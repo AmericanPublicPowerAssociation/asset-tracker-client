@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Vulnerabilities</title>
+		<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Salah Ahmed">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tabulator/3.5.3/css/tabulator.min.css" rel="stylesheet">
+    <!-- personal stylesheet -->
+    <link rel="stylesheet" href="">
+	</head>
+	<body>
+		<div class="container-fluid">
+      <h1>Vulnerabilities</h1>
+        <form>
+        <label for='vendor'>Vendor
+          <input name='vendor'>
+        </label>
+        <label for='product'>Product
+          <input name='product'>
+        </label>
+        <label for='version'>Version
+          <input name='version'>
+        </label>
+        <input id='submit' type='submit' class='btn'>
+        </form>
+      <div id='result-table'></div>
+          <input type='submit' value='download' id='download' name='download'>
+		</div>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script
+			  src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+			  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+			  crossorigin="anonymous"></script>
+    <!-- bootstrap js -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tabulator/3.5.3/js/tabulator.min.js"></script>
+    <!-- personal js -->
+    <script>
+      $(document).ready(() => {
+        $("#result-table").tabulator({
+          columns:[
+            {title:"Vendor", field:"vendor", sorter:"string", align:"left"},
+            {title:"Product", field:"product", sorter:"string", align:"left"},
+            {title:"Vulnerability", field:"vulnerability", sorter:"string", align:"left"},
+          ],
+        });
+      });
+      document.getElementById('submit').addEventListener('click', (e) => {
+        e.preventDefault();
+        const data = $(e.target.form).serializeArray().reduce(function(obj, item) {
+            obj[item.name] = item.value;
+            return obj;
+        }, {});
+        const form = $(e.target.form).serialize()
+        $("#result-table").tabulator('destroy');
+        $("#result-table").tabulator({
+          columns:[
+            {title:"Vendor", field:"vendor", sorter:"string", align:"left", headerFilter:"input"},
+            {title:"Product", field:"product", sorter:"string", align:"left", headerFilter:"input"},
+            {title:"Vulnerability", field:"vulnerability", sorter:"string", align:"left", headerFilter:"input"},
+          ],
+          ajaxURL: `/query?${form}`,
+          pagination:"remote", //enable remote pagination
+          paginationSize:20,
+        });
+      })
+
+      document.getElementById('download').addEventListener('click', (e) => {
+        $("#result-table").tabulator('download', 'csv', 'data.csv');
+      });
+    </script>
+	</body>
+</html>
