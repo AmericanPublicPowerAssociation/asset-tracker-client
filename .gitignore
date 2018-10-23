@@ -23,3 +23,6 @@ data_*
 *~
 # Other
 .DS_Store/
+# node
+node_modules/
+npm-debug.log*
