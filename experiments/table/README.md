@@ -17,7 +17,7 @@ Download the .html files of your choice and open them via web browser. You can v
 ## Differences Between the 3 Table Libraries
 
 ### Tabulator
-* Free license (?)
+* Free license
 * Recent commit to GitHub (https://github.com/olifolkerd/tabulator) - regular maintenance
 * Works with major frameworks
 * Create complex tables with simple code
