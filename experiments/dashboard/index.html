@@ -6,10 +6,16 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>Asset Tracker</title>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel='stylesheet' href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.css'>
+
     <style>
       body {
         padding-top: 5rem;
+      }
+      #map {
+        height: 500px;
       }
     </style>
   </head>
@@ -26,7 +32,6 @@
           <li class="nav-item"><a class="nav-link" href="#">Assets (9,876)</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Reports (2)</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Alerts (7)</a></li>
-          <li class="nav-item"><input class="form-control ml-2" type="text" placeholder="Search" aria-label="Search"></li>
         </ul>
 
         <ul class="navbar-nav mr-2">
@@ -36,17 +41,86 @@
       </div>
     </nav>
 
-    <main role="main" class="container">
+<main role="main" class="container">
+<div class="row">
+<div class="col">
+<div id="map">
+</div>
+<button type="button" class="btn btn-secondary btn-block">Switch to List</button>
+</div>
+<div class="col">
+<input class="form-control btn-block" type="text" placeholder="Search" aria-label="Search">
+</div>
+<div class="col">
 
-      <div class="starter-template">
-        <h1>Bootstrap starter template</h1>
-        <p class="lead"></p>
-      </div>
+<div class="accordion" id="accordionExample">
+<div class="card">
+<div class="card-header" id="headingOne">
+<h5 class="mb-0">
+<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+Alerts
+</button>
+</h5>
+</div>
+<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+<div class="card-body">
+<p>Relay NER87 needs an update</p>
+<p>Relay NWS99 is not connected</p>
+</div>
+</div>
+</div>
+<div class="card">
+<div class="card-header" id="headingTwo">
+<h5 class="mb-0">
+<button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+Benchmarks
+</button>
+</h5>
+</div>
+<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+<div class="card-body">
+<p></p>
+<p></p>
+</div>
+</div>
+</div>
+<div class="card">
+<div class="card-header" id="headingThree">
+<h5 class="mb-0">
+<button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+Circuits
+</button>
+</h5>
+</div>
+<div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+<div class="card-body">
+<p>Alert 1</p>
+<p>Alert 2</p>
+</div>
+</div>
+</div>
+</div>
 
-    </main>
+
+
+</div>
+</div>
+</main>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.js'></script>
+    <script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoicm1ndWFyYWNoaSIsImEiOiJjamwzdDdseXcyNTk5M3Fuc3p2ZzJmdXdlIn0.cjtHea9XjbVzu7IQDIXsog';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        center: [-88.039894, 30.695366],
+        zoom: 7,
+        style: 'mapbox://styles/mapbox/satellite-v9',
+        logoPosition: 'top-right',
+    });
+    </script>
   </body>
 </html>
