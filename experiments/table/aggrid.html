@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Importing AgGrid component -->
+  <script src="https://unpkg.com/ag-grid-enterprise/dist/ag-grid-enterprise.min.noStyle.js"></script>
+  <!-- grid "structure" stylesheet -->
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+  <!-- one of the available grid themes -->
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+</head>
+<body>
+  <h1>Hello from ag-grid!</h1>
+
+  <button onclick="getSelectedRows()">Get Selected Rows</button>
+  <div id="myGrid" style="height: 600px;width:500px;" class="ag-theme-balham"></div>
+
+  <script type="text/javascript" charset="utf-8">
+  // specify the columns
+  var columnDefs = [
+    // groups data by make
+    {headerName: "Make", field: "make", rowGroupIndex: 0 },
+    {headerName: "Price", field: "price"}
+  ];
+
+  // lists model field value when expanded
+  var autoGroupColumnDef = {
+    headerName: "Model",
+    field: "model",
+    //
+    cellRenderer:'agGroupCellRenderer',
+    cellRendererParams: {
+      checkbox: true
+    }
+  }
+
+  // // specify the data  - NOW COMING FROM REMOTE SERVICE
+  // var rowData = [
+  //   {make: "Toyota", model: "Celica", price: 35000},
+  //   {make: "Ford", model: "Mondeo", price: 32000},
+  //   {make: "Porsche", model: "Boxter", price: 72000}
+  // ];
+
+  // let the grid know which columns and what data to use
+  var gridOptions = {
+    columnDefs: columnDefs,
+    // rowData: rowData, - replaced with data fetch from remote service
+    enableSorting: true,
+    enableFilter: true,
+    rowSelection: 'multiple',
+    defaultColDef: {
+      editable: true
+    },
+    onCellEditingStarted: function(event) {
+      console.log('cellEditingStarted');
+    },
+    onCellEditingStopped: function(event) {
+      console.log('cellEditingStopped');
+    },
+    autoGroupColumnDef: autoGroupColumnDef,
+    groupSelectsChildren: true
+  };
+
+  // lookup the container we want the Grid to use
+  var eGridDiv = document.querySelector('#myGrid');
+
+  // create the grid passing in the div to use together with the columns & data we want to use
+  new agGrid.Grid(eGridDiv, gridOptions);
+
+  fetch('https://api.myjson.com/bins/ly7d1').then(function(response) {
+    return response.json();
+  }).then(function(data) {
+    gridOptions.api.setRowData(data); //accessed grid Api
+    //api object exposes many methods that allow us to implement complex scenarios with grid
+  })
+
+  // Event handler
+  function getSelectedRows() {
+    var selectedNodes = gridOptions.api.getSelectedNodes()
+    var selectedData = selectedNodes.map( function(node) { return node.data })
+    // convert items to string
+    var selectedDataStringPresentation = selectedData.map( function(node) { return node.make + ' ' + node.model }).join(', ')
+    // present string to user in alert box
+    alert('Selected nodes: ' + selectedDataStringPresentation);
+  }
+
+  </script>
+</body>
+</html>
