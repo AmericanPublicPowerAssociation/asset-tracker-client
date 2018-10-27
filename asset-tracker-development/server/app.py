@@ -17,7 +17,6 @@ def get_query():
             'product': "quicktime",
             'lat': 40.6602037,
             'lng': -73.9689558,
-            'delete': False,
         },
         {
             'id': 2,
@@ -26,7 +25,6 @@ def get_query():
             'product': "relay",
             'lat': 40.5833388,
             'lng': -73.8179384,
-            'delete': False,
         },
         {
             'id': 3,
@@ -35,7 +33,6 @@ def get_query():
             'product': "circuit",
             'lat': 40.708981,
             'lng': -73.830536,
-            'delete': False,
         },
         {
             'id': 4,
@@ -44,7 +41,6 @@ def get_query():
             'product': "fuse",
             'lat': 40.6832795,
             'lng': -73.9793,
-            'delete': False,
         },
         {
             'id': 5,
@@ -53,7 +49,6 @@ def get_query():
             'product': "transformer",
             'lat': 40.7119001,
             'lng': -73.8994671,
-            'delete': False,
         },
     ]
     return jsonify(json.dumps(assets))

@@ -5,6 +5,7 @@ import SearchQuery from './SearchQuery';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
+
 class App extends Component {
   state = {
     all_assets: [],
@@ -12,7 +13,8 @@ class App extends Component {
   };
 
   componentDidMount() {
-    fetch('http://localhost:5000/get-assets.json')
+    const url = 'http://localhost:5000/get-assets.json';
+    fetch(url)
       .then(res => {
         return res.json();
       }).then(data => {
@@ -26,74 +28,29 @@ class App extends Component {
 
   componentDidUpdate(oldProps, oldState) {
     // if new state is different from old state update db
-    const {all_assets} = this.state;
-    if (oldState.all_assets.length !== all_assets.length) {
-        console.log('update');
-    }
-    else {
-      const eq = oldState.all_assets.every((asset, index) => all_assets[index].id === asset.id);
-      if (!eq) {
-        console.log('update');
-      }
-    }
   }
 
-  /*
-    updateCoords(e) {
-      const marker = e.target;
-      const {lng, lat} = marker.getLngLat();
-      const old_asset = this.state.filtered_assets[marker.index];
-      const new_filtered_assets = this.state.filtered_assets.map((a, i) => {
-        if (a.id === old_asset.id) {
-          return {
-            ...a,
-            lat: lat,
-            lng: lng,
-          }
-        }
-        else {
-          return a
-        }
-      })
-      const new_assets = this.state.assets.map((a, i) => {
-        if (a.id === old_asset.id) {
-          return {
-            ...a,
-            lat: lat,
-            lng: lng,
-          }
-        }
-        else {
-          return a
-        }
-      })
-      this.setState({
-        assets: new_assets,
-        filtered_assets: new_filtered_assets
-      })
-    }
-    */
 
   filterAssets(search_query) {
     // search for assets
     const {all_assets} = this.state;
     const re = new RegExp(`.*${search_query}.*`, 'i');
 
-    const filtered_assets = all_assets.filter((a) => a.vendor.match(re) || a.product.match(re))
+    const filtered_assets = all_assets.filter((a) => 
+      a.vendor.match(re) || a.product.match(re));
     this.setState({
-      filtered_assets 
+      filtered_assets
     });
   }
 
   render() {
-    const {filtered_assets, search_query} = this.state
-    // updateCoords={(marker) => this.updateCoords(marker)}
+    const {filtered_assets} = this.state;
     return (
       <div className="App">
         <h1 className='text-center'>Asset Tracker</h1>
         <div className="row">
           <div className="col-md-8">
-            <Map markers={filtered_assets} />
+            <Map markers={filtered_assets}/>
           </div>
           <div className="col-md-4">
             <SearchQuery filterAssets={(search_query) => this.filterAssets(search_query)}/>

@@ -4,32 +4,28 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 
 class Map extends Component {
-  addMarkers(asset, index) {
+  addMarker(asset, index) {
       const marker = new mapboxgl.Marker({
-        //draggable: true,
       })
         .setLngLat([asset.lng, asset.lat])
         .addTo(this.map);
-      // marker.index = index
-      marker.on('dragend', this.props.updateCoords);
       return marker
     }
 
   setBounds(markers) {
     if (markers.length > 0) {
-      console.log('here')
       return markers.reduce(function(bounds, marker) {
                   return bounds.extend(marker.getLngLat());
-              }, new mapboxgl.LngLatBounds(markers[0].getLngLat(), markers[0].getLngLat()));
+              }, new mapboxgl.LngLatBounds(
+                markers[0].getLngLat(), markers[0].getLngLat()));
     } else {
       return new mapboxgl.LngLatBounds([0, 0], [0, 0]);
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    debugger
     this.markers.forEach((m) => m.remove())
-    this.markers = this.props.markers.map((m, i) => this.addMarkers(m, i));
+    this.markers = this.props.markers.map((m, i) => this.addMarker(m, i));
     const bounds = this.setBounds(this.markers);
     this.map.fitBounds(bounds, {
                 padding: 20
@@ -41,13 +37,12 @@ class Map extends Component {
     mapboxgl.accessToken = 'pk.eyJ1Ijoic2FsYWgtaGFsYXMiLCJhIjoiY2prdnY1Y25mMGN3cjN2cTVxa2tvbWRnZCJ9.c8uFh6KYWAi1SPF6ZRosAA';
     this.map = new mapboxgl.Map({
           container: this.mapContainer,
-          style: 'mapbox://styles/mapbox/satellite-v9',
+          style: 'mapbox://styles/mapbox/streets-v9',
           center: [0, 0],
-          zoom: 10,
+          zoom: 8,
           minZoom: 10,
         });
-    this.markers = this.props.markers.map((m, i) => this.addMarkers(m, i));
-    console.log('mount')
+    this.markers = this.props.markers.map((m, i) => this.addMarker(m, i));
     const bounds = this.setBounds(this.markers);
     this.map.fitBounds(bounds, {
                 padding: 20
@@ -61,18 +56,24 @@ class Map extends Component {
 
   render() {
     const style = {
+          zIndex: 3,
           bottom: 0,
           height: '500px',
           overflow: 'hidden',
-          position: 'absolute',
           top: 0,
           width: '100%'
         };
+
     return (
-      <div style={style} ref={el => this.mapContainer = el} />
+      <div className='row'>
+        <div className='col-md-12'>
+          <div onDragOver={(e) => {
+                    e.preventDefault();
+              }}   style={style} ref={el => this.mapContainer = el} />
+        </div>
+      </div>
     );
   }
 }
-
 
 export default Map;

@@ -1,18 +1,22 @@
 import React, { Component } from 'react';
+import Asset from './Asset';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './AssetsGrid.css';
+
 
 class AssetsGrid extends Component {
   render() {
     const {assets} = this.props;
     let rows = [];
     assets.forEach((a) => {
-      const asset = (<div key={a.id} className='row'><div className='col-md-12'>{a.product}<hr/></div></div>);
+      const asset = (<Asset key={a.id} asset={a}/>);
       rows.push(asset);
     });
+
     return (
-      <div className='row'>
+      <div className='row assets-grid'>
         <div className="col-md-12">
-      {rows}
+          {rows}
         </div>
       </div>
     );
