@@ -17,6 +17,7 @@ dist
 *.map
 *.out
 *.tmp
+.DS_Store
 data_*
 # Vim
 *.sw[op]
