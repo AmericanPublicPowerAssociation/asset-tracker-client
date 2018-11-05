@@ -22,5 +22,9 @@ data_*
 # Vim
 *.sw[op]
 *~
-# Other
+# node
+node_modules/
+npm-debug.log*
+package-lock.json
+# misc
 .DS_Store

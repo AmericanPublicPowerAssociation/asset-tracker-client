@@ -1,0 +1,14 @@
+.search {
+  z-index: 1;
+  top: 0;
+  left: 0;
+}
+
+.search-btn {
+  position: absolute;
+  z-index: 2;
+  width: 20%;
+  cursor: pointer;
+  top: 0;
+  right: 0;
+}

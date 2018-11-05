@@ -1,0 +1,14 @@
+.assets-grid {
+  cursor: pointer;
+}
+
+.asset {
+  padding: 10px;
+  border-bottom: 1px solid gray;
+  border-left: 1px solid gray;
+  text-align: center;
+}
+
+.asset:hover {
+  background-color: lightblue;
+}
