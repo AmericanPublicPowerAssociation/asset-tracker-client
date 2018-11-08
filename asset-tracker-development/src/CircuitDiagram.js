@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import cytoscape from 'cytoscape';
+import popper from 'cytoscape-popper';
+import tippy from 'tippy.js';
+cytoscape.use(popper);
 
 class CircuitDiagram extends Component {
 
@@ -22,6 +25,19 @@ class CircuitDiagram extends Component {
       };
     });
     const edges = assets.map((v, i) => {
+      if (i === assets.length - 1) {
+        return {
+          group: 'edges',
+          data: {
+            id: 'e' + v.id,
+            source: 'n' + v.id,
+            target: 'n1'
+          },
+          style: {
+            width: 5
+          }
+        }
+      }
       return {
         group: 'edges',
         data: {
@@ -34,7 +50,7 @@ class CircuitDiagram extends Component {
         }
       }
     });
-    window.cy = cytoscape({
+    const cy = window.cy = cytoscape({
       container: document.getElementById('cy'),
       elements: elements.concat(edges),
       layout: { 
@@ -46,7 +62,28 @@ class CircuitDiagram extends Component {
           'content': 'data(name)' 
        }
       }]
-    }); 
+    });
+    cy.nodes().forEach(node => {
+      node.popper({
+        content: () => {
+          let div = document.createElement('div');
+          div.innerHTML = node.data('product');
+          document.body.appendChild(div);
+          return div;
+        }
+      });
+    });
+    cy.nodes().map(node => {
+      return tippy(node.popperRef(), {
+        content: node.data('vendor'),
+        trigger: 'manual',
+        arrow: true,
+        placement: 'bottom',
+        hideOnClick: false,
+        multiple: true,
+        sticky: true
+      });
+    });
   }
 
   render() {
