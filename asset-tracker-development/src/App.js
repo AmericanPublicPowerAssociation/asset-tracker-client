@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Map from './Map';
 import AssetsGrid from './AssetsGrid';
 import SearchQuery from './SearchQuery';
+import CircuitDiagram from './CircuitDiagram';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -55,6 +56,7 @@ class App extends Component {
           <div className="col-md-4">
             <SearchQuery filterAssets={(search_query) => this.filterAssets(search_query)}/>
             <AssetsGrid assets={filtered_assets}/>
+            <CircuitDiagram assets={this.state.all_assets} />
           </div>
         </div>
       </div>
