@@ -1,0 +1,12 @@
+asset
+    id
+    name
+    type
+    geometry
+    properties
+        vendor_name
+        product_name
+        product_version
+connection
+    asset1_id
+    asset2_id
