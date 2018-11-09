@@ -4,6 +4,7 @@ import AssetsGrid from './AssetsGrid';
 import SearchQuery from './SearchQuery';
 import CircuitDiagram from './CircuitDiagram';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.min.js';
 import './App.css';
 
 
