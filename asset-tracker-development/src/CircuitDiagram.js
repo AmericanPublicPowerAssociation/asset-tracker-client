@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 class CircuitDiagram extends Component {
-  render {
+  render() {
     return (
-      <h1>Circuits!</h1>
+      <h1 className='text-center'>Circuits!</h1>
     )
   }
 }
