@@ -60,7 +60,7 @@ class App extends Component {
 
       <div className="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul className="navbar-nav mr-auto">
-          <li className="nav-item"><Link className="nav-link" to="/assets">Assets </Link></li>
+          <li className="nav-item"><Link className="nav-link" to="/assets">Assets ({all_assets.length}) </Link></li>
           <li className="nav-item"><a className="nav-link" href="#">Reports (2)</a></li>
           <li className="nav-item"><a className="nav-link" href="#">Alerts (7)</a></li>
         </ul>
