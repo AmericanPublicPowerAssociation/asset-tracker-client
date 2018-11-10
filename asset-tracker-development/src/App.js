@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import {Route} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import Map from './Map';
+import AssetsTable from './AssetsTable';
 import AssetsGrid from './AssetsGrid';
 import SearchQuery from './SearchQuery';
 import CircuitDiagram from './CircuitDiagram';
@@ -50,14 +53,14 @@ class App extends Component {
     return (
       <div className="App">
     <nav className="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-      <a className="navbar-brand" href="#">Asset Tracker</a>
+      <Link className="navbar-brand" to="/">Asset Tracker</Link>
       <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
       </button>
 
       <div className="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul className="navbar-nav mr-auto">
-          <li className="nav-item"><a className="nav-link" href="#">Assets (9,876)</a></li>
+          <li className="nav-item"><Link className="nav-link" to="/assets">Assets </Link></li>
           <li className="nav-item"><a className="nav-link" href="#">Reports (2)</a></li>
           <li className="nav-item"><a className="nav-link" href="#">Alerts (7)</a></li>
         </ul>
@@ -68,18 +71,23 @@ class App extends Component {
         <button id="button-sign-out" className="btn btn-primary my-2 my-sm-0" type="submit">Sign Out</button>
       </div>
     </nav>
-        <div className="row">
-          <div className="col-md-6">
-            <Map markers={filtered_assets}/>
+        <Route exact path="/assets" render={ () => (
+          <AssetsTable assets={all_assets}/>
+        )} />
+        <Route exact path="/" render={ () => (
+          <div className="row">
+            <div className="col-md-6">
+              <Map markers={filtered_assets}/>
+            </div>
+            <div className="col-md-2">
+              <SearchQuery filterAssets={(search_query) => this.filterAssets(search_query)}/>
+              <AssetsGrid assets={filtered_assets}/>
+            </div>
+            <div className="col-md-4">
+              <CircuitDiagram assets={all_assets}/>
+            </div>
           </div>
-          <div className="col-md-2">
-            <SearchQuery filterAssets={(search_query) => this.filterAssets(search_query)}/>
-            <AssetsGrid assets={filtered_assets}/>
-          </div>
-          <div className="col-md-4">
-	    <CircuitDiagram assets={all_assets}/>
-          </div>
-        </div>
+        )} />
       </div>
     );
   }
