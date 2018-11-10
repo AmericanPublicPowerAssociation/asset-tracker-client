@@ -10,6 +10,7 @@ import './App.css';
 class App extends Component {
   state = {
     all_assets: [],
+    connections: [],
     filtered_assets: [],
   };
 
@@ -19,8 +20,10 @@ class App extends Component {
       .then(res => {
         return res.json();
       }).then(data => {
-        const all_assets = JSON.parse(data);
+        const {all_assets, connections} = JSON.parse(data);
+        console.log(connections);
         this.setState({
+          connections,
           all_assets,
           filtered_assets: all_assets,
         });
@@ -45,7 +48,7 @@ class App extends Component {
   }
 
   render() {
-    const {filtered_assets} = this.state;
+    const {filtered_assets, connections} = this.state;
     return (
       <div className="App">
         <h1 className='text-center'>Asset Tracker</h1>
@@ -56,7 +59,7 @@ class App extends Component {
           <div className="col-md-4">
             <SearchQuery filterAssets={(search_query) => this.filterAssets(search_query)}/>
             <AssetsGrid assets={filtered_assets}/>
-            <CircuitDiagram assets={this.state.all_assets} />
+            <CircuitDiagram connections={connections} assets={this.state.all_assets} />
           </div>
         </div>
       </div>
