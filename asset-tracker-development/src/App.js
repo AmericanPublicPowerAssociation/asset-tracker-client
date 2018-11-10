@@ -1,13 +1,15 @@
-import React, { Component } from 'react';
-import {Route} from 'react-router-dom';
-import {Link} from 'react-router-dom';
-import Map from './Map';
-import AssetsTable from './AssetsTable';
-import AssetsGrid from './AssetsGrid';
-import SearchQuery from './SearchQuery';
-import CircuitDiagram from './CircuitDiagram';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, {Component} from 'react';
+import {Route, Link} from 'react-router-dom';
 import 'bootstrap/dist/js/bootstrap.min.js';
+
+import AssetDetails from './AssetDetails';
+import AssetsGrid from './AssetsGrid';
+import AssetsTable from './AssetsTable';
+import CircuitDiagram from './CircuitDiagram';
+import Map from './Map';
+import SearchQuery from './SearchQuery';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 
@@ -15,10 +17,11 @@ class App extends Component {
   state = {
     all_assets: [],
     filtered_assets: [],
+    selected_asset_index: 0,
   };
 
   componentDidMount() {
-    const url = 'http://138.197.69.144:5000/get-assets.json';
+    const url = 'http://localhost:5000/get-assets.json';
     fetch(url)
       .then(res => {
         return res.json();
@@ -49,7 +52,8 @@ class App extends Component {
   }
 
   render() {
-    const {filtered_assets, all_assets} = this.state;
+    const {filtered_assets, all_assets, selected_asset_index} = this.state;
+    const selected_asset = all_assets.length > 0 ? all_assets[selected_asset_index] : null;
     return (
       <div className="App">
     <nav className="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
@@ -77,14 +81,15 @@ class App extends Component {
         <Route exact path="/" render={ () => (
           <div className="row">
             <div className="col-md-6">
-              <Map markers={filtered_assets}/>
+              <Map selected_asset={selected_asset} updateSelected={(selected_asset_index) => this.setState({selected_asset_index})} markers={filtered_assets}/>
             </div>
             <div className="col-md-2">
               <SearchQuery filterAssets={(search_query) => this.filterAssets(search_query)}/>
-              <AssetsGrid assets={filtered_assets}/>
+              <AssetsGrid updateSelected={(selected_asset_index) => this.setState({selected_asset_index})} assets={filtered_assets}/>
             </div>
             <div className="col-md-4">
-              <CircuitDiagram assets={all_assets}/>
+              <CircuitDiagram selected_asset={selected_asset} updateSelected={(selected_asset_index) => this.setState({selected_asset_index})} assets={all_assets}/>
+              <AssetDetails asset={selected_asset}/>
             </div>
           </div>
         )} />

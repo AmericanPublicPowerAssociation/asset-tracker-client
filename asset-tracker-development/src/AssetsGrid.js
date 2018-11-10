@@ -1,15 +1,17 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+
 import Asset from './Asset';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AssetsGrid.css';
 
 
 class AssetsGrid extends Component {
   render() {
-    const {assets} = this.props;
+    const {assets, updateSelected} = this.props;
     let rows = [];
     assets.forEach((a) => {
-      const asset = (<Asset key={a.id} asset={a}/>);
+      const asset = (<Asset onClickEvent={() => updateSelected(a.id)} key={a.id} asset={a}/>);
       rows.push(asset);
     });
 
