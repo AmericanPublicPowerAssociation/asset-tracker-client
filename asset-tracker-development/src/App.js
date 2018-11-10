@@ -1,8 +1,14 @@
-import React, { Component } from 'react';
-import Map from './Map';
+import React, {Component} from 'react';
+import {Route, Link} from 'react-router-dom';
+import 'bootstrap/dist/js/bootstrap.min.js';
+
+import AssetDetails from './AssetDetails';
 import AssetsGrid from './AssetsGrid';
-import SearchQuery from './SearchQuery';
+import AssetsTable from './AssetsTable';
 import CircuitDiagram from './CircuitDiagram';
+import Map from './Map';
+import SearchQuery from './SearchQuery';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -12,6 +18,7 @@ class App extends Component {
     all_assets: [],
     connections: [],
     filtered_assets: [],
+    selected_asset_index: 0,
   };
 
   componentDidMount() {
@@ -48,20 +55,47 @@ class App extends Component {
   }
 
   render() {
-    const {filtered_assets, connections} = this.state;
+    const {filtered_assets, all_assets, selected_asset_index} = this.state;
+    const selected_asset = all_assets.length > 0 ? all_assets[selected_asset_index] : null;
     return (
       <div className="App">
-        <h1 className='text-center'>Asset Tracker</h1>
-        <div className="row">
-          <div className="col-md-8">
-            <Map markers={filtered_assets}/>
+    <nav className="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+      <Link className="navbar-brand" to="/">Asset Tracker</Link>
+      <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span className="navbar-toggler-icon"></span>
+      </button>
+
+      <div className="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul className="navbar-nav mr-auto">
+          <li className="nav-item"><Link className="nav-link" to="/assets">Assets ({all_assets.length}) </Link></li>
+          <li className="nav-item"><a className="nav-link" href="#">Reports (2)</a></li>
+          <li className="nav-item"><a className="nav-link" href="#">Alerts (7)</a></li>
+        </ul>
+
+        <ul className="navbar-nav mr-2">
+          <li className="nav-item"><a className="nav-link" href="#">Alex</a></li>
+        </ul>
+        <button id="button-sign-out" className="btn btn-primary my-2 my-sm-0" type="submit">Sign Out</button>
+      </div>
+    </nav>
+        <Route exact path="/assets" render={ () => (
+          <AssetsTable assets={all_assets}/>
+        )} />
+        <Route exact path="/" render={ () => (
+          <div className="row">
+            <div className="col-md-6">
+              <Map selected_asset={selected_asset} updateSelected={(selected_asset_index) => this.setState({selected_asset_index})} markers={filtered_assets}/>
+            </div>
+            <div className="col-md-2">
+              <SearchQuery filterAssets={(search_query) => this.filterAssets(search_query)}/>
+              <AssetsGrid updateSelected={(selected_asset_index) => this.setState({selected_asset_index})} assets={filtered_assets}/>
+            </div>
+            <div className="col-md-4">
+              <CircuitDiagram selected_asset={selected_asset} updateSelected={(selected_asset_index) => this.setState({selected_asset_index})} assets={all_assets}/>
+              <AssetDetails asset={selected_asset}/>
+            </div>
           </div>
-          <div className="col-md-4">
-            <SearchQuery filterAssets={(search_query) => this.filterAssets(search_query)}/>
-            <AssetsGrid assets={filtered_assets}/>
-            <CircuitDiagram connections={connections} assets={this.state.all_assets} />
-          </div>
-        </div>
+        )} />
       </div>
     );
   }

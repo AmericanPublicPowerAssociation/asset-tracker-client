@@ -1,11 +1,12 @@
 .assets-grid {
   cursor: pointer;
+  overflow: auto;
+  height: 450px;
 }
 
 .asset {
   padding: 10px;
-  border-bottom: 1px solid gray;
-  border-left: 1px solid gray;
+  border: 1px solid gray;
   text-align: center;
 }
 

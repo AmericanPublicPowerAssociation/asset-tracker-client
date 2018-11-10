@@ -61,5 +61,4 @@ class CircuitDiagram extends Component {
   }
 }
 
-
 export default CircuitDiagram;
