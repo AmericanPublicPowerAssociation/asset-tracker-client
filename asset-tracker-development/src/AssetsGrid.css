@@ -1,5 +1,7 @@
 .assets-grid {
   cursor: pointer;
+  overflow: auto;
+  height: 450px;
 }
 
 .asset {

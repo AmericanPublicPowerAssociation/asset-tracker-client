@@ -5,10 +5,12 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 class Map extends Component {
   addMarker(asset, index) {
+      const popup = new mapboxgl.Popup()
+        .setText(asset.product)
       const marker = new mapboxgl.Marker({
       })
         .setLngLat([asset.lng, asset.lat])
-        .addTo(this.map);
+        .setPopup(popup)
       return marker
     }
 
@@ -26,6 +28,7 @@ class Map extends Component {
   componentDidUpdate(prevProps, prevState) {
     this.markers.forEach((m) => m.remove())
     this.markers = this.props.markers.map((m, i) => this.addMarker(m, i));
+    this.markers.forEach((m) => m.addTo(this.map))
     const bounds = this.setBounds(this.markers);
     this.map.fitBounds(bounds, {
                 padding: 20
@@ -35,15 +38,17 @@ class Map extends Component {
 
   componentDidMount() {
     mapboxgl.accessToken = 'pk.eyJ1Ijoic2FsYWgtaGFsYXMiLCJhIjoiY2prdnY1Y25mMGN3cjN2cTVxa2tvbWRnZCJ9.c8uFh6KYWAi1SPF6ZRosAA';
+    this.markers = this.props.markers.map((m, i) => this.addMarker(m, i));
+    const bounds = this.setBounds(this.markers);
+    const center = this.markers.length > 0 ? bounds.getCenter() : [0, 0];
     this.map = new mapboxgl.Map({
           container: this.mapContainer,
           style: 'mapbox://styles/mapbox/streets-v9',
-          center: [0, 0],
+          center: center,
           zoom: 8,
           minZoom: 10,
         });
-    this.markers = this.props.markers.map((m, i) => this.addMarker(m, i));
-    const bounds = this.setBounds(this.markers);
+    this.markers.forEach((m) => m.addTo(this.map))
     this.map.fitBounds(bounds, {
                 padding: 20
             });
