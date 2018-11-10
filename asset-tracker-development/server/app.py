@@ -11,7 +11,7 @@ CORS(app)
 def get_query():
     assets = [
         {
-            'id': 1,
+            'id': 0,
             'vendor': "apple",
             'version': "0.3",
             'product': "quicktime",
@@ -19,7 +19,7 @@ def get_query():
             'lng': -73.9689558,
         },
         {
-            'id': 2,
+            'id': 1,
             'vendor': "Siemens",
             'version': "4.0.3",
             'product': "relay",
@@ -27,7 +27,7 @@ def get_query():
             'lng': -73.8179384,
         },
         {
-            'id': 3,
+            'id': 2,
             'vendor': "schneider-electric",
             'version': "4.3.2",
             'product': "circuit",
@@ -35,7 +35,7 @@ def get_query():
             'lng': -73.830536,
         },
         {
-            'id': 4,
+            'id': 3,
             'vendor': "alstom",
             'version': "3.2.0",
             'product': "fuse",
@@ -43,7 +43,7 @@ def get_query():
             'lng': -73.9793,
         },
         {
-            'id': 5,
+            'id': 4,
             'vendor': "ge",
             'version': "3.2.0",
             'product': "transformer",
