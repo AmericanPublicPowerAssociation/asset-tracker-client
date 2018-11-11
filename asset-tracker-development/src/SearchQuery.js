@@ -14,6 +14,11 @@ class SearchQuery extends Component {
     search_query: ''
   };
 
+  shouldComponentUpdate(prevProps, prevState) {
+    const {search_query} = this.state
+    return prevState.search_query !== search_query 
+  }
+
   render() {
     const {filterAssets} = this.props;
     const {search_query} = this.state;
