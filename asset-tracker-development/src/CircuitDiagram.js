@@ -3,12 +3,61 @@ import cytoscape from 'cytoscape';
 
 
 class CircuitDiagram extends Component {
+  state = {
+    connections: []
+  }
+
+  componentDidMount() {
+    const {updateSelected} = this.props;
+    this.cy = cytoscape({
+      container: document.getElementById('cy'),
+      layout: {
+        name: 'grid'
+      },
+      style: [{
+        selector: 'node',
+        style: {
+          content: 'data(product)',
+        }
+      }]
+    });
+    this.cy.maxZoom(1);
+    this.cy.minZoom(.2);
+    this.cy.on('click', 'node', function(e) {
+      updateSelected(parseInt(e.target.id()))
+    });
+    const url = 'http://localhost:5000/get-connections.json';
+    fetch(url)
+      .then(res => {
+        return res.json();
+      }).then(data => {
+        const {connections} = JSON.parse(data);
+        this.setState({
+          connections,
+        });
+      });
+  }
+
   componentDidUpdate() {
-    const {assets, connections} = this.props;
-    const nodes = assets.map((n, i) => {return {
+    this.cy.remove('node');
+    const {assets, selected_asset_id} = this.props;
+    const {connections} = this.state;
+    const {nodes, edges} = this.getElements(assets, connections);
+    this.cy.add({
+      nodes,
+      edges
+    });
+    this.cy.fit();
+    const el = this.cy.getElementById(selected_asset_id)
+    el.select();
+  }
+
+  getElements(assets, connections) {
+    const nodes = assets.map((n, i) => {
+      return {
           group: 'nodes',
           data: {
-            id: `${n.id}`,
+            id: n.id,
             vendor: n.vendor,
             product: n.product
           },
@@ -16,41 +65,30 @@ class CircuitDiagram extends Component {
             x: (Number(n.lng)) * 10000,
             y: -(Number(n.lat)) * 10000
           },
+          style: {
+            padding: "50px"
+          },
           selected: false,
           selectable: true
       }}
     );
-    const edges = connections.map((e) => {
-      const [from, to] = e;
-      return {
-          group: 'edges',
-          data: {
-            id: `${from},${to}`,
-            source: `${from}`,
-            target: `${to}`
-          },
-          style: {
-            width: 5
-          }
-        }
-    });
 
-    const cy = window.cy = cytoscape({
-      container: document.getElementById('cy'),
-      elements: {
-        nodes: nodes,
-        edges: edges,
-      },
-      layout: {
-        name: 'preset'
-      },
-      style: [{
-        selector: 'node',
-        style: {
-          'content': 'data(product)'
-        }
-      }]
-    });
+    const edges = (nodes.length > 0) ? connections.map((e) => {
+          const [from, to] = e;
+          return {
+              group: 'edges',
+              data: {
+                id: `${from},${to}`,
+                source: from,
+                target: to
+              },
+              style: {
+                width: 5
+              }
+            }
+        }) : [];
+
+    return {nodes, edges};
   }
 
   render() {

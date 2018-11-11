@@ -7,9 +7,16 @@ app = Flask(__name__)
 CORS(app)
 
 
+@app.route('/get-connections.json')
+def get_connections():
+    connections = [(0, 2), (1, 3), (2, 4)]
+    return jsonify(json.dumps(
+        dict(connections=connections)))
+
+
+
 @app.route('/get-assets.json')
 def get_query():
-    connections = [(0, 2), (1, 3), (2, 4)]
     assets = [
         {
             'id': 0,
@@ -53,8 +60,7 @@ def get_query():
         },
     ]
     return jsonify(json.dumps(dict(
-        all_assets=assets,
-        connections=connections)))
+        all_assets=assets)))
 
 
 if __name__ == '__main__':
