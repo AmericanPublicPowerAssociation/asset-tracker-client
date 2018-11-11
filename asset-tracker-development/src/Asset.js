@@ -9,7 +9,7 @@ class Asset extends Component {
     const {isSelected, asset, onClickEvent} = this.props;
     const style = isSelected ? {backgroundColor: 'lightblue'} : {}
     return (
-      <div style={style} onClick={(e) => onClickEvent()} className='row asset'>
+      <div style={style} onClick={(e) => onClickEvent()} className='row border-bottom asset'>
         <div className='col-md-12'>
           {asset.product}
         </div>

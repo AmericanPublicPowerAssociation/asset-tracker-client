@@ -94,7 +94,7 @@ class CircuitDiagram extends Component {
   render() {
     const style = {height: '400px', width: '400px'}
 	  return (
-      <div id='cy' style={style} />
+      <div id='cy' className='border rounded' style={style} />
     )
   }
 }
