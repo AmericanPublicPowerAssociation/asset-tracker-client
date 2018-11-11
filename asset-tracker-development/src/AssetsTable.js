@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {ReactTabulator} from "react-tabulator";
+
 import "react-tabulator/lib/css/bootstrap/tabulator_bootstrap.min.css";
 import './App.css';
 

@@ -1,16 +1,23 @@
-import React, { Component } from 'react';
-import './SearchBar.css';
+import React, {Component} from 'react';
+
+import {library} from '@fortawesome/fontawesome-svg-core'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faSearch} from '@fortawesome/free-solid-svg-icons'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import './SearchBar.css';
 
 
 library.add(faSearch)
+
 class SearchQuery extends Component {
   state = {
     search_query: ''
   };
+
+  shouldComponentUpdate(prevProps, prevState) {
+    const {search_query} = this.state
+    return prevState.search_query !== search_query 
+  }
 
   render() {
     const {filterAssets} = this.props;

@@ -1,17 +1,24 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+
 import Asset from './Asset';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AssetsGrid.css';
 
 
 class AssetsGrid extends Component {
-  render() {
+  shouldComponentUpdate(prevProps, prevState) {
+    /**
+     * only update component if props.assets changed
+     **/
     const {assets} = this.props;
-    let rows = [];
-    assets.forEach((a) => {
-      const asset = (<Asset key={a.id} asset={a}/>);
-      rows.push(asset);
-    });
+    return (assets.length !== prevProps.assets.length) || (
+      assets.some((a, i) => a.id !== prevProps.assets[i].id));
+  }
+
+  render() {
+    const {assets, updateSelected} = this.props;
+    const rows = assets.map((a) => <Asset onClickEvent={() => updateSelected(a.id)} key={a.id} asset={a}/>);
 
     return (
       <div className='row assets-grid'>
