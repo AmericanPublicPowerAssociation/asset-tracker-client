@@ -25,13 +25,15 @@ class SearchQuery extends Component {
     return (
       <div className='row'>
         <div className="col-md-12 search-div">
-          <input onChange={(e) =>
-              this.setState({
-                search_query: e.target.value
-              })} placeholder='search...' value={search_query}
-              className='search form-control'/>
-          <button onClick={(e) => filterAssets(this.state.search_query)}
-            className='search-btn form-control'><FontAwesomeIcon icon='search' /> </button>
+          <form onSubmit={(e) => e.preventDefault()}>
+            <input onChange={(e) =>
+                this.setState({
+                  search_query: e.target.value
+                })} placeholder='search...' value={search_query}
+                className='search form-control'/>
+            <button onClick={(e) => filterAssets(this.state.search_query)}
+              className='search-btn form-control'><FontAwesomeIcon icon='search' /> </button>
+          </form>
         </div>
       </div>
     );
