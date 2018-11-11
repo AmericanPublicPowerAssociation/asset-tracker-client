@@ -21,8 +21,8 @@ class CircuitDiagram extends Component {
         }
       }]
     });
-    this.cy.maxZoom(1);
-    this.cy.minZoom(.2);
+    //this.cy.maxZoom(1);
+    //this.cy.minZoom(.2);
     this.cy.on('click', 'node', function(e) {
       updateSelected(parseInt(e.target.id()))
     });
@@ -92,9 +92,18 @@ class CircuitDiagram extends Component {
   }
 
   render() {
-    const style = {height: '400px', width: '400px'}
+    const style = {height: '400px', width: '100%'}
 	  return (
-      <div id='cy' className='border rounded' style={style} />
+      <div className='row'>
+        <div className='col-md-12'>
+          <div className="card">
+            <div className="card-body">
+              <h1 className="card-title">Circuit</h1>
+              <div id='cy' className='border rounded' style={style} />
+            </div>
+          </div>
+        </div>
+      </div>
     )
   }
 }

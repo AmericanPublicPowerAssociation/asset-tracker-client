@@ -60,26 +60,11 @@ class App extends Component {
         <Route exact path="/" render={ () => (
           <div className="row">
             <div className='col-md-8'>
-              <div className="card">
-                <div className="card-body">
-                  <h1 className="card-title">Map</h1>
                   <FilterComponents all_assets={all_assets} selected_asset_index={selected_asset_index} updateSelected={(selected_asset_index) => this.setState({selected_asset_index})} />
-                </div>
-              </div>
             </div>
             <div className="col-md-4">
-              <div className="card">
-                <div className="card-body">
-                  <h1 className="card-title">Circuit</h1>
-                  <CircuitDiagram selected_asset_id={selected_asset_index} updateSelected={(selected_asset_index) => this.setState({selected_asset_index})} assets={all_assets}/>
-                </div>
-              </div>
-              <div className="card">
-                <div className="card-body">
-                  <h1 className="card-title">Asset</h1>
-                  <AssetDetails asset={selected_asset}/>
-                </div>
-              </div>
+              <CircuitDiagram selected_asset_id={selected_asset_index} updateSelected={(selected_asset_index) => this.setState({selected_asset_index})} assets={all_assets}/>
+              <AssetDetails asset={selected_asset}/>
             </div>
           </div>
         )} />

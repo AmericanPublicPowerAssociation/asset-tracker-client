@@ -44,12 +44,21 @@ class FilterComponents extends Component {
     const {filtered_assets} = this.state;
     return (
       <div className='row'>
-        <div className="col-md-8">
-          <Map selected_asset_id={selected_asset_index} updateSelected={(selected_asset_index) => updateSelected(selected_asset_index)} markers={filtered_assets} />
-        </div>
-        <div className="col-md-4">
-          <SearchQuery filterAssets={(search_query) => this.filterAssets(search_query)}/>
-          <AssetsGrid selected_asset_id={selected_asset_index} updateSelected={(selected_asset_index) => updateSelected(selected_asset_index)} assets={filtered_assets}/>
+        <div className='col-md-12'>
+          <div className="card">
+            <div className="card-body">
+              <h1 className="card-title">Map</h1>
+              <div className='row'>
+                    <div className="col-md-8">
+                      <Map selected_asset_id={selected_asset_index} updateSelected={(selected_asset_index) => updateSelected(selected_asset_index)} markers={filtered_assets} />
+                    </div>
+                    <div className="col-md-4">
+                      <SearchQuery filterAssets={(search_query) => this.filterAssets(search_query)}/>
+                      <AssetsGrid selected_asset_id={selected_asset_index} updateSelected={(selected_asset_index) => updateSelected(selected_asset_index)} assets={filtered_assets}/>
+                    </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

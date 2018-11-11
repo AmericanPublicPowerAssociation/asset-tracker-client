@@ -8,7 +8,12 @@ class AssetDetails extends Component {
     return (
       <div className='row'>
         <div className='col-md-12'>
-          {details}
+          <div className="card">
+            <div className="card-body">
+              <h1 className="card-title">Asset</h1>
+                {details}
+            </div>
+          </div>
         </div>
       </div>
     );
