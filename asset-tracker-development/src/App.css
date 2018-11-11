@@ -2,6 +2,10 @@ body {
   padding-top: 5rem;
 }
 
+.navbar {
+  background-color: '#f8f8f8';
+}
+
 .App {
   height: 100%;
 }

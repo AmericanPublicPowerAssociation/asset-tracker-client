@@ -36,7 +36,11 @@ class Map extends Component {
     this.markers.forEach((m) => m.remove())
     this.markers = markers.map((m, i) => this.addMarker(m, i, selected_asset_id));
     this.markers.forEach((m) => m.addTo(this.map))
-    if (this.markers.length !== prevProps.markers.length) {
+
+    // if markers didn't change, don't change bounds
+    if ((this.markers.length !== prevProps.markers.length) || (
+      this.markers.some((m, i) => m.id !== prevProps.markers[i].id)
+    )) {
       const bounds = this.setBounds(this.markers);
       this.map.fitBounds(bounds, {
                   padding: 20
@@ -82,9 +86,9 @@ class Map extends Component {
     return (
       <div className='row'>
         <div className='col-md-12'>
-          <div onDragOver={(e) => {
-                    e.preventDefault();
-              }}   style={style} ref={el => this.mapContainer = el} />
+          <div className='border rounded'
+            style={style}
+            ref={el => this.mapContainer = el} />
         </div>
       </div>
     );

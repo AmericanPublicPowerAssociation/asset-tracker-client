@@ -35,7 +35,7 @@ class App extends Component {
     const selected_asset = all_assets.length > 0 ? all_assets[selected_asset_index] : null;
     return (
       <div className="App">
-    <nav className="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <nav className="navbar border-bottom navbar-expand-md navbar-light fixed-top">
       <Link className="navbar-brand" to="/">Asset Tracker</Link>
       <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
