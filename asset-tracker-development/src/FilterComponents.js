@@ -49,7 +49,7 @@ class FilterComponents extends Component {
         </div>
         <div className="col-md-4">
           <SearchQuery filterAssets={(search_query) => this.filterAssets(search_query)}/>
-          <AssetsGrid updateSelected={(selected_asset_index) => updateSelected(selected_asset_index)} assets={filtered_assets}/>
+          <AssetsGrid selected_asset_id={selected_asset_index} updateSelected={(selected_asset_index) => updateSelected(selected_asset_index)} assets={filtered_assets}/>
         </div>
       </div>
     );

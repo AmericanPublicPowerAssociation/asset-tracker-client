@@ -6,9 +6,10 @@ import './AssetsGrid.css';
 
 class Asset extends Component {
   render() {
-    const {asset, onClickEvent} = this.props;
+    const {isSelected, asset, onClickEvent} = this.props;
+    const style = isSelected ? {backgroundColor: 'lightblue'} : {}
     return (
-      <div onClick={(e) => onClickEvent()} className='row asset'>
+      <div style={style} onClick={(e) => onClickEvent()} className='row asset'>
         <div className='col-md-12'>
           {asset.product}
         </div>
