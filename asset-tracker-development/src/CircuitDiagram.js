@@ -1,6 +1,12 @@
 import React, {Component} from 'react';
 import cytoscape from 'cytoscape';
 
+import {library} from '@fortawesome/fontawesome-svg-core'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faLocationArrow} from '@fortawesome/free-solid-svg-icons'
+
+
+library.add(faLocationArrow)
 
 class CircuitDiagram extends Component {
   state = {
@@ -98,7 +104,9 @@ class CircuitDiagram extends Component {
         <div className='col-md-12'>
           <div className="card">
             <div className="card-body">
-              <h1 className="card-title">Circuit</h1>
+              <h1 className="card-title">Circuit
+                <button style={{'float': 'right'}} className='center-circuit btn btn-primary' onClick={(e) => this.cy.fit()}><FontAwesomeIcon icon='location-arrow' /></button>
+              </h1>
               <div id='cy' className='border rounded' style={style} />
             </div>
           </div>

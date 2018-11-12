@@ -14,7 +14,6 @@ def get_connections():
         dict(connections=connections)))
 
 
-
 @app.route('/get-assets.json')
 def get_query():
     assets = [
