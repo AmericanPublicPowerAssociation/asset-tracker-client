@@ -1,3 +1,7 @@
+.search-div {
+  padding: 0px;
+}
+
 .search {
   z-index: 1;
   top: 0;

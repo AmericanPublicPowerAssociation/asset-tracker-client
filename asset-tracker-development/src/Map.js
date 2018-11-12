@@ -1,14 +1,22 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import mapboxgl from 'mapbox-gl';
+
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 
 class Map extends Component {
-  addMarker(asset, index) {
-      const marker = new mapboxgl.Marker({
-      })
+  addMarker(asset, index, selected_asset_id) {
+      const {updateSelected} = this.props;
+      const popup = new mapboxgl.Popup()
+        .on('open', function(e) {
+          updateSelected(asset.id);
+        })
+      const color = asset.id === selected_asset_id ? 'red' : 'blue';
+      const marker = new mapboxgl.Marker({color})
         .setLngLat([asset.lng, asset.lat])
-        .addTo(this.map);
+        .setPopup(popup)
+
+      marker.id = asset.id;
       return marker
     }
 
@@ -24,26 +32,37 @@ class Map extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const {markers, selected_asset_id} = this.props;
     this.markers.forEach((m) => m.remove())
-    this.markers = this.props.markers.map((m, i) => this.addMarker(m, i));
-    const bounds = this.setBounds(this.markers);
-    this.map.fitBounds(bounds, {
-                padding: 20
-            });
+    this.markers = markers.map((m, i) => this.addMarker(m, i, selected_asset_id));
+    this.markers.forEach((m) => m.addTo(this.map))
+
+    // if markers didn't change, don't change bounds
+    if ((this.markers.length !== prevProps.markers.length) || (
+      this.markers.some((m, i) => m.id !== prevProps.markers[i].id)
+    )) {
+      const bounds = this.setBounds(this.markers);
+      this.map.fitBounds(bounds, {
+                  padding: 20
+              });
+    }
     //this.map.setMaxBounds(this.map.getBounds());
   }
 
   componentDidMount() {
+    const {markers, selected_asset_id} = this.props;
     mapboxgl.accessToken = 'pk.eyJ1Ijoic2FsYWgtaGFsYXMiLCJhIjoiY2prdnY1Y25mMGN3cjN2cTVxa2tvbWRnZCJ9.c8uFh6KYWAi1SPF6ZRosAA';
+    this.markers = markers.map((m, i) => this.addMarker(m, i, selected_asset_id));
+    const bounds = this.setBounds(this.markers);
+    const center = this.markers.length > 0 ? bounds.getCenter() : [0, 0];
     this.map = new mapboxgl.Map({
           container: this.mapContainer,
           style: 'mapbox://styles/mapbox/streets-v9',
-          center: [0, 0],
+          center: center,
           zoom: 8,
           minZoom: 10,
         });
-    this.markers = this.props.markers.map((m, i) => this.addMarker(m, i));
-    const bounds = this.setBounds(this.markers);
+    this.markers.forEach((m) => m.addTo(this.map))
     this.map.fitBounds(bounds, {
                 padding: 20
             });
@@ -67,9 +86,9 @@ class Map extends Component {
     return (
       <div className='row'>
         <div className='col-md-12'>
-          <div onDragOver={(e) => {
-                    e.preventDefault();
-              }}   style={style} ref={el => this.mapContainer = el} />
+          <div className='border rounded'
+            style={style}
+            ref={el => this.mapContainer = el} />
         </div>
       </div>
     );
