@@ -58,6 +58,8 @@ def get_query():
             'lng': -73.8994671,
         },
     ]
+    with open('data.json') as f:
+        assets = json.load(f)
     return jsonify(json.dumps(dict(
         all_assets=assets)))
 

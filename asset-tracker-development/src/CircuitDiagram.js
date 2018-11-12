@@ -71,9 +71,6 @@ class CircuitDiagram extends Component {
             x: (Number(n.lng)) * 10000,
             y: -(Number(n.lat)) * 10000
           },
-          style: {
-            padding: "50px"
-          },
           selected: false,
           selectable: true
       }}
