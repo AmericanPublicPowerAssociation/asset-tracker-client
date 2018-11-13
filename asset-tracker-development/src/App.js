@@ -4,7 +4,7 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 
 import AssetDetails from './AssetDetails';
 import AssetsTable from './AssetsTable';
-//import CircuitDiagram from './CircuitDiagram';
+import CircuitDiagram from './CircuitDiagram';
 import FilterComponents from './FilterComponents';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -48,6 +48,7 @@ class App extends Component {
                   <FilterComponents selectedAsset={selectedAsset} updateSelected={(selectedAsset) => this.setState({selectedAsset})} />
             </div>
             <div className="col-md-4">
+              <CircuitDiagram updateSelected={(selectedAsset) => this.setState({selectedAsset})} asset={selectedAsset}/>
               <AssetDetails asset={selectedAsset}/>
             </div>
           </div>

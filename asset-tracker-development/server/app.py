@@ -66,9 +66,21 @@ def get_center():
 
 @app.route('/get-connections.json')
 def get_connections():
-    connections = [(0, 2), (1, 3), (2, 4)]
+    node = int(request.args.get('node', None))
+    print(node)
+    curr_assets, conn = [], []
+    if node is not None:
+        curr_assets = [assets[node]]
+        connections = [(0, 2), (1, 3), (2, 4)]
+        for f, t in connections:
+            if node in [f, t]:
+                other = f if node != f else t
+                curr_assets.append(assets[other])
+                conn.append((f, t))
+    print(curr_assets)
+    print(conn)
     return jsonify(json.dumps(
-        dict(connections=connections)))
+        dict(assets=curr_assets, connections=conn)))
 
 
 @app.route('/search')
