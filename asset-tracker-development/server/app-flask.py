@@ -1,5 +1,5 @@
 import json
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 from flask_cors import CORS
 
 
@@ -12,7 +12,6 @@ def get_connections():
     connections = [(0, 2), (1, 3), (2, 4)]
     return jsonify(json.dumps(
         dict(connections=connections)))
-
 
 
 @app.route('/get-assets.json')
