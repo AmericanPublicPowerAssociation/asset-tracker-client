@@ -7,41 +7,20 @@ import SearchQuery from './SearchQuery';
 
 class FilterComponents extends Component {
   state = {
-    filtered_assets: []
+    filteredAssets: []
   }
 
-  componentDidMount() {
-    const {all_assets} = this.props;
+
+  updateFilteredAssets(filteredAssets) {
+    // search for assets
     this.setState({
-      filtered_assets: all_assets
+      filteredAssets 
     })
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const {all_assets} = this.props;
-    if (
-      prevProps.all_assets.length !== all_assets.length) {
-        this.setState({
-          filtered_assets: all_assets
-        })
-    }
-  }
-
-  filterAssets(search_query) {
-    // search for assets
-    const {all_assets} = this.props;
-    const re = new RegExp(`.*${search_query}.*`, 'i');
-
-    const filtered_assets = all_assets.filter((a) =>
-      a.vendor.match(re) || a.product.match(re));
-    this.setState({
-      filtered_assets
-    });
-  }
-
   render() {
-    const {selected_asset_index, updateSelected} = this.props;
-    const {filtered_assets} = this.state;
+    const {selectedAsset, updateSelected} = this.props;
+    const {filteredAssets} = this.state;
     return (
       <div className='row'>
         <div className='col-md-12'>
@@ -50,11 +29,11 @@ class FilterComponents extends Component {
               <h1 className="card-title">Map</h1>
               <div className='row'>
                     <div className="col-md-8">
-                      <Map selected_asset_id={selected_asset_index} updateSelected={(selected_asset_index) => updateSelected(selected_asset_index)} markers={filtered_assets} />
+                      <Map selectedAsset={selectedAsset} updateSelected={(asset) => updateSelected(asset)} markers={filteredAssets} />
                     </div>
                     <div className="col-md-4">
-                      <SearchQuery filterAssets={(search_query) => this.filterAssets(search_query)}/>
-                      <AssetsGrid selected_asset_id={selected_asset_index} updateSelected={(selected_asset_index) => updateSelected(selected_asset_index)} assets={filtered_assets}/>
+                      <SearchQuery updateFilteredAssets={(filteredAssets) => this.updateFilteredAssets(filteredAssets)}/>
+                      <AssetsGrid selectedAsset={selectedAsset} updateSelected={(asset) => updateSelected(asset)} assets={filteredAssets}/>
                     </div>
               </div>
             </div>

@@ -5,13 +5,13 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 
 class Map extends Component {
-  addMarker(asset, index, selected_asset_id) {
+  addMarker(asset, index, selectedAsset) {
       const {updateSelected} = this.props;
       const popup = new mapboxgl.Popup()
         .on('open', function(e) {
-          updateSelected(asset.id);
+          updateSelected(asset);
         })
-      const color = asset.id === selected_asset_id ? 'red' : 'blue';
+      const color = (selectedAsset !== null) && asset.id === selectedAsset.id ? 'red' : 'blue';
       const marker = new mapboxgl.Marker({color})
         .setLngLat([asset.lng, asset.lat])
         .setPopup(popup)
@@ -32,9 +32,10 @@ class Map extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const {markers, selected_asset_id} = this.props;
+    const {markers, selectedAsset} = this.props;
+
     this.markers.forEach((m) => m.remove())
-    this.markers = markers.map((m, i) => this.addMarker(m, i, selected_asset_id));
+    this.markers = markers.map((m, i) => this.addMarker(m, i, selectedAsset));
     this.markers.forEach((m) => m.addTo(this.map))
 
     // if markers didn't change, don't change bounds
@@ -50,23 +51,20 @@ class Map extends Component {
   }
 
   componentDidMount() {
-    const {markers, selected_asset_id} = this.props;
     mapboxgl.accessToken = 'pk.eyJ1Ijoic2FsYWgtaGFsYXMiLCJhIjoiY2prdnY1Y25mMGN3cjN2cTVxa2tvbWRnZCJ9.c8uFh6KYWAi1SPF6ZRosAA';
-    this.markers = markers.map((m, i) => this.addMarker(m, i, selected_asset_id));
-    const bounds = this.setBounds(this.markers);
-    const center = this.markers.length > 0 ? bounds.getCenter() : [0, 0];
-    this.map = new mapboxgl.Map({
-          container: this.mapContainer,
-          style: 'mapbox://styles/mapbox/streets-v9',
-          center: center,
-          zoom: 8,
-          minZoom: 10,
-        });
-    this.markers.forEach((m) => m.addTo(this.map))
-    this.map.fitBounds(bounds, {
-                padding: 20
+    fetch('http://localhost:5000/get-center.json')
+      .then((res) => res.json())
+      .then((data) => {
+        const {lat, lng} = JSON.parse(data);
+        this.map = new mapboxgl.Map({
+              container: this.mapContainer,
+              style: 'mapbox://styles/mapbox/streets-v9',
+              center: [lng, lat],
+              zoom: 8,
+              minZoom: 10,
             });
-    //this.map.setMaxBounds(this.map.getBounds());
+        this.markers = [];
+      })
   }
 
   componentWillUnmount() {

@@ -6,13 +6,30 @@ import './App.css';
 
 
 class AssetsTable extends Component {
+  state = {
+    assets: [], 
+  }
+  componentDidMount() {
+    const url = 'http://localhost:5000/get-assets.json';
+    fetch(url)
+      .then(res => {
+        return res.json();
+      }).then(data => {
+        const {assets} = JSON.parse(data);
+        this.setState({
+          assets,
+        });
+      });
+  }
+
+
   render() {
     const columns = [
       { title: "Vendor", field: "vendor"},
       { title: "Product", field: "product"},
       { title: "Version", field: "version"},
     ];
-    const {assets} = this.props;
+    const {assets} = this.state;
 
     return (
       <ReactTabulator columns={columns} data={assets} />
