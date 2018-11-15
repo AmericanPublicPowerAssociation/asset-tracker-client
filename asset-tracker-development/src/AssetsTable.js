@@ -10,7 +10,7 @@ class AssetsTable extends Component {
     assets: [], 
   }
   componentDidMount() {
-    const url = 'http://138.197.69.144:5000/get-assets.json';
+    const url = 'http://localhost:5000/get-assets.json';
     fetch(url)
       .then(res => {
         return res.json();

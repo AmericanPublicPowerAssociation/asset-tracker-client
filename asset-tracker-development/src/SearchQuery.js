@@ -19,7 +19,7 @@ class SearchQuery extends Component {
     const {searchQuery, filter} = this.state;
     const {updateFilteredAssets} = this.props;
     if (filter) {
-      fetch(`http://138.197.69.144:5000/search?query=${searchQuery}`)
+      fetch(`http://localhost:5000/search?query=${searchQuery}`)
       .then((res) => res.json())
       .then((data) => {
         const {filteredAssets} = JSON.parse(data);

@@ -14,6 +14,7 @@ assets = [
         'product': "quicktime",
         'lat': 40.6602037,
         'lng': -73.9689558,
+        'circuit': 'Ann'
     },
     {
         'id': 1,
@@ -22,6 +23,7 @@ assets = [
         'product': "relay",
         'lat': 40.5833388,
         'lng': -73.8179384,
+        'circuit': 'Bob'
     },
     {
         'id': 2,
@@ -30,6 +32,7 @@ assets = [
         'product': "circuit",
         'lat': 40.708981,
         'lng': -73.830536,
+        'circuit': 'Ann'
     },
     {
         'id': 3,
@@ -38,6 +41,7 @@ assets = [
         'product': "fuse",
         'lat': 40.6832795,
         'lng': -73.9793,
+        'circuit': 'Bob'
     },
     {
         'id': 4,
@@ -46,11 +50,11 @@ assets = [
         'product': "transformer",
         'lat': 40.7119001,
         'lng': -73.8994671,
+        'circuit': 'Ann'
     },
 ]
-with open('data.json') as f:
-    assets = json.load(f)
 
+connections = [(0, 2), (1, 3), (2, 4)]
 
 @app.route('/get-center.json')
 def get_center():
@@ -105,6 +109,12 @@ def get_query():
     return jsonify(json.dumps(dict(
         assets=assets)))
 
+@app.route('/get-circuit.json')
+def get_circuit():
+    circuit = request.args.get('circuit', None) # get assets passed in URL
+    group = {a['id']: a for a in assets if a['circuit'] == circuit}
+    edges = [(a, b) for a, b in connections if a in group and b in group]
+    return jsonify(json.dumps(dict(edges=edges)))
 
 if __name__ == '__main__':
     app.run('0.0.0.0', debug=True)

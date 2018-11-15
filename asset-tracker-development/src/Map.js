@@ -103,7 +103,7 @@ class Map extends Component {
 
   componentDidMount() {
     mapboxgl.accessToken = 'pk.eyJ1Ijoic2FsYWgtaGFsYXMiLCJhIjoiY2prdnY1Y25mMGN3cjN2cTVxa2tvbWRnZCJ9.c8uFh6KYWAi1SPF6ZRosAA';
-    fetch('http://138.197.69.144:5000/get-center.json')
+    fetch('http://localhost:5000/get-center.json')
       .then((res) => res.json())
       .then((data) => {
         const {lat, lng} = JSON.parse(data);
