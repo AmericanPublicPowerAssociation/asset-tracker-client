@@ -17,12 +17,12 @@ dist
 *.map
 *.out
 *.tmp
+.DS_Store
 data_*
 # Vim
 *.sw[op]
 *~
-# Other
-.DS_Store/
 # node
 node_modules/
 npm-debug.log*
+package-lock.json

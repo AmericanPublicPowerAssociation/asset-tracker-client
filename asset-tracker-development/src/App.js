@@ -1,129 +1,58 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import { ReactTabulator } from "react-tabulator";
-import Map from './Map';
-import "react-tabulator/lib/css/bootstrap/tabulator_bootstrap.min.css";
+import React, {Component} from 'react';
+import {Route, Link} from 'react-router-dom';
+import 'bootstrap/dist/js/bootstrap.min.js';
+
+import AssetDetails from './AssetDetails';
+import AssetsTable from './AssetsTable';
+import CircuitDiagram from './CircuitDiagram';
+import FilterComponents from './FilterComponents';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
+
 class App extends Component {
   state = {
-    assets: [],
-    filtered_assets: [],
+    selectedAsset: null,
   };
 
-  componentDidMount() {
-    const assets = [
-      {
-        id: 1,
-        vendor: "Oli Bob",
-        version: "12",
-        product: "red",
-        delete: false,
-      },
-      {
-        id: 2,
-        vendor: "Mary May",
-        version: "1",
-        product: "green",
-        delete: false,
-      },
-      {
-        id: 3,
-        vendor: "Christine Lobowski",
-        version: "42",
-        product: "green",
-        delete: false,
-      },
-      {
-        id: 4,
-        vendor: "Brendon Philips",
-        version: "125",
-        product: "red",
-        delete: false,
-      },
-      {
-        id: 5,
-        vendor: "Margret Marmajuke",
-        version: "16",
-        product: "yellow",
-        delete: false,
-      },
-      {
-        id: 6,
-        vendor: "Van Ng",
-        version: "37",
-        product: "green",
-        delete: false,
-      },
-      {
-        id: 7,
-        vendor: "Duc Ng",
-        version: "37",
-        product: "yellow",
-        delete: false,
-      }
-    ];
-
-    this.setState({
-      assets,
-    });
-  }
-
-  componentDidUpdate(oldProps, oldState) {
-    // if new state is different from old state update db
-    if (oldState.assets.length !== this.state.assets.length) {
-      console.log('update');
-    }
-    else {
-      const eq = oldState.assets.every((asset, index) => this.state.assets[index].id === asset.id);
-      if (! eq) {
-        console.log('update');
-      }
-    }
-  }
-
-  handleDelete(e, row) {
-    console.log(this)
-    this.deleteRow(row.getIndex())
-  }
-
-
   render() {
-    const columns = [
-      { title: "Vendor", editor: "input", field: "vendor", headerFilter: "input"},
-      { title: "Product", editor: "input", field: "product", headerFilter: "input"},
-      { title: "Version", editor: "input", field: "version"},
-      { title: "delete", field:'delete', formatter:'tickCross', cellClick: (e, cell) => {
-          console.log('delete row');
-          const id = cell._cell.row.data.id;
-          console.log(id);
-          const assets = this.state.assets.filter((a, i) => a.id !== id);
-          console.log(assets)
-          this.setState({
-            assets
-          });
-        }
-      },
-    ];
-
+    const {selectedAsset} = this.state;
     return (
       <div className="App">
-        <h1>Asset Tracker</h1>
-        <div className="row">
-          <div className="col-md-4">
-            <ReactTabulator dataFiltered={(filters, rows) => {
-              if (this.state.filtered_assets.length !== rows.length )
-                    this.setState({
-                      filtered_assets: rows 
-                    })
-              }
-            } dataEdited={(data) => this.setState({data})} columns={columns} data={this.state.assets} />
+    <nav className="navbar border-bottom navbar-expand-md navbar-light fixed-top">
+      <Link className="navbar-brand" to="/">Asset Tracker</Link>
+      <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span className="navbar-toggler-icon"></span>
+      </button>
+
+      <div className="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul className="navbar-nav mr-auto">
+          <li className="nav-item"><Link className="nav-link" to="/assets">Assets</Link></li>
+          <li className="nav-item"><Link className="nav-link" to="#">Reports</Link></li>
+          <li className="nav-item"><Link className="nav-link" to="#">Alerts</Link></li>
+        </ul>
+
+        <ul className="navbar-nav mr-2">
+          <li className="nav-item"><Link className="nav-link" to="#">Alex</Link></li>
+        </ul>
+        <button id="button-sign-out" className="btn btn-primary my-2 my-sm-0" type="submit">Sign Out</button>
+      </div>
+    </nav>
+        <Route exact path="/assets" render={ () => (
+          <AssetsTable />
+        )} />
+        <Route exact path="/" render={ () => (
+          <div className="row">
+            <div className='col-md-8'>
+                  <FilterComponents selectedAsset={selectedAsset} updateSelected={(selectedAsset) => this.setState({selectedAsset})} />
+            </div>
+            <div className="col-md-4">
+              <CircuitDiagram updateSelected={(selectedAsset) => this.setState({selectedAsset})} asset={selectedAsset}/>
+              <AssetDetails asset={selectedAsset}/>
+            </div>
           </div>
-          <div className="col-md-8">
-            <Map markers={this.state.assets} />
-          </div>
-        </div>
+        )} />
       </div>
     );
   }

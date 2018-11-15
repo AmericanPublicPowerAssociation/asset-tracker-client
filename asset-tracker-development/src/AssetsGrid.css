@@ -1,0 +1,14 @@
+.assets-grid {
+  cursor: pointer;
+  overflow: auto;
+  height: 450px;
+}
+
+.asset {
+  padding: 10px;
+  text-align: center;
+}
+
+.asset:hover {
+  background-color: lightblue;
+}
