@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {ReactTabulator} from "react-tabulator";
+import { AgGridReact } from "ag-grid-react";
 
-import "react-tabulator/lib/css/bootstrap/tabulator_bootstrap.min.css";
+import "ag-grid-community/dist/styles/ag-grid.css";
+import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import './App.css';
 
 
@@ -9,6 +10,7 @@ class AssetsTable extends Component {
   state = {
     assets: [], 
   }
+
   componentDidMount() {
     const url = 'http://18.212.1.167:5000/get-assets.json';
     fetch(url)
@@ -22,17 +24,39 @@ class AssetsTable extends Component {
       });
   }
 
+  onGridReady(params) {
+    this.gridAPI = params.api;
+    this.gridAPI.sizeColumnsToFit();
+  }
 
   render() {
     const columns = [
       { title: "Vendor", field: "vendor"},
       { title: "Product", field: "product"},
-      { title: "Version", field: "version"},
+      { title: "Version", field: "version"}
     ];
     const {assets} = this.state;
 
     return (
-      <ReactTabulator columns={columns} data={assets} />
+      <div
+        // specify grid theme
+        className="ag-theme-balham"
+        style={{
+          // grid dimensions
+          height: "500px",
+          width: "100%"
+        }}
+      >
+	<button className='btn btn-primary' onClick={(e) => this.gridAPI.exportDataAsCsv() }>Download</button>
+        <AgGridReact
+          // agGrid component with config objects
+          enableSorting={true}
+          enableFilter={true}
+          columnDefs={columns}
+          onGridReady={this.onGridReady.bind(this)}
+	  rowData={assets}
+        />
+      </div>
     );
   }
 }
