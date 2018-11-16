@@ -10,11 +10,26 @@ class FilterComponents extends Component {
     filteredAssets: []
   }
 
+  componentDidUpdate() {
+    const {selectedAsset} = this.props;
+    if (selectedAsset !== null) {
+      const {filteredAssets} = this.state;
+      const isNotInFilter = filteredAssets.every(
+        (a) => a.id !== selectedAsset.id);
+      if (isNotInFilter) {
+        this.setState({
+          filteredAssets: filteredAssets.concat([selectedAsset])
+        })
+      }
+    }
+  }
 
   updateFilteredAssets(filteredAssets) {
     // search for assets
+    const {updateSelected} = this.props;
+    updateSelected(null)
     this.setState({
-      filteredAssets 
+      filteredAssets
     })
   }
 

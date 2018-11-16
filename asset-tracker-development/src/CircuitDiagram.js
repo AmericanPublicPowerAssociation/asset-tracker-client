@@ -28,8 +28,8 @@ class CircuitDiagram extends Component {
     this.cy.remove('node');
     this.cy.removeListener('click', 'node');
     const {asset, updateSelected} = this.props;
-    if (asset !== null) {
-      const url = `http://localhost:5000/get-connections.json?node=${asset.id}`;
+    if (asset) {
+      const url = `http://18.212.1.167:5000/get-circuit.json?circuit_id=${asset.circuit}`;
       fetch(url)
         .then(res => {
           return res.json();
@@ -43,8 +43,6 @@ class CircuitDiagram extends Component {
           this.cy.fit();
           this.cy.on('click', 'node', function(e) {
             const currId = parseInt(e.target.id());
-            console.log(currId)
-            console.log(assets)
             const asset = assets.filter((a) => a.id === currId)[0]
             updateSelected(asset)
           });

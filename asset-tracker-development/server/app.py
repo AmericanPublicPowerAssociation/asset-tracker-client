@@ -56,13 +56,14 @@ assets = [
 
 connections = [(0, 2), (1, 3), (2, 4)]
 
+
 @app.route('/get-center.json')
 def get_center():
     lat = []
     lng = []
     for a in assets:
-          lat.append(a['lat'])
-          lng.append(a['lng'])
+        lat.append(a['lat'])
+        lng.append(a['lng'])
     return jsonify(json.dumps(dict(
         lat=sum(lat)/len(lat),
         lng=sum(lng)/len(lng))))
@@ -71,7 +72,6 @@ def get_center():
 @app.route('/get-connections.json')
 def get_connections():
     node = int(request.args.get('node', None))
-    print(node)
     curr_assets, conn = [], []
     if node is not None:
         curr_assets = [assets[node]]
@@ -81,8 +81,6 @@ def get_connections():
                 other = f if node != f else t
                 curr_assets.append(assets[other])
                 conn.append((f, t))
-    print(curr_assets)
-    print(conn)
     return jsonify(json.dumps(
         dict(assets=curr_assets, connections=conn)))
 
@@ -90,8 +88,7 @@ def get_connections():
 @app.route('/search')
 def search():
     query = request.args.get('query', None)
-    print(query)
-    l = []
+    results = []
     if query is not None:
         for a in assets:
             template = r'.*%s.*' % query
@@ -100,8 +97,8 @@ def search():
             product_match = re.search(
                     template, a['product'], re.IGNORECASE)
             if vendor_match or product_match:
-                l.append(a)
-    return jsonify(json.dumps(dict(filteredAssets=l)))
+                results.append(a)
+    return jsonify(json.dumps(dict(filteredAssets=results)))
 
 
 @app.route('/get-assets.json')
@@ -109,12 +106,15 @@ def get_query():
     return jsonify(json.dumps(dict(
         assets=assets)))
 
+
 @app.route('/get-circuit.json')
 def get_circuit():
-    circuit = request.args.get('circuit', None) # get assets passed in URL
-    group = {a['id']: a for a in assets if a['circuit'] == circuit}
+    circuit_id = request.args.get('circuit_id', None)
+    group = {a['id']: a for a in assets if a['circuit'] == circuit_id}
     edges = [(a, b) for a, b in connections if a in group and b in group]
-    return jsonify(json.dumps(dict(edges=edges)))
+    return jsonify(
+        json.dumps(dict(assets=list(group.values()), connections=edges)))
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', debug=True)
