@@ -8,11 +8,11 @@ import './App.css';
 
 class AssetsTable extends Component {
   state = {
-    assets: [],
+    assets: [], 
   }
 
   componentDidMount() {
-    const url = 'http://138.197.69.144:5000/get-assets.json';
+    const url = 'http://18.212.1.167:5000/get-assets.json';
     fetch(url)
       .then(res => {
         return res.json();

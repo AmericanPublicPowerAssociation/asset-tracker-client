@@ -13,26 +13,11 @@ import './App.css';
 
 class App extends Component {
   state = {
-    all_assets: [],
-    selected_asset_index: 0,
+    selectedAsset: null,
   };
 
-  componentDidMount() {
-    const url = 'http://localhost:5000/get-assets.json';
-    fetch(url)
-      .then(res => {
-        return res.json();
-      }).then(data => {
-        const {all_assets} = JSON.parse(data);
-        this.setState({
-          all_assets,
-        });
-      });
-  }
-
   render() {
-    const {all_assets, selected_asset_index} = this.state;
-    const selected_asset = all_assets.length > 0 ? all_assets[selected_asset_index] : null;
+    const {selectedAsset} = this.state;
     return (
       <div className="App">
     <nav className="navbar border-bottom navbar-expand-md navbar-light fixed-top">
@@ -43,9 +28,9 @@ class App extends Component {
 
       <div className="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul className="navbar-nav mr-auto">
-          <li className="nav-item"><Link className="nav-link" to="/assets">Assets ({all_assets.length}) </Link></li>
-          <li className="nav-item"><Link className="nav-link" to="#">Reports (2)</Link></li>
-          <li className="nav-item"><Link className="nav-link" to="#">Alerts (7)</Link></li>
+          <li className="nav-item"><Link className="nav-link" to="/assets">Assets</Link></li>
+          <li className="nav-item"><Link className="nav-link" to="#">Reports</Link></li>
+          <li className="nav-item"><Link className="nav-link" to="#">Alerts</Link></li>
         </ul>
 
         <ul className="navbar-nav mr-2">
@@ -55,16 +40,16 @@ class App extends Component {
       </div>
     </nav>
         <Route exact path="/assets" render={ () => (
-          <AssetsTable assets={all_assets}/>
+          <AssetsTable />
         )} />
         <Route exact path="/" render={ () => (
           <div className="row">
             <div className='col-md-8'>
-                  <FilterComponents all_assets={all_assets} selected_asset_index={selected_asset_index} updateSelected={(selected_asset_index) => this.setState({selected_asset_index})} />
+                  <FilterComponents selectedAsset={selectedAsset} updateSelected={(selectedAsset) => this.setState({selectedAsset})} />
             </div>
             <div className="col-md-4">
-              <CircuitDiagram selected_asset_id={selected_asset_index} updateSelected={(selected_asset_index) => this.setState({selected_asset_index})} assets={all_assets}/>
-              <AssetDetails asset={selected_asset}/>
+              <CircuitDiagram updateSelected={(selectedAsset) => this.setState({selectedAsset})} asset={selectedAsset}/>
+              <AssetDetails asset={selectedAsset}/>
             </div>
           </div>
         )} />

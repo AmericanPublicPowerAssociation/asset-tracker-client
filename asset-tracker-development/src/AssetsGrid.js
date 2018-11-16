@@ -8,10 +8,10 @@ import './AssetsGrid.css';
 
 class AssetsGrid extends Component {
   render() {
-    const {assets, updateSelected, selected_asset_id} = this.props;
+    const {assets, updateSelected, selectedAsset} = this.props;
     const rows = assets.map((a) => {
-      const isSelected = (a.id === selected_asset_id);
-      return <Asset isSelected={isSelected} onClickEvent={() => updateSelected(a.id)} key={a.id} asset={a}/>
+      const isSelected = selectedAsset !== null && (a.id === selectedAsset.id);
+      return <Asset isSelected={isSelected} onClickEvent={() => updateSelected(a)} key={a.id} asset={a}/>
     });
 
     return (

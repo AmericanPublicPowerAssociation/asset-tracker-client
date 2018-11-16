@@ -5,13 +5,51 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 
 class Map extends Component {
-  addMarker(asset, index, selected_asset_id) {
+  createLayer(assets, selectedAsset, layerName) {
+    const assetData = assets.map((a) => {
+      const isSelected = (selectedAsset !== null && selectedAsset.id === a.id) ? 1 : 0;
+      return {
+                  "type": "Feature",
+                  "geometry": {
+                      "type": "Point",
+                      "coordinates": [a.lng, a.lat]
+                  },
+                  "properties": {
+                    "id": a.id,
+                    "selected": isSelected
+                  }
+          }
+    });
+
+    return {
+      id: layerName,
+      type: "circle",
+      source: {
+        type: 'geojson',
+        data: {
+          "type": "FeatureCollection",
+          "features": assetData,
+        }
+      },
+      paint: {
+        "circle-radius": 10,
+        "circle-color": [
+          "match",
+          ["get", "selected"],
+          1, "red",
+          "blue",
+        ]
+      },
+    };
+  }
+
+  addMarker(asset, index, selectedAsset) {
       const {updateSelected} = this.props;
       const popup = new mapboxgl.Popup()
         .on('open', function(e) {
-          updateSelected(asset.id);
+          updateSelected(asset);
         })
-      const color = asset.id === selected_asset_id ? 'red' : 'blue';
+      const color = (selectedAsset !== null) && asset.id === selectedAsset.id ? 'red' : 'blue';
       const marker = new mapboxgl.Marker({color})
         .setLngLat([asset.lng, asset.lat])
         .setPopup(popup)
@@ -22,26 +60,56 @@ class Map extends Component {
 
   setBounds(markers) {
     if (markers.length > 0) {
+      const initialCoords = [markers[0].lng, markers[0].lat];
       return markers.reduce(function(bounds, marker) {
-                  return bounds.extend(marker.getLngLat());
+                  return bounds.extend([marker.lng, marker.lat]);
               }, new mapboxgl.LngLatBounds(
-                markers[0].getLngLat(), markers[0].getLngLat()));
+                initialCoords, initialCoords));
     } else {
       return new mapboxgl.LngLatBounds([0, 0], [0, 0]);
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const {markers, selected_asset_id} = this.props;
-    this.markers.forEach((m) => m.remove())
-    this.markers = markers.map((m, i) => this.addMarker(m, i, selected_asset_id));
-    this.markers.forEach((m) => m.addTo(this.map))
+    const {markers, selectedAsset, updateSelected} = this.props;
 
     // if markers didn't change, don't change bounds
-    if ((this.markers.length !== prevProps.markers.length) || (
-      this.markers.some((m, i) => m.id !== prevProps.markers[i].id)
-    )) {
-      const bounds = this.setBounds(this.markers);
+    const prevPoints = prevProps.markers;
+    const didChange = ((markers.length !== prevPoints.length) || (
+      markers.some((m, i) => m.id !== prevPoints[i].id)
+    ))
+
+    const layerName = 'assets'
+    const layer = this.map.getLayer(layerName)
+
+    if (layer) {
+      this.map.removeLayer(layerName);
+      this.map.removeSource(layerName);
+      this.map.off('click', layerName)
+    }
+
+    this.layer = this.createLayer(markers, selectedAsset, layerName);
+    this.map.on('click', layerName, (e) => {
+        const features = this.map.queryRenderedFeatures(e.point, {layers: [layerName]});
+        if (features.length) {
+          const feature = features[0];
+          const pointId = feature.properties.id
+          const asset =  this.props.markers.find((m) => m.id === pointId)
+          if (asset) {
+            updateSelected(asset)
+          } else {
+            console.log("ERROR")
+          }
+        }
+        else {
+          console.log("ERROR")
+        }
+      });
+    this.map.addLayer(this.layer);
+
+    // if markers didn't change, don't change bounds
+    if (didChange){
+      const bounds = this.setBounds(markers);
       this.map.fitBounds(bounds, {
                   padding: 20
               });
@@ -50,23 +118,20 @@ class Map extends Component {
   }
 
   componentDidMount() {
-    const {markers, selected_asset_id} = this.props;
     mapboxgl.accessToken = 'pk.eyJ1Ijoic2FsYWgtaGFsYXMiLCJhIjoiY2prdnY1Y25mMGN3cjN2cTVxa2tvbWRnZCJ9.c8uFh6KYWAi1SPF6ZRosAA';
-    this.markers = markers.map((m, i) => this.addMarker(m, i, selected_asset_id));
-    const bounds = this.setBounds(this.markers);
-    const center = this.markers.length > 0 ? bounds.getCenter() : [0, 0];
-    this.map = new mapboxgl.Map({
-          container: this.mapContainer,
-          style: 'mapbox://styles/mapbox/streets-v9',
-          center: center,
-          zoom: 8,
-          minZoom: 10,
-        });
-    this.markers.forEach((m) => m.addTo(this.map))
-    this.map.fitBounds(bounds, {
-                padding: 20
+    fetch('http://18.212.1.167:5000/get-center.json')
+      .then((res) => res.json())
+      .then((data) => {
+        const {lat, lng} = JSON.parse(data);
+        this.map = new mapboxgl.Map({
+              container: this.mapContainer,
+              style: 'mapbox://styles/mapbox/streets-v9',
+              center: [lng, lat],
+              zoom: 8,
+              minZoom: 10,
             });
-    //this.map.setMaxBounds(this.map.getBounds());
+        this.layer = {};
+      })
   }
 
   componentWillUnmount() {

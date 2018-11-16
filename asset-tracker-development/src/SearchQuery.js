@@ -11,27 +11,45 @@ library.add(faSearch)
 
 class SearchQuery extends Component {
   state = {
-    search_query: ''
+    searchQuery: '',
+    filter: false
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    const {searchQuery, filter} = this.state;
+    const {updateFilteredAssets} = this.props;
+    if (filter) {
+      fetch(`http://18.212.1.167:5000/search?query=${searchQuery}`)
+      .then((res) => res.json())
+      .then((data) => {
+        const {filteredAssets} = JSON.parse(data);
+        this.setState({
+          searchQuery: '',
+          filter: false
+        })
+        updateFilteredAssets(filteredAssets);
+      })  
+    } 
+  }
+
   shouldComponentUpdate(prevProps, prevState) {
-    const {search_query} = this.state
-    return prevState.search_query !== search_query 
+    const {searchQuery, filter} = this.state
+    return (prevState.searchQuery !== searchQuery) || (
+        prevState.filter !== filter)
   }
 
   render() {
-    const {filterAssets} = this.props;
-    const {search_query} = this.state;
+    const {searchQuery} = this.state;
     return (
       <div className='row'>
         <div className="col-md-12 search-div">
           <form onSubmit={(e) => e.preventDefault()}>
             <input onChange={(e) =>
                 this.setState({
-                  search_query: e.target.value
-                })} placeholder='search...' value={search_query}
+                  searchQuery: e.target.value
+                })} placeholder='search...' value={searchQuery}
                 className='search form-control'/>
-            <button onClick={(e) => filterAssets(this.state.search_query)}
+            <button onClick={(e) => this.setState({filter: true})}
               className='search-btn form-control'><FontAwesomeIcon icon='search' /> </button>
           </form>
         </div>
