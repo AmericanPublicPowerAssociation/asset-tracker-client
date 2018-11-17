@@ -12,7 +12,7 @@ class FilterComponents extends Component {
 
   componentDidUpdate() {
     const {selectedAsset} = this.props;
-    if (selectedAsset !== null) {
+    if (selectedAsset) {
       const {filteredAssets} = this.state;
       const isNotInFilter = filteredAssets.every(
         (a) => a.id !== selectedAsset.id);
@@ -38,15 +38,15 @@ class FilterComponents extends Component {
     const {filteredAssets} = this.state;
     return (
       <div className='row'>
-        <div className='col-md-12'>
+        <div className='col-lg-12'>
           <div className="card">
             <div className="card-body">
               <h1 className="card-title">Map</h1>
               <div className='row'>
-                    <div className="col-md-8">
+                    <div className="col-lg-8">
                       <Map selectedAsset={selectedAsset} updateSelected={(asset) => updateSelected(asset)} markers={filteredAssets} />
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-lg-4">
                       <SearchQuery updateFilteredAssets={(filteredAssets) => this.updateFilteredAssets(filteredAssets)}/>
                       <AssetsGrid selectedAsset={selectedAsset} updateSelected={(asset) => updateSelected(asset)} assets={filteredAssets}/>
                     </div>

@@ -44,10 +44,10 @@ class App extends Component {
         )} />
         <Route exact path="/" render={ () => (
           <div className="row">
-            <div className='col-md-8'>
+            <div className='col-lg-8'>
                   <FilterComponents selectedAsset={selectedAsset} updateSelected={(selectedAsset) => this.setState({selectedAsset})} />
             </div>
-            <div className="col-md-4">
+            <div className="col-lg-4">
               <CircuitDiagram updateSelected={(selectedAsset) => this.setState({selectedAsset})} asset={selectedAsset}/>
               <AssetDetails asset={selectedAsset}/>
             </div>

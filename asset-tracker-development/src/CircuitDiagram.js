@@ -3,12 +3,19 @@ import cytoscape from 'cytoscape';
 
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faLocationArrow} from '@fortawesome/free-solid-svg-icons'
+import {faCompass} from '@fortawesome/free-solid-svg-icons'
 
 
-library.add(faLocationArrow)
+library.add(faCompass)
 
 class CircuitDiagram extends Component {
+  shouldComponentUpdate(prevProps, prevState) {
+    const {asset} = this.props;
+    const prevAsset = prevProps.asset;
+    return !(asset && prevProps.asset && asset.circuit === prevAsset.circuit)
+  }
+
+
   componentDidMount() {
     this.cy = cytoscape({
       container: document.getElementById('cy'),
@@ -41,13 +48,17 @@ class CircuitDiagram extends Component {
             edges
           });
           this.cy.fit();
-          this.cy.on('click', 'node', function(e) {
+          this.cy.on('tap', 'node', function(e) {
             const currId = parseInt(e.target.id());
             const asset = assets.filter((a) => a.id === currId)[0]
             updateSelected(asset)
           });
           const el = this.cy.getElementById(asset.id)
           el.select();
+          this.setState({
+            assets,
+            connections
+          });
         });
     }
   }
@@ -70,7 +81,7 @@ class CircuitDiagram extends Component {
       }
     });
 
-    const edges = (nodes.length > 0) ? connections.map((e) => {
+    const edges = nodes.length ? connections.map((e) => {
           const [from, to] = e;
           return {
               group: 'edges',
@@ -92,13 +103,14 @@ class CircuitDiagram extends Component {
     const style = {height: '400px', width: '100%'}
 	  return (
       <div className='row'>
-        <div className='col-md-12'>
+        <div className='col-lg-12'>
           <div className="card">
             <div className="card-body">
-              <h1 className="card-title">Circuit
-                <button style={{'float': 'right'}} className='center-circuit btn btn-primary' onClick={(e) => this.cy.fit()}><FontAwesomeIcon icon='location-arrow' /></button>
+              <h1 className="card-title">
+                Circuit
               </h1>
               <div id='cy' className='border rounded' style={style} />
+                <button style={{'float': 'right'}} className='center-circuit btn' onClick={(e) => this.cy.fit()}><FontAwesomeIcon icon='compass' /></button>
             </div>
           </div>
         </div>

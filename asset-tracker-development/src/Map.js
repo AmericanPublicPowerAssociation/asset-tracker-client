@@ -7,7 +7,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 class Map extends Component {
   createLayer(assets, selectedAsset, layerName) {
     const assetData = assets.map((a) => {
-      const isSelected = (selectedAsset !== null && selectedAsset.id === a.id) ? 1 : 0;
+      const isSelected = (selectedAsset && selectedAsset.id === a.id) ? 1 : 0;
       return {
                   "type": "Feature",
                   "geometry": {
@@ -49,7 +49,7 @@ class Map extends Component {
         .on('open', function(e) {
           updateSelected(asset);
         })
-      const color = (selectedAsset !== null) && asset.id === selectedAsset.id ? 'red' : 'blue';
+      const color = selectedAsset && asset.id === selectedAsset.id ? 'red' : 'blue';
       const marker = new mapboxgl.Marker({color})
         .setLngLat([asset.lng, asset.lat])
         .setPopup(popup)
@@ -90,25 +90,24 @@ class Map extends Component {
 
     this.layer = this.createLayer(markers, selectedAsset, layerName);
     this.map.on('click', layerName, (e) => {
-        const features = this.map.queryRenderedFeatures(e.point, {layers: [layerName]});
-        if (features.length) {
-          const feature = features[0];
-          const pointId = feature.properties.id
-          const asset =  this.props.markers.find((m) => m.id === pointId)
-          if (asset) {
-            updateSelected(asset)
-          } else {
-            console.log("ERROR")
-          }
-        }
-        else {
-          console.log("ERROR")
-        }
-      });
+      const pointId = e.features[0].properties.id
+      const asset =  this.props.markers.find((m) => m.id === pointId)
+      updateSelected(asset)
+    });
     this.map.addLayer(this.layer);
+    if (selectedAsset) {
+      this.popup
+        .setLngLat(
+          [selectedAsset.lng, selectedAsset.lat])
+        .setHTML(selectedAsset.product)
+        .addTo(this.map);
+    }
+    else {
+      this.popup.remove(); 
+    }
 
     // if markers didn't change, don't change bounds
-    if (didChange){
+    if (didChange && markers.length){
       const bounds = this.setBounds(markers);
       this.map.fitBounds(bounds, {
                   padding: 20
@@ -130,6 +129,9 @@ class Map extends Component {
               zoom: 8,
               minZoom: 10,
             });
+        this.popup = new mapboxgl.Popup({
+          closeOnClick: false
+        })
         this.layer = {};
       })
   }
@@ -150,7 +152,7 @@ class Map extends Component {
 
     return (
       <div className='row'>
-        <div className='col-md-12'>
+        <div className='col-lg-12'>
           <div className='border rounded'
             style={style}
             ref={el => this.mapContainer = el} />

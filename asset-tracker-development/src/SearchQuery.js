@@ -42,7 +42,7 @@ class SearchQuery extends Component {
     const {searchQuery} = this.state;
     return (
       <div className='row'>
-        <div className="col-md-12 search-div">
+        <div className="col-lg-12 search-div">
           <form onSubmit={(e) => e.preventDefault()}>
             <input onChange={(e) =>
                 this.setState({
