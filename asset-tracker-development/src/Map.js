@@ -32,7 +32,7 @@ class Map extends Component {
         }
       },
       paint: {
-        "circle-radius": 10,
+        "circle-radius": 6,
         "circle-color": [
           "match",
           ["get", "selected"],

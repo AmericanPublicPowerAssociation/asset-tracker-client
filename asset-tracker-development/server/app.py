@@ -94,11 +94,9 @@ def search():
     if query is not None:
         for a in assets:
             template = r'.*%s.*' % query
-            vendor_match = re.search(
-                    template, a['vendor'], re.IGNORECASE)
             product_match = re.search(
                     template, a['product'], re.IGNORECASE)
-            if vendor_match or product_match:
+            if product_match:
                 results.append(a)
     return jsonify(json.dumps(dict(filteredAssets=results)))
 
