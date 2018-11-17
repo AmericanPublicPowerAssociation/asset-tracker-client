@@ -53,8 +53,11 @@ assets = [
         'circuit': 'Ann'
     },
 ]
-
+with open('data.json') as f:
+    assets = json.load(f)
 connections = [(0, 2), (1, 3), (2, 4)]
+with open('connections.json') as f:
+    connections = json.load(f)
 
 
 @app.route('/get-center.json')
@@ -75,7 +78,6 @@ def get_connections():
     curr_assets, conn = [], []
     if node is not None:
         curr_assets = [assets[node]]
-        connections = [(0, 2), (1, 3), (2, 4)]
         for f, t in connections:
             if node in [f, t]:
                 other = f if node != f else t
