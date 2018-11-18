@@ -52,7 +52,7 @@ class ProductVersion(Base):
     version = Column(String)
 
 
-class AssetType(enum.Enum):
+class AssetType(enum.IntEnum):
     Pole = 1
     Meter = 2
     Line = 3
@@ -60,6 +60,7 @@ class AssetType(enum.Enum):
     Busbar = 5
     Tranformer = 6
     Substation = 7
+    Other = 0
 
 
 class AssetSubType(Base):
@@ -82,11 +83,10 @@ class Asset(Base):
     version_id = Column(Integer, ForeignKey('product_version.id'))
     parent_id = Column(Integer, ForeignKey('asset.id'))
     name = Column(String)
-    geometry = Geometry(management=True, use_st_prefix=False)
+    geometry = Geometry(srid=4326, management=True, use_st_prefix=False)
     properties = PickleType()
     connections = relationship(
-        'Asset',
-        secondary=AssetConnection,
+        'Asset', secondary=AssetConnection,
         primaryjoin=AssetConnection.c.l_asset_id == id,
         secondaryjoin=AssetConnection.c.r_asset_id == id)
 
@@ -117,4 +117,4 @@ for asset_subtype in [
     AssetSubType(id=8, type_id=AssetType.Switch, name='Relay'),
 ]:
     db.add(asset_subtype)
-    db.commit()
+db.commit()
