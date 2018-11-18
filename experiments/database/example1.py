@@ -1,28 +1,106 @@
-# import numpy as np
+import numpy as np
 import pypsa
 
 from models import Asset, AssetType, db
 
 
-def make_asset(type_id, **kw):
-    asset = Asset(type_id=type_id, **kw)
+def make_asset(type_id, name, **kw):
+    asset = Asset(type_id=type_id, name=name, **kw)
     db.add(asset)
     db.commit()
     return asset
 
 
-bus0 = make_asset(AssetType.Busbar, name='Bus 0')
-bus1 = make_asset(AssetType.Busbar, name='Bus 1')
-bus2 = make_asset(AssetType.Busbar, name='Bus 1')
-line0 = make_asset(AssetType.Line, name='Line 0', connections=[bus0, bus1])
-line1 = make_asset(AssetType.Line, name='Line 1', connections=[bus1, bus2])
-line2 = make_asset(AssetType.Line, name='Line 2', connections=[bus2, bus0])
+bus0 = make_asset(AssetType.Busbar, 'Bus 0', properties={
+    'nominal_voltage_in_kv': 20,
+})
+bus1 = make_asset(AssetType.Busbar, 'Bus 1', properties={
+    'nominal_voltage_in_kv': 20,
+})
+bus2 = make_asset(AssetType.Busbar, 'Bus 2', properties={
+    'nominal_voltage_in_kv': 20,
+})
 
 
-# Get assets
-# Make network
+line0 = make_asset(AssetType.Line, 'Line 0', connections=[
+    bus0,
+    bus1,
+], properties={
+    'series_reactance_in_ohm': 0.1,
+    'series_resistance_in_ohm': 0.01,
+})
+line1 = make_asset(AssetType.Line, 'Line 1', connections=[
+    bus1,
+    bus2,
+], properties={
+    'series_reactance_in_ohm': 0.1,
+    'series_resistance_in_ohm': 0.01,
+})
+line2 = make_asset(AssetType.Line, 'Line 2', connections=[
+    bus2,
+    bus0,
+], properties={
+    'series_reactance_in_ohm': 0.1,
+    'series_resistance_in_ohm': 0.01,
+})
+
+
+substation0 = make_asset(AssetType.Substation, 'Substation 0', connections=[
+    bus0,
+], properties={
+    'active_power_set_point_in_mw': 100,
+    'control_strategy': 'PQ',
+})
+
+
+meter0 = make_asset(AssetType.Meter, 'Meter 0', connections=[
+    bus1,
+], properties={
+    'active_power_consumption_in_mw': 100,
+    'reactive_power_consumption_in_mvar': 100,
+})
+
 
 network = pypsa.Network()
+for asset in db.query(Asset).filter_by(type_id=AssetType.Busbar):
+    d = asset.properties
+    network.add(
+        'Bus', asset.name,
+        v_nom=d['nominal_voltage_in_kv'])
+for asset in db.query(Asset).filter_by(type_id=AssetType.Line):
+    c = asset.connections
+    d = asset.properties
+    network.add(
+        'Line', asset.name,
+        bus0=c[0].name,
+        bus1=c[1].name,
+        x=d['series_reactance_in_ohm'],
+        r=d['series_resistance_in_ohm'])
+for asset in db.query(Asset).filter_by(type_id=AssetType.Substation):
+    c = asset.connections
+    d = asset.properties
+    network.add(
+        'Generator', asset.name,
+        bus=c[0].name,
+        p_set=d['active_power_set_point_in_mw'],
+        control=d['control_strategy'])
+for asset in db.query(Asset).filter_by(type_id=AssetType.Meter):
+    c = asset.connections
+    d = asset.properties
+    network.add(
+        'Load', asset.name,
+        bus=c[0].name,
+        p_set=d['active_power_consumption_in_mw'],
+        q_set=d['reactive_power_consumption_in_mvar'])
+print(network.buses)
+print(network.lines)
+print(network.generators)
+print(network.generators.p_set)
+print(network.loads)
+print(network.loads.p_set)
+network.pf()
+print(network.lines_t.p0)
+print(network.buses_t.v_ang * 180 / np.pi)
+print(network.buses_t.v_mag_pu)
 
-# Run power flow
 # Save tables as csv

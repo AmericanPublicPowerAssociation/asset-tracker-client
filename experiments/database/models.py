@@ -1,3 +1,4 @@
+import enum
 from geoalchemy2 import Geometry
 from sqlalchemy import (
     Column, ForeignKey, Table, create_engine)
@@ -6,7 +7,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.sql import func, select
 from sqlalchemy.types import Enum, Integer, PickleType, String
-import enum
 
 
 Base = declarative_base()
@@ -20,7 +20,7 @@ class Utility(Base):
     __tablename__ = 'utility'
     id = Column(Integer, primary_key=True)
     identifier = Column(String, unique=True)
-    name = Column(String)
+    name = Column(String, nullable=False, unique=True)
 
 
 class User(Base):
@@ -28,14 +28,14 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     identifier = Column(String, unique=True)
     utility_id = Column(Integer, ForeignKey('utility.id'))
-    name = Column(String)
+    name = Column(String, nullable=False)
     email = Column(String)
 
 
 class Vendor(Base):
     __tablename__ = 'vendor'
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    name = Column(String, nullable=False, unique=True)
 
 
 class Product(Base):
@@ -58,7 +58,7 @@ class AssetType(enum.IntEnum):
     Line = 3
     Switch = 4
     Busbar = 5
-    Tranformer = 6
+    Transformer = 6
     Substation = 7
     Other = 0
 
