@@ -89,15 +89,17 @@ def get_connections():
 
 @app.route('/search')
 def search():
-    query = request.args.get('query', None)
+    product = request.args.get('product', '')
+    vendor = request.args.get('vendor', '')
     results = []
-    if query is not None:
-        for a in assets:
-            template = r'.*%s.*' % query
-            product_match = re.search(
-                    template, a['product'], re.IGNORECASE)
-            if product_match:
-                results.append(a)
+    for a in assets:
+        template = r'.*%s.*'
+        vendor_match = re.search(
+                template % vendor, a['vendor'], re.IGNORECASE)
+        product_match = re.search(
+                template % product, a['product'], re.IGNORECASE)
+        if vendor_match and product_match:
+            results.append(a)
     return jsonify(json.dumps(dict(filteredAssets=results)))
 
 

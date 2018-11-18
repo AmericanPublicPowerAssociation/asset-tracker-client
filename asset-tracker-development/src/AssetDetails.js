@@ -16,7 +16,6 @@ class AssetDetails extends Component {
           <p>{asset.version}</p>
           <h5>ID</h5>
           <p>{asset.id}</p>
-
         </div>
       )
     }
