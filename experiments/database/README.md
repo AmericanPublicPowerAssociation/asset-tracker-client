@@ -10,25 +10,27 @@
             overhead line
             underground line
         switch
-            circuit breaker switch
-            recloser switch
-            relay switch
+            circuit breaker
+            recloser
+            relay
         busbar
         transformer
         substation
+        station
+            photovoltaic power station
 
 # Tables
 
-    utility
+    organization
         id
-        identifier
         name
+        member_organizations
     user
         id
-        identifier
-        utility_id
+        organization_id
         name
         email
+        role
     vendor
         id
         name
@@ -40,6 +42,9 @@
         id
         product_id
         version
+    asset_type
+        id
+        name
     asset_subtype
         id
         type_id
@@ -47,8 +52,7 @@
         name
     asset
         id
-        identifier
-        utility_id
+        organization_id
         type_id
         subtype_id
         vendor_id
@@ -58,7 +62,7 @@
         name
         geometry
         properties
-        connections
+        connected_assets
     asset_connection
         l_asset_id
         r_asset_id
