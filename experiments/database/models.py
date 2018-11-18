@@ -3,9 +3,10 @@ from sqlalchemy import (
     Column, ForeignKey, Table, create_engine)
 from sqlalchemy.event import listen
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.sql import func, select
-from sqlalchemy.types import Integer, PickleType, String
+from sqlalchemy.types import Enum, Integer, PickleType, String
+import enum
 
 
 Base = declarative_base()
@@ -51,10 +52,21 @@ class ProductVersion(Base):
     version = Column(String)
 
 
-class AssetType(Base):
-    __tablename__ = 'asset_type'
+class AssetType(enum.Enum):
+    Pole = 1
+    Meter = 2
+    Line = 3
+    Switch = 4
+    Busbar = 5
+    Tranformer = 6
+    Substation = 7
+
+
+class AssetSubType(Base):
+    __tablename__ = 'asset_subtype'
     id = Column(Integer, primary_key=True)
-    parent_id = Column(Integer, ForeignKey('asset_type.id'))
+    type_id = Column(Enum(AssetType))
+    parent_id = Column(Integer, ForeignKey('asset_subtype.id'))
     name = Column(String)
 
 
@@ -63,7 +75,8 @@ class Asset(Base):
     id = Column(Integer, primary_key=True)
     identifier = Column(String, unique=True)
     utility_id = Column(Integer, ForeignKey('utility.id'))
-    type_id = Column(Integer, ForeignKey('asset_type.id'))
+    type_id = Column(Enum(AssetType))
+    subtype_id = Column(Integer, ForeignKey('asset_subtype.id'))
     vendor_id = Column(Integer, ForeignKey('vendor.id'))
     product_id = Column(Integer, ForeignKey('product.id'))
     version_id = Column(Integer, ForeignKey('product_version.id'))
@@ -72,26 +85,36 @@ class Asset(Base):
     geometry = Geometry(management=True, use_st_prefix=False)
     properties = PickleType()
     connections = relationship(
-        'asset',
+        'Asset',
         secondary=AssetConnection,
         primaryjoin=AssetConnection.c.l_asset_id == id,
         secondaryjoin=AssetConnection.c.r_asset_id == id)
 
 
-def load_spatialite(connection, record):
-    connection.enable_load_extension(True)
-    connection.load_extension('/usr/lib64/mod_spatialite.so')
+def load_spatialite(sqlite3_connection, _):
+    sqlite3_connection.enable_load_extension(True)
+    sqlite3_connection.load_extension('/usr/lib64/mod_spatialite.so')
 
 
 engine = create_engine('sqlite:///:memory:', echo=True)
 listen(engine, 'connect', load_spatialite)
-connection = engine.connect()
-connection.execute(select([func.InitSpatialMetaData()]))
+engine_connection = engine.connect()
+engine_connection.execute(select([func.InitSpatialMetaData()]))
 Base.metadata.create_all(engine)
+DatabaseSession = sessionmaker(bind=engine)
+DatabaseSession.configure(bind=engine)
+db = DatabaseSession()
 
 
-# Make data
-# Get assets
-# make network
-# run power flow
-# save tables as csv
+for asset_subtype in [
+    AssetSubType(id=1, type_id=AssetType.Meter, name='Residential Meter'),
+    AssetSubType(id=2, type_id=AssetType.Meter, name='Commercial Meter'),
+    AssetSubType(id=3, type_id=AssetType.Meter, name='Industrial Meter'),
+    AssetSubType(id=4, type_id=AssetType.Line, name='Overhead Line'),
+    AssetSubType(id=5, type_id=AssetType.Line, name='Underground Line'),
+    AssetSubType(id=6, type_id=AssetType.Switch, name='Circuit Breaker'),
+    AssetSubType(id=7, type_id=AssetType.Switch, name='Recloser'),
+    AssetSubType(id=8, type_id=AssetType.Switch, name='Relay'),
+]:
+    db.add(asset_subtype)
+    db.commit()

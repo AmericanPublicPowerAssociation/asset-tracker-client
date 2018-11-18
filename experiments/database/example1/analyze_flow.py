@@ -1,13 +1,3 @@
-# Given a database, analyze the power flow
-
-
-import numpy as np
-import pypsa
-
-
-network = pypsa.Network()
-
-
 network.add('Bus', 'B0')
 network.add('Bus', 'B1')
 network.add('Bus', 'B2')
