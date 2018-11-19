@@ -10,13 +10,13 @@ class AssetDetails extends Component {
     if (asset) {
       details = (
         <div className='asset-details'>
-          <h5>Vendor</h5>
+          <h2>Vendor</h2>
           <p>{asset.vendor}</p>
-          <h5>Product</h5>
+          <h2>Product</h2>
           <p>{asset.product}</p>
-          <h5>Version</h5>
+          <h2>Version</h2>
           <p>{asset.version}</p>
-          <h5>ID</h5>
+          <h2>ID</h2>
           <p>{asset.id}</p>
         </div>
       )
