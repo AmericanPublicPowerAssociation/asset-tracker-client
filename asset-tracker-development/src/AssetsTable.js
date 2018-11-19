@@ -5,7 +5,7 @@ import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import './App.css';
 
-import {Row, Button, Col} from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 
 
 class AssetsTable extends Component {

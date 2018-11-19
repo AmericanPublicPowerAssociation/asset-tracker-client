@@ -8,7 +8,7 @@ import CircuitDiagram from './CircuitDiagram';
 import FilterComponents from './FilterComponents';
 
 
-import {Button, Grid, Row, Col, Nav, Navbar, NavDropdown, MenuItem, NavItem} from 'react-bootstrap';
+import {Button, Grid, Row, Col, Nav, Navbar, NavItem} from 'react-bootstrap';
 import './App.css';
 
 

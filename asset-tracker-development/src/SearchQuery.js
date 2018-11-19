@@ -40,9 +40,9 @@ class SearchQuery extends Component {
   }
 
   shouldComponentUpdate(prevProps, prevState) {
-    const {searchQuery, filter} = this.state
+    const {searchQuery, key, filter} = this.state
     return (prevState.searchQuery !== searchQuery) || (
-        prevState.filter !== filter)
+        prevState.filter !== filter) || (prevState.key !== key)
   }
 
   render() {
@@ -75,7 +75,7 @@ class SearchQuery extends Component {
                   <FormControl onChange={(e) =>
                       this.setState({
                         searchQuery: e.target.value
-                      })} placeholder='search...' value={searchQuery}
+                      })} placeholder={`search by ${key}...`} value={searchQuery}
                       className='search'/>
                   <FormControl componentClass='button' onClick={(e) => this.setState((state, props) => {
                     const {filters, key, searchQuery} = state;
@@ -93,13 +93,17 @@ class SearchQuery extends Component {
                         Filter Search
                       </Panel.Title>
                     </Panel.Heading>
-                    <Panel.Collapse>
+                    <Panel.Collapse onExited={(e) => {
+                      this.setState({
+                        key: 'product'
+                      })
+                    }}>
                       <Panel.Body>
                           <div style={{display: 'flex'}}>
                             <ControlLabel style={{paddingRight: '10px'}}>
                               Key
                             </ControlLabel>
-                              <FormControl componentClass='select' defaultValue={key} onChange={(e) => {
+                              <FormControl componentClass='select' value={key} onChange={(e) => {
                                   this.setState({
                                     key: e.target.value
                                   })
