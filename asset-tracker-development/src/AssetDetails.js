@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import {Row, Col, Panel} from 'react-bootstrap';
+
 
 class AssetDetails extends Component {
   render() {
@@ -20,16 +22,16 @@ class AssetDetails extends Component {
       )
     }
     return (
-      <div className='row'>
-        <div className='col-lg-12'>
-          <div className="card">
-            <div className="card-body">
-              <h1 className="card-title">Asset</h1>
+      <Row>
+        <Col lg={12}>
+          <Panel>
+            <Panel.Heading><h1>Asset</h1></Panel.Heading>
+            <Panel.Body>
                 {details}
-            </div>
-          </div>
-        </div>
-      </div>
+            </Panel.Body>
+          </Panel>
+        </Col>
+      </Row>
     );
   }
 }

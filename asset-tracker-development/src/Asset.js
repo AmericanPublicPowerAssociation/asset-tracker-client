@@ -4,8 +4,9 @@ import {library} from '@fortawesome/fontawesome-svg-core'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faMapMarker} from '@fortawesome/free-solid-svg-icons'
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './AssetsGrid.css';
+
+import {Row, Button, Col} from 'react-bootstrap';
 
 
 library.add(faMapMarker)
@@ -13,19 +14,18 @@ library.add(faMapMarker)
 class Asset extends Component {
   render() {
     const {isSelected, asset, onClickEvent} = this.props;
-    const style = isSelected ? {backgroundColor: 'yellow'} : {}
+    const style = isSelected ? {borderRadius: '10px', backgroundColor: 'yellow'} : {borderRadius: '10px'}
     return (
-      <div style={style} onClick={(e) => onClickEvent()} className='row border-bottom asset'>
-        <div className='col-lg-12'>
-          <button
-            style={{'float': 'left'}}
-            className='btn'>
+      <Row style={style} onClick={(e) => onClickEvent()} className='asset'>
+        <Col lg={12}>
+          <Button
+            style={{'float': 'left'}}>
               <FontAwesomeIcon
                 icon='map-marker'/>
-          </button>
+          </Button>
           <h5>{asset.product}</h5>
-        </div>
-      </div>
+        </Col>
+      </Row>
     );
   }
 }

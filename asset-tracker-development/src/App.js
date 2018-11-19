@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import {Route, Link} from 'react-router-dom';
-import 'bootstrap/dist/js/bootstrap.min.js';
+import {LinkContainer} from 'react-router-bootstrap';
 
 import AssetDetails from './AssetDetails';
 import AssetsTable from './AssetsTable';
 import CircuitDiagram from './CircuitDiagram';
 import FilterComponents from './FilterComponents';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+
+import {Button, Grid, Row, Col, Nav, Navbar, NavDropdown, MenuItem, NavItem} from 'react-bootstrap';
 import './App.css';
 
 
@@ -20,38 +21,65 @@ class App extends Component {
     const {selectedAsset} = this.state;
     return (
       <div className="App">
-    <nav className="navbar border-bottom navbar-expand-md navbar-light fixed-top">
-      <Link className="navbar-brand" to="/">Asset Tracker</Link>
-      <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span className="navbar-toggler-icon"></span>
-      </button>
 
-      <div className="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul className="navbar-nav mr-auto">
-          <li className="nav-item"><Link className="nav-link" to="/assets">Assets</Link></li>
-          <li className="nav-item"><Link className="nav-link" to="#">Reports</Link></li>
-          <li className="nav-item"><Link className="nav-link" to="#">Alerts</Link></li>
-        </ul>
+      <Navbar fixedTop collapseOnSelect>
+        <Navbar.Header>
+          <Navbar.Brand>
+            <Link to="/">Asset Tracker</Link>
+          </Navbar.Brand>
+          <Navbar.Toggle />
+        </Navbar.Header>
+        <Navbar.Collapse>
+          <Nav>
+            <LinkContainer to="/assets">
+              <NavItem eventKey={1}>
+                Assets
+              </NavItem>
+            </LinkContainer>
+            <LinkContainer to="#">
+              <NavItem eventKey={2}>
+                Reports
+              </NavItem>
+            </LinkContainer>
+            <LinkContainer to="#">
+              <NavItem eventKey={3}>
+                Alerts
+              </NavItem>
+            </LinkContainer>
+          </Nav>
+          <Nav pullRight>
+            <LinkContainer to="#">
+              <NavItem eventKey={4}>
+                Alex
+              </NavItem>
+            </LinkContainer>
+            <LinkContainer to="#">
+              <NavItem eventKey={5}>
+                <Button bsStyle="primary">Sign Out</Button>
+              </NavItem>
+            </LinkContainer>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
 
-        <ul className="navbar-nav mr-2">
-          <li className="nav-item"><Link className="nav-link" to="#">Alex</Link></li>
-        </ul>
-        <button id="button-sign-out" className="btn btn-primary my-2 my-sm-0" type="submit">Sign Out</button>
-      </div>
-    </nav>
+
+
+
         <Route exact path="/assets" render={ () => (
           <AssetsTable />
         )} />
         <Route exact path="/" render={ () => (
-          <div className="row">
-            <div className='col-lg-8'>
-                  <FilterComponents selectedAsset={selectedAsset} updateSelected={(selectedAsset) => this.setState({selectedAsset})} />
-            </div>
-            <div className="col-lg-4">
-              <CircuitDiagram updateSelected={(selectedAsset) => this.setState({selectedAsset})} asset={selectedAsset}/>
-              <AssetDetails asset={selectedAsset}/>
-            </div>
-          </div>
+          <Grid fluid={true}>
+            <Row>
+              <Col xs={18} md={12} lg={8}>
+                <FilterComponents selectedAsset={selectedAsset} updateSelected={(selectedAsset) => this.setState({selectedAsset})} />
+              </Col>
+              <Col xs={18} md={12} lg={4}>
+                <CircuitDiagram updateSelected={(selectedAsset) => this.setState({selectedAsset})} asset={selectedAsset}/>
+                <AssetDetails asset={selectedAsset}/>
+              </Col>
+            </Row>
+          </Grid>
         )} />
       </div>
     );

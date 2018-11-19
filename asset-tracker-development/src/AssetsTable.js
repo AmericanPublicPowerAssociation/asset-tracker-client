@@ -5,6 +5,8 @@ import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import './App.css';
 
+import {Row, Button, Col} from 'react-bootstrap';
+
 
 class AssetsTable extends Component {
   state = {
@@ -44,18 +46,19 @@ class AssetsTable extends Component {
         style={{
           // grid dimensions
           height: "500px",
-          width: "100%"
+          width: "100%",
+          padding: '30px',
         }}
       >
-	<button className='btn btn-primary' onClick={(e) => this.gridAPI.exportDataAsCsv() }>Download</button>
-        <AgGridReact
-          // agGrid component with config objects
-          enableSorting={true}
-          enableFilter={true}
-          columnDefs={columns}
-          onGridReady={this.onGridReady.bind(this)}
-	  rowData={assets}
-        />
+        <Button bsStyle='primary' onClick={(e) => this.gridAPI.exportDataAsCsv() }>Download</Button>
+              <AgGridReact
+                // agGrid component with config objects
+                enableSorting={true}
+                enableFilter={true}
+                columnDefs={columns}
+                onGridReady={this.onGridReady.bind(this)}
+          rowData={assets}
+              />
       </div>
     );
   }

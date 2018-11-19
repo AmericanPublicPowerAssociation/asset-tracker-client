@@ -3,6 +3,8 @@ import mapboxgl from 'mapbox-gl';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
+import {Row, Col} from 'react-bootstrap';
+
 
 class Map extends Component {
   createLayer(assets, selectedAsset, layerName) {
@@ -103,7 +105,7 @@ class Map extends Component {
         .addTo(this.map);
     }
     else {
-      this.popup.remove(); 
+      this.popup.remove();
     }
 
     // if markers didn't change, don't change bounds
@@ -147,17 +149,17 @@ class Map extends Component {
           height: '500px',
           overflow: 'hidden',
           top: 0,
-          width: '100%'
+          width: '100%',
+          borderRadius: '25px'
         };
 
     return (
-      <div className='row'>
-        <div className='col-lg-12'>
-          <div className='border rounded'
-            style={style}
+      <Row>
+        <Col lg={12}>
+          <div style={style}
             ref={el => this.mapContainer = el} />
-        </div>
-      </div>
+        </Col>
+      </Row>
     );
   }
 }

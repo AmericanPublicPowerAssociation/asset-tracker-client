@@ -5,6 +5,8 @@ import {library} from '@fortawesome/fontawesome-svg-core'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faCompass} from '@fortawesome/free-solid-svg-icons'
 
+import {Row, Col, Button, Panel} from 'react-bootstrap';
+
 
 library.add(faCompass)
 
@@ -100,21 +102,19 @@ class CircuitDiagram extends Component {
   }
 
   render() {
-    const style = {height: '400px', width: '100%'}
+    const style = {border: '1px solid gray', borderRadius: '25px', height: '400px', width: '100%'}
 	  return (
-      <div className='row'>
-        <div className='col-lg-12'>
-          <div className="card">
-            <div className="card-body">
-              <h1 className="card-title">
-                Circuit
-              </h1>
-              <div id='cy' className='border rounded' style={style} />
-                <button style={{'float': 'right'}} className='center-circuit btn' onClick={(e) => this.cy.fit()}><FontAwesomeIcon icon='compass' /></button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Row>
+        <Col lg={12}>
+          <Panel>
+            <Panel.Heading><h1>Circuit</h1></Panel.Heading>
+            <Panel.Body>
+              <div id='cy' style={style} />
+              <Button style={{'float': 'right'}} className='center-circuit' onClick={(e) => this.cy.fit()}><FontAwesomeIcon icon='compass' /></Button>
+            </Panel.Body>
+          </Panel>
+        </Col>
+      </Row>
     )
   }
 }

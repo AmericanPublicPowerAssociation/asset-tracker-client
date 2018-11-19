@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 
 import Asset from './Asset';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './AssetsGrid.css';
+import {Row, Col} from 'react-bootstrap';
 
 
 class AssetsGrid extends Component {
@@ -15,11 +15,11 @@ class AssetsGrid extends Component {
     });
 
     return (
-      <div className='row assets-grid'>
-        <div className="col-lg-12">
+      <Row className='assets-grid'>
+        <Col lg={12}>
           {rows}
-        </div>
-      </div>
+        </Col>
+      </Row>
     );
   }
 }

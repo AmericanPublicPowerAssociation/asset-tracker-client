@@ -4,6 +4,9 @@ import AssetsGrid from './AssetsGrid';
 import Map from './Map';
 import SearchQuery from './SearchQuery';
 
+import {Row, Col, Panel} from 'react-bootstrap';
+
+
 
 class FilterComponents extends Component {
   state = {
@@ -37,24 +40,26 @@ class FilterComponents extends Component {
     const {selectedAsset, updateSelected} = this.props;
     const {filteredAssets} = this.state;
     return (
-      <div className='row'>
-        <div className='col-lg-12'>
-          <div className="card">
-            <div className="card-body">
-              <h1 className="card-title">Map</h1>
-              <div className='row'>
-                    <div className="col-lg-8">
-                      <Map selectedAsset={selectedAsset} updateSelected={(asset) => updateSelected(asset)} markers={filteredAssets} />
-                    </div>
-                    <div className="col-lg-4">
-                      <SearchQuery updateFilteredAssets={(filteredAssets) => this.updateFilteredAssets(filteredAssets)}/>
-                      <AssetsGrid selectedAsset={selectedAsset} updateSelected={(asset) => updateSelected(asset)} assets={filteredAssets}/>
-                    </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Row>
+        <Col lg={12}>
+
+          <Panel>
+            <Panel.Heading><h1>Map</h1></Panel.Heading>
+            <Panel.Body>
+              <Row>
+                <Col lg={8}>
+                  <Map selectedAsset={selectedAsset} updateSelected={(asset) => updateSelected(asset)} markers={filteredAssets} />
+                </Col>
+                <Col lg={4}>
+                  <SearchQuery updateFilteredAssets={(filteredAssets) => this.updateFilteredAssets(filteredAssets)}/>
+                  <AssetsGrid selectedAsset={selectedAsset} updateSelected={(asset) => updateSelected(asset)} assets={filteredAssets}/>
+                </Col>
+              </Row>
+            </Panel.Body>
+          </Panel>
+
+        </Col>
+      </Row>
     );
   }
 }
