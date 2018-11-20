@@ -20,7 +20,7 @@ class App extends Component {
   render() {
     const {selectedAsset} = this.state;
     return (
-      <div className="App">
+      <Grid fluid={true}>
 
       <Navbar fixedTop collapseOnSelect>
         <Navbar.Header>
@@ -69,7 +69,6 @@ class App extends Component {
           <AssetsTable />
         )} />
         <Route exact path="/" render={ () => (
-          <Grid fluid={true}>
             <Row>
               <Col xs={18} md={12} lg={8}>
                 <FilterComponents selectedAsset={selectedAsset} updateSelected={(selectedAsset) => this.setState({selectedAsset})} />
@@ -79,9 +78,8 @@ class App extends Component {
                 <AssetDetails asset={selectedAsset}/>
               </Col>
             </Row>
-          </Grid>
         )} />
-      </div>
+          </Grid>
     );
   }
 }
