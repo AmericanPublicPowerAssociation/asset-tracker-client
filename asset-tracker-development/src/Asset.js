@@ -13,10 +13,17 @@ library.add(faMapMarker)
 
 class Asset extends Component {
   render() {
-    const {isSelected, asset, onClickEvent} = this.props;
+    const {isSelected, asset, editMode, onClickEvent} = this.props;
     const style = isSelected ? {borderRadius: '10px', backgroundColor: 'yellow'} : {borderRadius: '10px'}
+    if (editMode) {
+      style.cursor = 'not-allowed';
+    }
     return (
-      <Row style={style} onClick={(e) => onClickEvent()} className='asset'>
+      <Row style={style} onClick={(e) => {
+        if (!editMode) {
+          onClickEvent()
+        }
+      }} className='asset'>
         <Col lg={12}>
           <Button
             style={{'float': 'left'}}>

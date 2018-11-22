@@ -87,6 +87,22 @@ def get_connections():
         dict(assets=curr_assets, connections=conn)))
 
 
+@app.route('/delete-asset')
+def delete():
+    try:
+        assetID = int(request.args.get('assetID', None))
+    except ValueError:
+        assetID = None
+    validID = bool(assetID)
+    if (validID):
+        global assets
+        oldAssets = assets
+        assets = [a for a in assets if a['id'] != assetID]
+        validID = len(assets) < len(oldAssets)
+    return jsonify(
+        json.dumps(dict(sucess=validID)))
+
+
 @app.route('/search')
 def search():
     product = request.args.get('product', '')

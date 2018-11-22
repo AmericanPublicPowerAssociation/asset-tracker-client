@@ -15,10 +15,58 @@ import './App.css';
 class App extends Component {
   state = {
     selectedAsset: null,
+    savedAsset: null,
+    deleteAssetId: '',
+    editMode: false,
   };
 
+  deleteAsset(assetId) {
+    this.setState({
+      deleteAssetId: assetId
+    })
+  }
+
+  componentDidUpdate() {
+    const {deleteAssetId, savedAsset} = this.state;
+    if (savedAsset !== null) {
+      //send post request
+      /*
+      fetch(`http://18.212.1.167:5000/save-asset?assetID=${deleteAssetId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data)
+          this.setState({
+            deleteAssetId: '',
+            selectedAsset: null
+          })
+        })
+        */
+          this.setState({
+            savedAsset: null,
+          })
+    }
+    if (deleteAssetId !== '') {
+      //TODO send delete request
+      /*
+      fetch(`http://18.212.1.167:5000/delete-asset?assetID=${deleteAssetId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data)
+          this.setState({
+            deleteAssetId: '',
+            selectedAsset: null
+          })
+        })
+      */
+          this.setState({
+            deleteAssetId: '',
+            selectedAsset: null
+          })
+    }
+  }
+
   render() {
-    const {selectedAsset} = this.state;
+    const {selectedAsset, editMode} = this.state;
     return (
       <Grid fluid={true}>
 
@@ -62,20 +110,25 @@ class App extends Component {
         </Navbar.Collapse>
       </Navbar>
 
-
-
-
         <Route exact path="/assets" render={ () => (
           <AssetsTable />
         )} />
         <Route exact path="/" render={ () => (
             <Row>
               <Col xs={18} md={12} lg={8}>
-                <FilterComponents selectedAsset={selectedAsset} updateSelected={(selectedAsset) => this.setState({selectedAsset})} />
+                <FilterComponents editMode={editMode} selectedAsset={selectedAsset} updateSelected={(selectedAsset) => this.setState({selectedAsset})} />
               </Col>
               <Col xs={18} md={12} lg={4}>
+                <AssetDetails saveAsset={(savedAsset) => {
+                  this.setState({
+                    selectedAsset: savedAsset,
+                    savedAsset,
+                    editMode: false
+                  });
+                }} toggleEdit={(val) => this.setState({
+                  editMode: val
+                })} editMode={editMode} deleteAsset={(assetId) => this.deleteAsset(assetId)} asset={selectedAsset}/>
                 <CircuitDiagram updateSelected={(selectedAsset) => this.setState({selectedAsset})} asset={selectedAsset}/>
-                <AssetDetails asset={selectedAsset}/>
               </Col>
             </Row>
         )} />

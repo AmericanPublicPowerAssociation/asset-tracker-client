@@ -73,13 +73,7 @@ class Map extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const {markers, selectedAsset, updateSelected} = this.props;
-
-    // if markers didn't change, don't change bounds
-    const prevPoints = prevProps.markers;
-    const didChange = ((markers.length !== prevPoints.length) || (
-      markers.some((m, i) => m.id !== prevPoints[i].id)
-    ))
+    const {editMode, markers, selectedAsset, updateSelected} = this.props;
 
     const layerName = 'assets'
     const layer = this.map.getLayer(layerName)
@@ -89,33 +83,59 @@ class Map extends Component {
       this.map.removeSource(layerName);
       this.map.off('click', layerName)
     }
+    if (editMode) {
+      if (!this.editedMarker) {
+        this.editedMarker = new mapboxgl.Marker({draggable: true})
+        this.editedMarker
+          .setLngLat([selectedAsset.lng, selectedAsset.lat])
+          .addTo(this.map);
+        this.editedMarker.on('dragend', (e) => {
+          const {lat, lng, ...updatedAsset} = selectedAsset;
+          const [new_lng, new_lat] = e.target.getLngLat().toArray();
+          updatedAsset.lat = new_lat;
+          updatedAsset.lng = new_lng;
+          updateSelected(updatedAsset);
+        })
+      }
+    } else {
+      if (this.editedMarker) {
+        this.editedMarker.remove();
+      }
 
-    this.layer = this.createLayer(markers, selectedAsset, layerName);
-    this.map.on('click', layerName, (e) => {
-      const pointId = e.features[0].properties.id
-      const asset =  this.props.markers.find((m) => m.id === pointId)
-      updateSelected(asset)
-    });
-    this.map.addLayer(this.layer);
-    if (selectedAsset) {
-      this.popup
-        .setLngLat(
-          [selectedAsset.lng, selectedAsset.lat])
-        .setHTML(selectedAsset.product)
-        .addTo(this.map);
-    }
-    else {
-      this.popup.remove();
-    }
+      // if markers didn't change, don't change bounds
+      const prevPoints = prevProps.markers;
+      const didChange = ((markers.length !== prevPoints.length) || (
+        markers.some((m, i) => m.id !== prevPoints[i].id)
+      ))
 
-    // if markers didn't change, don't change bounds
-    if (didChange && markers.length){
-      const bounds = this.setBounds(markers);
-      this.map.fitBounds(bounds, {
-                  padding: 20
-              });
+
+      this.layer = this.createLayer(markers, selectedAsset, layerName);
+      this.map.on('click', layerName, (e) => {
+        const pointId = e.features[0].properties.id
+        const asset =  this.props.markers.find((m) => m.id === pointId)
+        updateSelected(asset)
+      });
+      this.map.addLayer(this.layer);
+      if (selectedAsset) {
+        this.popup
+          .setLngLat(
+            [selectedAsset.lng, selectedAsset.lat])
+          .setHTML(selectedAsset.product)
+          .addTo(this.map);
+      }
+      else {
+        this.popup.remove();
+      }
+
+      // if markers didn't change, don't change bounds
+      if (didChange && markers.length){
+        const bounds = this.setBounds(markers);
+        this.map.fitBounds(bounds, {
+                    padding: 20
+                });
+      }
+      //this.map.setMaxBounds(this.map.getBounds());
     }
-    //this.map.setMaxBounds(this.map.getBounds());
   }
 
   componentDidMount() {

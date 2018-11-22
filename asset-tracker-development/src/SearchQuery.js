@@ -42,11 +42,12 @@ class SearchQuery extends Component {
   shouldComponentUpdate(prevProps, prevState) {
     const {searchQuery, key, filter} = this.state
     return (prevState.searchQuery !== searchQuery) || (
-        prevState.filter !== filter) || (prevState.key !== key)
+        prevState.filter !== filter) || (prevState.key !== key) || (prevProps.editMode !== this.props.editMode)
   }
 
   render() {
     const {searchQuery, filters, key} = this.state;
+    const {editMode} = this.props;
     const pills = Object.entries(filters).map((f, i) => {
       const {[f[0]]: value, ...newFilters} = filters;
       return (
@@ -72,18 +73,28 @@ class SearchQuery extends Component {
             <Col lg={12} className='search-div'>
               <form onSubmit={(e) => e.preventDefault()}>
                 <FormGroup>
-                  <FormControl onChange={(e) =>
+                  { editMode ?  (
+                    <FormControl readOnly placeholder={`search by ${key}...`} value={searchQuery}
+                      className='search'/>
+                  ) : (
+                    <FormControl onChange={(e) =>
                       this.setState({
                         searchQuery: e.target.value
                       })} placeholder={`search by ${key}...`} value={searchQuery}
                       className='search'/>
-                  <FormControl componentClass='button' onClick={(e) => this.setState((state, props) => {
-                    const {filters, key, searchQuery} = state;
-                    return {
-                      filters: Object.assign(filters, {[key]: searchQuery}),
-                      filter: true
-                    }
-                  })}
+                  )
+                  }
+                  <FormControl style={editMode ? {cursor: 'not-allowed'}: {}} componentClass='button' onClick={(e) => {
+                      if (!editMode) {
+                        this.setState((state, props) => {
+                          const {filters, key, searchQuery} = state;
+                          return {
+                            filters: Object.assign(filters, {[key]: searchQuery}),
+                            filter: true
+                          }
+                        })
+                      }
+                  }}
                     className='search-btn'><FontAwesomeIcon icon='search' /> </FormControl>
 
 

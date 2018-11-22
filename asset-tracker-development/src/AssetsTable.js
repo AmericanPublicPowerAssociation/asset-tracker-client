@@ -5,12 +5,12 @@ import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import './App.css';
 
-import {Button} from 'react-bootstrap';
+import {Button, Row, Col} from 'react-bootstrap';
 
 
 class AssetsTable extends Component {
   state = {
-    assets: [], 
+    assets: [],
   }
 
   componentDidMount() {
@@ -40,26 +40,29 @@ class AssetsTable extends Component {
     const {assets} = this.state;
 
     return (
-      <div
-        // specify grid theme
-        className="ag-theme-balham"
-        style={{
-          // grid dimensions
-          height: "500px",
-          width: "100%",
-          padding: '30px',
-        }}
-      >
-        <Button bsStyle='primary' onClick={(e) => this.gridAPI.exportDataAsCsv() }>Download</Button>
-              <AgGridReact
-                // agGrid component with config objects
-                enableSorting={true}
-                enableFilter={true}
-                columnDefs={columns}
-                onGridReady={this.onGridReady.bind(this)}
-          rowData={assets}
-              />
-      </div>
+      <Row>
+        <Col lg={12} md={12} sm={18}>
+          <div
+            // specify grid theme
+            className="ag-theme-balham"
+            style={{
+              // grid dimensions
+              height: "100rem",
+              padding: '30px',
+            }}
+          >
+            <Button bsStyle='primary' onClick={(e) => this.gridAPI.exportDataAsCsv() }>Download</Button>
+                  <AgGridReact
+                    // agGrid component with config objects
+                    enableSorting={true}
+                    enableFilter={true}
+                    columnDefs={columns}
+                    onGridReady={this.onGridReady.bind(this)}
+              rowData={assets}
+                  />
+          </div>
+        </Col>
+      </Row>
     );
   }
 }

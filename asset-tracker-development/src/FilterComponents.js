@@ -13,13 +13,26 @@ class FilterComponents extends Component {
     filteredAssets: []
   }
 
-  componentDidUpdate() {
-    const {selectedAsset} = this.props;
-    if (selectedAsset) {
-      const {filteredAssets} = this.state;
-      const isNotInFilter = filteredAssets.every(
-        (a) => a.id !== selectedAsset.id);
-      if (isNotInFilter) {
+  componentDidUpdate(prevProps, prevState) {
+    const {selectedAsset, editMode} = this.props;
+    const {filteredAssets} = this.state
+    if (selectedAsset == null && prevProps.selectedAsset != null) {
+      this.setState({
+        filteredAssets: filteredAssets.filter(
+          (a) => a.id !== prevProps.selectedAsset.id)
+      })
+    } else if (selectedAsset) {
+      const i = filteredAssets.findIndex((a) => a.id === selectedAsset.id);
+      if (prevProps.editMode && !editMode && i >= 0) {
+        const newFilteredAssets = filteredAssets.slice(0, i).concat([selectedAsset], filteredAssets.slice(i + 1, filteredAssets.length))
+        console.log('filter')
+        debugger;
+        console.log(newFilteredAssets[i])
+        this.setState({
+          filteredAssets: newFilteredAssets
+        })
+      }
+      if (i === -1) {
         this.setState({
           filteredAssets: filteredAssets.concat([selectedAsset])
         })
@@ -37,7 +50,7 @@ class FilterComponents extends Component {
   }
 
   render() {
-    const {selectedAsset, updateSelected} = this.props;
+    const {selectedAsset, updateSelected, editMode} = this.props;
     const {filteredAssets} = this.state;
     return (
       <Row>
@@ -48,11 +61,11 @@ class FilterComponents extends Component {
             <Panel.Body>
               <Row>
                 <Col lg={8}>
-                  <Map selectedAsset={selectedAsset} updateSelected={(asset) => updateSelected(asset)} markers={filteredAssets} />
+                  <Map editMode={editMode} selectedAsset={selectedAsset} updateSelected={(asset) => updateSelected(asset)} markers={filteredAssets} />
                 </Col>
                 <Col lg={4}>
-                  <SearchQuery updateFilteredAssets={(filteredAssets) => this.updateFilteredAssets(filteredAssets)}/>
-                  <AssetsGrid selectedAsset={selectedAsset} updateSelected={(asset) => updateSelected(asset)} assets={filteredAssets}/>
+                  <SearchQuery editMode={editMode} updateFilteredAssets={(filteredAssets) => this.updateFilteredAssets(filteredAssets)}/>
+                  <AssetsGrid editMode={editMode} selectedAsset={selectedAsset} updateSelected={(asset) => updateSelected(asset)} assets={filteredAssets}/>
                 </Col>
               </Row>
             </Panel.Body>
