@@ -115,20 +115,23 @@ class Map extends Component {
     }
 
     if (editMode) {
+      debugger
+      const coords = selectedAsset.id >= 0 ? {lng: selectedAsset.lng,
+        lat: selectedAsset.lat} : this.map.getCenter();
       if (!this.editedMarker) {
         this.editedMarker = new mapboxgl.Marker({draggable: true})
-        const coords = selectedAsset.id >= 0 ? [
-          selectedAsset.lng, selectedAsset.lat] : this.map.getCenter();
-        this.editedMarker
-          .setLngLat(coords)
-          .addTo(this.map);
-        this.editedMarker.on('dragend', (e) => {
-          const lnglat = e.target.getLngLat();
-          this.getUpdatedAsset(selectedAsset, lnglat)
-        })
         this.getUpdatedAsset(selectedAsset, coords)
       }
+      debugger
+      this.editedMarker
+        .setLngLat(coords)
+        .addTo(this.map);
+      this.editedMarker.on('dragend', (e) => {
+        const lnglat = e.target.getLngLat();
+        this.getUpdatedAsset(selectedAsset, lnglat)
+      })
     } else if (this.editedMarker) {
+        console.log('remove')
         this.editedMarker.remove();
     }
 

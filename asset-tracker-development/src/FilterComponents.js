@@ -58,10 +58,10 @@ class FilterComponents extends Component {
             <Panel.Body>
               <Row>
                 <Col lg={8}>
+                  <SearchQuery editMode={editMode} updateFilteredAssets={(filteredAssets) => this.updateFilteredAssets(filteredAssets)}/>
                   <Map editMode={editMode} selectedAsset={selectedAsset} updateSelected={(asset) => updateSelected(asset)} markers={filteredAssets} />
                 </Col>
                 <Col lg={4}>
-                  <SearchQuery editMode={editMode} updateFilteredAssets={(filteredAssets) => this.updateFilteredAssets(filteredAssets)}/>
                   <AssetsGrid addNewAsset={() => addNewAsset()} editMode={editMode} selectedAsset={selectedAsset} updateSelected={(asset) => updateSelected(asset)} assets={filteredAssets}/>
                 </Col>
               </Row>

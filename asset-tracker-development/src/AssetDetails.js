@@ -25,7 +25,7 @@ class AssetDetails extends Component {
         editedAsset: null
       })
     } else if (this.props.asset && (!prevProps.asset || prevProps.asset.id !== this.props.asset.id)) {
-      const {lat, lng, id, ...editedAsset} = this.props.asset
+      const {id, ...editedAsset} = this.props.asset
       this.setState({
         editedAsset
       })
@@ -33,7 +33,7 @@ class AssetDetails extends Component {
   }
 
   render() {
-    const {asset, deleteAsset, editMode, saveAsset, toggleEdit} = this.props;
+    const {asset, updateSelected, deleteAsset, editMode, saveAsset, toggleEdit} = this.props;
     const {editedAsset} = this.state;
     let details = '';
     if (editedAsset && asset) {
@@ -41,14 +41,24 @@ class AssetDetails extends Component {
         <Button style={{'float': 'right'}} bsStyle='success' onClick={(e) => {
               const updatedAsset = Object.assign(editedAsset, {id: asset.id, lng: asset.lng, lat: asset.lat});
               saveAsset(updatedAsset)
-        }}><FontAwesomeIcon icon='save' /></Button>) : (
-          <Button style={{'float': 'right'}} bsStyle='info' onClick={(e) => toggleEdit(true)}><FontAwesomeIcon icon='edit' /></Button>
+        }}>{'Save Asset '}<FontAwesomeIcon icon='save' /></Button>) : (
+          <Button style={{'float': 'right'}} bsStyle='info' onClick={(e) => toggleEdit(true)}>{'Edit Asset '}<FontAwesomeIcon icon='edit' /></Button>
         );
 
       const deleteBtn = editMode ? (
-        <Button style={{'float': 'right'}} bsStyle='danger' onClick={(e) => deleteAsset(asset.id)}><FontAwesomeIcon icon='ban' /></Button>
+        <Button style={{'float': 'right'}} bsStyle='danger' onClick={(e) => {
+          toggleEdit(false)
+          if (asset.id < 0) {
+            updateSelected(null);
+          }
+          else {
+            debugger
+            const n = Object.assign(asset, {lng: editedAsset.lng, lat: editedAsset.lat})
+            updateSelected(n)
+          }
+      }}>{'Cancel '}<FontAwesomeIcon icon='ban' /></Button>
       ) : (
-        <Button style={{'float': 'right'}} bsStyle='danger' onClick={(e) => deleteAsset(asset.id)}><FontAwesomeIcon icon='trash' /></Button>
+        <Button style={{'float': 'right'}} bsStyle='danger' onClick={(e) => deleteAsset(asset.id)}>{'Delete Asset '}<FontAwesomeIcon icon='trash' /></Button>
       );
 
       details = (

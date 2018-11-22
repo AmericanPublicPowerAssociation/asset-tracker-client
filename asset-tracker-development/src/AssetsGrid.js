@@ -5,6 +5,12 @@ import Asset from './Asset';
 import './AssetsGrid.css';
 import {Row, Col} from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
+import {library} from '@fortawesome/fontawesome-svg-core'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faPlusCircle} from '@fortawesome/free-solid-svg-icons'
+
+
+library.add(faPlusCircle)
 
 class AssetsGrid extends Component {
   render() {
@@ -16,14 +22,16 @@ class AssetsGrid extends Component {
 
     return (
       <div>
-      <Row className='assets-grid'>
-        <Col lg={12}>
-          {rows}
-        </Col>
-      </Row>
-      <Button
-      onClick={addNewAsset}
-      >Add asset</Button>
+        <Row>
+          <Col lg={12}>
+            <Button style={{'float': 'right', marginBottom: '10px'}} bsStyle='primary' onClick={addNewAsset}>{'Add new Asset '}<FontAwesomeIcon icon='plus-circle' /></Button>
+          </Col>
+        </Row>
+        <Row className='assets-grid'>
+          <Col lg={12}>
+            {rows}
+          </Col>
+        </Row>
       </div>
     );
   }

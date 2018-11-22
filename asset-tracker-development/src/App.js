@@ -64,7 +64,7 @@ class App extends Component {
               deleteAssetId: '',
             })
           })
-      
+
       } else {
         this.setState({
           deleteAssetId: '',
@@ -168,7 +168,7 @@ class App extends Component {
                     selectedAsset: savedAsset,
                     editMode: false
                   });
-                }} toggleEdit={(val) => this.setState({
+                }} updateSelected={(selectedAsset) => this.setState({selectedAsset})} toggleEdit={(val) => this.setState({
                   editMode: val
                 })} editMode={editMode} deleteAsset={(assetId) => this.deleteAsset(assetId)} asset={selectedAsset}/>
                 <CircuitDiagram updateSelected={(selectedAsset) => this.setState({selectedAsset})} asset={selectedAsset}/>
