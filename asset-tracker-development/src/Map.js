@@ -86,8 +86,10 @@ class Map extends Component {
     if (editMode) {
       if (!this.editedMarker) {
         this.editedMarker = new mapboxgl.Marker({draggable: true})
+        const coords = selectedAsset.id ? [
+          selectedAsset.lng, selectedAsset.lat] : this.map.getCenter();
         this.editedMarker
-          .setLngLat([selectedAsset.lng, selectedAsset.lat])
+          .setLngLat(coords)
           .addTo(this.map);
         this.editedMarker.on('dragend', (e) => {
           const {lat, lng, ...updatedAsset} = selectedAsset;
