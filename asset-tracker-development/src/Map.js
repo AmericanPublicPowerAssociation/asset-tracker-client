@@ -86,8 +86,8 @@ class Map extends Component {
     if (editMode) {
       if (!this.editedMarker) {
         this.editedMarker = new mapboxgl.Marker({draggable: true})
-        const coords = selectedAsset.id ? [
-          selectedAsset.lng, selectedAsset.lat] : this.map.getCenter();
+        const coords = selectedAsset.id >= 0 ? [
+          selectedAsset.lng, selectedAsset.lat] : this.map.getCenter().toArray();
         this.editedMarker
           .setLngLat(coords)
           .addTo(this.map);
@@ -98,6 +98,11 @@ class Map extends Component {
           updatedAsset.lng = new_lng;
           updateSelected(updatedAsset);
         })
+        const {lat, lng, ...updatedAsset} = selectedAsset;
+        const [new_lng, new_lat] = coords;
+        updatedAsset.lat = new_lat;
+        updatedAsset.lng = new_lng;
+        updateSelected(updatedAsset);
       }
     } else {
       if (this.editedMarker) {

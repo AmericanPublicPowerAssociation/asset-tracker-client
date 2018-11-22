@@ -7,7 +7,6 @@ import SearchQuery from './SearchQuery';
 import {Row, Col, Panel} from 'react-bootstrap';
 
 
-
 class FilterComponents extends Component {
   state = {
     filteredAssets: []
@@ -40,14 +39,15 @@ class FilterComponents extends Component {
   updateFilteredAssets(filteredAssets) {
     // search for assets
     const {updateSelected} = this.props;
-    updateSelected(null)
+    const asset = filteredAssets.length ? filteredAssets[0] : null
+    updateSelected(asset)
     this.setState({
       filteredAssets
     })
   }
 
   render() {
-    const {selectedAsset, updateSelected, editMode} = this.props;
+    const {addNewAsset, selectedAsset, updateSelected, editMode} = this.props;
     const {filteredAssets} = this.state;
     return (
       <Row>
@@ -62,7 +62,7 @@ class FilterComponents extends Component {
                 </Col>
                 <Col lg={4}>
                   <SearchQuery editMode={editMode} updateFilteredAssets={(filteredAssets) => this.updateFilteredAssets(filteredAssets)}/>
-                  <AssetsGrid editMode={editMode} selectedAsset={selectedAsset} updateSelected={(asset) => updateSelected(asset)} assets={filteredAssets}/>
+                  <AssetsGrid addNewAsset={() => addNewAsset()} editMode={editMode} selectedAsset={selectedAsset} updateSelected={(asset) => updateSelected(asset)} assets={filteredAssets}/>
                 </Col>
               </Row>
             </Panel.Body>

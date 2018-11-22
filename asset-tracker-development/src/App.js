@@ -132,7 +132,27 @@ class App extends Component {
         <Route exact path="/" render={ () => (
             <Row>
               <Col xs={18} md={12} lg={8}>
-                <FilterComponents editMode={editMode} selectedAsset={selectedAsset} updateSelected={(selectedAsset) => this.setState({selectedAsset})} />
+                <FilterComponents addNewAsset={() => {
+                  // create asset that has all the keys of a regular asset but with empty values
+                  // toggle "editMode"
+                  // talk to component that defines asset model, get that model
+                  let assetObj = {
+                      'id': -1,
+                      'vendor': "",
+                      'version': "",
+                      'product': "",
+                      'lat': '',
+                      'lng': '',
+                      'circuit': ''
+                  };
+                  this.setState({
+                    selectedAsset: assetObj,
+                    editMode: true
+                  });
+                }} editMode={editMode} selectedAsset={selectedAsset} updateSelected={(selectedAsset)  => {
+                  debugger;
+                 this.setState({selectedAsset})
+                }} />
               </Col>
               <Col xs={18} md={12} lg={4}>
                 <AssetDetails saveAsset={(savedAsset) => {

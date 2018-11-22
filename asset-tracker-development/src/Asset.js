@@ -17,6 +17,7 @@ class Asset extends Component {
     const style = isSelected ? {borderRadius: '10px', backgroundColor: 'yellow'} : {borderRadius: '10px'}
     if (editMode) {
       style.cursor = 'not-allowed';
+      style.visibility = 'hidden';
     }
     return (
       <Row style={style} onClick={(e) => {

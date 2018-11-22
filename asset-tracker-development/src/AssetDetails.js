@@ -19,7 +19,12 @@ class AssetDetails extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.asset && (!prevProps.asset || prevProps.asset !== this.props.asset)) {
+    if (this.props.asset === null && this.state.editedAsset !== null) {
+      console.log('edit!')
+      this.setState({
+        editedAsset: null
+      })
+    } else if (this.props.asset && (!prevProps.asset || prevProps.asset.id !== this.props.asset.id)) {
       const {lat, lng, id, ...editedAsset} = this.props.asset
       this.setState({
         editedAsset
@@ -31,7 +36,8 @@ class AssetDetails extends Component {
     const {asset, deleteAsset, editMode, saveAsset, toggleEdit} = this.props;
     const {editedAsset} = this.state;
     let details = '';
-    if (editedAsset) {
+    if (editedAsset && asset) {
+      console.log(JSON.stringify(editedAsset))
       const editBtn = editMode ? (
         <Button style={{'float': 'right'}} bsStyle='success' onClick={(e) => {
               const updatedAsset = Object.assign(editedAsset, {id: asset.id, lng: asset.lng, lat: asset.lat});
