@@ -11,12 +11,15 @@ library.add(faEdit)
 library.add(faSave)
 
 class AssetDetails extends Component {
-  state = {
-    editedAsset: {}
+  constructor(props) {
+    super(props)
+    this.state = {
+      editedAsset: null,
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (!prevProps.asset && this.props.asset) {
+    if (this.props.asset && (!prevProps.asset || prevProps.asset !== this.props.asset)) {
       const {lat, lng, id, ...editedAsset} = this.props.asset
       this.setState({
         editedAsset
@@ -28,7 +31,7 @@ class AssetDetails extends Component {
     const {asset, deleteAsset, editMode, saveAsset, toggleEdit} = this.props;
     const {editedAsset} = this.state;
     let details = '';
-    if (asset) {
+    if (editedAsset) {
       const editBtn = editMode ? (
         <Button style={{'float': 'right'}} bsStyle='success' onClick={(e) => {
               const updatedAsset = Object.assign(editedAsset, {id: asset.id, lng: asset.lng, lat: asset.lat});
@@ -37,7 +40,7 @@ class AssetDetails extends Component {
           <Button style={{'float': 'right'}} bsStyle='info' onClick={(e) => toggleEdit(true)}><FontAwesomeIcon icon='edit' /></Button>
         );
 
-      const saveBtn = <Button style={{'float': 'right'}} bsStyle='danger' onClick={(e) => deleteAsset(asset.id)}><FontAwesomeIcon icon='trash' /></Button>
+      const deleteBtn = <Button style={{'float': 'right'}} bsStyle='danger' onClick={(e) => deleteAsset(asset.id)}><FontAwesomeIcon icon='trash' /></Button>
 
       const coords = editMode ? (
               <div>
@@ -49,10 +52,9 @@ class AssetDetails extends Component {
       ) : '';
       details = (
         <div className='asset-details' >
-          {saveBtn}
+          {deleteBtn}
           {editBtn}
           {Object.entries(editedAsset).map((a, i) => {
-            //debugger;
             const [key, value] = a;
             return editMode ? (
               <div key={i}>

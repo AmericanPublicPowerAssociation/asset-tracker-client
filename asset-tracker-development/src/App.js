@@ -15,7 +15,7 @@ import './App.css';
 class App extends Component {
   state = {
     selectedAsset: null,
-    savedAsset: null,
+    savedAsset: false,
     deleteAssetId: '',
     editMode: false,
   };
@@ -28,7 +28,7 @@ class App extends Component {
 
   componentDidUpdate() {
     const {deleteAssetId, savedAsset} = this.state;
-    if (savedAsset !== null) {
+    if (savedAsset) {
       //send post request
       /*
       fetch(`http://18.212.1.167:5000/save-asset?assetID=${deleteAssetId}`)
@@ -42,7 +42,7 @@ class App extends Component {
         })
         */
           this.setState({
-            savedAsset: null,
+            savedAsset: false,
           })
     }
     if (deleteAssetId !== '') {
@@ -68,9 +68,9 @@ class App extends Component {
   render() {
     const {selectedAsset, editMode} = this.state;
     return (
-      <Grid fluid={true}>
+      <div>
 
-      <Navbar fixedTop collapseOnSelect>
+      <Navbar className={editMode ? 'editing': '' } fixedTop collapseOnSelect>
         <Navbar.Header>
           <Navbar.Brand>
             <Link to="/">Asset Tracker</Link>
@@ -79,29 +79,44 @@ class App extends Component {
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav>
-            <LinkContainer to="/assets">
+            <LinkContainer onClick={(e) => {
+              if (editMode) {
+               e.preventDefault()
+              }}} to="/assets">
               <NavItem eventKey={1}>
                 Assets
               </NavItem>
             </LinkContainer>
-            <LinkContainer to="#">
+            <LinkContainer onClick={(e) => {
+              if (editMode) {
+               e.preventDefault()
+              }}} to="#">
               <NavItem eventKey={2}>
                 Reports
               </NavItem>
             </LinkContainer>
-            <LinkContainer to="#">
+            <LinkContainer onClick={(e) => {
+              if (editMode) {
+               e.preventDefault()
+              }}} to="#">
               <NavItem eventKey={3}>
                 Alerts
               </NavItem>
             </LinkContainer>
           </Nav>
           <Nav pullRight>
-            <LinkContainer to="#">
+            <LinkContainer onClick={(e) => {
+              if (editMode) {
+               e.preventDefault()
+              }}} to="#">
               <NavItem eventKey={4}>
                 Alex
               </NavItem>
             </LinkContainer>
-            <LinkContainer to="#">
+            <LinkContainer onClick={(e) => {
+              if (editMode) {
+               e.preventDefault()
+              }}} to="#">
               <NavItem eventKey={5}>
                 <Button bsStyle="primary">Sign Out</Button>
               </NavItem>
@@ -109,6 +124,7 @@ class App extends Component {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
+      <Grid fluid={true}>
 
         <Route exact path="/assets" render={ () => (
           <AssetsTable />
@@ -121,8 +137,8 @@ class App extends Component {
               <Col xs={18} md={12} lg={4}>
                 <AssetDetails saveAsset={(savedAsset) => {
                   this.setState({
+                    savedAsset: true,
                     selectedAsset: savedAsset,
-                    savedAsset,
                     editMode: false
                   });
                 }} toggleEdit={(val) => this.setState({
@@ -133,6 +149,7 @@ class App extends Component {
             </Row>
         )} />
           </Grid>
+        </div>
     );
   }
 }

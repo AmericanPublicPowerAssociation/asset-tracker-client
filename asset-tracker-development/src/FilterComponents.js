@@ -25,9 +25,6 @@ class FilterComponents extends Component {
       const i = filteredAssets.findIndex((a) => a.id === selectedAsset.id);
       if (prevProps.editMode && !editMode && i >= 0) {
         const newFilteredAssets = filteredAssets.slice(0, i).concat([selectedAsset], filteredAssets.slice(i + 1, filteredAssets.length))
-        console.log('filter')
-        debugger;
-        console.log(newFilteredAssets[i])
         this.setState({
           filteredAssets: newFilteredAssets
         })
