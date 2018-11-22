@@ -21,46 +21,55 @@ class App extends Component {
   };
 
   deleteAsset(assetId) {
+    const deleteID = parseInt(assetId) >= 0  ? assetId : ''
     this.setState({
-      deleteAssetId: assetId,
+      deleteAssetId: deleteID,
       editMode: false,
       selectedAsset: null,
     })
   }
 
+  shouldComponentUpdate(prevProps, prevState) {
+    return (!(
+      prevState.savedAsset && !this.state.savedAssets) || !(
+      prevState.deletedAsset !== '' && this.state.deletedAsset === ''
+    ))
+  }
   componentDidUpdate() {
-    const {deleteAssetId, savedAsset} = this.state;
+    const {deleteAssetId, savedAsset, selectedAsset} = this.state;
     if (savedAsset) {
       //send post request
-      /*
-      fetch(`http://18.212.1.167:5000/save-asset?assetID=${deleteAssetId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          this.setState({
-            deleteAssetId: '',
-            selectedAsset: null
-          })
+      fetch(`http://18.212.1.167:5000/save-asset`, {
+        method: 'POST',
+        body: JSON.stringify({asset: selectedAsset})
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        this.setState({
+          savedAsset: false
         })
-        */
-          this.setState({
-            savedAsset: false,
-          })
+      })
     }
     if (deleteAssetId !== '') {
       //TODO send delete request
-      /*
-      fetch(`http://18.212.1.167:5000/delete-asset?assetID=${deleteAssetId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          this.setState({
-            deleteAssetId: '',
-            selectedAsset: null
-          })
+      const id = parseInt(deleteAssetId)
+      if (id >= 0) {
+        fetch(`http://18.212.1.167:5000/delete-asset`, {
+          method: 'DELETE',
+          body: JSON.stringify({id: id})
         })
-      */
-          this.setState({
-            deleteAssetId: '',
+          .then((res) => res.json())
+          .then((data) => {
+            this.setState({
+              deleteAssetId: '',
+            })
           })
+      
+      } else {
+        this.setState({
+          deleteAssetId: '',
+        })
+      }
     }
   }
 

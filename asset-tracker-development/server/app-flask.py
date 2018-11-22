@@ -87,13 +87,21 @@ def get_connections():
         dict(assets=curr_assets, connections=conn)))
 
 
-@app.route('/delete-asset')
+@app.route('/save-asset', methods=['POST'])
+def save():
+    asset = json.loads(request.data).get('asset', None)
+    if asset is not None:
+        global assets
+        assets.append(asset)
+
+
+@app.route('/delete-asset', methods=['DELETE'])
 def delete():
     try:
-        assetID = int(request.args.get('assetID', None))
+        assetID = int(json.loads(request.data).get('id', -1))
     except ValueError:
-        assetID = None
-    validID = bool(assetID)
+        assetID = -1
+    validID = assetID >= 0
     if (validID):
         global assets
         oldAssets = assets
