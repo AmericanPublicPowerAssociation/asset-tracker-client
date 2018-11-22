@@ -22,10 +22,11 @@ class AssetDetails extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.props.asset === null && this.state.editedAsset !== null) {
       this.setState({
-        editedAsset: null
+        editedAsset: null,
       })
     } else if (this.props.asset && (!prevProps.asset || prevProps.asset.id !== this.props.asset.id)) {
-      const {id, ...editedAsset} = this.props.asset
+      const {id, lat, lng, ...editedAsset} = this.props.asset
+      this.originalLngLat = [lng, lat]
       this.setState({
         editedAsset
       })
@@ -34,12 +35,13 @@ class AssetDetails extends Component {
 
   render() {
     const {asset, updateSelected, deleteAsset, editMode, saveAsset, toggleEdit} = this.props;
-    const {editedAsset} = this.state;
+    const {editedAsset, lng, lat} = this.state;
     let details = '';
     if (editedAsset && asset) {
       const editBtn = editMode ? (
         <Button style={{'float': 'right'}} bsStyle='success' onClick={(e) => {
-              const updatedAsset = Object.assign(editedAsset, {id: asset.id, lng: asset.lng, lat: asset.lat});
+              debugger;
+              const updatedAsset = Object.assign({}, editedAsset, {id: asset.id, lng: asset.lng, lat: asset.lat});
               saveAsset(updatedAsset)
         }}>{'Save Asset '}<FontAwesomeIcon icon='save' /></Button>) : (
           <Button style={{'float': 'right'}} bsStyle='info' onClick={(e) => toggleEdit(true)}>{'Edit Asset '}<FontAwesomeIcon icon='edit' /></Button>
@@ -52,8 +54,7 @@ class AssetDetails extends Component {
             updateSelected(null);
           }
           else {
-            debugger
-            const n = Object.assign(asset, {lng: editedAsset.lng, lat: editedAsset.lat})
+            const n = Object.assign({}, asset, {lng: this.originalLngLat[0], lat: this.originalLngLat[1]})
             updateSelected(n)
           }
       }}>{'Cancel '}<FontAwesomeIcon icon='ban' /></Button>
@@ -71,7 +72,7 @@ class AssetDetails extends Component {
               <div key={i}>
                 <h2>{key}</h2>
                 <FormControl onChange={(e) => this.setState({
-                  editedAsset: Object.assign(editedAsset, {[key]: e.target.value})
+                  editedAsset: Object.assign({}, editedAsset, {[key]: e.target.value})
                 })} value={value} />
               </div>
             ) : (

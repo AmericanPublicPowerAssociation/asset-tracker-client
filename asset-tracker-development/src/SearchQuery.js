@@ -89,7 +89,7 @@ class SearchQuery extends Component {
                         this.setState((state, props) => {
                           const {filters, key, searchQuery} = state;
                           return {
-                            filters: Object.assign(filters, {[key]: searchQuery}),
+                            filters: Object.assign({}, filters, {[key]: searchQuery}),
                             filter: true
                           }
                         })
