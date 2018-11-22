@@ -3,12 +3,13 @@ import React, {Component} from 'react';
 import {Row, Button, FormControl, Col, Panel} from 'react-bootstrap';
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faTrash, faEdit, faSave} from '@fortawesome/free-solid-svg-icons'
+import {faTrash, faBan, faEdit, faSave} from '@fortawesome/free-solid-svg-icons'
 
 
 library.add(faTrash)
 library.add(faEdit)
 library.add(faSave)
+library.add(faBan)
 
 class AssetDetails extends Component {
   constructor(props) {
@@ -20,7 +21,6 @@ class AssetDetails extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.asset === null && this.state.editedAsset !== null) {
-      console.log('edit!')
       this.setState({
         editedAsset: null
       })
@@ -37,7 +37,6 @@ class AssetDetails extends Component {
     const {editedAsset} = this.state;
     let details = '';
     if (editedAsset && asset) {
-      console.log(JSON.stringify(editedAsset))
       const editBtn = editMode ? (
         <Button style={{'float': 'right'}} bsStyle='success' onClick={(e) => {
               const updatedAsset = Object.assign(editedAsset, {id: asset.id, lng: asset.lng, lat: asset.lat});
@@ -46,16 +45,12 @@ class AssetDetails extends Component {
           <Button style={{'float': 'right'}} bsStyle='info' onClick={(e) => toggleEdit(true)}><FontAwesomeIcon icon='edit' /></Button>
         );
 
-      const deleteBtn = <Button style={{'float': 'right'}} bsStyle='danger' onClick={(e) => deleteAsset(asset.id)}><FontAwesomeIcon icon='trash' /></Button>
+      const deleteBtn = editMode ? (
+        <Button style={{'float': 'right'}} bsStyle='danger' onClick={(e) => deleteAsset(asset.id)}><FontAwesomeIcon icon='ban' /></Button>
+      ) : (
+        <Button style={{'float': 'right'}} bsStyle='danger' onClick={(e) => deleteAsset(asset.id)}><FontAwesomeIcon icon='trash' /></Button>
+      );
 
-      const coords = editMode ? (
-              <div>
-                <h2>Latitude</h2>
-                <FormControl readOnly value={asset.lat} />
-                <h2>Longitude</h2>
-                <FormControl readOnly value={asset.lng} />
-              </div>
-      ) : '';
       details = (
         <div className='asset-details' >
           {deleteBtn}
@@ -76,7 +71,6 @@ class AssetDetails extends Component {
               </div>
             )
           })}
-          {coords}
         </div>
       );
     }

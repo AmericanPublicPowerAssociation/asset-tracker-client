@@ -7,8 +7,12 @@ import {Row, Col} from 'react-bootstrap';
 
 
 class Map extends Component {
-  createLayer(assets, selectedAsset, layerName) {
-    const assetData = assets.map((a) => {
+  createLayer(assets, selectedAsset, editMode, layerName) {
+    let assetsWithEdit = assets
+    if (editMode) {
+      assetsWithEdit = assets.filter((a) => (selectedAsset && selectedAsset.id !== a.id))
+    }
+    const assetData = assetsWithEdit.map((a) => {
       const isSelected = (selectedAsset && selectedAsset.id === a.id) ? 1 : 0;
       return {
                   "type": "Feature",
@@ -72,6 +76,14 @@ class Map extends Component {
     }
   }
 
+  getUpdatedAsset(asset, lnglat) {
+    const {updateSelected} = this.props;
+    const {lat, lng, ...updatedAsset} = asset;
+    updatedAsset.lat = lnglat.lat;
+    updatedAsset.lng = lnglat.lng;
+    updateSelected(updatedAsset);
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const {editMode, markers, selectedAsset, updateSelected} = this.props;
 
@@ -83,56 +95,48 @@ class Map extends Component {
       this.map.removeSource(layerName);
       this.map.off('click', layerName)
     }
+
+    this.layer = this.createLayer(markers, selectedAsset, editMode, layerName);
+    this.map.on('click', layerName, (e) => {
+      const pointId = e.features[0].properties.id
+      const asset =  this.props.markers.find((m) => m.id === pointId)
+      updateSelected(asset)
+    });
+    this.map.addLayer(this.layer);
+    if (selectedAsset && !editMode) {
+      this.popup
+        .setLngLat(
+          [selectedAsset.lng, selectedAsset.lat])
+        .setHTML(selectedAsset.product)
+        .addTo(this.map);
+    }
+    else {
+      this.popup.remove();
+    }
+
     if (editMode) {
       if (!this.editedMarker) {
         this.editedMarker = new mapboxgl.Marker({draggable: true})
         const coords = selectedAsset.id >= 0 ? [
-          selectedAsset.lng, selectedAsset.lat] : this.map.getCenter().toArray();
+          selectedAsset.lng, selectedAsset.lat] : this.map.getCenter();
         this.editedMarker
           .setLngLat(coords)
           .addTo(this.map);
         this.editedMarker.on('dragend', (e) => {
-          const {lat, lng, ...updatedAsset} = selectedAsset;
-          const [new_lng, new_lat] = e.target.getLngLat().toArray();
-          updatedAsset.lat = new_lat;
-          updatedAsset.lng = new_lng;
-          updateSelected(updatedAsset);
+          const lnglat = e.target.getLngLat();
+          this.getUpdatedAsset(selectedAsset, lnglat)
         })
-        const {lat, lng, ...updatedAsset} = selectedAsset;
-        const [new_lng, new_lat] = coords;
-        updatedAsset.lat = new_lat;
-        updatedAsset.lng = new_lng;
-        updateSelected(updatedAsset);
+        this.getUpdatedAsset(selectedAsset, coords)
       }
-    } else {
-      if (this.editedMarker) {
+    } else if (this.editedMarker) {
         this.editedMarker.remove();
-      }
+    }
 
       // if markers didn't change, don't change bounds
-      const prevPoints = prevProps.markers;
-      const didChange = ((markers.length !== prevPoints.length) || (
-        markers.some((m, i) => m.id !== prevPoints[i].id)
-      ))
+    const prevPoints = prevProps.markers;
+    const didChange = (markers.length !== prevPoints.length ||
+      markers.some((m, i) => m.id !== prevPoints[i].id)) && !editMode
 
-
-      this.layer = this.createLayer(markers, selectedAsset, layerName);
-      this.map.on('click', layerName, (e) => {
-        const pointId = e.features[0].properties.id
-        const asset =  this.props.markers.find((m) => m.id === pointId)
-        updateSelected(asset)
-      });
-      this.map.addLayer(this.layer);
-      if (selectedAsset) {
-        this.popup
-          .setLngLat(
-            [selectedAsset.lng, selectedAsset.lat])
-          .setHTML(selectedAsset.product)
-          .addTo(this.map);
-      }
-      else {
-        this.popup.remove();
-      }
 
       // if markers didn't change, don't change bounds
       if (didChange && markers.length){
@@ -142,7 +146,6 @@ class Map extends Component {
                 });
       }
       //this.map.setMaxBounds(this.map.getBounds());
-    }
   }
 
   componentDidMount() {

@@ -22,7 +22,9 @@ class App extends Component {
 
   deleteAsset(assetId) {
     this.setState({
-      deleteAssetId: assetId
+      deleteAssetId: assetId,
+      editMode: false,
+      selectedAsset: null,
     })
   }
 
@@ -34,7 +36,6 @@ class App extends Component {
       fetch(`http://18.212.1.167:5000/save-asset?assetID=${deleteAssetId}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data)
           this.setState({
             deleteAssetId: '',
             selectedAsset: null
@@ -51,7 +52,6 @@ class App extends Component {
       fetch(`http://18.212.1.167:5000/delete-asset?assetID=${deleteAssetId}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data)
           this.setState({
             deleteAssetId: '',
             selectedAsset: null
@@ -60,7 +60,6 @@ class App extends Component {
       */
           this.setState({
             deleteAssetId: '',
-            selectedAsset: null
           })
     }
   }
@@ -150,7 +149,6 @@ class App extends Component {
                     editMode: true
                   });
                 }} editMode={editMode} selectedAsset={selectedAsset} updateSelected={(selectedAsset)  => {
-                  debugger;
                  this.setState({selectedAsset})
                 }} />
               </Col>
