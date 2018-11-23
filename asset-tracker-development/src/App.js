@@ -1,18 +1,28 @@
 import React, {Component} from 'react';
 import {Route, Link} from 'react-router-dom';
 import {LinkContainer} from 'react-router-bootstrap';
+import {Button, Grid, Row, Col, Nav, Navbar, NavItem} from 'react-bootstrap';
 
 import AssetDetails from './AssetDetails';
 import AssetsTable from './AssetsTable';
 import CircuitDiagram from './CircuitDiagram';
 import FilterComponents from './FilterComponents';
+import Navigation from './Navigation';
 
-
-import {Button, Grid, Row, Col, Nav, Navbar, NavItem} from 'react-bootstrap';
 import './App.css';
 
 
 class App extends Component {
+  /*
+   * selectedAsset: Object  => currently selected asset
+   * savedAsset:    Boolean => If the "save asset" button was pressed
+   *    the asset to save would be the currently selected asset
+   * deleteAssetId: Integer => the ID of the asset to delete,
+   *    changed when the "delete asset" button is pressed
+   * editMode:      Boolean => If the edit/add asset form should be
+   *    displayed changed when the edit/save/delete/cancel
+   *    button is pressed.
+   */
   state = {
     selectedAsset: null,
     savedAsset: false,
@@ -73,65 +83,18 @@ class App extends Component {
     }
   }
 
+  updateSelected = (selectedAsset) => {
+    this.setState({
+      selectedAsset
+    })
+  }
+
   render() {
     const {selectedAsset, editMode} = this.state;
     return (
       <div>
 
-      <Navbar className={editMode ? 'editing': '' } fixedTop collapseOnSelect>
-        <Navbar.Header>
-          <Navbar.Brand>
-            <Link to="/">Asset Tracker</Link>
-          </Navbar.Brand>
-          <Navbar.Toggle />
-        </Navbar.Header>
-        <Navbar.Collapse>
-          <Nav>
-            <LinkContainer onClick={(e) => {
-              if (editMode) {
-               e.preventDefault()
-              }}} to="/assets">
-              <NavItem eventKey={1}>
-                Assets
-              </NavItem>
-            </LinkContainer>
-            <LinkContainer onClick={(e) => {
-              if (editMode) {
-               e.preventDefault()
-              }}} to="#">
-              <NavItem eventKey={2}>
-                Reports
-              </NavItem>
-            </LinkContainer>
-            <LinkContainer onClick={(e) => {
-              if (editMode) {
-               e.preventDefault()
-              }}} to="#">
-              <NavItem eventKey={3}>
-                Alerts
-              </NavItem>
-            </LinkContainer>
-          </Nav>
-          <Nav pullRight>
-            <LinkContainer onClick={(e) => {
-              if (editMode) {
-               e.preventDefault()
-              }}} to="#">
-              <NavItem eventKey={4}>
-                Alex
-              </NavItem>
-            </LinkContainer>
-            <LinkContainer onClick={(e) => {
-              if (editMode) {
-               e.preventDefault()
-              }}} to="#">
-              <NavItem eventKey={5}>
-                <Button bsStyle="primary">Sign Out</Button>
-              </NavItem>
-            </LinkContainer>
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
+      <Navigation editMode={editMode} />
       <Grid fluid={true}>
 
         <Route exact path="/assets" render={ () => (
@@ -157,9 +120,7 @@ class App extends Component {
                     selectedAsset: assetObj,
                     editMode: true
                   });
-                }} editMode={editMode} selectedAsset={selectedAsset} updateSelected={(selectedAsset)  => {
-                 this.setState({selectedAsset})
-                }} />
+                }} editMode={editMode} selectedAsset={selectedAsset} updateSelected={this.updateSelected} />
               </Col>
               <Col xs={18} md={12} lg={4}>
                 <AssetDetails saveAsset={(savedAsset) => {
@@ -168,10 +129,10 @@ class App extends Component {
                     selectedAsset: savedAsset,
                     editMode: false
                   });
-                }} updateSelected={(selectedAsset) => this.setState({selectedAsset})} toggleEdit={(val) => this.setState({
+                }} updateSelected={this.updateSelected} toggleEdit={(val) => this.setState({
                   editMode: val
                 })} editMode={editMode} deleteAsset={(assetId) => this.deleteAsset(assetId)} asset={selectedAsset}/>
-                <CircuitDiagram updateSelected={(selectedAsset) => this.setState({selectedAsset})} asset={selectedAsset}/>
+                <CircuitDiagram updateSelected={this.updateSelected} asset={selectedAsset}/>
               </Col>
             </Row>
         )} />
