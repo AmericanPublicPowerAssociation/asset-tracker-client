@@ -23,18 +23,17 @@ class App extends Component {
    *    button is pressed.
    */
   state = {
-    selectedAsset: null,
+    selectedAsset: {},
     savedAsset: false,
-    deleteAssetId: '',
+    deleteAssetId: -1,
     editMode: false,
   };
 
   deleteAsset(assetId) {
-    const deleteID = parseInt(assetId) >= 0  ? assetId : ''
     this.setState({
-      deleteAssetId: deleteID,
+      deleteAssetId: assetId,
       editMode: false,
-      selectedAsset: null,
+      selectedAsset: {},
     })
   }
 
@@ -44,6 +43,7 @@ class App extends Component {
       prevState.deletedAsset !== '' && this.state.deletedAsset === ''
     ))
   }
+
   componentDidUpdate() {
     const {deleteAssetId, savedAsset, selectedAsset} = this.state;
     if (savedAsset) {
@@ -59,27 +59,20 @@ class App extends Component {
         })
       })
     }
-    if (deleteAssetId !== '') {
+    if (deleteAssetId >= 0) {
       //TODO send delete request
-      const id = parseInt(deleteAssetId)
-      if (id >= 0) {
         fetch(`http://18.212.1.167:5000/delete-asset`, {
           method: 'DELETE',
-          body: JSON.stringify({id: id})
+          body: JSON.stringify({id: deleteAssetId})
         })
           .then((res) => res.json())
           .then((data) => {
             this.setState({
-              deleteAssetId: '',
+              deleteAssetId: -1,
             })
           })
 
-      } else {
-        this.setState({
-          deleteAssetId: '',
-        })
-      }
-    }
+    } 
   }
 
   updateSelected = (selectedAsset) => {

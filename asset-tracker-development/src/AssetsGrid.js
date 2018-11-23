@@ -16,7 +16,7 @@ class AssetsGrid extends Component {
   render() {
     const {assets, updateSelected, editMode, selectedAsset, addNewAsset} = this.props;
     const rows = assets.map((a) => {
-      const isSelected = selectedAsset && (a.id === selectedAsset.id);
+      const isSelected = (a.id === selectedAsset.id);
       return <Asset editMode={editMode} isSelected={isSelected} onClickEvent={() => updateSelected(a)} key={a.id} asset={a}/>
     });
 
