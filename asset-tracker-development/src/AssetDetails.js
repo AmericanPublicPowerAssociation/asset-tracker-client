@@ -11,24 +11,37 @@ library.add(faEdit)
 library.add(faSave)
 library.add(faBan)
 
+
 class AssetDetails extends Component {
   constructor(props) {
     super(props)
+    /*
+     * editedAsset: Object => the current state of the edited form
+     */
     this.state = {
-      editedAsset: null,
+      editedAsset: {},
     }
   }
 
+  isValid = (obj) => Object.keys(obj).length > 0;
+
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.asset === null && this.state.editedAsset !== null) {
-      this.setState({
-        editedAsset: null,
+    const self = this;
+    const {asset} = self.props;
+    const {editedAsset} = self.state;
+    if (!self.isValid(asset) && self.isValid(editedAsset)) {
+      // if you are no longer selecting an asset, reset editedAsset
+      self.setState({
+        editedAsset: {},
       })
-    } else if (this.props.asset && (!prevProps.asset || prevProps.asset.id !== this.props.asset.id)) {
-      const {id, lat, lng, ...editedAsset} = this.props.asset
-      this.originalLngLat = [lng, lat]
-      this.setState({
-        editedAsset
+    } else if (self.isValid(asset) && prevProps.asset.id !== asset.id) {
+      // a new asset was selected
+      self.setState((state, props) => {
+        const {id, lat, lng, ...editedAsset} = props.asset
+        self.ORIGINALCOORDS = [lng, lat]
+        return {
+          editedAsset
+        }
       })
     }
   }
@@ -36,55 +49,84 @@ class AssetDetails extends Component {
   render() {
     const {asset, updateSelected, deleteAsset, editMode, saveAsset, toggleEdit} = this.props;
     const {editedAsset} = this.state;
+    const style = {'float': 'right'}
     let details = '';
-    if (editedAsset && asset) {
+
+    if (this.isValid(editedAsset) && this.isValid(asset)) {
       const editBtn = editMode ? (
-        <Button style={{'float': 'right'}} bsStyle='success' onClick={(e) => {
-              debugger;
-              const updatedAsset = Object.assign({}, editedAsset, {id: asset.id, lng: asset.lng, lat: asset.lat});
-              saveAsset(updatedAsset)
-        }}>{'Save Asset '}<FontAwesomeIcon icon='save' /></Button>) : (
-          <Button style={{'float': 'right'}} bsStyle='info' onClick={(e) => toggleEdit(true)}>{'Edit Asset '}<FontAwesomeIcon icon='edit' /></Button>
-        );
+        <Button style={style} bsStyle='success'
+          onClick={(e) => {
+              const updatedAsset = Object.assign(
+                {}, editedAsset, {
+                  id: asset.id,
+                  lng: asset.lng,
+                  lat: asset.lat});
+              saveAsset(updatedAsset);
+        }} >{'Save Asset '}<FontAwesomeIcon icon='save' /></Button>) : (
+        <Button style={style} bsStyle='info' onClick={(e) =>
+          toggleEdit(true)
+        }>{'Edit Asset '}<FontAwesomeIcon icon='edit' /></Button>
+      );
 
       const deleteBtn = editMode ? (
-        <Button style={{'float': 'right'}} bsStyle='danger' onClick={(e) => {
-          toggleEdit(false)
-          if (asset.id < 0) {
-            updateSelected(null);
-          }
-          else {
-            const n = Object.assign({}, asset, {lng: this.originalLngLat[0], lat: this.originalLngLat[1]})
-            updateSelected(n)
-          }
-      }}>{'Cancel '}<FontAwesomeIcon icon='ban' /></Button>
+        <Button style={style} bsStyle='danger' onClick={(e) => {
+            toggleEdit(false)
+            // if new asset use empty object
+            // if editing an asset revert to original asset
+            const a = asset.id >= 0 ? (
+              Object.assign(
+                  {},
+                  asset,
+                  {
+                    lng: this.ORIGINALCOORDS[0],
+                    lat: this.ORIGINALCOORDS[1]
+                  })
+            ) : {};
+            updateSelected(a)
+      }} >{'Cancel '}<FontAwesomeIcon icon='ban' /></Button>
       ) : (
-        <Button style={{'float': 'right'}} bsStyle='danger' onClick={(e) => deleteAsset(asset.id)}>{'Delete Asset '}<FontAwesomeIcon icon='trash' /></Button>
+        <Button style={style} bsStyle='danger' onClick={(e) =>
+          deleteAsset(asset.id)
+        }>{'Delete Asset '}<FontAwesomeIcon icon='trash' /></Button>
       );
+
+      const assetForm = Object.entries(editedAsset).map((attr, i) => {
+        const [key, value] = attr;
+        return editMode ? (
+          <div key={i}>
+            <h2>{key}</h2>
+            <FormControl onChange={(e) => {
+              const value = e.target.value;
+               this.setState((state, props) => {
+                return {
+                  editedAsset: Object.assign(
+                    {},
+                    state.editedAsset,
+                    {
+                      [key]: value
+                    }
+                  )
+                }
+              })}
+            } value={value} />
+          </div>
+        ) : (
+          <div key={i}>
+            <h2>{key}</h2>
+            <p>{asset[[key]]}</p>
+          </div>
+        )
+      });
 
       details = (
         <div className='asset-details' >
           {deleteBtn}
           {editBtn}
-          {Object.entries(editedAsset).map((a, i) => {
-            const [key, value] = a;
-            return editMode ? (
-              <div key={i}>
-                <h2>{key}</h2>
-                <FormControl onChange={(e) => this.setState({
-                  editedAsset: Object.assign({}, editedAsset, {[key]: e.target.value})
-                })} value={value} />
-              </div>
-            ) : (
-              <div key={i}>
-                <h2>{key}</h2>
-                <p>{asset[[key]]}</p>
-              </div>
-            )
-          })}
+          {assetForm}
         </div>
       );
     }
+
     return (
       <Row>
         <Col lg={12}>
@@ -99,5 +141,6 @@ class AssetDetails extends Component {
     );
   }
 }
+
 
 export default AssetDetails;

@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import mapboxgl from 'mapbox-gl';
+import {Row, Col} from 'react-bootstrap';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
-
-import {Row, Col} from 'react-bootstrap';
 
 
 class Map extends Component {
@@ -96,10 +95,10 @@ class Map extends Component {
 
   getBounds(markers) {
     const initialCoords = [markers[0].lng, markers[0].lat];
-    return markers.reduce(function(bounds, marker) {
-                return bounds.extend([marker.lng, marker.lat]);
-            }, new mapboxgl.LngLatBounds(
-              initialCoords, initialCoords));
+    return markers.reduce(
+      (bounds, marker) => bounds.extend([marker.lng, marker.lat]),
+      new mapboxgl.LngLatBounds(initialCoords, initialCoords)
+    );
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -124,7 +123,7 @@ class Map extends Component {
     if (editMode) {
       // if editing an asset use its coords else if new asset use center of map
       if (selectedAsset.id < 0 && selectedAsset.lng === '') {
-        this.props.updateSelected(Object.assign({}, selectedAsset, this.map.getCenter())) 
+        this.props.updateSelected(Object.assign({}, selectedAsset, this.map.getCenter()))
       }
       const coords = {lng: selectedAsset.lng,
         lat: selectedAsset.lat};
@@ -176,5 +175,6 @@ class Map extends Component {
     );
   }
 }
+
 
 export default Map;

@@ -11,6 +11,7 @@ const Navigation = (props) => {
       e.preventDefault()
     }
   };
+
   return (
       <Navbar className={editMode ? 'editing': '' } fixedTop collapseOnSelect>
         <Navbar.Header>
@@ -51,7 +52,7 @@ const Navigation = (props) => {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
-  )
+  );
 }
 
 

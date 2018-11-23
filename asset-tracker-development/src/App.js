@@ -71,8 +71,7 @@ class App extends Component {
               deleteAssetId: -1,
             })
           })
-
-    } 
+    }
   }
 
   updateSelected = (selectedAsset) => {
@@ -121,9 +120,12 @@ class App extends Component {
                     selectedAsset: savedAsset,
                     editMode: false
                   });
-                }} updateSelected={this.updateSelected} toggleEdit={(val) => this.setState({
-                  editMode: val
-                })} editMode={editMode} deleteAsset={(assetId) => this.deleteAsset(assetId)} asset={selectedAsset}/>
+                }} updateSelected={this.updateSelected} toggleEdit={(val) =>
+                  this.setState({
+                    editMode: val
+                  })} editMode={editMode} deleteAsset={(assetId) =>
+                    this.deleteAsset(assetId)
+                  } asset={selectedAsset}/>
                 <CircuitDiagram updateSelected={this.updateSelected} asset={selectedAsset}/>
               </Col>
             </Row>
@@ -133,5 +135,6 @@ class App extends Component {
     );
   }
 }
+
 
 export default App;

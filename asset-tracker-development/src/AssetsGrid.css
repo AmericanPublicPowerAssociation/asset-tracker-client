@@ -5,8 +5,13 @@
   max-height: 60rem;
 }
 
+.selected.asset {
+  background-color: yellow;
+}
+
 .asset {
   padding: 10px;
+  border-radius: 10px;
   text-align: center;
 }
 

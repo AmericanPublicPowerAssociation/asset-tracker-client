@@ -1,13 +1,16 @@
 import React, {Component} from 'react';
+import {Row, Col, Panel} from 'react-bootstrap';
 
 import AssetsGrid from './AssetsGrid';
 import Map from './Map';
 import SearchQuery from './SearchQuery';
 
-import {Row, Col, Panel} from 'react-bootstrap';
-
 
 class FilterComponents extends Component {
+  /*
+   * filteredAssets: List => current assets displayed
+   *    in asset overview and map
+   */
   state = {
     filteredAssets: []
   }
@@ -20,9 +23,11 @@ class FilterComponents extends Component {
     if (!valid && isValid(prevProps.selectedAsset)) {
       // asset was deleted
       // this is assuming the only way to go from selected to not selected is by deleting
-      this.setState({
-        filteredAssets: filteredAssets.filter(
-          (a) => a.id !== prevProps.selectedAsset.id)
+      this.setState((state, props) => {
+        return {
+          filteredAssets: state.filteredAssets.filter(
+            (a) => a.id !== prevProps.selectedAsset.id)
+        }
       })
     } else if (valid && prevProps.editMode && !editMode) {
       // finished editing
@@ -31,15 +36,22 @@ class FilterComponents extends Component {
         // finished editing a current asset
         this.setState((state, props) => {
           const fa = state.filteredAssets;
-          const filteredAssets = fa.slice(0, i).concat([selectedAsset], fa.slice(i + 1, fa.length))
+          const filteredAssets = fa.slice(
+            0, i).concat(
+              [props.selectedAsset],
+              fa.slice(i + 1, fa.length)
+            )
           return {
             filteredAssets
           }
         })
       } else {
         // finished creating a new asset
-        this.setState({
-          filteredAssets: filteredAssets.concat([selectedAsset])
+        this.setState((state, props) => {
+          return {
+            filteredAssets: state.filteredAssets.concat(
+              [props.selectedAsset])
+          }
         })
       }
     }
@@ -68,7 +80,8 @@ class FilterComponents extends Component {
                     updateFilteredAssets={(filteredAssets) =>
                       this.setState({
                         filteredAssets
-                      })} />
+                      })
+                    } />
                   <Map editMode={editMode} selectedAsset={selectedAsset} updateSelected={(asset) => updateSelected(asset)} markers={filteredAssets} />
                 </Col>
                 <Col lg={4}>
@@ -83,5 +96,6 @@ class FilterComponents extends Component {
     );
   }
 }
+
 
 export default FilterComponents;
