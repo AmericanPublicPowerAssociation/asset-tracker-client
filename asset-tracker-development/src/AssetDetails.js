@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-
 import {Row, Button, FormControl, Col, Panel} from 'react-bootstrap';
+
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faTrash, faBan, faEdit, faSave} from '@fortawesome/free-solid-svg-icons'
@@ -35,7 +35,7 @@ class AssetDetails extends Component {
 
   render() {
     const {asset, updateSelected, deleteAsset, editMode, saveAsset, toggleEdit} = this.props;
-    const {editedAsset, lng, lat} = this.state;
+    const {editedAsset} = this.state;
     let details = '';
     if (editedAsset && asset) {
       const editBtn = editMode ? (

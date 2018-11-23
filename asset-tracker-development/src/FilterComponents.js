@@ -39,8 +39,6 @@ class FilterComponents extends Component {
   updateFilteredAssets(filteredAssets) {
     // search for assets
     const {updateSelected} = this.props;
-    const asset = filteredAssets.length ? filteredAssets[0] : null
-    updateSelected(asset)
     this.setState({
       filteredAssets
     })

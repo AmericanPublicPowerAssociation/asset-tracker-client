@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {Route, Link} from 'react-router-dom';
-import {LinkContainer} from 'react-router-bootstrap';
-import {Button, Grid, Row, Col, Nav, Navbar, NavItem} from 'react-bootstrap';
+import {Route} from 'react-router-dom';
+import {Grid, Row, Col} from 'react-bootstrap';
 
 import AssetDetails from './AssetDetails';
 import AssetsTable from './AssetsTable';

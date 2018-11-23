@@ -8,11 +8,7 @@ import {Row, Col} from 'react-bootstrap';
 
 class Map extends Component {
   createLayer(assets, selectedAsset, editMode, layerName) {
-    let assetsWithEdit = assets
-    if (editMode) {
-      assetsWithEdit = assets.filter((a) => (selectedAsset && selectedAsset.id !== a.id))
-    }
-    const assetData = assetsWithEdit.map((a) => {
+    const assetData = assets.map((a) => {
       const isSelected = (selectedAsset && selectedAsset.id === a.id) ? 1 : 0;
       return {
                   "type": "Feature",
@@ -49,21 +45,6 @@ class Map extends Component {
     };
   }
 
-  addMarker(asset, index, selectedAsset) {
-      const {updateSelected} = this.props;
-      const popup = new mapboxgl.Popup()
-        .on('open', function(e) {
-          updateSelected(asset);
-        })
-      const color = selectedAsset && asset.id === selectedAsset.id ? 'red' : 'blue';
-      const marker = new mapboxgl.Marker({color})
-        .setLngLat([asset.lng, asset.lat])
-        .setPopup(popup)
-
-      marker.id = asset.id;
-      return marker
-    }
-
   setBounds(markers) {
     if (markers.length > 0) {
       const initialCoords = [markers[0].lng, markers[0].lat];
@@ -74,14 +55,6 @@ class Map extends Component {
     } else {
       return new mapboxgl.LngLatBounds([0, 0], [0, 0]);
     }
-  }
-
-  getUpdatedAsset(asset, lnglat) {
-    const {updateSelected} = this.props;
-    const {lat, lng, ...updatedAsset} = asset;
-    updatedAsset.lat = lnglat.lat;
-    updatedAsset.lng = lnglat.lng;
-    updateSelected(updatedAsset);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -96,11 +69,15 @@ class Map extends Component {
       this.map.off('click', layerName)
     }
 
-    this.layer = this.createLayer(markers, selectedAsset, editMode, layerName);
+    const assets = editMode ? markers.filter(
+      (a) => (!Boolean(selectedAsset) || selectedAsset.id !== a.id)) : markers
+    this.layer = this.createLayer(assets, selectedAsset, editMode, layerName);
     this.map.on('click', layerName, (e) => {
-      const pointId = e.features[0].properties.id
-      const asset =  this.props.markers.find((m) => m.id === pointId)
-      updateSelected(asset)
+      if (!this.props.editMode) {
+        const pointId = e.features[0].properties.id
+        const asset =  this.props.markers.find((m) => m.id === pointId)
+        updateSelected(asset)
+      }
     });
     this.map.addLayer(this.layer);
     if (selectedAsset && !editMode) {
@@ -120,19 +97,21 @@ class Map extends Component {
         lat: selectedAsset.lat} : this.map.getCenter();
       if (!this.editedMarker) {
         this.editedMarker = new mapboxgl.Marker({draggable: true})
-        this.getUpdatedAsset(selectedAsset, coords)
       }
-      debugger
       this.editedMarker
         .setLngLat(coords)
         .addTo(this.map);
       this.editedMarker.on('dragend', (e) => {
         const lnglat = e.target.getLngLat();
-        this.getUpdatedAsset(selectedAsset, lnglat)
+        const {updateSelected} = this.props;
+        const {lat, lng, ...updatedAsset} = selectedAsset;
+        updatedAsset.lat = lnglat.lat;
+        updatedAsset.lng = lnglat.lng;
+        updateSelected(updatedAsset);
       })
     } else if (this.editedMarker) {
-        console.log('remove')
         this.editedMarker.remove();
+        delete this.editedMarker
     }
 
       // if markers didn't change, don't change bounds
