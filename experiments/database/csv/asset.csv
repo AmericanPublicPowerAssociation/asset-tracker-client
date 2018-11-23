@@ -1,0 +1,14 @@
+id,organization_id,type_id,subtype_id,vendor_id,product_id,version_id,parent_id,name,geometry,properties
+QYEmZScfCd1Lyi9V,SP79S78F,2,1,,,,,Red Mesa Senior Center Meter,,"{‘active_power_consumption_in_mw’: 100, ‘reactive_power_consumption_in_mw’: 100}"
+dSrOZalr1C2RUJ4X,SP79S78F,2,2,,,,,Foothills Mall Meter,,"{‘active_power_consumption_in_mw’: 100, ‘reactive_power_consumption_in_mw’: 100}"
+51zOZBG2Lh2p6Bmv,SP79S78F,2,3,,,,OlrJG8fxAlsf6Yto,Lumiservicios Steel Mill Meter,,"{‘active_power_consumption_in_mw’: 100, ‘reactive_power_consumption_in_mw’: 100}"
+OlrJG8fxAlsf6Yto,SP79S78F,1,,,,,,Pole 33,,
+GFC8yAvl6HjV7NbB,SP79S78F,1,,,,,,Pole 58,,
+ZvKTr0xDBSCeANST,SP79S78F,3,4,,,,,US 191 33-58 Line,,"{‘series_reactance_in_ohm’: 0.1, ‘series_resistance_in_ohm’: 0.01}"
+m4mfUWG0F65O7Afs,SP79S78F,3,4,,,,,US 160 58-Kayenta Line,,"{‘series_reactance_in_ohm’: 0.1, ‘series_resistance_in_ohm’: 0.01}"
+C4qCRFvuAr5n3LVa,SP79S78F,6,,,,,OlrJG8fxAlsf6Yto,Pole 33 Step Down Transformer,,
+vg5MiYkfeWLICTHu,SP79S78F,6,,,,,GFC8yAvl6HjV7NbB,Pole 58 Step Down Transformer,,
+HQWgIdE5SsDXpyNW,SP79S78F,4,8,1,3,1,lUvLoJPBUc8HjA5w,Town of Red Mesa Relay,,
+uqfQfa0Q7HmjIawj,SP79S78F,5,,,,,lUvLoJPBUc8HjA5w,Busbar,,{‘nominal_voltage_in_kv’: 20}
+lUvLoJPBUc8HjA5w,SP79S78F,7,,,,,,Kayenta Substation,,
+vq5L6XEQTf9zEGcT,SP79S78F,8,1,,,,,Kayenta Solar Facility,,"{‘active_power_set_point_in_mw’: 100, ‘control_strategy’: ‘PQ’}"

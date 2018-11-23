@@ -11,18 +11,30 @@ import './SearchBar.css';
 
 library.add(faSearch)
 
+
 class SearchQuery extends Component {
+  /*
+   * searchQuery: String => current state of search input box
+   * key:         String => current filter being searched
+   * search:      String => if a search is triggered
+   * filters:     Object => object containing filter values
+   *    of the form
+   *    {
+   *      product: '',
+   *      vendor : '',
+   *    }
+   */
   state = {
     searchQuery: '',
     key: 'product',
-    filter: false,
+    search: false,
     filters: {},
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const {filter, filters} = this.state;
+    const {search, filters} = this.state;
     const {updateFilteredAssets} = this.props;
-    if (filter) {
+    if (search) {
       const url = Object.entries(filters).reduce((url, f) => {
         return url + `${f[0]}=${f[1]}&`
       }, `http://18.212.1.167:5000/search?`);
@@ -32,7 +44,7 @@ class SearchQuery extends Component {
         const {filteredAssets} = JSON.parse(data);
         this.setState({
           searchQuery: '',
-          filter: false
+          search: false
         })
         updateFilteredAssets(filteredAssets);
       })
@@ -40,24 +52,32 @@ class SearchQuery extends Component {
   }
 
   shouldComponentUpdate(prevProps, prevState) {
-    const {searchQuery, key, filter} = this.state
+    // only update if this component's state updated (not if parents updated)
+    const {searchQuery, key, search} = this.state
     return (prevState.searchQuery !== searchQuery) || (
-        prevState.filter !== filter) || (prevState.key !== key)
+            prevState.search !== search)           || (
+            prevState.key !== key)                 || (
+            prevProps.editMode !== this.props.editMode)
   }
 
   render() {
     const {searchQuery, filters, key} = this.state;
+    const {editMode} = this.props;
     const pills = Object.entries(filters).map((f, i) => {
-      const {[f[0]]: value, ...newFilters} = filters;
       return (
-        <span onClick={(e) => {
-          this.setState({
-            filter: true,
-            filters: newFilters
-          })
-        }} key={i} style={{backgroundColor: 'red', borderRadius: '25px', padding: '10px'}} className='filter text-center border'>{f[0]}: {f[1]}</span>
+        <span onClick={(e) =>
+            this.setState((state, props) => {
+              const {[f[0]]: value, ...newFilters} = state.filters;
+              return {
+                search: true,
+                filters: newFilters
+              };
+            })
+          } key={i} className='filter text-center border'>{f[0]}: {f[1]}
+        </span>
       );
-    })
+    });
+
     return (
       <Row>
         <Col lg={12}>
@@ -72,20 +92,31 @@ class SearchQuery extends Component {
             <Col lg={12} className='search-div'>
               <form onSubmit={(e) => e.preventDefault()}>
                 <FormGroup>
-                  <FormControl onChange={(e) =>
-                      this.setState({
-                        searchQuery: e.target.value
-                      })} placeholder={`search by ${key}...`} value={searchQuery}
+                  { editMode ?  (
+                    <FormControl readOnly placeholder={`search by ${key}...`} value={searchQuery}
                       className='search'/>
-                  <FormControl componentClass='button' onClick={(e) => this.setState((state, props) => {
-                    const {filters, key, searchQuery} = state;
-                    return {
-                      filters: Object.assign(filters, {[key]: searchQuery}),
-                      filter: true
-                    }
-                  })}
+                  ) : (
+                    <FormControl onChange={(e) =>
+                        this.setState({
+                          searchQuery: e.target.value
+                        })
+                      } placeholder={`search by ${key}...`}
+                      value={searchQuery}
+                      className='search'/>
+                  )
+                  }
+                  <FormControl style={editMode ? {cursor: 'not-allowed'}: {}} componentClass='button' onClick={(e) => {
+                      if (!editMode) {
+                        this.setState((state, props) => {
+                          const {filters, key, searchQuery} = state;
+                          return {
+                            filters: Object.assign({}, filters, {[key]: searchQuery}),
+                            search: true
+                          }
+                        })
+                      }
+                  }}
                     className='search-btn'><FontAwesomeIcon icon='search' /> </FormControl>
-
 
                   <Panel>
                     <Panel.Heading>
@@ -93,25 +124,25 @@ class SearchQuery extends Component {
                         Filter Search
                       </Panel.Title>
                     </Panel.Heading>
-                    <Panel.Collapse onExited={(e) => {
-                      this.setState({
-                        key: 'product'
-                      })
-                    }}>
+                    <Panel.Collapse onExited={(e) =>
+                        this.setState({
+                          key: 'product'
+                        })
+                      }>
                       <Panel.Body>
-                          <div style={{display: 'flex'}}>
-                            <ControlLabel style={{paddingRight: '10px'}}>
-                              Key
-                            </ControlLabel>
-                              <FormControl componentClass='select' value={key} onChange={(e) => {
-                                  this.setState({
-                                    key: e.target.value
-                                  })
-                              }}>
-                                <option value='vendor'>Vendor</option>
-                                <option value='product'>Product</option>
-                              </FormControl>
-                          </div>
+                        <div style={{display: 'flex'}}>
+                          <ControlLabel style={{paddingRight: '10px'}}>
+                            Key
+                          </ControlLabel>
+                          <FormControl componentClass='select' value={key} onChange={(e) =>
+                              this.setState({
+                                key: e.target.value
+                              })
+                          }>
+                            <option value='vendor'>Vendor</option>
+                            <option value='product'>Product</option>
+                          </FormControl>
+                        </div>
                       </Panel.Body>
                     </Panel.Collapse>
                   </Panel>
@@ -124,5 +155,6 @@ class SearchQuery extends Component {
     );
   }
 }
+
 
 export default SearchQuery;

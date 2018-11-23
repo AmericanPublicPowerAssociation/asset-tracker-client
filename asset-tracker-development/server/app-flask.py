@@ -87,6 +87,42 @@ def get_connections():
         dict(assets=curr_assets, connections=conn)))
 
 
+@app.route('/save-asset', methods=['POST'])
+def save():
+    asset = json.loads(request.data).get('asset', None)
+    if asset is not None:
+        global assets
+        if asset['id'] < 0:
+            asset['id'] = len(assets)
+            assets.append(asset)
+        else:
+            for i, a in enumerate(assets):
+                if a['id'] == asset['id']:
+                    break
+            else:
+                raise Exception
+            assets[i] = asset
+
+    return jsonify(
+        json.dumps(dict(sucess=True)))
+
+
+@app.route('/delete-asset', methods=['DELETE'])
+def delete():
+    try:
+        assetID = int(json.loads(request.data).get('id', -1))
+    except ValueError:
+        assetID = -1
+    validID = assetID >= 0
+    if (validID):
+        global assets
+        oldAssets = assets
+        assets = [a for a in assets if a['id'] != assetID]
+        validID = len(assets) < len(oldAssets)
+    return jsonify(
+        json.dumps(dict(sucess=validID)))
+
+
 @app.route('/search')
 def search():
     product = request.args.get('product', '')

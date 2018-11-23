@@ -1,0 +1,10 @@
+l_asset_id,r_asset_id,
+vq5L6XEQTf9zEGcT,uqfQfa0Q7HmjIawj,Station to Busbar
+uqfQfa0Q7HmjIawj,HQWgIdE5SsDXpyNW,Busbar to Relay
+HQWgIdE5SsDXpyNW,m4mfUWG0F65O7Afs,Relay to Medium Voltage Line
+m4mfUWG0F65O7Afs,vg5MiYkfeWLICTHu,High Voltage Line to Medium Voltage Transformer
+vg5MiYkfeWLICTHu,51zOZBG2Lh2p6Bmv,Medium Voltage Transformer to Industrial Meter
+vg5MiYkfeWLICTHu,ZvKTr0xDBSCeANST,Medium Voltage Transformer to Medium Voltage Line
+ZvKTr0xDBSCeANST,C4qCRFvuAr5n3LVa,Medium Voltage Line to Low Voltage Transformer
+C4qCRFvuAr5n3LVa,dSrOZalr1C2RUJ4X,Low Voltage Transformer to Commercial Meter
+C4qCRFvuAr5n3LVa,QYEmZScfCd1Lyi9V,Low Voltage Transformer to Residential Meter

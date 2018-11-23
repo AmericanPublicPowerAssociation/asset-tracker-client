@@ -1,21 +1,24 @@
 import React, {Component} from 'react';
 import { AgGridReact } from "ag-grid-react";
+import {Button, Row, Col} from 'react-bootstrap';
 
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
-import './App.css';
 
-import {Button} from 'react-bootstrap';
+import './App.css';
 
 
 class AssetsTable extends Component {
+  /*
+   * asset: List => All the user's assets
+   */
   state = {
-    assets: [], 
+    assets: [],
   }
 
   componentDidMount() {
-    const url = 'http://18.212.1.167:5000/get-assets.json';
-    fetch(url)
+    const URL = 'http://18.212.1.167:5000/get-assets.json';
+    fetch(URL)
       .then(res => {
         return res.json();
       }).then(data => {
@@ -29,6 +32,7 @@ class AssetsTable extends Component {
   onGridReady(params) {
     this.gridAPI = params.api;
     this.gridAPI.sizeColumnsToFit();
+    window.addEventListener("resize", this.gridAPI.sizeColumnsToFit);
   }
 
   render() {
@@ -40,28 +44,33 @@ class AssetsTable extends Component {
     const {assets} = this.state;
 
     return (
-      <div
-        // specify grid theme
-        className="ag-theme-balham"
-        style={{
-          // grid dimensions
-          height: "500px",
-          width: "100%",
-          padding: '30px',
-        }}
-      >
-        <Button bsStyle='primary' onClick={(e) => this.gridAPI.exportDataAsCsv() }>Download</Button>
-              <AgGridReact
-                // agGrid component with config objects
-                enableSorting={true}
-                enableFilter={true}
-                columnDefs={columns}
-                onGridReady={this.onGridReady.bind(this)}
-          rowData={assets}
-              />
-      </div>
+      <Row>
+        <Col lg={12} md={12} sm={18}>
+          <div
+            // specify grid theme
+            className="ag-theme-balham"
+            style={
+              {
+                // grid dimensions
+                height: "100rem",
+                padding: '30px',
+              }
+            } >
+            <Button bsStyle='primary' onClick={(e) =>
+              this.gridAPI.exportDataAsCsv()
+            } >Download</Button>
+            <AgGridReact
+              enableSorting={true}
+              enableFilter={true}
+              columnDefs={columns}
+              onGridReady={this.onGridReady.bind(this)}
+              rowData={assets} />
+          </div>
+        </Col>
+      </Row>
     );
   }
 }
+
 
 export default AssetsTable;

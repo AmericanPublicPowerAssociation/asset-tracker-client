@@ -1,11 +1,17 @@
 .assets-grid {
   cursor: pointer;
   overflow: auto;
-  height: 300px;
+  height: 100%;
+  max-height: 60rem;
+}
+
+.selected.asset {
+  background-color: yellow;
 }
 
 .asset {
   padding: 10px;
+  border-radius: 10px;
   text-align: center;
 }
 
