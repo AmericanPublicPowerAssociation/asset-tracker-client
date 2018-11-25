@@ -18,20 +18,25 @@ class FilterComponents extends Component {
   componentDidUpdate(prevProps, prevState) {
     const {selectedAsset, editMode} = this.props;
     const {filteredAssets} = this.state
-    const isValid = (obj) => Object.keys(obj).length > 0;
-    const valid = isValid(selectedAsset)
-    if (!valid && isValid(prevProps.selectedAsset)) {
+    const testValid = (obj) => Object.keys(obj).length > 0;
+    const isValid = testValid(selectedAsset)
+    const wasValid = testValid(prevProps.selectedAsset)
+    const wasDeleted = !isValid && wasValid
+    const finishedEditing = isValid && prevProps.editMode && !editMode;
+    const oldId = wasValid ? prevProps.selectedAsset.id : -1;
+
+    if (wasDeleted) {
       // asset was deleted
       // this is assuming the only way to go from selected to not selected is by deleting
       this.setState((state, props) => {
         return {
           filteredAssets: state.filteredAssets.filter(
-            (a) => a.id !== prevProps.selectedAsset.id)
+            (a) => a.id !== oldId)
         }
       })
-    } else if (valid && prevProps.editMode && !editMode) {
-      // finished editing
-      const i = filteredAssets.findIndex((a) => a.id === selectedAsset.id);
+    } else if (finishedEditing) {
+      const i = filteredAssets.findIndex((a) =>
+        a.id === selectedAsset.id);
       if (i >= 0) {
         // finished editing a current asset
         this.setState((state, props) => {

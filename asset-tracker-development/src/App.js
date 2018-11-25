@@ -37,13 +37,6 @@ class App extends Component {
     })
   }
 
-  shouldComponentUpdate(prevProps, prevState) {
-    return (!(
-      prevState.savedAsset && !this.state.savedAssets) || !(
-      prevState.deletedAsset !== '' && this.state.deletedAsset === ''
-    ))
-  }
-
   componentDidUpdate() {
     const {deleteAssetId, savedAsset, selectedAsset} = this.state;
     if (savedAsset) {
@@ -98,7 +91,7 @@ class App extends Component {
                   // create asset that has all the keys of a regular asset but with empty values
                   // toggle "editMode"
                   // talk to component that defines asset model, get that model
-                  let assetObj = {
+                  const assetObj = {
                       'id': -1,
                       'vendor': "",
                       'version': "",
