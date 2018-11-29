@@ -13,18 +13,21 @@ import './App.css';
 
 class App extends Component {
   /*
-   * selectedAsset: Object  => currently selected asset
-   * savedAsset:    Boolean => If the "save asset" button was pressed
+   * selectedAsset:    Object  => currently selected asset
+   *
+   * savedAssetToggle: Boolean => If the "save asset" button was pressed
    *    the asset to save would be the currently selected asset
-   * deleteAssetId: Integer => the ID of the asset to delete,
+   *
+   * deleteAssetId:    Integer => the ID of the asset to delete,
    *    changed when the "delete asset" button is pressed
-   * editMode:      Boolean => If the edit/add asset form should be
+   *
+   * editMode:         Boolean => If the edit/add asset form should be
    *    displayed changed when the edit/save/delete/cancel
    *    button is pressed.
    */
   state = {
     selectedAsset: {},
-    savedAsset: false,
+    savedAssetToggle: false,
     deleteAssetId: -1,
     editMode: false,
   };
@@ -37,9 +40,11 @@ class App extends Component {
     })
   }
 
-  componentDidUpdate() {
-    const {deleteAssetId, savedAsset, selectedAsset} = this.state;
-    if (savedAsset) {
+  componentDidUpdate(prevProps, prevState) {
+    const {deleteAssetId, savedAssetToggle, selectedAsset} = this.state;
+    const newAssetDeleted = deleteAssetId === -1;
+
+    if (savedAssetToggle !== prevProps.savedAssetToggle) {
       //send post request
       fetch(`http://18.212.1.167:5000/save-asset`, {
         method: 'POST',
@@ -47,22 +52,16 @@ class App extends Component {
       })
       .then((res) => res.json())
       .then((data) => {
-        this.setState({
-          savedAsset: false
-        })
+        // TODO: handle case for failure
       })
-    }
-    if (deleteAssetId >= 0) {
-      //TODO send delete request
+    } else if (!newAssetDeleted && deleteAssetId !== prevProps.deleteAssetId) {
         fetch(`http://18.212.1.167:5000/delete-asset`, {
           method: 'DELETE',
           body: JSON.stringify({id: deleteAssetId})
         })
           .then((res) => res.json())
           .then((data) => {
-            this.setState({
-              deleteAssetId: -1,
-            })
+            // TODO: handle case for failure
           })
     }
   }
@@ -108,10 +107,12 @@ class App extends Component {
               </Col>
               <Col xs={18} md={12} lg={4}>
                 <AssetDetails saveAsset={(savedAsset) => {
-                  this.setState({
-                    savedAsset: true,
-                    selectedAsset: savedAsset,
-                    editMode: false
+                  this.setState((state, props) => {
+                    return {
+                      savedAssetToggle: !state.savedAssetToggle,
+                      selectedAsset: savedAsset,
+                      editMode: false
+                    }
                   });
                 }} updateSelected={this.updateSelected} toggleEdit={(val) =>
                   this.setState({
