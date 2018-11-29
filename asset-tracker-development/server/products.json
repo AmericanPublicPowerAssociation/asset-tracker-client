@@ -1,0 +1,83 @@
+[
+    {
+        "name": "schneider-electric",
+        "products": [
+            {
+                "coordinates": {
+                    "lat": 40.796092,
+                    "lng": -73.961454
+                },
+                "type": 4,
+                "name": "Emergency Stop Relay",
+                "versions": [
+                    "XPSAC5121"
+                ]
+            },
+            {
+                "coordinates": {
+                    "lat": 40.695178000000006,
+                    "lng": -73.84433
+                },
+                "type": 2,
+                "name": "TeSys D Contactor",
+                "versions": [
+                    "LC1D09G7"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "siemens",
+        "products": [
+            {
+                "coordinates": {
+                    "lat": 40.681711,
+                    "lng": -73.837683
+                },
+                "type": 2,
+                "name": "3-phase monitor",
+                "versions": [
+                    "3UG4512-1AR20"
+                ]
+            },
+            {
+                "coordinates": {
+                    "lat": 40.79502,
+                    "lng": -73.94425
+                },
+                "type": 4,
+                "name": "Thermistor Relay 2",
+                "versions": [
+                    "3RN10131BW10"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "General Electric",
+        "products": [
+            {
+                "coordinates": {
+                    "lat": 40.799075,
+                    "lng": -73.95182199999999
+                },
+                "type": 2,
+                "name": "relay",
+                "versions": [
+                    "RL4RA031TJ"
+                ]
+            },
+            {
+                "coordinates": {
+                    "lat": 40.697418,
+                    "lng": -73.836345
+                },
+                "type": 4,
+                "name": "reed switch",
+                "versions": [
+                    "104PXC01"
+                ]
+            }
+        ]
+    }
+]

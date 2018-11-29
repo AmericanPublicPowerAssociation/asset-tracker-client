@@ -7,6 +7,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.sql import func, select
 from sqlalchemy.types import Enum, Integer, PickleType, String
+from contextlib import contextmanager
 
 
 Base = declarative_base()
@@ -96,7 +97,9 @@ class Asset(Base):
     version_id = Column(Integer, ForeignKey('product_version.id'))
     parent_id = Column(String, ForeignKey('asset.id'))
     name = Column(String)
-    geometry = Geometry(srid=4326, management=True, use_st_prefix=False)
+    geometry = Column(Geometry(
+        geometry_type='POINT', management=True,
+        use_st_prefix=False))
     properties = PickleType()
     connected_assets = relationship(
         'Asset', secondary=AssetConnection,
@@ -113,23 +116,20 @@ engine = create_engine('sqlite:///:memory:', echo=True)
 listen(engine, 'connect', load_spatialite)
 engine_connection = engine.connect()
 engine_connection.execute(select([func.InitSpatialMetaData()]))
+engine_connection.close()
 Base.metadata.create_all(engine)
 DatabaseSession = sessionmaker(bind=engine)
 DatabaseSession.configure(bind=engine)
-db = DatabaseSession()
 
 
-for asset_subtype in [
-    AssetSubType(id=1, type_id=AssetType.Meter, name='Residential Meter'),
-    AssetSubType(id=2, type_id=AssetType.Meter, name='Commercial Meter'),
-    AssetSubType(id=3, type_id=AssetType.Meter, name='Industrial Meter'),
-    AssetSubType(id=4, type_id=AssetType.Line, name='Overhead Line'),
-    AssetSubType(id=5, type_id=AssetType.Line, name='Underground Line'),
-    AssetSubType(id=6, type_id=AssetType.Switch, name='Circuit Breaker'),
-    AssetSubType(id=7, type_id=AssetType.Switch, name='Recloser'),
-    AssetSubType(id=8, type_id=AssetType.Switch, name='Relay'),
-    AssetSubType(
-        id=9, type_id=AssetType.Station, name='Photovoltaic Power Station'),
-]:
-    db.add(asset_subtype)
-db.commit()
+@contextmanager
+def database_connection(*args, **kwds):
+    db = DatabaseSession()
+    try:
+        yield db
+        db.commit()
+    except:
+        db.rollback()
+        raise
+    finally:
+        db.close()
