@@ -7,17 +7,17 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 class Map extends Component {
   componentDidMount() {
-    mapboxgl.accessToken = 'pk.eyJ1Ijoic2FsYWgtaGFsYXMiLCJhIjoiY2prdnY1Y25mMGN3cjN2cTVxa2tvbWRnZCJ9.c8uFh6KYWAi1SPF6ZRosAA';
     fetch('http://18.212.1.167:5000/get-center.json')
       .then((res) => res.json())
       .then((data) => {
         const {lat, lng} = JSON.parse(data);
+        const center = new mapboxgl.LngLat(lng, lat);
+        mapboxgl.accessToken = 'pk.eyJ1Ijoic2FsYWgtaGFsYXMiLCJhIjoiY2pwM2QycWdjMDJhNjNwcndmc3hkbzRkZSJ9.0NufwkqqyqJ4isDzf6U4LQ';
         this.map = new mapboxgl.Map({
               container: this.mapContainer,
               style: 'mapbox://styles/mapbox/streets-v9',
-              center: [lng, lat],
+              center: center,
               zoom: 8,
-              minZoom: 10,
             });
         this.popup = new mapboxgl.Popup({
           closeOnClick: false

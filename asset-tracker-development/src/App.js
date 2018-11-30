@@ -43,7 +43,8 @@ class App extends Component {
     const {deleteAssetId, savedAssetToggle, selectedAsset} = this.state;
     const newAssetDeleted = deleteAssetId === -1;
 
-    if (savedAssetToggle !== prevProps.savedAssetToggle) {
+    if (savedAssetToggle !== prevState.savedAssetToggle) {
+      debugger;
       //send post request
       fetch(`http://18.212.1.167:5000/save-asset`, {
         method: 'POST',
