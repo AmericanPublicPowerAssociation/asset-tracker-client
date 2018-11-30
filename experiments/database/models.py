@@ -1,7 +1,6 @@
 import enum
 from geoalchemy2 import Geometry
-from sqlalchemy import (
-    Column, ForeignKey, Table, create_engine)
+from sqlalchemy import Column, ForeignKey, Table, create_engine
 from sqlalchemy.event import listen
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
@@ -128,8 +127,7 @@ for asset_subtype in [
     AssetSubType(id=6, type_id=AssetType.Switch, name='Circuit Breaker'),
     AssetSubType(id=7, type_id=AssetType.Switch, name='Recloser'),
     AssetSubType(id=8, type_id=AssetType.Switch, name='Relay'),
-    AssetSubType(
-        id=9, type_id=AssetType.Station, name='Photovoltaic Power Station'),
+    AssetSubType(id=9, type_id=AssetType.Station, name='Photovoltaic Station'),
 ]:
     db.add(asset_subtype)
 db.commit()
