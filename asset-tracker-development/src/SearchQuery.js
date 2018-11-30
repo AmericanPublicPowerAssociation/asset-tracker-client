@@ -16,25 +16,28 @@ class SearchQuery extends Component {
   /*
    * searchQuery: String => current state of search input box
    * key:         String => current filter being searched
-   * search:      String => if a search is triggered
+   * type_id:         String => filter (type of asset being searched)
+   * searchToggle:      Boolean => if a search is triggered
    * filters:     Object => object containing filter values
    *    of the form
    *    {
    *      product: '',
    *      vendor : '',
+   *      type_id: '',
    *    }
    */
   state = {
     searchQuery: '',
     key: 'product',
-    search: false,
+    type_id: '2',
+    searchToggle: false,
     filters: {},
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const {search, filters} = this.state;
+    const {searchToggle, filters} = this.state;
     const {updateFilteredAssets} = this.props;
-    if (search) {
+    if (searchToggle !== prevState.searchToggle) {
       const url = Object.entries(filters).reduce((url, f) => {
         return url + `${f[0]}=${f[1]}&`
       }, `http://18.212.1.167:5000/search?`);
@@ -42,10 +45,6 @@ class SearchQuery extends Component {
       .then((res) => res.json())
       .then((data) => {
         const {filteredAssets} = JSON.parse(data);
-        this.setState({
-          searchQuery: '',
-          search: false
-        })
         updateFilteredAssets(filteredAssets);
       })
     }
@@ -53,27 +52,40 @@ class SearchQuery extends Component {
 
   shouldComponentUpdate(prevProps, prevState) {
     // only update if this component's state updated (not if parents updated)
-    const {searchQuery, key, search} = this.state
-    return (prevState.searchQuery !== searchQuery) || (
-            prevState.search !== search)           || (
-            prevState.key !== key)                 || (
-            prevProps.editMode !== this.props.editMode)
+    const {searchQuery, key, searchToggle} = this.state
+    return (prevState.searchQuery !== searchQuery)      || (
+            prevState.searchToggle !== searchToggle)                || (
+            prevState.key !== key)                      || (
+            prevProps.editMode !== this.props.editMode) || (
+            prevProps.type_id !== this.props.type_id)
   }
 
   render() {
-    const {searchQuery, filters, key} = this.state;
+    const {searchQuery, type_id, filters, key} = this.state;
     const {editMode} = this.props;
+    const types = ['Other', 'Pole', 'Meter', 'Line', 'Switch', 'Busbar', 'Transformer', 'Substation', 'Station']
+    const options = (
+        <FormControl componentClass='select' value={type_id} onChange={(e) =>
+            this.setState({
+              type_id: e.target.value
+            })
+        }>
+          { types.map((t, i) => <option key={i} value={i}>{t}</option>) }
+        </FormControl>
+    )
     const pills = Object.entries(filters).map((f, i) => {
+      const key = f[0]
+      const value = key === 'type_id' ? types[parseInt(f[1])] : f[1];
       return (
-        <span onClick={(e) =>
+        <span style={{margin: '10px'}} onClick={(e) =>
             this.setState((state, props) => {
-              const {[f[0]]: value, ...newFilters} = state.filters;
+              const {[key]: val, ...newFilters} = state.filters;
               return {
-                search: true,
+                searchToggle: !state.searchToggle,
                 filters: newFilters
               };
             })
-          } key={i} className='filter text-center border'>{f[0]}: {f[1]}
+          } key={i} className='filter text-center border'>{key}: {value}
         </span>
       );
     });
@@ -108,10 +120,10 @@ class SearchQuery extends Component {
                   <FormControl style={editMode ? {cursor: 'not-allowed'}: {}} componentClass='button' onClick={(e) => {
                       if (!editMode) {
                         this.setState((state, props) => {
-                          const {filters, key, searchQuery} = state;
+                          const {filters, type_id, key, searchQuery} = state;
                           return {
-                            filters: Object.assign({}, filters, {[key]: searchQuery}),
-                            search: true
+                            filters: Object.assign({}, filters, {[key]: searchQuery, type_id: type_id}),
+                            searchToggle: !state.searchToggle
                           }
                         })
                       }
@@ -126,7 +138,8 @@ class SearchQuery extends Component {
                     </Panel.Heading>
                     <Panel.Collapse onExited={(e) =>
                         this.setState({
-                          key: 'product'
+                          key: 'product',
+                          type_id: '2',
                         })
                       }>
                       <Panel.Body>
@@ -142,6 +155,10 @@ class SearchQuery extends Component {
                             <option value='vendor'>Vendor</option>
                             <option value='product'>Product</option>
                           </FormControl>
+                          <ControlLabel style={{paddingLeft: '10px', paddingRight: '10px'}}>
+                            Type
+                          </ControlLabel>
+                          { options }
                         </div>
                       </Panel.Body>
                     </Panel.Collapse>

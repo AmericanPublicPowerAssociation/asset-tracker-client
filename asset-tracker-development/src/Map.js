@@ -15,7 +15,7 @@ class Map extends Component {
         mapboxgl.accessToken = 'pk.eyJ1Ijoic2FsYWgtaGFsYXMiLCJhIjoiY2pwM2QycWdjMDJhNjNwcndmc3hkbzRkZSJ9.0NufwkqqyqJ4isDzf6U4LQ';
         this.map = new mapboxgl.Map({
               container: this.mapContainer,
-              style: 'mapbox://styles/mapbox/streets-v9',
+              style: 'mapbox://styles/mapbox/satellite-v9',
               center: center,
               zoom: 8,
             });
@@ -66,6 +66,7 @@ class Map extends Component {
           "coordinates": [a.lng, a.lat]
         },
         "properties": {
+          "type_id": a.type_id,
           "id": a.id,
           "selected": isSelected
         }

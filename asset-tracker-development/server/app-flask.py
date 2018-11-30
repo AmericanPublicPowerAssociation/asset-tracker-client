@@ -51,7 +51,6 @@ def save():
             geom = 'POINT(%s %s)' % (lng, lat)
             if data['id'] == '':
                 asset_id = make_random_string()
-
                 kws = dict(
                         id=asset_id, name=name,
                         organization_id=organization_id,
