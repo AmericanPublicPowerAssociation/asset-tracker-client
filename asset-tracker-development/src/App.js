@@ -17,7 +17,7 @@ class App extends Component {
    * savedAssetToggle: Boolean => If the "save asset" button was pressed
    *    the asset to save would be the currently selected asset
    *
-   * deleteAssetId:    Integer => the ID of the asset to delete,
+   * deleteAssetId:    String => the ID of the asset to delete,
    *    changed when the "delete asset" button is pressed
    *
    * editMode:         Boolean => If the edit/add asset form should be
@@ -27,7 +27,7 @@ class App extends Component {
   state = {
     selectedAsset: {},
     savedAssetToggle: false,
-    deleteAssetId: -1,
+    deleteAssetId: '',
     editMode: false,
   };
 
@@ -41,10 +41,9 @@ class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const {deleteAssetId, savedAssetToggle, selectedAsset} = this.state;
-    const newAssetDeleted = deleteAssetId === -1;
+    const newAssetDeleted = deleteAssetId === '';
 
     if (savedAssetToggle !== prevState.savedAssetToggle) {
-      debugger;
       //send post request
       fetch(`http://18.212.1.167:5000/save-asset`, {
         method: 'POST',
@@ -53,6 +52,15 @@ class App extends Component {
       .then((res) => res.json())
       .then((data) => {
         // TODO: handle case for failure
+        const {asset_id} = JSON.parse(data);
+        if (asset_id && selectedAsset.id !== asset_id) {
+          this.setState((state, props) => {
+            return {
+              selectedAsset: Object.assign({}, state.selectedAsset, {id: asset_id}),
+              editMode: false
+            };
+          });
+        }
       })
     } else if (!newAssetDeleted && deleteAssetId !== prevProps.deleteAssetId) {
         fetch(`http://18.212.1.167:5000/delete-asset`, {
@@ -91,7 +99,7 @@ class App extends Component {
                   // toggle "editMode"
                   // talk to component that defines asset model, get that model
                   const assetObj = {
-                      'id': -1,
+                      'id': '',
                       'lat': '',
                       'lng': '',
                       'name': '',
@@ -110,10 +118,11 @@ class App extends Component {
               <Col xs={18} md={12} lg={4}>
                 <AssetDetails saveAsset={(savedAsset) => {
                   this.setState((state, props) => {
+                    const editMode = savedAsset.id !== '' ? false : true
                     return {
                       savedAssetToggle: !state.savedAssetToggle,
                       selectedAsset: savedAsset,
-                      editMode: false
+                      editMode
                     }
                   });
                 }} updateSelected={this.updateSelected} toggleEdit={(val) =>
