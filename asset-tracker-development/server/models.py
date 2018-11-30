@@ -95,7 +95,7 @@ class Asset(Base):
     version_id = Column(Integer, ForeignKey('product_version.id'))
     parent_id = Column(String, ForeignKey('asset.id'))
     name = Column(String)
-    geometry = Column(Geometry('POINT'))
+    geometry = Column(Geometry('POINT', srid=4326))
     properties = PickleType()
     connected_assets = relationship(
         'Asset', secondary=AssetConnection,

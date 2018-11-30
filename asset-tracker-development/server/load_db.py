@@ -68,7 +68,8 @@ with database_connection() as db:
         AssetSubType(id=7, type_id=AssetType.Switch, name='Recloser'),
         AssetSubType(id=8, type_id=AssetType.Switch, name='Relay'),
         AssetSubType(
-            id=9, type_id=AssetType.Station, name='Photovoltaic Power Station'),
+            id=9, type_id=AssetType.Station,
+            name='Photovoltaic Power Station'),
     ]:
         db.add(asset_subtype)
 
@@ -109,7 +110,7 @@ with database_connection() as db:
             ProductVersion).filter_by(version=version).first()
         asset = make_asset(
             type_id,
-            'POINT(%s %s)' % (coord['lat'], coord['lng']),
+            'POINT(%s %s)' % (coord['lng'], coord['lat']),
             organization,
             vendor,
             product,

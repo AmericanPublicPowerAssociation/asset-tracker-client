@@ -1,6 +1,8 @@
-import json
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+import json
+import random
+import string
 
 from models import (
     database_connection, Asset, Vendor, Product, AssetType, ProductVersion)
@@ -11,10 +13,21 @@ app = Flask(__name__)
 CORS(app)
 
 
+try:
+    ALPHABET = string.digits + string.letters
+except AttributeError:
+    ALPHABET = string.digits + string.ascii_letters
+RANDOM = random.SystemRandom()
+
+
+def make_random_string(length=16, alphabet=ALPHABET):
+    return ''.join(RANDOM.choice(alphabet) for x in range(length))
+
+
 @app.route('/get-center.json')
 def get_center():
     with database_connection() as db:
-        centroid = gf.ST_Centroid(Asset.geometry)
+        centroid = gf.ST_Centroid(gf.ST_Collect(Asset.geometry))
         lng = db.scalar(centroid.ST_X())
         lat = db.scalar(centroid.ST_Y())
     return jsonify(json.dumps(dict(
@@ -28,29 +41,42 @@ def save():
     with database_connection() as db:
         if data is not None:
             organization_id = 'abc'
-            vendor = db.query(Vendor).filter_by(name=data['vendor'])
-            product = db.query(Product).filter_by(name=data['product'])
+            vendor = db.query(Vendor).filter_by(name=data['vendor']).first()
+            product = db.query(Product).filter_by(name=data['product']).first()
+            version = db.query(ProductVersion).filter_by(
+                    version=data['version']).first()
             type_id = AssetType(int(data['type_id']))
             name = data['name']
             lng, lat = data['lng'], data['lat']
             geom = 'POINT(%s %s)' % (lng, lat)
-            kws = dict(name=name, organization_id=organization_id,
-                       geometry=geom, type_id=type_id, product_id=product.id,
-                       vendor_id=vendor.id)
-            if data['id'] < 0:
+            if data['id'] == '':
+                asset_id = make_random_string()
+
+                kws = dict(
+                        id=asset_id, name=name,
+                        organization_id=organization_id,
+                        geometry=geom, version_id=version.id,
+                        type_id=type_id, product_id=product.id,
+                        vendor_id=vendor.id)
                 # new asset
                 asset = Asset(**kws)
                 db.add(asset)
+                return jsonify(
+                    json.dumps(dict(asset_id=asset_id)))
             else:
                 asset = db.query(Asset).get(data['id'])
                 asset.vendor_id = vendor.id
                 asset.product_id = product.id
+                asset.version_id = version.id
                 asset.type_id = type_id
                 asset.name = name
                 asset.geometry = geom
                 db.add(asset)
-    return jsonify(
-        json.dumps(dict(sucess=True)))
+                return jsonify(
+                    json.dumps(dict(asset_id=asset.id)))
+        else:
+            return jsonify(
+                json.dumps(dict(asset_id=None)))
 
 
 @app.route('/delete-asset', methods=['DELETE'])
