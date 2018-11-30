@@ -32,7 +32,7 @@ class AssetsTable extends Component {
   onGridReady(params) {
     this.gridAPI = params.api;
     this.gridAPI.sizeColumnsToFit();
-    window.addEventListener("resize", this.gridAPI.sizeColumnsToFit);
+    window.addEventListener("resize", () => this.gridAPI.sizeColumnsToFit());
   }
 
   render() {
