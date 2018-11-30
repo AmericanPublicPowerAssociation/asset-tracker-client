@@ -37,7 +37,7 @@ class FilterComponents extends Component {
     } else if (finishedEditing) {
       const i = filteredAssets.findIndex((a) =>
         a.id === selectedAsset.id);
-      if (i >= 0) {
+      if (i !== -1) {
         // finished editing a current asset
         this.setState((state, props) => {
           const fa = state.filteredAssets;

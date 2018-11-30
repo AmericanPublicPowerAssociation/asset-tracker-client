@@ -4,7 +4,6 @@ import {Grid, Row, Col} from 'react-bootstrap';
 
 import AssetDetails from './AssetDetails';
 import AssetsTable from './AssetsTable';
-import CircuitDiagram from './CircuitDiagram';
 import FilterComponents from './FilterComponents';
 import Navigation from './Navigation';
 
@@ -92,13 +91,15 @@ class App extends Component {
                   // talk to component that defines asset model, get that model
                   const assetObj = {
                       'id': -1,
-                      'vendor': "",
-                      'version': "",
-                      'product': "",
                       'lat': '',
                       'lng': '',
-                      'circuit': ''
+                      'name': '',
+                      'product': '',
+                      'type_id': -1,
+                      'vendor': '',
+                      'version': '',
                   };
+
                   this.setState({
                     selectedAsset: assetObj,
                     editMode: true
@@ -120,7 +121,6 @@ class App extends Component {
                   })} editMode={editMode} deleteAsset={(assetId) =>
                     this.deleteAsset(assetId)
                   } asset={selectedAsset}/>
-                <CircuitDiagram updateSelected={this.updateSelected} asset={selectedAsset}/>
               </Col>
             </Row>
         )} />
