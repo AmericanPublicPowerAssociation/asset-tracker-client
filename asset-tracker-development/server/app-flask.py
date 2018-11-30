@@ -1,157 +1,106 @@
 import json
-import re
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+
+from models import (
+    database_connection, Asset, Vendor, Product, AssetType, ProductVersion)
+from geoalchemy2 import func as gf
 
 
 app = Flask(__name__)
 CORS(app)
-assets = [
-    {
-        'id': 0,
-        'vendor': "apple",
-        'version': "0.3",
-        'product': "quicktime",
-        'lat': 40.6602037,
-        'lng': -73.9689558,
-        'circuit': 'Ann'
-    },
-    {
-        'id': 1,
-        'vendor': "Siemens",
-        'version': "4.0.3",
-        'product': "relay",
-        'lat': 40.5833388,
-        'lng': -73.8179384,
-        'circuit': 'Bob'
-    },
-    {
-        'id': 2,
-        'vendor': "schneider-electric",
-        'version': "4.3.2",
-        'product': "circuit",
-        'lat': 40.708981,
-        'lng': -73.830536,
-        'circuit': 'Ann'
-    },
-    {
-        'id': 3,
-        'vendor': "alstom",
-        'version': "3.2.0",
-        'product': "fuse",
-        'lat': 40.6832795,
-        'lng': -73.9793,
-        'circuit': 'Bob'
-    },
-    {
-        'id': 4,
-        'vendor': "ge",
-        'version': "3.2.0",
-        'product': "transformer",
-        'lat': 40.7119001,
-        'lng': -73.8994671,
-        'circuit': 'Ann'
-    },
-]
-with open('data.json') as f:
-    assets = json.load(f)
-connections = [(0, 2), (1, 3), (2, 4)]
-with open('connections.json') as f:
-    connections = json.load(f)
 
 
 @app.route('/get-center.json')
 def get_center():
-    lat = []
-    lng = []
-    for a in assets:
-        lat.append(a['lat'])
-        lng.append(a['lng'])
+    with database_connection() as db:
+        centroid = gf.ST_Centroid(Asset.geometry)
+        lng = db.scalar(centroid.ST_X())
+        lat = db.scalar(centroid.ST_Y())
     return jsonify(json.dumps(dict(
-        lat=sum(lat)/len(lat),
-        lng=sum(lng)/len(lng))))
-
-
-@app.route('/get-connections.json')
-def get_connections():
-    node = int(request.args.get('node', None))
-    curr_assets, conn = [], []
-    if node is not None:
-        curr_assets = [assets[node]]
-        for f, t in connections:
-            if node in [f, t]:
-                other = f if node != f else t
-                curr_assets.append(assets[other])
-                conn.append((f, t))
-    return jsonify(json.dumps(
-        dict(assets=curr_assets, connections=conn)))
+        lat=lat,
+        lng=lng)))
 
 
 @app.route('/save-asset', methods=['POST'])
 def save():
-    asset = json.loads(request.data).get('asset', None)
-    if asset is not None:
-        global assets
-        if asset['id'] < 0:
-            asset['id'] = len(assets)
-            assets.append(asset)
-        else:
-            for i, a in enumerate(assets):
-                if a['id'] == asset['id']:
-                    break
+    data = json.loads(request.data).get('asset', None)
+    with database_connection() as db:
+        if data is not None:
+            organization_id = 'abc'
+            vendor = db.query(Vendor).filter_by(name=data['vendor'])
+            product = db.query(Product).filter_by(name=data['product'])
+            type_id = AssetType(int(data['type_id']))
+            name = data['name']
+            lng, lat = data['lng'], data['lat']
+            geom = 'POINT(%s %s)' % (lng, lat)
+            kws = dict(name=name, organization_id=organization_id,
+                       geometry=geom, type_id=type_id, product_id=product.id,
+                       vendor_id=vendor.id)
+            if data['id'] < 0:
+                # new asset
+                asset = Asset(**kws)
+                db.add(asset)
             else:
-                raise Exception
-            assets[i] = asset
-
+                asset = db.query(Asset).get(data['id'])
+                asset.vendor_id = vendor.id
+                asset.product_id = product.id
+                asset.type_id = type_id
+                asset.name = name
+                asset.geometry = geom
+                db.add(asset)
     return jsonify(
         json.dumps(dict(sucess=True)))
 
 
 @app.route('/delete-asset', methods=['DELETE'])
 def delete():
-    try:
-        assetID = int(json.loads(request.data).get('id', -1))
-    except ValueError:
-        assetID = -1
-    validID = assetID >= 0
-    if (validID):
-        global assets
-        oldAssets = assets
-        assets = [a for a in assets if a['id'] != assetID]
-        validID = len(assets) < len(oldAssets)
+    asset_id = json.loads(request.data).get('id', '')
+    valid = True
+    with database_connection() as db:
+        asset = db.query(Asset).get(asset_id)
+        if asset:
+            db.remove(asset)
+        else:
+            valid = False
     return jsonify(
-        json.dumps(dict(sucess=validID)))
+        json.dumps(dict(sucess=valid)))
+
+
+def serialize(asset):
+    with database_connection() as db:
+        product = db.query(Product).get(asset.product_id).name
+        vendor = db.query(Vendor).get(asset.vendor_id).name
+        version = db.query(ProductVersion).get(asset.version_id).version
+        lng = db.scalar(asset.geometry.ST_X())
+        lat = db.scalar(asset.geometry.ST_Y())
+        d = dict(
+            id=asset.id,
+            lat=lat,
+            lng=lng,
+            name=asset.name,
+            product=product,
+            type_id=asset.type_id,
+            vendor=vendor,
+            version=version,
+        )
+        return d
 
 
 @app.route('/search')
 def search():
-    product = request.args.get('product', '')
-    vendor = request.args.get('vendor', '')
-    results = []
-    for a in assets:
-        template = r'.*%s.*'
-        vendor_match = re.search(
-                template % vendor, a['vendor'], re.IGNORECASE)
-        product_match = re.search(
-                template % product, a['product'], re.IGNORECASE)
-        if vendor_match and product_match:
-            results.append(a)
-    return jsonify(json.dumps(dict(filteredAssets=results)))
+    with database_connection() as db:
+        assets = list(map(serialize, db.query(Asset)))
+        return jsonify(json.dumps(dict(
+            filteredAssets=assets)))
 
 
 @app.route('/get-assets.json')
 def get_query():
-    return jsonify(json.dumps(dict(
-        assets=assets)))
-
-
-@app.route('/get-circuit.json')
-def get_circuit():
-    circuit_id = request.args.get('circuit_id', None)
-    group = {a['id']: a for a in assets if a['circuit'] == circuit_id}
-    edges = [(a, b) for a, b in connections if a in group and b in group]
-    return jsonify(
-        json.dumps(dict(assets=list(group.values()), connections=edges)))
+    with database_connection() as db:
+        assets = list(map(serialize, db.query(Asset)))
+        return jsonify(json.dumps(dict(
+            filteredAssets=assets)))
 
 
 if __name__ == '__main__':

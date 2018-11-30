@@ -2,10 +2,8 @@ import enum
 from geoalchemy2 import Geometry
 from sqlalchemy import (
     Column, ForeignKey, Table, create_engine)
-from sqlalchemy.event import listen
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
-from sqlalchemy.sql import func, select
 from sqlalchemy.types import Enum, Integer, PickleType, String
 from contextlib import contextmanager
 
@@ -97,9 +95,7 @@ class Asset(Base):
     version_id = Column(Integer, ForeignKey('product_version.id'))
     parent_id = Column(String, ForeignKey('asset.id'))
     name = Column(String)
-    geometry = Column(Geometry(
-        geometry_type='POINT', management=True,
-        use_st_prefix=False))
+    geometry = Column(Geometry('POINT'))
     properties = PickleType()
     connected_assets = relationship(
         'Asset', secondary=AssetConnection,
@@ -107,16 +103,7 @@ class Asset(Base):
         secondaryjoin=AssetConnection.c.r_asset_id == id)
 
 
-def load_spatialite(sqlite3_connection, _):
-    sqlite3_connection.enable_load_extension(True)
-    sqlite3_connection.load_extension('/usr/lib64/mod_spatialite.so')
-
-
-engine = create_engine('sqlite:///:memory:', echo=True)
-listen(engine, 'connect', load_spatialite)
-engine_connection = engine.connect()
-engine_connection.execute(select([func.InitSpatialMetaData()]))
-engine_connection.close()
+engine = create_engine('postgresql:///asset-tracker', echo=True)
 Base.metadata.create_all(engine)
 DatabaseSession = sessionmaker(bind=engine)
 DatabaseSession.configure(bind=engine)
@@ -128,8 +115,5 @@ def database_connection(*args, **kwds):
     try:
         yield db
         db.commit()
-    except:
-        db.rollback()
-        raise
     finally:
         db.close()
