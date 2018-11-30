@@ -3,6 +3,7 @@ from flask_cors import CORS
 import json
 import random
 import string
+from sqlalchemy import and_
 
 from models import (
     database_connection, Asset, Vendor, Product, AssetType, ProductVersion)
@@ -114,8 +115,22 @@ def serialize(asset):
 
 @app.route('/search')
 def search():
+    product_name = request.args.get('product', '')
+    vendor_name = request.args.get('vendor', '')
+    type_id = int(request.args.get('type_id', -1))
     with database_connection() as db:
-        assets = list(map(serialize, db.query(Asset)))
+        query = db.query(Asset).filter(
+            and_(
+                Asset.product_id == Product.id,
+                Product.name.like('%{0}%'.format(product_name)),
+                Asset.vendor_id == Vendor.id,
+                Vendor.name.like('%{0}%'.format(vendor_name)),
+            ))
+        results = query
+        if type_id >= 0:
+            asset_type = AssetType(type_id)
+            results = query.filter_by(type_id=asset_type)
+        assets = list(map(serialize, results))
         return jsonify(json.dumps(dict(
             filteredAssets=assets)))
 
