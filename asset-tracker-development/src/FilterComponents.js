@@ -23,7 +23,7 @@ class FilterComponents extends Component {
     const wasValid = testValid(prevProps.selectedAsset)
     const wasDeleted = !isValid && wasValid
     const finishedEditing = isValid && prevProps.editMode && !editMode;
-    const oldId = wasValid ? prevProps.selectedAsset.id : -1;
+    const oldId = wasValid ? prevProps.selectedAsset.id : '';
 
     if (wasDeleted) {
       // asset was deleted

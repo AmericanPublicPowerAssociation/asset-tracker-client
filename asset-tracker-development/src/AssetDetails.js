@@ -73,7 +73,7 @@ class AssetDetails extends Component {
             toggleEdit(false)
             // if new asset use empty object
             // if editing an asset revert to original asset
-            const a = asset.id >= 0 ? (
+            const a = asset.id !== '' ? (
               Object.assign(
                   {},
                   asset,
