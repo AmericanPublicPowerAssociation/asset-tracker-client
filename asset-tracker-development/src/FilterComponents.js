@@ -82,6 +82,7 @@ class FilterComponents extends Component {
               <Row>
                 <Col lg={8}>
                   <SearchQuery editMode={editMode}
+                    updateSelected={(asset) => updateSelected(asset)}
                     updateFilteredAssets={(filteredAssets) =>
                       this.setState({
                         filteredAssets

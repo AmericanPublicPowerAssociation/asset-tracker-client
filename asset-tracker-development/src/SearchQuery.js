@@ -36,8 +36,9 @@ class SearchQuery extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const {searchToggle, filters} = this.state;
-    const {updateFilteredAssets} = this.props;
+    const {updateFilteredAssets, updateSelected} = this.props;
     if (searchToggle !== prevState.searchToggle) {
+      updateSelected({})
       const url = Object.entries(filters).reduce((url, f) => {
         return url + `${f[0]}=${f[1]}&`
       }, `http://18.212.1.167:5000/search?`);
