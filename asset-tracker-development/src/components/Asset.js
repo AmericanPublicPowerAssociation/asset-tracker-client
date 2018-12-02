@@ -5,7 +5,7 @@ import {library} from '@fortawesome/fontawesome-svg-core'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faMapMarker} from '@fortawesome/free-solid-svg-icons'
 
-import './AssetsGrid.css';
+import '../css/AssetsGrid.css';
 
 
 library.add(faMapMarker)

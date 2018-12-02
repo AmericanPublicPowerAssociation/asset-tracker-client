@@ -6,7 +6,7 @@ import {faSearch} from '@fortawesome/free-solid-svg-icons'
 
 import {Row, ControlLabel, Col, Panel, FormControl, FormGroup} from 'react-bootstrap';
 
-import './SearchBar.css';
+import '../css/SearchBar.css';
 
 
 library.add(faSearch)
@@ -36,30 +36,13 @@ class SearchQuery extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const {searchToggle, filters} = this.state;
-    const {updateFilteredAssets, updateSelected} = this.props;
+    const {searchAssets, updateSelected} = this.props;
     if (searchToggle !== prevState.searchToggle) {
       updateSelected({})
-      const url = Object.entries(filters).reduce((url, f) => {
-        return url + `${f[0]}=${f[1]}&`
-      }, `http://18.212.1.167:5000/search?`);
-      fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        const {filteredAssets} = JSON.parse(data);
-        updateFilteredAssets(filteredAssets);
-      })
+      searchAssets(filters);
     }
   }
 
-  shouldComponentUpdate(prevProps, prevState) {
-    // only update if this component's state updated (not if parents updated)
-    const {searchQuery, key, searchToggle} = this.state
-    return (prevState.searchQuery !== searchQuery)      || (
-            prevState.searchToggle !== searchToggle)                || (
-            prevState.key !== key)                      || (
-            prevProps.editMode !== this.props.editMode) || (
-            prevProps.type_id !== this.props.type_id)
-  }
 
   render() {
     const {searchQuery, type_id, filters, key} = this.state;

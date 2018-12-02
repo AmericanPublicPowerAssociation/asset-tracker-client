@@ -9,10 +9,8 @@ from models import (
     database_connection, Asset, Vendor, Product, AssetType, ProductVersion)
 from geoalchemy2 import func as gf
 
-
 app = Flask(__name__)
 CORS(app)
-
 
 try:
     ALPHABET = string.digits + string.letters

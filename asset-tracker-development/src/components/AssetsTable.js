@@ -5,28 +5,13 @@ import {Button, Row, Col} from 'react-bootstrap';
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 
-import './App.css';
+import '../css/App.css';
 
 
 class AssetsTable extends Component {
-  /*
-   * asset: List => All the user's assets
-   */
-  state = {
-    assets: [],
-  }
-
   componentDidMount() {
-    const URL = 'http://18.212.1.167:5000/get-assets.json';
-    fetch(URL)
-      .then(res => {
-        return res.json();
-      }).then(data => {
-        const {assets} = JSON.parse(data);
-        this.setState({
-          assets,
-        });
-      });
+    const {loadData} = this.props
+    loadData()
   }
 
   onGridReady(params) {
@@ -41,7 +26,7 @@ class AssetsTable extends Component {
       { title: "Product", field: "product"},
       { title: "Version", field: "version"}
     ];
-    const {assets} = this.state;
+    const {assets} = this.props;
 
     return (
       <Row>

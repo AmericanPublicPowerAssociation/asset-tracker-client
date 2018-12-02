@@ -6,7 +6,7 @@ import {library} from '@fortawesome/fontawesome-svg-core'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faCompass} from '@fortawesome/free-solid-svg-icons'
 
-import './CircuitDiagram.css';
+import '../css/CircuitDiagram.css';
 
 
 library.add(faCompass)
