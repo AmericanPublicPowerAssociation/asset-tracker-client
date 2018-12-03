@@ -29,7 +29,7 @@ class SearchQuery extends Component {
   state = {
     searchQuery: '',
     key: 'product',
-    type_id: '2',
+    type_id: '0',
     searchToggle: false,
     filters: {},
   };
@@ -123,7 +123,7 @@ class SearchQuery extends Component {
                     <Panel.Collapse onExited={(e) =>
                         this.setState({
                           key: 'product',
-                          type_id: '2',
+                          type_id: '0',
                         })
                       }>
                       <Panel.Body>
