@@ -7,7 +7,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 class Map extends Component {
   componentDidMount() {
-    fetch('http://18.212.1.167:5000/get-center.json')
+    fetch('http://localhost:5000/get-center.json')
       .then((res) => res.json())
       .then((data) => {
         const {lat, lng} = JSON.parse(data);
