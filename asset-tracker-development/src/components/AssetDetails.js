@@ -61,6 +61,7 @@ class AssetDetails extends Component {
                   id: asset.id,
                   lng: asset.lng,
                   lat: asset.lat});
+              toggleEdit(false);
               saveAsset(updatedAsset);
         }} >{'Save Asset '}<FontAwesomeIcon icon='save' /></Button>) : (
         <Button style={style} bsStyle='info' onClick={(e) =>
@@ -70,7 +71,6 @@ class AssetDetails extends Component {
 
       const deleteBtn = editMode ? (
         <Button style={style} bsStyle='danger' onClick={(e) => {
-            toggleEdit(false)
             // if new asset use empty object
             // if editing an asset revert to original asset
             const a = asset.id !== '' ? (
@@ -82,11 +82,12 @@ class AssetDetails extends Component {
                     lat: this.ORIGINALCOORDS[1]
                   })
             ) : {};
+            toggleEdit(false)
             updateSelected(a)
       }} >{'Cancel '}<FontAwesomeIcon icon='ban' /></Button>
       ) : (
         <Button style={style} bsStyle='danger' onClick={(e) =>
-          deleteAsset(asset.id)
+          deleteAsset(asset)
         }>{'Delete Asset '}<FontAwesomeIcon icon='trash' /></Button>
       );
 

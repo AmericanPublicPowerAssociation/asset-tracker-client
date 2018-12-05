@@ -9,10 +9,8 @@ from models import (
     database_connection, Asset, Vendor, Product, AssetType, ProductVersion)
 from geoalchemy2 import func as gf
 
-
 app = Flask(__name__)
 CORS(app)
-
 
 try:
     ALPHABET = string.digits + string.letters
@@ -117,7 +115,7 @@ def serialize(asset):
 def search():
     product_name = request.args.get('product', '')
     vendor_name = request.args.get('vendor', '')
-    type_id = int(request.args.get('type_id', -1))
+    type_id = int(request.args.get('type_id', 0))
     with database_connection() as db:
         query = db.query(Asset).filter(
             and_(
@@ -127,7 +125,7 @@ def search():
                 Vendor.name.like('%{0}%'.format(vendor_name)),
             ))
         results = query
-        if type_id >= 0:
+        if type_id > 0:
             asset_type = AssetType(type_id)
             results = query.filter_by(type_id=asset_type)
         assets = list(map(serialize, results))
