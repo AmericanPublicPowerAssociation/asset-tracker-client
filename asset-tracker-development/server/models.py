@@ -102,7 +102,7 @@ class Asset(Base):
         secondaryjoin=AssetConnection.c.r_asset_id == id)
 
 
-engine = create_engine('postgresql:///asset-tracker', echo=True)
+engine = create_engine('postgresql:///asset_tracker', echo=True)
 Base.metadata.create_all(engine)
 DatabaseSession = sessionmaker(bind=engine)
 DatabaseSession.configure(bind=engine)
@@ -116,21 +116,3 @@ def database_connection(*args, **kwds):
         db.commit()
     finally:
         db.close()
-
-
-db = DatabaseSession()
-
-
-for asset_subtype in [
-    AssetSubType(id=1, type_id=AssetType.Meter, name='Residential Meter'),
-    AssetSubType(id=2, type_id=AssetType.Meter, name='Commercial Meter'),
-    AssetSubType(id=3, type_id=AssetType.Meter, name='Industrial Meter'),
-    AssetSubType(id=4, type_id=AssetType.Line, name='Overhead Line'),
-    AssetSubType(id=5, type_id=AssetType.Line, name='Underground Line'),
-    AssetSubType(id=6, type_id=AssetType.Switch, name='Circuit Breaker'),
-    AssetSubType(id=7, type_id=AssetType.Switch, name='Recloser'),
-    AssetSubType(id=8, type_id=AssetType.Switch, name='Relay'),
-    AssetSubType(id=9, type_id=AssetType.Station, name='Photovoltaic Station'),
-]:
-    db.add(asset_subtype)
-db.commit()

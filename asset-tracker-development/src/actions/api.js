@@ -1,7 +1,7 @@
 export const APIsearch = (filters) => {
     const url = Object.entries(filters).reduce((url, f) => {
       return url + `${f[0]}=${f[1]}&`
-    }, `http://18.212.1.167:5000/search?`);
+    }, `http://localhost:5000/search?`);
     return fetch(url)
       .then((res) => {
         if (!res.ok) {
@@ -16,7 +16,7 @@ export const APIsearch = (filters) => {
   }
 
 export const APIdeleteAsset = (id) => {
-    return fetch(`http://18.212.1.167:5000/delete-asset`, {
+    return fetch(`http://localhost:5000/delete-asset`, {
       method: 'DELETE',
       body: JSON.stringify({id})
     })
@@ -35,7 +35,7 @@ export const APIdeleteAsset = (id) => {
   }
 
 export const APIaddAsset = (asset) => {
-    return fetch(`http://18.212.1.167:5000/add-asset`, {
+    return fetch(`http://localhost:5000/add-asset`, {
       method: 'POST',
       body: JSON.stringify({asset})
     })
@@ -53,7 +53,7 @@ export const APIaddAsset = (asset) => {
   }
 
 export const APIeditAsset = (asset) => {
-    return fetch(`http://18.212.1.167:5000/edit-asset`, {
+    return fetch(`http://localhost:5000/edit-asset`, {
       method: 'POST',
       body: JSON.stringify({asset})
     })
