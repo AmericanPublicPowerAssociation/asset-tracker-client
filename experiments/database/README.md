@@ -17,7 +17,7 @@
         transformer
         substation
         station
-            photovoltaic power station
+            photovoltaic station
 
 # Tables
 
