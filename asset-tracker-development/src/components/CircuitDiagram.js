@@ -75,7 +75,7 @@ class CircuitDiagram extends Component {
     this.cy.removeListener('click', 'node');
     const {asset, updateSelected} = this.props;
     if (asset) {
-      const url = `http://18.212.1.167:5000/get-circuit.json?circuit_id=${asset.circuit}`;
+      const url = `http://localhost:5000/get-circuit.json?circuit_id=${asset.circuit}`;
       fetch(url)
         .then(res => {
           return res.json();
