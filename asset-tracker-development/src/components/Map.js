@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import mapboxgl from 'mapbox-gl';
 import {Row, Col} from 'react-bootstrap';
 
-import {api_base_url} from '../actions/api'
+import {APIgetCenter} from '../actions/api'
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -11,8 +11,7 @@ class Map extends Component {
   componentDidMount() {
     const self = this;
     const {markers, selectedAsset} = self.props;
-    fetch(`${api_base_url}/get-center.json`)
-      .then((res) => res.json())
+    APIgetCenter()
       .then((data) => {
         const {lat, lng} = JSON.parse(data);
         const center = new mapboxgl.LngLat(lng, lat);
@@ -63,7 +62,6 @@ class Map extends Component {
 
   createLayer(assets, selectedAsset, map, LAYERNAME) {
     // remove layer before adding a new layer to avoid error
-    if (! map) debugger;
     if (map.getLayer(LAYERNAME)) {
       map.removeLayer(LAYERNAME);
       map.removeSource(LAYERNAME);
@@ -115,6 +113,9 @@ class Map extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (! this.map) {
+      return null
+    }
     const {editMode, markers, selectedAsset} = this.props;
     const valid = Object.keys(selectedAsset).length > 0;
 
