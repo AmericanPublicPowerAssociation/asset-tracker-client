@@ -47,10 +47,6 @@ const AssetsGrid = (props) => {
     </Button>
   );
 
-
-
-
-
   return (
     <div>
       <Row>

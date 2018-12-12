@@ -2,56 +2,68 @@ import React, {Component} from 'react';
 import mapboxgl from 'mapbox-gl';
 import {Row, Col} from 'react-bootstrap';
 
+import {api_base_url} from '../actions/api'
+
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 
 class Map extends Component {
   componentDidMount() {
-    fetch('http://18.212.1.167:5000/get-center.json')
+    const self = this;
+    const {markers, selectedAsset} = self.props;
+    fetch(`${api_base_url}/get-center.json`)
       .then((res) => res.json())
       .then((data) => {
         const {lat, lng} = JSON.parse(data);
         const center = new mapboxgl.LngLat(lng, lat);
         mapboxgl.accessToken = 'pk.eyJ1Ijoic2FsYWgtaGFsYXMiLCJhIjoiY2pwM2QycWdjMDJhNjNwcndmc3hkbzRkZSJ9.0NufwkqqyqJ4isDzf6U4LQ';
-        this.map = new mapboxgl.Map({
-              container: this.mapContainer,
+        self.map = new mapboxgl.Map({
+              container: self.mapContainer,
               style: 'mapbox://styles/mapbox/satellite-v9',
               center: center,
               zoom: 8,
             });
-        this.popup = new mapboxgl.Popup({
+        self.popup = new mapboxgl.Popup({
           closeOnClick: false
         })
-        this.editedMarker = new mapboxgl.Marker({
+        self.editedMarker = new mapboxgl.Marker({
           draggable: true
         })
-        this.editedMarker.on('dragend', (e) => {
+        self.editedMarker.on('dragend', (e) => {
           // update assets coords to be passed to assetdetails component for saving
           const lnglat = e.target.getLngLat();
-          const {lat, lng, ...updatedAsset} = this.props.selectedAsset;
+          const {lat, lng, ...updatedAsset} = self.props.selectedAsset;
           updatedAsset.lat = lnglat.lat;
           updatedAsset.lng = lnglat.lng;
-          this.props.updateSelected(updatedAsset);
+          self.props.updateSelected(updatedAsset);
         })
-        this.LAYERNAME = 'assets'
-        this.map.on('click', this.LAYERNAME, (e) => {
+        self.LAYERNAME = 'assets'
+        self.map.on('click', self.LAYERNAME, (e) => {
           // when a point is clicked update selected asset
           // if in edit mode don't allow for changes to selected asset by clicks on map
-          if (!this.props.editMode) {
+          if (!self.props.editMode) {
             const pointId = e.features[0].properties.id
-            const asset =  this.props.markers.find((m) => m.id === pointId)
-            this.props.updateSelected(asset)
+            const asset =  self.props.markers.find((m) => m.id === pointId)
+            self.props.updateSelected(asset)
           }
         });
+        self.map.on('load', (loadEvent) => {
+          if (markers.length) {
+            const map = loadEvent.target;
+            const layer = self.createLayer(markers, selectedAsset, map, self.LAYERNAME);
+            map.addLayer(layer);
+          }
+        })
       })
   }
 
   componentWillUnmount() {
-    this.map.remove();
+    if (this.map) this.map.remove();
   }
 
   createLayer(assets, selectedAsset, map, LAYERNAME) {
     // remove layer before adding a new layer to avoid error
+    if (! map) debugger;
     if (map.getLayer(LAYERNAME)) {
       map.removeLayer(LAYERNAME);
       map.removeSource(LAYERNAME);
