@@ -1,11 +1,10 @@
 import enum
+from contextlib import contextmanager
 from geoalchemy2 import Geometry
-from sqlalchemy import (
-    Column, ForeignKey, Table, create_engine)
+from sqlalchemy import Column, ForeignKey, Table, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.types import Enum, Integer, PickleType, String
-from contextlib import contextmanager
 
 
 Base = declarative_base()
@@ -103,7 +102,7 @@ class Asset(Base):
         secondaryjoin=AssetConnection.c.r_asset_id == id)
 
 
-engine = create_engine('postgresql:///asset-tracker', echo=True)
+engine = create_engine('postgresql:///asset_tracker', echo=True)
 Base.metadata.create_all(engine)
 DatabaseSession = sessionmaker(bind=engine)
 DatabaseSession.configure(bind=engine)
