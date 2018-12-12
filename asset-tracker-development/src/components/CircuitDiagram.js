@@ -74,6 +74,7 @@ class CircuitDiagram extends Component {
   }
 
   componentDidUpdate() {
+    /*
     this.cy.remove('node');
     this.cy.removeListener('click', 'node');
     const {asset, updateSelected} = this.props;
@@ -103,6 +104,7 @@ class CircuitDiagram extends Component {
           });
         });
     }
+    */
   }
 
   render() {
