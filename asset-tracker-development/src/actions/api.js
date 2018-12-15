@@ -2,7 +2,7 @@ const scheme = 'http';
 const port = 5000
 const hostname = '18.212.160.114'
 export const api_base_url = `${scheme}://${hostname}:${port}`
-const TIMEOUT = 2000;
+const TIMEOUT = 500;
 const ASSETTYPES = {
   Pole: 1,
   Meter: 2,
@@ -75,10 +75,10 @@ let assets = [{
 export const APIsearch = (filters) => {
     return new Promise((res, rej) => {
       setTimeout(() => {
-        const filterProduct = filters.product || '';
-        const namePattern = new RegExp(`.*${filterProduct}.*`)
+        const filterProduct = filters.name || '';
+        const namePattern = new RegExp(`.*${filterProduct}.*`, 'i')
         const search_results = assets.filter((a) => {
-          return a.product.match(namePattern) // && filters.types.some((t) =>a.type_id === parseInt(t))
+          return a.name.match(namePattern) && (filters.type_ids.length === 0 || filters.type_ids.some((t) =>a.type_id === parseInt(t)))
         })
         res(search_results)
       }, TIMEOUT)
