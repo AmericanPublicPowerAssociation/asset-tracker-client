@@ -72,6 +72,15 @@ let assets = [{
 }];
 
 
+export const APIget = () => {
+    return new Promise((res, rej) => {
+      setTimeout(() => {
+        res(assets)
+      }, TIMEOUT)
+    })
+}
+
+
 export const APIsearch = (filters) => {
     return new Promise((res, rej) => {
       setTimeout(() => {

@@ -14,28 +14,29 @@ library.add(faSearch)
 
 class SearchQuery extends Component {
   /*
-   * searchQuery: String => current state of search input box
+   * query: String => current state of search input box
    * searchToggle:      Boolean => if a search is triggered
    * type_ids:     Array => list of type_ids to filter for
    */
   state = {
-    searchQuery: '',
+    query: '',
+    searchTerm: '',
     searchToggle: false,
     type_ids: [],
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const {searchToggle, searchQuery, type_ids} = this.state;
+    const {searchToggle, searchTerm, type_ids} = this.state;
     const {searchAssets, updateSelected} = this.props;
     if (searchToggle !== prevState.searchToggle || type_ids.length !== prevState.type_ids || type_ids.some((t, i) => t !== prevState.type_ids[i])) {
       updateSelected({})
-      searchAssets({name: searchQuery, type_ids: type_ids});
+      searchAssets({name: searchTerm, type_ids: type_ids});
     }
   }
 
 
   render() {
-    const {searchQuery} = this.state;
+    const {query, searchTerm} = this.state;
     const {editMode} = this.props;
     const types = ['Other', 'Pole', 'Meter', 'Line', 'Switch', 'Busbar', 'Transformer', 'Substation', 'Station']
     const options = (
@@ -55,28 +56,36 @@ class SearchQuery extends Component {
     )
 
     return (
+      <Row>
+        <Col lg={12}>
+          <Row>
+            <Col lg={12}>
+              <h2>Search: "{ searchTerm }" </h2>
+            </Col>
+          </Row>
           <Row>
             <Col lg={12} className='search-div'>
               <form onSubmit={(e) => e.preventDefault()}>
                 <FormGroup>
                   { editMode ?  (
-                    <FormControl readOnly placeholder={`search by name...`} value={searchQuery}
+                    <FormControl readOnly placeholder={`search by name...`} value={query}
                       className='search'/>
                   ) : (
                     <FormControl onChange={(e) =>
                         this.setState({
-                          searchQuery: e.target.value
+                          query: e.target.value
                         })
                       } placeholder={`search by name...`}
-                      value={searchQuery}
+                      value={query}
                       className='search'/>
                   )
                   }
                   <FormControl style={editMode ? {cursor: 'not-allowed'}: {}} componentClass='button' onClick={(e) => {
                       if (!editMode) {
                         this.setState((state, props) => {
-                          const {searchToggle} = state;
+                          const {searchToggle, query} = state;
                           return {
+                            searchTerm: query.trim(),
                             searchToggle: !searchToggle
                           }
                         })
@@ -109,6 +118,8 @@ class SearchQuery extends Component {
               </form>
             </Col>
           </Row>
+        </Col>
+      </Row>
     );
   }
 }

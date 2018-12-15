@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { handleSearchAssets } from '../actions'
+import { handleGetAssets } from '../actions'
 import AssetsTable from '../components/AssetsTable'
 
 
@@ -8,7 +8,7 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  loadData: () => dispatch(handleSearchAssets({}))
+  loadData: () => dispatch(handleGetAssets())
 })
 
 export default connect(
