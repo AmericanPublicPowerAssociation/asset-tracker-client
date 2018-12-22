@@ -10,8 +10,12 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  updateSelected: (asset) => dispatch(setSelected(asset)),
-	toggleEdit: (val) => dispatch(toggleEdit(val))
+  updateSelected: (asset) => {
+    dispatch(setSelected(asset))
+  },
+	toggleEdit: (val) => {
+    dispatch(toggleEdit(val))
+  },
 })
 
 export default connect(

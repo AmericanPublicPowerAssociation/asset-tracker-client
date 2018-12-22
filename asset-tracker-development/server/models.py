@@ -102,7 +102,7 @@ class Asset(Base):
         secondaryjoin=AssetConnection.c.r_asset_id == id)
 
 
-engine = create_engine('postgresql:///asset_tracker', echo=True)
+engine = create_engine('postgresql:///asset-tracker', echo=True)
 Base.metadata.create_all(engine)
 DatabaseSession = sessionmaker(bind=engine)
 DatabaseSession.configure(bind=engine)

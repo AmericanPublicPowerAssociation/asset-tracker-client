@@ -28,7 +28,7 @@ class SearchQuery extends Component {
   componentDidUpdate(prevProps, prevState) {
     const {searchToggle, searchTerm, type_ids} = this.state;
     const {searchAssets, updateSelected} = this.props;
-    if (searchToggle !== prevState.searchToggle || type_ids.length !== prevState.type_ids || type_ids.some((t, i) => t !== prevState.type_ids[i])) {
+    if (searchToggle !== prevState.searchToggle || type_ids.length !== prevState.type_ids.length || (type_ids.length > 0 && type_ids.some((t, i) => t !== prevState.type_ids[i]))) {
       updateSelected({})
       searchAssets({name: searchTerm, type_ids: type_ids});
     }
@@ -42,7 +42,6 @@ class SearchQuery extends Component {
     const options = (
         <FormGroup onChange={(e) => {
             // get list of selected checks
-            debugger;
             const type_id_checkbox = e.target;
             this.setState((state, props) => {
               return {

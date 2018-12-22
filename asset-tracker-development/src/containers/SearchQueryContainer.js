@@ -8,8 +8,12 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  updateSelected: (asset) => dispatch(setSelected(asset)),
-  searchAssets: (filters) => dispatch(handleSearchAssets(filters))
+  updateSelected: (asset) => {
+    dispatch(setSelected(asset))
+  },
+  searchAssets: (filters) => {
+    dispatch(handleSearchAssets(filters))
+  }
 })
 
 export default connect(

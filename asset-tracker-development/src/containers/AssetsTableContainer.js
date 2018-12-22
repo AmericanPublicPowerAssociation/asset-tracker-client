@@ -8,7 +8,9 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  loadData: () => dispatch(handleGetAssets())
+  loadData: () => {
+    dispatch(handleGetAssets())
+  }
 })
 
 export default connect(
