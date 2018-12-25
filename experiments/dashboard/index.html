@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-<link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+<link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.css">
 <title>Asset Tracker</title>
 <style>
 html, body {
@@ -96,6 +96,9 @@ Line
   Underground
 Pole
 Busbar
+Control
+  PLC
+  Microcontroller
 Miscellaneous
 </div>
 </div>
@@ -113,18 +116,44 @@ Miscellaneous
 </main>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.2.22/cytoscape.min.js"></script>
+<script src="line.js.gz"></script>
 <script>
 mapboxgl.accessToken = 'pk.eyJ1Ijoicm1ndWFyYWNoaSIsImEiOiJjamwzdDdseXcyNTk5M3Fuc3p2ZzJmdXdlIn0.cjtHea9XjbVzu7IQDIXsog';
 var map = new mapboxgl.Map({
   container: 'map',
-  center: [-88.039894, 30.695366],
-  zoom: 7,
-  style: 'mapbox://styles/mapbox/satellite-v9',
-  logoPosition: 'top-right',
+  // center: [-88.039894, 30.695366],
+  // zoom: 7,
+  // center: [-122.48383155304096, 37.82882682974591],
+  // center: [-84.2097517295505, 44.61079360769207],
+  center: [-79.60975239966413, 36.20116405881477],
+  zoom: 9,
+  style: 'mapbox://styles/mapbox/basic-v9',
+  logoPosition: 'top-right'
+});
+map.on('load', function() {
+  map.addLayer({
+    'id': 'line',
+    'type': 'line',
+    'source': {
+      'type': 'geojson',
+      'data': line_geojson
+    },
+    'paint': {
+      'line-width': ['*', ['get', 'NomV'], 0.1],
+      /*
+      'line-color': ['match', ['get', 'Phases'],
+        'A', '#fbb03b',
+        'B', '#223b53',
+        'C', '#e55e5e',
+        'ABC', '#3bb2d0']
+      */
+    }
+  });
+  map.addControl(new mapboxgl.NavigationControl());
 });
 
 var cy = cytoscape({
