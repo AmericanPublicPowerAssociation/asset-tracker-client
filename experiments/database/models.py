@@ -50,6 +50,7 @@ class Asset(Base):
     __tablename__ = 'asset'
     id = Column(String, primary_key=True)
     name = Column(String)
+    description = Column(String)
     type_id = Column(Enum(AssetType))
     subtype_id = Column(String, ForeignKey('asset_subtype.id'))
     utility_id = Column(String)

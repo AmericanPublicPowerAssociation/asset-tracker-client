@@ -1,27 +1,25 @@
 Station
 Substation
 Quality
-  Capacitor
-  Regulator
-  Booster
+    Capacitor
+    Regulator
+    Booster
 Switch
-  Fuse
-  Breaker
-  Recloser
-  Interrupter
-  Sectionalizer
-  Relay
+    Fuse
+    Breaker
+    Recloser
+    Interrupter
+    Sectionalizer
+    Relay
 Transformer
 Meter
-  Residential
-  Commercial
-  Industrial
+    Residential
+    Commercial
+    Industrial
 Line
-  Overhead
-  Underground
 Pole
 Busbar
 Control
-  PLC
-  Microcontroller
+    PLC
+    Microcontroller
 Miscellaneous

@@ -16,13 +16,15 @@ GET /
 GET /#<asset-id>/q=abc+def&f=relay+transformer&l=40.51,-73.33,15
 GET /assets
 POST /assets.json
+# GET /assets.msg  # msgpack
 
-GET /maps/{zoom_level}/{row_index}/{column_index}
+GET /maps/{zoom_level}/{row_index}/{column_index}  # pbf with asset id
 
 GET /assets.csv
 GET /assets.zip
 
 GET /assets/<asset-id>.json
+GET /assets/<asset-id>.msg
 POST /assets/<asset-id>.json
 
 GET /reports
