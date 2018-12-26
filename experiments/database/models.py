@@ -1,8 +1,8 @@
 import enum
 from geoalchemy2 import Geometry
-from sqlalchemy import Column, ForeignKey, Table
+from sqlalchemy import Column, ForeignKey, Table, create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.types import Enum, PickleType, String
 
 
@@ -54,7 +54,9 @@ class Asset(Base):
     type_id = Column(Enum(AssetType))
     subtype_id = Column(String, ForeignKey('asset_subtype.id'))
     utility_id = Column(String)
-    geometry = Column(Geometry(srid=4326))
+    # geometry = Column(Geometry(srid=4326))
+    geometry = Column(Geometry(
+        srid=4326, management=True, use_st_prefix=False))
     properties = PickleType()
     contained_assets = relationship(
         'Asset', secondary=AssetContent,
@@ -71,3 +73,25 @@ class AssetSubType(Base):
     id = Column(String, primary_key=True)
     name = Column(String)
     type_id = Column(Enum(AssetType))
+
+
+def load_spatialite_sqlite_extension(engine):
+    from sqlalchemy.event import listen
+    from sqlalchemy.sql import func, select
+
+    def load_spatialite(api_connection, connection_record):
+        api_connection.enable_load_extension(True)
+        api_connection.load_extension('/usr/lib64/mod_spatialite.so')
+
+    listen(engine, 'connect', load_spatialite)
+    engine_connection = engine.connect()
+    engine_connection.execute(select([func.InitSpatialMetaData()]))
+    engine_connection.close()
+
+
+engine = create_engine('sqlite://', echo=True)
+load_spatialite_sqlite_extension(engine)
+Base.metadata.create_all(engine)
+DatabaseSession = sessionmaker(bind=engine)
+DatabaseSession.configure(bind=engine)
+database = DatabaseSession()
