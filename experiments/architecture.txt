@@ -1,0 +1,30 @@
+application client (React + Redux)
+application server (Pyramid + mapbox-vector-tile)
+database (PostGIS)
+
+q = "abc def"
+f = {
+    "type": [3, 4.5],
+    "installation_date": [
+        [">", "20170101"],
+        ["<", "20181231"],
+    ],
+}
+l = [40.51, -73.33, 15]
+
+GET /
+GET /#<asset-id>/q=abc+def&f=relay+transformer&l=40.51,-73.33,15
+GET /assets
+POST /assets.json
+
+GET /maps/{zoom_level}/{row_index}/{column_index}
+
+GET /assets.csv
+GET /assets.zip
+
+GET /assets/<asset-id>.json
+POST /assets/<asset-id>.json
+
+GET /reports
+GET /reports/<report-id>
+GET /reports/<report-id>.zip
