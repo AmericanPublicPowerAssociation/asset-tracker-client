@@ -4,14 +4,15 @@
 .cache
 .coverage
 .ipynb_checkpoints
+.pytest_cache
 __pycache__
 build
 dist
 # Sass
 .sass-cache
 # SQLite
-*.db
-*.db-journal
+*.sqlite
+*.sqlite-journal
 # Transient
 *.log
 *.map
@@ -22,7 +23,7 @@ data_*
 # Vim
 *.sw[op]
 *~
-# node
+# Node
 node_modules
 npm-debug.log*
 package-lock.json
