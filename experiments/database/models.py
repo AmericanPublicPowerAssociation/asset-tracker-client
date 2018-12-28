@@ -1,5 +1,6 @@
 import enum
 from geoalchemy2 import Geometry
+from geoalchemy2.shape import to_shape
 from sqlalchemy import Column, ForeignKey, Table, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
@@ -54,9 +55,6 @@ class Asset(Base):
     type_id = Column(Enum(AssetType))
     subtype_id = Column(String, ForeignKey('asset_subtype.id'))
     utility_id = Column(String)
-    # geometry = Column(Geometry(srid=4326))
-    geometry = Column(Geometry(
-        srid=4326, management=True, use_st_prefix=False))
     properties = PickleType()
     contained_assets = relationship(
         'Asset', secondary=AssetContent,
@@ -66,6 +64,22 @@ class Asset(Base):
         'Asset', secondary=AssetConnection,
         primaryjoin=AssetConnection.c.left_asset_id == id,
         secondaryjoin=AssetConnection.c.right_asset_id == id)
+    # _geometry = Column(Geometry(srid=4326))
+    _geometry = Column(Geometry(management=True, use_st_prefix=False))
+
+    def __init__(self, **kwargs):
+        if 'geometry' in kwargs:
+            geometry = kwargs.pop('geometry')
+            kwargs['_geometry'] = geometry.wkt
+        super(Asset, self).__init__(**kwargs)
+
+    @property
+    def geometry(self):
+        return to_shape(self._geometry)
+
+    @geometry.setter
+    def geometry(self, g):
+        self._geometry = g.wkt
 
 
 class AssetSubType(Base):
@@ -89,7 +103,8 @@ def load_spatialite_sqlite_extension(engine):
     engine_connection.close()
 
 
-engine = create_engine('sqlite://', echo=True)
+# engine = create_engine('sqlite://', echo=True)
+engine = create_engine('sqlite://')
 load_spatialite_sqlite_extension(engine)
 Base.metadata.create_all(engine)
 DatabaseSession = sessionmaker(bind=engine)
