@@ -2,7 +2,8 @@ from sqlalchemy import (
     Column,
     Index,
     Integer,
-    Text)
+    Text,
+)
 
 from .meta import Base
 

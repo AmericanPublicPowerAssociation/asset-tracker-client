@@ -1,7 +1,8 @@
-import transaction
 import unittest
 
 from pyramid import testing
+
+import transaction
 
 
 def dummy_request(dbsession):
@@ -11,7 +12,7 @@ def dummy_request(dbsession):
 class BaseTest(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp(settings={
-            'sqlalchemy.url': 'sqlite:///:memory:',
+            'sqlalchemy.url': 'sqlite:///:memory:'
         })
         self.config.include('.models')
         settings = self.config.get_settings()
@@ -54,7 +55,7 @@ class TestMyViewSuccessCondition(BaseTest):
         from .views.default import my_view
         info = my_view(dummy_request(self.session))
         self.assertEqual(info['one'].name, 'one')
-        self.assertEqual(info['project'], 'asset-tracker')
+        self.assertEqual(info['project'], 'asset_tracker')
 
 
 class TestMyViewFailureCondition(BaseTest):
@@ -63,24 +64,3 @@ class TestMyViewFailureCondition(BaseTest):
         from .views.default import my_view
         info = my_view(dummy_request(self.session))
         self.assertEqual(info.status_int, 500)
-
-
-class FunctionalTests(unittest.TestCase):
-    def setUp(self):
-        from asset_tracker import main
-        settings = {
-            'sqlalchemy.url': 'sqlite:///:memory:',
-        }
-        app = main({}, **settings)
-        from webtest import TestApp
-        self.testapp = TestApp(app)
-
-        x = app.registry['dbsession_factory']
-        engine = x.kw['bind']
-
-        from .models.meta import Base
-        Base.metadata.create_all(engine)
-
-    def test_root(self):
-        res = self.testapp.get('/', status=200)
-        self.assertTrue(b'Pyramid' in res.body)

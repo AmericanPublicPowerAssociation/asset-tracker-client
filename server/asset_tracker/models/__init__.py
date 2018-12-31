@@ -1,10 +1,11 @@
-import zope.sqlalchemy
 from sqlalchemy import engine_from_config
-from sqlalchemy.orm import configure_mappers, sessionmaker
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import configure_mappers
+import zope.sqlalchemy
 
 # import or define all models here to ensure they are attached to the
 # Base.metadata prior to any initialization routines
-from .model_old import MyModel  # noqa
+# from .mymodel import MyModel  # flake8: noqa
 
 # run configure_mappers after defining all of the models to ensure
 # all relationships can be setup
@@ -52,7 +53,7 @@ def includeme(config):
     """
     Initialize the model for a Pyramid app.
 
-    Activate this setup using ``config.include('asset-tracker.models')``.
+    Activate this setup using ``config.include('asset_tracker.models')``.
 
     """
     settings = config.get_settings()
@@ -60,6 +61,9 @@ def includeme(config):
 
     # use pyramid_tm to hook the transaction lifecycle to the request
     config.include('pyramid_tm')
+
+    # use pyramid_retry to retry a request when transient exceptions occur
+    config.include('pyramid_retry')
 
     session_factory = get_session_factory(get_engine(settings))
     config.registry['dbsession_factory'] = session_factory
@@ -69,4 +73,5 @@ def includeme(config):
         # r.tm is the transaction manager used by pyramid_tm
         lambda r: get_tm_session(session_factory, r.tm),
         'dbsession',
-        reify=True)
+        reify=True
+    )
