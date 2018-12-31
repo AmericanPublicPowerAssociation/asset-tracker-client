@@ -52,26 +52,38 @@ class Asset(Base):
     id = Column(String, primary_key=True)
     name = Column(String)
     description = Column(String)
-    type_id = Column(Enum(AssetType))
+    type = Column(Enum(AssetType))
     subtype_id = Column(String, ForeignKey('asset_subtype.id'))
     utility_id = Column(String)
     properties = PickleType()
-    contained_assets = relationship(
+    _contents = relationship(
         'Asset', secondary=AssetContent,
         primaryjoin=AssetContent.c.parent_asset_id == id,
-        secondaryjoin=AssetContent.c.child_asset_id == id)
-    connected_assets = relationship(
+        secondaryjoin=AssetContent.c.child_asset_id == id,
+        backref='containers')
+    _connections = relationship(
         'Asset', secondary=AssetConnection,
         primaryjoin=AssetConnection.c.left_asset_id == id,
         secondaryjoin=AssetConnection.c.right_asset_id == id)
-    # _geometry = Column(Geometry(srid=4326))
     _geometry = Column(Geometry(management=True, use_st_prefix=False))
+    # _geometry = Column(Geometry(srid=4326))
 
     def __init__(self, **kwargs):
         if 'geometry' in kwargs:
             geometry = kwargs.pop('geometry')
             kwargs['_geometry'] = geometry.wkt
         super(Asset, self).__init__(**kwargs)
+
+    def __repr__(self):
+        return '<Asset(id={})>'.format(self.id)
+
+    @property
+    def contained_assets(self):
+        return self._contents
+
+    @property
+    def connected_assets(self):
+        return self._connections
 
     @property
     def geometry(self):
@@ -81,12 +93,45 @@ class Asset(Base):
     def geometry(self, g):
         self._geometry = g.wkt
 
+    def add_content(self, asset):
+        if self == asset:
+            return
+        if asset not in self._contents:
+            self._contents.append(asset)
+
+    def add_connection(self, asset):
+        if self == asset:
+            return
+        if asset not in self._connections:
+            self._connections.append(asset)
+        if self not in asset._connections:
+            asset._connections.append(self)
+
+    def remove_content(self, asset):
+        if asset in self._contents:
+            self._contents.remove(asset)
+
+    def remove_connection(self, asset):
+        if asset in self._connections:
+            self._connections.remove(asset)
+        if self in asset._connections:
+            asset._connections.remove(self)
+
 
 class AssetSubType(Base):
     __tablename__ = 'asset_subtype'
     id = Column(String, primary_key=True)
     name = Column(String)
     type_id = Column(Enum(AssetType))
+
+
+def configure_database(database_url):
+    engine = create_engine(database_url)
+    load_spatialite_sqlite_extension(engine)
+    Base.metadata.create_all(engine)
+    DatabaseSession = sessionmaker(bind=engine)
+    DatabaseSession.configure(bind=engine)
+    return DatabaseSession()
 
 
 def load_spatialite_sqlite_extension(engine):
@@ -101,12 +146,3 @@ def load_spatialite_sqlite_extension(engine):
     engine_connection = engine.connect()
     engine_connection.execute(select([func.InitSpatialMetaData()]))
     engine_connection.close()
-
-
-# engine = create_engine('sqlite://', echo=True)
-engine = create_engine('sqlite://')
-load_spatialite_sqlite_extension(engine)
-Base.metadata.create_all(engine)
-DatabaseSession = sessionmaker(bind=engine)
-DatabaseSession.configure(bind=engine)
-database = DatabaseSession()

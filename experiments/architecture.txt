@@ -1,6 +1,6 @@
-application client (React + Redux)
-application server (Pyramid + mapbox-vector-tile)
-database (PostGIS)
+application client (react + redux)
+application server (pyramid + mapbox-vector-tile)
+database (postgis)
 
 q = "abc def"
 f = {
