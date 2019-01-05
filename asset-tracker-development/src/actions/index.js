@@ -1,4 +1,4 @@
-import {APIsearch, APIaddAsset, APIeditAsset, APIdeleteAsset} from './api'
+import {APIget, APIsearch, APIaddAsset, APIeditAsset, APIdeleteAsset} from './api'
 
 export const ADD_ASSET = 'ADD_ASSET';
 export const REMOVE_ASSET = 'REMOVE_ASSET';
@@ -37,6 +37,15 @@ export const searchAssets = assets => ({
   type: RECEIVE_ASSETS,
   assets
 })
+
+export const handleGetAssets = () => {
+  return (dispatch) => {
+    APIget()
+      .then((assets) => {
+        dispatch(searchAssets(assets))
+      })
+  }
+}
 
 export const handleSearchAssets = (filters) => {
   return (dispatch) => {
