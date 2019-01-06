@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
 import json
 import random
@@ -9,7 +9,7 @@ from models import (
     database_connection, Asset, Vendor, Product, AssetType, ProductVersion)
 from geoalchemy2 import func as gf
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='templates/static')
 CORS(app)
 
 try:
@@ -21,6 +21,12 @@ RANDOM = random.SystemRandom()
 
 def make_random_string(length=16, alphabet=ALPHABET):
     return ''.join(RANDOM.choice(alphabet) for x in range(length))
+
+
+@app.route('/assets')
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 
 @app.route('/get-center.json')

@@ -6,7 +6,10 @@ import {library} from '@fortawesome/fontawesome-svg-core'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faCompass} from '@fortawesome/free-solid-svg-icons'
 
+import {api_base_url} from '../actions/api'
+
 import '../css/CircuitDiagram.css';
+
 
 
 library.add(faCompass)
@@ -71,11 +74,12 @@ class CircuitDiagram extends Component {
   }
 
   componentDidUpdate() {
+    /*
     this.cy.remove('node');
     this.cy.removeListener('click', 'node');
     const {asset, updateSelected} = this.props;
     if (asset) {
-      const url = `http://localhost:5000/get-circuit.json?circuit_id=${asset.circuit}`;
+      const url = `${api_base_url}/get-circuit.json?circuit_id=${asset.circuit}`;
       fetch(url)
         .then(res => {
           return res.json();
@@ -100,6 +104,7 @@ class CircuitDiagram extends Component {
           });
         });
     }
+    */
   }
 
   render() {

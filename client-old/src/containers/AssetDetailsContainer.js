@@ -10,7 +10,9 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   updateSelected: (asset) => dispatch(setSelected(asset)),
-	toggleEdit: (val) => dispatch(toggleEdit(val)),
+	toggleEdit: (val) => {
+    dispatch(toggleEdit(val))
+  },
   deleteAsset: (asset) => dispatch(handleRemoveAsset(asset)),
   saveAsset: (asset) =>  {
     if (asset.id === '') {

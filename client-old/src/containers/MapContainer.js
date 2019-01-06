@@ -10,7 +10,9 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  updateSelected: (asset) => dispatch(setSelected(asset)),
+  updateSelected: (asset) => {
+    dispatch(setSelected(asset))
+  },
 })
 
 export default connect(

@@ -25,6 +25,18 @@ class AssetDetails extends Component {
 
   isValid = (obj) => Object.keys(obj).length > 0;
 
+  componentDidMount() {
+    if (this.isValid(this.props.asset)) {
+      this.setState((state, props) => {
+        const {id, lat, lng, ...editedAsset} = props.asset
+        this.ORIGINALCOORDS = [lng, lat]
+        return {
+          editedAsset
+        }
+      })
+    }
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const self = this;
     const {asset} = self.props;
