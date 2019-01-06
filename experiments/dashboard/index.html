@@ -128,6 +128,19 @@ map.on('load', function() {
         'icon-size': 0.5
       }
     });
+    map.on('click', 'substation', function(e) {
+      alert(e);
+      console.log(e);
+      console.log(e.features);
+      console.log(e.features[0]);
+      console.log(e.features[0].properties);
+    });
+    map.on('mouseenter', 'substation', function() {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'substation', function () {
+      map.getCanvas().style.cursor = '';
+    });
   });
   map.loadImage('third-party/quality.png', function(error, image) {
     map.addImage('quality', image);

@@ -1,6 +1,11 @@
+proxy (nginx)
 application client (react + redux)
 application server (pyramid + mapbox-vector-tile)
 database (postgis)
+
+geojson only contains id
+properties contained in separate json
+This way we can use replace geojson with protocol buffer later.
 
 q = "abc def"
 f = {

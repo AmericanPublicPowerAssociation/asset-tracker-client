@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.css">
 <link rel="stylesheet" href="{{ request.static_url('asset_tracker:static/simTree.css') }}">
 <title>Asset Tracker</title>
@@ -16,6 +17,17 @@ body {
 }
 .container-fluid {
   padding-left: 0;
+}
+.toolbar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #007bff;
+  z-index: 100;
+  cursor: pointer;
+}
+#detail-panel {
+  position: relative;
 }
 #filter ul {
   padding-left: 0;
@@ -81,12 +93,16 @@ body {
 </div>
 
 </div>
-<div id="detail" class="col-4 h-100">
+<div class="col-4 h-100">
 <div id="circuit" class="h-50">
 </div>
-<div id="information">
-<div>Asset Name</div>
-<div>Asset ID</div>
+<div id="detail-panel">
+<span class="toolbar">
+<i class="fas fa-edit fa-3x edit-icon d-none"></i>
+<i class="fas fa-check fa-3x save-icon d-none"></i>
+<i class="fas fa-times fa-3x cancel-icon d-none"></i>
+</span>
+<form id="detail-form"></form>
 </div>
 </div>
 </div>
@@ -105,6 +121,52 @@ body {
 <script src="{{ request.static_url('asset_tracker:static/meter.js') }}"></script>
 <script src="{{ request.static_url('asset_tracker:static/line.js') }}"></script>
 <script>
+var $toolbar = $('#detail-panel .toolbar');
+
+function render_detail(feature) {
+  var template = '<div class="form-group row"><label for="K" class="col-sm-2 col-form-label">K</label><div class="col-sm-10"><input type="text" readonly class="form-control-plaintext" name="K" value="V"></div></div>';
+  var html = '', properties = feature.properties;
+  for (const k in properties) {
+    html += template.replace(/K/g, k).replace(/V/g, properties[k]);
+  }
+  $('#detail-panel .edit-icon').removeClass('d-none').addClass('d-inline');
+  $('#detail-panel .save-icon').removeClass('d-inline').addClass('d-none');
+  $('#detail-panel .cancel-icon').removeClass('d-inline').addClass('d-none');
+  $('#detail-form').html(html);
+  $('#detail-form input').on('dblclick', make_detail_form);
+  $('#detail-form').data('feature', feature);
+  $('#detail-form').data('properties', properties);
+}
+function make_detail_form() {
+  var $inputs = $('#detail-form input');
+  $inputs.prop('readonly', false);
+  $inputs.removeClass('form-control-plaintext').addClass('form-control');
+  $toolbar.find('.edit-icon').removeClass('d-inline').addClass('d-none');
+  $toolbar.find('.save-icon').removeClass('d-none').addClass('d-inline');
+  $toolbar.find('.cancel-icon').removeClass('d-none').addClass('d-inline');
+}
+
+$('#detail-panel .edit-icon').on('click', function() {
+  make_detail_form();
+});
+$('#detail-panel .save-icon').on('click', function() {
+  var feature = $('#detail-form').data('feature');
+  var properties = {};
+  var a = $('#detail-form').serializeArray();
+  for (var i = 0; i < a.length; i++){
+    properties[a[i]['name']] = a[i]['value'];
+  }
+  Object.assign(feature.properties, properties);
+  render_detail(feature);
+});
+$('#detail-panel .cancel-icon').on('click', function() {
+  var $inputs = $('#detail-form input');
+  $inputs.prop('readonly', true);
+  $inputs.addClass('form-control-plaintext').removeClass('form-control');
+  var feature = $('#detail-form').data('feature');
+  render_detail(feature);
+});
+
 mapboxgl.accessToken = 'pk.eyJ1Ijoicm1ndWFyYWNoaSIsImEiOiJjamwzdDdseXcyNTk5M3Fuc3p2ZzJmdXdlIn0.cjtHea9XjbVzu7IQDIXsog';
 var map = new mapboxgl.Map({
   container: 'map',
@@ -113,105 +175,72 @@ var map = new mapboxgl.Map({
   style: 'mapbox://styles/mapbox/basic-v9',
   logoPosition: 'top-right'
 });
-map.on('load', function() {
-  map.loadImage("{{ request.static_url('asset_tracker:static/substation.png') }}", function(error, image) {
-    map.addImage('substation', image);
+
+function prepare_point_layer(layer_name, layer_geojson, marker_url) {
+  map.loadImage(marker_url, function(error, image) {
+    map.addImage(layer_name, image);
     map.addLayer({
-      'id': 'substation',
+      'id': layer_name,
       'type': 'symbol',
       'source': {
         'type': 'geojson',
-        'data': substation_geojson
+        'data': layer_geojson
       },
       'layout': {
-        'icon-image': 'substation',
+        'icon-image': layer_name,
         'icon-size': 0.5,
         'visibility': 'none'
       }
     });
-  });
-  map.loadImage("{{ request.static_url('asset_tracker:static/quality.png') }}", function(error, image) {
-    map.addImage('quality', image);
-    map.addLayer({
-      'id': 'quality',
-      'type': 'symbol',
-      'source': {
-        'type': 'geojson',
-        'data': quality_geojson
-      },
-      'layout': {
-        'icon-image': 'quality',
-        'icon-size': 0.5,
-        'visibility': 'none'
+    map.on('click', layer_name, function(e) {
+      var template = '<div class="form-group row"><label for="K" class="col-sm-2 col-form-label">K</label><div class="col-sm-10"><input type="text" readonly class="form-control-plaintext" name="K" value="V"></div></div>';
+      var html = '', properties = e.features[0].properties;
+      for (const k in properties) {
+        html += template.replace(/K/g, k).replace(/V/g, properties[k]);
       }
+      $('#detail-panel .edit-icon').removeClass('d-none').addClass('d-inline');
+      $('#detail-form').html(html);
+      $('#detail-form input').on('dblclick', make_detail_form);
+    });
+    map.on('mouseenter', layer_name, function() {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', layer_name, function () {
+      map.getCanvas().style.cursor = '';
     });
   });
-  map.loadImage("{{ request.static_url('asset_tracker:static/switch.jpg') }}", function(error, image) {
-    map.addImage('switch', image);
-    map.addLayer({
-      'id': 'switch',
-      'type': 'symbol',
-      'source': {
-        'type': 'geojson',
-        'data': switch_geojson
-      },
-      'layout': {
-        'icon-image': 'switch',
-        'icon-size': 0.5,
-        'visibility': 'none'
-      }
-    });
-  });
-  map.loadImage("{{ request.static_url('asset_tracker:static/transformer.png') }}", function(error, image) {
-    map.addImage('transformer', image);
-    map.addLayer({
-      'id': 'transformer',
-      'type': 'symbol',
-      'source': {
-        'type': 'geojson',
-        'data': transformer_geojson
-      },
-      'layout': {
-        'icon-image': 'transformer',
-        'icon-size': 0.25,
-        'visibility': 'none'
-      }
-    });
-  });
-  map.loadImage("{{ request.static_url('asset_tracker:static/meter.png') }}", function(error, image) {
-    map.addImage('meter', image);
-    map.addLayer({
-      'id': 'meter',
-      'type': 'symbol',
-      'source': {
-        'type': 'geojson',
-        'data': meter_geojson
-      },
-      'layout': {
-        'icon-image': 'meter',
-        'icon-size': 0.5,
-        'visibility': 'none'
-      }
-    });
-  });
+}
+function prepare_line_layer(layer_name, layer_geojson) {
   map.addLayer({
-    'id': 'line',
+    'id': layer_name,
     'type': 'line',
     'source': {
       'type': 'geojson',
-      'data': line_geojson
+      'data': layer_geojson
     },
     'paint': {
       'line-width': ['*', ['get', 'NomV'], 0.1],
-      /*
-      'line-color': ['match', ['get', 'Phases'],
-        'A', '#fbb03b',
-        'B', '#223b53',
-        'C', '#e55e5e',
-        'ABC', '#3bb2d0']
-      */
     }
   });
+  map.on('click', layer_name, function(e) {
+    var feature = e.features[0];
+    render_detail(feature);
+  });
+  map.on('mouseenter', layer_name, function() {
+    map.getCanvas().style.cursor = 'pointer';
+  });
+  map.on('mouseleave', layer_name, function () {
+    map.getCanvas().style.cursor = '';
+  });
+};
+
+map.on('load', function() {
+  prepare_point_layer('substation', substation_geojson, '{{ request.static_url("asset_tracker:static/substation.png") }}');
+  prepare_point_layer('quality', quality_geojson, '{{ request.static_url("asset_tracker:static/quality.png") }}');
+  prepare_point_layer('switch', switch_geojson, '{{ request.static_url("asset_tracker:static/switch.jpg") }}');
+  prepare_point_layer('transformer', transformer_geojson, '{{ request.static_url("asset_tracker:static/transformer.png") }}');
+  prepare_point_layer('meter', meter_geojson, '{{ request.static_url("asset_tracker:static/meter.png") }}');
+  prepare_line_layer('line', line_geojson);
   map.addControl(new mapboxgl.NavigationControl());
 });
 

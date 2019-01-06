@@ -1,0 +1,2 @@
+Store asset properties separately
+Store asset id in feature.properties
