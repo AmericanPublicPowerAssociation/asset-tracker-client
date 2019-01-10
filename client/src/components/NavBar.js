@@ -6,7 +6,13 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
+import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
+import SearchIcon from '@material-ui/icons/Search';
+import MapIcon from '@material-ui/icons/Map';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+
 
 const styles = {
   root: {
@@ -33,12 +39,21 @@ function ButtonAppBar(props) {
           <Typography variant="h6" color="inherit" className={classes.grow}>
             Asset Tracker
           </Typography>
-          <Button color="inherit">Maps</Button>
-          <Button color="inherit">Tables</Button>
-          <Button color="inherit">Reports</Button>
-          <Button color="inherit">Alerts</Button>
-          <Button color="inherit">Alex</Button>
-          <Button color="inherit">Sign Out</Button>
+          <IconButton>
+           	<SearchIcon />
+         	</IconButton>
+					<IconButton>
+           	<MapIcon />
+         	</IconButton>
+
+          {/*<Button color="inherit">Tables</Button>
+          <Button color="inherit">Reports</Button>*/}
+					<Badge badgeContent={11} color="secondary">
+            <NotificationsIcon />
+          </Badge>
+					<IconButton color="inherit">
+          	<AccountCircleIcon />
+					</IconButton>
         </Toolbar>
       </AppBar>
     </div>
