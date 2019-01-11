@@ -1,5 +1,8 @@
 proxy (nginx)
-application client (react + redux)
+    client production files
+    server reverse proxy
+application client (react + redux + material-ui)
+    npm run build
 application server (pyramid + mapbox-vector-tile)
 database (postgis)
 
