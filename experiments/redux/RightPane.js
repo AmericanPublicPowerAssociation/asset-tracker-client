@@ -1,7 +1,6 @@
 import React from "react";
 
 export default props => (
-  // checkbox list
   <div>
     Station
     <br /> Substation
