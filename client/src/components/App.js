@@ -1,12 +1,23 @@
 import React from 'react'
+import { withStyles } from '@material-ui/core/styles'
+import CssBaseline from '@material-ui/core/CssBaseline'
 import NavigationBar from './NavigationBar'
-import Dashboard from './Dashboard'
+import MapPage from './MapPage'
 
+const styles = theme => ({
+  toolbar: theme.mixins.toolbar,
+})
 
-const App = () => (
-  <React.Fragment>
-    <NavigationBar />
-  </React.Fragment>
-)
+const App = props => {
+  const { classes } = props
+  return (
+    <React.Fragment>
+      <CssBaseline />
+      <NavigationBar />
+      <div className={classes.toolbar}/>
+      <MapPage />
+    </React.Fragment>
+  )
+}
 
-export default App
+export default withStyles(styles)(App)

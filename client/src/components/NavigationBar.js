@@ -9,7 +9,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import MapIcon from '@material-ui/icons/Map'
 import TableIcon from '@material-ui/icons/ListAlt'
 import ReportIcon from '@material-ui/icons/Assessment'
-import AlertIcon from '@material-ui/icons/Notifications';
+import AlertIcon from '@material-ui/icons/Notifications'
 import AccountIcon from '@material-ui/icons/AccountCircle'
 
 const styles = {
@@ -18,7 +18,7 @@ const styles = {
   },
 }
 
-function NavigationBar(props) {
+const NavigationBar = props => {
   const { classes } = props;
   return (
     <AppBar position='fixed' color='default'>
