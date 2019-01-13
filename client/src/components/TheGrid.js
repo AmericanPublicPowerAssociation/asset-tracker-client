@@ -19,4 +19,3 @@ const TheGrid = () => {
   );
 };
 export default TheGrid;
-
