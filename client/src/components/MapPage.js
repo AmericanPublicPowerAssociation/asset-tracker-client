@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
 
 const styles = theme => ({
   dashboardContainer: {
@@ -33,12 +34,20 @@ class MapPage extends Component {
   render() {
     return (
       <Grid container className={this.props.classes.dashboardContainer}>
-        <Grid item xs={6} className={this.props.classes.mapPanel}>Map</Grid>
-        <Grid item className={this.props.classes.filterPanel}>Filter</Grid>
+        <Grid item xs={6} className={this.props.classes.mapPanel}>
+          <Typography variant='body1'>Map</Typography>
+        </Grid>
+        <Grid item className={this.props.classes.filterPanel}>
+          <Typography variant='body1'>Filter</Typography>
+        </Grid>
         <Grid item xs>
           <Grid container direction='column' className={this.props.classes.informationContainer}>
-            <Grid item xs className={this.props.classes.circuitPanel}>Circuit</Grid>
-            <Grid item xs className={this.props.classes.detailPanel}>Detail</Grid>
+            <Grid item xs className={this.props.classes.circuitPanel}>
+              <Typography variant='body1'>Circuit</Typography>
+            </Grid>
+            <Grid item xs className={this.props.classes.detailPanel}>
+              <Typography variant='body1'>Detail</Typography>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
