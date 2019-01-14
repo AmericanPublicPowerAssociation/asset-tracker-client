@@ -17,10 +17,13 @@ class App extends Component {
     return (
       <div>
         <NavigationContainer />
+
         <Grid fluid={true}>
+
           <Route exact path="/assets" render={ () => (
             <AssetsTableContainer />
           )} />
+
           <Route exact path="/" render={ () => (
             <Row>
               <Col xs={18} md={12} lg={8}>
@@ -47,6 +50,7 @@ class App extends Component {
               </Col>
             </Row>
           )} />
+
         </Grid>
       </div>
     );

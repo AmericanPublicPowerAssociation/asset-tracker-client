@@ -1,0 +1,53 @@
+Station
+Substation
+Power Quality
+Switch
+Transformer
+Meter
+Line
+Pole
+Busbar
+Control
+Miscellaneous
+
+
+    <ListItem button>
+      <Checkbox color='default' />
+      <ListItemText primary='Substation' />
+    </ListItem>
+    <ListItem button>
+      <Checkbox color='default' />
+      <ListItemText primary='Power Quality' />
+    </ListItem>
+    <ListItem button>
+      <Checkbox />
+      <ListItemText primary='Switch' />
+    </ListItem>
+    <ListItem button>
+      <Checkbox />
+      <ListItemText primary='Transformer' />
+    </ListItem>
+    <ListItem button>
+      <Checkbox />
+      <ListItemText primary='Meter' />
+    </ListItem>
+    <ListItem button>
+      <Checkbox />
+      <ListItemText primary='Line' />
+    </ListItem>
+    <ListItem button>
+      <Checkbox />
+      <ListItemText primary='Pole' />
+    </ListItem>
+    <ListItem button>
+      <Checkbox />
+      <ListItemText primary='Busbar' />
+    </ListItem>
+    <ListItem button>
+      <Checkbox />
+      <ListItemText primary='Control' />
+    </ListItem>
+    <ListItem button>
+      <Checkbox />
+      <ListItemText primary='Miscellaneous' />
+    </ListItem>

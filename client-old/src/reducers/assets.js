@@ -1,7 +1,6 @@
 import {ADD_ASSET, EDIT_ASSET,
         REMOVE_ASSET, RECEIVE_ASSETS} from '../actions'
 
-
 const assets = (state=[], action) => {
   switch (action.type) {
     case ADD_ASSET:

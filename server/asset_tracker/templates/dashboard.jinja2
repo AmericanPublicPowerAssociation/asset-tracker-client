@@ -29,78 +29,17 @@ html, body {
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light fixed-top">
-<a class="navbar-brand" href="#">Asset Tracker</a>
-<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle Navigation">
-<span class="navbar-toggler-icon"></span>
-</button>
-
-<div class="collapse navbar-collapse" id="navigation">
-
-<form class="form-inline mr-2 my-2 my-lg-0">
-<input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-<button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
-</form>
-
-<ul class="navbar-nav mr-auto">
-
-<li class="nav-item active">
-<a class="nav-link" href="#">Maps <span class="sr-only">(Current)</span></a>
-</li>
-
-<li class="nav-item">
-<a class="nav-link disabled" href="#">Tables</a>
-</li>
-
-<li class="nav-item">
-<a class="nav-link disabled" href="#">Reports</a>
-</li>
-
-<li class="nav-item">
-<a class="nav-link disabled" href="#">Alerts</a>
-</li>
-
-</ul>
-
-<ul class="navbar-nav mr-2">
-<li class="nav-item disabled"><a class="nav-link" href="#">Alex</a></li>
-</ul>
-
-<button id="button-sign-out" class="btn btn-primary my-2 my-sm-0 disabled" type="submit">Sign Out</button>
-
-</div>
-</nav>
-
-<main role="main" class="container-fluid h-100">
-<div class="row h-100">
-<div class="col-8 h-100">
-
-<div class="row h-100">
-<div id="map" class="col-10 h-100">
-</div>
-<div id="filter" class="col-2">
-</div>
-</div>
-
-</div>
-<div class="col-4 h-100">
-<div id="circuit" class="h-50">
-</div>
 <div id="detail-panel">
 <span class="toolbar">
 <i class="fas fa-edit fa-3x edit-icon d-none"></i>
 <i class="fas fa-check fa-3x save-icon d-none"></i>
 <i class="fas fa-times fa-3x cancel-icon d-none"></i>
 </span>
+
 <form id="detail-form"></form>
 </div>
-</div>
-</div>
-</main>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
 <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.2.22/cytoscape.min.js"></script>
 <script src="{{ request.static_url('asset_tracker:static/simTree.js') }}"></script>
@@ -110,6 +49,7 @@ html, body {
 <script src="{{ request.static_url('asset_tracker:static/transformer.js') }}"></script>
 <script src="{{ request.static_url('asset_tracker:static/meter.js') }}"></script>
 <script src="{{ request.static_url('asset_tracker:static/line.js') }}"></script>
+
 <script>
 var $toolbar = $('#detail-panel .toolbar');
 
@@ -304,5 +244,3 @@ $('#filter').simTree({
   }
 });
 </script>
-</body>
-</html>

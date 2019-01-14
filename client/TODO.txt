@@ -1,1 +1,2 @@
+Render Asset Types as List
 Rename Quality to Power Quality

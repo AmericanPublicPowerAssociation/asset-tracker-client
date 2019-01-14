@@ -19,7 +19,7 @@ const styles = {
 }
 
 const NavigationBar = props => {
-  const { classes } = props;
+  const { classes } = props
   return (
     <AppBar position='fixed' color='default'>
       <Toolbar>

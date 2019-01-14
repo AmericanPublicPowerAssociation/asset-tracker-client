@@ -1,0 +1,29 @@
+Station
+Substation
+  Transmission
+  Distribution
+Power Quality
+  Capacitor
+  Regulator
+  Booster
+Switch
+  Fuse
+  Breaker
+  Recloser
+  Interrupter
+  Sectionalizer
+  Relay
+Transformer
+  Distribution
+Meter
+  Residential
+  Commercial
+  Industrial
+Line
+Pole
+Busbar
+Control
+  PLC
+  Microcontroller
+Miscellaneous
+
