@@ -36,7 +36,7 @@ class UserRole(enum.IntEnum):
 class AssetType(enum.IntEnum):
     Station = 0
     Substation = 1
-    Quality = 2
+    PowerQuality = 2
     Switch = 3
     Transformer = 4
     Meter = 5

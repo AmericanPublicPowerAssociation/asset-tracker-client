@@ -3,7 +3,7 @@ export const ADD_ASSET = 'ADD_ASSET'
 export const ASSET_TYPES = [
   {id: 0, name: 'Station'},
   {id: 1, name: 'Substation'},
-  {id: 2, name: 'Quality'},
+  {id: 2, name: 'Power Quality'},
   {id: 3, name: 'Switch'},
   {id: 4, name: 'Transformer'},
   {id: 5, name: 'Meter'},

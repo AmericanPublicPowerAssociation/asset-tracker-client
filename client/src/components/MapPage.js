@@ -2,6 +2,7 @@ import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
+import AssetMap from './AssetMap'
 import AssetFilter from './AssetFilter'
 
 const styles = theme => ({
@@ -43,7 +44,7 @@ const MapPage = props => {
   return (
     <Grid container className={classes.dashboardContainer}>
       <Grid item xs={6} className={classes.mapPanel}>
-        <Typography variant='body1'>Map</Typography>
+        <AssetMap />
       </Grid>
       <Grid item className={classes.listPanel}>
         <AssetFilter />
