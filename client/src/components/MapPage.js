@@ -2,8 +2,10 @@ import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import AssetMap from './AssetMap'
 import AssetFilter from './AssetFilter'
+import AssetMap from './AssetMap'
+import AssetDetail from './AssetDetail'
+import AssetCircuit from './AssetCircuit'
 
 const styles = theme => ({
   dashboardContainer: {
@@ -52,10 +54,10 @@ const MapPage = props => {
       <Grid item xs>
         <Grid container direction='column' className={classes.informationContainer}>
           <Grid item xs className={classes.circuitPanel}>
-            <Typography variant='body1'>Circuit</Typography>
+            <AssetCircuit />
           </Grid>
           <Grid item xs className={classes.detailPanel}>
-            <Typography variant='body1'>Detail</Typography>
+            <AssetDetail />
           </Grid>
         </Grid>
       </Grid>
