@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux'
 import assetById from './assetById'
-import assetTypeIds from './assetTypeIds'
+import selectedAssetId from './selectedAssetId'
+import selectedAssetTypeIds from './selectedAssetTypeIds'
 
 export default combineReducers({
   assetById,
-  assetTypeIds,
+  selectedAssetId,
+  selectedAssetTypeIds,
 })
