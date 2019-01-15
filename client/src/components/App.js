@@ -6,6 +6,10 @@ import MapPage from './MapPage'
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
+  content: {
+    backgroundColor: 'blue',
+    padding: 24,
+  },
 })
 
 const App = props => {
@@ -14,10 +18,13 @@ const App = props => {
     <React.Fragment>
       <CssBaseline />
       <NavigationBar />
-      <div className={classes.toolbar}/>
-      <MapPage />
+      <div className={classes.toolbar} />
+      <div className={classes.content}>
+        <MapPage />
+      </div>
     </React.Fragment>
   )
 }
 
 export default withStyles(styles)(App)
+

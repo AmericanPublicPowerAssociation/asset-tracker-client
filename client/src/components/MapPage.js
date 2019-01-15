@@ -9,25 +9,19 @@ import AssetDetail from './AssetDetail'
 import AssetCircuit from './AssetCircuit'
 
 const styles = theme => ({
-  dashboardContainer: {
-    // padding: "16px",
-    // height: "100%",
-    // margin: '16px',
-    // margin: 16,
-    // padding: 16,
-    height: 'calc(100vh - 56px - 32px)',
-    // height: 100,
-  },
-  /*
-  dashboardContainer: {
-    height: 'calc(100vh - 56px)',
+  root: {
+    backgroundColor: 'green',
+    height: 'calc(100vh - 56px - 24px)',
     [`${theme.breakpoints.up('xs')} and (orientation: landscape)`]: {
-      height: 'calc(100vh - 48px)',
+      backgroundColor: 'yellow',
+      height: 'calc(100vh - 48px - 24px)',
     },
     [theme.breakpoints.up('sm')]: {
-      height: 'calc(100vh - 64px)',
+      backgroundColor: 'orange',
+      height: 'calc(100vh - 64px - 24px)',
     },
   },
+  /*
   informationContainer: {
     height: '100%',
   },
@@ -52,30 +46,30 @@ const styles = theme => ({
     backgroundColor: 'yellow',
   },
   paper: {
-    // backgroundColor: 'black',
-    // textAlign: 'center',
-    // padding: theme.spacing.unit * 3,
-    // margin: '16px',
-    height: "100%",
-    // height: 100,
-    // height: '100vh',
+    height: '100%',
   }
 })
 
 const MapPage = props => {
   const { classes } = props
   return (
+    <Grid container className={classes.root}
+        spacing={24}>
+      <Grid item xs={8}>
+        <Paper className={classes.paper} />
+      </Grid>
+      <Grid item xs={4}>
+        <Paper className={classes.paper} />
+      </Grid>
+    </Grid>
+  )
+}
+
+export default withStyles(styles)(MapPage)
+
+    /*
     <div style={{ padding: 16 }}>
     <Grid container className={classes.dashboardContainer} spacing={16}>
-      <Grid item xs={6}>
-        <Paper className={classes.paper}>
-        </Paper>
-      </Grid>
-      <Grid item xs={6}>
-        <Paper className={classes.paper}>
-        </Paper>
-      </Grid>
-    {/*
       <Grid item xs={8}>
         <Grid container>
           <Grid item xs={9} className={classes.mapPanel}>
@@ -98,11 +92,5 @@ const MapPage = props => {
           </Grid>
         </Grid>
       </Grid>
-    */}
-
-    </Grid>
     </div>
-  )
-}
-
-export default withStyles(styles)(MapPage)
+    */
