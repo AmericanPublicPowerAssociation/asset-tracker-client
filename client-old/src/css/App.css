@@ -1,0 +1,11 @@
+body {
+  padding-top: 5rem;
+}
+
+.editing a,.editing button {
+  cursor: not-allowed;
+}
+
+.container {
+  width: 100%;
+}

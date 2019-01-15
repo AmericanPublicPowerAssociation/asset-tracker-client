@@ -1,0 +1,6 @@
+pyramid
+pyramid_jinja2
+waitress
+geoalchemy
+sqlalchemy
+pre-commit
