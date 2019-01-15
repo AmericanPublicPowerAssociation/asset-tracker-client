@@ -9,9 +9,7 @@ import {faPlusCircle} from '@fortawesome/free-solid-svg-icons'
 
 import '../css/AssetsGrid.css';
 
-
 library.add(faPlusCircle)
-
 
 const AssetsGrid = (props) => {
   const {assets, updateSelected, editMode, selectedAsset, toggleEdit} = props;
@@ -58,6 +56,5 @@ const AssetsGrid = (props) => {
     </div>
   );
 }
-
 
 export default AssetsGrid;

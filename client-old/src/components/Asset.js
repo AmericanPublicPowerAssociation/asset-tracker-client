@@ -7,9 +7,7 @@ import {faMapMarker} from '@fortawesome/free-solid-svg-icons'
 
 import '../css/AssetsGrid.css';
 
-
 library.add(faMapMarker)
-
 
 const Asset = (props) => {
   const {className, asset, editMode, onClickEvent} = props;
@@ -30,6 +28,5 @@ const Asset = (props) => {
     </Row>
   );
 }
-
 
 export default Asset;

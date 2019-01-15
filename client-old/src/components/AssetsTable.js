@@ -57,5 +57,4 @@ class AssetsTable extends Component {
   }
 }
 
-
 export default AssetsTable;

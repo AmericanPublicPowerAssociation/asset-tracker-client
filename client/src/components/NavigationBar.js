@@ -28,7 +28,9 @@ const NavigationBar = props => {
         <IconButton><MapIcon /></IconButton>
         <IconButton><TableIcon /></IconButton>
         <IconButton><ReportIcon /></IconButton>
-        <IconButton><Badge badgeContent={3} color='error'><AlertIcon /></Badge></IconButton>
+        <IconButton>
+          <Badge badgeContent={3} color='error'><AlertIcon /></Badge>
+        </IconButton>
         <IconButton><AccountIcon /></IconButton>
       </Toolbar>
     </AppBar>

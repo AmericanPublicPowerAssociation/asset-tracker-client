@@ -9,15 +9,12 @@ import AssetCircuit from './AssetCircuit'
 
 const styles = theme => ({
   root: {
-    // backgroundColor: 'green',
-    height: 'calc(100vh - 56px - 24px)',
+    height: `calc(100vh - 56px - ${theme.spacing.unit * 3}px)`,
     [`${theme.breakpoints.up('xs')} and (orientation: landscape)`]: {
-      // backgroundColor: 'yellow',
-      height: 'calc(100vh - 48px - 24px)',
+      height: `calc(100vh - 48px - ${theme.spacing.unit * 3}px)`,
     },
     [theme.breakpoints.up('sm')]: {
-      // backgroundColor: 'orange',
-      height: 'calc(100vh - 64px - 24px)',
+      height: `calc(100vh - 64px - ${theme.spacing.unit * 3}px)`,
     },
   },
   mapFrame: {
@@ -26,18 +23,12 @@ const styles = theme => ({
   detailFrame: {
     height: '100%',
   },
-  /*
-    maxHeight: 'calc(100vh - 56px)',
-    [`${theme.breakpoints.up('xs')} and (orientation: landscape)`]: {
-      maxHeight: 'calc(100vh - 48px)',
-    },
-    [theme.breakpoints.up('sm')]: {
-      maxHeight: 'calc(100vh - 64px)',
-    },
-    overflow: 'auto',
-  */
   mapPanel: {
     backgroundColor: 'red',
+  },
+  listPanel: {
+    maxWidth: theme.spacing.unit * 24,
+    overflow: 'auto',
   },
   circuitPanel: {
     backgroundColor: 'green',
@@ -53,14 +44,14 @@ const styles = theme => ({
 const MapPage = props => {
   const { classes } = props
   return (
-    <Grid container className={classes.root} spacing={24}>
+    <Grid container spacing={24} className={classes.root}>
       <Grid item xs={8}>
         <Paper className={classes.paper}>
           <Grid container className={classes.mapFrame}>
-            <Grid item xs={10} className={classes.mapPanel}>
+            <Grid item xs className={classes.mapPanel}>
               <AssetMap />
             </Grid>
-            <Grid item xs={2} className={classes.listPanel}>
+            <Grid item xs className={classes.listPanel}>
               <AssetFilter />
             </Grid>
           </Grid>
