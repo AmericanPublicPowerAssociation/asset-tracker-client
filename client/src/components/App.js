@@ -7,7 +7,7 @@ import MapPage from './MapPage'
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
   content: {
-    backgroundColor: 'blue',
+    // backgroundColor: 'blue',
     padding: 24,
   },
 })
