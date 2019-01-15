@@ -7,6 +7,12 @@ with open('requirements.txt') as f:
 with open('README.md') as f:
     DESCRIPTION = f.read()
 
+dev_requires = [
+    'pyramid_debugtoolbar',
+    'pytest',
+    'webtest',
+]
+
 setup(
     name='asset-tracker',
     version='0.1.0',
@@ -27,6 +33,9 @@ setup(
     setup_requires=[
         'pytest-runner',
     ],
+    extras_require={
+        'dev': dev_requires,
+    },
     install_requires=REQUIREMENTS,
     tests_require=[
         'mock',
@@ -34,4 +43,10 @@ setup(
         'pytest-mock',
         'werkzeug',
         'webob',
-    ])
+    ],
+    entry_points={
+        'paste.app_factory': [
+            'main = asset_tracker:main'
+            ],
+        }
+    )
