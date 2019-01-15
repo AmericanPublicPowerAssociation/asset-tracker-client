@@ -2,7 +2,7 @@ import json
 import random
 import string
 
-from models import (
+from .models import (
         database_connection, Asset, AssetSubType,
         AssetType, Product, Vendor, ProductVersion,
         Organization)
