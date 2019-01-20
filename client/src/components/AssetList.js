@@ -7,7 +7,9 @@ const ABC = [
 ]
 
 const AssetList = () => {
-  return ( {ABC.map(x => <b>({x.id})</b>} )
+  return (
+    <ul>{ABC.map(x => (x.id))}</ul>
+  )
 }
 
 export default AssetList
