@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import AssetTypeFilter from './AssetTypeFilter'
 import AssetList from './AssetList'
-import AssetMap from './AssetMap'
+// import AssetMap from './AssetMap'
 import AssetDetail from './AssetDetail'
 import AssetCircuit from './AssetCircuit'
 
@@ -50,7 +50,7 @@ const MapPage = props => {
         <Paper className={classes.paper}>
           <Grid container className={classes.mapFrame}>
             <Grid item xs className={classes.mapPanel}>
-              {/*<AssetMap />*/}
+              {/* <AssetMap /> */}
               <AssetList />
             </Grid>
             <Grid item xs className={classes.listPanel}>

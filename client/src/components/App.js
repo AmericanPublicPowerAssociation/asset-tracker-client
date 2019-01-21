@@ -1,7 +1,7 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import NavigationBar from './NavigationBar'
+import Navigation from './Navigation'
 import MapPage from './MapPage'
 
 const styles = theme => ({
@@ -16,14 +16,13 @@ const App = props => {
   return (
     <React.Fragment>
       <CssBaseline />
-      <NavigationBar />
+      <Navigation />
       <div className={classes.toolbar} />
-      <div className={classes.content}>
+      <main className={classes.content}>
         <MapPage />
-      </div>
+      </main>
     </React.Fragment>
   )
 }
 
 export default withStyles(styles)(App)
-
