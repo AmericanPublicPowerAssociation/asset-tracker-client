@@ -1,7 +1,12 @@
+export const CONTENT_PADDING = 24
+
+export const INFORMATION_DRAWER_WIDTH = 240
+export const FILTER_LIST_DRAWER_WIDTH = 240
+
 export const ADD_ASSET = 'ADD_ASSET'
 
 export const ASSET_TYPES = [
-	{id: '0', name: 'Station'},
+  {id: '0', name: 'Station'},
   {id: '1', name: 'Substation', children: [
     {id: '1.1', name: 'Transmission'},
     {id: '1.2', name: 'Distribution'},

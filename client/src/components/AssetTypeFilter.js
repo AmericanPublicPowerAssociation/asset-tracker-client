@@ -4,7 +4,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import { ASSET_TYPES } from '../constants'
 
-const AssetFilter = () => {
+const AssetTypeFilter = () => {
   return (
     <List disablePadding>
     {ASSET_TYPES.map(x => (
@@ -16,4 +16,4 @@ const AssetFilter = () => {
   )
 }
 
-export default AssetFilter
+export default AssetTypeFilter
