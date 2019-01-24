@@ -1,7 +1,7 @@
 export const CONTENT_PADDING = 24
 
-export const INFORMATION_DRAWER_WIDTH = 240
-export const FILTER_LIST_DRAWER_WIDTH = 240
+export const INFORMATION_DRAWER_WIDTH = 160
+export const FILTER_LIST_DRAWER_WIDTH = 160
 
 export const ADD_ASSET = 'ADD_ASSET'
 
