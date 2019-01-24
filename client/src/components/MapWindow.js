@@ -42,11 +42,11 @@ const styles = theme => ({
   },
   mapPanel: {
     backgroundColor: 'red',
+    minHeight: '50%',
   },
   listPanel: {
     backgroundColor: 'blue',
     overflow: 'auto',
-    maxWidth: INFORMATION_DRAWER_WIDTH,
   },
 })
 
@@ -65,10 +65,10 @@ const MapWindow = (props) => {
       [classes.windowWithFilterList]: isFilterListDrawerOpen,
     })}>
       <Grid container className={classes.frame} onClick={onItemSelect}>
-        <Grid item xs className={classes.mapPanel}>
+        <Grid item xs={12} sm={9} className={classes.mapPanel}>
           <AssetMap />
         </Grid>
-        <Grid item xs className={classes.listPanel}>
+        <Grid item xs={12} sm={3} className={classes.listPanel}>
           <AssetList />
         </Grid>
       </Grid>
