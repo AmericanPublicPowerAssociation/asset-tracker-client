@@ -1,4 +1,9 @@
-const visibleAssetIds = (state=[], action) => {
+const initialState = [
+  'a',
+  'b',
+]
+
+const visibleAssetIds = (state=initialState, action) => {
   return state
 }
 

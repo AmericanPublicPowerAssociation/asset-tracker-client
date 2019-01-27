@@ -9,7 +9,7 @@ import {
   FILTER_LIST_DRAWER_WIDTH,
 } from '../constants'
 import AssetMap from './AssetMap'
-import AssetList from './AssetList'
+import AssetListContainer from '../containers/AssetListContainer'
 
 const styles = theme => ({
   window: {
@@ -69,7 +69,7 @@ const MapWindow = (props) => {
           <AssetMap />
         </Grid>
         <Grid item xs={12} sm={3} className={classes.listPanel}>
-          <AssetList />
+          <AssetListContainer />
         </Grid>
       </Grid>
     </Paper>
