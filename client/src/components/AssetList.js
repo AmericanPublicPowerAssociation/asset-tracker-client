@@ -9,6 +9,7 @@ const AssetList = props => {
   } = props
   const {
     assetById,
+    highlightedAssetId,
     selectedAssetTypeIds,
     sortedAssetIds,
   } = props
@@ -27,6 +28,7 @@ const AssetList = props => {
           highlightAsset(assetId)
           onSelect()
         }}
+        selected={assetId === highlightedAssetId}
       >
         <ListItemText primary={assetById[assetId].name} />
       </ListItem>

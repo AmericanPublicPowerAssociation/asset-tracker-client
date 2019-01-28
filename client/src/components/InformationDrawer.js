@@ -11,6 +11,7 @@ const styles = {
     flexDirection: 'column',
     height: '100%',
     width: INFORMATION_DRAWER_WIDTH,
+    padding: '0 24px',
   },
   circuitPanel: {
     // backgroundColor: 'green',

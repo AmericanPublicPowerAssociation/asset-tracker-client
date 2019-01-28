@@ -1,5 +1,6 @@
 import {
   ADD_ASSET,
+  UPDATE_ASSET,
   HIGHLIGHT_ASSET,
   ADD_SELECTED_ASSET_TYPE,
   REMOVE_SELECTED_ASSET_TYPE,
@@ -9,6 +10,9 @@ import {
 
 export const addAsset = asset => ({
   type: ADD_ASSET, asset})
+
+export const updateAsset = asset => ({
+  type: UPDATE_ASSET, asset})
 
 export const highlightAsset = assetId => ({
   type: HIGHLIGHT_ASSET, assetId})

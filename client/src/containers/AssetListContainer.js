@@ -1,11 +1,10 @@
 import { connect } from 'react-redux'
-import {
-  highlightAsset,
-} from '../actions'
+import { highlightAsset } from '../actions'
 import AssetList from '../components/AssetList'
 
 const mapStateToProps = state => ({
   assetById: state.assetById,
+  highlightedAssetId: state.highlightedAssetId,
   selectedAssetTypeIds: state.selectedAssetTypeIds,
   sortedAssetIds: state.sortedAssetIds,
 })
