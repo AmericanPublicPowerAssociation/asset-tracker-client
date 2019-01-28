@@ -51,7 +51,10 @@ export const ASSET_TYPES = [
   ]},
   {id: 'X', name: 'Other'},
 ]
-
+export const ASSET_TYPE_BY_ID = ASSET_TYPES.reduce((obj, item) => {
+  obj[item.id] = item
+  return obj
+}, {})
 export const ASSET_BY_ID ={
   'station1': {'name': 'Station 1', 'typeId': '0'},
   'station2': {'name': 'Station 2', 'typeId': '0'},

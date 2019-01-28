@@ -5,6 +5,8 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
 import AssetTypeRadioButtons from './AssetTypeRadioButtons'
+import { ASSET_TYPE_BY_ID } from '../constants'
+import { getRandomString } from '../macros'
 
 class AssetAddDialog extends Component {
   state = {
@@ -21,10 +23,12 @@ class AssetAddDialog extends Component {
 
   handleOk = () => {
     const assetTypeId = this.state.assetTypeId
+    const assetTypeName = ASSET_TYPE_BY_ID[assetTypeId]['name']
+    const assetId = getRandomString(7)
     this.props.addSelectedAssetType(assetTypeId)
     this.props.addAsset({
-      'id': '' + Math.random(),
-      'name': 'XXX',
+      'id': assetId,
+      'name': assetTypeName + ' ' + assetId,
       'typeId': assetTypeId})
     this.props.onClose(assetTypeId)
   }
