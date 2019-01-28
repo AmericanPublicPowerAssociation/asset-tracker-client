@@ -83,8 +83,7 @@ const ApplicationBar = (props) => {
         ><AddIcon /></IconButton>
         <IconButton disabled><SearchIcon /></IconButton>
         <IconButton
-          className={classNames({
-            [isFilterListDrawerOpen]: classes.hide})}
+          className={(isFilterListDrawerOpen && classes.hide) || ''}
           onClick={onFilterIconClick}
         ><FilterListIcon /></IconButton>
       </Toolbar>
