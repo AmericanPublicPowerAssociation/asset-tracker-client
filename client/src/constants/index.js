@@ -48,3 +48,28 @@ export const ASSET_TYPES = [
   ]},
   {id: 'X', name: 'Other'},
 ]
+
+export const ASSET_BY_ID ={
+  'station1': {'name': 'Station 1', 'typeId': '0'},
+  'station2': {'name': 'Station 2', 'typeId': '0'},
+  'substation1': {'name': 'Substation 1', 'typeId': '1'},
+  'substation2': {'name': 'Substation 2', 'typeId': '1'},
+  'quality1': {'name': 'Power Quality 1', 'typeId': '2'},
+  'quality2': {'name': 'Power Quality 2', 'typeId': '2'},
+  'switch1': {'name': 'Switch 1', 'typeId': '3'},
+  'switch2': {'name': 'Switch 2', 'typeId': '3'},
+  'transformer1': {'name': 'Transformer 1', 'typeId': '4'},
+  'transformer2': {'name': 'Transformer 2', 'typeId': '4'},
+  'meter1': {'name': 'Meter 1', 'typeId': '5'},
+  'meter2': {'name': 'Meter 2', 'typeId': '5'},
+  'line1': {'name': 'Line 1', 'typeId': '6'},
+  'line2': {'name': 'Line 2', 'typeId': '6'},
+  'pole1': {'name': 'Pole 1', 'typeId': '7'},
+  'pole2': {'name': 'Pole 2', 'typeId': '7'},
+  'busbar1': {'name': 'Busbar 1', 'typeId': '8'},
+  'busbar2': {'name': 'Busbar 2', 'typeId': '8'},
+  'control1': {'name': 'Control 1', 'typeId': '9'},
+  'control2': {'name': 'Control 2', 'typeId': '9'},
+  'other1': {'name': 'Other 1', 'typeId': 'X'},
+  'other2': {'name': 'Other 2', 'typeId': 'X'},
+}

@@ -6,6 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import MenuIcon from '@material-ui/icons/Menu'
+import AddIcon from '@material-ui/icons/Add'
 import SearchIcon from '@material-ui/icons/Search'
 import FilterListIcon from '@material-ui/icons/FilterList'
 import {
@@ -51,6 +52,11 @@ const ApplicationBar = (props) => {
     isInformationDrawerOpen,
     isFilterListDrawerOpen,
   } = props
+  const {
+    onAddIconClick,
+    onFilterIconClick,
+    onMenuIconClick,
+  } = props
   const isRightDrawerOpen = isInformationDrawerOpen || isFilterListDrawerOpen
   return (
     <AppBar
@@ -65,17 +71,21 @@ const ApplicationBar = (props) => {
       <Toolbar>
         <IconButton
           className={classes.menuButton}
-          onClick={props.onMenuClick}
+          onClick={onMenuIconClick}
         ><MenuIcon /></IconButton>
         <Typography
           variant='h6'
           color='inherit'
           className={classes.grow}
         >Asset Tracker</Typography>
-        <IconButton><SearchIcon /></IconButton>
         <IconButton
-          className={isRightDrawerOpen && classes.hide}
-          onClick={props.onFilterListClick}
+          onClick={onAddIconClick}
+        ><AddIcon /></IconButton>
+        <IconButton disabled><SearchIcon /></IconButton>
+        <IconButton
+          className={classNames({
+            [isFilterListDrawerOpen]: classes.hide})}
+          onClick={onFilterIconClick}
         ><FilterListIcon /></IconButton>
       </Toolbar>
     </AppBar>

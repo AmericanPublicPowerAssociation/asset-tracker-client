@@ -5,7 +5,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Checkbox from '@material-ui/core/Checkbox'
 import { ASSET_TYPES } from '../constants'
 
-const AssetTypeFilter = props => {
+const AssetTypeCheckboxes = props => {
   const { selectedAssetTypeIds } = props
   const { onAssetTypeClick } = props
   return (
@@ -28,7 +28,7 @@ const AssetTypeFilter = props => {
   )
 }
 
-export default AssetTypeFilter
+export default AssetTypeCheckboxes
 
 /*
 */

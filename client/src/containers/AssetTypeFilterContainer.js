@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { toggleSelectedAssetType } from '../actions'
-import AssetTypeFilter from '../components/AssetTypeFilter'
+import AssetTypeCheckboxes from '../components/AssetTypeCheckboxes'
 
 const mapStateToProps = state => ({
   selectedAssetTypeIds: state.selectedAssetTypeIds,
@@ -14,4 +14,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(AssetTypeFilter)
+)(AssetTypeCheckboxes)

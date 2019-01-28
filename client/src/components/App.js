@@ -12,6 +12,7 @@ import NavigationDrawer from './NavigationDrawer'
 import InformationDrawer from './InformationDrawer'
 import FilterListDrawer from './FilterListDrawer'
 import MapWindow from './MapWindow'
+import AssetAddDialog from './AssetAddDialog'
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -41,6 +42,7 @@ class App extends Component {
     isNavigationDrawerOpen: false,
     isInformationDrawerOpen: false,
     isFilterListDrawerOpen: false,
+    isAssetAddDialogOpen: true,
   }
 
   handleNavigationDrawerOpen = () => {
@@ -51,20 +53,21 @@ class App extends Component {
   handleInformationDrawerOpen = () => {
     this.setState({
       isInformationDrawerOpen: true,
-      isFilterListDrawerOpen: false,
-    })
-  }
+      isFilterListDrawerOpen: false})}
   handleInformationDrawerClose = () => {
     this.setState({isInformationDrawerOpen: false})}
 
   handleFilterListDrawerOpen = () => {
     this.setState({
       isFilterListDrawerOpen: true,
-      isInformationDrawerOpen: false,
-    })
-  }
+      isInformationDrawerOpen: false})}
   handleFilterListDrawerClose = () => {
     this.setState({isFilterListDrawerOpen: false})}
+
+  handleAssetAddDialogOpen = () => {
+    this.setState({isAssetAddDialogOpen: true})}
+  handleAssetAddDialogClose = () => {
+    this.setState({isAssetAddDialogOpen: false})}
 
   render() {
     const { classes } = this.props
@@ -72,6 +75,7 @@ class App extends Component {
       isNavigationDrawerOpen,
       isInformationDrawerOpen,
       isFilterListDrawerOpen,
+      isAssetAddDialogOpen,
     } = this.state
     const isRightDrawerOpen = isInformationDrawerOpen || isFilterListDrawerOpen
     return (
@@ -80,8 +84,9 @@ class App extends Component {
         <ApplicationBar
           isInformationDrawerOpen={isInformationDrawerOpen}
           isFilterListDrawerOpen={isFilterListDrawerOpen}
-          onMenuClick={this.handleNavigationDrawerOpen}
-          onFilterListClick={this.handleFilterListDrawerOpen}
+          onMenuIconClick={this.handleNavigationDrawerOpen}
+          onAddIconClick={this.handleAssetAddDialogOpen}
+          onFilterIconClick={this.handleFilterListDrawerOpen}
         />
         <div className={classes.toolbar} />
         <main className={classNames(classes.content, {
@@ -102,6 +107,10 @@ class App extends Component {
         <FilterListDrawer
           isOpen={isFilterListDrawerOpen}
           onClose={this.handleFilterListDrawerClose}
+        />
+        <AssetAddDialog
+          open={isAssetAddDialogOpen}
+          onClose={this.handleAssetAddDialogClose}
         />
       </Fragment>
     )
