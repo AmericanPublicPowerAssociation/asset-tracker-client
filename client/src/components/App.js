@@ -12,7 +12,7 @@ import NavigationDrawer from './NavigationDrawer'
 import InformationDrawer from './InformationDrawer'
 import FilterListDrawer from './FilterListDrawer'
 import MapWindow from './MapWindow'
-import AssetAddDialog from './AssetAddDialog'
+import AssetAddDialogContainer from '../containers/AssetAddDialogContainer'
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -42,7 +42,7 @@ class App extends Component {
     isNavigationDrawerOpen: false,
     isInformationDrawerOpen: false,
     isFilterListDrawerOpen: false,
-    isAssetAddDialogOpen: true,
+    isAssetAddDialogOpen: false,
   }
 
   handleNavigationDrawerOpen = () => {
@@ -66,7 +66,7 @@ class App extends Component {
 
   handleAssetAddDialogOpen = () => {
     this.setState({isAssetAddDialogOpen: true})}
-  handleAssetAddDialogClose = () => {
+  handleAssetAddDialogClose = assetTypeId => {
     this.setState({isAssetAddDialogOpen: false})}
 
   render() {
@@ -108,7 +108,7 @@ class App extends Component {
           isOpen={isFilterListDrawerOpen}
           onClose={this.handleFilterListDrawerClose}
         />
-        <AssetAddDialog
+        <AssetAddDialogContainer
           open={isAssetAddDialogOpen}
           onClose={this.handleAssetAddDialogClose}
         />

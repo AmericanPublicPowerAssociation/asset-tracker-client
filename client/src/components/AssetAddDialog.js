@@ -12,14 +12,21 @@ class AssetAddDialog extends Component {
   }
 
   handleAssetTypeClick = assetTypeId => {
-    this.setState({assetTypeId: assetTypeId})}
-
-  handleCancel = () => {
-    this.props.onClose()
+    this.props.onAssetTypeClick(assetTypeId)
+    this.setState({assetTypeId: assetTypeId})
   }
 
+  handleCancel = () => {
+    this.props.onClose()}
+
   handleOk = () => {
-    this.props.onClose(this.state.assetTypeId)
+    const assetTypeId = this.state.assetTypeId
+    this.props.addSelectedAssetType(assetTypeId)
+    this.props.addAsset({
+      'id': '' + Math.random(),
+      'name': 'XXX',
+      'typeId': assetTypeId})
+    this.props.onClose(assetTypeId)
   }
 
   render() {

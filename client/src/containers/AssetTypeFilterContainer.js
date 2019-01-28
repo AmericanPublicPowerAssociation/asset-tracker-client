@@ -8,7 +8,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onAssetTypeClick: assetTypeId => {dispatch(
-    toggleSelectedAssetType(assetTypeId))}
+    toggleSelectedAssetType(assetTypeId))},
 })
 
 export default connect(
