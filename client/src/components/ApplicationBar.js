@@ -17,6 +17,9 @@ const styles = theme => ({
   grow: {
     flexGrow: 1,
   },
+  hide: {
+    display: 'none',
+  },
   appBar: {
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
@@ -71,6 +74,7 @@ const ApplicationBar = (props) => {
         >Asset Tracker</Typography>
         <IconButton><SearchIcon /></IconButton>
         <IconButton
+          className={isRightDrawerOpen && classes.hide}
           onClick={props.onFilterListClick}
         ><FilterListIcon /></IconButton>
       </Toolbar>
