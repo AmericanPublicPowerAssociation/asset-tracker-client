@@ -1,9 +1,10 @@
 export const CONTENT_PADDING = 24
 
-export const INFORMATION_DRAWER_WIDTH = 160
-export const FILTER_LIST_DRAWER_WIDTH = 160
+export const INFORMATION_DRAWER_WIDTH = 256
+export const FILTER_LIST_DRAWER_WIDTH = 256
 
 export const ADD_ASSET = 'ADD_ASSET'
+export const TOGGLE_SELECTED_ASSET_TYPE = 'TOGGLE_SELECTED_ASSET_TYPE'
 
 export const ASSET_TYPES = [
   {id: '0', name: 'Station'},

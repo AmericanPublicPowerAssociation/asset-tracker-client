@@ -3,7 +3,8 @@ import AssetList from '../components/AssetList'
 
 const mapStateToProps = state => ({
   assetById: state.assetById,
-  visibleAssetIds: state.visibleAssetIds,
+  selectedAssetTypeIds: state.selectedAssetTypeIds,
+  sortedAssetIds: state.sortedAssetIds,
 })
 
 export default connect(

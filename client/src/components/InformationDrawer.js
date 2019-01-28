@@ -22,7 +22,7 @@ const styles = {
   },
 }
 
-const InformationDrawer = (props) => {
+const InformationDrawer = props => {
   const { classes, isOpen, onClose } = props
   return (
     <PersistentRightDrawer

@@ -1,7 +1,12 @@
 import React, { Component, Fragment } from 'react'
+import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import { CONTENT_PADDING } from '../constants'
+import {
+  CONTENT_PADDING,
+  INFORMATION_DRAWER_WIDTH,
+  FILTER_LIST_DRAWER_WIDTH,
+} from '../constants'
 import ApplicationBar from './ApplicationBar'
 import NavigationDrawer from './NavigationDrawer'
 import InformationDrawer from './InformationDrawer'
@@ -12,6 +17,22 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
   content: {
     padding: CONTENT_PADDING,
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  contentTransition: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  contentWithInformation: {
+    marginRight: INFORMATION_DRAWER_WIDTH,
+  },
+  contentWithFilterList: {
+    marginRight: FILTER_LIST_DRAWER_WIDTH,
   },
 })
 
@@ -52,6 +73,7 @@ class App extends Component {
       isInformationDrawerOpen,
       isFilterListDrawerOpen,
     } = this.state
+    const isRightDrawerOpen = isInformationDrawerOpen || isFilterListDrawerOpen
     return (
       <Fragment>
         <CssBaseline />
@@ -62,12 +84,12 @@ class App extends Component {
           onFilterListClick={this.handleFilterListDrawerOpen}
         />
         <div className={classes.toolbar} />
-        <main className={classes.content}>
-          <MapWindow
-            isInformationDrawerOpen={isInformationDrawerOpen}
-            isFilterListDrawerOpen={isFilterListDrawerOpen}
-            onItemSelect={this.handleInformationDrawerOpen}
-          />
+        <main className={classNames(classes.content, {
+          [classes.contentTransition]: isRightDrawerOpen,
+          [classes.contentWithInformation]: isInformationDrawerOpen,
+          [classes.contentWithFilterList]: isFilterListDrawerOpen,
+        })}>
+          <MapWindow onItemSelect={this.handleInformationDrawerOpen} />
         </main>
         <NavigationDrawer
           isOpen={isNavigationDrawerOpen}
