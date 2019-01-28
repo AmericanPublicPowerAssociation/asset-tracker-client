@@ -67,7 +67,9 @@ class App extends Component {
   handleAssetAddDialogOpen = () => {
     this.setState({isAssetAddDialogOpen: true})}
   handleAssetAddDialogClose = assetTypeId => {
-    this.setState({isAssetAddDialogOpen: false})}
+    this.setState({isAssetAddDialogOpen: false})
+    this.handleInformationDrawerOpen()
+  }
 
   render() {
     const { classes } = this.props
@@ -94,7 +96,9 @@ class App extends Component {
           [classes.contentWithInformation]: isInformationDrawerOpen,
           [classes.contentWithFilterList]: isFilterListDrawerOpen,
         })}>
-          <MapWindow onItemSelect={this.handleInformationDrawerOpen} />
+        <MapWindow
+          onSelect={this.handleInformationDrawerOpen}
+        />
         </main>
         <NavigationDrawer
           isOpen={isNavigationDrawerOpen}

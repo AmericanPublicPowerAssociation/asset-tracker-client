@@ -30,6 +30,7 @@ class AssetAddDialog extends Component {
       'id': assetId,
       'name': assetTypeName + ' ' + assetId,
       'typeId': assetTypeId})
+    this.props.highlightAsset(assetId)
     this.props.onClose(assetTypeId)
   }
 

@@ -30,15 +30,20 @@ const styles = theme => ({
 })
 
 const MapWindow = (props) => {
-  const { classes, onItemSelect } = props
+  const { classes } = props
+  const { onSelect } = props
   return (
     <Paper className={classes.window}>
-      <Grid container className={classes.frame} onClick={onItemSelect}>
+      <Grid container className={classes.frame}>
         <Grid item xs={12} sm={9} className={classes.mapPanel}>
-          <AssetMap />
+          <AssetMap
+            onSelect={onSelect}
+          />
         </Grid>
         <Grid item xs={12} sm={3} className={classes.listPanel}>
-          <AssetListContainer />
+          <AssetListContainer
+            onSelect={onSelect}
+          />
         </Grid>
       </Grid>
     </Paper>

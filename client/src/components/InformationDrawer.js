@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles'
 import { INFORMATION_DRAWER_WIDTH } from '../constants'
 import PersistentRightDrawer from './PersistentRightDrawer'
 import AssetCircuit from './AssetCircuit'
-import AssetDetail from './AssetDetail'
+import AssetDetailContainer from '../containers/AssetDetailContainer'
 
 const styles = {
   frame: {
@@ -13,11 +13,11 @@ const styles = {
     width: INFORMATION_DRAWER_WIDTH,
   },
   circuitPanel: {
-    backgroundColor: 'green',
+    // backgroundColor: 'green',
     flexGrow: 1,
   },
   detailPanel: {
-    backgroundColor: 'yellow',
+    // backgroundColor: 'yellow',
     flexGrow: 2,
   },
 }
@@ -34,7 +34,7 @@ const InformationDrawer = props => {
           <AssetCircuit />
         </div>
         <div className={classes.detailPanel}>
-          <AssetDetail />
+          <AssetDetailContainer />
         </div>
       </div>
     </PersistentRightDrawer>

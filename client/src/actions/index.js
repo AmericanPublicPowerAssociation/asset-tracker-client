@@ -1,5 +1,6 @@
 import {
   ADD_ASSET,
+  HIGHLIGHT_ASSET,
   ADD_SELECTED_ASSET_TYPE,
   REMOVE_SELECTED_ASSET_TYPE,
   TOGGLE_SELECTED_ASSET_TYPE,
@@ -8,6 +9,9 @@ import {
 
 export const addAsset = asset => ({
   type: ADD_ASSET, asset})
+
+export const highlightAsset = assetId => ({
+  type: HIGHLIGHT_ASSET, assetId})
 
 export const addSelectedAssetType = assetTypeId => ({
   type: ADD_SELECTED_ASSET_TYPE, assetTypeId})
