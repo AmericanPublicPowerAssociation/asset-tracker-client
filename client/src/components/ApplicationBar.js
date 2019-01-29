@@ -85,6 +85,7 @@ const ApplicationBar = (props) => {
           variant='h6'
           color='inherit'
           className={classes.grow}
+          noWrap
         >Asset Tracker</Typography>
         <IconButton
           onClick={onAddIconClick}
