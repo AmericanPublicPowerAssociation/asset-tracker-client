@@ -54,7 +54,7 @@ const styles = theme => ({
   },
 })
 
-const ApplicationBar = (props) => {
+const ApplicationBar = props => {
   const {
     classes,
     isInformationDrawerOpen,

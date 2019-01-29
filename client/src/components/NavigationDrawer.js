@@ -11,7 +11,7 @@ import ReportIcon from '@material-ui/icons/Assessment'
 import AlertIcon from '@material-ui/icons/Notifications'
 import AccountIcon from '@material-ui/icons/AccountCircle'
 
-const NavigationDrawer = (props) => {
+const NavigationDrawer = props => {
   const { onClose, ...etc } = props
   return (
     <Drawer

@@ -1,6 +1,10 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import classNames from 'classnames'
-import { withStyles } from '@material-ui/core/styles'
+import {
+  MuiThemeProvider,
+  createMuiTheme,
+  withStyles,
+} from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import {
   CONTENT_PADDING,
@@ -13,6 +17,9 @@ import InformationDrawer from './InformationDrawer'
 import FilterListDrawer from './FilterListDrawer'
 import MapWindow from './MapWindow'
 import AssetAddDialogContainer from '../containers/AssetAddDialogContainer'
+
+const brightTheme = createMuiTheme()
+const darkTheme = createMuiTheme({palette: {type: 'dark'}})
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -45,6 +52,7 @@ const styles = theme => ({
 
 class App extends Component {
   state = {
+    isDark: false,
     isNavigationDrawerOpen: false,
     isInformationDrawerOpen: false,
     isFilterListDrawerOpen: false,
@@ -80,6 +88,7 @@ class App extends Component {
   render() {
     const { classes } = this.props
     const {
+      isDark,
       isNavigationDrawerOpen,
       isInformationDrawerOpen,
       isFilterListDrawerOpen,
@@ -87,7 +96,7 @@ class App extends Component {
     } = this.state
     const isRightDrawerOpen = isInformationDrawerOpen || isFilterListDrawerOpen
     return (
-      <Fragment>
+      <MuiThemeProvider theme={isDark ? darkTheme : brightTheme}>
         <CssBaseline />
         <ApplicationBar
           isInformationDrawerOpen={isInformationDrawerOpen}
@@ -122,7 +131,7 @@ class App extends Component {
           open={isAssetAddDialogOpen}
           onClose={this.handleAssetAddDialogClose}
         />
-      </Fragment>
+      </MuiThemeProvider>
     )
   }
 }

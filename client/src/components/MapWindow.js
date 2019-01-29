@@ -29,7 +29,7 @@ const styles = theme => ({
   },
 })
 
-const MapWindow = (props) => {
+const MapWindow = props => {
   const { classes } = props
   const { onSelect } = props
   return (
