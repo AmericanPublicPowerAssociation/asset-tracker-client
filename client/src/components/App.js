@@ -31,9 +31,15 @@ const styles = theme => ({
   },
   contentWithInformation: {
     marginRight: INFORMATION_DRAWER_WIDTH,
+    [theme.breakpoints.down('md')]: {
+      marginRight: 256,
+    },
   },
   contentWithFilterList: {
     marginRight: FILTER_LIST_DRAWER_WIDTH,
+    [theme.breakpoints.down('md')]: {
+      marginRight: 256,
+    },
   },
 })
 
@@ -101,15 +107,15 @@ class App extends Component {
         />
         </main>
         <NavigationDrawer
-          isOpen={isNavigationDrawerOpen}
+          open={isNavigationDrawerOpen}
           onClose={this.handleNavigationDrawerClose}
         />
         <InformationDrawer
-          isOpen={isInformationDrawerOpen}
+          open={isInformationDrawerOpen}
           onClose={this.handleInformationDrawerClose}
         />
         <FilterListDrawer
-          isOpen={isFilterListDrawerOpen}
+          open={isFilterListDrawerOpen}
           onClose={this.handleFilterListDrawerClose}
         />
         <AssetAddDialogContainer

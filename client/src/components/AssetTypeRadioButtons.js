@@ -18,7 +18,7 @@ const AssetTypeRadioButtons = props => {
         control={<Radio />}
         value={x.id}
         label={x.name}
-        disabled={x.id !== '7'}
+        disabled={!['0', '1', '5', '7'].includes(x.id)}
       />
     ))}
     </RadioGroup>

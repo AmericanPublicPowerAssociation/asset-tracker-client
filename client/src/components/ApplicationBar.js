@@ -36,10 +36,18 @@ const styles = theme => ({
   appBarWithInformation: {
     width: `calc(100% - ${INFORMATION_DRAWER_WIDTH}px)`,
     marginRight: INFORMATION_DRAWER_WIDTH,
+    [theme.breakpoints.down('md')]: {
+      width: `calc(100% - 256px)`,
+      marginRight: 256,
+    },
   },
   appBarWithFilterList: {
     width: `calc(100% - ${FILTER_LIST_DRAWER_WIDTH}px)`,
     marginRight: FILTER_LIST_DRAWER_WIDTH,
+    [theme.breakpoints.down('md')]: {
+      width: `calc(100% - 256px)`,
+      marginRight: 256,
+    },
   },
   menuButton: {
     marginRight: 16,

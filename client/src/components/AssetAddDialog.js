@@ -14,7 +14,6 @@ class AssetAddDialog extends Component {
   }
 
   handleAssetTypeClick = assetTypeId => {
-    this.props.onAssetTypeClick(assetTypeId)
     this.setState({assetTypeId: assetTypeId})
   }
 

@@ -12,9 +12,12 @@ import AlertIcon from '@material-ui/icons/Notifications'
 import AccountIcon from '@material-ui/icons/AccountCircle'
 
 const NavigationDrawer = (props) => {
-  const { isOpen, onClose } = props
+  const { onClose, ...etc } = props
   return (
-    <Drawer open={isOpen} onClose={onClose}>
+    <Drawer
+      onClose={onClose}
+      {...etc}
+    >
       <List>
         <ListItem button>
           <ListItemIcon><MapIcon /></ListItemIcon>
