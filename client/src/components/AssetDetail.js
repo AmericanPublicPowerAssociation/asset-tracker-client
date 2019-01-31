@@ -33,7 +33,7 @@ const AssetDetail = props => {
   } = props
   const asset = assetById[highlightedAssetId]
   return (
-    <form>
+    <form onSubmit={event => event.preventDefault()}>
       <TextField
         value={(asset && asset.name) || ''}
         fullWidth

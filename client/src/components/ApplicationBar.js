@@ -7,6 +7,8 @@ import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import MenuIcon from '@material-ui/icons/Menu'
 import AddIcon from '@material-ui/icons/Add'
+import SunnyIcon from '@material-ui/icons/WbSunny'
+import SunnyOutlinedIcon from '@material-ui/icons/WbSunnyOutlined'
 import SearchIcon from '@material-ui/icons/Search'
 import FilterListIcon from '@material-ui/icons/FilterList'
 import {
@@ -57,13 +59,15 @@ const styles = theme => ({
 const ApplicationBar = props => {
   const {
     classes,
+    isDark,
     isInformationDrawerOpen,
     isFilterListDrawerOpen,
   } = props
   const {
-    onAddIconClick,
-    onFilterIconClick,
     onMenuIconClick,
+    onAddIconClick,
+    onThemeIconClick,
+    onFilterIconClick,
   } = props
   const isRightDrawerOpen = isInformationDrawerOpen || isFilterListDrawerOpen
   return (
@@ -90,6 +94,9 @@ const ApplicationBar = props => {
         <IconButton
           onClick={onAddIconClick}
         ><AddIcon /></IconButton>
+        <IconButton
+          onClick={onThemeIconClick}
+        >{isDark ? <SunnyIcon /> : <SunnyOutlinedIcon />}</IconButton>
         <IconButton disabled><SearchIcon /></IconButton>
         <IconButton
           className={(isFilterListDrawerOpen && classes.hide) || ''}

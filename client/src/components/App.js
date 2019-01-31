@@ -18,8 +18,18 @@ import FilterListDrawer from './FilterListDrawer'
 import MapWindow from './MapWindow'
 import AssetAddDialogContainer from '../containers/AssetAddDialogContainer'
 
-const brightTheme = createMuiTheme()
-const darkTheme = createMuiTheme({palette: {type: 'dark'}})
+var theme = {
+  typography: {
+    useNextVariants: true,
+  },
+}
+const brightTheme = createMuiTheme(theme)
+const darkTheme = createMuiTheme({
+  ...theme,
+  palette: {
+    type: 'dark',
+  },
+})
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -82,8 +92,10 @@ class App extends Component {
     this.setState({isAssetAddDialogOpen: true})}
   handleAssetAddDialogClose = assetTypeId => {
     this.setState({isAssetAddDialogOpen: false})
-    this.handleInformationDrawerOpen()
-  }
+    this.handleInformationDrawerOpen()}
+
+  handleThemeToggle = () => {
+    this.setState({isDark: !this.state.isDark})}
 
   render() {
     const { classes } = this.props
@@ -99,10 +111,12 @@ class App extends Component {
       <MuiThemeProvider theme={isDark ? darkTheme : brightTheme}>
         <CssBaseline />
         <ApplicationBar
+          isDark={isDark}
           isInformationDrawerOpen={isInformationDrawerOpen}
           isFilterListDrawerOpen={isFilterListDrawerOpen}
           onMenuIconClick={this.handleNavigationDrawerOpen}
           onAddIconClick={this.handleAssetAddDialogOpen}
+          onThemeIconClick={this.handleThemeToggle}
           onFilterIconClick={this.handleFilterListDrawerOpen}
         />
         <div className={classes.toolbar} />
