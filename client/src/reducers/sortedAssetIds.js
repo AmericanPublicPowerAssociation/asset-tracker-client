@@ -1,9 +1,12 @@
 import {
   ADD_ASSET,
+} from '../constants'
+import {
   ASSET_BY_ID,
+  SORTED_ASSET_IDS,
 } from '../constants'
 
-const initialState = Object.keys(ASSET_BY_ID)
+const initialState = SORTED_ASSET_IDS
 
 const sortedAssetIds = (state=initialState, action) => {
   const { asset } = action

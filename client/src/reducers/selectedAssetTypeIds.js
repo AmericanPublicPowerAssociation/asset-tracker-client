@@ -3,8 +3,11 @@ import {
   REMOVE_SELECTED_ASSET_TYPE,
   TOGGLE_SELECTED_ASSET_TYPE,
 } from '../constants'
+import {
+  SELECTED_ASSET_TYPE_IDS,
+} from '../constants'
 
-const initialState = ['6']
+const initialState = SELECTED_ASSET_TYPE_IDS
 
 const selectedAssetTypeIds = (state=initialState, action) => {
   const { assetTypeId } = action

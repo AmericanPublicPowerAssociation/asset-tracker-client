@@ -5,12 +5,15 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
 import AssetTypeRadioButtons from './AssetTypeRadioButtons'
-import { ASSET_TYPE_BY_ID } from '../constants'
+import {
+  ASSET_TYPE_BY_ID,
+  DEFAULT_ASSET_TYPE_ID,
+} from '../constants'
 import { getRandomString } from '../macros'
 
 class AssetAddDialog extends Component {
   state = {
-    assetTypeId: '7',
+    assetTypeId: DEFAULT_ASSET_TYPE_ID,
   }
 
   handleAssetTypeClick = assetTypeId => {
