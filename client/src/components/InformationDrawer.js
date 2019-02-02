@@ -43,7 +43,14 @@ const styles = theme => ({
 })
 
 const InformationDrawer = props => {
-  const { classes, onClose, ...etc } = props
+  const {
+    classes,
+    exposedAssetKey,
+    onClose,
+    onAssetKeyOpen,
+    onAssetKeyClose,
+    ...etc
+  } = props
   return (
     <Drawer
       className={classes.drawer}
@@ -64,7 +71,11 @@ const InformationDrawer = props => {
           <AssetCircuit />
         </div>
         <div className={classes.detailPanel}>
-          <AssetDetailContainer />
+          <AssetDetailContainer
+            exposedAssetKey={exposedAssetKey}
+            onAssetKeyOpen={onAssetKeyOpen}
+            onAssetKeyClose={onAssetKeyClose}
+          />
         </div>
       </div>
     </Drawer>

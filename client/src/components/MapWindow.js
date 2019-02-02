@@ -32,6 +32,7 @@ const styles = theme => ({
 const MapWindow = props => {
   const { classes } = props
   const { onSelect } = props
+  const { exposedAssetKey } = props
   return (
     <Paper className={classes.window}>
       <Grid container className={classes.frame}>
@@ -43,6 +44,7 @@ const MapWindow = props => {
         <Grid item xs={12} sm={3} className={classes.listPanel}>
           <AssetListContainer
             onSelect={onSelect}
+            exposedAssetKey={exposedAssetKey}
           />
         </Grid>
       </Grid>

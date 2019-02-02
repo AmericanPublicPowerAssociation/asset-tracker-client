@@ -67,6 +67,7 @@ class App extends Component {
     isInformationDrawerOpen: false,
     isFilterListDrawerOpen: false,
     isAssetAddDialogOpen: false,
+    exposedAssetKey: null,
   }
 
   handleNavigationDrawerOpen = () => {
@@ -97,6 +98,11 @@ class App extends Component {
   handleThemeToggle = () => {
     this.setState({isDark: !this.state.isDark})}
 
+  handleAssetKeyOpen = assetKey => {
+    this.setState({exposedAssetKey: assetKey})}
+  handleAssetKeyClose = () => {
+    this.setState({exposedAssetKey: null})}
+
   render() {
     const { classes } = this.props
     const {
@@ -105,6 +111,7 @@ class App extends Component {
       isInformationDrawerOpen,
       isFilterListDrawerOpen,
       isAssetAddDialogOpen,
+      exposedAssetKey,
     } = this.state
     const isRightDrawerOpen = isInformationDrawerOpen || isFilterListDrawerOpen
     return (
@@ -127,6 +134,7 @@ class App extends Component {
         })}>
         <MapWindow
           onSelect={this.handleInformationDrawerOpen}
+          exposedAssetKey={exposedAssetKey}
         />
         </main>
         <NavigationDrawer
@@ -135,7 +143,10 @@ class App extends Component {
         />
         <InformationDrawer
           open={isInformationDrawerOpen}
+          exposedAssetKey={exposedAssetKey}
           onClose={this.handleInformationDrawerClose}
+          onAssetKeyOpen={this.handleAssetKeyOpen}
+          onAssetKeyClose={this.handleAssetKeyClose}
         />
         <FilterListDrawer
           open={isFilterListDrawerOpen}

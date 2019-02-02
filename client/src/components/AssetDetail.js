@@ -5,6 +5,7 @@ import FormControl from '@material-ui/core/FormControl'
 import FormLabel from '@material-ui/core/FormLabel'
 import Chip from '@material-ui/core/Chip'
 import AddIcon from '@material-ui/icons/Add'
+import CancelIcon from '@material-ui/icons/Clear'
 
 const styles = theme => ({
   assetName: {
@@ -23,14 +24,18 @@ const styles = theme => ({
 })
 
 const AssetDetail = props => {
-  const { classes } = props
   const {
+    classes,
+    // Get local variables
+    exposedAssetKey,
+    onAssetKeyOpen,
+    onAssetKeyClose,
+    // Get global variables
     assetById,
     highlightedAssetId,
-  } = props
-  const {
     updateAsset,
   } = props
+
   const asset = assetById[highlightedAssetId]
   const connectedIds = (asset && asset.connectedIds) || []
   const parentIds = (asset && asset.parentIds) || []
@@ -62,7 +67,8 @@ const AssetDetail = props => {
         ))}
           <Chip
             className={classes.chip}
-            label={<AddIcon />}
+            label={'connectedIds' === exposedAssetKey ? <CancelIcon /> : <AddIcon />}
+            onClick={() => 'connectedIds' === exposedAssetKey ?  onAssetKeyClose() : onAssetKeyOpen('connectedIds')}
             color='primary'
           />
         </div>
@@ -77,7 +83,8 @@ const AssetDetail = props => {
         ))}
           <Chip
             className={classes.chip}
-            label={<AddIcon />}
+            label={'parentIds' === exposedAssetKey ? <CancelIcon /> : <AddIcon />}
+            onClick={() => 'parentIds' === exposedAssetKey ?  onAssetKeyClose() : onAssetKeyOpen('parentIds')}
             color='primary'
           />
         </div>
@@ -92,7 +99,8 @@ const AssetDetail = props => {
         ))}
           <Chip
             className={classes.chip}
-            label={<AddIcon />}
+            label={'childIds' === exposedAssetKey ? <CancelIcon /> : <AddIcon />}
+            onClick={() => 'childIds' === exposedAssetKey ?  onAssetKeyClose() : onAssetKeyOpen('childIds')}
             color='primary'
           />
         </div>
