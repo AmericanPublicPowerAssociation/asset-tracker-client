@@ -20,19 +20,23 @@ const NavigationDrawer = props => {
       {...etc}
     >
       <List>
-        <Link to='/'>
-          <ListItem button>
-            <ListItemIcon><MapIcon /></ListItemIcon>
-            <ListItemText primary='Maps' />
-          </ListItem>
-        </Link>
+        <ListItem
+          {...{to: '/'}}
+          component={ Link }
+          button
+        >
+          <ListItemIcon><MapIcon /></ListItemIcon>
+          <ListItemText primary='Maps' />
+        </ListItem>
 
-        <Link to='/tables'>
-          <ListItem button>
-            <ListItemIcon><TableIcon /></ListItemIcon>
-            <ListItemText primary='Tables' />
-          </ListItem>
-        </Link>
+        <ListItem
+          {...{to: '/tables'}}
+          component={ Link }
+          button
+        >
+          <ListItemIcon><TableIcon /></ListItemIcon>
+          <ListItemText primary='Tables' />
+        </ListItem>
 
         <ListItem button>
           <ListItemIcon><ReportIcon /></ListItemIcon>
