@@ -1,10 +1,5 @@
-import {
-  ADD_ASSET,
-} from '../constants'
-import {
-  ASSET_BY_ID,
-  SORTED_ASSET_IDS,
-} from '../constants'
+import { ADD_ASSET } from '../constants'
+import { SORTED_ASSET_IDS } from '../constants'
 
 const initialState = SORTED_ASSET_IDS
 
