@@ -104,7 +104,15 @@ export const ASSET_BY_ID = {
     name: 'Line 1',
     typeId: 'l',
     connectedIds: ['transformer1', 'transformer2'],
-    childIds: ['pole1', 'pole2']},
+    childIds: ['pole1a', 'pole1b']},
+  pole1a: {
+    name: 'Pole 1A',
+    typeId: 'p',
+    parentIds: ['line1']},
+  pole1b: {
+    name: 'Pole 1B',
+    typeId: 'p',
+    parentIds: ['line1']},
   substation1: {
     name: 'Substation 1',
     typeId: 's',

@@ -32,6 +32,10 @@ const AssetDetail = props => {
     updateAsset,
   } = props
   const asset = assetById[highlightedAssetId]
+  const connectedIds = (asset && asset.connectedIds) || []
+  const parentIds = (asset && asset.parentIds) || []
+  const childIds = (asset && asset.childIds) || []
+
   return (
     <form onSubmit={event => event.preventDefault()}>
       <TextField
@@ -48,56 +52,47 @@ const AssetDetail = props => {
           })
         )}
       />
-      <FormControl className={classes.formControl}>
+      <FormControl className={classes.formControl} fullWidth>
         <FormLabel>Connections</FormLabel>
         <div className={classes.chipGroup}>
-          <Chip label='Connected Asset 1' className={classes.chip} />
-          <Chip label='Connected Asset 2' className={classes.chip} />
-          <Chip label='Connected Asset 3' className={classes.chip} />
-          <Chip label='Connected Asset 4' className={classes.chip} />
-          <Chip label='Connected Asset 5' className={classes.chip} />
-          <Chip label='Connected Asset 6' className={classes.chip} />
-          <Chip label='Connected Asset 7' className={classes.chip} />
+        {connectedIds.map(assetId => (
+          <Chip
+            label={assetById[assetId].name}
+            className={classes.chip} />
+        ))}
           <Chip
             className={classes.chip}
             label={<AddIcon />}
-            onClick={() => console.log('hey')}
             color='primary'
           />
         </div>
       </FormControl>
-      <FormControl className={classes.formControl}>
+      <FormControl className={classes.formControl} fullWidth>
         <FormLabel>Parents</FormLabel>
         <div className={classes.chipGroup}>
-          <Chip label='Parent Asset 1' className={classes.chip} />
-          <Chip label='Parent Asset 2' className={classes.chip} />
-          <Chip label='Parent Asset 3' className={classes.chip} />
-          <Chip label='Parent Asset 4' className={classes.chip} />
-          <Chip label='Parent Asset 5' className={classes.chip} />
-          <Chip label='Parent Asset 6' className={classes.chip} />
-          <Chip label='Parent Asset 7' className={classes.chip} />
+        {parentIds.map(assetId => (
+          <Chip
+            label={assetById[assetId].name}
+            className={classes.chip} />
+        ))}
           <Chip
             className={classes.chip}
             label={<AddIcon />}
-            onClick={() => console.log('hey')}
             color='primary'
           />
         </div>
       </FormControl>
-      <FormControl className={classes.formControl}>
+      <FormControl className={classes.formControl} fullWidth>
         <FormLabel>Children</FormLabel>
         <div className={classes.chipGroup}>
-          <Chip label='Child Asset 1' className={classes.chip} />
-          <Chip label='Child Asset 2' className={classes.chip} />
-          <Chip label='Child Asset 3' className={classes.chip} />
-          <Chip label='Child Asset 4' className={classes.chip} />
-          <Chip label='Child Asset 5' className={classes.chip} />
-          <Chip label='Child Asset 6' className={classes.chip} />
-          <Chip label='Child Asset 7' className={classes.chip} />
+        {childIds.map(assetId => (
+          <Chip
+            label={assetById[assetId].name}
+            className={classes.chip} />
+        ))}
           <Chip
             className={classes.chip}
             label={<AddIcon />}
-            onClick={() => console.log('hey')}
             color='primary'
           />
         </div>
