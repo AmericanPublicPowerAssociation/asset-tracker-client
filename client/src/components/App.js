@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Route } from 'react-router-dom'
 import classNames from 'classnames'
 import {
   MuiThemeProvider,
@@ -16,6 +17,7 @@ import NavigationDrawer from './NavigationDrawer'
 import InformationDrawer from './InformationDrawer'
 import FilterListDrawer from './FilterListDrawer'
 import MapWindow from './MapWindow'
+import TableWindow from './TableWindow'
 import AssetAddDialogContainer from '../containers/AssetAddDialogContainer'
 
 var theme = {
@@ -132,10 +134,18 @@ class App extends Component {
           [classes.contentWithInformation]: isInformationDrawerOpen,
           [classes.contentWithFilterList]: isFilterListDrawerOpen,
         })}>
-        <MapWindow
-          onSelect={this.handleInformationDrawerOpen}
-          exposedAssetKey={exposedAssetKey}
-        />
+        <Route exact path='/' render={() => (
+          <MapWindow
+            onSelect={this.handleInformationDrawerOpen}
+            exposedAssetKey={exposedAssetKey}
+          />
+        )} />
+        <Route exact path='/tables' render={() => (
+          <TableWindow
+            onSelect={this.handleInformationDrawerOpen}
+            exposedAssetKey={exposedAssetKey}
+          />
+        )} />
         </main>
         <NavigationDrawer
           open={isNavigationDrawerOpen}

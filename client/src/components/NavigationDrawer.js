@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import Drawer from '@material-ui/core/Drawer'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -19,15 +20,19 @@ const NavigationDrawer = props => {
       {...etc}
     >
       <List>
-        <ListItem button>
-          <ListItemIcon><MapIcon /></ListItemIcon>
-          <ListItemText primary='Maps' />
-        </ListItem>
+        <Link to='/'>
+          <ListItem button>
+            <ListItemIcon><MapIcon /></ListItemIcon>
+            <ListItemText primary='Maps' />
+          </ListItem>
+        </Link>
 
-        <ListItem button>
-          <ListItemIcon><TableIcon /></ListItemIcon>
-          <ListItemText primary='Tables' />
-        </ListItem>
+        <Link to='/tables'>
+          <ListItem button>
+            <ListItemIcon><TableIcon /></ListItemIcon>
+            <ListItemText primary='Tables' />
+          </ListItem>
+        </Link>
 
         <ListItem button>
           <ListItemIcon><ReportIcon /></ListItemIcon>
