@@ -1,7 +1,9 @@
 import React from 'react'
 
 const TableWindow = () => {
-  return ('hey')
+  return (
+    'hey'
+  )
 }
 
 export default TableWindow
