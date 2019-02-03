@@ -20,7 +20,7 @@ const styles = theme => ({
     height: '100%',
   },
   mapPanel: {
-    backgroundColor: 'red',
+    backgroundColor: 'blue',
     minHeight: '50%',
   },
   listPanel: {

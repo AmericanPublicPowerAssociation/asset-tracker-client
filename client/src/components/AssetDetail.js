@@ -21,6 +21,13 @@ const AssetDetail = ({
   updateAsset,
 }) => {
   const asset = assetById[highlightedAssetId]
+  const assetRelationControlProps = {
+    exposedAssetKey,
+    asset,
+    assetById,
+    onAssetKeyOpen,
+    onAssetKeyClose,
+  }
   return (
     <form onSubmit={event => event.preventDefault()}>
       <TextField
@@ -40,26 +47,17 @@ const AssetDetail = ({
       <AssetRelationControl
         label='Connections'
         assetKey='connectedIds'
-        exposedAssetKey={exposedAssetKey}
-        asset={asset}
-        assetById={assetById}
-        onAssetKeyOpen={onAssetKeyOpen}
+        {...assetRelationControlProps}
       />
       <AssetRelationControl
         label='Parents'
         assetKey='parentIds'
-        exposedAssetKey={exposedAssetKey}
-        asset={asset}
-        assetById={assetById}
-        onAssetKeyOpen={onAssetKeyOpen}
+        {...assetRelationControlProps}
       />
       <AssetRelationControl
         label='Children'
         assetKey='childIds'
-        exposedAssetKey={exposedAssetKey}
-        asset={asset}
-        assetById={assetById}
-        onAssetKeyOpen={onAssetKeyOpen}
+        {...assetRelationControlProps}
       />
     </form>
   )

@@ -20,6 +20,7 @@ const styles = theme => ({
   tilt: {
     transition: theme.transitions.create('transform', {
       easing: theme.transitions.easing.easeIn,
+      duration: theme.transitions.duration.shortest,
     }),
     transform: 'rotate(45deg)',
   },
@@ -39,6 +40,7 @@ const AssetRelationControl = ({
   onAssetKeyClose,
 }) => {
   const relationIds = (asset && asset[assetKey]) || []
+  const isAssetKeyExposed = exposedAssetKey === assetKey
   return (
     <FormControl fullWidth className={classes.formControl}>
       <FormLabel>{label}</FormLabel>
@@ -49,13 +51,14 @@ const AssetRelationControl = ({
           className={classes.chip} />
       ))}
         <Chip
-          className={classNames(classes.chip, classes.flat, {
-            [classes.tilt]: exposedAssetKey === assetKey,
-            [classes.hide]: exposedAssetKey && exposedAssetKey !== assetKey,
+          className={classNames(classes.chip, {
+            [classes.hide]: exposedAssetKey && !isAssetKeyExposed,
           })}
-          label={<AddIcon />}
-          color='primary'
-          onClick={() => onAssetKeyOpen(assetKey)}
+          label={<AddIcon className={classNames({
+            [classes.tilt]: isAssetKeyExposed,
+          })}/>}
+          color={isAssetKeyExposed ? 'secondary' : 'primary'}
+          onClick={() => isAssetKeyExposed ? onAssetKeyClose() : onAssetKeyOpen(assetKey)}
         />
       </div>
     </FormControl>
