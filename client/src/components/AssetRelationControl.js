@@ -17,13 +17,6 @@ const styles = theme => ({
   chip: {
     margin: `${theme.spacing.unit}px 8px 0 0`,
   },
-  tilt: {
-    transition: theme.transitions.create('transform', {
-      easing: theme.transitions.easing.easeIn,
-      duration: theme.transitions.duration.shortest,
-    }),
-    transform: 'rotate(45deg)',
-  },
   hide: {
     visibility: 'hidden',
   },
@@ -32,33 +25,37 @@ const styles = theme => ({
 const AssetRelationControl = ({
   classes,
   label,
-  assetKey,
-  exposedAssetKey,
-  asset,
+  currentAssetId,
+  currentAssetRelation,
   assetById,
-  onAssetKeyOpen,
-  onAssetKeyClose,
+  exposedAssetId,
+  exposedAssetRelation,
+  onAssetRelationOpen,
+  onAssetRelationClose,
 }) => {
-  const relationIds = (asset && asset[assetKey]) || []
-  const isAssetKeyExposed = exposedAssetKey === assetKey
+  const asset = assetById[currentAssetId]
+  const relationIds = (asset && asset[currentAssetRelation]) || []
   return (
     <FormControl fullWidth className={classes.formControl}>
       <FormLabel>{label}</FormLabel>
       <div className={classes.chipGroup}>
       {relationIds.map(assetId => (
         <Chip
+          key={assetId}
           label={assetById[assetId].name}
           className={classes.chip} />
       ))}
         <Chip
           className={classNames(classes.chip, {
-            [classes.hide]: exposedAssetKey && !isAssetKeyExposed,
+            [classes.hide]: exposedAssetId && (
+              exposedAssetId !== currentAssetId ||
+              exposedAssetRelation !== currentAssetRelation),
           })}
-          label={<AddIcon className={classNames({
-            [classes.tilt]: isAssetKeyExposed,
-          })}/>}
-          color={isAssetKeyExposed ? 'secondary' : 'primary'}
-          onClick={() => isAssetKeyExposed ? onAssetKeyClose() : onAssetKeyOpen(assetKey)}
+          label={<AddIcon />}
+          color='primary'
+          onClick={() => onAssetRelationOpen(
+            currentAssetId,
+            currentAssetRelation)}
         />
       </div>
     </FormControl>

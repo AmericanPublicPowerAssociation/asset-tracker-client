@@ -44,10 +44,11 @@ const styles = theme => ({
 
 const InformationDrawer = ({
   classes,
-  exposedAssetKey,
+  exposedAssetId,
+  exposedAssetRelation,
+  onAssetRelationOpen,
+  onAssetRelationClose,
   onClose,
-  onAssetKeyOpen,
-  onAssetKeyClose,
   ...etc
 }) => {
   return (
@@ -71,9 +72,10 @@ const InformationDrawer = ({
         </div>
         <div className={classes.detailPanel}>
           <AssetDetailContainer
-            exposedAssetKey={exposedAssetKey}
-            onAssetKeyOpen={onAssetKeyOpen}
-            onAssetKeyClose={onAssetKeyClose}
+            exposedAssetId={exposedAssetId}
+            exposedAssetRelation={exposedAssetRelation}
+            onAssetRelationOpen={onAssetRelationOpen}
+            onAssetRelationClose={onAssetRelationClose}
           />
         </div>
       </div>

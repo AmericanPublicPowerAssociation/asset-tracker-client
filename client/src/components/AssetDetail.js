@@ -12,9 +12,10 @@ const styles = theme => ({
 const AssetDetail = ({
   classes,
   // Get local variables
-  exposedAssetKey,
-  onAssetKeyOpen,
-  onAssetKeyClose,
+  exposedAssetId,
+  exposedAssetRelation,
+  onAssetRelationOpen,
+  onAssetRelationClose,
   // Get global variables
   assetById,
   highlightedAssetId,
@@ -22,11 +23,12 @@ const AssetDetail = ({
 }) => {
   const asset = assetById[highlightedAssetId]
   const assetRelationControlProps = {
-    exposedAssetKey,
-    asset,
+    currentAssetId: highlightedAssetId,
     assetById,
-    onAssetKeyOpen,
-    onAssetKeyClose,
+    exposedAssetId,
+    exposedAssetRelation,
+    onAssetRelationOpen,
+    onAssetRelationClose,
   }
   return (
     <form onSubmit={event => event.preventDefault()}>
@@ -46,17 +48,17 @@ const AssetDetail = ({
       />
       <AssetRelationControl
         label='Connections'
-        assetKey='connectedIds'
+        currentAssetRelation='connectedIds'
         {...assetRelationControlProps}
       />
       <AssetRelationControl
         label='Parents'
-        assetKey='parentIds'
+        currentAssetRelation='parentIds'
         {...assetRelationControlProps}
       />
       <AssetRelationControl
         label='Children'
-        assetKey='childIds'
+        currentAssetRelation='childIds'
         {...assetRelationControlProps}
       />
     </form>

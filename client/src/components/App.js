@@ -69,7 +69,8 @@ class App extends Component {
     isInformationDrawerOpen: false,
     isFilterListDrawerOpen: false,
     isAssetAddDialogOpen: false,
-    exposedAssetKey: null,
+    exposedAssetId: null,
+    exposedAssetRelation: null,
   }
 
   handleNavigationDrawerOpen = () => {
@@ -100,10 +101,16 @@ class App extends Component {
   handleThemeToggle = () => {
     this.setState({isDark: !this.state.isDark})}
 
-  handleAssetKeyOpen = assetKey => {
-    this.setState({exposedAssetKey: assetKey})}
-  handleAssetKeyClose = () => {
-    this.setState({exposedAssetKey: null})}
+  handleAssetRelationOpen = (assetId, assetRelation) => {
+    this.setState({
+      exposedAssetId: assetId,
+      exposedAssetRelation: assetRelation,
+    })}
+  handleAssetRelationClose = () => {
+    this.setState({
+      exposedAssetId: null,
+      exposedAssetRelation: null,
+    })}
 
   render() {
     const { classes } = this.props
@@ -113,7 +120,8 @@ class App extends Component {
       isInformationDrawerOpen,
       isFilterListDrawerOpen,
       isAssetAddDialogOpen,
-      exposedAssetKey,
+      exposedAssetId,
+      exposedAssetRelation,
     } = this.state
     const isRightDrawerOpen = isInformationDrawerOpen || isFilterListDrawerOpen
     return (
@@ -123,6 +131,7 @@ class App extends Component {
           isDark={isDark}
           isInformationDrawerOpen={isInformationDrawerOpen}
           isFilterListDrawerOpen={isFilterListDrawerOpen}
+          exposedAssetId={exposedAssetId}
           onMenuIconClick={this.handleNavigationDrawerOpen}
           onAddIconClick={this.handleAssetAddDialogOpen}
           onThemeIconClick={this.handleThemeToggle}
@@ -137,13 +146,15 @@ class App extends Component {
         <Route exact path='/' render={() => (
           <MapWindow
             onSelect={this.handleInformationDrawerOpen}
-            exposedAssetKey={exposedAssetKey}
+            exposedAssetId={exposedAssetId}
+            exposedAssetRelation={exposedAssetRelation}
           />
         )} />
         <Route exact path='/tables' render={() => (
           <TableWindow
             onSelect={this.handleInformationDrawerOpen}
-            exposedAssetKey={exposedAssetKey}
+            exposedAssetId={exposedAssetId}
+            exposedAssetRelation={exposedAssetRelation}
           />
         )} />
         </main>
@@ -153,10 +164,11 @@ class App extends Component {
         />
         <InformationDrawer
           open={isInformationDrawerOpen}
-          exposedAssetKey={exposedAssetKey}
+          exposedAssetId={exposedAssetId}
+          exposedAssetRelation={exposedAssetRelation}
+          onAssetRelationOpen={this.handleAssetRelationOpen}
+          onAssetRelationClose={this.handleAssetRelationClose}
           onClose={this.handleInformationDrawerClose}
-          onAssetKeyOpen={this.handleAssetKeyOpen}
-          onAssetKeyClose={this.handleAssetKeyClose}
         />
         <FilterListDrawer
           open={isFilterListDrawerOpen}

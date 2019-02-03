@@ -61,6 +61,7 @@ const ApplicationBar = ({
   isDark,
   isInformationDrawerOpen,
   isFilterListDrawerOpen,
+  exposedAssetId,
   onMenuIconClick,
   onAddIconClick,
   onThemeIconClick,
@@ -70,7 +71,7 @@ const ApplicationBar = ({
   return (
     <AppBar
       position='fixed'
-      color='default'
+      color={exposedAssetId ? 'secondary' : 'default'}
       className={classNames(classes.appBar, {
         [classes.appBarTransition]: isRightDrawerOpen,
         [classes.appBarWithInformation]: isInformationDrawerOpen,

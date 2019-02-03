@@ -7,7 +7,7 @@ import Switch from '@material-ui/core/Switch'
 
 const AssetList = ({
   // Get local variables
-  exposedAssetKey,
+  exposedAssetId,
   onSelect,
   // Get global variables
   assetById,
@@ -31,7 +31,7 @@ const AssetList = ({
         selected={assetId === highlightedAssetId}
       >
         <ListItemText primary={assetById[assetId].name} />
-        {exposedAssetKey &&
+        {exposedAssetId &&
           <ListItemSecondaryAction>
             <Switch />
           </ListItemSecondaryAction>
