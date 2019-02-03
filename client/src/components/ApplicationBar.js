@@ -56,19 +56,16 @@ const styles = theme => ({
   },
 })
 
-const ApplicationBar = props => {
-  const {
-    classes,
-    isDark,
-    isInformationDrawerOpen,
-    isFilterListDrawerOpen,
-  } = props
-  const {
-    onMenuIconClick,
-    onAddIconClick,
-    onThemeIconClick,
-    onFilterIconClick,
-  } = props
+const ApplicationBar = ({
+  classes,
+  isDark,
+  isInformationDrawerOpen,
+  isFilterListDrawerOpen,
+  onMenuIconClick,
+  onAddIconClick,
+  onThemeIconClick,
+  onFilterIconClick,
+}) => {
   const isRightDrawerOpen = isInformationDrawerOpen || isFilterListDrawerOpen
   return (
     <AppBar
@@ -107,4 +104,4 @@ const ApplicationBar = props => {
   )
 }
 
-export default withStyles(styles, {withTheme: true})(ApplicationBar)
+export default withStyles(styles)(ApplicationBar)

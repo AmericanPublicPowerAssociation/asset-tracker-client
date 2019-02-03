@@ -5,19 +5,17 @@ import ListItemText from '@material-ui/core/ListItemText'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import Switch from '@material-ui/core/Switch'
 
-const AssetList = props => {
+const AssetList = ({
   // Get local variables
-  const { onSelect } = props
-  const { exposedAssetKey } = props
+  exposedAssetKey,
+  onSelect,
   // Get global variables
-  const {
-    assetById,
-    highlightedAssetId,
-    selectedAssetTypeIds,
-    sortedAssetIds,
-  } = props
-  const { highlightAsset } = props
-
+  assetById,
+  highlightedAssetId,
+  selectedAssetTypeIds,
+  sortedAssetIds,
+  highlightAsset,
+}) => {
   const visibleAssetIds = sortedAssetIds.filter(
     assetId => selectedAssetTypeIds.includes(assetById[assetId].typeId))
   return (

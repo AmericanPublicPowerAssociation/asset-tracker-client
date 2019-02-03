@@ -1,57 +1,47 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import Drawer from '@material-ui/core/Drawer'
 import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
-import Badge from '@material-ui/core/Badge'
 import MapIcon from '@material-ui/icons/Map'
 import TableIcon from '@material-ui/icons/ListAlt'
 import ReportIcon from '@material-ui/icons/Assessment'
 import AlertIcon from '@material-ui/icons/Notifications'
 import AccountIcon from '@material-ui/icons/AccountCircle'
+import ListItemLink from './ListItemLink'
 
-const NavigationDrawer = props => {
-  const { onClose, ...etc } = props
+const NavigationDrawer = ({ onClose, ...etc }) => {
   return (
     <Drawer
       onClose={onClose}
       {...etc}
     >
       <List>
-        <ListItem
-          {...{to: '/'}}
-          component={ Link }
-          button
-        >
-          <ListItemIcon><MapIcon /></ListItemIcon>
-          <ListItemText primary='Maps' />
-        </ListItem>
-
-        <ListItem
-          {...{to: '/tables'}}
-          component={ Link }
-          button
-        >
-          <ListItemIcon><TableIcon /></ListItemIcon>
-          <ListItemText primary='Tables' />
-        </ListItem>
-
-        <ListItem button>
-          <ListItemIcon><ReportIcon /></ListItemIcon>
-          <ListItemText primary='Reports' />
-        </ListItem>
-
-        <ListItem button>
-          <ListItemIcon><Badge badgeContent={3} color='error'><AlertIcon /></Badge></ListItemIcon>
-          <ListItemText primary='Alerts' />
-        </ListItem>
-
-        <ListItem button>
-          <ListItemIcon><AccountIcon /></ListItemIcon>
-          <ListItemText primary='Accounts' />
-        </ListItem>
+        <ListItemLink
+          to='/'
+          text='Maps'
+          icon={<MapIcon />}
+        />
+        <ListItemLink
+          to='/tables'
+          text='Tables'
+          icon={<TableIcon />}
+        />
+        <ListItemLink
+          to='/reports'
+          text='Reports'
+          icon={<ReportIcon />}
+        />
+        <ListItemLink
+          to='/alerts'
+          text='Alerts'
+          icon={<AlertIcon />}
+          badgeContent={3}
+          badgeColor='error'
+        />
+        <ListItemLink
+          to='/accounts'
+          text='Accounts'
+          icon={<AccountIcon />}
+        />
       </List>
     </Drawer>
   )

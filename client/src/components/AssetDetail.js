@@ -23,24 +23,21 @@ const styles = theme => ({
   },
 })
 
-const AssetDetail = props => {
-  const {
-    classes,
-    // Get local variables
-    exposedAssetKey,
-    onAssetKeyOpen,
-    onAssetKeyClose,
-    // Get global variables
-    assetById,
-    highlightedAssetId,
-    updateAsset,
-  } = props
-
+const AssetDetail = ({
+  classes,
+  // Get local variables
+  exposedAssetKey,
+  onAssetKeyOpen,
+  onAssetKeyClose,
+  // Get global variables
+  assetById,
+  highlightedAssetId,
+  updateAsset,
+}) => {
   const asset = assetById[highlightedAssetId]
   const connectedIds = (asset && asset.connectedIds) || []
   const parentIds = (asset && asset.parentIds) || []
   const childIds = (asset && asset.childIds) || []
-
   return (
     <form onSubmit={event => event.preventDefault()}>
       <TextField
@@ -109,4 +106,4 @@ const AssetDetail = props => {
   )
 }
 
-export default withStyles(styles, {withTheme: true})(AssetDetail)
+export default withStyles(styles)(AssetDetail)

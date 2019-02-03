@@ -5,9 +5,10 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Checkbox from '@material-ui/core/Checkbox'
 import { ASSET_TYPES } from '../constants'
 
-const AssetTypeCheckboxes = props => {
-  const { selectedAssetTypeIds } = props
-  const { onAssetTypeClick } = props
+const AssetTypeCheckboxes = ({
+  selectedAssetTypeIds,
+  onAssetTypeClick,
+}) => {
   return (
     <List disablePadding>
     {ASSET_TYPES.map(x => (
@@ -29,6 +30,3 @@ const AssetTypeCheckboxes = props => {
 }
 
 export default AssetTypeCheckboxes
-
-/*
-*/

@@ -42,15 +42,14 @@ const styles = theme => ({
   },
 })
 
-const InformationDrawer = props => {
-  const {
-    classes,
-    exposedAssetKey,
-    onClose,
-    onAssetKeyOpen,
-    onAssetKeyClose,
-    ...etc
-  } = props
+const InformationDrawer = ({
+  classes,
+  exposedAssetKey,
+  onClose,
+  onAssetKeyOpen,
+  onAssetKeyClose,
+  ...etc
+}) => {
   return (
     <Drawer
       className={classes.drawer}
@@ -82,4 +81,4 @@ const InformationDrawer = props => {
   )
 }
 
-export default withStyles(styles, {withTheme: true})(InformationDrawer)
+export default withStyles(styles)(InformationDrawer)

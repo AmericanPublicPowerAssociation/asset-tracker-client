@@ -24,15 +24,15 @@ const styles = theme => ({
     minHeight: '50%',
   },
   listPanel: {
-    // backgroundColor: 'blue',
     overflow: 'auto',
   },
 })
 
-const MapWindow = props => {
-  const { classes } = props
-  const { onSelect } = props
-  const { exposedAssetKey } = props
+const MapWindow = ({
+  classes,
+  exposedAssetKey,
+  onSelect,
+}) => {
   return (
     <Paper className={classes.window}>
       <Grid container className={classes.frame}>
@@ -52,4 +52,4 @@ const MapWindow = props => {
   )
 }
 
-export default withStyles(styles, {withTheme: true})(MapWindow)
+export default withStyles(styles)(MapWindow)

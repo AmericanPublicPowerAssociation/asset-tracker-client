@@ -32,8 +32,11 @@ const styles = theme => ({
   },
 })
 
-const FilterListDrawer = props => {
-  const { classes, onClose, ...etc } = props
+const FilterListDrawer = ({
+  classes,
+  onClose,
+  ...etc,
+}) => {
   return (
     <Drawer
       className={classes.drawer}
@@ -56,4 +59,4 @@ const FilterListDrawer = props => {
   )
 }
 
-export default withStyles(styles, {withTheme: true})(FilterListDrawer)
+export default withStyles(styles)(FilterListDrawer)

@@ -4,10 +4,10 @@ import Radio from '@material-ui/core/Radio'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { ASSET_TYPES } from '../constants'
 
-const AssetTypeRadioButtons = props => {
-  const { selectedAssetTypeId } = props
-  const { onAssetTypeClick } = props
-
+const AssetTypeRadioButtons = ({
+  selectedAssetTypeId,
+  onAssetTypeClick,
+}) => {
   return (
     <RadioGroup
       value={selectedAssetTypeId}
