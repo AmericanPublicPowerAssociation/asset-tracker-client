@@ -5,6 +5,7 @@ import FormControl from '@material-ui/core/FormControl'
 import FormLabel from '@material-ui/core/FormLabel'
 import Chip from '@material-ui/core/Chip'
 import AddIcon from '@material-ui/icons/Add'
+import CheckIcon from '@material-ui/icons/Check'
 
 const styles = theme => ({
   root: {
@@ -47,14 +48,17 @@ const AssetRelationChips = ({
         />
       ))}
         <Chip
-          label={<AddIcon />}
+          label={exposedAssetId ? <CheckIcon /> : <AddIcon />}
           color='primary'
           className={classNames(classes.chip, {
             [classes.hide]: exposedAssetId && (
               exposedAssetId !== assetId ||
               exposedAssetKey !== assetKey),
           })}
-          onClick={() => setExposedAsset({
+          onClick={() => setExposedAsset(exposedAssetId ? {
+            id: null,
+            key: null,
+          } : {
             id: assetId,
             key: assetKey,
           })}

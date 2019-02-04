@@ -83,7 +83,7 @@ const ApplicationBar = ({
   return (
     <AppBar
       position='fixed'
-      color={exposedAssetId ? 'secondary' : 'default'}
+      color={exposedAssetId ? 'primary' : 'default'}
       className={classNames(classes.appBar, {
         [classes.appBarTransition]: isRightDrawerOpen,
         [classes.appBarWithInformation]: isInformationDrawerOpen,
