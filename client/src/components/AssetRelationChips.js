@@ -49,7 +49,7 @@ const AssetRelationChips = ({
       ))}
         <Chip
           label={exposedAssetId ? <CheckIcon /> : <AddIcon />}
-          color='primary'
+          color={exposedAssetId ? 'secondary' : 'primary'}
           className={classNames(classes.chip, {
             [classes.hide]: exposedAssetId && (
               exposedAssetId !== assetId ||

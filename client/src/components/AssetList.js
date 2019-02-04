@@ -33,7 +33,9 @@ const AssetList = ({
         <ListItemText primary={assetById[visibleAssetId].name} />
         {exposedAssetId &&
           <ListItemSecondaryAction>
-            <Switch />
+            <Switch
+              onChange={() => {console.log('hey')}}
+            />
           </ListItemSecondaryAction>
         }
       </ListItem>
