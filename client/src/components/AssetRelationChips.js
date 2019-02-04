@@ -40,13 +40,17 @@ const AssetRelationChips = ({
     <FormControl fullWidth className={classes.root}>
       <FormLabel>{label}</FormLabel>
       <div className={classes.chipGroup}>
-      {relatedAssetIds.map(relatedAssetId => (
-        <Chip
-          key={relatedAssetId}
-          label={assetById[relatedAssetId].name}
-          className={classes.chip}
-        />
-      ))}
+      {relatedAssetIds.map(relatedAssetId => {
+        const relatedAsset = assetById[relatedAssetId]
+        const {id, name} = relatedAsset
+        return (
+          <Chip
+            key={id}
+            label={name}
+            className={classes.chip}
+          />
+        )
+      })}
         <Chip
           label={exposedAssetId ? <CheckIcon /> : <AddIcon />}
           color={exposedAssetId ? 'secondary' : 'primary'}

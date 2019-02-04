@@ -11,6 +11,8 @@ import SunnyIcon from '@material-ui/icons/WbSunny'
 import SunnyOutlinedIcon from '@material-ui/icons/WbSunnyOutlined'
 import SearchIcon from '@material-ui/icons/Search'
 import FilterListIcon from '@material-ui/icons/FilterList'
+import TeleportIcon from '@material-ui/icons/CenterFocusStrong'
+
 import {
   FILTER_LIST_DRAWER_WIDTH,
   INFORMATION_DRAWER_WIDTH,
@@ -68,9 +70,12 @@ const ApplicationBar = ({
   onThemeIconClick,
   onFilterIconClick,
   // Get global variables
+  highlightedAssetId,
   exposedAssetId,
   exposedAssetKey,
   assetById,
+  addSelectedAssetType,
+  setHighlightedAsset,
 }) => {
   const isRightDrawerOpen = isInformationDrawerOpen || isFilterListDrawerOpen
   const applicationTitle = exposedAssetId ?
@@ -80,6 +85,7 @@ const ApplicationBar = ({
       assetById[exposedAssetId].name
     }` :
     'Asset Tracker'
+  const withTeleportIcon = exposedAssetId && exposedAssetId !== highlightedAssetId
   return (
     <AppBar
       position='fixed'
@@ -101,6 +107,13 @@ const ApplicationBar = ({
           className={classes.grow}
           noWrap
         >{applicationTitle}</Typography>
+        <IconButton
+          className={(!withTeleportIcon && classes.vanish) || ''}
+          onClick={() => {
+            addSelectedAssetType({id: assetById[exposedAssetId].typeId})
+            setHighlightedAsset({id: exposedAssetId})
+          }}
+        ><TeleportIcon /></IconButton>
         <IconButton
           onClick={onAddIconClick}
         ><AddIcon /></IconButton>
