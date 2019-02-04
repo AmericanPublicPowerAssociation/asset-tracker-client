@@ -12,6 +12,7 @@ import {
   INFORMATION_DRAWER_WIDTH,
   FILTER_LIST_DRAWER_WIDTH,
 } from '../constants'
+import Paper from '@material-ui/core/Paper'
 import NavigationDrawer from './NavigationDrawer'
 import InformationDrawer from './InformationDrawer'
 import FilterListDrawer from './FilterListDrawer'
@@ -38,31 +39,40 @@ const darkTheme = createMuiTheme({
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
-  content: {
+  main: {
     padding: CONTENT_PADDING,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
-  contentTransition: {
+  mainTransition: {
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-  contentWithInformation: {
+  mainWithInformation: {
     marginRight: INFORMATION_DRAWER_WIDTH,
     [theme.breakpoints.down('md')]: {
       marginRight: 256,
     },
   },
-  contentWithFilterList: {
+  mainWithFilterList: {
     marginRight: FILTER_LIST_DRAWER_WIDTH,
     [theme.breakpoints.down('md')]: {
       marginRight: 256,
     },
   },
+  paper: {
+    height: `calc(100vh - 56px - ${CONTENT_PADDING * 2}px)`,
+    [`${theme.breakpoints.up('xs')} and (orientation: landscape)`]: {
+      height: `calc(100vh - 48px - ${CONTENT_PADDING * 2}px)`,
+    },
+    [theme.breakpoints.up('sm')]: {
+      height: `calc(100vh - 64px - ${CONTENT_PADDING * 2}px)`,
+    },
+  }
 })
 
 class App extends Component {
@@ -125,30 +135,32 @@ class App extends Component {
           onFilterIconClick={this.handleFilterListDrawerOpen}
         />
         <div className={classes.toolbar} />
-        <main className={classNames(classes.content, {
-          [classes.contentTransition]: isRightDrawerOpen,
-          [classes.contentWithInformation]: isInformationDrawerOpen,
-          [classes.contentWithFilterList]: isFilterListDrawerOpen,
+        <main className={classNames(classes.main, {
+          [classes.mainTransition]: isRightDrawerOpen,
+          [classes.mainWithInformation]: isInformationDrawerOpen,
+          [classes.mainWithFilterList]: isFilterListDrawerOpen,
         })}>
-        <Route exact path='/' render={() => (
-          <MapWindow
-            onSelect={this.handleInformationDrawerOpen}
-          />
-        )} />
-        <Route exact path='/tables' render={() => (
-          <TableWindow
-            onSelect={this.handleInformationDrawerOpen}
-          />
-        )} />
-        <Route exact path='/reports' render={() => (
-          <ReportWindow />
-        )} />
-        <Route exact path='/alerts' render={() => (
-          <AlertWindow />
-        )} />
-        <Route exact path='/accounts' render={() => (
-          <AccountWindow />
-        )} />
+          <Paper className={classes.paper}>
+            <Route exact path='/' render={() => (
+              <MapWindow
+                onSelect={this.handleInformationDrawerOpen}
+              />
+            )} />
+            <Route exact path='/tables' render={() => (
+              <TableWindow
+                onSelect={this.handleInformationDrawerOpen}
+              />
+            )} />
+            <Route exact path='/reports' render={() => (
+              <ReportWindow />
+            )} />
+            <Route exact path='/alerts' render={() => (
+              <AlertWindow />
+            )} />
+            <Route exact path='/accounts' render={() => (
+              <AccountWindow />
+            )} />
+          </Paper>
         </main>
         <NavigationDrawer
           open={isNavigationDrawerOpen}
