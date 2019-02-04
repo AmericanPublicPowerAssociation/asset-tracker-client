@@ -14,13 +14,14 @@ import FilterListIcon from '@material-ui/icons/FilterList'
 import {
   FILTER_LIST_DRAWER_WIDTH,
   INFORMATION_DRAWER_WIDTH,
+  RELATION_NAME_BY_KEY,
 } from '../constants'
 
 const styles = theme => ({
   grow: {
     flexGrow: 1,
   },
-  hide: {
+  vanish: {
     display: 'none',
   },
   appBar: {
@@ -58,16 +59,27 @@ const styles = theme => ({
 
 const ApplicationBar = ({
   classes,
+  // Get local variables
   isDark,
   isInformationDrawerOpen,
   isFilterListDrawerOpen,
-  exposedAssetId,
   onMenuIconClick,
   onAddIconClick,
   onThemeIconClick,
   onFilterIconClick,
+  // Get global variables
+  exposedAssetId,
+  exposedAssetKey,
+  assetById,
 }) => {
   const isRightDrawerOpen = isInformationDrawerOpen || isFilterListDrawerOpen
+  const applicationTitle = exposedAssetId ?
+    `Editing ${
+      RELATION_NAME_BY_KEY[exposedAssetKey]
+    } for ${
+      assetById[exposedAssetId].name
+    }` :
+    'Asset Tracker'
   return (
     <AppBar
       position='fixed'
@@ -88,7 +100,7 @@ const ApplicationBar = ({
           color='inherit'
           className={classes.grow}
           noWrap
-        >Asset Tracker</Typography>
+        >{applicationTitle}</Typography>
         <IconButton
           onClick={onAddIconClick}
         ><AddIcon /></IconButton>
@@ -97,7 +109,7 @@ const ApplicationBar = ({
         >{isDark ? <SunnyIcon /> : <SunnyOutlinedIcon />}</IconButton>
         <IconButton disabled><SearchIcon /></IconButton>
         <IconButton
-          className={(isFilterListDrawerOpen && classes.hide) || ''}
+          className={(isFilterListDrawerOpen && classes.vanish) || ''}
           onClick={onFilterIconClick}
         ><FilterListIcon /></IconButton>
       </Toolbar>

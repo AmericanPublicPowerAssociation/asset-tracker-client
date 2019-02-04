@@ -16,25 +16,23 @@ class AssetAddDialog extends Component {
     assetTypeId: DEFAULT_ASSET_TYPE_ID,
   }
 
-  handleAssetTypeClick = assetTypeId => {
-    this.setState({assetTypeId: assetTypeId})
-  }
+  handleAssetTypeClick = ({id}) => {
+    this.setState({assetTypeId: id})}
 
   handleCancel = () => {
     this.props.onClose()}
 
   handleOk = () => {
-    const assetTypeId = this.state.assetTypeId
+    const { assetTypeId } = this.state
     const assetTypeName = ASSET_TYPE_BY_ID[assetTypeId]['name']
     const assetId = getRandomString(7)
-    this.props.addSelectedAssetType(assetTypeId)
+    this.props.addSelectedAssetType({id: assetTypeId})
     this.props.addAsset({
       'id': assetId,
       'name': assetTypeName + ' ' + assetId,
       'typeId': assetTypeId})
-    this.props.highlightAsset(assetId)
-    this.props.onClose(assetTypeId)
-  }
+    this.props.setHighlightedAsset({id: assetId})
+    this.props.onClose()}
 
   render() {
     const { ...etc } = this.props
@@ -50,7 +48,7 @@ class AssetAddDialog extends Component {
         </DialogContent>
         <DialogActions>
           <Button onClick={this.handleCancel}>Cancel</Button>
-          <Button onClick={this.handleOk} color="primary">Ok</Button>
+          <Button onClick={this.handleOk} color='primary'>Ok</Button>
         </DialogActions>
       </Dialog>
     )

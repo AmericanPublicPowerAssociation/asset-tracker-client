@@ -11,18 +11,18 @@ const AssetTypeCheckboxes = ({
 }) => {
   return (
     <List disablePadding>
-    {ASSET_TYPES.map(x => (
+    {ASSET_TYPES.map(assetType => (
       <ListItem
         button
-        key={x.id}
-        onClick={() => onAssetTypeClick(x.id)}
+        key={assetType.id}
+        onClick={() => onAssetTypeClick({id: assetType.id})}
       >
         <Checkbox
-          checked={selectedAssetTypeIds.includes(x.id)}
+          checked={selectedAssetTypeIds.includes(assetType.id)}
           tabIndex={-1}
           disableRipple
         />
-        <ListItemText primary={x.name} />
+        <ListItemText primary={assetType.name} />
       </ListItem>
     ))}
     </List>

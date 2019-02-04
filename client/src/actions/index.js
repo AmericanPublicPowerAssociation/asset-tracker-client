@@ -1,30 +1,30 @@
 import {
   ADD_ASSET,
   UPDATE_ASSET,
-  HIGHLIGHT_ASSET,
   ADD_SELECTED_ASSET_TYPE,
-  REMOVE_SELECTED_ASSET_TYPE,
   TOGGLE_SELECTED_ASSET_TYPE,
-  SET_SELECTED_ASSET_TYPES,
+  SET_HIGHLIGHTED_ASSET,
+  SET_EXPOSED_ASSET,
+  ADD_ASSET_RELATION,
+  REMOVE_ASSET_RELATION,
 } from '../constants'
 
-export const addAsset = asset => ({
-  type: ADD_ASSET, asset})
+export const addAsset = payload => ({
+  type: ADD_ASSET, payload})
+export const updateAsset = payload => ({
+  type: UPDATE_ASSET, payload})
 
-export const updateAsset = asset => ({
-  type: UPDATE_ASSET, asset})
+export const addSelectedAssetType = payload => ({
+  type: ADD_SELECTED_ASSET_TYPE, payload})
+export const toggleSelectedAssetType = payload => ({
+  type: TOGGLE_SELECTED_ASSET_TYPE, payload})
 
-export const highlightAsset = assetId => ({
-  type: HIGHLIGHT_ASSET, assetId})
+export const setHighlightedAsset = payload => ({
+  type: SET_HIGHLIGHTED_ASSET, payload})
+export const setExposedAsset = payload => ({
+  type: SET_EXPOSED_ASSET, payload})
 
-export const addSelectedAssetType = assetTypeId => ({
-  type: ADD_SELECTED_ASSET_TYPE, assetTypeId})
-
-export const removeSelectedAssetType = assetTypeId => ({
-  type: REMOVE_SELECTED_ASSET_TYPE, assetTypeId})
-
-export const toggleSelectedAssetType = assetTypeId => ({
-  type: TOGGLE_SELECTED_ASSET_TYPE, assetTypeId})
-
-export const setSelectedAssetTypes = assetTypeIds => ({
-  type: SET_SELECTED_ASSET_TYPES, assetTypeIds})
+export const addAssetRelation = payload => ({
+  type: ADD_ASSET_RELATION, payload})
+export const removeAssetRelation = payload => ({
+  type: REMOVE_ASSET_RELATION, payload})

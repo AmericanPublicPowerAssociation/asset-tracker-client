@@ -7,8 +7,8 @@ import Chip from '@material-ui/core/Chip'
 import AddIcon from '@material-ui/icons/Add'
 
 const styles = theme => ({
-  formControl: {
-    margin: '24px 0 0 0',
+  root: {
+    margin: `${theme.spacing.unit * 3}px 0 0 0`,
   },
   chipGroup: {
     display: 'flex',
@@ -22,44 +22,46 @@ const styles = theme => ({
   },
 })
 
-const AssetRelationControl = ({
+const AssetRelationChips = ({
   classes,
   label,
-  currentAssetId,
-  currentAssetRelation,
-  assetById,
+  assetKey,
+  highlightedAssetId,
   exposedAssetId,
-  exposedAssetRelation,
-  onAssetRelationOpen,
-  onAssetRelationClose,
+  exposedAssetKey,
+  assetById,
+  setExposedAsset,
 }) => {
-  const asset = assetById[currentAssetId]
-  const relationIds = (asset && asset[currentAssetRelation]) || []
+  const assetId = highlightedAssetId
+  const asset = assetById[assetId]
+  const relatedAssetIds = (asset && asset[assetKey]) || []
   return (
-    <FormControl fullWidth className={classes.formControl}>
+    <FormControl fullWidth className={classes.root}>
       <FormLabel>{label}</FormLabel>
       <div className={classes.chipGroup}>
-      {relationIds.map(assetId => (
+      {relatedAssetIds.map(relatedAssetId => (
         <Chip
-          key={assetId}
-          label={assetById[assetId].name}
-          className={classes.chip} />
+          key={relatedAssetId}
+          label={assetById[relatedAssetId].name}
+          className={classes.chip}
+        />
       ))}
         <Chip
-          className={classNames(classes.chip, {
-            [classes.hide]: exposedAssetId && (
-              exposedAssetId !== currentAssetId ||
-              exposedAssetRelation !== currentAssetRelation),
-          })}
           label={<AddIcon />}
           color='primary'
-          onClick={() => onAssetRelationOpen(
-            currentAssetId,
-            currentAssetRelation)}
+          className={classNames(classes.chip, {
+            [classes.hide]: exposedAssetId && (
+              exposedAssetId !== assetId ||
+              exposedAssetKey !== assetKey),
+          })}
+          onClick={() => setExposedAsset({
+            id: assetId,
+            key: assetKey,
+          })}
         />
       </div>
     </FormControl>
   )
 }
 
-export default withStyles(styles)(AssetRelationControl)
+export default withStyles(styles)(AssetRelationChips)

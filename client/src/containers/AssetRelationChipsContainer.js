@@ -1,21 +1,22 @@
 import { connect } from 'react-redux'
-import { setHighlightedAsset } from '../actions'
-import AssetList from '../components/AssetList'
+import {
+  setExposedAsset,
+} from '../actions'
+import AssetRelationChips from '../components/AssetRelationChips'
 
 const mapStateToProps = state => ({
-  sortedAssetIds: state.sortedAssetIds,
-  selectedAssetTypeIds: state.selectedAssetTypeIds,
   highlightedAssetId: state.highlightedAssetId,
   exposedAssetId: state.exposedAssetId,
+  exposedAssetKey: state.exposedAssetKey,
   assetById: state.assetById,
 })
 
 const mapDispatchToProps = dispatch => ({
-  setHighlightedAsset: payload => {dispatch(
-    setHighlightedAsset(payload))},
+  setExposedAsset: payload => {dispatch(
+    setExposedAsset(payload))},
 })
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(AssetList)
+)(AssetRelationChips)

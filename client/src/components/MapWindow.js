@@ -30,24 +30,16 @@ const styles = theme => ({
 
 const MapWindow = ({
   classes,
-  exposedAssetId,
-  exposedAssetRelation,
   onSelect,
 }) => {
   return (
     <Paper className={classes.window}>
       <Grid container className={classes.frame}>
         <Grid item xs={12} sm={9} className={classes.mapPanel}>
-          <AssetMap
-            onSelect={onSelect}
-          />
+          <AssetMap onSelect={onSelect} />
         </Grid>
         <Grid item xs={12} sm={3} className={classes.listPanel}>
-          <AssetListContainer
-            onSelect={onSelect}
-            exposedAssetId={exposedAssetId}
-            exposedAssetRelation={exposedAssetRelation}
-          />
+          <AssetListContainer onSelect={onSelect} />
         </Grid>
       </Grid>
     </Paper>

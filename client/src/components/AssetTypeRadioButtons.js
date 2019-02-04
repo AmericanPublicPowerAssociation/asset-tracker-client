@@ -11,7 +11,7 @@ const AssetTypeRadioButtons = ({
   return (
     <RadioGroup
       value={selectedAssetTypeId}
-      onChange={event => onAssetTypeClick(event.target.value)}
+      onChange={event => onAssetTypeClick({id: event.target.value})}
     >
     {ASSET_TYPES.map(x => (
       <FormControlLabel

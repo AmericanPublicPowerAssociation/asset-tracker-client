@@ -12,12 +12,15 @@ import {
   INFORMATION_DRAWER_WIDTH,
   FILTER_LIST_DRAWER_WIDTH,
 } from '../constants'
-import ApplicationBar from './ApplicationBar'
 import NavigationDrawer from './NavigationDrawer'
 import InformationDrawer from './InformationDrawer'
 import FilterListDrawer from './FilterListDrawer'
 import MapWindow from './MapWindow'
 import TableWindow from './TableWindow'
+import ReportWindow from './ReportWindow'
+import AlertWindow from './AlertWindow'
+import AccountWindow from './AccountWindow'
+import ApplicationBarContainer from '../containers/ApplicationBarContainer'
 import AssetAddDialogContainer from '../containers/AssetAddDialogContainer'
 
 var theme = {
@@ -69,8 +72,6 @@ class App extends Component {
     isInformationDrawerOpen: false,
     isFilterListDrawerOpen: false,
     isAssetAddDialogOpen: false,
-    exposedAssetId: null,
-    exposedAssetRelation: null,
   }
 
   handleNavigationDrawerOpen = () => {
@@ -94,23 +95,12 @@ class App extends Component {
 
   handleAssetAddDialogOpen = () => {
     this.setState({isAssetAddDialogOpen: true})}
-  handleAssetAddDialogClose = assetTypeId => {
+  handleAssetAddDialogClose = () => {
     this.setState({isAssetAddDialogOpen: false})
     this.handleInformationDrawerOpen()}
 
   handleThemeToggle = () => {
     this.setState({isDark: !this.state.isDark})}
-
-  handleAssetRelationOpen = (assetId, assetRelation) => {
-    this.setState({
-      exposedAssetId: assetId,
-      exposedAssetRelation: assetRelation,
-    })}
-  handleAssetRelationClose = () => {
-    this.setState({
-      exposedAssetId: null,
-      exposedAssetRelation: null,
-    })}
 
   render() {
     const { classes } = this.props
@@ -120,18 +110,15 @@ class App extends Component {
       isInformationDrawerOpen,
       isFilterListDrawerOpen,
       isAssetAddDialogOpen,
-      exposedAssetId,
-      exposedAssetRelation,
     } = this.state
     const isRightDrawerOpen = isInformationDrawerOpen || isFilterListDrawerOpen
     return (
       <MuiThemeProvider theme={isDark ? darkTheme : brightTheme}>
         <CssBaseline />
-        <ApplicationBar
+        <ApplicationBarContainer
           isDark={isDark}
           isInformationDrawerOpen={isInformationDrawerOpen}
           isFilterListDrawerOpen={isFilterListDrawerOpen}
-          exposedAssetId={exposedAssetId}
           onMenuIconClick={this.handleNavigationDrawerOpen}
           onAddIconClick={this.handleAssetAddDialogOpen}
           onThemeIconClick={this.handleThemeToggle}
@@ -146,16 +133,21 @@ class App extends Component {
         <Route exact path='/' render={() => (
           <MapWindow
             onSelect={this.handleInformationDrawerOpen}
-            exposedAssetId={exposedAssetId}
-            exposedAssetRelation={exposedAssetRelation}
           />
         )} />
         <Route exact path='/tables' render={() => (
           <TableWindow
             onSelect={this.handleInformationDrawerOpen}
-            exposedAssetId={exposedAssetId}
-            exposedAssetRelation={exposedAssetRelation}
           />
+        )} />
+        <Route exact path='/reports' render={() => (
+          <ReportWindow />
+        )} />
+        <Route exact path='/alerts' render={() => (
+          <AlertWindow />
+        )} />
+        <Route exact path='/accounts' render={() => (
+          <AccountWindow />
         )} />
         </main>
         <NavigationDrawer
@@ -164,10 +156,6 @@ class App extends Component {
         />
         <InformationDrawer
           open={isInformationDrawerOpen}
-          exposedAssetId={exposedAssetId}
-          exposedAssetRelation={exposedAssetRelation}
-          onAssetRelationOpen={this.handleAssetRelationOpen}
-          onAssetRelationClose={this.handleAssetRelationClose}
           onClose={this.handleInformationDrawerClose}
         />
         <FilterListDrawer

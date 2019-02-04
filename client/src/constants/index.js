@@ -6,12 +6,14 @@ export const FILTER_LIST_DRAWER_WIDTH = 256
 export const ADD_ASSET = 'ADD_ASSET'
 export const UPDATE_ASSET = 'UPDATE_ASSET'
 
-export const HIGHLIGHT_ASSET = 'HIGHLIGHT_ASSET'
-
 export const ADD_SELECTED_ASSET_TYPE = 'ADD_SELECTED_ASSET_TYPE'
-export const REMOVE_SELECTED_ASSET_TYPE = 'REMOVE_SELECTED_ASSET_TYPE'
 export const TOGGLE_SELECTED_ASSET_TYPE = 'TOGGLE_SELECTED_ASSET_TYPE'
-export const SET_SELECTED_ASSET_TYPES = 'SET_SELECTED_ASSET_TYPES'
+
+export const SET_HIGHLIGHTED_ASSET = 'SET_HIGHLIGHTED_ASSET'
+export const SET_EXPOSED_ASSET = 'SET_EXPOSED_ASSET'
+
+export const ADD_ASSET_RELATION = 'ADD_ASSET_RELATION'
+export const REMOVE_ASSET_RELATION = 'REMOVE_ASSET_RELATION'
 
 export const ASSET_TYPES = [
   {id: 'p', name: 'Pole'},
@@ -204,3 +206,9 @@ export const ASSET_BY_ID = {
     connectedIds: ['transformer2b']},
 }
 export const SORTED_ASSET_IDS = Object.keys(ASSET_BY_ID)
+
+export const RELATION_NAME_BY_KEY = {
+  connectedIds: 'Connections',
+  parentIds: 'Parents',
+  childIds: 'Children',
+}

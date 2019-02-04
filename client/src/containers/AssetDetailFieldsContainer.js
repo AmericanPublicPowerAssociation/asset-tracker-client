@@ -1,18 +1,18 @@
 import { connect } from 'react-redux'
 import { updateAsset } from '../actions'
-import AssetDetail from '../components/AssetDetail'
+import AssetDetailFields from '../components/AssetDetailFields'
 
 const mapStateToProps = state => ({
-  assetById: state.assetById,
   highlightedAssetId: state.highlightedAssetId,
+  assetById: state.assetById,
 })
 
 const mapDispatchToProps = dispatch => ({
-  updateAsset: asset => {dispatch(
-    updateAsset(asset))},
+  updateAsset: payload => {dispatch(
+    updateAsset(payload))},
 })
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(AssetDetail)
+)(AssetDetailFields)

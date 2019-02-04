@@ -1,16 +1,19 @@
-import { ADD_ASSET } from '../constants'
-import { SORTED_ASSET_IDS } from '../constants'
+import {
+  SORTED_ASSET_IDS,
+  ADD_ASSET,
+} from '../constants'
 
 const initialState = SORTED_ASSET_IDS
 
 const sortedAssetIds = (state=initialState, action) => {
-  const { asset } = action
-  switch (action.type) {
-    case ADD_ASSET:
-      return [asset.id, ...state]
-    default:
-      return state
+  const actionType = action.type
+
+  if (ADD_ASSET === actionType) {
+    const {id} = action.payload
+    return [id, ...state]
   }
+
+  return state
 }
 
 export default sortedAssetIds

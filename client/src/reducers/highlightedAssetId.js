@@ -1,17 +1,18 @@
 import {
-  HIGHLIGHT_ASSET,
+  SET_HIGHLIGHTED_ASSET,
 } from '../constants'
 
 const initialState = null
 
 const highlightedAssetId = (state=initialState, action) => {
-  const { assetId } = action
-  switch (action.type) {
-    case HIGHLIGHT_ASSET:
-      return assetId
-    default:
-      return state
+  const actionType = action.type
+
+  if (SET_HIGHLIGHTED_ASSET === actionType) {
+    const {id} = action.payload
+    return id
   }
+
+  return state
 }
 
 export default highlightedAssetId

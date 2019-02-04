@@ -7,30 +7,30 @@ import Switch from '@material-ui/core/Switch'
 
 const AssetList = ({
   // Get local variables
-  exposedAssetId,
   onSelect,
   // Get global variables
-  assetById,
-  highlightedAssetId,
-  selectedAssetTypeIds,
   sortedAssetIds,
-  highlightAsset,
+  selectedAssetTypeIds,
+  highlightedAssetId,
+  exposedAssetId,
+  assetById,
+  setHighlightedAsset,
 }) => {
-  const visibleAssetIds = sortedAssetIds.filter(
-    assetId => selectedAssetTypeIds.includes(assetById[assetId].typeId))
+  const visibleAssetIds = sortedAssetIds.filter(sortedAssetId =>
+    selectedAssetTypeIds.includes(assetById[sortedAssetId].typeId))
   return (
     <List disablePadding>
-    {visibleAssetIds.map(assetId => (
+    {visibleAssetIds.map(visibleAssetId => (
       <ListItem
         button
-        key={assetId}
+        key={visibleAssetId}
         onClick={() => {
-          highlightAsset(assetId)
+          setHighlightedAsset({id: visibleAssetId})
           onSelect()
         }}
-        selected={assetId === highlightedAssetId}
+        selected={visibleAssetId === highlightedAssetId}
       >
-        <ListItemText primary={assetById[assetId].name} />
+        <ListItemText primary={assetById[visibleAssetId].name} />
         {exposedAssetId &&
           <ListItemSecondaryAction>
             <Switch />

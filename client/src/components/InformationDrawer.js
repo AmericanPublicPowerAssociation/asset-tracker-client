@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import { INFORMATION_DRAWER_WIDTH } from '../constants'
 import AssetCircuit from './AssetCircuit'
-import AssetDetailContainer from '../containers/AssetDetailContainer'
+import AssetDetail from './AssetDetail'
 
 const styles = theme => ({
   drawer: {
@@ -44,10 +44,6 @@ const styles = theme => ({
 
 const InformationDrawer = ({
   classes,
-  exposedAssetId,
-  exposedAssetRelation,
-  onAssetRelationOpen,
-  onAssetRelationClose,
   onClose,
   ...etc
 }) => {
@@ -71,12 +67,7 @@ const InformationDrawer = ({
           <AssetCircuit />
         </div>
         <div className={classes.detailPanel}>
-          <AssetDetailContainer
-            exposedAssetId={exposedAssetId}
-            exposedAssetRelation={exposedAssetRelation}
-            onAssetRelationOpen={onAssetRelationOpen}
-            onAssetRelationClose={onAssetRelationClose}
-          />
+          <AssetDetail />
         </div>
       </div>
     </Drawer>
