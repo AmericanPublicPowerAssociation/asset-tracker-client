@@ -13,33 +13,44 @@ const AssetList = ({
   selectedAssetTypeIds,
   highlightedAssetId,
   exposedAssetId,
+  exposedAssetKey,
   assetById,
   setHighlightedAsset,
+  toggleAssetRelation,
 }) => {
   const visibleAssetIds = sortedAssetIds.filter(sortedAssetId =>
     selectedAssetTypeIds.includes(assetById[sortedAssetId].typeId))
   return (
     <List disablePadding>
-    {visibleAssetIds.map(visibleAssetId => (
-      <ListItem
-        button
-        key={visibleAssetId}
-        onClick={() => {
-          setHighlightedAsset({id: visibleAssetId})
-          onSelect()
-        }}
-        selected={visibleAssetId === highlightedAssetId}
-      >
-        <ListItemText primary={assetById[visibleAssetId].name} />
-        {exposedAssetId &&
-          <ListItemSecondaryAction>
-            <Switch
-              onChange={() => {console.log('hey')}}
-            />
-          </ListItemSecondaryAction>
-        }
-      </ListItem>
-    ))}
+    {visibleAssetIds.map(visibleAssetId => {
+      const visibleAsset = assetById[visibleAssetId]
+      return (
+        <ListItem
+          button
+          key={visibleAssetId}
+          onClick={() => {
+            setHighlightedAsset({id: visibleAssetId})
+            onSelect()
+          }}
+          selected={visibleAssetId === highlightedAssetId}
+        >
+          <ListItemText primary={visibleAsset.name} />
+          {exposedAssetId && exposedAssetId !== visibleAssetId &&
+            <ListItemSecondaryAction>
+              <Switch
+                checked={(
+                  assetById[exposedAssetId][exposedAssetKey] || []
+                ).includes(visibleAssetId)}
+                onChange={() => {toggleAssetRelation({
+                  exposedAssetId,
+                  exposedAssetKey,
+                  visibleAssetId})}}
+              />
+            </ListItemSecondaryAction>
+          }
+        </ListItem>
+      )
+    })}
     </List>
   )
 }

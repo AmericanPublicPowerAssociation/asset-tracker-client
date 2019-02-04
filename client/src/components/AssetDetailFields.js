@@ -25,11 +25,11 @@ const AssetDetailFields = ({
           input: classes.name,
         },
       }}
-      onChange={event => updateAsset(
-        Object.assign({}, asset, {
-          id: highlightedAssetId,
-          name: event.target.value})
-      )}
+      onChange={event => updateAsset({
+        ...asset,
+        id: highlightedAssetId,
+        name: event.target.value,
+      })}
     />
   )
 }

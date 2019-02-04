@@ -17,8 +17,8 @@ const selectedAssetTypeIds = (state=initialState, action) => {
     if (!state.includes(id)) {
       state = [...state, id]
     }
+    return state
   }
-
   return state
 }
 
