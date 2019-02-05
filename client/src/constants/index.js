@@ -16,43 +16,121 @@ export const REMOVE_ASSET_RELATION = 'REMOVE_ASSET_RELATION'
 export const TOGGLE_ASSET_RELATION = 'TOGGLE_ASSET_RELATION'
 
 export const ASSET_TYPES = [
-  {id: 'p', name: 'Pole'},
-  {id: 'l', name: 'Line'},
-  {id: 'm', name: 'Meter', children: [
-    {id: 'mr', name: 'Residential'},
-    {id: 'mc', name: 'Commercial'},
-    {id: 'mi', name: 'Industrial'},
-    {id: 'mX', name: 'Other'}]},
-  {id: 't', name: 'Transformer', children: [
-    {id: 'td', name: 'Distribution'},
-    {id: 'tp', name: 'Power'},
-    {id: 'tX', name: 'Other'}]},
-  {id: 'x', name: 'Switch', children: [
-    {id: 'xf', name: 'Fuse'},
-    {id: 'xb', name: 'Breaker'},
-    {id: 'xc', name: 'Recloser'},
-    {id: 'xi', name: 'Interrupter'},
-    {id: 'xs', name: 'Sectionalizer'},
-    {id: 'xr', name: 'Relay'},
-    {id: 'xX', name: 'Other'}]},
-  {id: 'q', name: 'Power Quality', children: [
-    {id: 'qc', name: 'Capacitor'},
-    {id: 'qr', name: 'Regulator'},
-    {id: 'qb', name: 'Booster'},
-    {id: 'qX', name: 'Other'}]},
-  {id: 'c', name: 'Control', children: [
-    {id: 'cp', name: 'PLC'},
-    {id: 'cm', name: 'Microcontroller'},
-    {id: 'cX', name: 'Other'}]},
-  {id: 'b', name: 'Busbar'},
-  {id: 'o', name: 'Storage'},
-  {id: 'g', name: 'Generator'},
-  {id: 's', name: 'Substation', children: [
-    {id: 'sd', name: 'Distribution'},
-    {id: 'st', name: 'Transmission'},
-    {id: 'sX', name: 'Other'}]},
-  {id: 'S', name: 'Station'},
-  {id: 'X', name: 'Other'},
+  {
+    id: 'p',
+    name: 'Pole',
+    connectedIds: [],  //
+    parentIds: ['l', 's', 'S'],  //
+    childIds: ['m', 't', 'x', 'q', 'c', 'X'],  //
+  }, {
+    id: 'l',
+    name: 'Line',
+    connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'], //
+    parentIds: [],  //
+    childIds: ['p'],  //
+  }, {
+    id: 'm',
+    name: 'Meter',
+    connectedIds: ['l', 't', 'X'],  //
+    parentIds: ['p', 's', 'S'],  //
+    childIds: [],  //
+    subTypes: [
+      {id: 'mr', name: 'Residential'},
+      {id: 'mc', name: 'Commercial'},
+      {id: 'mi', name: 'Industrial'},
+      {id: 'mX', name: 'Other'},
+    ]
+  }, {
+    id: 't',
+    name: 'Transformer',
+    connectedIds: ['l', 'm', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],  //
+    parentIds: ['p'],  //
+    childIds: [],  //
+    subTypes: [
+      {id: 'td', name: 'Distribution'},
+      {id: 'tp', name: 'Power'},
+      {id: 'tX', name: 'Other'},
+    ],
+  }, {
+    id: 'x',
+    name: 'Switch',
+    connectedIds: ['l', 't', 'X'],
+    parentIds: ['p'],
+    childIds: [],
+    subTypes: [
+      {id: 'xf', name: 'Fuse'},
+      {id: 'xb', name: 'Breaker'},
+      {id: 'xc', name: 'Recloser'},
+      {id: 'xi', name: 'Interrupter'},
+      {id: 'xs', name: 'Sectionalizer'},
+      {id: 'xr', name: 'Relay'},
+      {id: 'xX', name: 'Other'},
+    ],
+  }, {
+    id: 'q',
+    name: 'Power Quality',
+    connectedIds: ['l', 't'],
+    parentIds: ['p'],
+    childIds: [],
+    subTypes: [
+      {id: 'qc', name: 'Capacitor'},
+      {id: 'qr', name: 'Regulator'},
+      {id: 'qb', name: 'Booster'},
+      {id: 'qX', name: 'Other'},
+    ],
+  }, {
+    id: 'c',
+    name: 'Control',
+    connectedIds: ['l', 't'],
+    parentIds: ['p'],
+    childIds: [],
+    subTypes: [
+      {id: 'cp', name: 'PLC'},
+      {id: 'cm', name: 'Microcontroller'},
+      {id: 'cX', name: 'Other'},
+    ],
+  }, {
+    id: 'b',
+    name: 'Busbar',
+    connectedIds: ['l', 't'],
+    parentIds: [],
+    childIds: [],
+  }, {
+    id: 'o',
+    name: 'Storage',
+    connectedIds: ['l', 't'],
+    parentIds: [],
+    childIds: [],
+  }, {
+    id: 'g',
+    name: 'Generator',
+    connectedIds: ['l', 't'],
+    parentIds: [],
+    childIds: [],
+  }, {
+    id: 's',
+    name: 'Substation',
+    connectedIds: [],
+    parentIds: [],
+    childIds: ['p', 'm'],
+    subTypes: [
+      {id: 'sd', name: 'Distribution'},
+      {id: 'st', name: 'Transmission'},
+      {id: 'sX', name: 'Other'},
+    ],
+  }, {
+    id: 'S',
+    name: 'Station',
+    connectedIds: [],
+    parentIds: [],
+    childIds: ['p', 'm'],
+  }, {
+    id: 'X',
+    name: 'Other',
+    connectedIds: ['l', 'm', 't'],
+    parentIds: ['p'],
+    childIds: [],
+  },
 ]
 export const ASSET_TYPE_BY_ID = ASSET_TYPES.reduce((obj, item) => {
   obj[item.id] = item
