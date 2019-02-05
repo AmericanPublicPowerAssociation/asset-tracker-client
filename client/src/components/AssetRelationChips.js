@@ -42,11 +42,10 @@ const AssetRelationChips = ({
       <div className={classes.chipGroup}>
       {relatedAssetIds.map(relatedAssetId => {
         const relatedAsset = assetById[relatedAssetId]
-        const {id, name} = relatedAsset
         return (
           <Chip
-            key={id}
-            label={name}
+            key={relatedAssetId}
+            label={relatedAsset.name}
             className={classes.chip}
           />
         )

@@ -1,11 +1,19 @@
 import React from 'react'
+import { withStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import Switch from '@material-ui/core/Switch'
 
+const styles = theme => ({
+  exposed: {
+    backgroundColor: theme.palette.secondary.main,
+  },
+})
+
 const AssetList = ({
+  classes,
   // Get local variables
   onSelect,
   // Get global variables
@@ -33,6 +41,10 @@ const AssetList = ({
             onSelect()
           }}
           selected={visibleAssetId === highlightedAssetId}
+          className={(
+            exposedAssetId &&
+            exposedAssetId === visibleAssetId &&
+            classes.exposed) || ''}
         >
           <ListItemText primary={visibleAsset.name} />
           {exposedAssetId && exposedAssetId !== visibleAssetId &&
@@ -55,4 +67,4 @@ const AssetList = ({
   )
 }
 
-export default AssetList
+export default withStyles(styles)(AssetList)
