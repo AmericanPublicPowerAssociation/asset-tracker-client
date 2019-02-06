@@ -19,21 +19,21 @@ export const ASSET_TYPES = [
   {
     id: 'p',
     name: 'Pole',
-    connectedIds: [],  //
-    parentIds: ['l', 's', 'S'],  //
-    childIds: ['m', 't', 'x', 'q', 'c', 'X'],  //
+    connectedIds: [],
+    parentIds: ['l', 's', 'S'],
+    childIds: ['m', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
   }, {
     id: 'l',
     name: 'Line',
-    connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'], //
-    parentIds: [],  //
-    childIds: ['p'],  //
+    connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
+    parentIds: [],
+    childIds: ['p'],
   }, {
     id: 'm',
     name: 'Meter',
-    connectedIds: ['l', 't', 'X'],  //
-    parentIds: ['p', 's', 'S'],  //
-    childIds: [],  //
+    connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
+    parentIds: ['p', 's', 'S'],
+    childIds: [],
     subTypes: [
       {id: 'mr', name: 'Residential'},
       {id: 'mc', name: 'Commercial'},
@@ -43,9 +43,9 @@ export const ASSET_TYPES = [
   }, {
     id: 't',
     name: 'Transformer',
-    connectedIds: ['l', 'm', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],  //
-    parentIds: ['p'],  //
-    childIds: [],  //
+    connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
+    parentIds: ['p'],
+    childIds: [],
     subTypes: [
       {id: 'td', name: 'Distribution'},
       {id: 'tp', name: 'Power'},
@@ -54,8 +54,8 @@ export const ASSET_TYPES = [
   }, {
     id: 'x',
     name: 'Switch',
-    connectedIds: ['l', 't', 'X'],
-    parentIds: ['p'],
+    connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
+    parentIds: ['p', 's', 'S'],
     childIds: [],
     subTypes: [
       {id: 'xf', name: 'Fuse'},
@@ -69,8 +69,8 @@ export const ASSET_TYPES = [
   }, {
     id: 'q',
     name: 'Power Quality',
-    connectedIds: ['l', 't'],
-    parentIds: ['p'],
+    connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
+    parentIds: ['p', 's', 'S'],
     childIds: [],
     subTypes: [
       {id: 'qc', name: 'Capacitor'},
@@ -81,8 +81,8 @@ export const ASSET_TYPES = [
   }, {
     id: 'c',
     name: 'Control',
-    connectedIds: ['l', 't'],
-    parentIds: ['p'],
+    connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
+    parentIds: ['p', 's', 'S'],
     childIds: [],
     subTypes: [
       {id: 'cp', name: 'PLC'},
@@ -92,27 +92,27 @@ export const ASSET_TYPES = [
   }, {
     id: 'b',
     name: 'Busbar',
-    connectedIds: ['l', 't'],
-    parentIds: [],
+    connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
+    parentIds: ['p', 's', 'S'],
     childIds: [],
   }, {
     id: 'o',
     name: 'Storage',
-    connectedIds: ['l', 't'],
-    parentIds: [],
+    connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
+    parentIds: ['p', 's', 'S'],
     childIds: [],
   }, {
     id: 'g',
     name: 'Generator',
-    connectedIds: ['l', 't'],
-    parentIds: [],
+    connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
+    parentIds: ['p', 's', 'S'],
     childIds: [],
   }, {
     id: 's',
     name: 'Substation',
     connectedIds: [],
     parentIds: [],
-    childIds: ['p', 'm'],
+    childIds: ['p', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
     subTypes: [
       {id: 'sd', name: 'Distribution'},
       {id: 'st', name: 'Transmission'},
@@ -123,12 +123,12 @@ export const ASSET_TYPES = [
     name: 'Station',
     connectedIds: [],
     parentIds: [],
-    childIds: ['p', 'm'],
+    childIds: ['p', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
   }, {
     id: 'X',
     name: 'Other',
-    connectedIds: ['l', 'm', 't'],
-    parentIds: ['p'],
+    connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
+    parentIds: ['p', 's', 'S'],
     childIds: [],
   },
 ]
