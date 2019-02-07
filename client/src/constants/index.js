@@ -1,18 +1,20 @@
-export const ADD_ASSET = 'ADD_ASSET'
+export const ADD_ASSET = "ADD_ASSET";
 
 export const ASSET_TYPES = [
-  {id: '0', name: 'Station'},
-  {id: '1', name: 'Substation'},
-  {id: '2', name: 'Power Quality'},
-  {id: '3', name: 'Switch'},
-  {id: '4', name: 'Transformer'},
-  {id: '5', name: 'Meter'},
-  {id: '6', name: 'Line'},
-  {id: '7', name: 'Pole'},
-  {id: '8', name: 'Busbar'},
-  {id: '9', name: 'Control'},
-  {id: 'X', name: 'Other'},
-]
+  { id: "0", name: "POLES" },
+  { id: "1", name: "SUBSTATIONS" },
+  { id: "2", name: "SWITCH" },
+  { id: "3", name: "Relay" },
+  { id: "4", name: "Recloser" },
+  { id: "5", name: "Circuit breaker" },
+  { id: "6", name: "METER" },
+  { id: "7", name: "Commercial" },
+  { id: "8", name: "Residential" },
+  { id: "9", name: "LINE" },
+  { id: "10", name: "Commercial" },
+  { id: "11", name: "Residential" },
+  { id: "X", name: "BUSBAR" }
+];
 
 /*
 export const ASSET_TYPES = [
