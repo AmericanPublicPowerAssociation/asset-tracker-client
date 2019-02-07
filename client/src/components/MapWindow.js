@@ -13,6 +13,7 @@ const styles = theme => ({
     backgroundColor: 'lightblue',
   },
   listPanel: {
+    height: '100%',
     overflow: 'auto',
   },
 })
@@ -22,10 +23,10 @@ const MapWindow = ({
   onSelect,
 }) => (
   <Grid container className={classes.frame}>
-    <Grid item xs={12} sm={9} className={classes.mapPanel}>
+    <Grid item xs={12} sm={12} md={9} className={classes.mapPanel}>
       <AssetMap onSelect={onSelect} />
     </Grid>
-    <Grid item xs={12} sm={3} className={classes.listPanel}>
+    <Grid item xs={12} sm={12} md={3} className={classes.listPanel}>
       <AssetListContainer onSelect={onSelect} />
     </Grid>
   </Grid>
