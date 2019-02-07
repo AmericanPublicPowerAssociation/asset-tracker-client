@@ -15,21 +15,20 @@ export const SET_EXPOSED_ASSET = 'SET_EXPOSED_ASSET'
 export const REMOVE_ASSET_RELATION = 'REMOVE_ASSET_RELATION'
 export const TOGGLE_ASSET_RELATION = 'TOGGLE_ASSET_RELATION'
 
-export const ASSET_TYPES = [
-  {
-    id: 'p',
+export const ASSET_TYPE_BY_ID = {
+  'p': {
     name: 'Pole',
     connectedIds: [],
     parentIds: ['l', 's', 'S'],
     childIds: ['m', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
-  }, {
-    id: 'l',
+  },
+  'l': {
     name: 'Line',
     connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
     parentIds: [],
     childIds: ['p'],
-  }, {
-    id: 'm',
+  },
+  'm': {
     name: 'Meter',
     connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
     parentIds: ['p', 's', 'S'],
@@ -39,9 +38,9 @@ export const ASSET_TYPES = [
       {id: 'mc', name: 'Commercial'},
       {id: 'mi', name: 'Industrial'},
       {id: 'mX', name: 'Other'},
-    ]
-  }, {
-    id: 't',
+    ],
+  },
+  't': {
     name: 'Transformer',
     connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
     parentIds: ['p'],
@@ -51,8 +50,8 @@ export const ASSET_TYPES = [
       {id: 'tp', name: 'Power'},
       {id: 'tX', name: 'Other'},
     ],
-  }, {
-    id: 'x',
+  },
+  'x': {
     name: 'Switch',
     connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
     parentIds: ['p', 's', 'S'],
@@ -66,8 +65,8 @@ export const ASSET_TYPES = [
       {id: 'xr', name: 'Relay'},
       {id: 'xX', name: 'Other'},
     ],
-  }, {
-    id: 'q',
+  },
+  'q': {
     name: 'Power Quality',
     connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
     parentIds: ['p', 's', 'S'],
@@ -78,8 +77,8 @@ export const ASSET_TYPES = [
       {id: 'qb', name: 'Booster'},
       {id: 'qX', name: 'Other'},
     ],
-  }, {
-    id: 'c',
+  },
+  'c': {
     name: 'Control',
     connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
     parentIds: ['p', 's', 'S'],
@@ -89,26 +88,26 @@ export const ASSET_TYPES = [
       {id: 'cm', name: 'Microcontroller'},
       {id: 'cX', name: 'Other'},
     ],
-  }, {
-    id: 'b',
+  },
+  'b': {
     name: 'Busbar',
     connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
     parentIds: ['p', 's', 'S'],
     childIds: [],
-  }, {
-    id: 'o',
+  },
+  'o': {
     name: 'Storage',
     connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
     parentIds: ['p', 's', 'S'],
     childIds: [],
-  }, {
-    id: 'g',
+  },
+  'g': {
     name: 'Generator',
     connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
     parentIds: ['p', 's', 'S'],
     childIds: [],
-  }, {
-    id: 's',
+  },
+  's': {
     name: 'Substation',
     connectedIds: [],
     parentIds: [],
@@ -118,24 +117,20 @@ export const ASSET_TYPES = [
       {id: 'st', name: 'Transmission'},
       {id: 'sX', name: 'Other'},
     ],
-  }, {
-    id: 'S',
+  },
+  'S': {
     name: 'Station',
     connectedIds: [],
     parentIds: [],
     childIds: ['p', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
-  }, {
-    id: 'X',
+  },
+  'X': {
     name: 'Other',
     connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
     parentIds: ['p', 's', 'S'],
     childIds: [],
   },
-]
-export const ASSET_TYPE_BY_ID = ASSET_TYPES.reduce((obj, item) => {
-  obj[item.id] = item
-  return obj
-}, {})
+}
 export const SELECTED_ASSET_TYPE_IDS = ['l']
 export const DEFAULT_ASSET_TYPE_ID = 'p'
 

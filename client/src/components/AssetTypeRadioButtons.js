@@ -2,7 +2,7 @@ import React from 'react'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import Radio from '@material-ui/core/Radio'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import { ASSET_TYPES } from '../constants'
+import { ASSET_TYPE_BY_ID } from '../constants'
 
 const AssetTypeRadioButtons = ({
   selectedAssetTypeId,
@@ -13,13 +13,13 @@ const AssetTypeRadioButtons = ({
       value={selectedAssetTypeId}
       onChange={event => onAssetTypeClick({id: event.target.value})}
     >
-    {ASSET_TYPES.map(x => (
+    {Object.entries(ASSET_TYPE_BY_ID).map(([id, {name}]) =>
       <FormControlLabel
         control={<Radio />}
-        value={x.id}
-        label={x.name}
+        value={id}
+        label={name}
       />
-    ))}
+    )}
     </RadioGroup>
   )
 }

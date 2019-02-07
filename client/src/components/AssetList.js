@@ -5,6 +5,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import Switch from '@material-ui/core/Switch'
+import { ASSET_TYPE_BY_ID } from '../constants'
 
 const styles = theme => ({
   exposed: {
@@ -26,6 +27,8 @@ const AssetList = ({
   setHighlightedAsset,
   toggleAssetRelation,
 }) => {
+  const visibleAssetTypeIds = exposedAssetId ? ASSET_TYPE_BY_ID[
+    assetById[exposedAssetId].typeId][exposedAssetKey] : []
   const visibleAssetIds = sortedAssetIds.filter(sortedAssetId =>
     selectedAssetTypeIds.includes(assetById[sortedAssetId].typeId))
   return (
@@ -47,7 +50,10 @@ const AssetList = ({
             classes.exposed) || ''}
         >
           <ListItemText primary={visibleAsset.name} />
-          {exposedAssetId && exposedAssetId !== visibleAssetId &&
+          {
+            exposedAssetId &&
+            exposedAssetId !== visibleAssetId &&
+            visibleAssetTypeIds.includes(visibleAsset.typeId) &&
             <ListItemSecondaryAction>
               <Switch
                 checked={(
