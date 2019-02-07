@@ -17,7 +17,7 @@ import NavigationDrawer from './NavigationDrawer'
 import InformationDrawer from './InformationDrawer'
 import FilterListDrawer from './FilterListDrawer'
 import MapWindow from './MapWindow'
-import TableWindow from './TableWindow'
+import TableWindowContainer from '../containers/TableWindowContainer'
 import ReportWindow from './ReportWindow'
 import AlertWindow from './AlertWindow'
 import AccountWindow from './AccountWindow'
@@ -147,7 +147,7 @@ class App extends Component {
               />
             )} />
             <Route exact path='/tables' render={() => (
-              <TableWindow
+              <TableWindowContainer
                 onSelect={this.handleInformationDrawerOpen}
               />
             )} />
