@@ -69,14 +69,22 @@ const NavigationBar = props => {
         />
         <Button
           variant="h6"
-          style={{ padding: "0.5em", ml: "5rem", textTransform: "none" }}
+          style={{
+            padding: "0.5em",
+            marginLeft: "1rem",
+            textTransform: "none"
+          }}
           className={classes.typography1}
         >
           Asset locator
         </Button>
         <Button
           variant="h6"
-          style={{ padding: "0.5em", ml: "5rem", textTransform: "none" }}
+          style={{
+            padding: "0.5em",
+            marginLeft: "0.5rem",
+            textTransform: "none"
+          }}
           className={classes.typography1}
         >
           Dashboard
