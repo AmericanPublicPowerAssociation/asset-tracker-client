@@ -6,6 +6,7 @@ import FormLabel from '@material-ui/core/FormLabel'
 import Chip from '@material-ui/core/Chip'
 import AddIcon from '@material-ui/icons/Add'
 import CheckIcon from '@material-ui/icons/Check'
+import { ASSET_TYPE_BY_ID } from '../constants'
 
 const styles = theme => ({
   root: {
@@ -33,9 +34,12 @@ const AssetRelationChips = ({
   assetById,
   setExposedAsset,
 }) => {
+  if (highlightedAssetId === null) return null
   const assetId = highlightedAssetId
   const asset = assetById[assetId]
-  const relatedAssetIds = (asset && asset[assetKey]) || []
+  const relatedAssetIds = asset[assetKey] || []
+  const relatedAssetTypeIds = ASSET_TYPE_BY_ID[asset.typeId][assetKey] || []
+  if (!relatedAssetTypeIds.length) return null
   return (
     <FormControl fullWidth className={classes.root}>
       <FormLabel>{label}</FormLabel>

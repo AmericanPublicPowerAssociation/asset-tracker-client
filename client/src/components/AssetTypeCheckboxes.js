@@ -3,7 +3,7 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import Checkbox from '@material-ui/core/Checkbox'
-import { ASSET_TYPES } from '../constants'
+import { ASSET_TYPE_BY_ID } from '../constants'
 
 const AssetTypeCheckboxes = ({
   selectedAssetTypeIds,
@@ -11,23 +11,20 @@ const AssetTypeCheckboxes = ({
 }) => {
   return (
     <List disablePadding>
-    {ASSET_TYPES.map(assetType => {
-      const {id, name} = assetType
-      return (
-        <ListItem
-          button
-          key={id}
-          onClick={() => onAssetTypeClick({id})}
-        >
-          <Checkbox
-            checked={selectedAssetTypeIds.includes(id)}
-            tabIndex={-1}
-            disableRipple
-          />
-          <ListItemText primary={name} />
-        </ListItem>
-      )
-    })}
+    {Object.entries(ASSET_TYPE_BY_ID).map(([id, {name}]) =>
+      <ListItem
+        button
+        key={id}
+        onClick={() => onAssetTypeClick({id})}
+      >
+        <Checkbox
+          checked={selectedAssetTypeIds.includes(id)}
+          tabIndex={-1}
+          disableRipple
+        />
+        <ListItemText primary={name} />
+      </ListItem>
+    )}
     </List>
   )
 }
