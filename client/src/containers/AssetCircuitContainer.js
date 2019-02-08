@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import {
   setHighlightedAsset,
 } from '../actions'
-import TableWindow from '../components/TableWindow'
+import AssetCircuit from '../components/AssetCircuit'
 
 const mapStateToProps = state => ({
   highlightedAssetId: state.highlightedAssetId,
@@ -17,4 +17,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(TableWindow)
+)(AssetCircuit)

@@ -72,6 +72,7 @@ const styles = theme => ({
     [theme.breakpoints.up('sm')]: {
       height: `calc(100vh - 64px - ${CONTENT_PADDING * 2}px)`,
     },
+    overflow: 'auto',
   }
 })
 
@@ -79,7 +80,7 @@ class App extends Component {
   state = {
     isDark: false,
     isNavigationDrawerOpen: false,
-    isInformationDrawerOpen: false,
+    isInformationDrawerOpen: true,
     isFilterListDrawerOpen: false,
     isAssetAddDialogOpen: false,
   }

@@ -285,3 +285,5 @@ export const RELATION_NAME_BY_KEY = {
   parentIds: 'Parents',
   childIds: 'Children',
 }
+
+export const DEBOUNCE_THRESHOLD_IN_MILLISECONDS = 100

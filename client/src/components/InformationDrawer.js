@@ -4,7 +4,7 @@ import Drawer from '@material-ui/core/Drawer'
 import IconButton from '@material-ui/core/IconButton'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import { INFORMATION_DRAWER_WIDTH } from '../constants'
-import AssetCircuit from './AssetCircuit'
+import AssetCircuitContainer from '../containers/AssetCircuitContainer'
 import AssetDetail from './AssetDetail'
 
 const styles = theme => ({
@@ -35,10 +35,9 @@ const styles = theme => ({
     padding: '0 24px',
   },
   circuitPanel: {
-    flexGrow: 1,
+    height: '40%',
   },
   detailPanel: {
-    flexGrow: 2,
   },
 })
 
@@ -64,7 +63,7 @@ const InformationDrawer = ({
       </div>
       <div className={classes.frame}>
         <div className={classes.circuitPanel}>
-          <AssetCircuit />
+          <AssetCircuitContainer />
         </div>
         <div className={classes.detailPanel}>
           <AssetDetail />

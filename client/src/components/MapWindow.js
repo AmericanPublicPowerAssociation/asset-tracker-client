@@ -5,7 +5,7 @@ import AssetMap from './AssetMap'
 import AssetListContainer from '../containers/AssetListContainer'
 
 const styles = theme => ({
-  frame: {
+  root: {
     height: '100%',
   },
   mapPanel: {
@@ -15,6 +15,9 @@ const styles = theme => ({
   listPanel: {
     height: '100%',
     overflow: 'auto',
+    [theme.breakpoints.down('md')]: {
+      height: '50%',
+    },
   },
 })
 
@@ -22,7 +25,7 @@ const MapWindow = ({
   classes,
   onSelect,
 }) => (
-  <Grid container className={classes.frame}>
+  <Grid container className={classes.root}>
     <Grid item xs={12} sm={12} md={9} className={classes.mapPanel}>
       <AssetMap onSelect={onSelect} />
     </Grid>

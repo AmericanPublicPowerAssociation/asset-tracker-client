@@ -98,40 +98,55 @@ const ApplicationBar = ({
       })}
     >
       <Toolbar>
-        <IconButton
-          className={classes.menuButton}
-          onClick={onMenuIconClick}
-        ><MenuIcon /></IconButton>
+
+        <Tooltip title='Open Navigation' enterDelay={500}>
+          <IconButton aria-label='Open Navigation'
+            className={classes.menuButton}
+            onClick={onMenuIconClick}
+          ><MenuIcon /></IconButton>
+        </Tooltip>
+
         <Typography
           variant='h6'
           color='inherit'
           className={classes.grow}
           noWrap
         >{applicationTitle}</Typography>
-        <IconButton 
-          className={(!withTeleportIcon && classes.vanish) || ''}
-          onClick={() => {
-            addSelectedAssetType({id: assetById[exposedAssetId].typeId})
-            setHighlightedAsset({id: exposedAssetId})
-          }}
-        ><TeleportIcon /></IconButton>
-        <Tooltip title="Add asset" enterDelay={500}>
-          <IconButton aria-label="Add"
+
+        <Tooltip title='Show Exposed Asset' enterDelay={500}>
+          <IconButton aria-label='Show Exposed Asset'
+            className={(!withTeleportIcon && classes.vanish) || ''}
+            onClick={() => {
+              addSelectedAssetType({id: assetById[exposedAssetId].typeId})
+              setHighlightedAsset({id: exposedAssetId})
+            }}
+          ><TeleportIcon /></IconButton>
+        </Tooltip>
+
+        <Tooltip title='Add Asset' enterDelay={500}>
+          <IconButton aria-label='Add Asset'
             onClick={onAddIconClick}
           ><AddIcon /></IconButton>
         </Tooltip>
-        <Tooltip title="Toggle light/dark mode" enterDelay={500}>
-          <IconButton aria-label="toggleMode"
+
+        <Tooltip title='Toggle Brightness' enterDelay={500}>
+          <IconButton aria-label='Toggle Brightness'
             onClick={onThemeIconClick}
           >{isDark ? <SunnyIcon /> : <SunnyOutlinedIcon />}</IconButton>
         </Tooltip>
-        <IconButton disabled><SearchIcon /></IconButton>
-        <Tooltip title="Filter assets" enterDelay={500}>
-          <IconButton aria-label="Filter"
+
+        <Tooltip title='Search Assets' enterDelay={500}>
+          <IconButton aria-label='Search Assets' disabled
+          ><SearchIcon /></IconButton>
+        </Tooltip>
+
+        <Tooltip title='Filter Assets' enterDelay={500}>
+          <IconButton aria-label='Filter Assets'
             className={(isFilterListDrawerOpen && classes.vanish) || ''}
             onClick={onFilterIconClick}
           ><FilterListIcon /></IconButton>
         </Tooltip>
+
       </Toolbar>
     </AppBar>
   )
