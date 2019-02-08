@@ -41,6 +41,8 @@ class AssetCircuit extends Component {
 
   handleCy = cy => {
     const {
+      assetById,
+      addSelectedAssetType,
       setHighlightedAsset,
     } = this.props
 
@@ -49,7 +51,10 @@ class AssetCircuit extends Component {
     }, DEBOUNCE_THRESHOLD_IN_MILLISECONDS)
 
     const showAsset = e => {
-      let assetId = e.target.id()
+      const assetId = e.target.id()
+      const assetTypeId = assetById[assetId].typeId
+
+      addSelectedAssetType({id: assetTypeId})
       setHighlightedAsset({id: assetId})
 
       // !!! Find out why this gets called twice

@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import {
+  addSelectedAssetType,
   setHighlightedAsset,
 } from '../actions'
 import AssetCircuit from '../components/AssetCircuit'
@@ -10,6 +11,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  addSelectedAssetType: payload => {dispatch(
+    addSelectedAssetType(payload))},
   setHighlightedAsset: payload => {dispatch(
     setHighlightedAsset(payload))},
 })

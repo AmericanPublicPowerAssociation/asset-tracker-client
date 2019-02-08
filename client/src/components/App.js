@@ -80,7 +80,7 @@ class App extends Component {
   state = {
     isDark: false,
     isNavigationDrawerOpen: false,
-    isInformationDrawerOpen: true,
+    isInformationDrawerOpen: false,
     isFilterListDrawerOpen: false,
     isAssetAddDialogOpen: false,
   }
