@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { applyMiddleware, compose, createStore } from 'redux'
 import thunk from 'redux-thunk'
+import { config as configureEnvironment } from 'dotenv'
 import rootReducer from './reducers'
 import App from './components/App'
 
@@ -13,6 +14,8 @@ const store = createStore(
   rootReducer,
   enhanceStore(applyMiddleware(thunk)),
 )
+
+configureEnvironment()
 
 ReactDOM.render(
   <Provider store={store}>
