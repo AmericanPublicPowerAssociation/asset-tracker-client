@@ -12,6 +12,7 @@ import SunnyOutlinedIcon from '@material-ui/icons/WbSunnyOutlined'
 import SearchIcon from '@material-ui/icons/Search'
 import FilterListIcon from '@material-ui/icons/FilterList'
 import TeleportIcon from '@material-ui/icons/CenterFocusStrong'
+import Tooltip from '@material-ui/core/Tooltip';
 
 import {
   FILTER_LIST_DRAWER_WIDTH,
@@ -107,24 +108,30 @@ const ApplicationBar = ({
           className={classes.grow}
           noWrap
         >{applicationTitle}</Typography>
-        <IconButton
+        <IconButton 
           className={(!withTeleportIcon && classes.vanish) || ''}
           onClick={() => {
             addSelectedAssetType({id: assetById[exposedAssetId].typeId})
             setHighlightedAsset({id: exposedAssetId})
           }}
         ><TeleportIcon /></IconButton>
-        <IconButton
-          onClick={onAddIconClick}
-        ><AddIcon /></IconButton>
-        <IconButton
-          onClick={onThemeIconClick}
-        >{isDark ? <SunnyIcon /> : <SunnyOutlinedIcon />}</IconButton>
+        <Tooltip title="Add asset" enterDelay={500}>
+          <IconButton aria-label="Add"
+            onClick={onAddIconClick}
+          ><AddIcon /></IconButton>
+        </Tooltip>
+        <Tooltip title="Toggle light/dark mode" enterDelay={500}>
+          <IconButton aria-label="toggleMode"
+            onClick={onThemeIconClick}
+          >{isDark ? <SunnyIcon /> : <SunnyOutlinedIcon />}</IconButton>
+        </Tooltip>
         <IconButton disabled><SearchIcon /></IconButton>
-        <IconButton
-          className={(isFilterListDrawerOpen && classes.vanish) || ''}
-          onClick={onFilterIconClick}
-        ><FilterListIcon /></IconButton>
+        <Tooltip title="Filter assets" enterDelay={500}>
+          <IconButton aria-label="Filter"
+            className={(isFilterListDrawerOpen && classes.vanish) || ''}
+            onClick={onFilterIconClick}
+          ><FilterListIcon /></IconButton>
+        </Tooltip>
       </Toolbar>
     </AppBar>
   )
