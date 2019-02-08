@@ -135,10 +135,10 @@ const ApplicationBar = ({
           >{isDark ? <SunnyIcon /> : <SunnyOutlinedIcon />}</IconButton>
         </Tooltip>
 
-        <Tooltip title='Search Assets' enterDelay={500}>
+        {/* <Tooltip title='Search Assets' enterDelay={500}> */}
           <IconButton aria-label='Search Assets' disabled
           ><SearchIcon /></IconButton>
-        </Tooltip>
+        {/* </Tooltip> */}
 
         <Tooltip title='Filter Assets' enterDelay={500}>
           <IconButton aria-label='Filter Assets'

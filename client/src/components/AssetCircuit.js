@@ -58,6 +58,9 @@ class AssetCircuit extends Component {
 
     cy.on('add remove', refreshLayout)
     cy.on('tap', 'node', showAsset)
+
+    // !!! Find out why this does not work
+    // cy.on('mouseover', 'node', e  => e.target.cursor = 'pointer')
   }
 
   render() {
@@ -72,6 +75,7 @@ class AssetCircuit extends Component {
         style={{
           height: '100%',
           width: '100%',
+          cursor: 'pointer',
         }}
         cy={this.handleCy}
       />
