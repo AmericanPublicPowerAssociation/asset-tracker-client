@@ -1,3 +1,5 @@
+//import assetById from '../datasets/assetById.json'
+
 export const CONTENT_PADDING = 24
 
 export const INFORMATION_DRAWER_WIDTH = 512
@@ -278,6 +280,7 @@ export const ASSET_BY_ID = {
     typeId: 'm',
     connectedIds: ['transformer2b']},
 }
+//export const ASSET_BY_ID = assetById
 export const SORTED_ASSET_IDS = Object.keys(ASSET_BY_ID)
 
 export const RELATION_NAME_BY_KEY = {
