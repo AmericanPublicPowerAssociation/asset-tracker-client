@@ -3,7 +3,7 @@ import ReactMapGL from 'react-map-gl'
 import { fromJS } from 'immutable'
 import MAP_STYLE from '../datasets/map-style-basic-v8.json'
 
-//import lineExample from '../datasets/example-line.geojson'
+import meterExample from '../datasets/toy-meter.json'
 
 import 'mapbox-gl/dist/mapbox-gl.css'
 
@@ -24,53 +24,31 @@ class AssetMap extends Component {
         ...MAP_STYLE,
         sources: {
           ...MAP_STYLE.sources,
-          points: {
+          meters: {
               type: 'geojson',
-              data: {
-                  type: 'FeatureCollection',
-                  features: [
-                      {type: 'Feature', geometry: {type: 'Point', coordinates: [-122.45, 37.78]}},
-                  ]
-              }
+              data: meterExample,
           },
-          lines: {
-              type: 'geojson',
-              data: {
-                  type: 'FeatureCollection',
-                  features: [
-                      {type: 'Feature', geometry: {type: 'LineString', coordinates: [[-122.45, 37.78], [-132.45, 40.78]]}},
-                  ]
-              }
-
-          }
         },
         layers: [
             ...MAP_STYLE.layers,
             {
-                id: 'my-layer',
-                type: 'circle',
-                source: 'points',
-                paint: {
-                    'circle-color': '#f00',
-                    'circle-radius': 14
-                }
-            },
-            {
-                id: 'my-lines',
-                type: 'line',
-                source: 'lines',
-                paint: {
-                  'line-color': 'yellow',
-                  'line-width': 7
-                }
+              id: 'my-meters',
+              type: 'circle',
+              source: 'meters',
+              paint: {
+                'circle-color': 'red',
+                'circle-radius': 8
+              }
             }
         ]
     });
 
     return (
+
       <ReactMapGL
         //mapStyle='mapbox://styles/mapbox/satellite-v9'
-        //mapStyle='mapbox://styles/mapbox/streets-v9'
+        // mapStyle='mapbox://styles/mapbox/streets-v9'
+        //mapStyle='mapbox://styles/invisibleroads/cjrxqr50m0q1j1fp91ydmnoqv'
         mapStyle={ mapStyle }
         {...this.state.viewport}
         onViewportChange={viewport => this.setState({viewport})}
