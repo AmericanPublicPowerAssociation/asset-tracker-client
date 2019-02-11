@@ -1,116 +1,97 @@
 import React, { Component } from 'react'
 import ReactMapGL from 'react-map-gl'
-import { fromJS } from 'immutable'
-import MAP_STYLE from '../datasets/map-style-satellite-streets.json'
-
-import meterExample from '../datasets/example-meter.geojson'
-import lineExample from '../datasets/example-line.geojson'
-
 import 'mapbox-gl/dist/mapbox-gl.css'
+import {
+  KEY_PREFIX,
+  MAP_STYLE,
+} from '../constants'
+import LINE_GEOJSON from '../datasets/toy-line.geojson'
+import METER_GEOJSON from '../datasets/toy-meter.geojson'
+// import LINE_GEOJSON from '../datasets/line.geojson'
+// import METER_GEOJSON from '../datasets/meter.geojson'
 
 class AssetMap extends Component {
-  constructor(props) {
-    super(props);
-    const mapStyle = fromJS({
-        ...MAP_STYLE,
-        sources: {
-          ...MAP_STYLE.sources,
-          'l': {
-              type: 'geojson',
-              data: lineExample,
-          },
-          'm': {
-              type: 'geojson',
-              data: meterExample,
-          },
-        },
-        layers: [
-          ...MAP_STYLE.layers,
-        ],
-    });
-    this.state = {
-      viewport: {
-        width: '100%',
-        height: '100%',
-        longitude: -80,
-        latitude: 35,
-        zoom: 6,
+  state = {
+    viewport: {
+      longitude: -79.7919754,
+      latitude: 36.0726354,
+      // zoom: 9,
+      zoom: 3,
+    },
+    mapStyle: MAP_STYLE.mergeDeep({
+      sources: {
+        [KEY_PREFIX + 'l']: {type: 'geojson', data: LINE_GEOJSON},
+        [KEY_PREFIX + 'm']: {type: 'geojson', data: METER_GEOJSON},
       },
-      mapStyle: mapStyle
-    }
+      layers: [{
+        id: KEY_PREFIX + 'l',
+        type: 'line',
+        source: KEY_PREFIX + 'l',
+        paint: {
+          'line-width': ['get', 'width'],
+          'line-color': 'yellow',
+          // 'line-cap': 'round',
+          // 'line-join': 'round',
+          'line-opacity': 0.5,
+        },
+      }, {
+        id: KEY_PREFIX + 'm',
+        type: 'circle',
+        source: KEY_PREFIX + 'm',
+        paint: {
+          'circle-radius': ['get', 'radius'],
+          'circle-color': 'blue',
+          'circle-stroke-color': 'white',
+          'circle-stroke-width': 1,
+          'circle-opacity': 0.5,
+        },
+      }],
+    }),
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { selectedAssetTypeIds } = this.props;
-    const isSame = (
-      selectedAssetTypeIds.length === prevProps.selectedAssetTypeIds.length &&
-      selectedAssetTypeIds.every(function(value, index) { return value === prevProps.selectedAssetTypeIds[index]}))
-    if (!isSame) {
-      const style = fromJS(this.state.mapStyle)
-      const defaultLayers = fromJS(MAP_STYLE).get('layers');
-      const newLayers = defaultLayers.concat(selectedAssetTypeIds.map((t, i) => {
-        let type = 'circle';
-        let paint = {
-          'circle-color': 'red',
-          'circle-radius': 4
-        }
-        if (t === 'l') {
-          type = 'line'
-          paint = {
-            'line-color': 'yellow',
-            'line-width': ['get', 'NomV']
-          }
-        }
-        return {
-                  id: `${i}`,
-                  type: type,
-                  source: t,
-                  paint: paint,
-                }
-      }))
-      console.log(newLayers)
-      this.setState({mapStyle: style.set('layers', newLayers)})
-    }
-  }
-
-  componentDidMount() {
-      const { selectedAssetTypeIds } = this.props;
-      const style = fromJS(this.state.mapStyle)
-      const defaultLayers = fromJS(MAP_STYLE).get('layers');
-      const newLayers = defaultLayers.concat(selectedAssetTypeIds.map((t, i) => {
-        let type = 'circle';
-        let paint = {
-          'circle-color': 'red',
-          'circle-radius': 4
-        }
-        if (t === 'l') {
-          type = 'line'
-          paint = {
-            'line-color': 'yellow',
-            'line-width': ['get', 'NomV']
-          }
-        }
-        return {
-                  id: `${i}`,
-                  type: type,
-                  source: t,
-                  paint: paint,
-                }
-      }))
-      console.log(newLayers)
-      this.setState({mapStyle: style.set('layers', newLayers)})
+  onViewportChange = viewport => {
+    const {width, height, ...etc} = viewport
+    this.setState({viewport: etc})
   }
 
   render () {
+    /*
+    const {
+      selectedAssetTypeIds,
+    } = this.props
+    */
+    const {
+      mapStyle,
+      viewport,
+    } = this.state
+    /*
+    const layers = MAP_STYLE.get('layers').concat(
+      selectedAssetTypeIds.map(typeId => {
+        const isLine = typeId === 'l'
+        return {
+          id: KEY_PREFIX + typeId,
+          type: isLine  ? 'line' : 'circle',
+          source: KEY_PREFIX + typeId,
+          paint: isLine ? {
+            'line-color': 'black',
+            'line-width': ['get', 'width'],
+          } : {
+            'circle-color': 'yellow',
+            'circle-radius': ['get', 'radius'],
+          },
+        }
+      }))
+    this.setState({mapStyle: mapStyle.set('layers', layers)})
+    */
+
     return (
       <ReactMapGL
-        //mapStyle='mapbox://styles/mapbox/satellite-v9'
-        // mapStyle='mapbox://styles/mapbox/streets-v9'
-        //mapStyle='mapbox://styles/invisibleroads/cjrxqr50m0q1j1fp91ydmnoqv'
-        mapStyle={ this.state.mapStyle }
-        {...this.state.viewport}
-        onViewportChange={viewport => this.setState({viewport})}
+        width='100%'
+        height='100%'
+        {...viewport}
+        mapStyle={mapStyle}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+        onViewportChange={viewport => this.onViewportChange(viewport)}
       />
     )
   }

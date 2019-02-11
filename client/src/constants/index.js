@@ -1,4 +1,8 @@
-//import assetById from '../datasets/assetById.json'
+import { fromJS } from 'immutable'
+import MAP_STYLE_JSON from '../datasets/map-style-satellite-streets.json'
+
+export const MAP_STYLE = fromJS(MAP_STYLE_JSON)
+export const KEY_PREFIX = 'asset-tracker-'
 
 export const CONTENT_PADDING = 24
 
