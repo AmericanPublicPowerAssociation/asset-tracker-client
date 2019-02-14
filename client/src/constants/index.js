@@ -1,8 +1,6 @@
 import { fromJS } from 'immutable'
-import MAP_STYLE_JSON from '../datasets/map-style-satellite-streets.json'
-
-export const MAP_STYLE = fromJS(MAP_STYLE_JSON)
-export const KEY_PREFIX = 'asset-tracker-'
+import mapStyle from '../datasets/map-style-satellite-streets.json'
+// import assetById from '../datasets/assetById.json'
 
 export const CONTENT_PADDING = 24
 
@@ -140,7 +138,7 @@ export const ASSET_TYPE_BY_ID = {
 export const SELECTED_ASSET_TYPE_IDS = ['l']
 export const DEFAULT_ASSET_TYPE_ID = 'p'
 
-export const ASSET_BY_ID = {
+const assetById = {
   station1: {
     name: 'Station 1',
     typeId: 'S',
@@ -284,8 +282,8 @@ export const ASSET_BY_ID = {
     typeId: 'm',
     connectedIds: ['transformer2b']},
 }
-//export const ASSET_BY_ID = assetById
-export const SORTED_ASSET_IDS = Object.keys(ASSET_BY_ID)
+export const ASSET_BY_ID = fromJS(assetById)
+export const SORTED_ASSET_IDS = ASSET_BY_ID.keySeq().toArray()
 
 export const RELATION_NAME_BY_KEY = {
   connectedIds: 'Connections',
@@ -294,3 +292,6 @@ export const RELATION_NAME_BY_KEY = {
 }
 
 export const DEBOUNCE_THRESHOLD_IN_MILLISECONDS = 100
+
+export const MAP_STYLE = fromJS(mapStyle)
+export const KEY_PREFIX = 'asset-tracker-'

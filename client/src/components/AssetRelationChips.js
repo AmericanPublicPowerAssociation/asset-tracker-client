@@ -36,20 +36,21 @@ const AssetRelationChips = ({
 }) => {
   if (highlightedAssetId === null) return null
   const assetId = highlightedAssetId
-  const asset = assetById[assetId]
-  const relatedAssetIds = asset[assetKey] || []
-  const relatedAssetTypeIds = ASSET_TYPE_BY_ID[asset.typeId][assetKey] || []
+  const asset = assetById.get(assetId)
+  const assetTypeId = asset.get('typeId')
+  const relatedAssetIds = asset.get(assetKey, [])
+  const relatedAssetTypeIds = ASSET_TYPE_BY_ID[assetTypeId][assetKey] || []
   if (!relatedAssetTypeIds.length) return null
   return (
     <FormControl fullWidth className={classes.root}>
       <FormLabel>{label}</FormLabel>
       <div className={classes.chipGroup}>
       {relatedAssetIds.map(relatedAssetId => {
-        const relatedAsset = assetById[relatedAssetId]
+        const relatedAsset = assetById.get(relatedAssetId)
         return (
           <Chip
             key={relatedAssetId}
-            label={relatedAsset.name}
+            label={relatedAsset.get('name')}
             className={classes.chip}
           />
         )

@@ -35,7 +35,7 @@ const TableWindow = ({
 					</TableRow>
 				</TableHead>
 				<TableBody>
-        {Object.entries(assetById).map(([id, {name, typeId}]) => (
+        {assetById.entrySeq().map(([id, {name, typeId}]) => (
           <TableRow
             hover
             selected={id === highlightedAssetId}

@@ -14,10 +14,10 @@ const AssetDetailFields = ({
   assetById,
   updateAsset,
 }) => {
-  const asset = assetById[highlightedAssetId]
+  const asset = assetById.get(highlightedAssetId)
   return (
     <TextField
-      value={(asset && asset.name) || ''}
+      value={(asset && asset.get('name')) || ''}
       fullWidth
       required
       InputProps={{
@@ -25,11 +25,10 @@ const AssetDetailFields = ({
           input: classes.name,
         },
       }}
-      onChange={event => updateAsset({
-        ...asset,
+      onChange={event => updateAsset(asset.merge({
         id: highlightedAssetId,
         name: event.target.value,
-      })}
+      }))}
     />
   )
 }

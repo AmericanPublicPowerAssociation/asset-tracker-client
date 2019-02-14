@@ -14,7 +14,7 @@ const getElements = (assetId, assetById, maximumDepth) => {
   for (let depth = 0; depth < maximumDepth; depth++) {
     let nextNextIds = new Set()
     for (const id of nextIds) {
-      const connectedIds = assetById[id].connectedIds || []
+      const connectedIds = assetById.get(id).get('connectedIds', [])
       for (const connectedId of connectedIds) {
         const ids = [id, connectedId]
         ids.sort()
@@ -28,7 +28,7 @@ const getElements = (assetId, assetById, maximumDepth) => {
   let elements = []
   let nodeIds = [...seenIds, ...nextIds]
   for (const id of nodeIds) {
-    elements.push({data: {id, label: assetById[id].name}})
+    elements.push({data: {id, label: assetById.get(id).get('name')}})
   }
   for (const idPair of idPairs) {
     const [id1, id2] = idPair.split(' ')
@@ -52,7 +52,7 @@ class AssetCircuit extends Component {
 
     const showAsset = e => {
       const assetId = e.target.id()
-      const assetTypeId = assetById[assetId].typeId
+      const assetTypeId = assetById.get(assetId).get('typeId')
 
       addSelectedAssetType({id: assetTypeId})
       setHighlightedAsset({id: assetId})

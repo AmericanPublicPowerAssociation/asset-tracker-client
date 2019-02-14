@@ -27,14 +27,14 @@ const AssetList = ({
   setHighlightedAsset,
   toggleAssetRelation,
 }) => {
-  const visibleAssetTypeIds = exposedAssetId ? ASSET_TYPE_BY_ID[
-    assetById[exposedAssetId].typeId][exposedAssetKey] : []
+  const visibleAssetTypeIds = exposedAssetId ? ASSET_TYPE_BY_ID[assetById.get(
+    exposedAssetId).get('typeId')][exposedAssetKey] : []
   const visibleAssetIds = sortedAssetIds.filter(sortedAssetId =>
-    selectedAssetTypeIds.includes(assetById[sortedAssetId].typeId))
+    selectedAssetTypeIds.includes(assetById.get(sortedAssetId).get('typeId')))
   return (
     <List disablePadding>
     {visibleAssetIds.map(visibleAssetId => {
-      const visibleAsset = assetById[visibleAssetId]
+      const visibleAsset = assetById.get(visibleAssetId)
       return (
         <ListItem
           button
@@ -49,15 +49,15 @@ const AssetList = ({
             exposedAssetId === visibleAssetId &&
             classes.exposed) || ''}
         >
-          <ListItemText primary={visibleAsset.name} />
+          <ListItemText primary={visibleAsset.get('name')} />
           {
             exposedAssetId &&
             exposedAssetId !== visibleAssetId &&
-            visibleAssetTypeIds.includes(visibleAsset.typeId) &&
+            visibleAssetTypeIds.includes(visibleAsset.get('typeId')) &&
             <ListItemSecondaryAction>
               <Switch
                 checked={(
-                  assetById[exposedAssetId][exposedAssetKey] || []
+                  assetById.get(exposedAssetId).get(exposedAssetKey, [])
                 ).includes(visibleAssetId)}
                 onChange={() => {toggleAssetRelation({
                   exposedAssetId,

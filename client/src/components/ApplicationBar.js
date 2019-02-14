@@ -83,7 +83,7 @@ const ApplicationBar = ({
     `Editing ${
       RELATION_NAME_BY_KEY[exposedAssetKey]
     } for ${
-      assetById[exposedAssetId].name
+      assetById.get(exposedAssetId).get('name')
     }` :
     'Asset Tracker'
   const withTeleportIcon = exposedAssetId && exposedAssetId !== highlightedAssetId
@@ -117,8 +117,10 @@ const ApplicationBar = ({
           <IconButton aria-label='Show Exposed Asset'
             className={(!withTeleportIcon && classes.vanish) || ''}
             onClick={() => {
-              addSelectedAssetType({id: assetById[exposedAssetId].typeId})
-              setHighlightedAsset({id: exposedAssetId})
+              addSelectedAssetType({
+                id: assetById.get(exposedAssetId).get('typeId')})
+              setHighlightedAsset({
+                id: exposedAssetId})
             }}
           ><TeleportIcon /></IconButton>
         </Tooltip>
