@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -16,46 +16,58 @@ const styles = () => ({
   },
 })
 
-const TableWindow = ({
-	classes,
-  // Get local variables
-  onSelect,
-  // Get global variables
-  highlightedAssetId,
-	assetById,
-	setHighlightedAsset,
-}) => {
-	return (
-		<div className={classes.root}>
-			<Table>
-				<TableHead>
-					<TableRow>
-						<TableCell>Asset Name</TableCell>
-						<TableCell align='right'>Asset Type</TableCell>
-					</TableRow>
-				</TableHead>
-				<TableBody>
-        {assetById.entrySeq().map(([id, {name, typeId}]) => (
-          <TableRow
-            hover
-            selected={id === highlightedAssetId}
-            classes={{
-              hover: classes.hover,
-            }}
-            onClick={() => {
-              setHighlightedAsset({id: id})
-              onSelect()
-            }}
-            key={id}
-          >
-            <TableCell component='th' scope='row'>{name}</TableCell>
-            <TableCell align='right'>{ASSET_TYPE_BY_ID[typeId].name}</TableCell>
-          </TableRow>
-        ))}
-				</TableBody>
-			</Table>
-		</div>
-	)
+class TableWindow extends PureComponent {
+  render() {
+    const {
+      classes,
+      // Get local variables
+      onSelect,
+      // Get global variables
+      visibleAssets,
+      highlightedAssetId,
+      setHighlightedAsset,
+    } = this.props
+    return (
+      <div className={classes.root}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Asset Name</TableCell>
+              <TableCell align='right'>Asset Type</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+          {visibleAssets.map(asset => {
+            const assetId = asset.get('id')
+            const assetName = asset.get('name')
+            const assetTypeId = asset.get('typeId')
+            return (
+              <TableRow
+                hover
+                selected={assetId === highlightedAssetId}
+                classes={{
+                  hover: classes.hover,
+                }}
+                onClick={() => {
+                  setHighlightedAsset({id: assetId})
+                  onSelect()
+                }}
+                key={assetId}
+              >
+                <TableCell component='th' scope='row'>
+                  {assetName}
+                </TableCell>
+                <TableCell align='right'>
+                  {ASSET_TYPE_BY_ID[assetTypeId].name}
+                </TableCell>
+              </TableRow>
+            )
+          })}
+          </TableBody>
+        </Table>
+      </div>
+    )
+  }
 }
 
 export default withStyles(styles)(TableWindow)

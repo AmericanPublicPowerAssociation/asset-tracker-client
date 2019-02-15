@@ -12,8 +12,7 @@ const enhanceStore = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 const store = createStore(
   rootReducer,
-  enhanceStore(applyMiddleware(thunk)),
-)
+  enhanceStore(applyMiddleware(thunk)))
 
 configureEnvironment()
 
@@ -23,5 +22,4 @@ ReactDOM.render(
       <App />
     </BrowserRouter>
   </Provider>,
-  document.getElementById('root'),
-)
+  document.getElementById('root'))

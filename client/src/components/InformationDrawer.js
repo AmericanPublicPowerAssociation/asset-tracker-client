@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import IconButton from '@material-ui/core/IconButton'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import { INFORMATION_DRAWER_WIDTH } from '../constants'
 import AssetCircuitContainer from '../containers/AssetCircuitContainer'
-import AssetDetail from './AssetDetail'
+import AssetDetailContainer from '../containers/AssetDetailContainer'
 
 const styles = theme => ({
   drawer: {
@@ -41,36 +41,37 @@ const styles = theme => ({
   },
 })
 
-const InformationDrawer = ({
-  classes,
-  onClose,
-  ...etc
-}) => {
-  return (
-    <Drawer
-      className={classes.drawer}
-      variant='persistent'
-      anchor='right'
-      classes={{
-        paper: classes.drawerPaper,
-      }}
-      {...etc}
-    >
-      <div className={classes.drawerHeader}>
-        <IconButton onClick={onClose}>
-          <ChevronRightIcon />
-        </IconButton>
-      </div>
-      <div className={classes.frame}>
-        <div className={classes.circuitPanel}>
-          <AssetCircuitContainer />
+class InformationDrawer extends PureComponent {
+  render() {
+    const {
+      classes,
+      onClose,
+      ...etc
+    } = this.props
+    return (
+      <Drawer
+        className={classes.drawer}
+        variant='persistent'
+        anchor='right'
+        classes={{ paper: classes.drawerPaper }}
+        {...etc}
+      >
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={onClose}>
+            <ChevronRightIcon />
+          </IconButton>
         </div>
-        <div className={classes.detailPanel}>
-          <AssetDetail />
+        <div className={classes.frame}>
+          <div className={classes.circuitPanel}>
+            <AssetCircuitContainer />
+          </div>
+          <div className={classes.detailPanel}>
+            <AssetDetailContainer />
+          </div>
         </div>
-      </div>
-    </Drawer>
-  )
+      </Drawer>
+    )
+  }
 }
 
 export default withStyles(styles)(InformationDrawer)

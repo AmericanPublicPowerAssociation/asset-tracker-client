@@ -10,7 +10,7 @@ const sortedAssetIds = (state=initialState, action) => {
 
   if (ADD_ASSET === actionType) {
     const {id} = action.payload
-    return [id, ...state]
+    return state.unshift(id)
   }
 
   return state

@@ -1,3 +1,4 @@
+import { List, fromJS } from 'immutable'
 import {
   ASSET_BY_ID,
   ADD_ASSET,
@@ -11,8 +12,10 @@ const assetById = (state=initialState, action) => {
   const actionType = action.type
 
   if (ADD_ASSET === actionType || UPDATE_ASSET === actionType) {
-    const {id, ...asset} = action.payload
-    return state.set(id, asset)
+    const asset = action.payload
+    return state.merge({
+      [asset.id]: fromJS(asset),
+    })
   } else if (TOGGLE_ASSET_RELATION === actionType) {
     const {
       exposedAssetId,
@@ -29,8 +32,8 @@ const assetById = (state=initialState, action) => {
       'parentIds': 'childIds',
       'childIds': 'parentIds',
     }[exposedAssetKey]
-    const exposedRelatedAssetIds = exposedAsset.get(exposedAssetKey, [])
-    const visibleRelatedAssetIds = visibleAsset.get(visibleAssetKey, [])
+    const exposedRelatedAssetIds = exposedAsset.get(exposedAssetKey, List())
+    const visibleRelatedAssetIds = visibleAsset.get(visibleAssetKey, List())
     const toggle =
       exposedRelatedAssetIds.includes(visibleAssetId) ?
       (assetIds, assetId) => assetIds.filter(x => x !== assetId) :

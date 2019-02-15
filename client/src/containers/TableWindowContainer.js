@@ -3,10 +3,11 @@ import {
   setHighlightedAsset,
 } from '../actions'
 import TableWindow from '../components/TableWindow'
+import { getVisibleAssets } from '../selectors'
 
 const mapStateToProps = state => ({
+  visibleAssets: getVisibleAssets(state),
   highlightedAssetId: state.highlightedAssetId,
-  assetById: state.assetById,
 })
 
 const mapDispatchToProps = dispatch => ({

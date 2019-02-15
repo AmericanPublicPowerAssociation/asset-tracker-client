@@ -1,7 +1,11 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
+import { List } from 'immutable'
 import CytoscapeComponent from 'react-cytoscapejs'
 import { debounce } from 'lodash'
-import { DEBOUNCE_THRESHOLD_IN_MILLISECONDS } from '../constants'
+import {
+  CIRCUIT_DEPTH,
+  DEBOUNCE_THRESHOLD_IN_MILLISECONDS,
+} from '../constants'
 
 const cytoscapeLayout = {
   'name': 'cose',
@@ -14,7 +18,7 @@ const getElements = (assetId, assetById, maximumDepth) => {
   for (let depth = 0; depth < maximumDepth; depth++) {
     let nextNextIds = new Set()
     for (const id of nextIds) {
-      const connectedIds = assetById.get(id).get('connectedIds', [])
+      const connectedIds = assetById.get(id).get('connectedIds', List())
       for (const connectedId of connectedIds) {
         const ids = [id, connectedId]
         ids.sort()
@@ -37,7 +41,7 @@ const getElements = (assetId, assetById, maximumDepth) => {
   return elements
 }
 
-class AssetCircuit extends Component {
+class AssetCircuit extends PureComponent {
 
   handleCy = cy => {
     const {
@@ -73,9 +77,10 @@ class AssetCircuit extends Component {
       highlightedAssetId,
       assetById,
     } = this.props
+    if (!highlightedAssetId) return null
     return (
       <CytoscapeComponent
-        elements={getElements(highlightedAssetId, assetById, 2)}
+        elements={getElements(highlightedAssetId, assetById, CIRCUIT_DEPTH)}
         layout={cytoscapeLayout}
         style={{
           height: '100%',

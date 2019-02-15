@@ -11,13 +11,10 @@ const selectedAssetTypeIds = (state=initialState, action) => {
 
   if (TOGGLE_SELECTED_ASSET_TYPE === actionType) {
     const {id} = action.payload
-    return state.includes(id) ? state.filter(x => x !== id) : [...state, id]
+    return state.includes(id) ? state.filter(x => x !== id) : state.push(id)
   } else if (ADD_SELECTED_ASSET_TYPE === actionType) {
     const {id} = action.payload
-    if (!state.includes(id)) {
-      state = [...state, id]
-    }
-    return state
+    return state.includes(id) ? state : state.push(id)
   }
   return state
 }

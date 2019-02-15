@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import ReactMapGL from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import {
@@ -8,7 +8,7 @@ import {
 import LINE_GEOJSON from '../datasets/line.geojson'
 import METER_GEOJSON from '../datasets/meter.geojson'
 
-class AssetMap extends Component {
+class AssetMap extends PureComponent {
   state = {
     viewport: {
       longitude: -79.7919754,
@@ -29,12 +29,13 @@ class AssetMap extends Component {
     const {
       viewport,
     } = this.state
-    const mapStyle = MAP_STYLE.mergeDeep({
-      sources: {
-        [KEY_PREFIX + 'l']: {type: 'geojson', data: LINE_GEOJSON},
-        [KEY_PREFIX + 'm']: {type: 'geojson', data: METER_GEOJSON},
-      },
-      layers: selectedAssetTypeIds.map(typeId => {
+    const mapSources = {
+      [KEY_PREFIX + 'l']: {type: 'geojson', data: LINE_GEOJSON},
+      [KEY_PREFIX + 'm']: {type: 'geojson', data: METER_GEOJSON},
+    }
+    const mapLayers = selectedAssetTypeIds
+      .filter(typeId => KEY_PREFIX + typeId in mapSources)
+      .map(typeId => {
         const isLine = typeId === 'l'
         return {
           id: KEY_PREFIX + typeId,
@@ -52,8 +53,10 @@ class AssetMap extends Component {
             'circle-opacity': 0.8,
           },
         }
-      }),
-    })
+      })
+    const mapStyle = MAP_STYLE.mergeDeep({
+      sources: mapSources,
+      layers: mapLayers})
     return (
       <ReactMapGL
         width='100%'

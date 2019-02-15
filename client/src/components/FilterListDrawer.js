@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import IconButton from '@material-ui/core/IconButton'
@@ -32,31 +32,34 @@ const styles = theme => ({
   },
 })
 
-const FilterListDrawer = ({
-  classes,
-  onClose,
-  ...etc,
-}) => {
-  return (
-    <Drawer
-      className={classes.drawer}
-      variant='persistent'
-      anchor='right'
-      classes={{
-        paper: classes.drawerPaper,
-      }}
-      {...etc}
-    >
-      <div className={classes.drawerHeader}>
-        <IconButton onClick={onClose}>
-          <ChevronRightIcon />
-        </IconButton>
-      </div>
-      <div className={classes.frame}>
-        <AssetTypeFilterContainer />
-      </div>
-    </Drawer>
-  )
+class FilterListDrawer extends PureComponent {
+  render() {
+    const {
+      classes,
+      onClose,
+      ...etc
+    } = this.props
+    return (
+      <Drawer
+        className={classes.drawer}
+        variant='persistent'
+        anchor='right'
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+        {...etc}
+      >
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={onClose}>
+            <ChevronRightIcon />
+          </IconButton>
+        </div>
+        <div className={classes.frame}>
+          <AssetTypeFilterContainer />
+        </div>
+      </Drawer>
+    )
+  }
 }
 
 export default withStyles(styles)(FilterListDrawer)

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import { NavLink } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles'
 import ListItem from '@material-ui/core/ListItem'
@@ -12,27 +12,27 @@ const styles = theme => ({
   },
 })
 
-const ListItemLink = ({
-  classes,
-  to, text, icon,
-  badgeContent, badgeColor,
-}) => {
-  return (
-    <ListItem button component={NavLink}
-      exact
-      to={to}
-      activeClassName={classes.selected}
-    >
-      <ListItemIcon>{badgeContent ?
-        <Badge
-          badgeContent={badgeContent}
-          color={badgeColor}
-        >{icon}</Badge> :
-        icon}
-      </ListItemIcon>
-      <ListItemText primary={text} />
-    </ListItem>
-  )
+class ListItemLink extends PureComponent {
+  render() {
+    const {
+      classes,
+      to, text, icon,
+      badgeContent, badgeColor,
+    } = this.props
+    return (
+      <ListItem button component={NavLink}
+        exact to={to} activeClassName={classes.selected}
+      >
+        <ListItemIcon>{badgeContent ?
+          <Badge badgeContent={badgeContent} color={badgeColor}>
+            {icon}
+          </Badge> :
+          icon}
+        </ListItemIcon>
+        <ListItemText primary={text} />
+      </ListItem>
+    )
+  }
 }
 
 export default withStyles(styles)(ListItemLink)

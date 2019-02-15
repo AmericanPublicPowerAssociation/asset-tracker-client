@@ -4,12 +4,12 @@ import {
   setHighlightedAsset,
 } from '../actions'
 import ApplicationBar from '../components/ApplicationBar'
+import { getExposedAsset } from '../selectors'
 
 const mapStateToProps = state => ({
   highlightedAssetId: state.highlightedAssetId,
-  exposedAssetId: state.exposedAssetId,
   exposedAssetKey: state.exposedAssetKey,
-  assetById: state.assetById,
+  exposedAsset: getExposedAsset(state),
 })
 
 const mapDispatchToProps = dispatch => ({

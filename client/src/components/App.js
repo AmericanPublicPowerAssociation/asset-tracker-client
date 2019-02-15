@@ -122,7 +122,9 @@ class App extends Component {
       isFilterListDrawerOpen,
       isAssetAddDialogOpen,
     } = this.state
-    const isRightDrawerOpen = isInformationDrawerOpen || isFilterListDrawerOpen
+    const isRightDrawerOpen =
+      isInformationDrawerOpen ||
+      isFilterListDrawerOpen
     return (
       <MuiThemeProvider theme={isDark ? darkTheme : brightTheme}>
         <CssBaseline />

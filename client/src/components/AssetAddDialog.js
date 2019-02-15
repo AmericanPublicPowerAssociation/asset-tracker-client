@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -11,7 +11,7 @@ import {
 } from '../constants'
 import { getRandomString } from '../macros'
 
-class AssetAddDialog extends Component {
+class AssetAddDialog extends PureComponent {
   state = {
     assetTypeId: DEFAULT_ASSET_TYPE_ID,
   }
@@ -28,14 +28,14 @@ class AssetAddDialog extends Component {
     const assetId = getRandomString(7)
     this.props.addSelectedAssetType({id: assetTypeId})
     this.props.addAsset({
-      'id': assetId,
-      'name': assetTypeName + ' ' + assetId,
-      'typeId': assetTypeId})
+      id: assetId,
+      name: assetTypeName + ' ' + assetId,
+      typeId: assetTypeId})
     this.props.setHighlightedAsset({id: assetId})
     this.props.onClose()}
 
   render() {
-    const { ...etc } = this.props
+    const etc = this.props
     const { assetTypeId } = this.state
     return (
       <Dialog {...etc}>

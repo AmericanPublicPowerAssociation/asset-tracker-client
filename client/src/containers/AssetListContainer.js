@@ -4,14 +4,18 @@ import {
   toggleAssetRelation,
 } from '../actions'
 import AssetList from '../components/AssetList'
+import {
+  getVisibleAssets,
+  getExposedAsset,
+  getExposedAssetTypeIds,
+} from '../selectors'
 
 const mapStateToProps = state => ({
-  sortedAssetIds: state.sortedAssetIds,
-  selectedAssetTypeIds: state.selectedAssetTypeIds,
+  visibleAssets: getVisibleAssets(state),
   highlightedAssetId: state.highlightedAssetId,
-  exposedAssetId: state.exposedAssetId,
   exposedAssetKey: state.exposedAssetKey,
-  assetById: state.assetById,
+  exposedAsset: getExposedAsset(state),
+  exposedAssetTypeIds: getExposedAssetTypeIds(state),
 })
 
 const mapDispatchToProps = dispatch => ({

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import FormControl from '@material-ui/core/FormControl'
@@ -24,56 +24,57 @@ const styles = theme => ({
   },
 })
 
-const AssetRelationChips = ({
-  classes,
-  label,
-  assetKey,
-  highlightedAssetId,
-  exposedAssetId,
-  exposedAssetKey,
-  assetById,
-  setExposedAsset,
-}) => {
-  if (highlightedAssetId === null) return null
-  const assetId = highlightedAssetId
-  const asset = assetById.get(assetId)
-  const assetTypeId = asset.get('typeId')
-  const relatedAssetIds = asset.get(assetKey, [])
-  const relatedAssetTypeIds = ASSET_TYPE_BY_ID[assetTypeId][assetKey] || []
-  if (!relatedAssetTypeIds.length) return null
-  return (
-    <FormControl fullWidth className={classes.root}>
-      <FormLabel>{label}</FormLabel>
-      <div className={classes.chipGroup}>
-      {relatedAssetIds.map(relatedAssetId => {
-        const relatedAsset = assetById.get(relatedAssetId)
-        return (
+class AssetRelationChips extends PureComponent {
+  render() {
+    const {
+      classes,
+      label,
+      assetKey,
+      relatedAssets,
+      highlightedAsset,
+      exposedAssetId,
+      exposedAssetKey,
+      setExposedAsset,
+    } = this.props
+    const assetId = highlightedAsset.get('id')
+    const assetTypeId = highlightedAsset.get('typeId')
+    const relatedAssetTypeIds = ASSET_TYPE_BY_ID[assetTypeId][assetKey] || []
+    if (!relatedAssetTypeIds.length) return null
+    return (
+      <FormControl fullWidth className={classes.root}>
+        <FormLabel>{label}</FormLabel>
+        <div className={classes.chipGroup}>
+        {relatedAssets.map(relatedAsset => {
+          const relatedAssetId = relatedAsset.get('id')
+          const relatedAssetName = relatedAsset.get('name')
+          return (
+            <Chip
+              key={relatedAssetId}
+              label={relatedAssetName}
+              className={classes.chip}
+            />
+          )
+        })}
           <Chip
-            key={relatedAssetId}
-            label={relatedAsset.get('name')}
-            className={classes.chip}
+            label={exposedAssetId ? <CheckIcon /> : <AddIcon />}
+            color={exposedAssetId ? 'secondary' : 'primary'}
+            className={classNames(classes.chip, {
+              [classes.hide]: exposedAssetId && (
+                exposedAssetId !== assetId ||
+                exposedAssetKey !== assetKey),
+            })}
+            onClick={() => setExposedAsset(exposedAssetId ? {
+              id: null,
+              key: null,
+            } : {
+              id: assetId,
+              key: assetKey,
+            })}
           />
-        )
-      })}
-        <Chip
-          label={exposedAssetId ? <CheckIcon /> : <AddIcon />}
-          color={exposedAssetId ? 'secondary' : 'primary'}
-          className={classNames(classes.chip, {
-            [classes.hide]: exposedAssetId && (
-              exposedAssetId !== assetId ||
-              exposedAssetKey !== assetKey),
-          })}
-          onClick={() => setExposedAsset(exposedAssetId ? {
-            id: null,
-            key: null,
-          } : {
-            id: assetId,
-            key: assetKey,
-          })}
-        />
-      </div>
-    </FormControl>
-  )
+        </div>
+      </FormControl>
+    )
+  }
 }
 
 export default withStyles(styles)(AssetRelationChips)
