@@ -1,8 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/App';
+import Histogram from './components/Histogram';
+import PieChart from './components/PieChart';
+import Sunburst from './components/Sunburst';
+
 
 ReactDOM.render(
-    <App />,
+    <div>
+        <Histogram />
+        <PieChart />
+        <Sunburst />
+    </div>,
     document.getElementById('root')
 );
