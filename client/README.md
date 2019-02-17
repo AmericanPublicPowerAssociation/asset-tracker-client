@@ -1,5 +1,14 @@
 # Asset Tracker
 
+## Configuration
+
+    cd client
+    vim .env
+        REACT_APP_MAPBOX_TOKEN = 'YOUR-MAPBOX-TOKEN'
+    npm install
+
+## Usage
+
 ## Available Scripts
 
 ### `npm start`
