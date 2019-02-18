@@ -13,7 +13,7 @@ def main(global_config, **settings):
         config.include('.routes')
         config.scan()
     # !!! QUICKFIX
-    config.set_request_factory(request_factory)
+    # config.set_request_factory(request_factory)
     return config.make_wsgi_app()
 
 
