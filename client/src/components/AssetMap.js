@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react'
-import ReactMapGL from 'react-map-gl'
+import ReactMapGL, {Marker, Popup} from 'react-map-gl'
+import Pin from './MarkerPin'
 import 'mapbox-gl/dist/mapbox-gl.css'
+
 import {
   KEY_PREFIX,
   MAP_STYLE,
@@ -15,6 +17,11 @@ class AssetMap extends PureComponent {
       latitude: 36.0726354,
       zoom: 9,
     },
+		marker: {
+			longitude: -79.631300697574062,
+			latitude: 36.280963128879741 
+		}
+
   }
 
   onViewportChange = viewport => {
@@ -22,12 +29,22 @@ class AssetMap extends PureComponent {
     this.setState({viewport: etc})
   }
 
+	onMarkerDragEnd = (event) => {
+    this.setState({
+      marker: {
+        longitude: event.lngLat[0],
+        latitude: event.lngLat[1],
+      }
+    });
+	}; 
+
   render () {
     const {
       selectedAssetTypeIds,
     } = this.props
     const {
-      viewport,
+      viewport, 
+			marker,
     } = this.state
     const mapSources = {
       [KEY_PREFIX + 'l']: {type: 'geojson', data: LINE_GEOJSON},
@@ -65,7 +82,16 @@ class AssetMap extends PureComponent {
         mapStyle={mapStyle}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
         onViewportChange={viewport => this.onViewportChange(viewport)}
-      />
+      >
+          <Marker 
+						draggable
+            longitude={marker.longitude}
+            latitude={marker.latitude}
+						onDragEnd={this.onMarkerDragEnd}
+          >
+            <Pin />
+          </Marker>
+      </ReactMapGL>
     )
   }
 }
