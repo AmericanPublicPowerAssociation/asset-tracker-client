@@ -9,4 +9,5 @@ def tiles(request):
 	y = int(request.matchdict['y'])
 	z = int(request.matchdict['z'])
 	bounds = helper.indices_to_bounds(x, y, z)
-	return Response( 'West: ' + str(bounds.west) + ', South: ' + str(bounds.south) + ', East: ' + str(bounds.east) + ', North: ' + str(bounds.north) )
+	pbf = helper.geojson_to_pfb()
+	return Response( 'West: ' + str(bounds.west) + ', South: ' + str(bounds.south) + ', East: ' + str(bounds.east) + ', North: ' + str(bounds.north)  + '\n\n' + str(pbf))
