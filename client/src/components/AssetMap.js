@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
 import ReactMapGL from 'react-map-gl'
-import 'mapbox-gl/dist/mapbox-gl.css'
 import {
   KEY_PREFIX,
   MAP_STYLE,
@@ -10,16 +9,22 @@ import METER_GEOJSON from '../datasets/meter.geojson'
 
 class AssetMap extends PureComponent {
   state = {
-    viewport: {
-      longitude: -79.7919754,
-      latitude: 36.0726354,
-      zoom: 9,
-    },
+    longitude: -79.7919754,
+    latitude: 36.0726354,
+    zoom: 9,
   }
 
   onViewportChange = viewport => {
-    const {width, height, ...etc} = viewport
-    this.setState({viewport: etc})
+    const {
+      longitude,
+      latitude,
+      zoom,
+    } = viewport
+    this.setState({
+      longitude: longitude,
+      latitude: latitude,
+      zoom: zoom,
+    })
   }
 
   render () {
@@ -27,7 +32,9 @@ class AssetMap extends PureComponent {
       selectedAssetTypeIds,
     } = this.props
     const {
-      viewport,
+      longitude,
+      latitude,
+      zoom,
     } = this.state
     const mapSources = {
       [KEY_PREFIX + 'l']: {type: 'geojson', data: LINE_GEOJSON},
@@ -61,7 +68,9 @@ class AssetMap extends PureComponent {
       <ReactMapGL
         width='100%'
         height='100%'
-        {...viewport}
+        longitude={longitude}
+        latitude={latitude}
+        zoom={zoom}
         mapStyle={mapStyle}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
         onViewportChange={viewport => this.onViewportChange(viewport)}
