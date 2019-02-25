@@ -1,14 +1,5 @@
-// import fs from 'fs'
-// import parse from 'csv-parse/lib/sync'
 import { fromJS } from 'immutable'
 import mapStyle from '../datasets/map-style-satellite-streets.json'
-
-/*
-const assets = parse(fs.readFileSync('../datasets/assets.csv', 'utf8'), {
-  columns: true,
-  skip_empty_lines: true,
-})
-*/
 
 const assets = [{
   id: 'station1',
@@ -430,8 +421,8 @@ export const DEFAULT_ASSET_TYPE_ID = 'p'
 
 export const ASSET_BY_ID = fromJS(
   assets.reduce((o, x) => Object.assign(o, {[x.id]: x}), {}))
-
 export const SORTED_ASSET_IDS = ASSET_BY_ID.keySeq().toList()
+export const MAXIMUM_LIST_LENGTH = 50
 
 export const MAP_STYLE = fromJS(mapStyle)
 export const KEY_PREFIX = 'asset-tracker-'

@@ -46,6 +46,7 @@ class AssetList extends PureComponent {
                 exposedAssetId &&
                 exposedAssetId === visibleAssetId &&
                 classes.exposed) || ''}
+              key={visibleAssetId}
             >
               <ListItemText primary={visibleAssetName} />
               {
