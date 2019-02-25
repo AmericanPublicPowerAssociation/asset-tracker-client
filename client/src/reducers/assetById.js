@@ -13,7 +13,7 @@ const assetById = (state=initialState, action) => {
 
   if (ADD_ASSET === actionType || UPDATE_ASSET === actionType) {
     const asset = action.payload
-    return state.merge({
+    return state.mergeDeep({
       [asset.id]: fromJS(asset),
     })
   } else if (TOGGLE_ASSET_RELATION === actionType) {
