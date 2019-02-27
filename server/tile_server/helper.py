@@ -1,5 +1,9 @@
+import pkgutil
 import mercantile
 import mapbox_vector_tile
+
+def load_dataset():
+    return pkgutil.get_data('tile_server', 'line.geojson')
 
 def indices_to_bounds(x, y, z):
     return mercantile.bounds(x, y, z)
