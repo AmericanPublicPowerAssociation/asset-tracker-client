@@ -1,12 +1,39 @@
 import pkgutil
+import geojson
 import mercantile
 import mapbox_vector_tile
 
-def load_dataset():
-    return pkgutil.get_data('tile_server', 'line.geojson')
+from geojson import Feature, FeatureCollection
 
-def indices_to_bounds(x, y, z):
+from shapely import wkt
+from shapely.geometry import box, shape, GeometryCollection
+
+def load_dataset ():
+    data = pkgutil.get_data('tile_server', 'line.geojson')
+    data_geojson = geojson.loads(data)
+    geometries = []
+
+    for feature in data_geojson['features']:
+        geometries.append(shape(feature['geometry']))
+
+    return GeometryCollection(geometries)
+
+def indices_to_bounds (x, y, z):
     return mercantile.bounds(x, y, z)
 
-def geojson_to_pfb(geojson = [{"name": "test", "type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"id": "meter1", "radius": 3 }, "geometry": {"type": "Point", "coordinates": [-74.0059728, 40.7127753] } }, {"type": "Feature", "properties": {"id": "meter2", "radius": 4 }, "geometry": {"type": "Point", "coordinates": [-104.990251, 39.7392358] } }, {"type": "Feature", "properties": {"id": "meter3", "radius": 5 }, "geometry": {"type": "Point", "coordinates": [-122.6587185, 45.5122308] } }, {"type": "Feature", "properties": {"id": "meter4", "radius": 6 }, "geometry": {"type": "Point", "coordinates": [-80.1917902, 25.7616798] } }, {"type": "Feature", "properties": {"id": "meter5", "radius": 7 }, "geometry": {"type": "Point", "coordinates": [-83.7430378, 42.2808256] } } ] }]):
+def bound_dataset (dataset, bounds):
+    bound_box = box(bounds.west, bounds.south, bounds.east, bounds.north)
+    # test case:
+    # bound_box = box(-79.656855, 36.18200, -79.50, 36.31)
+
+    bounded_dataset = dataset.intersection(bound_box)
+    feature_array = []
+    for line in bounded_dataset:
+        feature_array.append(Feature(geometry=line))
+
+    return geojson.dumps(FeatureCollection(feature_array))
+
+
+def geojson_to_pfb (geojson):
+    geojson['name'] = 'line'
     return mapbox_vector_tile.encode(geojson)
