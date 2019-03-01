@@ -13,6 +13,5 @@ def tiles (request):
 
 	bounds = helper.indices_to_bounds(x, y, z)
 	bounded_dataset = helper.bound_dataset(dataset, bounds)
-	return Response(bounded_dataset)
-	# pbf = helper.geojson_to_pfb(bounded_dataset)
-	# return Response(str(pbf))
+	pbf = helper.geojson_to_pfb(bounded_dataset, bounds)
+	return Response(str(pbf))

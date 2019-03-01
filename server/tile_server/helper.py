@@ -28,12 +28,12 @@ def bound_dataset (dataset, bounds):
 
     bounded_dataset = dataset.intersection(bound_box)
     feature_array = []
-    for line in bounded_dataset:
-        feature_array.append(Feature(geometry=line))
+    for line in bounded_dataset: 
+        feature_array.append({"properties": {}, "geometry" : line.wkt})
 
-    return geojson.dumps(FeatureCollection(feature_array))
+    return FeatureCollection(feature_array)
 
 
-def geojson_to_pfb (geojson):
+def geojson_to_pfb (geojson, bounds):
     geojson['name'] = 'line'
-    return mapbox_vector_tile.encode(geojson)
+    return mapbox_vector_tile.encode(geojson, quantize_bounds=(bounds.west, bounds.south, bounds.east, bounds.north))
