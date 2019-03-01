@@ -1,5 +1,5 @@
 from pyramid.view import view_config
-from pyramid.response import Response
+from pyramid.response import Response, FileResponse
 
 from tile_server import helper
 
@@ -15,5 +15,9 @@ def tiles (request):
 	bounded_dataset = helper.bound_dataset(dataset, bounds)
 	pbf = helper.geojson_to_pfb(bounded_dataset, bounds)
 	response = Response(pbf)
-	response.content_type = 'application/octet-stream'
+	response.content_type = 'application/x-protobuf'
 	return response
+
+@view_config(route_name="test", renderer='../templates/map-test.jinja2')
+def test (request):
+	return {}
