@@ -14,4 +14,6 @@ def tiles (request):
 	bounds = helper.indices_to_bounds(x, y, z)
 	bounded_dataset = helper.bound_dataset(dataset, bounds)
 	pbf = helper.geojson_to_pfb(bounded_dataset, bounds)
-	return Response(str(pbf))
+	response = Response(pbf)
+	response.content_type = 'application/octet-stream'
+	return response
