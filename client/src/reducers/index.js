@@ -13,4 +13,6 @@ export default combineReducers({
   highlightedAssetId,
   exposedAssetId,
   exposedAssetKey,
+  // mappedAssetId,
+  // mappedAssetLocation,
 })

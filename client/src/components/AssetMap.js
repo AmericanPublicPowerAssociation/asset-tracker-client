@@ -4,8 +4,8 @@ import {
   KEY_PREFIX,
   MAP_STYLE,
 } from '../constants'
-import LINE_GEOJSON from '../datasets/line.geojson'
-import METER_GEOJSON from '../datasets/meter.geojson'
+// import LINE_GEOJSON from '../datasets/line.geojson'
+// import METER_GEOJSON from '../datasets/meter.geojson'
 
 class AssetMap extends PureComponent {
   state = {
@@ -37,8 +37,8 @@ class AssetMap extends PureComponent {
       zoom,
     } = this.state
     const mapSources = {
-      [KEY_PREFIX + 'l']: {type: 'geojson', data: LINE_GEOJSON},
-      [KEY_PREFIX + 'm']: {type: 'geojson', data: METER_GEOJSON},
+      // [KEY_PREFIX + 'l']: {type: 'geojson', data: LINE_GEOJSON},
+      // [KEY_PREFIX + 'm']: {type: 'geojson', data: METER_GEOJSON},
     }
     const mapLayers = selectedAssetTypeIds
       .filter(typeId => KEY_PREFIX + typeId in mapSources)

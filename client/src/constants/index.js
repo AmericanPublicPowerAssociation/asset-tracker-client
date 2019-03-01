@@ -306,6 +306,7 @@ export const ASSET_TYPE_BY_ID = {
     connectedIds: [],
     parentIds: ['l', 's', 'S'],
     childIds: ['m', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
+    hasLocation: true,
   },
   l: {
     name: 'Line',
@@ -324,6 +325,7 @@ export const ASSET_TYPE_BY_ID = {
       {id: 'mi', name: 'Industrial'},
       {id: 'mX', name: 'Other'},
     ],
+    hasLocation: true,
   },
   t: {
     name: 'Transformer',
@@ -385,12 +387,14 @@ export const ASSET_TYPE_BY_ID = {
     connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
     parentIds: ['p', 's', 'S'],
     childIds: [],
+    hasLocation: true,
   },
   g: {
     name: 'Generator',
     connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
     parentIds: ['p', 's', 'S'],
     childIds: [],
+    hasLocation: true,
   },
   s: {
     name: 'Substation',
@@ -402,18 +406,21 @@ export const ASSET_TYPE_BY_ID = {
       {id: 'st', name: 'Transmission'},
       {id: 'sX', name: 'Other'},
     ],
+    hasLocation: true,
   },
   S: {
     name: 'Station',
     connectedIds: [],
     parentIds: [],
     childIds: ['p', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
+    hasLocation: true,
   },
   X: {
     name: 'Other',
     connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
     parentIds: ['p', 's', 'S'],
     childIds: [],
+    hasLocation: true,
   },
 }
 export const SELECTED_ASSET_TYPE_IDS = fromJS(['l'])

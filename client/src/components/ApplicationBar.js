@@ -13,7 +13,6 @@ import SearchIcon from '@material-ui/icons/Search'
 import FilterListIcon from '@material-ui/icons/FilterList'
 import TeleportIcon from '@material-ui/icons/CenterFocusStrong'
 import Tooltip from '@material-ui/core/Tooltip';
-
 import {
   FILTER_LIST_DRAWER_WIDTH,
   INFORMATION_DRAWER_WIDTH,

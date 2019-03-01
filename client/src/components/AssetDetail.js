@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react'
 import { List } from 'immutable'
-import AssetDetailFields from './AssetDetailFields'
+import { ASSET_TYPE_BY_ID } from '../constants'
+import AssetName from './AssetName'
+import AssetLocation from './AssetLocation'
 import AssetRelationChips from './AssetRelationChips'
 
 class AssetDetail extends PureComponent {
@@ -17,6 +19,9 @@ class AssetDetail extends PureComponent {
     } = this.props
     if (!highlightedAssetId) return null
     const highlightedAsset = assetById.get(highlightedAssetId)
+    const highlightedAssetType = ASSET_TYPE_BY_ID[
+      highlightedAsset.get('typeId')]
+    const hasLocation = highlightedAssetType['hasLocation'] || false
     const getRelatedAssets = assetKey => highlightedAsset.get(
       assetKey, List()).map(assetId => assetById.get(assetId))
     const assetRelationChipsProps = {
@@ -27,10 +32,11 @@ class AssetDetail extends PureComponent {
     }
     return (
       <form onSubmit={this.handleSubmit}>
-        <AssetDetailFields
+        <AssetName
           highlightedAsset={highlightedAsset}
           updateAsset={updateAsset}
         />
+        {hasLocation && <AssetLocation />}
         <AssetRelationChips
           label='Connections'
           assetKey='connectedIds'
