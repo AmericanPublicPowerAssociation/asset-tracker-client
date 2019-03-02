@@ -436,3 +436,4 @@ export const KEY_PREFIX = 'asset-tracker-'
 
 export const CIRCUIT_DEPTH = 3
 export const DEBOUNCE_THRESHOLD_IN_MILLISECONDS = 100
+export const CYTOSCAPE_LAYOUT = {'name': 'cose'}

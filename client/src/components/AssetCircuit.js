@@ -4,12 +4,9 @@ import CytoscapeComponent from 'react-cytoscapejs'
 import { debounce } from 'lodash'
 import {
   CIRCUIT_DEPTH,
+  CYTOSCAPE_LAYOUT,
   DEBOUNCE_THRESHOLD_IN_MILLISECONDS,
 } from '../constants'
-
-const cytoscapeLayout = {
-  'name': 'cose',
-}
 
 const getElements = (assetId, assetById, maximumDepth) => {
   let idPairs = new Set()
@@ -42,7 +39,6 @@ const getElements = (assetId, assetById, maximumDepth) => {
 }
 
 class AssetCircuit extends PureComponent {
-
   onCy = cy => {
     const {
       assetById,
@@ -50,8 +46,10 @@ class AssetCircuit extends PureComponent {
       setFocusingAsset,
     } = this.props
 
+    const containerStyle = cy.container().style
+
     const refreshLayout = debounce(() => {
-      cy.layout(cytoscapeLayout).run()
+      cy.layout(CYTOSCAPE_LAYOUT).run()
     }, DEBOUNCE_THRESHOLD_IN_MILLISECONDS)
 
     const showAsset = e => {
@@ -60,20 +58,20 @@ class AssetCircuit extends PureComponent {
 
       addSelectedAssetType({id: assetTypeId})
       setFocusingAsset({id: assetId})
-
-      // !!! Find out why this gets called twice
-      // alert('tapped ' + node.id())
     }
 
+    cy.off('add remove tap')
     cy.on('add remove', refreshLayout)
     cy.on('tap', 'node', showAsset)
 
-    // !!! Find out why this does not work
-    // cy.on('mouseover', 'node', e  => e.target.cursor = 'pointer')
+    cy.on('mouseover', 'node', () => {
+      containerStyle['cursor'] = 'pointer'})
+    cy.on('mouseout', 'node', () => {
+      containerStyle['cursor'] = 'all-scroll'})
   }
 
   render() {
-    let {
+    const {
       focusingAssetId,
       assetById,
     } = this.props
@@ -81,12 +79,8 @@ class AssetCircuit extends PureComponent {
     return (
       <CytoscapeComponent
         elements={getElements(focusingAssetId, assetById, CIRCUIT_DEPTH)}
-        layout={cytoscapeLayout}
-        style={{
-          height: '100%',
-          width: '100%',
-          cursor: 'pointer',
-        }}
+        layout={CYTOSCAPE_LAYOUT}
+        style={{height: '100%', width: '100%'}}
         cy={this.onCy}
       />
     )
