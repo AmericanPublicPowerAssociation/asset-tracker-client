@@ -18,31 +18,31 @@ const assetById = (state=initialState, action) => {
     })
   } else if (TOGGLE_ASSET_RELATION === actionType) {
     const {
-      exposedAssetId,
-      exposedAssetKey,
+      relatingAssetId,
+      relatingAssetKey,
       visibleAssetId,
     } = action.payload
-    if (exposedAssetId === visibleAssetId) {
+    if (relatingAssetId === visibleAssetId) {
       return state
     }
-    const exposedAsset = state.get(exposedAssetId)
+    const relatingAsset = state.get(relatingAssetId)
     const visibleAsset = state.get(visibleAssetId)
     const visibleAssetKey = {
       'connectedIds': 'connectedIds',
       'parentIds': 'childIds',
       'childIds': 'parentIds',
-    }[exposedAssetKey]
-    const exposedRelatedAssetIds = exposedAsset.get(exposedAssetKey, List())
+    }[relatingAssetKey]
+    const relatingRelatedAssetIds = relatingAsset.get(relatingAssetKey, List())
     const visibleRelatedAssetIds = visibleAsset.get(visibleAssetKey, List())
     const toggle =
-      exposedRelatedAssetIds.includes(visibleAssetId) ?
+      relatingRelatedAssetIds.includes(visibleAssetId) ?
       (assetIds, assetId) => assetIds.filter(x => x !== assetId) :
       (assetIds, assetId) => assetIds.push(assetId)
     return state.merge({
-      [exposedAssetId]: exposedAsset.set(exposedAssetKey, toggle(
-        exposedRelatedAssetIds, visibleAssetId)),
+      [relatingAssetId]: relatingAsset.set(relatingAssetKey, toggle(
+        relatingRelatedAssetIds, visibleAssetId)),
       [visibleAssetId]: visibleAsset.set(visibleAssetKey, toggle(
-        visibleRelatedAssetIds, exposedAssetId)),
+        visibleRelatedAssetIds, relatingAssetId)),
     })
   }
   return state

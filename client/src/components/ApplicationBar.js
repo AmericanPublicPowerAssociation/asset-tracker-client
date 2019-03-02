@@ -11,7 +11,7 @@ import SunnyIcon from '@material-ui/icons/WbSunny'
 import SunnyOutlinedIcon from '@material-ui/icons/WbSunnyOutlined'
 import SearchIcon from '@material-ui/icons/Search'
 import FilterListIcon from '@material-ui/icons/FilterList'
-import TeleportIcon from '@material-ui/icons/CenterFocusStrong'
+import ReturnIcon from '@material-ui/icons/CenterFocusStrong'
 import Tooltip from '@material-ui/core/Tooltip';
 import {
   FILTER_LIST_DRAWER_WIDTH,
@@ -71,11 +71,11 @@ class ApplicationBar extends PureComponent {
       onThemeIconClick,
       onFilterIconClick,
       // Get global variables
-      highlightedAssetId,
-      exposedAssetKey,
-      exposedAsset,
+      focusingAssetId,
+      relatingAssetKey,
+      relatingAsset,
       addSelectedAssetType,
-      setHighlightedAsset,
+      setFocusingAsset,
     } = this.props
     const isRightDrawerOpen =
       isInformationDrawerOpen ||
@@ -84,20 +84,20 @@ class ApplicationBar extends PureComponent {
       connectedIds: 'Connections',
       parentIds: 'Parents',
       childIds: 'Children',
-    }[exposedAssetKey]
-    const exposedAssetId = exposedAsset.get('id')
-    const exposedAssetName = exposedAsset.get('name')
-    const exposedAssetTypeId = exposedAsset.get('typeId')
-    const applicationTitle = exposedAssetId ?
-      `Editing ${relationName} for ${exposedAssetName}` :
+    }[relatingAssetKey]
+    const relatingAssetId = relatingAsset.get('id')
+    const relatingAssetName = relatingAsset.get('name')
+    const relatingAssetTypeId = relatingAsset.get('typeId')
+    const applicationTitle = relatingAssetId ?
+      `Editing ${relationName} for ${relatingAssetName}` :
       'Asset Tracker'
-    const withTeleportIcon =
-      exposedAssetId &&
-      exposedAssetId !== highlightedAssetId
+    const withReturnIcon =
+      relatingAssetId &&
+      relatingAssetId !== focusingAssetId
     return (
       <AppBar
         position='fixed'
-        color={exposedAssetId ? 'secondary' : 'default'}
+        color={relatingAssetId ? 'secondary' : 'default'}
         className={classNames(classes.appBar, {
           [classes.appBarTransition]: isRightDrawerOpen,
           [classes.appBarWithInformation]: isInformationDrawerOpen,
@@ -119,14 +119,14 @@ class ApplicationBar extends PureComponent {
             noWrap
           >{applicationTitle}</Typography>
 
-          <Tooltip title='Show Exposed Asset' enterDelay={500}>
-            <IconButton aria-label='Show Exposed Asset'
-              className={(!withTeleportIcon && classes.vanish) || ''}
+          <Tooltip title='Return to Asset' enterDelay={500}>
+            <IconButton aria-label='Return to Asset'
+              className={(!withReturnIcon && classes.vanish) || ''}
               onClick={() => {
-                addSelectedAssetType({id: exposedAssetTypeId})
-                setHighlightedAsset({id: exposedAssetId})
+                addSelectedAssetType({id: relatingAssetTypeId})
+                setFocusingAsset({id: relatingAssetId})
               }}
-            ><TeleportIcon /></IconButton>
+            ><ReturnIcon /></IconButton>
           </Tooltip>
 
           <Tooltip title='Add Asset' enterDelay={500}>

@@ -24,8 +24,8 @@ class TableWindow extends PureComponent {
       onSelect,
       // Get global variables
       visibleAssets,
-      highlightedAssetId,
-      setHighlightedAsset,
+      focusingAssetId,
+      setFocusingAsset,
     } = this.props
     return (
       <div className={classes.root}>
@@ -44,12 +44,12 @@ class TableWindow extends PureComponent {
             return (
               <TableRow
                 hover
-                selected={assetId === highlightedAssetId}
+                selected={assetId === focusingAssetId}
                 classes={{
                   hover: classes.hover,
                 }}
                 onClick={() => {
-                  setHighlightedAsset({id: assetId})
+                  setFocusingAsset({id: assetId})
                   onSelect()
                 }}
                 key={assetId}

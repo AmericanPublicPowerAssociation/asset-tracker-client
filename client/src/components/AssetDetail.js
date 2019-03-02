@@ -1,58 +1,56 @@
 import React, { PureComponent } from 'react'
-import { List } from 'immutable'
 import { ASSET_TYPE_BY_ID } from '../constants'
 import AssetName from './AssetName'
 import AssetLocation from './AssetLocation'
 import AssetRelationChips from './AssetRelationChips'
 
 class AssetDetail extends PureComponent {
-  handleSubmit = event => event.preventDefault()
+  onSubmit = event => event.preventDefault()
 
   render() {
     const {
-      highlightedAssetId,
-      exposedAssetId,
-      exposedAssetKey,
-      assetById,
+      focusingAsset,
+      relatingAssetId,
+      relatingAssetKey,
+      connectedAssets,
+      parentAssets,
+      childAssets,
+      setRelatingAsset,
       updateAsset,
-      setExposedAsset,
     } = this.props
-    if (!highlightedAssetId) return null
-    const highlightedAsset = assetById.get(highlightedAssetId)
-    const highlightedAssetType = ASSET_TYPE_BY_ID[
-      highlightedAsset.get('typeId')]
-    const hasLocation = highlightedAssetType['hasLocation'] || false
-    const getRelatedAssets = assetKey => highlightedAsset.get(
-      assetKey, List()).map(assetId => assetById.get(assetId))
+    const focusingAssetTypeId = focusingAsset.get('typeId')
+    if (!focusingAssetTypeId) return null
+    const focusingAssetType = ASSET_TYPE_BY_ID[focusingAssetTypeId]
+    const hasLocation = focusingAssetType['hasLocation'] || false
     const assetRelationChipsProps = {
-      highlightedAsset: highlightedAsset,
-      exposedAssetId: exposedAssetId,
-      exposedAssetKey: exposedAssetKey,
-      setExposedAsset: setExposedAsset,
+      focusingAsset: focusingAsset,
+      relatingAssetId: relatingAssetId,
+      relatingAssetKey: relatingAssetKey,
+      setRelatingAsset: setRelatingAsset,
     }
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.onSubmit}>
         <AssetName
-          highlightedAsset={highlightedAsset}
+          focusingAsset={focusingAsset}
           updateAsset={updateAsset}
         />
         {hasLocation && <AssetLocation />}
         <AssetRelationChips
           label='Connections'
           assetKey='connectedIds'
-          relatedAssets={getRelatedAssets('connectedIds')}
+          relatedAssets={connectedAssets}
           {...assetRelationChipsProps}
         />
         <AssetRelationChips
           label='Parents'
           assetKey='parentIds'
-          relatedAssets={getRelatedAssets('parentIds')}
+          relatedAssets={parentAssets}
           {...assetRelationChipsProps}
         />
         <AssetRelationChips
           label='Children'
           assetKey='childIds'
-          relatedAssets={getRelatedAssets('childIds')}
+          relatedAssets={childAssets}
           {...assetRelationChipsProps}
         />
       </form>

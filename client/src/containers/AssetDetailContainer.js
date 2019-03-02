@@ -1,22 +1,30 @@
 import { connect } from 'react-redux'
 import {
+  setRelatingAsset,
   updateAsset,
-  setExposedAsset,
 } from '../actions'
 import AssetDetail from '../components/AssetDetail'
+import {
+  getFocusingAsset,
+  getConnectedAssets,
+  getParentAssets,
+  getChildAssets,
+} from '../selectors'
 
 const mapStateToProps = state => ({
-  highlightedAssetId: state.highlightedAssetId,
-  exposedAssetId: state.exposedAssetId,
-  exposedAssetKey: state.exposedAssetKey,
-  assetById: state.assetById,
+  focusingAsset: getFocusingAsset(state),
+  relatingAssetId: state.relatingAssetId,
+  relatingAssetKey: state.relatingAssetKey,
+  connectedAssets: getConnectedAssets(state),
+  parentAssets: getParentAssets(state),
+  childAssets: getChildAssets(state),
 })
 
 const mapDispatchToProps = dispatch => ({
+  setRelatingAsset: payload => {dispatch(
+    setRelatingAsset(payload))},
   updateAsset: payload => {dispatch(
     updateAsset(payload))},
-  setExposedAsset: payload => {dispatch(
-    setExposedAsset(payload))},
 })
 
 export default connect(

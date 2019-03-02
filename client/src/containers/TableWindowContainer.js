@@ -1,18 +1,18 @@
 import { connect } from 'react-redux'
 import {
-  setHighlightedAsset,
+  setFocusingAsset,
 } from '../actions'
 import TableWindow from '../components/TableWindow'
 import { getVisibleAssets } from '../selectors'
 
 const mapStateToProps = state => ({
   visibleAssets: getVisibleAssets(state),
-  highlightedAssetId: state.highlightedAssetId,
+  focusingAssetId: state.focusingAssetId,
 })
 
 const mapDispatchToProps = dispatch => ({
-  setHighlightedAsset: payload => {dispatch(
-    setHighlightedAsset(payload))},
+  setFocusingAsset: payload => {dispatch(
+    setFocusingAsset(payload))},
 })
 
 export default connect(

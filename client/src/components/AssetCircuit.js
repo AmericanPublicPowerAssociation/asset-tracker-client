@@ -43,11 +43,11 @@ const getElements = (assetId, assetById, maximumDepth) => {
 
 class AssetCircuit extends PureComponent {
 
-  handleCy = cy => {
+  onCy = cy => {
     const {
       assetById,
       addSelectedAssetType,
-      setHighlightedAsset,
+      setFocusingAsset,
     } = this.props
 
     const refreshLayout = debounce(() => {
@@ -59,7 +59,7 @@ class AssetCircuit extends PureComponent {
       const assetTypeId = assetById.get(assetId).get('typeId')
 
       addSelectedAssetType({id: assetTypeId})
-      setHighlightedAsset({id: assetId})
+      setFocusingAsset({id: assetId})
 
       // !!! Find out why this gets called twice
       // alert('tapped ' + node.id())
@@ -74,20 +74,20 @@ class AssetCircuit extends PureComponent {
 
   render() {
     let {
-      highlightedAssetId,
+      focusingAssetId,
       assetById,
     } = this.props
-    if (!highlightedAssetId) return null
+    if (!focusingAssetId) return null
     return (
       <CytoscapeComponent
-        elements={getElements(highlightedAssetId, assetById, CIRCUIT_DEPTH)}
+        elements={getElements(focusingAssetId, assetById, CIRCUIT_DEPTH)}
         layout={cytoscapeLayout}
         style={{
           height: '100%',
           width: '100%',
           cursor: 'pointer',
         }}
-        cy={this.handleCy}
+        cy={this.onCy}
       />
     )
   }

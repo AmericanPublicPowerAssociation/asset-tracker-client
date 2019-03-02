@@ -7,7 +7,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import Switch from '@material-ui/core/Switch'
 
 const styles = theme => ({
-  exposed: {
+  relating: {
     backgroundColor: theme.palette.secondary.main,
   },
 })
@@ -20,11 +20,12 @@ class AssetList extends PureComponent {
       onSelect,
       // Get global variables
       visibleAssets,
-      highlightedAssetId,
-      exposedAssetKey,
-      exposedAsset,
-      exposedAssetTypeIds,
-      setHighlightedAsset,
+      relatedAssetIds,
+      relatedAssetTypeIds,
+      focusingAssetId,
+      relatingAssetId,
+      relatingAssetKey,
+      setFocusingAsset,
       toggleAssetRelation,
     } = this.props
     return (
@@ -33,34 +34,31 @@ class AssetList extends PureComponent {
           const visibleAssetId = visibleAsset.get('id')
           const visibleAssetName = visibleAsset.get('name')
           const visibleAssetTypeId = visibleAsset.get('typeId')
-          const exposedAssetId = exposedAsset.get('id')
           return (
             <ListItem
               button
               onClick={() => {
-                setHighlightedAsset({id: visibleAssetId})
+                setFocusingAsset({id: visibleAssetId})
                 onSelect()
               }}
-              selected={visibleAssetId === highlightedAssetId}
+              selected={visibleAssetId === focusingAssetId}
               className={(
-                exposedAssetId &&
-                exposedAssetId === visibleAssetId &&
-                classes.exposed) || ''}
+                relatingAssetId &&
+                relatingAssetId === visibleAssetId &&
+                classes.relating) || ''}
               key={visibleAssetId}
             >
               <ListItemText primary={visibleAssetName} />
               {
-                exposedAssetId &&
-                exposedAssetId !== visibleAssetId &&
-                exposedAssetTypeIds.includes(visibleAssetTypeId) &&
+                relatingAssetId &&
+                relatingAssetId !== visibleAssetId &&
+                relatedAssetTypeIds.includes(visibleAssetTypeId) &&
                 <ListItemSecondaryAction>
                   <Switch
-                    checked={(
-                      exposedAsset.get(exposedAssetKey, [])
-                    ).includes(visibleAssetId)}
+                    checked={relatedAssetIds.includes(visibleAssetId)}
                     onChange={() => {toggleAssetRelation({
-                      exposedAssetId,
-                      exposedAssetKey,
+                      relatingAssetId,
+                      relatingAssetKey,
                       visibleAssetId})}}
                   />
                 </ListItemSecondaryAction>
