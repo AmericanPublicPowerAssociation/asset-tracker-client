@@ -22,9 +22,6 @@ const styles = theme => ({
   grow: {
     flexGrow: 1,
   },
-  vanish: {
-    display: 'none',
-  },
   appBar: {
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
@@ -119,15 +116,15 @@ class ApplicationBar extends PureComponent {
             noWrap
           >{applicationTitle}</Typography>
 
+        {withReturnIcon &&
           <Tooltip title='Return to Asset' enterDelay={500}>
             <IconButton aria-label='Return to Asset'
-              className={(!withReturnIcon && classes.vanish) || ''}
               onClick={() => {
                 addSelectedAssetType({id: relatingAssetTypeId})
                 setFocusingAsset({id: relatingAssetId})
               }}
             ><ReturnIcon /></IconButton>
-          </Tooltip>
+          </Tooltip>}
 
           <Tooltip title='Add Asset' enterDelay={500}>
             <IconButton aria-label='Add Asset'

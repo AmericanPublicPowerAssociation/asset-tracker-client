@@ -423,7 +423,7 @@ export const ASSET_TYPE_BY_ID = {
     hasLocation: true,
   },
 }
-export const SELECTED_ASSET_TYPE_IDS = fromJS(['l'])
+export const SELECTED_ASSET_TYPE_IDS = fromJS(['l', 'm'])
 export const DEFAULT_ASSET_TYPE_ID = 'p'
 
 export const ASSET_BY_ID = fromJS(

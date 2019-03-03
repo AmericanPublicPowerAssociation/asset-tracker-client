@@ -10,11 +10,13 @@ class AssetDetail extends PureComponent {
   render() {
     const {
       focusingAsset,
+      locatingAsset,
       relatingAssetId,
       relatingAssetKey,
       connectedAssets,
       parentAssets,
       childAssets,
+      setLocatingAsset,
       setRelatingAsset,
       updateAsset,
     } = this.props
@@ -34,7 +36,12 @@ class AssetDetail extends PureComponent {
           focusingAsset={focusingAsset}
           updateAsset={updateAsset}
         />
-        {hasLocation && <AssetLocation />}
+      {hasLocation &&
+        <AssetLocation
+          focusingAsset={focusingAsset}
+          locatingAsset={locatingAsset}
+          setLocatingAsset={setLocatingAsset}
+        />}
         <AssetRelationChips
           label='Connections'
           assetKey='connectedIds'
