@@ -5,15 +5,15 @@ import {
 } from '../actions'
 import ApplicationBar from '../components/ApplicationBar'
 import {
+  getLocatingAsset,
   getRelatingAsset,
-  // getLocatingAsset,
 } from '../selectors'
 
 const mapStateToProps = state => ({
   focusingAssetId: state.focusingAssetId,
+  locatingAsset: getLocatingAsset(state),
   relatingAssetKey: state.relatingAssetKey,
   relatingAsset: getRelatingAsset(state),
-  // locatingAsset: getLocatingAsset(state),
 })
 
 const mapDispatchToProps = dispatch => ({

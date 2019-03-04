@@ -69,6 +69,7 @@ class ApplicationBar extends PureComponent {
       onFilterIconClick,
       // Get global variables
       focusingAssetId,
+      locatingAsset,
       relatingAssetKey,
       relatingAsset,
       addSelectedAssetType,
@@ -77,24 +78,27 @@ class ApplicationBar extends PureComponent {
     const isRightDrawerOpen =
       isInformationDrawerOpen ||
       isFilterListDrawerOpen
-    const relationName = {
+    const locatingAssetId = locatingAsset.get('id')
+    const relatingAssetId = relatingAsset.get('id')
+    const editingAssetId = locatingAssetId || relatingAssetId
+    const editingAsset = locatingAssetId ? locatingAsset : relatingAsset
+    const editingAssetName = editingAsset.get('name')
+    const editingAssetTypeId = editingAsset.get('typeId')
+    const editingAttributeName = locatingAssetId ? 'Location' : {
       connectedIds: 'Connections',
       parentIds: 'Parents',
       childIds: 'Children',
     }[relatingAssetKey]
-    const relatingAssetId = relatingAsset.get('id')
-    const relatingAssetName = relatingAsset.get('name')
-    const relatingAssetTypeId = relatingAsset.get('typeId')
-    const applicationTitle = relatingAssetId ?
-      `Editing ${relationName} for ${relatingAssetName}` :
-      'Asset Tracker'
     const withReturnIcon =
-      relatingAssetId &&
-      relatingAssetId !== focusingAssetId
+      editingAssetId &&
+      editingAssetId !== focusingAssetId
+    const applicationTitle = editingAssetId ?
+      `Editing ${editingAttributeName} for ${editingAssetName}` :
+      'Asset Tracker'
     return (
       <AppBar
         position='fixed'
-        color={relatingAssetId ? 'secondary' : 'default'}
+        color={editingAssetId ? 'secondary' : 'default'}
         className={classNames(classes.appBar, {
           [classes.appBarTransition]: isRightDrawerOpen,
           [classes.appBarWithInformation]: isInformationDrawerOpen,
@@ -120,8 +124,8 @@ class ApplicationBar extends PureComponent {
           <Tooltip title='Return to Asset' enterDelay={500}>
             <IconButton aria-label='Return to Asset'
               onClick={() => {
-                addSelectedAssetType({id: relatingAssetTypeId})
-                setFocusingAsset({id: relatingAssetId})
+                addSelectedAssetType({id: editingAssetTypeId})
+                setFocusingAsset({id: editingAssetId})
               }}
             ><ReturnIcon /></IconButton>
           </Tooltip>}
@@ -138,10 +142,11 @@ class ApplicationBar extends PureComponent {
             >{isDark ? <SunnyIcon /> : <SunnyOutlinedIcon />}</IconButton>
           </Tooltip>
 
-          {/* <Tooltip title='Search Assets' enterDelay={500}> */}
+          <Tooltip title='Search Assets' enterDelay={500}>
             <IconButton aria-label='Search Assets' disabled
+              onClick={() => alert('Not yet implemented!')}
             ><SearchIcon /></IconButton>
-          {/* </Tooltip> */}
+          </Tooltip>
 
           <Tooltip title='Filter Assets' enterDelay={500}>
             <IconButton aria-label='Filter Assets'
