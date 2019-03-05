@@ -31,6 +31,8 @@ class AssetMap extends PureComponent {
   render () {
     const {
       selectedAssetTypeIds,
+      focusingAssetId,
+      focusingAssetLocation,
       locatingAssetId,
       locatingAssetLocation,
       updateAssetLocation,
@@ -80,8 +82,15 @@ class AssetMap extends PureComponent {
         onViewportChange={viewport => this.onViewportChange(viewport)}
       >
         <AssetMapMarker
-          locatingAssetId={locatingAssetId}
-          locatingAssetLocation={locatingAssetLocation}
+          color='white'
+          assetId={focusingAssetId}
+          assetLocation={focusingAssetLocation}
+        />
+        <AssetMapMarker
+          draggable
+          color='yellow'
+          assetId={locatingAssetId}
+          assetLocation={locatingAssetLocation}
           defaultLongitude={longitude}
           defaultLatitude={latitude}
           updateAssetLocation={updateAssetLocation}

@@ -5,20 +5,23 @@ import PlaceIcon from '@material-ui/icons/Place'
 class AssetMapMarker extends PureComponent {
   render() {
     const {
-      locatingAssetId,
-      locatingAssetLocation,
+      draggable,
+      color,
+      assetId,
+      assetLocation,
       defaultLongitude,
       defaultLatitude,
       updateAssetLocation,
     } = this.props
-    if (!locatingAssetId) return null
-    const assetLongitude = locatingAssetLocation.get(
+    if (!assetId) return null
+    const assetLongitude = assetLocation.get(
       'longitude', defaultLongitude)
-    const assetLatitude = locatingAssetLocation.get(
+    const assetLatitude = assetLocation.get(
       'latitude', defaultLatitude)
+    if (!assetLongitude) return null
     return (
       <Marker
-        draggable
+        draggable={draggable}
         longitude={assetLongitude}
         latitude={assetLatitude}
         onDragEnd={event => {
@@ -27,14 +30,14 @@ class AssetMapMarker extends PureComponent {
             latitude,
           ] = event.lngLat
           updateAssetLocation({
-            id: locatingAssetId,
+            id: assetId,
             longitude: longitude,
             latitude: latitude,
           })
         }}
       >
         <PlaceIcon
-          nativeColor='yellow'
+          nativeColor={color}
           fontSize='large'
         />
       </Marker>
