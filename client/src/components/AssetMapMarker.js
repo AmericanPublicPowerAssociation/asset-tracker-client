@@ -1,23 +1,21 @@
 import React, { PureComponent } from 'react'
 import { Marker } from 'react-map-gl'
-import { Map } from 'immutable'
 import PlaceIcon from '@material-ui/icons/Place'
 
 class AssetMapMarker extends PureComponent {
   render() {
     const {
-      locatingAsset,
+      locatingAssetId,
+      locatingAssetLocation,
       defaultLongitude,
       defaultLatitude,
-      updateAsset,
+      updateAssetLocation,
     } = this.props
-    const locatingAssetId = locatingAsset.get('id')
     if (!locatingAssetId) return null
-    const assetLocation = locatingAsset.get('location', Map({
-      longitude: defaultLongitude,
-      latitude: defaultLatitude}))
-    const assetLongitude = assetLocation.get('longitude')
-    const assetLatitude = assetLocation.get('latitude')
+    const assetLongitude = locatingAssetLocation.get(
+      'longitude', defaultLongitude)
+    const assetLatitude = locatingAssetLocation.get(
+      'latitude', defaultLatitude)
     return (
       <Marker
         draggable
@@ -28,12 +26,10 @@ class AssetMapMarker extends PureComponent {
             longitude,
             latitude,
           ] = event.lngLat
-          updateAsset({
+          updateAssetLocation({
             id: locatingAssetId,
-            location: {
-              longitude: longitude,
-              latitude: latitude,
-            }
+            longitude: longitude,
+            latitude: latitude,
           })
         }}
       >

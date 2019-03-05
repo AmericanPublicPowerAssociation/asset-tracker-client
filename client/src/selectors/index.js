@@ -9,6 +9,7 @@ import {
 } from '../constants'
 
 const getAssetById = state => state.assetById
+const getAssetLocationById = state => state.assetLocationById
 const getSortedAssetIds = state => state.sortedAssetIds
 const getSelectedAssetTypeIds = state => state.selectedAssetTypeIds
 const getFocusingAssetId = state => state.focusingAssetId
@@ -20,9 +21,19 @@ export const getFocusingAsset = createSelector(
   [getAssetById, getFocusingAssetId],
   (assetById, focusingAssetId) => assetById.get(focusingAssetId, Map()))
 
+export const getFocusingAssetLocation = createSelector(
+  [getAssetLocationById, getFocusingAssetId],
+  (assetLocationById, focusingAssetId) => assetLocationById.get(
+    focusingAssetId, Map()))
+
 export const getLocatingAsset = createSelector(
   [getAssetById, getLocatingAssetId],
   (assetById, locatingAssetId) => assetById.get(locatingAssetId, Map()))
+
+export const getLocatingAssetLocation = createSelector(
+  [getAssetLocationById, getLocatingAssetId],
+  (assetLocationById, locatingAssetId) => assetLocationById.get(
+    locatingAssetId, Map()))
 
 export const getRelatingAsset = createSelector(
   [getAssetById, getRelatingAssetId],

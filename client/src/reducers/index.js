@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import assetById from './assetById'
+import assetLocationById from './assetLocationById'
 import sortedAssetIds from './sortedAssetIds'
 import selectedAssetTypeIds from './selectedAssetTypeIds'
 import focusingAssetId from './focusingAssetId'
@@ -9,6 +10,7 @@ import locatingAssetId from './locatingAssetId'
 
 export default combineReducers({
   assetById,
+  assetLocationById,
   sortedAssetIds,
   selectedAssetTypeIds,
   focusingAssetId,

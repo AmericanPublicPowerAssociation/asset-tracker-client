@@ -1,18 +1,21 @@
 import { connect } from 'react-redux'
 import {
-  updateAsset,
+  updateAssetLocation,
 } from '../actions'
 import AssetMap from '../components/AssetMap'
-import { getLocatingAsset } from '../selectors'
+import {
+  getLocatingAssetLocation,
+} from '../selectors'
 
 const mapStateToProps = state => ({
   selectedAssetTypeIds: state.selectedAssetTypeIds,
-  locatingAsset: getLocatingAsset(state),
+  locatingAssetId: state.locatingAssetId,
+  locatingAssetLocation: getLocatingAssetLocation(state),
 })
 
 const mapDispatchToProps = dispatch => ({
-  updateAsset: payload => {dispatch(
-    updateAsset(payload))},
+  updateAssetLocation: payload => {dispatch(
+    updateAssetLocation(payload))},
 })
 
 export default connect(

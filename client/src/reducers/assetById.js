@@ -1,4 +1,4 @@
-import { List, fromJS } from 'immutable'
+import { fromJS, List } from 'immutable'
 import {
   ASSET_BY_ID,
   ADD_ASSET,

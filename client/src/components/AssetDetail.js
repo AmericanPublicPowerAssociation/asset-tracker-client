@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { ASSET_TYPE_BY_ID } from '../constants'
 import AssetName from './AssetName'
-import AssetLocation from './AssetLocation'
+import AssetLocationContainer from '../containers/AssetLocationContainer'
 import AssetRelationChips from './AssetRelationChips'
 
 class AssetDetail extends PureComponent {
@@ -10,20 +10,18 @@ class AssetDetail extends PureComponent {
   render() {
     const {
       focusingAsset,
-      locatingAsset,
       relatingAssetId,
       relatingAssetKey,
       connectedAssets,
       parentAssets,
       childAssets,
-      setLocatingAsset,
       setRelatingAsset,
       updateAsset,
     } = this.props
     const focusingAssetTypeId = focusingAsset.get('typeId')
     if (!focusingAssetTypeId) return null
     const focusingAssetType = ASSET_TYPE_BY_ID[focusingAssetTypeId]
-    const hasLocation = focusingAssetType['hasLocation'] || false
+    const locatable = focusingAssetType['locatable'] || false
     const assetRelationChipsProps = {
       focusingAsset: focusingAsset,
       relatingAssetId: relatingAssetId,
@@ -36,12 +34,7 @@ class AssetDetail extends PureComponent {
           focusingAsset={focusingAsset}
           updateAsset={updateAsset}
         />
-      {hasLocation &&
-        <AssetLocation
-          focusingAsset={focusingAsset}
-          locatingAsset={locatingAsset}
-          setLocatingAsset={setLocatingAsset}
-        />}
+        {locatable && <AssetLocationContainer />}
         <AssetRelationChips
           label='Connections'
           assetKey='connectedIds'

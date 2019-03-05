@@ -31,8 +31,9 @@ class AssetMap extends PureComponent {
   render () {
     const {
       selectedAssetTypeIds,
-      locatingAsset,
-      updateAsset,
+      locatingAssetId,
+      locatingAssetLocation,
+      updateAssetLocation,
     } = this.props
     const {
       longitude,
@@ -79,10 +80,11 @@ class AssetMap extends PureComponent {
         onViewportChange={viewport => this.onViewportChange(viewport)}
       >
         <AssetMapMarker
-          locatingAsset={locatingAsset}
+          locatingAssetId={locatingAssetId}
+          locatingAssetLocation={locatingAssetLocation}
           defaultLongitude={longitude}
           defaultLatitude={latitude}
-          updateAsset={updateAsset}
+          updateAssetLocation={updateAssetLocation}
         />
       </ReactMapGL>
     )

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, Fragment } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import FormControl from '@material-ui/core/FormControl'
 import FormLabel from '@material-ui/core/FormLabel'
@@ -7,6 +7,10 @@ import AddIcon from '@material-ui/icons/Add'
 import EditIcon from '@material-ui/icons/Edit'
 import PlaceIcon from '@material-ui/icons/Place'
 import CheckIcon from '@material-ui/icons/Check'
+import Tooltip from '@material-ui/core/Tooltip'
+import {
+  TOOLTIP_DELAY,
+} from '../constants'
 
 const styles = theme => ({
   root: {
@@ -18,25 +22,47 @@ const styles = theme => ({
 })
 
 class AssetLocation extends PureComponent {
+  state = {
+    showCoordinates: false,
+  }
+
   render() {
     const {
       classes,
-      focusingAsset,
-      locatingAsset,
+      focusingAssetId,
+      focusingAssetLocation,
+      locatingAssetId,
       setLocatingAsset,
     } = this.props
-    const focusingAssetId = focusingAsset.get('id')
-    const focusingAssetLocation = focusingAsset.get('location')
-    const locatingAssetId = locatingAsset.get('id')
-    const updateIcon = focusingAssetLocation ? <EditIcon /> : <AddIcon />
+    const {
+      showCoordinates,
+    } = this.state
+    const hasLocation = !focusingAssetLocation.isEmpty()
+    const updateIcon = hasLocation ? <EditIcon /> : <AddIcon />
     return (
       <FormControl fullWidth className={classes.root}>
-        <FormLabel>Location</FormLabel>
+        <FormLabel>
+          Location
+        {hasLocation && showCoordinates &&
+          <Fragment>
+            {' ('}
+            <Tooltip title='Longitude' enterDelay={TOOLTIP_DELAY} placement='top'>
+              <span>{focusingAssetLocation.get('longitude')}</span>
+            </Tooltip>
+            {', '}
+            <Tooltip title='Latitude' enterDelay={TOOLTIP_DELAY} placement='top'>
+              <span>{focusingAssetLocation.get('latitude')}</span>
+            </Tooltip>
+            {')'}
+          </Fragment>
+        }
+        </FormLabel>
         <div>
-        {focusingAssetLocation &&
+        {hasLocation &&
           <Chip
             label={<PlaceIcon />}
             className={classes.chip}
+            onClick={() => this.setState({showCoordinates: !showCoordinates})}
           />
         }
           <Chip

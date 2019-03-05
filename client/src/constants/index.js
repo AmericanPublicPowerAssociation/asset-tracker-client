@@ -291,6 +291,9 @@ export const FILTER_LIST_DRAWER_WIDTH = 256
 export const ADD_ASSET = 'ADD_ASSET'
 export const UPDATE_ASSET = 'UPDATE_ASSET'
 
+export const UPDATE_ASSET_LOCATION = 'UPDATE_ASSET_LOCATION'
+export const TOGGLE_ASSET_RELATION = 'TOGGLE_ASSET_RELATION'
+
 export const ADD_SELECTED_ASSET_TYPE = 'ADD_SELECTED_ASSET_TYPE'
 export const TOGGLE_SELECTED_ASSET_TYPE = 'TOGGLE_SELECTED_ASSET_TYPE'
 
@@ -298,15 +301,13 @@ export const SET_FOCUSING_ASSET = 'SET_FOCUSING_ASSET'
 export const SET_RELATING_ASSET = 'SET_RELATING_ASSET'
 export const SET_LOCATING_ASSET = 'SET_LOCATING_ASSET'
 
-export const TOGGLE_ASSET_RELATION = 'TOGGLE_ASSET_RELATION'
-
 export const ASSET_TYPE_BY_ID = {
   p: {
     name: 'Pole',
     connectedIds: [],
     parentIds: ['l', 's', 'S'],
     childIds: ['m', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
-    hasLocation: true,
+    locatable: true,
   },
   l: {
     name: 'Line',
@@ -325,7 +326,7 @@ export const ASSET_TYPE_BY_ID = {
       {id: 'mi', name: 'Industrial'},
       {id: 'mX', name: 'Other'},
     ],
-    hasLocation: true,
+    locatable: true,
   },
   t: {
     name: 'Transformer',
@@ -387,14 +388,14 @@ export const ASSET_TYPE_BY_ID = {
     connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
     parentIds: ['p', 's', 'S'],
     childIds: [],
-    hasLocation: true,
+    locatable: true,
   },
   g: {
     name: 'Generator',
     connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
     parentIds: ['p', 's', 'S'],
     childIds: [],
-    hasLocation: true,
+    locatable: true,
   },
   s: {
     name: 'Substation',
@@ -406,21 +407,21 @@ export const ASSET_TYPE_BY_ID = {
       {id: 'st', name: 'Transmission'},
       {id: 'sX', name: 'Other'},
     ],
-    hasLocation: true,
+    locatable: true,
   },
   S: {
     name: 'Station',
     connectedIds: [],
     parentIds: [],
     childIds: ['p', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
-    hasLocation: true,
+    locatable: true,
   },
   X: {
     name: 'Other',
     connectedIds: ['l', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
     parentIds: ['p', 's', 'S'],
     childIds: [],
-    hasLocation: true,
+    locatable: true,
   },
 }
 export const SELECTED_ASSET_TYPE_IDS = fromJS(['l', 'm'])
@@ -431,9 +432,13 @@ export const ASSET_BY_ID = fromJS(
 export const SORTED_ASSET_IDS = ASSET_BY_ID.keySeq().toList()
 export const MAXIMUM_LIST_LENGTH = 50
 
+export const ASSET_LOCATION_BY_ID = fromJS({})
+
 export const MAP_STYLE = fromJS(mapStyle)
 export const KEY_PREFIX = 'asset-tracker-'
 
 export const CIRCUIT_DEPTH = 3
 export const DEBOUNCE_THRESHOLD_IN_MILLISECONDS = 100
 export const CYTOSCAPE_LAYOUT = {'name': 'cose'}
+
+export const TOOLTIP_DELAY = 500

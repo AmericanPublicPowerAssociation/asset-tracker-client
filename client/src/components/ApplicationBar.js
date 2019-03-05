@@ -12,10 +12,11 @@ import SunnyOutlinedIcon from '@material-ui/icons/WbSunnyOutlined'
 import SearchIcon from '@material-ui/icons/Search'
 import FilterListIcon from '@material-ui/icons/FilterList'
 import ReturnIcon from '@material-ui/icons/CenterFocusStrong'
-import Tooltip from '@material-ui/core/Tooltip';
+import Tooltip from '@material-ui/core/Tooltip'
 import {
   FILTER_LIST_DRAWER_WIDTH,
   INFORMATION_DRAWER_WIDTH,
+  TOOLTIP_DELAY,
 } from '../constants'
 
 const styles = theme => ({
@@ -106,7 +107,7 @@ class ApplicationBar extends PureComponent {
         })}
       >
         <Toolbar>
-          <Tooltip title='Open Navigation' enterDelay={500}>
+          <Tooltip title='Open Navigation' enterDelay={TOOLTIP_DELAY}>
             <IconButton aria-label='Open Navigation'
               className={classes.menuButton}
               onClick={onMenuIconClick}
@@ -121,7 +122,7 @@ class ApplicationBar extends PureComponent {
           >{applicationTitle}</Typography>
 
         {withReturnIcon &&
-          <Tooltip title='Return to Asset' enterDelay={500}>
+          <Tooltip title='Return to Asset' enterDelay={TOOLTIP_DELAY}>
             <IconButton aria-label='Return to Asset'
               onClick={() => {
                 addSelectedAssetType({id: editingAssetTypeId})
@@ -130,25 +131,25 @@ class ApplicationBar extends PureComponent {
             ><ReturnIcon /></IconButton>
           </Tooltip>}
 
-          <Tooltip title='Add Asset' enterDelay={500}>
+          <Tooltip title='Add Asset' enterDelay={TOOLTIP_DELAY}>
             <IconButton aria-label='Add Asset'
               onClick={onAddIconClick}
             ><AddIcon /></IconButton>
           </Tooltip>
 
-          <Tooltip title='Toggle Brightness' enterDelay={500}>
+          <Tooltip title='Toggle Brightness' enterDelay={TOOLTIP_DELAY}>
             <IconButton aria-label='Toggle Brightness'
               onClick={onThemeIconClick}
             >{isDark ? <SunnyIcon /> : <SunnyOutlinedIcon />}</IconButton>
           </Tooltip>
 
-          <Tooltip title='Search Assets' enterDelay={500}>
-            <IconButton aria-label='Search Assets' disabled
+          <Tooltip title='Search Assets' enterDelay={TOOLTIP_DELAY}>
+            <IconButton aria-label='Search Assets'
               onClick={() => alert('Not yet implemented!')}
             ><SearchIcon /></IconButton>
           </Tooltip>
 
-          <Tooltip title='Filter Assets' enterDelay={500}>
+          <Tooltip title='Filter Assets' enterDelay={TOOLTIP_DELAY}>
             <IconButton aria-label='Filter Assets'
               className={(isFilterListDrawerOpen && classes.vanish) || ''}
               onClick={onFilterIconClick}
