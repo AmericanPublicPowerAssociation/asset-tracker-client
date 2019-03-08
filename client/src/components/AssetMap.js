@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import ReactMapGL from 'react-map-gl'
+import ReactMapGL, { NavigationControl } from 'react-map-gl'
 // import LINE_GEOJSON from '../datasets/line.geojson'
 // import METER_GEOJSON from '../datasets/meter.geojson'
 import AssetMapMarker from './AssetMapMarker'
@@ -79,7 +79,9 @@ class AssetMap extends PureComponent {
           defaultLatitude={latitude}
           updateAssetLocation={updateAssetLocation}
         />
-      }
+        <div style={{position: 'absolute', left: 0}}>
+          <NavigationControl onViewportChange={this.onViewportChange} />
+        </div>
       </ReactMapGL>
     )
   }
