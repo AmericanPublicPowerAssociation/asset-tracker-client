@@ -16,6 +16,7 @@ const getAssetById = state => state.assetById
 const getAssetLocationById = state => state.assetLocationById
 const getSortedAssetIds = state => state.sortedAssetIds
 const getSelectedAssetTypeIds = state => state.selectedAssetTypeIds
+const getSelectedAssetIds = state => state.selectedAssetIds
 const getFocusingAssetId = state => state.focusingAssetId
 const getLocatingAssetId = state => state.locatingAssetId
 const getRelatingAssetId = state => state.relatingAssetId
@@ -43,12 +44,20 @@ export const getChildAssets = createSelector(
   [getAssetById, getChildIds],
   (assetById, childIds) => childIds.map(assetId => assetById.get(assetId)))
 
-export const getVisibleAssets = createSelector(
-  [getAssetById, getSortedAssetIds, getSelectedAssetTypeIds],
-  (assetById, sortedAssetIds, selectedAssetTypeIds) => sortedAssetIds
-    .slice(0, MAXIMUM_LIST_LENGTH)
-    .map(assetId => assetById.get(assetId))
-    .filter(asset => selectedAssetTypeIds.includes(asset.get('typeId'))))
+export const getVisibleAssets = createSelector([
+  getSelectedAssetIds,
+  getSortedAssetIds,
+  getSelectedAssetTypeIds,
+  getAssetById,
+], (
+  selectedAssetIds,
+  sortedAssetIds,
+  selectedAssetTypeIds,
+  assetById,
+) => (selectedAssetIds.isEmpty() ? sortedAssetIds : selectedAssetIds)
+  .slice(0, MAXIMUM_LIST_LENGTH)
+  .map(assetId => assetById.get(assetId))
+  .filter(asset => selectedAssetTypeIds.includes(asset.get('typeId'))))
 
 export const getFocusingAssetLocation = createSelector(
   [getAssetLocationById, getFocusingAssetId, getParentIds],

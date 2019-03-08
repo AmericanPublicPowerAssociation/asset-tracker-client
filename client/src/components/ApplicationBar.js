@@ -69,6 +69,7 @@ class ApplicationBar extends PureComponent {
       onThemeIconClick,
       onFilterIconClick,
       // Get global variables
+      selectedAssetIds,
       focusingAssetId,
       locatingAsset,
       relatingAssetKey,
@@ -93,13 +94,17 @@ class ApplicationBar extends PureComponent {
     const withReturnIcon =
       editingAssetId &&
       editingAssetId !== focusingAssetId
-    const applicationTitle = editingAssetId ?
-      `Editing ${editingAttributeName} for ${editingAssetName}` :
-      'Asset Tracker'
+    const selectedAssetCount = selectedAssetIds.count()
+    const applicationTitle = selectedAssetCount ?
+      `Selected ${selectedAssetCount} Assets` :
+      editingAssetId ?
+        `Editing ${editingAttributeName} for ${editingAssetName}` :
+        'Asset Tracker'
     return (
       <AppBar
         position='fixed'
-        color={editingAssetId ? 'secondary' : 'default'}
+        color={selectedAssetCount ? 'primary' :
+          editingAssetId ? 'secondary' : 'default'}
         className={classNames(classes.appBar, {
           [classes.appBarTransition]: isRightDrawerOpen,
           [classes.appBarWithInformation]: isInformationDrawerOpen,

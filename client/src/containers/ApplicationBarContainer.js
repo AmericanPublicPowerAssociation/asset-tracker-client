@@ -10,6 +10,7 @@ import {
 } from '../selectors'
 
 const mapStateToProps = state => ({
+  selectedAssetIds: state.selectedAssetIds,
   focusingAssetId: state.focusingAssetId,
   locatingAsset: getLocatingAsset(state),
   relatingAssetKey: state.relatingAssetKey,

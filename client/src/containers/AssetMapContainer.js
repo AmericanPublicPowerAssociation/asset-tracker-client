@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import {
   setFocusingAsset,
+  setSelectedAssetIds,
   updateAssetLocation,
 } from '../actions'
 import AssetMap from '../components/AssetMap'
@@ -23,6 +24,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setFocusingAsset: payload => {dispatch(
     setFocusingAsset(payload))},
+  setSelectedAssetIds: payload => {dispatch(
+    setSelectedAssetIds(payload))},
   updateAssetLocation: payload => {dispatch(
     updateAssetLocation(payload))},
 })

@@ -5,6 +5,7 @@ import {
   TOGGLE_ASSET_RELATION,
   ADD_SELECTED_ASSET_TYPE,
   TOGGLE_SELECTED_ASSET_TYPE,
+  SET_SELECTED_ASSET_IDS,
   SET_FOCUSING_ASSET,
   SET_RELATING_ASSET,
   SET_LOCATING_ASSET,
@@ -24,6 +25,8 @@ export const addSelectedAssetType = payload => ({
   type: ADD_SELECTED_ASSET_TYPE, payload})
 export const toggleSelectedAssetType = payload => ({
   type: TOGGLE_SELECTED_ASSET_TYPE, payload})
+export const setSelectedAssetIds = payload => ({
+  type: SET_SELECTED_ASSET_IDS, payload})
 
 export const setFocusingAsset = payload => ({
   type: SET_FOCUSING_ASSET, payload})

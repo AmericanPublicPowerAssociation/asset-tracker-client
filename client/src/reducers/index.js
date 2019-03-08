@@ -3,8 +3,9 @@ import assetById from './assetById'
 import assetLocationById from './assetLocationById'
 import featureColorAttribute from './featureColorAttribute'
 import featureSizeAttribute from './featureSizeAttribute'
-import sortedAssetIds from './sortedAssetIds'
 import selectedAssetTypeIds from './selectedAssetTypeIds'
+import sortedAssetIds from './sortedAssetIds'
+import selectedAssetIds from './selectedAssetIds'
 import focusingAssetId from './focusingAssetId'
 import relatingAssetId from './relatingAssetId'
 import relatingAssetKey from './relatingAssetKey'
@@ -15,8 +16,9 @@ export default combineReducers({
   assetLocationById,
   featureColorAttribute,
   featureSizeAttribute,
-  sortedAssetIds,
   selectedAssetTypeIds,
+  sortedAssetIds,
+  selectedAssetIds,
   focusingAssetId,
   relatingAssetId,
   relatingAssetKey,
