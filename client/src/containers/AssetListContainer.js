@@ -17,6 +17,7 @@ const mapStateToProps = state => ({
   focusingAssetId: state.focusingAssetId,
   relatingAssetId: state.relatingAssetId,
   relatingAssetKey: state.relatingAssetKey,
+  locatingAssetId: state.locatingAssetId,
 })
 
 const mapDispatchToProps = dispatch => ({

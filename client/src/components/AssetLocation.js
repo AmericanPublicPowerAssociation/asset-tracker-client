@@ -1,4 +1,5 @@
 import React, { PureComponent, Fragment } from 'react'
+import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import FormControl from '@material-ui/core/FormControl'
 import FormLabel from '@material-ui/core/FormLabel'
@@ -18,6 +19,9 @@ const styles = theme => ({
   },
   chip: {
     margin: `${theme.spacing.unit}px 8px 0 0`,
+  },
+  hide: {
+    visibility: 'hidden',
   },
 })
 
@@ -68,7 +72,10 @@ class AssetLocation extends PureComponent {
           <Chip
             label={locatingAssetId ? <CheckIcon /> : updateIcon}
             color={locatingAssetId ? 'secondary' : 'primary'}
-            className={classes.chip}
+            className={classNames(classes.chip, {
+              [classes.hide]: locatingAssetId &&
+                locatingAssetId !== focusingAssetId,
+            })}
             onClick={() => {setLocatingAsset(locatingAssetId ? {
               id: null
             } : {

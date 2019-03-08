@@ -25,9 +25,11 @@ class AssetList extends PureComponent {
       focusingAssetId,
       relatingAssetId,
       relatingAssetKey,
+      locatingAssetId,
       setFocusingAsset,
       toggleAssetRelation,
     } = this.props
+    const editingAssetId = relatingAssetId || locatingAssetId
     return (
       <List disablePadding>
         {visibleAssets.map(visibleAsset => {
@@ -43,8 +45,8 @@ class AssetList extends PureComponent {
               }}
               selected={visibleAssetId === focusingAssetId}
               className={(
-                relatingAssetId &&
-                relatingAssetId === visibleAssetId &&
+                editingAssetId &&
+                editingAssetId === visibleAssetId &&
                 classes.relating) || ''}
               key={visibleAssetId}
             >
