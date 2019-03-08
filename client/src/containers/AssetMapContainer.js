@@ -6,6 +6,7 @@ import AssetMap from '../components/AssetMap'
 import {
   getFocusingAssetLocation,
   getLocatingAssetLocation,
+  getMapSources,
 } from '../selectors'
 
 const mapStateToProps = state => ({
@@ -14,6 +15,7 @@ const mapStateToProps = state => ({
   focusingAssetLocation: getFocusingAssetLocation(state),
   locatingAssetId: state.locatingAssetId,
   locatingAssetLocation: getLocatingAssetLocation(state),
+  mapSources: getMapSources(state),
 })
 
 const mapDispatchToProps = dispatch => ({

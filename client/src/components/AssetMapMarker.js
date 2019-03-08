@@ -24,6 +24,8 @@ class AssetMapMarker extends PureComponent {
         draggable={draggable}
         longitude={assetLongitude}
         latitude={assetLatitude}
+        offsetLeft={-17}
+        offsetTop={-32}
         onDragEnd={event => {
           const [
             longitude,

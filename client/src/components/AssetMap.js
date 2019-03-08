@@ -4,8 +4,8 @@ import {
   KEY_PREFIX,
   MAP_STYLE,
 } from '../constants'
-import LINE_GEOJSON from '../datasets/line.geojson'
-import METER_GEOJSON from '../datasets/meter.geojson'
+// import LINE_GEOJSON from '../datasets/line.geojson'
+// import METER_GEOJSON from '../datasets/meter.geojson'
 import AssetMapMarker from './AssetMapMarker'
 
 class AssetMap extends PureComponent {
@@ -35,6 +35,7 @@ class AssetMap extends PureComponent {
       focusingAssetLocation,
       locatingAssetId,
       locatingAssetLocation,
+      mapSources,
       updateAssetLocation,
     } = this.props
     const {
@@ -42,25 +43,36 @@ class AssetMap extends PureComponent {
       latitude,
       zoom,
     } = this.state
-    const mapSources = {
-      [KEY_PREFIX + 'l']: {type: 'geojson', data: LINE_GEOJSON},
-      [KEY_PREFIX + 'm']: {type: 'geojson', data: METER_GEOJSON},
-    }
     const mapLayers = selectedAssetTypeIds
       .filter(typeId => KEY_PREFIX + typeId in mapSources)
       .map(typeId => {
         const isLine = typeId === 'l'
+        const layerColor = {
+          p: 'black',
+          l: 'yellow',
+          m: 'blue',
+          t: 'pink',
+          x: 'magenta',
+          q: 'green',
+          c: 'violet',
+          b: 'gray',
+          o: 'brown',
+          g: 'darkred',
+          s: 'orange',
+          S: 'red',
+          X: 'white',
+        }[typeId]
         return {
           id: KEY_PREFIX + typeId,
           type: isLine  ? 'line' : 'circle',
           source: KEY_PREFIX + typeId,
           paint: isLine ? {
-            'line-width': ['get', 'width'],
-            'line-color': 'yellow',
+            'line-width': ['get', 'size'],
+            'line-color': layerColor,
             'line-opacity': 0.8,
           } : {
-            'circle-radius': ['get', 'radius'],
-            'circle-color': 'blue',
+            'circle-radius': ['get', 'size'],
+            'circle-color': layerColor,
             'circle-stroke-color': 'white',
             'circle-stroke-width': 1,
             'circle-opacity': 0.8,

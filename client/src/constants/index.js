@@ -433,9 +433,13 @@ export const SORTED_ASSET_IDS = ASSET_BY_ID.keySeq().toList()
 export const MAXIMUM_LIST_LENGTH = 50
 
 export const ASSET_LOCATION_BY_ID = fromJS({})
-
+export const FEATURE_GEOMETRY_BY_ID = fromJS({})
+export const FEATURE_COLOR_ATTRIBUTE = 'typeId'
+export const FEATURE_SIZE_ATTRIBUTE = 'kV'
 export const MAP_STYLE = fromJS(mapStyle)
 export const KEY_PREFIX = 'asset-tracker-'
+export const PROPERTY_MINIMUM_VALUE = 1
+export const PROPERTY_MAXIMUM_VALUE = 9
 
 export const CIRCUIT_DEPTH = 3
 export const DEBOUNCE_THRESHOLD_IN_MILLISECONDS = 100
