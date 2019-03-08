@@ -1,14 +1,23 @@
 import React, { PureComponent } from 'react'
+import { withStyles } from '@material-ui/core/styles'
+import TextField from '@material-ui/core/TextField'
 import { ASSET_TYPE_BY_ID } from '../constants'
 import AssetName from './AssetName'
 import AssetLocationContainer from '../containers/AssetLocationContainer'
 import AssetRelationChips from './AssetRelationChips'
+
+const styles = theme => ({
+  attribute: {
+    margin: `${theme.spacing.unit * 3}px 0 0 0`,
+  },
+})
 
 class AssetDetail extends PureComponent {
   onSubmit = event => event.preventDefault()
 
   render() {
     const {
+      classes,
       focusingAsset,
       relatingAssetId,
       relatingAssetKey,
@@ -28,6 +37,9 @@ class AssetDetail extends PureComponent {
       relatingAssetKey: relatingAssetKey,
       setRelatingAsset: setRelatingAsset,
     }
+
+    const focusingAssetId = focusingAsset.get('id')
+
     return (
       <form onSubmit={this.onSubmit}>
         <AssetName
@@ -53,9 +65,50 @@ class AssetDetail extends PureComponent {
           relatedAssets={childAssets}
           {...assetRelationChipsProps}
         />
+        <TextField
+          label='Vendor Name'
+          value={focusingAsset.get('vendorName')}
+          fullWidth
+          className={classes.attribute}
+          onChange={event => updateAsset({
+            id: focusingAssetId,
+            vendorName: event.target.value,
+          })}
+          />
+        <TextField
+          label='Product Name'
+          value={focusingAsset.get('productName')}
+          fullWidth
+          className={classes.attribute}
+          onChange={event => updateAsset({
+            id: focusingAssetId,
+            productName: event.target.value,
+          })}
+          />
+        <TextField
+          label='Product Version'
+          value={focusingAsset.get('productVersion')}
+          fullWidth
+          className={classes.attribute}
+          onChange={event => updateAsset({
+            id: focusingAssetId,
+            productVersion: event.target.value,
+          })}
+          />
+        <TextField
+          label='kW'
+          value={focusingAsset.get('kW')}
+          type='number'
+          fullWidth
+          className={classes.attribute}
+          onChange={event => updateAsset({
+            id: focusingAssetId,
+            kW: event.target.value,
+          })}
+          />
       </form>
     )
   }
 }
 
-export default AssetDetail
+export default withStyles(styles)(AssetDetail)

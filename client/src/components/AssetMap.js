@@ -79,7 +79,12 @@ class AssetMap extends PureComponent {
           defaultLatitude={latitude}
           updateAssetLocation={updateAssetLocation}
         />
-        <div style={{position: 'absolute', left: 0}}>
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          padding: '10px',
+        }}>
           <NavigationControl onViewportChange={this.onViewportChange} />
         </div>
       </ReactMapGL>

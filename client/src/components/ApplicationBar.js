@@ -9,7 +9,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import AddIcon from '@material-ui/icons/Add'
 import SunnyIcon from '@material-ui/icons/WbSunny'
 import SunnyOutlinedIcon from '@material-ui/icons/WbSunnyOutlined'
-import SearchIcon from '@material-ui/icons/Search'
+// import SearchIcon from '@material-ui/icons/Search'
 import FilterListIcon from '@material-ui/icons/FilterList'
 import ReturnIcon from '@material-ui/icons/CenterFocusStrong'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -148,11 +148,13 @@ class ApplicationBar extends PureComponent {
             >{isDark ? <SunnyIcon /> : <SunnyOutlinedIcon />}</IconButton>
           </Tooltip>
 
+          {/*
           <Tooltip title='Search Assets' enterDelay={TOOLTIP_DELAY}>
             <IconButton aria-label='Search Assets'
               onClick={() => alert('Not yet implemented!')}
             ><SearchIcon /></IconButton>
           </Tooltip>
+          */}
 
           <Tooltip title='Filter Assets' enterDelay={TOOLTIP_DELAY}>
             <IconButton aria-label='Filter Assets'

@@ -5,11 +5,11 @@ import {
   MAXIMUM_LIST_LENGTH,
   KEY_PREFIX,
   MAP_STYLE,
-  // PROPERTY_MINIMUM_VALUE,
-  // PROPERTY_MAXIMUM_VALUE,
+  PROPERTY_MINIMUM_VALUE,
+  PROPERTY_MAXIMUM_VALUE,
 } from '../constants'
 import {
-  // normalizeNumber,
+  normalizeNumber,
 } from '../macros'
 
 const getAssetById = state => state.assetById
@@ -149,12 +149,12 @@ export const getMapSources = createSelector(
     assetById,
   ) => {
     if (featureGeometryById.isEmpty()) return Map()
-    /*
     const assetId = featureGeometryById.keySeq().first()
     const asset = assetById.get(assetId)
     const defineGetFeatureProperty = attributeName => {
       const values = assetById.valueSeq().map(
         asset => asset.get(attributeName))
+      /*
       if (typeof asset.get(attributeName) === 'string') {
         const uniqueValues = values.toSet().toList()
         return asset => normalizeNumber(
@@ -164,16 +164,18 @@ export const getMapSources = createSelector(
           PROPERTY_MINIMUM_VALUE,
           PROPERTY_MAXIMUM_VALUE)
       } else {
-        return asset => normalizeNumber(
-          asset.get(attributeName, 0),
-          values.min(),
-          values.max(),
-          PROPERTY_MINIMUM_VALUE,
-          PROPERTY_MAXIMUM_VALUE)
+      */
+      return asset => normalizeNumber(
+        asset.get(attributeName, 0),
+        values.min(),
+        values.max(),
+        PROPERTY_MINIMUM_VALUE,
+        PROPERTY_MAXIMUM_VALUE)
+          /*
       }
+          */
     }
-    */
-    // const getFeatureSize = defineGetFeatureProperty(featureSizeAttribute)
+    const getFeatureSize = defineGetFeatureProperty(featureSizeAttribute)
     const featuresByTypeId = featureGeometryById.reduce((
       featuresByTypeId,
       featureGeometry,
@@ -185,8 +187,8 @@ export const getMapSources = createSelector(
       const featureProperties = {
         id: assetId,
         // color: getFeatureColor(asset),
-        // size: getFeatureSize(asset),
-        size: 5,
+        size: getFeatureSize(asset),
+        // size: 5,
       }
       const feature = fromJS({
         type: 'Feature',
