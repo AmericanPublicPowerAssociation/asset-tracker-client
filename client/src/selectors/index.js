@@ -26,10 +26,40 @@ export const getFocusingAsset = createSelector(
   [getAssetById, getFocusingAssetId],
   (assetById, focusingAssetId) => assetById.get(focusingAssetId, Map()))
 
+export const getParentIds = createSelector(
+  [getAssetById, getFocusingAsset],
+  (assetById, focusingAsset) => focusingAsset.get('parentIds', List()))
+
+export const getParentAssets = createSelector(
+  [getAssetById, getParentIds],
+  (assetById, parentIds) => parentIds.map(assetId => assetById.get(assetId)))
+
+export const getChildIds = createSelector(
+  [getAssetById, getFocusingAsset],
+  (assetById, focusingAsset) => focusingAsset.get('childIds', List()))
+
+export const getChildAssets = createSelector(
+  [getAssetById, getChildIds],
+  (assetById, childIds) => childIds.map(assetId => assetById.get(assetId)))
+
+export const getVisibleAssets = createSelector(
+  [getAssetById, getSortedAssetIds, getSelectedAssetTypeIds],
+  (assetById, sortedAssetIds, selectedAssetTypeIds) => sortedAssetIds
+    .slice(0, MAXIMUM_LIST_LENGTH)
+    .map(assetId => assetById.get(assetId))
+    .filter(asset => selectedAssetTypeIds.includes(asset.get('typeId'))))
+
 export const getFocusingAssetLocation = createSelector(
-  [getAssetLocationById, getFocusingAssetId],
-  (assetLocationById, focusingAssetId) => assetLocationById.get(
-    focusingAssetId, Map()))
+  [getAssetLocationById, getFocusingAssetId, getParentIds],
+  (assetLocationById, focusingAssetId, parentIds) => {
+    let assetLocation = assetLocationById.get(focusingAssetId)
+    if (assetLocation) return assetLocation
+    for (const parentId of parentIds) {
+      assetLocation = assetLocationById.get(parentId)
+      if (assetLocation) return assetLocation
+    }
+    return Map()
+  })
 
 export const getLocatingAsset = createSelector(
   [getAssetById, getLocatingAssetId],
@@ -48,23 +78,6 @@ export const getConnectedAssets = createSelector(
   [getAssetById, getFocusingAsset],
   (assetById, focusingAsset) => focusingAsset.get(
     'connectedIds', List()).map(assetId => assetById.get(assetId)))
-
-export const getParentAssets = createSelector(
-  [getAssetById, getFocusingAsset],
-  (assetById, focusingAsset) => focusingAsset.get(
-    'parentIds', List()).map(assetId => assetById.get(assetId)))
-
-export const getChildAssets = createSelector(
-  [getAssetById, getFocusingAsset],
-  (assetById, focusingAsset) => focusingAsset.get(
-    'childIds', List()).map(assetId => assetById.get(assetId)))
-
-export const getVisibleAssets = createSelector(
-  [getAssetById, getSortedAssetIds, getSelectedAssetTypeIds],
-  (assetById, sortedAssetIds, selectedAssetTypeIds) => sortedAssetIds
-    .slice(0, MAXIMUM_LIST_LENGTH)
-    .map(assetId => assetById.get(assetId))
-    .filter(asset => selectedAssetTypeIds.includes(asset.get('typeId'))))
 
 export const getRelatedAssetTypeIds = createSelector(
   [getRelatingAsset, getRelatingAssetKey],
@@ -174,11 +187,13 @@ export const getMapSources = createSelector(
         assetTypeId, List()).push(feature))
     }, Map())
 
-    const x = featuresByTypeId.mapEntries(([assetTypeId, features]) => [
-      KEY_PREFIX + assetTypeId,
-      {type: 'geojson', data: {type: 'FeatureCollection', features: features}},
+    return featuresByTypeId.mapEntries(([assetTypeId, features]) => [
+      KEY_PREFIX + assetTypeId, {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: features,
+        }},
     ]).toJS()
-    console.log(x)
-    return x
 
   })
