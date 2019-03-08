@@ -1,24 +1,28 @@
 import { connect } from 'react-redux'
 import {
+  setFocusingAsset,
   updateAssetLocation,
 } from '../actions'
 import AssetMap from '../components/AssetMap'
 import {
+  getMapStyle,
+  getInteractiveLayerIds,
   getFocusingAssetLocation,
   getLocatingAssetLocation,
-  getMapSources,
 } from '../selectors'
 
 const mapStateToProps = state => ({
-  selectedAssetTypeIds: state.selectedAssetTypeIds,
+  mapStyle: getMapStyle(state),
+  interactiveLayerIds: getInteractiveLayerIds(state),
   focusingAssetId: state.focusingAssetId,
   focusingAssetLocation: getFocusingAssetLocation(state),
   locatingAssetId: state.locatingAssetId,
   locatingAssetLocation: getLocatingAssetLocation(state),
-  mapSources: getMapSources(state),
 })
 
 const mapDispatchToProps = dispatch => ({
+  setFocusingAsset: payload => {dispatch(
+    setFocusingAsset(payload))},
   updateAssetLocation: payload => {dispatch(
     updateAssetLocation(payload))},
 })

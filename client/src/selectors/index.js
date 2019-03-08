@@ -4,6 +4,7 @@ import {
   ASSET_TYPE_BY_ID,
   MAXIMUM_LIST_LENGTH,
   KEY_PREFIX,
+  MAP_STYLE,
   // PROPERTY_MINIMUM_VALUE,
   // PROPERTY_MAXIMUM_VALUE,
 } from '../constants'
@@ -197,3 +198,60 @@ export const getMapSources = createSelector(
     ]).toJS()
 
   })
+
+export const getMapLayers = createSelector([
+  getSelectedAssetTypeIds,
+  getMapSources,
+], (
+  selectedAssetTypeIds,
+  mapSources,
+) => selectedAssetTypeIds
+    .filter(typeId => KEY_PREFIX + typeId in mapSources)
+    .map(typeId => {
+      const isLine = typeId === 'l'
+      const layerColor = {
+        p: 'black',
+        l: 'yellow',
+        m: 'blue',
+        t: 'pink',
+        x: 'magenta',
+        q: 'green',
+        c: 'violet',
+        b: 'gray',
+        o: 'brown',
+        g: 'darkred',
+        s: 'orange',
+        S: 'red',
+        X: 'white',
+      }[typeId]
+      return {
+        id: KEY_PREFIX + typeId,
+        type: isLine  ? 'line' : 'circle',
+        source: KEY_PREFIX + typeId,
+        paint: isLine ? {
+          'line-width': ['get', 'size'],
+          'line-color': layerColor,
+          'line-opacity': 0.8,
+        } : {
+          'circle-radius': ['get', 'size'],
+          'circle-color': layerColor,
+          'circle-stroke-color': 'white',
+          'circle-stroke-width': 1,
+          'circle-opacity': 0.8,
+        },
+      }
+    }))
+
+export const getMapStyle = createSelector([
+  getMapSources,
+  getMapLayers,
+], (
+  mapSources,
+  mapLayers,
+) => MAP_STYLE.mergeDeep({sources: mapSources, layers: mapLayers}))
+
+export const getInteractiveLayerIds = createSelector([
+  getMapLayers,
+], (
+  mapLayers,
+) => mapLayers.map(layer => layer.id))
