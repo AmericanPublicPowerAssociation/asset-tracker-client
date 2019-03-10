@@ -17,9 +17,11 @@ def index(request):
     route_name='vulnerable_assets',
     renderer='json')
 def vulnerable_assets(request):
-    product_name = request.GET['name']
+    product_name = request.GET.get('product') or None
+    vendor_name = request.GET.get('vendor') or None
+    version = request.GET.get('version') or None
     cursor = get_mongo_connection()
-    vulnerabilities = query_nvd(cursor, product_name)
+    vulnerabilities = query_nvd(cursor, product_name, vendor_name, version)
     '''
     db = request.dbsession
     assets = db.query(Asset) \

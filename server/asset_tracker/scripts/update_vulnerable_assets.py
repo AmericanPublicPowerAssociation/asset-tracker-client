@@ -18,13 +18,29 @@ def get_vulnerabilities(asset, mongo_cursor):
             'score': v['score']} for v in vulnerabilities]
 
 
-def query_nvd(cursor, product_name):
-    product_query_string = \
-        'cve.affects.vendor.vendor_data.product.product_data.product_name'
-    product_query = {
-        product_query_string: product_name}
+def query_nvd(cursor, product_name=None, vendor_name=None, version_value=None):
+    product_query, vendor_query, version_query = {}, {}, {}
+    if not (product_name or vendor_name or version_value):
+        return None
+    if product_name:
+        product_query_string = \
+            'cve.affects.vendor.vendor_data.product.product_data.product_name'
+        product_query = {
+            product_query_string: product_name}
+    if vendor_name:
+        vendor_query_string = \
+            'cve.affects.vendor.vendor_data.vendor_name'
+        vendor_query = {
+            vendor_query_string: vendor_name}
+    if version_value:
+        version_query_string = \
+            'cve.affects.vendor.vendor_data.product.product_data.version.' + \
+            'version_data.version_value'
+        version_query = {
+            version_query_string: version_value}
     results = []
-    for x in cursor.find({'$and': [product_query]}):
+    for x in cursor.find(
+            {'$and': [product_query, vendor_query, version_query]}):
         r = {
             'description':
                 x['cve']['description']['description_data'][0]['value'],
