@@ -23,17 +23,19 @@ def query_nvd(cursor, product_name):
         'cve.affects.vendor.vendor_data.product.product_data.product_name'
     product_query = {
         product_query_string: product_name}
-    return list(map(
-        lambda x: {
+    results = []
+    for x in cursor.find({'$and': [product_query]}):
+        r = {
             'description':
                 x['cve']['description']['description_data'][0]['value'],
             'id': x['cve']['CVE_data_meta']['ID'],
             'date_published': x['publishedDate'],
             'score': x[
                 'impact'].get('baseMetricV2', {}).get(
-                    'cvss2', {}).get('baseScore', None)
-        }, cursor.find(
-                {'$and': [product_query]})))
+                    'cvssV2', {}).get('baseScore', None)
+        }
+        results.append(r)
+    return results
 
 
 def get_assets(dbsession):

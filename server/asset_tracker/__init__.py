@@ -1,6 +1,6 @@
 from pyramid.config import Configurator
 
-from pyramid.request import Response
+from pyramid.request import Response, Request
 
 
 def main(global_config, **settings):
@@ -13,19 +13,19 @@ def main(global_config, **settings):
         config.include('.routes')
         config.scan()
     # !!! QUICKFIX
-    config.add_request_method(request_factory)
+    config.set_request_factory(request_factory)
     return config.make_wsgi_app()
 
 
-def request_factory(request):
+def request_factory(environ):
     # !!! QUICKFIX DO NOT USE IN PRODUCTION
     # Use only if in development mode not production
-    if request.is_xhr:
-        request.response = Response()
-        request.response.headerlist = []
-        request.response.headerlist.extend(
-            (
-                ('Access-Control-Allow-Origin', '*'),
-            )
+    request = Request(environ)
+    request.response = Response()
+    request.response.headerlist = []
+    request.response.headerlist.extend(
+        (
+            ('Access-Control-Allow-Origin', '*'),
         )
+    )
     return request
