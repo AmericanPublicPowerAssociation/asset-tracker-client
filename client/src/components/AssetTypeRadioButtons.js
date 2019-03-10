@@ -5,19 +5,17 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { ASSET_TYPE_BY_ID } from '../constants'
 
 class AssetTypeRadioButtons extends PureComponent {
-  handleChange = event => {
+  onChange = event => {
     const { onAssetTypeClick } = this.props
     onAssetTypeClick({id: event.target.value})
   }
 
   render() {
-    const {
-      selectedAssetTypeId,
-    } = this.props
+    const { selectedAssetTypeId } = this.props
     return (
       <RadioGroup
         value={selectedAssetTypeId}
-        onChange={this.handleChange}
+        onChange={this.onChange}
       >
       {Object.entries(ASSET_TYPE_BY_ID).map(([id, {name}]) =>
         <FormControlLabel

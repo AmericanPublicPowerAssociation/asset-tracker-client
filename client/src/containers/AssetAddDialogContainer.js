@@ -1,18 +1,18 @@
 import { connect } from 'react-redux'
 import {
-  addAsset,
   addSelectedAssetType,
-  setHighlightedAsset,
+  addAsset,
+  setFocusingAsset,
 } from '../actions'
 import AssetAddDialog from '../components/AssetAddDialog'
 
 const mapDispatchToProps = dispatch => ({
-  addAsset: payload => {dispatch(
-    addAsset(payload))},
   addSelectedAssetType: payload => {dispatch(
     addSelectedAssetType(payload))},
-  setHighlightedAsset: payload => {dispatch(
-    setHighlightedAsset(payload))},
+  addAsset: payload => {dispatch(
+    addAsset(payload))},
+  setFocusingAsset: payload => {dispatch(
+    setFocusingAsset(payload))},
 })
 
 export default connect(

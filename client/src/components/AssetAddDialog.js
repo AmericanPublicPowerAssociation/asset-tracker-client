@@ -16,23 +16,31 @@ class AssetAddDialog extends PureComponent {
     assetTypeId: DEFAULT_ASSET_TYPE_ID,
   }
 
-  handleAssetTypeClick = ({id}) => {
+  onAssetTypeClick = ({id}) => {
     this.setState({assetTypeId: id})}
 
-  handleCancel = () => {
-    this.props.onClose()}
+  onCancel = () => {
+    const { onClose } = this.props
+    onClose()
+  }
 
-  handleOk = () => {
+  onOk = () => {
+    const {
+      addSelectedAssetType,
+      addAsset,
+      setFocusingAsset,
+      onClose,
+    } = this.props
     const { assetTypeId } = this.state
     const assetTypeName = ASSET_TYPE_BY_ID[assetTypeId]['name']
     const assetId = getRandomString(7)
-    this.props.addSelectedAssetType({id: assetTypeId})
-    this.props.addAsset({
+    addSelectedAssetType({id: assetTypeId})
+    addAsset({
       id: assetId,
       name: assetTypeName + ' ' + assetId,
       typeId: assetTypeId})
-    this.props.setHighlightedAsset({id: assetId})
-    this.props.onClose()}
+    setFocusingAsset({id: assetId})
+    onClose()}
 
   render() {
     const etc = this.props
@@ -43,12 +51,12 @@ class AssetAddDialog extends PureComponent {
         <DialogContent>
           <AssetTypeRadioButtons
             selectedAssetTypeId={assetTypeId}
-            onAssetTypeClick={this.handleAssetTypeClick}
+            onAssetTypeClick={this.onAssetTypeClick}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleCancel}>Cancel</Button>
-          <Button onClick={this.handleOk} color='primary'>Ok</Button>
+          <Button onClick={this.onCancel}>Cancel</Button>
+          <Button onClick={this.onOk} color='primary'>Ok</Button>
         </DialogActions>
       </Dialog>
     )

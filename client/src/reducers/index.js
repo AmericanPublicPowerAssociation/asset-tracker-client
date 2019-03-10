@@ -1,16 +1,26 @@
 import { combineReducers } from 'redux'
 import assetById from './assetById'
-import sortedAssetIds from './sortedAssetIds'
+import assetLocationById from './assetLocationById'
+import featureColorAttribute from './featureColorAttribute'
+import featureSizeAttribute from './featureSizeAttribute'
 import selectedAssetTypeIds from './selectedAssetTypeIds'
-import highlightedAssetId from './highlightedAssetId'
-import exposedAssetId from './exposedAssetId'
-import exposedAssetKey from './exposedAssetKey'
+import sortedAssetIds from './sortedAssetIds'
+import selectedAssetIds from './selectedAssetIds'
+import focusingAssetId from './focusingAssetId'
+import relatingAssetId from './relatingAssetId'
+import relatingAssetKey from './relatingAssetKey'
+import locatingAssetId from './locatingAssetId'
 
 export default combineReducers({
   assetById,
-  sortedAssetIds,
+  assetLocationById,
+  featureColorAttribute,
+  featureSizeAttribute,
   selectedAssetTypeIds,
-  highlightedAssetId,
-  exposedAssetId,
-  exposedAssetKey,
+  sortedAssetIds,
+  selectedAssetIds,
+  focusingAssetId,
+  relatingAssetId,
+  relatingAssetKey,
+  locatingAssetId,
 })

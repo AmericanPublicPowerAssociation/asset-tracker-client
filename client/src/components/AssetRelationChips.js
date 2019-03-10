@@ -30,14 +30,14 @@ class AssetRelationChips extends PureComponent {
       classes,
       label,
       assetKey,
+      focusingAsset,
+      relatingAssetId,
+      relatingAssetKey,
       relatedAssets,
-      highlightedAsset,
-      exposedAssetId,
-      exposedAssetKey,
-      setExposedAsset,
+      setRelatingAsset,
     } = this.props
-    const assetId = highlightedAsset.get('id')
-    const assetTypeId = highlightedAsset.get('typeId')
+    const assetId = focusingAsset.get('id')
+    const assetTypeId = focusingAsset.get('typeId')
     const relatedAssetTypeIds = ASSET_TYPE_BY_ID[assetTypeId][assetKey] || []
     if (!relatedAssetTypeIds.length) return null
     return (
@@ -56,14 +56,14 @@ class AssetRelationChips extends PureComponent {
           )
         })}
           <Chip
-            label={exposedAssetId ? <CheckIcon /> : <AddIcon />}
-            color={exposedAssetId ? 'secondary' : 'primary'}
+            label={relatingAssetId ? <CheckIcon /> : <AddIcon />}
+            color={relatingAssetId ? 'secondary' : 'primary'}
             className={classNames(classes.chip, {
-              [classes.hide]: exposedAssetId && (
-                exposedAssetId !== assetId ||
-                exposedAssetKey !== assetKey),
+              [classes.hide]: relatingAssetId && (
+                relatingAssetId !== assetId ||
+                relatingAssetKey !== assetKey),
             })}
-            onClick={() => setExposedAsset(exposedAssetId ? {
+            onClick={() => setRelatingAsset(relatingAssetId ? {
               id: null,
               key: null,
             } : {

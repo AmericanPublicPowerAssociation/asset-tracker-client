@@ -1,20 +1,20 @@
 import { connect } from 'react-redux'
 import {
   addSelectedAssetType,
-  setHighlightedAsset,
+  setFocusingAsset,
 } from '../actions'
 import AssetCircuit from '../components/AssetCircuit'
 
 const mapStateToProps = state => ({
-  highlightedAssetId: state.highlightedAssetId,
+  focusingAssetId: state.focusingAssetId,
   assetById: state.assetById,
 })
 
 const mapDispatchToProps = dispatch => ({
   addSelectedAssetType: payload => {dispatch(
     addSelectedAssetType(payload))},
-  setHighlightedAsset: payload => {dispatch(
-    setHighlightedAsset(payload))},
+  setFocusingAsset: payload => {dispatch(
+    setFocusingAsset(payload))},
 })
 
 export default connect(

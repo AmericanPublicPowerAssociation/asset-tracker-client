@@ -1,13 +1,13 @@
 import {
-  SET_EXPOSED_ASSET,
+  SET_RELATING_ASSET,
 } from '../constants'
 
 const initialState = null
 
-const exposedAssetKey = (state=initialState, action) => {
+const relatingAssetKey = (state=initialState, action) => {
   const actionType = action.type
 
-  if (SET_EXPOSED_ASSET === actionType) {
+  if (SET_RELATING_ASSET === actionType) {
     const {key} = action.payload
     return key
   }
@@ -15,4 +15,4 @@ const exposedAssetKey = (state=initialState, action) => {
   return state
 }
 
-export default exposedAssetKey
+export default relatingAssetKey

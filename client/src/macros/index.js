@@ -10,3 +10,6 @@ export const getRandomString = length => {
   }
   return x
 }
+
+export const normalizeNumber = (a, iMin, iMax, oMin, oMax) => Math.floor(
+  (a - iMin) * (oMax - oMin) / (iMax - iMin) + oMin)

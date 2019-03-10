@@ -1,71 +1,93 @@
 import React, { PureComponent } from 'react'
-import ReactMapGL from 'react-map-gl'
-import 'mapbox-gl/dist/mapbox-gl.css'
-import {
-  KEY_PREFIX,
-  MAP_STYLE,
-} from '../constants'
-import LINE_GEOJSON from '../datasets/line.geojson'
-import METER_GEOJSON from '../datasets/meter.geojson'
+import ReactMapGL, { NavigationControl } from 'react-map-gl'
+// import LINE_GEOJSON from '../datasets/line.geojson'
+// import METER_GEOJSON from '../datasets/meter.geojson'
+import AssetMapMarker from './AssetMapMarker'
 
 class AssetMap extends PureComponent {
   state = {
-    viewport: {
-      longitude: -79.7919754,
-      latitude: 36.0726354,
-      zoom: 9,
-    },
+    longitude: -79.7919754,
+    latitude: 36.0726354,
+    zoom: 9,
   }
 
   onViewportChange = viewport => {
-    const {width, height, ...etc} = viewport
-    this.setState({viewport: etc})
+    const {longitude, latitude, zoom} = viewport
+    this.setState({longitude, latitude, zoom})
+  }
+
+  onClick = event => {
+    const {
+      setSelectedAssetIds,
+      setFocusingAsset,
+    } = this.props
+    const assetIds = event.features && event.features.map(f => f.properties.id)
+    const assetCount = assetIds.length
+    if (assetCount === 0) {
+      setSelectedAssetIds({ids: []})
+      return
+    } else if (assetCount > 1) {
+      setSelectedAssetIds({ids: assetIds})
+    }
+    setFocusingAsset({id: assetIds[0]})
+  }
+
+  getCursor = ({isHovering}) => {
+    return isHovering ? 'pointer' : 'all-scroll'
   }
 
   render () {
     const {
-      selectedAssetTypeIds,
+      mapStyle,
+      interactiveLayerIds,
+      focusingAssetId,
+      focusingAssetLocation,
+      locatingAssetId,
+      locatingAssetLocation,
+      updateAssetLocation,
     } = this.props
     const {
-      viewport,
+      longitude,
+      latitude,
+      zoom,
     } = this.state
-    const mapSources = {
-      [KEY_PREFIX + 'l']: {type: 'geojson', data: LINE_GEOJSON},
-      [KEY_PREFIX + 'm']: {type: 'geojson', data: METER_GEOJSON},
-    }
-    const mapLayers = selectedAssetTypeIds
-      .filter(typeId => KEY_PREFIX + typeId in mapSources)
-      .map(typeId => {
-        const isLine = typeId === 'l'
-        return {
-          id: KEY_PREFIX + typeId,
-          type: isLine  ? 'line' : 'circle',
-          source: KEY_PREFIX + typeId,
-          paint: isLine ? {
-            'line-width': ['get', 'width'],
-            'line-color': 'yellow',
-            'line-opacity': 0.8,
-          } : {
-            'circle-radius': ['get', 'radius'],
-            'circle-color': 'blue',
-            'circle-stroke-color': 'white',
-            'circle-stroke-width': 1,
-            'circle-opacity': 0.8,
-          },
-        }
-      })
-    const mapStyle = MAP_STYLE.mergeDeep({
-      sources: mapSources,
-      layers: mapLayers})
     return (
       <ReactMapGL
         width='100%'
         height='100%'
-        {...viewport}
+        longitude={longitude}
+        latitude={latitude}
+        zoom={zoom}
         mapStyle={mapStyle}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-        onViewportChange={viewport => this.onViewportChange(viewport)}
-      />
+        interactiveLayerIds={interactiveLayerIds.toJS()}
+        onViewportChange={this.onViewportChange}
+        onClick={this.onClick}
+        getCursor={this.getCursor}
+      >
+        <AssetMapMarker
+          color='white'
+          assetId={focusingAssetId}
+          assetLocation={focusingAssetLocation}
+        />
+        <AssetMapMarker
+          draggable
+          color='yellow'
+          assetId={locatingAssetId}
+          assetLocation={locatingAssetLocation}
+          defaultLongitude={longitude}
+          defaultLatitude={latitude}
+          updateAssetLocation={updateAssetLocation}
+        />
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          padding: '10px',
+        }}>
+          <NavigationControl onViewportChange={this.onViewportChange} />
+        </div>
+      </ReactMapGL>
     )
   }
 }

@@ -12,15 +12,15 @@ class AssetDetailFields extends PureComponent {
   render() {
     const {
       classes,
-      highlightedAsset,
+      focusingAsset,
       updateAsset,
     } = this.props
-    const highlightedAssetId = highlightedAsset.get('id')
-    const highlightedAssetName = highlightedAsset.get('name')
-    if (!highlightedAssetId) return null
+    const focusingAssetId = focusingAsset.get('id')
+    const focusingAssetName = focusingAsset.get('name')
+    if (!focusingAssetId) return null
     return (
       <TextField
-        value={highlightedAssetName}
+        value={focusingAssetName}
         fullWidth
         required
         InputProps={{
@@ -29,7 +29,7 @@ class AssetDetailFields extends PureComponent {
           },
         }}
         onChange={event => updateAsset({
-          id: highlightedAssetId,
+          id: focusingAssetId,
           name: event.target.value,
         })}
       />
