@@ -5,11 +5,11 @@ from pymongo import MongoClient
 from pyramid.paster import bootstrap, setup_logging
 from sqlalchemy.exc import OperationalError
 
-from ..models import Asset, VulnerableAsset, TEST_USER
+from asset_tracker.models import Asset, VulnerableAsset
 
 
 def get_vulnerabilities(asset, mongo_cursor):
-    vulnerabilities = query_nvd(mongo_cursor, asset.name, asset.name)
+    vulnerabilities = query_nvd(mongo_cursor, asset.name)
     return [{
             'asset_id': asset.id,
             'id': v['id'],
@@ -18,20 +18,11 @@ def get_vulnerabilities(asset, mongo_cursor):
             'score': v['score']} for v in vulnerabilities]
 
 
-def query_nvd(cursor, vendor_name=None, product_name=None):
-    product_query, vendor_query, = {}, {}
-    if not (product_name or vendor_name):
-        return None
-    if product_name:
-        product_query_string = \
-            'cve.affects.vendor.vendor_data.product.product_data.product_name'
-        product_query = {
-            product_query_string: product_name}
-    if vendor_name:
-        vendor_query_string = \
-            'cve.affects.vendor.vendor_data.vendor_name'
-        vendor_query = {
-            vendor_query_string: vendor_name}
+def query_nvd(cursor, product_name):
+    product_query_string = \
+        'cve.affects.vendor.vendor_data.product.product_data.product_name'
+    product_query = {
+        product_query_string: product_name}
     return list(map(
         lambda x: {
             'description':
@@ -42,31 +33,28 @@ def query_nvd(cursor, vendor_name=None, product_name=None):
                 'impact'].get('baseMetricV2', {}).get(
                     'cvss2', {}).get('baseScore', None)
         }, cursor.find(
-                {'$or': [product_query, vendor_query]})))
+                {'$and': [product_query]})))
 
 
 def get_assets(dbsession):
-    users = [TEST_USER]
-    for user in users:
-        for a in dbsession.query(Asset).outerjoin(VulnerableAsset).filter(
-                VulnerableAsset.asset_id is None):
-            yield {'user': user, 'asset': a}
+    for a in dbsession.query(Asset).outerjoin(VulnerableAsset).filter(
+            VulnerableAsset.asset_id is None):
+        yield a
 
 
 def search_vulnerabilities(dbsession, mongo_cursor):
     assets = get_assets(dbsession)
     vulnerable_assets = filter(
         lambda a: a is not None, (
-         (a['user'], get_vulnerabilities(a['asset'], mongo_cursor))
+         get_vulnerabilities(a, mongo_cursor)
          for a in assets))
-    for user, vulnerabilities in vulnerable_assets:
+    for vulnerabilities in vulnerable_assets:
         for vulnerability in vulnerabilities:
             va = VulnerableAsset(
                 id=vulnerability['id'],
                 asset_id=vulnerability['asset_id'],
                 description=vulnerability['description'],
                 date_published=vulnerability['date_published'],
-                user_id=user,
                 score=vulnerability['score'])
             dbsession.add(va)
             dbsession.commit()
@@ -116,7 +104,9 @@ might be caused by one of the following things:
     your "development.ini" file is running.
             ''')
 
+
 if __name__ == '__main__':
     cursor = get_mongo_connection()
-    vulnerabilities = query_nvd(cursor, 'ge', 'ge')
-    import pdb; pdb.set_trace()
+    vulnerabilities = query_nvd(cursor, 'mds_pulsenet')
+    # import pprint; print = pprint.PrettyPrinter(indent=4).pprint
+    print(vulnerabilities)

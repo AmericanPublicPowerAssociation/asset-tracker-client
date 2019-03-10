@@ -1,11 +1,10 @@
 from pyramid.view import view_config
 # from pyramid.response import Response
 # from sqlalchemy.exc import DBAPIError
-from sqlalchemy.orm import sessionmaker
-from asset_tracker.models.asset import (engine, Base, VulnerableAsset)
 
-Base.metadata.bind = engine
-DatabaseSession = sessionmaker(bind=engine)
+# from asset_tracker.models import (Asset, VulnerableAsset)
+from asset_tracker.scripts.update_vulnerable_assets import (
+    get_mongo_connection, query_nvd)
 
 
 @view_config(route_name='index', renderer='../templates/dashboard.jinja2')
@@ -18,14 +17,15 @@ def index(request):
     route_name='vulnerable_assets',
     renderer='json')
 def vulnerable_assets(request):
+    product_name = request.GET['name']
+    cursor = get_mongo_connection()
+    vulnerabilities = query_nvd(cursor, product_name)
+    '''
     db = request.dbsession
-    product = request.GET.get('product', '')
-    vendor = request.GET.get('vendor', '')
-    version = request.GET.get('version', '')
-    # assets = db.query(Asset) \
-    # .join(VulnerableAsset, Asset.id == VulnerableAsset.asset_id).all()
-    assets = db.query(VulnerableAsset).all()
-    return assets + [{"name": product, "vendor": vendor, "version": version}]
+    assets = db.query(Asset) \
+        .join(VulnerableAsset, Asset.id == VulnerableAsset.asset_id).all()
+    '''
+    return vulnerabilities
 
 
 """

@@ -1,6 +1,7 @@
 import enum
-from geoalchemy2 import Geometry
-from geoalchemy2.shape import to_shape
+# from geoalchemy2 import Geometry
+# from geoalchemy2.shape import to_shape
+from shapely.geometry import Point
 from sqlalchemy import (
     Column, DateTime, Float, ForeignKey,
     Table, UniqueConstraint, create_engine)
@@ -54,6 +55,8 @@ class Asset(Base):
     id = Column(String, primary_key=True)
     name = Column(String)
     description = Column(String)
+    latitude = Column(Float)
+    longitude = Column(Float)
     type = Column(Enum(AssetType))
     subtype_id = Column(String, ForeignKey('asset_subtype.id'))
     utility_id = Column(String)
@@ -67,7 +70,7 @@ class Asset(Base):
         'Asset', secondary=AssetConnection,
         primaryjoin=AssetConnection.c.left_asset_id == id,
         secondaryjoin=AssetConnection.c.right_asset_id == id)
-    _geometry = Column(Geometry(management=True, use_st_prefix=False))
+    # _geometry = Column(Geometry(management=True, use_st_prefix=False))
     # _geometry = Column(Geometry(srid=4326))
 
     def __init__(self, **kwargs):
@@ -89,11 +92,7 @@ class Asset(Base):
 
     @property
     def geometry(self):
-        return to_shape(self._geometry)
-
-    @geometry.setter
-    def geometry(self, g):
-        self._geometry = g.wkt
+        return Point(self.longitude, self.latitude)
 
     def add_content(self, asset):
         if self == asset:
@@ -134,8 +133,7 @@ class VulnerableAsset(Base):
     vulnerability_description = Column(String, nullable=False)
     vulnerability_date_published = Column(DateTime, nullable=False)
     vulnerability_score = Column(Float)
-    # user_id = ...
-    UniqueConstraint('asset_id', 'vulnerability_id')
+    UniqueConstraint('asset_id', 'id')
 
 
 def load_spatialite_sqlite_extension(engine):
