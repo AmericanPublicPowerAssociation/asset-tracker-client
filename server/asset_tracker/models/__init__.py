@@ -10,7 +10,7 @@ from .asset import Asset, VulnerableAsset  # noqa
 # run configure_mappers after defining all of the models to ensure
 # all relationships can be setup
 configure_mappers()
-
+TEST_USER = "alex_appa"
 
 def get_engine(settings, prefix='sqlalchemy.'):
     return engine_from_config(settings, prefix)
