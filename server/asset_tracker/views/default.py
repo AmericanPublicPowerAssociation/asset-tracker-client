@@ -1,14 +1,29 @@
 from pyramid.view import view_config
 # from pyramid.response import Response
 # from sqlalchemy.exc import DBAPIError
+# from sqlalchemy.orm import sessionmaker
+# from asset_tracker.models.asset import (engine, Asset, Base, VulnerableAsset)
 
-# from .. import models
+# Base.metadata.bind = engine
+# DatabaseSession = sessionmaker(bind=engine)
 
 
 @view_config(route_name='index', renderer='../templates/dashboard.jinja2')
 def index(request):
     return {}
 
+
+"""
+@view_config(route_name='vulnerable_assets', renderer='json')
+def vulnerable_assets(request):
+    db = request.dbsession
+    # hardcoded for now
+    user_id = 'alex_appa'
+    assets = db.query(Asset).innerjoin(
+        VulnerableAsset,
+        Asset.id == Vulnerable.asset_id).find(user_id=user_id)
+    return assets
+"""
 
 """
 @view_config(route_name='home', renderer='../templates/mytemplate.jinja2')
