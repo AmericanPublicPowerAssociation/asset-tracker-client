@@ -20,6 +20,9 @@ requires = [
     'SQLAlchemy',
     'transaction',
     'zope.sqlalchemy',
+
+    'mercantile',
+    'mapbox-vector-tile',
 ]
 
 tests_require = [
