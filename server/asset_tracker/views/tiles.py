@@ -70,6 +70,15 @@ def tiles(request):
     return response
 
 
+@view_config(route_name='test_geobuf')
+def test_geobuf(request):
+    import geobuf
+    pbf = geobuf.encode(EXAMPLE_GEOJSON)
+    response = Response(pbf)
+    response.content_type = 'application/x-protobuf'
+    return response
+
+
 @view_config(route_name='test_geojson', renderer='json')
 def test_geojson(request):
     return EXAMPLE_GEOJSON

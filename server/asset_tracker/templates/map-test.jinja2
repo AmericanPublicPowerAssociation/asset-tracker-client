@@ -29,6 +29,25 @@ zoom: 12,
 map.on('load', function() {
 
 /*
+  map.addSource("geobuf-example", {
+    type: "geojson",
+    data: "/test/server.geobuf"
+  })
+
+  map.addLayer({
+      "id": "geobuf-example-layer",
+      "type": "line",
+      "source": "geobuf-example",
+      "layout": {
+          "line-join": "round",
+          "line-cap": "round"
+      },
+      "paint": {
+          "line-color": "#888",
+          "line-width": 8
+      }
+  });
+
 	map.addLayer({
 		"id": "route",
 		"type": "line",
@@ -48,52 +67,48 @@ map.on('load', function() {
 			"line-width": 4
 		}
 	});
+
+  map.addSource("geojson-example", {
+    type: "geojson",
+    data: "/test/server.geojson"
+  })
+
+  map.addSource("vector-example", {
+    type: "vector",
+    tiles: [
+      "http://localhost:6543/tiles/{z}/{x}/{y}"
+    ]
+  })
+
+  map.addLayer({
+      "id": "geojson-example-layer",
+      "type": "line",
+      "source": "geojson-example",
+      "layout": {
+          "line-join": "round",
+          "line-cap": "round"
+      },
+      "paint": {
+          "line-color": "#888",
+          "line-width": 8
+      }
+  });
+
+  map.addLayer({
+      "id": "vector-example-layer",
+      "type": "line",
+      "source": "vector-example",
+      "source-layer": "example",
+      "layout": {
+          "line-join": "round",
+          "line-cap": "round"
+      },
+      "paint": {
+          "line-color": "#888",
+          "line-width": 8
+      }
+  });
 */
-
-/*
-    map.addSource("geojson-example", {
-      type: "geojson",
-      data: "/test/server.geojson"
-    })
-*/
-
-    map.addSource("vector-example", {
-      type: "vector",
-      tiles: [
-        "http://localhost:6543/tiles/{z}/{x}/{y}"
-      ]
-    })
-
-/*
-    map.addLayer({
-        "id": "geojson-example-layer",
-        "type": "line",
-        "source": "geojson-example",
-        "layout": {
-            "line-join": "round",
-            "line-cap": "round"
-        },
-        "paint": {
-            "line-color": "#888",
-            "line-width": 8
-        }
-    });
-*/
-
-    map.addLayer({
-        "id": "vector-example-layer",
-        "type": "line",
-        "source": "vector-example",
-        "source-layer": "example",
-        "layout": {
-            "line-join": "round",
-            "line-cap": "round"
-        },
-        "paint": {
-            "line-color": "#888",
-            "line-width": 8
-        }
-    });
 
 });
 </script>

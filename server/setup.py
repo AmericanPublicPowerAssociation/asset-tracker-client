@@ -23,6 +23,7 @@ requires = [
 
     'mercantile',
     'mapbox-vector-tile',
+    'geobuf',
 ]
 
 tests_require = [
