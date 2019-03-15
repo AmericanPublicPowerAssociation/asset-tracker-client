@@ -50,15 +50,41 @@ map.on('load', function() {
 	});
 */
 
-    map.addSource("example", {
+/*
+    map.addSource("geojson-example", {
       type: "geojson",
       data: "/test/server.geojson"
     })
+*/
+
+    map.addSource("vector-example", {
+      type: "vector",
+      tiles: [
+        "http://localhost:6543/tiles/{z}/{x}/{y}"
+      ]
+    })
+
+/*
+    map.addLayer({
+        "id": "geojson-example-layer",
+        "type": "line",
+        "source": "geojson-example",
+        "layout": {
+            "line-join": "round",
+            "line-cap": "round"
+        },
+        "paint": {
+            "line-color": "#888",
+            "line-width": 8
+        }
+    });
+*/
 
     map.addLayer({
-        "id": "example",
+        "id": "vector-example-layer",
         "type": "line",
-        "source": "example",
+        "source": "vector-example",
+        "source-layer": "example",
         "layout": {
             "line-join": "round",
             "line-cap": "round"
