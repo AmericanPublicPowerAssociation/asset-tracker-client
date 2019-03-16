@@ -95,6 +95,7 @@ class AssetDetail extends PureComponent {
             productVersion: event.target.value,
           })}
           />
+        {/*
         <TextField
           label='kW'
           value={focusingAsset.get('kW')}
@@ -106,6 +107,7 @@ class AssetDetail extends PureComponent {
             kW: event.target.value,
           })}
           />
+        */}
       </form>
     )
   }
