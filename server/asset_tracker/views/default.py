@@ -2,12 +2,32 @@ from pyramid.view import view_config
 # from pyramid.response import Response
 # from sqlalchemy.exc import DBAPIError
 
-# from .. import models
+# from asset_tracker.models import (Asset, VulnerableAsset)
+from asset_tracker.scripts.update_vulnerable_assets import (
+    get_mongo_connection, query_nvd)
 
 
 @view_config(route_name='index', renderer='../templates/dashboard.jinja2')
 def index(request):
     return {}
+
+
+@view_config(
+    request_method='GET',
+    route_name='vulnerable_assets',
+    renderer='json')
+def vulnerable_assets(request):
+    product_name = request.GET.get('product') or None
+    vendor_name = request.GET.get('vendor') or None
+    version = request.GET.get('version') or None
+    cursor = get_mongo_connection()
+    vulnerabilities = query_nvd(cursor, product_name, vendor_name, version)
+    '''
+    db = request.dbsession
+    assets = db.query(Asset) \
+        .join(VulnerableAsset, Asset.id == VulnerableAsset.asset_id).all()
+    '''
+    return vulnerabilities
 
 
 """
