@@ -19,6 +19,7 @@ import FilterListDrawer from './FilterListDrawer'
 import MapWindow from './MapWindow'
 import TableWindowContainer from '../containers/TableWindowContainer'
 import ReportWindow from './ReportWindow'
+import VulnerabilityReportWindowContainer from '../containers//VulnerabilityReportWindowContainer'
 import AlertWindow from './AlertWindow'
 import AccountWindow from './AccountWindow'
 import ApplicationBarContainer from '../containers/ApplicationBarContainer'
@@ -85,32 +86,32 @@ class App extends Component {
     isAssetAddDialogOpen: false,
   }
 
-  handleNavigationDrawerOpen = () => {
+  openNavigationDrawer = () => {
     this.setState({isNavigationDrawerOpen: true})}
-  handleNavigationDrawerClose = () => {
+  closeNavigationDrawer = () => {
     this.setState({isNavigationDrawerOpen: false})}
 
-  handleInformationDrawerOpen = () => {
+  openInformationDrawer = () => {
     this.setState({
       isInformationDrawerOpen: true,
       isFilterListDrawerOpen: false})}
-  handleInformationDrawerClose = () => {
+  closeInformationDrawer = () => {
     this.setState({isInformationDrawerOpen: false})}
 
-  handleFilterListDrawerOpen = () => {
+  openFilterListDrawer = () => {
     this.setState({
       isFilterListDrawerOpen: true,
       isInformationDrawerOpen: false})}
-  handleFilterListDrawerClose = () => {
+  closeFilterListDrawer = () => {
     this.setState({isFilterListDrawerOpen: false})}
 
-  handleAssetAddDialogOpen = () => {
+  openAssetAddDialog = () => {
     this.setState({isAssetAddDialogOpen: true})}
-  handleAssetAddDialogClose = () => {
+  closeAssetAddDialog = () => {
     this.setState({isAssetAddDialogOpen: false})
-    this.handleInformationDrawerOpen()}
+    this.openInformationDrawer()}
 
-  handleThemeToggle = () => {
+  toggleTheme = () => {
     this.setState({isDark: !this.state.isDark})}
 
   render() {
@@ -132,10 +133,10 @@ class App extends Component {
           isDark={isDark}
           isInformationDrawerOpen={isInformationDrawerOpen}
           isFilterListDrawerOpen={isFilterListDrawerOpen}
-          onMenuIconClick={this.handleNavigationDrawerOpen}
-          onAddIconClick={this.handleAssetAddDialogOpen}
-          onThemeIconClick={this.handleThemeToggle}
-          onFilterIconClick={this.handleFilterListDrawerOpen}
+          onMenuIconClick={this.openNavigationDrawer}
+          onAddIconClick={this.openAssetAddDialog}
+          onThemeIconClick={this.toggleTheme}
+          onFilterIconClick={this.openFilterListDrawer}
         />
         <div className={classes.toolbar} />
         <main className={classNames(classes.main, {
@@ -146,17 +147,22 @@ class App extends Component {
           <Paper className={classes.paper}>
             <Route exact path='/' render={() => (
               <MapWindow
-                onSelect={this.handleInformationDrawerOpen}
+                onSelect={this.openInformationDrawer}
               />
             )} />
             <Route exact path='/tables' render={() => (
               <TableWindowContainer
-                onSelect={this.handleInformationDrawerOpen}
+                onSelect={this.openInformationDrawer}
               />
             )} />
             <Route exact path='/reports' render={() => (
               <ReportWindow />
             )} />
+
+            <Route exact path='/reports/vulnerability' render={() => (
+              <VulnerabilityReportWindowContainer />
+            )} />
+
             <Route exact path='/alerts' render={() => (
               <AlertWindow />
             )} />
@@ -167,19 +173,19 @@ class App extends Component {
         </main>
         <NavigationDrawer
           open={isNavigationDrawerOpen}
-          onClose={this.handleNavigationDrawerClose}
+          onClose={this.closeNavigationDrawer}
         />
         <InformationDrawer
           open={isInformationDrawerOpen}
-          onClose={this.handleInformationDrawerClose}
+          onClose={this.closeInformationDrawer}
         />
         <FilterListDrawer
           open={isFilterListDrawerOpen}
-          onClose={this.handleFilterListDrawerClose}
+          onClose={this.closeFilterListDrawer}
         />
         <AssetAddDialogContainer
           open={isAssetAddDialogOpen}
-          onClose={this.handleAssetAddDialogClose}
+          onClose={this.closeAssetAddDialog}
         />
       </MuiThemeProvider>
     )

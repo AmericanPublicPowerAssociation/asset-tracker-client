@@ -9,22 +9,19 @@ import MenuIcon from '@material-ui/icons/Menu'
 import AddIcon from '@material-ui/icons/Add'
 import SunnyIcon from '@material-ui/icons/WbSunny'
 import SunnyOutlinedIcon from '@material-ui/icons/WbSunnyOutlined'
-import SearchIcon from '@material-ui/icons/Search'
+// import SearchIcon from '@material-ui/icons/Search'
 import FilterListIcon from '@material-ui/icons/FilterList'
-import TeleportIcon from '@material-ui/icons/CenterFocusStrong'
-import Tooltip from '@material-ui/core/Tooltip';
-
+import ReturnIcon from '@material-ui/icons/CenterFocusStrong'
+import Tooltip from '@material-ui/core/Tooltip'
 import {
   FILTER_LIST_DRAWER_WIDTH,
   INFORMATION_DRAWER_WIDTH,
+  TOOLTIP_DELAY,
 } from '../constants'
 
 const styles = theme => ({
   grow: {
     flexGrow: 1,
-  },
-  vanish: {
-    display: 'none',
   },
   appBar: {
     transition: theme.transitions.create(['margin', 'width'], {
@@ -72,33 +69,42 @@ class ApplicationBar extends PureComponent {
       onThemeIconClick,
       onFilterIconClick,
       // Get global variables
-      highlightedAssetId,
-      exposedAssetKey,
-      exposedAsset,
+      selectedAssetIds,
+      focusingAssetId,
+      locatingAsset,
+      relatingAssetKey,
+      relatingAsset,
       addSelectedAssetType,
-      setHighlightedAsset,
+      setFocusingAsset,
     } = this.props
     const isRightDrawerOpen =
       isInformationDrawerOpen ||
       isFilterListDrawerOpen
-    const relationName = {
+    const locatingAssetId = locatingAsset.get('id')
+    const relatingAssetId = relatingAsset.get('id')
+    const editingAssetId = locatingAssetId || relatingAssetId
+    const editingAsset = locatingAssetId ? locatingAsset : relatingAsset
+    const editingAssetName = editingAsset.get('name')
+    const editingAssetTypeId = editingAsset.get('typeId')
+    const editingAttributeName = locatingAssetId ? 'Location' : {
       connectedIds: 'Connections',
       parentIds: 'Parents',
       childIds: 'Children',
-    }[exposedAssetKey]
-    const exposedAssetId = exposedAsset.get('id')
-    const exposedAssetName = exposedAsset.get('name')
-    const exposedAssetTypeId = exposedAsset.get('typeId')
-    const applicationTitle = exposedAssetId ?
-      `Editing ${relationName} for ${exposedAssetName}` :
-      'Asset Tracker'
-    const withTeleportIcon =
-      exposedAssetId &&
-      exposedAssetId !== highlightedAssetId
+    }[relatingAssetKey]
+    const withReturnIcon =
+      editingAssetId &&
+      editingAssetId !== focusingAssetId
+    const selectedAssetCount = selectedAssetIds.count()
+    const applicationTitle = selectedAssetCount ?
+      `Selected ${selectedAssetCount} Assets` :
+      editingAssetId ?
+        `Editing ${editingAttributeName} for ${editingAssetName}` :
+        'Asset Tracker'
     return (
       <AppBar
         position='fixed'
-        color={exposedAssetId ? 'secondary' : 'default'}
+        color={selectedAssetCount ? 'primary' :
+          editingAssetId ? 'secondary' : 'default'}
         className={classNames(classes.appBar, {
           [classes.appBarTransition]: isRightDrawerOpen,
           [classes.appBarWithInformation]: isInformationDrawerOpen,
@@ -106,7 +112,7 @@ class ApplicationBar extends PureComponent {
         })}
       >
         <Toolbar>
-          <Tooltip title='Open Navigation' enterDelay={500}>
+          <Tooltip title='Open Navigation' enterDelay={TOOLTIP_DELAY}>
             <IconButton aria-label='Open Navigation'
               className={classes.menuButton}
               onClick={onMenuIconClick}
@@ -120,34 +126,37 @@ class ApplicationBar extends PureComponent {
             noWrap
           >{applicationTitle}</Typography>
 
-          <Tooltip title='Show Exposed Asset' enterDelay={500}>
-            <IconButton aria-label='Show Exposed Asset'
-              className={(!withTeleportIcon && classes.vanish) || ''}
+        {withReturnIcon &&
+          <Tooltip title='Return to Asset' enterDelay={TOOLTIP_DELAY}>
+            <IconButton aria-label='Return to Asset'
               onClick={() => {
-                addSelectedAssetType({id: exposedAssetTypeId})
-                setHighlightedAsset({id: exposedAssetId})
+                addSelectedAssetType({id: editingAssetTypeId})
+                setFocusingAsset({id: editingAssetId})
               }}
-            ><TeleportIcon /></IconButton>
-          </Tooltip>
+            ><ReturnIcon /></IconButton>
+          </Tooltip>}
 
-          <Tooltip title='Add Asset' enterDelay={500}>
+          <Tooltip title='Add Asset' enterDelay={TOOLTIP_DELAY}>
             <IconButton aria-label='Add Asset'
               onClick={onAddIconClick}
             ><AddIcon /></IconButton>
           </Tooltip>
 
-          <Tooltip title='Toggle Brightness' enterDelay={500}>
+          <Tooltip title='Toggle Brightness' enterDelay={TOOLTIP_DELAY}>
             <IconButton aria-label='Toggle Brightness'
               onClick={onThemeIconClick}
             >{isDark ? <SunnyIcon /> : <SunnyOutlinedIcon />}</IconButton>
           </Tooltip>
 
-          {/* <Tooltip title='Search Assets' enterDelay={500}> */}
-            <IconButton aria-label='Search Assets' disabled
+          {/*
+          <Tooltip title='Search Assets' enterDelay={TOOLTIP_DELAY}>
+            <IconButton aria-label='Search Assets'
+              onClick={() => alert('Not yet implemented!')}
             ><SearchIcon /></IconButton>
-          {/* </Tooltip> */}
+          </Tooltip>
+          */}
 
-          <Tooltip title='Filter Assets' enterDelay={500}>
+          <Tooltip title='Filter Assets' enterDelay={TOOLTIP_DELAY}>
             <IconButton aria-label='Filter Assets'
               className={(isFilterListDrawerOpen && classes.vanish) || ''}
               onClick={onFilterIconClick}

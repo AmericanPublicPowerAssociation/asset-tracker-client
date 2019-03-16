@@ -15,7 +15,7 @@ const styles = theme => ({
   listPanel: {
     height: '100%',
     overflow: 'auto',
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('sm')]: {
       height: '50%',
     },
   },

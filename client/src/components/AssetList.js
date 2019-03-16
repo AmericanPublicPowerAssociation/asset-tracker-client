@@ -7,7 +7,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import Switch from '@material-ui/core/Switch'
 
 const styles = theme => ({
-  exposed: {
+  relating: {
     backgroundColor: theme.palette.secondary.main,
   },
 })
@@ -20,54 +20,54 @@ class AssetList extends PureComponent {
       onSelect,
       // Get global variables
       visibleAssets,
-      highlightedAssetId,
-      exposedAssetKey,
-      exposedAsset,
-      exposedAssetTypeIds,
-      setHighlightedAsset,
+      relatedAssetIds,
+      relatedAssetTypeIds,
+      focusingAssetId,
+      relatingAssetId,
+      relatingAssetKey,
+      locatingAssetId,
+      setFocusingAsset,
       toggleAssetRelation,
     } = this.props
+    const editingAssetId = relatingAssetId || locatingAssetId
     return (
       <List disablePadding>
-      {visibleAssets.map(visibleAsset => {
-        const visibleAssetId = visibleAsset.get('id')
-        const visibleAssetName = visibleAsset.get('name')
-        const visibleAssetTypeId = visibleAsset.get('typeId')
-        const exposedAssetId = exposedAsset.get('id')
-        return (
-          <ListItem
-            button
-            key={visibleAssetId}
-            onClick={() => {
-              setHighlightedAsset({id: visibleAssetId})
-              onSelect()
-            }}
-            selected={visibleAssetId === highlightedAssetId}
-            className={(
-              exposedAssetId &&
-              exposedAssetId === visibleAssetId &&
-              classes.exposed) || ''}
-          >
-            <ListItemText primary={visibleAssetName} />
-            {
-              exposedAssetId &&
-              exposedAssetId !== visibleAssetId &&
-              exposedAssetTypeIds.includes(visibleAssetTypeId) &&
-              <ListItemSecondaryAction>
-                <Switch
-                  checked={(
-                    exposedAsset.get(exposedAssetKey, [])
-                  ).includes(visibleAssetId)}
-                  onChange={() => {toggleAssetRelation({
-                    exposedAssetId,
-                    exposedAssetKey,
-                    visibleAssetId})}}
-                />
-              </ListItemSecondaryAction>
-            }
-          </ListItem>
-        )
-      })}
+        {visibleAssets.map(visibleAsset => {
+          const visibleAssetId = visibleAsset.get('id')
+          const visibleAssetName = visibleAsset.get('name')
+          const visibleAssetTypeId = visibleAsset.get('typeId')
+          return (
+            <ListItem
+              button
+              onClick={() => {
+                setFocusingAsset({id: visibleAssetId})
+                onSelect()
+              }}
+              selected={visibleAssetId === focusingAssetId}
+              className={(
+                editingAssetId &&
+                editingAssetId === visibleAssetId &&
+                classes.relating) || ''}
+              key={visibleAssetId}
+            >
+              <ListItemText primary={visibleAssetName} />
+              {
+                relatingAssetId &&
+                relatingAssetId !== visibleAssetId &&
+                relatedAssetTypeIds.includes(visibleAssetTypeId) &&
+                <ListItemSecondaryAction>
+                  <Switch
+                    checked={relatedAssetIds.includes(visibleAssetId)}
+                    onChange={() => {toggleAssetRelation({
+                      relatingAssetId,
+                      relatingAssetKey,
+                      visibleAssetId})}}
+                  />
+                </ListItemSecondaryAction>
+              }
+            </ListItem>
+          )
+        })}
       </List>
     )
   }

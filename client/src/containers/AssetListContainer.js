@@ -1,26 +1,28 @@
 import { connect } from 'react-redux'
 import {
-  setHighlightedAsset,
+  setFocusingAsset,
   toggleAssetRelation,
 } from '../actions'
 import AssetList from '../components/AssetList'
 import {
   getVisibleAssets,
-  getExposedAsset,
-  getExposedAssetTypeIds,
+  getRelatedAssetIds,
+  getRelatedAssetTypeIds,
 } from '../selectors'
 
 const mapStateToProps = state => ({
   visibleAssets: getVisibleAssets(state),
-  highlightedAssetId: state.highlightedAssetId,
-  exposedAssetKey: state.exposedAssetKey,
-  exposedAsset: getExposedAsset(state),
-  exposedAssetTypeIds: getExposedAssetTypeIds(state),
+  relatedAssetIds: getRelatedAssetIds(state),
+  relatedAssetTypeIds: getRelatedAssetTypeIds(state),
+  focusingAssetId: state.focusingAssetId,
+  relatingAssetId: state.relatingAssetId,
+  relatingAssetKey: state.relatingAssetKey,
+  locatingAssetId: state.locatingAssetId,
 })
 
 const mapDispatchToProps = dispatch => ({
-  setHighlightedAsset: payload => {dispatch(
-    setHighlightedAsset(payload))},
+  setFocusingAsset: payload => {dispatch(
+    setFocusingAsset(payload))},
   toggleAssetRelation: payload => {dispatch(
     toggleAssetRelation(payload))},
 })

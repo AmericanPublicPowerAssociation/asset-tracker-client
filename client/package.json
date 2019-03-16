@@ -5,7 +5,6 @@
   "dependencies": {
     "@material-ui/core": "^3.9.2",
     "@material-ui/icons": "^3.0.2",
-    "csv-parse": "^4.3.3",
     "dotenv": "^6.2.0",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.11",
@@ -16,7 +15,6 @@
     "react-redux": "^6.0.0",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^2.1.5",
-    "react-virtualized": "^9.21.0",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0"

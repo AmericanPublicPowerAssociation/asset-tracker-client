@@ -1,22 +1,27 @@
 import { connect } from 'react-redux'
 import {
   addSelectedAssetType,
-  setHighlightedAsset,
+  setFocusingAsset,
 } from '../actions'
 import ApplicationBar from '../components/ApplicationBar'
-import { getExposedAsset } from '../selectors'
+import {
+  getLocatingAsset,
+  getRelatingAsset,
+} from '../selectors'
 
 const mapStateToProps = state => ({
-  highlightedAssetId: state.highlightedAssetId,
-  exposedAssetKey: state.exposedAssetKey,
-  exposedAsset: getExposedAsset(state),
+  selectedAssetIds: state.selectedAssetIds,
+  focusingAssetId: state.focusingAssetId,
+  locatingAsset: getLocatingAsset(state),
+  relatingAssetKey: state.relatingAssetKey,
+  relatingAsset: getRelatingAsset(state),
 })
 
 const mapDispatchToProps = dispatch => ({
   addSelectedAssetType: payload => {dispatch(
     addSelectedAssetType(payload))},
-  setHighlightedAsset: payload => {dispatch(
-    setHighlightedAsset(payload))},
+  setFocusingAsset: payload => {dispatch(
+    setFocusingAsset(payload))},
 })
 
 export default connect(

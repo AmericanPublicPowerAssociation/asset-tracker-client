@@ -1,57 +1,114 @@
 import React, { PureComponent } from 'react'
-import { List } from 'immutable'
-import AssetDetailFields from './AssetDetailFields'
+import { withStyles } from '@material-ui/core/styles'
+import TextField from '@material-ui/core/TextField'
+import { ASSET_TYPE_BY_ID } from '../constants'
+import AssetName from './AssetName'
+import AssetLocationContainer from '../containers/AssetLocationContainer'
 import AssetRelationChips from './AssetRelationChips'
 
+const styles = theme => ({
+  attribute: {
+    margin: `${theme.spacing.unit * 3}px 0 0 0`,
+  },
+})
+
 class AssetDetail extends PureComponent {
-  handleSubmit = event => event.preventDefault()
+  onSubmit = event => event.preventDefault()
 
   render() {
     const {
-      highlightedAssetId,
-      exposedAssetId,
-      exposedAssetKey,
-      assetById,
+      classes,
+      focusingAsset,
+      relatingAssetId,
+      relatingAssetKey,
+      connectedAssets,
+      parentAssets,
+      childAssets,
+      setRelatingAsset,
       updateAsset,
-      setExposedAsset,
     } = this.props
-    if (!highlightedAssetId) return null
-    const highlightedAsset = assetById.get(highlightedAssetId)
-    const getRelatedAssets = assetKey => highlightedAsset.get(
-      assetKey, List()).map(assetId => assetById.get(assetId))
+    const focusingAssetTypeId = focusingAsset.get('typeId')
+    if (!focusingAssetTypeId) return null
+    const focusingAssetType = ASSET_TYPE_BY_ID[focusingAssetTypeId]
+    const locatable = focusingAssetType['locatable'] || false
     const assetRelationChipsProps = {
-      highlightedAsset: highlightedAsset,
-      exposedAssetId: exposedAssetId,
-      exposedAssetKey: exposedAssetKey,
-      setExposedAsset: setExposedAsset,
+      focusingAsset: focusingAsset,
+      relatingAssetId: relatingAssetId,
+      relatingAssetKey: relatingAssetKey,
+      setRelatingAsset: setRelatingAsset,
     }
+
+    const focusingAssetId = focusingAsset.get('id')
+
     return (
-      <form onSubmit={this.handleSubmit}>
-        <AssetDetailFields
-          highlightedAsset={highlightedAsset}
+      <form onSubmit={this.onSubmit}>
+        <AssetName
+          focusingAsset={focusingAsset}
           updateAsset={updateAsset}
         />
+        {locatable && <AssetLocationContainer />}
         <AssetRelationChips
           label='Connections'
           assetKey='connectedIds'
-          relatedAssets={getRelatedAssets('connectedIds')}
+          relatedAssets={connectedAssets}
           {...assetRelationChipsProps}
         />
         <AssetRelationChips
           label='Parents'
           assetKey='parentIds'
-          relatedAssets={getRelatedAssets('parentIds')}
+          relatedAssets={parentAssets}
           {...assetRelationChipsProps}
         />
         <AssetRelationChips
           label='Children'
           assetKey='childIds'
-          relatedAssets={getRelatedAssets('childIds')}
+          relatedAssets={childAssets}
           {...assetRelationChipsProps}
         />
+        <TextField
+          label='Vendor Name'
+          value={focusingAsset.get('vendorName')}
+          fullWidth
+          className={classes.attribute}
+          onChange={event => updateAsset({
+            id: focusingAssetId,
+            vendorName: event.target.value,
+          })}
+          />
+        <TextField
+          label='Product Name'
+          value={focusingAsset.get('productName')}
+          fullWidth
+          className={classes.attribute}
+          onChange={event => updateAsset({
+            id: focusingAssetId,
+            productName: event.target.value,
+          })}
+          />
+        <TextField
+          label='Product Version'
+          value={focusingAsset.get('productVersion')}
+          fullWidth
+          className={classes.attribute}
+          onChange={event => updateAsset({
+            id: focusingAssetId,
+            productVersion: event.target.value,
+          })}
+          />
+        <TextField
+          label='kW'
+          value={focusingAsset.get('kW')}
+          type='number'
+          fullWidth
+          className={classes.attribute}
+          onChange={event => updateAsset({
+            id: focusingAssetId,
+            kW: event.target.value,
+          })}
+          />
       </form>
     )
   }
 }
 
-export default AssetDetail
+export default withStyles(styles)(AssetDetail)

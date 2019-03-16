@@ -10,18 +10,22 @@ const styles = theme => ({
   selected: {
     backgroundColor: theme.palette.action.selected,
   },
+	nested: {
+		paddingLeft: theme.spacing.unit * 4,
+  },
 })
 
 class ListItemLink extends PureComponent {
   render() {
     const {
       classes,
-      to, text, icon,
+      to, text, icon, inset,
       badgeContent, badgeColor,
     } = this.props
     return (
       <ListItem button component={NavLink}
         exact to={to} activeClassName={classes.selected}
+        className={inset ? classes.nested : ''}
       >
         <ListItemIcon>{badgeContent ?
           <Badge badgeContent={badgeContent} color={badgeColor}>
@@ -29,7 +33,7 @@ class ListItemLink extends PureComponent {
           </Badge> :
           icon}
         </ListItemIcon>
-        <ListItemText primary={text} />
+        <ListItemText inset={inset} primary={text} />
       </ListItem>
     )
   }

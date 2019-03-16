@@ -4,12 +4,9 @@ import CytoscapeComponent from 'react-cytoscapejs'
 import { debounce } from 'lodash'
 import {
   CIRCUIT_DEPTH,
+  CYTOSCAPE_LAYOUT,
   DEBOUNCE_THRESHOLD_IN_MILLISECONDS,
 } from '../constants'
-
-const cytoscapeLayout = {
-  'name': 'cose',
-}
 
 const getElements = (assetId, assetById, maximumDepth) => {
   let idPairs = new Set()
@@ -42,16 +39,17 @@ const getElements = (assetId, assetById, maximumDepth) => {
 }
 
 class AssetCircuit extends PureComponent {
-
-  handleCy = cy => {
+  onCy = cy => {
     const {
       assetById,
       addSelectedAssetType,
-      setHighlightedAsset,
+      setFocusingAsset,
     } = this.props
 
+    const containerStyle = cy.container().style
+
     const refreshLayout = debounce(() => {
-      cy.layout(cytoscapeLayout).run()
+      cy.layout(CYTOSCAPE_LAYOUT).run()
     }, DEBOUNCE_THRESHOLD_IN_MILLISECONDS)
 
     const showAsset = e => {
@@ -59,35 +57,31 @@ class AssetCircuit extends PureComponent {
       const assetTypeId = assetById.get(assetId).get('typeId')
 
       addSelectedAssetType({id: assetTypeId})
-      setHighlightedAsset({id: assetId})
-
-      // !!! Find out why this gets called twice
-      // alert('tapped ' + node.id())
+      setFocusingAsset({id: assetId})
     }
 
+    cy.off('add remove tap')
     cy.on('add remove', refreshLayout)
     cy.on('tap', 'node', showAsset)
 
-    // !!! Find out why this does not work
-    // cy.on('mouseover', 'node', e  => e.target.cursor = 'pointer')
+    cy.on('mouseover', 'node', () => {
+      containerStyle['cursor'] = 'pointer'})
+    cy.on('mouseout', 'node', () => {
+      containerStyle['cursor'] = 'all-scroll'})
   }
 
   render() {
-    let {
-      highlightedAssetId,
+    const {
+      focusingAssetId,
       assetById,
     } = this.props
-    if (!highlightedAssetId) return null
+    if (!focusingAssetId) return null
     return (
       <CytoscapeComponent
-        elements={getElements(highlightedAssetId, assetById, CIRCUIT_DEPTH)}
-        layout={cytoscapeLayout}
-        style={{
-          height: '100%',
-          width: '100%',
-          cursor: 'pointer',
-        }}
-        cy={this.handleCy}
+        elements={getElements(focusingAssetId, assetById, CIRCUIT_DEPTH)}
+        layout={CYTOSCAPE_LAYOUT}
+        style={{height: '100%', width: '100%'}}
+        cy={this.onCy}
       />
     )
   }
