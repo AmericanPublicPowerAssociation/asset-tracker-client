@@ -48,9 +48,11 @@ def tiles(request):
     tile_bounds = mercantile.bounds(x, y, zoom)
     ll_box = box(*tile_bounds)
     sm_box = transform_shapely_geometry(ll_box)
+    # sm_box = ll_box
 
     g = line
     transformed_geometry = transform_shapely_geometry(g)
+    # transformed_geometry = g
 
     if not sm_box.intersection(transformed_geometry).is_empty:
         layers = [{

@@ -73,13 +73,6 @@ map.on('load', function() {
     data: "/test/server.geojson"
   })
 
-  map.addSource("vector-example", {
-    type: "vector",
-    tiles: [
-      "http://localhost:6543/tiles/{z}/{x}/{y}"
-    ]
-  })
-
   map.addLayer({
       "id": "geojson-example-layer",
       "type": "line",
@@ -93,6 +86,14 @@ map.on('load', function() {
           "line-width": 8
       }
   });
+*/
+
+  map.addSource("vector-example", {
+    type: "vector",
+    tiles: [
+      "http://localhost:6543/tiles/{z}/{x}/{y}"
+    ]
+  })
 
   map.addLayer({
       "id": "vector-example-layer",
@@ -108,7 +109,6 @@ map.on('load', function() {
           "line-width": 8
       }
   });
-*/
 
 });
 </script>
