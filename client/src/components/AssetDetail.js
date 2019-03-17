@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react'
+import Select from 'react-select';
 import { withStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
+import FormLabel from '@material-ui/core/FormLabel'
 import { ASSET_TYPE_BY_ID } from '../constants'
 import AssetName from './AssetName'
 import AssetLocationContainer from '../containers/AssetLocationContainer'
@@ -30,19 +32,26 @@ class AssetDetail extends PureComponent {
     const focusingAssetTypeId = focusingAsset.get('typeId')
     if (!focusingAssetTypeId) return null
     const type = ASSET_TYPE_BY_ID[focusingAssetTypeId]
-    if (focusingAsset.get('vendorName', null) !== null && prevProps.focusingAsset.get('vendorName', null) === null) {
+
+    if ((focusingAsset.get('vendorName', null) !== null && prevProps.focusingAsset.get('vendorName', null) === null) || focusingAsset.get('id') !== prevProps.focusingAsset.get('id')) {
       this.setState({
         vendorNameInput: focusingAsset.get('vendorName'),
         productNameInput: focusingAsset.get('productName'),
         versionInput: focusingAsset.get('productVersion'),
       })
+    } else if (focusingAsset.get('vendorName') !== prevProps.focusingAsset.get('vendorName')) {
+      return 1;
+    } else if (focusingAsset.get('productName') !== prevProps.focusingAsset.get('productName')) {
+      return 1;
+    } else if (focusingAsset.get('productVersion') !== prevProps.focusingAsset.get('productVersion')) {
+      return 1;
     } else if (vendorNameInput !== prevState.vendorNameInput && vendorNameInput !== '') {
       fetch(`http://18.206.94.219:5000/vendor_search?type=${type}&vendor=${vendorNameInput}`)
           .then((response)=> {
             response.json()
               .then((hints) => {
                 this.setState({
-                  vendorSearchHints: hints
+                  vendorSearchHints: hints.map(h => {return {'label': h, 'value': h}})
                 })
               })
           })
@@ -52,7 +61,7 @@ class AssetDetail extends PureComponent {
             response.json()
               .then((hints) => {
                 this.setState({
-                  productSearchHints: hints
+                  productSearchHints: hints.map(h => {return {'label': h, 'value': h}})
                 })
               })
           })
@@ -62,7 +71,7 @@ class AssetDetail extends PureComponent {
             response.json()
               .then((hints) => {
                 this.setState({
-                  versionSearchHints: hints
+                  versionSearchHints: hints.map(h => {return {'label': h, 'value': h}})
                 })
               })
           })
@@ -127,57 +136,60 @@ class AssetDetail extends PureComponent {
           relatedAssets={childAssets}
           {...assetRelationChipsProps}
         />
-        <TextField
-          label='Vendor Name'
-          value={vendorNameInput}
-          fullWidth
-          className={classes.attribute}
-          onChange={event => {
-              this.setState({
-                vendorNameInput: event.target.value,
-              })
-              /*
-              updateAsset({
-                id: focusingAssetId,
-                vendorName: event.target.value,
-              })
-              */
+        <FormLabel>Vendor Name
+          <Select
+            options={vendorSearchHints}
+            inputValue={vendorNameInput}
+            defaultInputValue={vendorNameInput}
+            className={classes.attribute}
+            onChange={option =>
+                updateAsset({
+                  id: focusingAssetId,
+                  vendorName: option.value,
+                })
             }
-          }/>
-        <TextField
-          label='Product Name'
-          value={productNameInput}
-          fullWidth
-          className={classes.attribute}
-          onChange={event => {
-              this.setState({
-                productNameInput: event.target.value,
-              })
-              /*
-              updateAsset({
-                id: focusingAssetId,
-                productName: event.target.value,
-              })
-              */
+            onInputChange={value => {
+                this.setState({
+                  vendorNameInput: value,
+                })
+              }
+            }/></FormLabel>
+        <FormLabel>Product Name
+          <Select
+            inputValue={productNameInput}
+            defaultInputValue={productNameInput}
+            options={productSearchHints}
+            className={classes.attribute}
+            onChange={option =>
+                updateAsset({
+                  id: focusingAssetId,
+                  productName: option.value,
+                })
             }
-          }/>
-        <TextField
-          label='Product Version'
-          value={versionInput}
-          fullWidth
-          className={classes.attribute}
-          onChange={event => {
-              this.setState({
-                versionInput: event.target.value,
-              })
-              /*
-              updateAsset({
-                id: focusingAssetId,
-                productVersion: event.target.value,
-              })
-              */
+            onInputChange={value => {
+                this.setState({
+                  productNameInput: value,
+                })
+              }
+            }/></FormLabel>
+        <FormLabel>Product Version
+          <Select
+            inputValue={versionInput}
+            defaultInputValue={versionInput}
+            options={versionSearchHints}
+            className={classes.attribute}
+            onChange={option =>
+                updateAsset({
+                  id: focusingAssetId,
+                  productVersion: option.value,
+                })
             }
-          }/>
+            onInputChange={value => {
+                this.setState({
+                  versionInput: value,
+                })
+              }
+            }/></FormLabel>
         <TextField
           label='kW'
           value={focusingAsset.get('kW')}
