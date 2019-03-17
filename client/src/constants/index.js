@@ -4,6 +4,9 @@ import mapStyle from '../datasets/map-style-satellite-streets.json'
 const assets = [{
   id: 'station1',
   name: 'Station 1',
+  vendorName: 'ge',
+  productName: 'mds_pulsenet',
+  productVersion: '3.1.3',
   typeId: 'S',
   childIds: [
     'generator1',
@@ -16,6 +19,9 @@ const assets = [{
 }, {
   id: 'generator1',
   name: 'Generator 1',
+  vendorName: 'ge',
+  productName: 'multilink_firmware',
+  productVersion: '5.4.1',
   typeId: 'g',
   connectedIds: [
     'storage1',
@@ -27,6 +33,9 @@ const assets = [{
 }, {
   id: 'storage1',
   name: 'Storage 1',
+  vendorName: 'schneider-electric',
+  productName: 'powerlogic_pm8ecc_firmware',
+  productVersion: '2.651',
   typeId: 'o',
   connectedIds: [
     'generator1',
@@ -38,6 +47,9 @@ const assets = [{
 }, {
   id: 'switch1',
   name: 'Switch 1',
+  vendorName: 'schneider-electric',
+  productName: 'somove',
+  productVersion: '1.7',
   typeId: 'x',
   connectedIds: [
     'storage1',
@@ -50,6 +62,9 @@ const assets = [{
 }, {
   id: 'control1',
   name: 'Control 1',
+  vendorName: 'schneider-electric',
+  productName: 'somachine_basic',
+  productVersion: '1.6',
   typeId: 'c',
   connectedIds: [
     'switch1',
@@ -60,6 +75,9 @@ const assets = [{
 }, {
   id: 'busbar1',
   name: 'Busbar 1',
+  vendorName: 'schneider-electric',
+  productName: 'foxview',
+  productVersion: '10.5',
   typeId: 'b',
   connectedIds: [
     'generator1',
@@ -72,6 +90,9 @@ const assets = [{
 }, {
   id: 'transformer1',
   name: 'Transformer 1',
+  vendorName: 'siemens',
+  productName: 'sicam_pas',
+  productVersion: '8.06',
   typeId: 't',
   connectedIds: [
     'busbar1',
@@ -83,6 +104,9 @@ const assets = [{
 }, {
   id: 'line1',
   name: 'Line 1',
+  vendorName: 'siemens',
+  productName: 'scalance_m-800_firmware',
+  productVersion: '4.01',
   typeId: 'l',
   connectedIds: [
     'transformer1',
@@ -95,6 +119,9 @@ const assets = [{
 }, {
   id: 'pole1a',
   name: 'Pole 1A',
+  vendorName: 'siemens',
+  productName: 'simatic_pcs_7',
+  productVersion: '8.0',
   typeId: 'p',
   parentIds: [
     'line1',
@@ -102,6 +129,9 @@ const assets = [{
 }, {
   id: 'pole1b',
   name: 'Pole 1B',
+  vendorName: 'siemens',
+  productName: 'ruggedcom_rugged_operating_system',
+  productVersion: '3.2.5',
   typeId: 'p',
   parentIds: [
     'line1',
@@ -109,6 +139,9 @@ const assets = [{
 }, {
   id: 'substation1',
   name: 'Substation 1',
+  vendorName: 'ge',
+  productName: 'xeleris',
+  productVersion: '1.0',
   typeId: 's',
   childIds: [
     'transformer2',
@@ -120,6 +153,9 @@ const assets = [{
 }, {
   id: 'transformer2',
   name: 'Transformer 2',
+  vendorName: 'gnu',
+  productName: 'libc',
+  productVersion: '1.0',
   typeId: 't',
   connectedIds: [
     'line1',
@@ -131,6 +167,9 @@ const assets = [{
 }, {
   id: 'busbar2',
   name: 'Busbar 2',
+  vendorName: 'nfs',
+  productName: 'nfs-utils',
+  productVersion: '1.0',
   typeId: 'b',
   connectedIds: [
     'transformer2',
@@ -143,6 +182,9 @@ const assets = [{
 }, {
   id: 'switch2a',
   name: 'Switch 2A',
+  vendorName: 'citrix',
+  productName: 'metaframe',
+  productVersion: '1.0',
   typeId: 'x',
   connectedIds: [
     'busbar2',
@@ -154,6 +196,9 @@ const assets = [{
 }, {
   id: 'switch2b',
   name: 'Switch 2B',
+  vendorName: 'cisco',
+  productName: 'ciscoworks_common_management_foundation',
+  productVersion: '2.0',
   typeId: 'x',
   connectedIds: [
     'busbar2',
@@ -165,6 +210,9 @@ const assets = [{
 }, {
   id: 'control2',
   name: 'Control 2',
+  vendorName: 'libexpat',
+  productName: 'expat',
+  productVersion: '1.0',
   typeId: 'c',
   connectedIds: [
     'switch2a',
@@ -176,6 +224,9 @@ const assets = [{
 }, {
   id: 'line2a',
   name: 'Line 2A',
+  vendorName: 'apache',
+  productName: 'struts',
+  productVersion: '1.0',
   typeId: 'l',
   connectedIds: [
     'switch2a',
@@ -188,6 +239,9 @@ const assets = [{
 }, {
   id: 'line2b',
   name: 'Line 2B',
+  vendorName: 'samsung',
+  productName: 'knox',
+  productVersion: '1.0',
   typeId: 'l',
   connectedIds: [
     'switch2b',
@@ -200,6 +254,9 @@ const assets = [{
 }, {
   id: 'quality2a',
   name: 'Quality 2A',
+  vendorName: 'ffmpeg',
+  productName: 'ffmpeg',
+  productVersion: '1.0',
   typeId: 'q',
   connectedIds: [
     'line2a',
@@ -211,6 +268,9 @@ const assets = [{
 }, {
   id: 'quality2b',
   name: 'Quality 2B',
+  vendorName: 'linecorp',
+  productName: 'line',
+  productVersion: '4.7.0',
   typeId: 'q',
   connectedIds: [
     'line2b',
@@ -222,6 +282,9 @@ const assets = [{
 }, {
   id: 'pole2a1',
   name: 'Pole 2A1',
+  vendorName: 'ipswitch',
+  productName: 'ws_ftp_server',
+  productVersion: '3.4',
   typeId: 'p',
   parentIds: [
     'line2a',
@@ -229,6 +292,9 @@ const assets = [{
 }, {
   id: 'pole2a2',
   name: 'Pole 2A2',
+  vendorName: 'selinc',
+  productName: 'sel_compass',
+  productVersion: '3.0.5.1',
   typeId: 'p',
   parentIds: [
     'line2a',
@@ -236,6 +302,9 @@ const assets = [{
 }, {
   id: 'pole2b1',
   name: 'Pole 2B1',
+  vendorName: 'selinc',
+  productName: 'sel-2241',
+  productVersion: 'r113-v0-z001001-d20110721',
   typeId: 'p',
   parentIds: [
     'line2b',
@@ -243,6 +312,9 @@ const assets = [{
 }, {
   id: 'pole2b2',
   name: 'Pole 2B2',
+  vendorName: 'selinc',
+  productName: 'acselerator_architect',
+  productVersion: '2.2.24.0',
   typeId: 'p',
   parentIds: [
     'line2b',
@@ -250,6 +322,9 @@ const assets = [{
 }, {
   id: 'transformer2a',
   name: 'Transformer 2A',
+  vendorName: 'aveva',
+  productName: 'clearscada',
+  productVersion: '2010',
   typeId: 't',
   connectedIds: [
     'quality2a',
@@ -259,6 +334,9 @@ const assets = [{
 }, {
   id: 'transformer2b',
   name: 'Transformer 2B',
+  vendorName: 'qeiinc',
+  productName: 'epaq-9410_substation_gateway',
+  productVersion: '1.0',
   typeId: 't',
   connectedIds: [
     'quality2b',
@@ -270,6 +348,9 @@ const assets = [{
 }, {
   id: 'meter2a',
   name: 'Meter 2A',
+  vendorName: 'sendmail',
+  productName: 'sendmail',
+  productVersion: '5.4',
   typeId: 'm',
   connectedIds: [
     'transformer2a',
@@ -277,6 +358,9 @@ const assets = [{
 }, {
   id: 'meter2b',
   name: 'Meter 2B',
+  vendorName: 'openbsd',
+  productName: 'openssh',
+  productVersion: '1.2',
   typeId: 'm',
   connectedIds: [
     'transformer2b',
