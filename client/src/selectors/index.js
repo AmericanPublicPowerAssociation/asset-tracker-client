@@ -171,11 +171,10 @@ export const getMapSources = createSelector(
         values.max(),
         PROPERTY_MINIMUM_VALUE,
         PROPERTY_MAXIMUM_VALUE)
-          /*
-      }
-          */
+      // }
     }
-    const getFeatureSize = defineGetFeatureProperty(featureSizeAttribute)
+    // const getFeatureSize = defineGetFeatureProperty(featureSizeAttribute)
+    const getFeatureSize = defineGetFeatureProperty('size')
     const featuresByTypeId = featureGeometryById.reduce((
       featuresByTypeId,
       featureGeometry,

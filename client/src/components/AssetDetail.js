@@ -190,6 +190,37 @@ class AssetDetail extends PureComponent {
                 })
               }
             }/></FormLabel>
+        {/*
+        <TextField
+          label='Vendor Name'
+          value={focusingAsset.get('vendorName')}
+          fullWidth
+          className={classes.attribute}
+          onChange={event => updateAsset({
+            id: focusingAssetId,
+            vendorName: event.target.value,
+          })}
+          />
+        <TextField
+          label='Product Name'
+          value={focusingAsset.get('productName')}
+          fullWidth
+          className={classes.attribute}
+          onChange={event => updateAsset({
+            id: focusingAssetId,
+            productName: event.target.value,
+          })}
+          />
+        <TextField
+          label='Product Version'
+          value={focusingAsset.get('productVersion')}
+          fullWidth
+          className={classes.attribute}
+          onChange={event => updateAsset({
+            id: focusingAssetId,
+            productVersion: event.target.value,
+          })}
+          />
         <TextField
           label='kW'
           value={focusingAsset.get('kW')}
@@ -201,6 +232,7 @@ class AssetDetail extends PureComponent {
             kW: event.target.value,
           })}
           />
+        */}
       </form>
     )
   }

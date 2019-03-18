@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<title>Join local JSON data with vector tile geometries</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' />
+<style>
+body { margin:0; padding:0; }
+#map { position:absolute; top:0; bottom:0; width:100%; }
+</style>
+</head>
+<body>
+
+<div id='map'>
+</div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoicG9ndWV6IiwiYSI6ImNqc3FnYzMwZjE4NzY0NHJyODFwOHE1NzEifQ.9tBits72Xm057VhrpW-rmw';
+var map = new mapboxgl.Map({
+container: 'map',
+style: 'mapbox://styles/mapbox/light-v9',
+// center: [-79.632565, 36.139914],
+center: [-122.48369693756104, 37.83381888486939],
+// zoom: 8,
+zoom: 12,
+});
+
+map.on('load', function() {
+
+/*
+  map.addSource("geobuf-example", {
+    type: "geojson",
+    data: "/test/server.geobuf"
+  })
+
+  map.addLayer({
+      "id": "geobuf-example-layer",
+      "type": "line",
+      "source": "geobuf-example",
+      "layout": {
+          "line-join": "round",
+          "line-cap": "round"
+      },
+      "paint": {
+          "line-color": "#888",
+          "line-width": 8
+      }
+  });
+
+	map.addLayer({
+		"id": "route",
+		"type": "line",
+		"source": {
+			"type": "vector", 
+		    "tiles": [
+			    // "http://localhost:6543/tiles/{z}/{x}/{y}.pbf"
+			    "http://localhost:6543/tiles/14/4569/6420.pbf"
+		    ]
+		},
+		"layout": {
+			"line-join": "round",
+			"line-cap": "round"
+		},
+		"paint": {
+			"line-color": "#888",
+			"line-width": 4
+		}
+	});
+
+  map.addSource("geojson-example", {
+    type: "geojson",
+    data: "/test/server.geojson"
+  })
+
+  map.addLayer({
+      "id": "geojson-example-layer",
+      "type": "line",
+      "source": "geojson-example",
+      "layout": {
+          "line-join": "round",
+          "line-cap": "round"
+      },
+      "paint": {
+          "line-color": "#888",
+          "line-width": 8
+      }
+  });
+*/
+
+  map.addSource("vector-example", {
+    type: "vector",
+    tiles: [
+      "http://localhost:6543/tiles/{z}/{x}/{y}"
+    ]
+  })
+
+  map.addLayer({
+      "id": "vector-example-layer",
+      "type": "line",
+      "source": "vector-example",
+      "source-layer": "example",
+      "layout": {
+          "line-join": "round",
+          "line-cap": "round"
+      },
+      "paint": {
+          "line-color": "#888",
+          "line-width": 8
+      }
+  });
+
+});
+</script>
+
+</body>
+</html>

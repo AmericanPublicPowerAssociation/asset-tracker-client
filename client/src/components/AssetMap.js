@@ -9,11 +9,13 @@ class AssetMap extends PureComponent {
     longitude: -79.7919754,
     latitude: 36.0726354,
     zoom: 9,
+    pitch: 0,
+    bearing: 0,
   }
 
   onViewportChange = viewport => {
-    const {longitude, latitude, zoom} = viewport
-    this.setState({longitude, latitude, zoom})
+    const {longitude, latitude, zoom, pitch, bearing} = viewport
+    this.setState({longitude, latitude, zoom, pitch, bearing})
   }
 
   onClick = event => {
@@ -50,6 +52,8 @@ class AssetMap extends PureComponent {
       longitude,
       latitude,
       zoom,
+      pitch,
+      bearing,
     } = this.state
     return (
       <ReactMapGL
@@ -58,6 +62,8 @@ class AssetMap extends PureComponent {
         longitude={longitude}
         latitude={latitude}
         zoom={zoom}
+        pitch={pitch}
+        bearing={bearing}
         mapStyle={mapStyle}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
         interactiveLayerIds={interactiveLayerIds.toJS()}

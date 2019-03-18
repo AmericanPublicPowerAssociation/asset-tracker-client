@@ -1,4 +1,5 @@
 import { fromJS } from 'immutable'
+import ASSETS_JSON from '../datasets/assets.json'
 import mapStyle from '../datasets/map-style-satellite-streets.json'
 
 const assets = [{
@@ -366,6 +367,7 @@ const assets = [{
     'transformer2b',
   ],
 }]
+// const assets = ASSETS_JSON
 
 export const CONTENT_PADDING = 24
 
