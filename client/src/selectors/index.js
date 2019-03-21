@@ -149,8 +149,8 @@ export const getMapSources = createSelector(
     assetById,
   ) => {
     if (featureGeometryById.isEmpty()) return Map()
-    const assetId = featureGeometryById.keySeq().first()
-    const asset = assetById.get(assetId)
+    // const assetId = featureGeometryById.keySeq().first()
+    // const asset = assetById.get(assetId)
     const defineGetFeatureProperty = attributeName => {
       const values = assetById.valueSeq().map(
         asset => asset.get(attributeName))

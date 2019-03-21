@@ -1,5 +1,5 @@
 import { fromJS } from 'immutable'
-import ASSETS_JSON from '../datasets/assets.json'
+// import ASSETS_JSON from '../datasets/assets.json'
 import mapStyle from '../datasets/map-style-satellite-streets.json'
 
 const assets = [{
