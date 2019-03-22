@@ -55,9 +55,9 @@ export const getVisibleAssets = createSelector([
   selectedAssetTypeIds,
   assetById,
 ) => (selectedAssetIds.isEmpty() ? sortedAssetIds : selectedAssetIds)
-  .slice(0, MAXIMUM_LIST_LENGTH)
   .map(assetId => assetById.get(assetId))
-  .filter(asset => selectedAssetTypeIds.includes(asset.get('typeId'))))
+  .filter(asset => selectedAssetTypeIds.includes(asset.get('typeId')))
+  .slice(0, MAXIMUM_LIST_LENGTH))
 
 export const getFocusingAssetLocation = createSelector(
   [getAssetLocationById, getFocusingAssetId, getParentIds],
@@ -103,12 +103,13 @@ export const getFeatureGeometryById = createSelector(
   [getAssetLocationById, getAssetById],
   (assetLocationById, assetById) => {
     const featureGeometryById = {}
+    /*
     const poleParentIds = {}
     assetLocationById.forEach((location, id) => {
       const asset = assetById.get(id)
       const assetGeometry = {type: 'Point', coordinates: [
-        location.get('longitude'),
-        location.get('latitude')]}
+        location.get(0),
+        location.get(0)]}
       featureGeometryById[id] = assetGeometry
       const assetTypeId = asset.get('typeId')
       for (const childId of asset.get('childIds', [])) {
@@ -133,6 +134,7 @@ export const getFeatureGeometryById = createSelector(
       const assetGeometry = {type: 'LineString', coordinates: assetCoordinates}
       featureGeometryById[parentId] = assetGeometry
     }
+    */
     return fromJS(featureGeometryById)
   })
 

@@ -1,7 +1,8 @@
 import { fromJS } from 'immutable'
-// import ASSETS_JSON from '../datasets/assets.json'
-import mapStyle from '../datasets/map-style-satellite-streets.json'
+import ASSETS_JSON from '../datasets/assets.json'
+import mapStyle from '../datasets/map-style-streets.json'
 
+/*
 const assets = [{
   id: 'station1',
   name: 'Station 1',
@@ -367,7 +368,8 @@ const assets = [{
     'transformer2b',
   ],
 }]
-// const assets = ASSETS_JSON
+*/
+const assets = ASSETS_JSON
 
 export const CONTENT_PADDING = 24
 
@@ -515,11 +517,20 @@ export const SELECTED_ASSET_TYPE_IDS = fromJS(['l'])
 export const DEFAULT_ASSET_TYPE_ID = 'p'
 
 export const ASSET_BY_ID = fromJS(
-  assets.reduce((o, x) => Object.assign(o, {[x.id]: x}), {}))
+  assets.reduce((o, x) => Object.assign(o, {[x.id]: {
+    id: x.id,
+    name: x.name,
+    typeId: x.typeId[0],
+    connectedIds: x.connectedIds || [],
+    parentIds: x.parentIds || [],
+    childIds: x.childIds || [],
+  }}), {}))
 export const SORTED_ASSET_IDS = ASSET_BY_ID.keySeq().toList()
 export const MAXIMUM_LIST_LENGTH = 50
 
-export const ASSET_LOCATION_BY_ID = fromJS({})
+export const ASSET_LOCATION_BY_ID = fromJS(
+  assets.filter(x => x.location).reduce(
+    (o, x) => Object.assign(o, {[x.id]: x.location}), {}))
 export const FEATURE_GEOMETRY_BY_ID = fromJS({})
 export const FEATURE_COLOR_ATTRIBUTE = 'typeId'
 export const FEATURE_SIZE_ATTRIBUTE = 'kV'
@@ -528,7 +539,7 @@ export const KEY_PREFIX = 'asset-tracker-'
 export const PROPERTY_MINIMUM_VALUE = 1
 export const PROPERTY_MAXIMUM_VALUE = 9
 
-export const CIRCUIT_DEPTH = 3
+export const CIRCUIT_DEPTH = 2
 export const DEBOUNCE_THRESHOLD_IN_MILLISECONDS = 100
 export const CYTOSCAPE_LAYOUT = {'name': 'cose'}
 

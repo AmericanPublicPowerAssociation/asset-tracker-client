@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import Select from 'react-select';
 import { withStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
+// import TextField from '@material-ui/core/TextField'
 import FormLabel from '@material-ui/core/FormLabel'
 import { ASSET_TYPE_BY_ID } from '../constants'
 import AssetName from './AssetName'
