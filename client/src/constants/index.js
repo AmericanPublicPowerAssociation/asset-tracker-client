@@ -1,5 +1,5 @@
 import { fromJS } from 'immutable'
-import assets from '../datasets/assets-toy.json'
+import assets from '../datasets/assets-greensboro.json'
 import mapStyle from '../datasets/map-style-streets.json'
 
 export const CONTENT_PADDING = 24
