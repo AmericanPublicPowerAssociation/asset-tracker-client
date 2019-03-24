@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react'
-import { List } from 'immutable'
 import CytoscapeComponent from 'react-cytoscapejs'
 import { debounce } from 'lodash'
 import {
@@ -9,33 +8,51 @@ import {
 } from '../constants'
 
 const getElements = (assetId, assetById, maximumDepth) => {
-  let idPairs = new Set()
-  let seenIds = new Set()
+  const idPairs = new Set()
+  const seenIds = new Set()
   let nextIds = assetId ? new Set([assetId]) : new Set()
   for (let depth = 0; depth < maximumDepth; depth++) {
     let nextNextIds = new Set()
-    for (const id of nextIds) {
-      const connectedIds = assetById.get(id).get('connectedIds', List())
+    for (const nextId of nextIds) {
+      const connectedIds = getConnectedIds(assetId, nextId, assetById)
       for (const connectedId of connectedIds) {
-        const ids = [id, connectedId]
+        const ids = [nextId, connectedId]
         ids.sort()
         idPairs.add(ids.join(' '))
-        !seenIds.has(connectedId) && nextNextIds.add(connectedId)
+        if (!seenIds.has(connectedId)) {
+          nextNextIds.add(connectedId)
+        }
       }
-      seenIds.add(id)
+      seenIds.add(nextId)
     }
     nextIds = nextNextIds
   }
-  let elements = []
-  let nodeIds = [...seenIds, ...nextIds]
+  const elements = []
+  const nodeIds = [...seenIds, ...nextIds]
   for (const id of nodeIds) {
-    elements.push({data: {id, label: assetById.get(id).get('name')}})
+    const asset = assetById.get(id)
+    elements.push({data: {id, label: asset.get('name')}})
   }
   for (const idPair of idPairs) {
     const [id1, id2] = idPair.split(' ')
-    elements.push({data: {source: id1, target: id2}})
+    if (id1 !== id2) {
+      elements.push({data: {source: id1, target: id2}})
+    }
   }
   return elements
+}
+
+const getConnectedIds = (rootId, assetId, assetById) => {
+  let connectedIds = []
+  for (const connectedId of assetById.get(assetId).get('connectedIds', [])) {
+    const isLine = assetById.get(connectedId).get('typeId') === 'l'
+    if (!isLine) {
+      connectedIds.push(connectedId)
+    } else if (connectedId !== rootId) {
+      connectedIds = connectedIds.concat(getConnectedIds(rootId, connectedId, assetById))
+    }
+  }
+  return connectedIds
 }
 
 class AssetCircuit extends PureComponent {
