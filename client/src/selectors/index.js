@@ -103,7 +103,6 @@ export const getFeatureGeometryById = createSelector(
   [getAssetLocationById, getAssetById],
   (assetLocationById, assetById) => {
     const featureGeometryById = {}
-    /*
     const poleParentIds = {}
     assetLocationById.forEach((location, id) => {
       const asset = assetById.get(id)
@@ -134,7 +133,6 @@ export const getFeatureGeometryById = createSelector(
       const assetGeometry = {type: 'LineString', coordinates: assetCoordinates}
       featureGeometryById[parentId] = assetGeometry
     }
-    */
     return fromJS(featureGeometryById)
   })
 
