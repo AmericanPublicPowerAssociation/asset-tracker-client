@@ -8,20 +8,34 @@ import {
 } from '../constants'
 
 const getElements = (assetId, assetById, maximumDepth) => {
-  const idPairs = new Set()
+  const getConnectedIds = (currentId, pastIds) => {
+    let connectedIds = []
+    const badIds = new Set([...pastIds, currentId])
+    for (const connectedId of assetById.get(currentId).get('connectedIds', [])) {
+      if (badIds.has(connectedId)) continue
+      // const isLine = assetById.get(connectedId).get('typeId') === 'l'
+      // if (!isLine) {
+      connectedIds.push(connectedId)
+      // }
+      // else {
+      // connectedIds = connectedIds.concat(getConnectedIds(connectedId, badIds))
+      // }
+    }
+    return connectedIds
+  }
+
   const seenIds = new Set()
+  const idPairs = new Set()
   let nextIds = assetId ? new Set([assetId]) : new Set()
   for (let depth = 0; depth < maximumDepth; depth++) {
     let nextNextIds = new Set()
     for (const nextId of nextIds) {
-      const connectedIds = getConnectedIds(assetId, nextId, assetById)
+      const connectedIds = getConnectedIds(nextId, seenIds)
       for (const connectedId of connectedIds) {
         const ids = [nextId, connectedId]
         ids.sort()
         idPairs.add(ids.join(' '))
-        if (!seenIds.has(connectedId)) {
-          nextNextIds.add(connectedId)
-        }
+        nextNextIds.add(connectedId)
       }
       seenIds.add(nextId)
     }
@@ -40,19 +54,6 @@ const getElements = (assetId, assetById, maximumDepth) => {
     }
   }
   return elements
-}
-
-const getConnectedIds = (rootId, assetId, assetById) => {
-  let connectedIds = []
-  for (const connectedId of assetById.get(assetId).get('connectedIds', [])) {
-    const isLine = assetById.get(connectedId).get('typeId') === 'l'
-    if (!isLine) {
-      connectedIds.push(connectedId)
-    } else if (connectedId !== rootId) {
-      connectedIds = connectedIds.concat(getConnectedIds(rootId, connectedId, assetById))
-    }
-  }
-  return connectedIds
 }
 
 class AssetCircuit extends PureComponent {

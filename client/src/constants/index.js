@@ -1,6 +1,6 @@
 import { fromJS } from 'immutable'
-// import assets from '../datasets/assets-greensboro.json'
-import assets from '../datasets/assets-toy.json'
+import assets from '../datasets/assets-greensboro.json'
+// import assets from '../datasets/assets-toy.json'
 import mapStyle from '../datasets/map-style-streets.json'
 
 export const CONTENT_PADDING = 24
@@ -171,7 +171,7 @@ export const KEY_PREFIX = 'asset-tracker-'
 export const PROPERTY_MINIMUM_VALUE = 1
 export const PROPERTY_MAXIMUM_VALUE = 9
 
-export const CIRCUIT_DEPTH = 3
+export const CIRCUIT_DEPTH = 2
 export const CYTOSCAPE_LAYOUT = {'name': 'cose'}
 export const DEBOUNCE_THRESHOLD_IN_MILLISECONDS = 100
 
