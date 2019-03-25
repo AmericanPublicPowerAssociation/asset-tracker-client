@@ -4,9 +4,9 @@ import AssetMapMarker from './AssetMapMarker'
 
 class AssetMap extends PureComponent {
   state = {
-    longitude: -79.60685561394529,
-    latitude: 36.187908126308486,
-    zoom: 15,
+    longitude: -79.60684769101411,
+    latitude: 36.19285069559501,
+    zoom: 14,
     pitch: 0,
     bearing: 0,
   }
@@ -18,10 +18,15 @@ class AssetMap extends PureComponent {
 
   onClick = event => {
     const {
+      // Get local variables
+      onSelect,
+      // Get global variables
       setSelectedAssetIds,
       setFocusingAsset,
     } = this.props
-    const assetIds = event.features && event.features.map(f => f.properties.id)
+    const assetIds = [...new Set(
+      event.features &&
+      event.features.map(f => f.properties.id))]
     const assetCount = assetIds.length
     if (assetCount === 0) {
       setSelectedAssetIds({ids: []})
@@ -30,6 +35,7 @@ class AssetMap extends PureComponent {
       setSelectedAssetIds({ids: assetIds})
     }
     setFocusingAsset({id: assetIds[0]})
+    onSelect()
   }
 
   getCursor = ({isHovering}) => {

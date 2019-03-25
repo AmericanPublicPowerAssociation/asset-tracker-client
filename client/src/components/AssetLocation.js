@@ -51,11 +51,11 @@ class AssetLocation extends PureComponent {
           <Fragment>
             {' ('}
             <Tooltip title='Longitude' enterDelay={TOOLTIP_DELAY} placement='top'>
-              <span>{focusingAssetLocation.get('longitude')}</span>
+              <span>{focusingAssetLocation.get(0)}</span>
             </Tooltip>
             {', '}
             <Tooltip title='Latitude' enterDelay={TOOLTIP_DELAY} placement='top'>
-              <span>{focusingAssetLocation.get('latitude')}</span>
+              <span>{focusingAssetLocation.get(1)}</span>
             </Tooltip>
             {')'}
           </Fragment>

@@ -61,15 +61,30 @@ export const getVisibleAssets = createSelector([
   .slice(0, MAXIMUM_LIST_LENGTH))
 
 export const getFocusingAssetLocation = createSelector(
-  [getAssetLocationById, getFocusingAssetId, getParentIds],
-  (assetLocationById, focusingAssetId, parentIds) => {
+  [getAssetLocationById, getFocusingAssetId, getParentIds, getChildIds],
+  (assetLocationById, focusingAssetId, parentIds, childIds) => {
     let assetLocation = assetLocationById.get(focusingAssetId)
     if (assetLocation) return assetLocation
     for (const parentId of parentIds) {
       assetLocation = assetLocationById.get(parentId)
       if (assetLocation) return assetLocation
     }
-    return List()
+    const selectedChildLocations = childIds
+      .map(childId => assetLocationById.get(childId))
+      .filter(assetLocation => assetLocation)
+      .slice(0, 2)
+    const selectedChildCount = selectedChildLocations.length
+    if (selectedChildCount) {
+      assetLocation = selectedChildLocations
+        .reduce((averageLocation, childLocation) => List([
+          (averageLocation.get(0, 0) + childLocation.get(0)) / selectedChildCount,
+          (averageLocation.get(1, 0) + childLocation.get(1)) / selectedChildCount,
+      ]), List())
+    } else {
+      assetLocation = List()
+    }
+    console.log(assetLocation.toJS())
+    return assetLocation
   })
 
 export const getLocatingAsset = createSelector(
