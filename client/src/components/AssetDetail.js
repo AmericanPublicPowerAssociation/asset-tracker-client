@@ -35,9 +35,9 @@ class AssetDetail extends PureComponent {
 
     if ((focusingAsset.get('vendorName', null) !== null && prevProps.focusingAsset.get('vendorName', null) === null) || focusingAsset.get('id') !== prevProps.focusingAsset.get('id')) {
       this.setState({
-        vendorNameInput: focusingAsset.get('vendorName'),
-        productNameInput: focusingAsset.get('productName'),
-        versionInput: focusingAsset.get('productVersion'),
+        vendorNameInput: focusingAsset.get('vendorName', ''),
+        productNameInput: focusingAsset.get('productName', ''),
+        versionInput: focusingAsset.get('productVersion', ''),
       })
     } else if (focusingAsset.get('vendorName') !== prevProps.focusingAsset.get('vendorName')) {
       return 1;
@@ -140,8 +140,10 @@ class AssetDetail extends PureComponent {
           <Select
             options={vendorSearchHints}
             inputValue={vendorNameInput}
-            defaultInputValue={vendorNameInput}
+            value={{value: focusingAsset.get("vendorName"), label: focusingAsset.get("vendorName")}}
             className={classes.attribute}
+            blurInputOnSelect={true}
+            onBlur={() => {}}
             onChange={option =>
                 updateAsset({
                   id: focusingAssetId,
@@ -149,9 +151,11 @@ class AssetDetail extends PureComponent {
                 })
             }
             onInputChange={value => {
-                this.setState({
-                  vendorNameInput: value,
-                })
+                if (value !== '') {
+                  this.setState({
+                    vendorNameInput: value,
+                  })
+                }
               }
             }/></FormLabel>
         <FormLabel>Product Name
@@ -159,7 +163,10 @@ class AssetDetail extends PureComponent {
             inputValue={productNameInput}
             defaultInputValue={productNameInput}
             options={productSearchHints}
+            value={{value: focusingAsset.get("productName"), label: focusingAsset.get("productName")}}
             className={classes.attribute}
+            blurInputOnSelect={true}
+            onBlur={() => {}}
             onChange={option =>
                 updateAsset({
                   id: focusingAssetId,
@@ -167,17 +174,21 @@ class AssetDetail extends PureComponent {
                 })
             }
             onInputChange={value => {
+              if (value !== '') {
                 this.setState({
                   productNameInput: value,
                 })
-              }
+              }}
             }/></FormLabel>
         <FormLabel>Product Version
           <Select
             inputValue={versionInput}
             defaultInputValue={versionInput}
             options={versionSearchHints}
+            value={{value: focusingAsset.get("productVersion"), label: focusingAsset.get("productVersion")}}
             className={classes.attribute}
+            blurInputOnSelect={true}
+            onBlur={() => {}}
             onChange={option =>
                 updateAsset({
                   id: focusingAssetId,
@@ -185,10 +196,11 @@ class AssetDetail extends PureComponent {
                 })
             }
             onInputChange={value => {
+              if (value !==  '') {
                 this.setState({
                   versionInput: value,
                 })
-              }
+              }}
             }/></FormLabel>
         {/*
         <TextField
