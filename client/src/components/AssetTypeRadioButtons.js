@@ -22,6 +22,7 @@ class AssetTypeRadioButtons extends PureComponent {
           control={<Radio />}
           value={id}
           label={name}
+          key={id}
         />
       )}
       </RadioGroup>

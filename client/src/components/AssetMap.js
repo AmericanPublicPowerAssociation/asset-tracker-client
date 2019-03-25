@@ -1,14 +1,12 @@
 import React, { PureComponent } from 'react'
 import ReactMapGL, { NavigationControl } from 'react-map-gl'
-// import LINE_GEOJSON from '../datasets/line.geojson'
-// import METER_GEOJSON from '../datasets/meter.geojson'
 import AssetMapMarker from './AssetMapMarker'
 
 class AssetMap extends PureComponent {
   state = {
-    longitude: -79.7919754,
-    latitude: 36.0726354,
-    zoom: 9,
+    longitude: -79.60685561394529,
+    latitude: 36.187908126308486,
+    zoom: 15,
     pitch: 0,
     bearing: 0,
   }

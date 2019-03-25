@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 import assetById from './assetById'
 import assetLocationById from './assetLocationById'
+import featureGeometryById from './featureGeometryById'
 import featureColorAttribute from './featureColorAttribute'
 import featureSizeAttribute from './featureSizeAttribute'
 import selectedAssetTypeIds from './selectedAssetTypeIds'
@@ -14,6 +15,7 @@ import locatingAssetId from './locatingAssetId'
 export default combineReducers({
   assetById,
   assetLocationById,
+  featureGeometryById,
   featureColorAttribute,
   featureSizeAttribute,
   selectedAssetTypeIds,

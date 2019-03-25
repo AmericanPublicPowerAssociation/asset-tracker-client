@@ -5,11 +5,11 @@ import {
   MAXIMUM_LIST_LENGTH,
   KEY_PREFIX,
   MAP_STYLE,
-  PROPERTY_MINIMUM_VALUE,
-  PROPERTY_MAXIMUM_VALUE,
+  // PROPERTY_MINIMUM_VALUE,
+  // PROPERTY_MAXIMUM_VALUE,
 } from '../constants'
 import {
-  normalizeNumber,
+  // normalizeNumber,
 } from '../macros'
 
 const getAssetById = state => state.assetById
@@ -21,6 +21,7 @@ const getFocusingAssetId = state => state.focusingAssetId
 const getLocatingAssetId = state => state.locatingAssetId
 const getRelatingAssetId = state => state.relatingAssetId
 const getRelatingAssetKey = state => state.relatingAssetKey
+const getFeatureGeometryById = state => state.featureGeometryById
 const getFeatureColorAttribute = state => state.featureColorAttribute
 const getFeatureSizeAttribute = state => state.featureSizeAttribute
 
@@ -68,7 +69,7 @@ export const getFocusingAssetLocation = createSelector(
       assetLocation = assetLocationById.get(parentId)
       if (assetLocation) return assetLocation
     }
-    return Map()
+    return List()
   })
 
 export const getLocatingAsset = createSelector(
@@ -78,7 +79,7 @@ export const getLocatingAsset = createSelector(
 export const getLocatingAssetLocation = createSelector(
   [getAssetLocationById, getLocatingAssetId],
   (assetLocationById, locatingAssetId) => assetLocationById.get(
-    locatingAssetId, Map()))
+    locatingAssetId, List()))
 
 export const getRelatingAsset = createSelector(
   [getAssetById, getRelatingAssetId],
@@ -99,11 +100,11 @@ export const getRelatedAssetIds = createSelector(
   [getRelatingAsset, getRelatingAssetKey],
   (relatingAsset, relatingAssetKey) => relatingAsset.get(relatingAssetKey, []))
 
+/*
 export const getFeatureGeometryById = createSelector(
   [getAssetLocationById, getAssetById],
   (assetLocationById, assetById) => {
     const featureGeometryById = {}
-    /*
     const poleParentIds = {}
     assetLocationById.forEach((location, id) => {
       const asset = assetById.get(id)
@@ -134,9 +135,9 @@ export const getFeatureGeometryById = createSelector(
       const assetGeometry = {type: 'LineString', coordinates: assetCoordinates}
       featureGeometryById[parentId] = assetGeometry
     }
-    */
     return fromJS(featureGeometryById)
   })
+*/
 
 export const getMapSources = createSelector(
   [
@@ -153,10 +154,10 @@ export const getMapSources = createSelector(
     if (featureGeometryById.isEmpty()) return Map()
     // const assetId = featureGeometryById.keySeq().first()
     // const asset = assetById.get(assetId)
+    /*
     const defineGetFeatureProperty = attributeName => {
       const values = assetById.valueSeq().map(
         asset => asset.get(attributeName))
-      /*
       if (typeof asset.get(attributeName) === 'string') {
         const uniqueValues = values.toSet().toList()
         return asset => normalizeNumber(
@@ -166,17 +167,16 @@ export const getMapSources = createSelector(
           PROPERTY_MINIMUM_VALUE,
           PROPERTY_MAXIMUM_VALUE)
       } else {
-      */
       return asset => normalizeNumber(
         asset.get(attributeName, 0),
         values.min(),
         values.max(),
         PROPERTY_MINIMUM_VALUE,
         PROPERTY_MAXIMUM_VALUE)
-      // }
+      }
     }
-    // const getFeatureSize = defineGetFeatureProperty(featureSizeAttribute)
-    const getFeatureSize = defineGetFeatureProperty('size')
+    const getFeatureSize = defineGetFeatureProperty(featureSizeAttribute)
+    */
     const featuresByTypeId = featureGeometryById.reduce((
       featuresByTypeId,
       featureGeometry,
@@ -185,11 +185,65 @@ export const getMapSources = createSelector(
       const asset = assetById.get(assetId)
       const assetTypeId = asset.get('typeId')
       // const featureColor = {}[asset[featureColorAttribute]]
+      let featureSize
+
+      let v
+      switch (assetTypeId) {
+        case 'p':
+          featureSize = 2
+          break
+        case 'l':
+        case 's':
+        case 'S':
+          v = asset.get('KV')
+          if (v < 10) {
+            featureSize = 1
+          } else if (v < 50) {
+            featureSize = 5
+          } else {
+            featureSize = 20
+          }
+          break
+        case 'm':
+          v = asset.get('peakKW')
+          if (v < 10) {
+            featureSize = 3
+          } else if (v < 50) {
+            featureSize = 6
+          } else {
+            featureSize = 9
+          }
+          break
+        case 't':
+          featureSize = 3
+          break
+        case 'x':
+          featureSize = 4
+          break
+        case 'q':
+          featureSize = 5
+          break
+        case 'c':
+          featureSize = 6
+          break
+        case 'b':
+          featureSize = 7
+          break
+        case 'o':
+          featureSize = 8
+          break
+        case 'g':
+          featureSize = 9
+          break
+        default:
+          featureSize = 10
+      }
+
       const featureProperties = {
         id: assetId,
         // color: getFeatureColor(asset),
-        size: getFeatureSize(asset),
-        // size: 5,
+        // size: getFeatureSize(asset),
+        size: featureSize,
       }
       const feature = fromJS({
         type: 'Feature',

@@ -1,7 +1,7 @@
 import { fromJS } from 'immutable'
 import assets from '../datasets/assets-greensboro.json'
-// import assets from '../datasets/assets-toy.json'
-import mapStyle from '../datasets/map-style-streets.json'
+// import mapStyle from '../datasets/map-style-streets.json'
+import mapStyle from '../datasets/map-style-satellite-streets.json'
 
 export const CONTENT_PADDING = 24
 
@@ -150,12 +150,8 @@ export const DEFAULT_ASSET_TYPE_ID = 'p'
 
 export const ASSET_BY_ID = fromJS(
   assets.reduce((o, x) => Object.assign(o, {[x.id]: {
-    id: x.id,
-    name: x.name,
+    ...x,
     typeId: x.typeId[0],
-    connectedIds: x.connectedIds || [],
-    parentIds: x.parentIds || [],
-    childIds: x.childIds || [],
   }}), {}))
 export const SORTED_ASSET_IDS = ASSET_BY_ID.keySeq().toList()
 export const MAXIMUM_LIST_LENGTH = 50
@@ -163,7 +159,9 @@ export const MAXIMUM_LIST_LENGTH = 50
 export const ASSET_LOCATION_BY_ID = fromJS(
   assets.filter(x => x.location).reduce(
     (o, x) => Object.assign(o, {[x.id]: x.location}), {}))
-export const FEATURE_GEOMETRY_BY_ID = fromJS({})
+export const FEATURE_GEOMETRY_BY_ID = fromJS(
+  assets.reduce(
+    (o, x) => Object.assign(o, {[x.id]: x.geometry}), {}))
 export const FEATURE_COLOR_ATTRIBUTE = 'typeId'
 export const FEATURE_SIZE_ATTRIBUTE = 'KV'
 export const MAP_STYLE = fromJS(mapStyle)

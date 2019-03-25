@@ -43,10 +43,10 @@ class AssetAddDialog extends PureComponent {
     onClose()}
 
   render() {
-    const etc = this.props
+    const { open, onClose } = this.props
     const { assetTypeId } = this.state
     return (
-      <Dialog {...etc}>
+      <Dialog open={open} onClose={onClose}>
         <DialogTitle>Add Asset</DialogTitle>
         <DialogContent>
           <AssetTypeRadioButtons

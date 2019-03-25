@@ -14,10 +14,8 @@ class AssetMapMarker extends PureComponent {
       updateAssetLocation,
     } = this.props
     if (!assetId) return null
-    const assetLongitude = assetLocation.get(
-      'longitude', defaultLongitude)
-    const assetLatitude = assetLocation.get(
-      'latitude', defaultLatitude)
+    const assetLongitude = assetLocation.get(0, defaultLongitude)
+    const assetLatitude = assetLocation.get(1, defaultLatitude)
     if (!assetLongitude) return null
     return (
       <Marker
