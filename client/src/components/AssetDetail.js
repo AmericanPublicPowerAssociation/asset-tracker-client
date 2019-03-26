@@ -136,12 +136,12 @@ class AssetDetail extends PureComponent {
           relatedAssets={childAssets}
           {...assetRelationChipsProps}
         />
-        <FormLabel>Vendor Name
+        <FormLabel className={classes.attribute}>
+          Vendor Name
           <Select
             options={vendorSearchHints}
             inputValue={vendorNameInput}
             value={{value: focusingAsset.get("vendorName"), label: focusingAsset.get("vendorName")}}
-            className={classes.attribute}
             blurInputOnSelect={true}
             onBlur={() => {}}
             onChange={option =>
@@ -158,13 +158,14 @@ class AssetDetail extends PureComponent {
                 }
               }
             }/></FormLabel>
-        <FormLabel>Product Name
+        <FormLabel
+          className={classes.attribute}
+        >Product Name
           <Select
             inputValue={productNameInput}
             defaultInputValue={productNameInput}
             options={productSearchHints}
             value={{value: focusingAsset.get("productName"), label: focusingAsset.get("productName")}}
-            className={classes.attribute}
             blurInputOnSelect={true}
             onBlur={() => {}}
             onChange={option =>
@@ -180,13 +181,14 @@ class AssetDetail extends PureComponent {
                 })
               }}
             }/></FormLabel>
-        <FormLabel>Product Version
+        <FormLabel
+            className={classes.attribute}
+        >Product Version
           <Select
             inputValue={versionInput}
             defaultInputValue={versionInput}
             options={versionSearchHints}
             value={{value: focusingAsset.get("productVersion"), label: focusingAsset.get("productVersion")}}
-            className={classes.attribute}
             blurInputOnSelect={true}
             onBlur={() => {}}
             onChange={option =>
