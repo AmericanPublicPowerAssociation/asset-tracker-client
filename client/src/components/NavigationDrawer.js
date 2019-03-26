@@ -6,8 +6,8 @@ import MapIcon from '@material-ui/icons/Map'
 import TableIcon from '@material-ui/icons/ListAlt'
 import ReportIcon from '@material-ui/icons/Assessment'
 import WarningIcon from '@material-ui/icons/Warning'
-import AlertIcon from '@material-ui/icons/Notifications'
-import AccountIcon from '@material-ui/icons/AccountCircle'
+// import AlertIcon from '@material-ui/icons/Notifications'
+// import AccountIcon from '@material-ui/icons/AccountCircle'
 
 class NavigationDrawer extends PureComponent {
   render() {
@@ -24,14 +24,21 @@ class NavigationDrawer extends PureComponent {
         <List>
           <ListItemLink
             to='/'
-            text='Maps'
-            icon={<MapIcon />}
-          />
-          <ListItemLink
-            to='/tables'
             text='Tables'
             icon={<TableIcon />}
           />
+          <ListItemLink
+            to='/maps'
+            text='Maps'
+            icon={<MapIcon />}
+          />
+          {/*
+          <ListItemLink
+            to='/circuits'
+            text='Circuits'
+            icon={<CircuitIcon />}
+          />
+          */}
           <ListItemLink
             to='/reports'
             text='Reports'
@@ -48,6 +55,7 @@ class NavigationDrawer extends PureComponent {
 							inset
 						/>
 					</List>
+          {/*
           <ListItemLink
             to='/alerts'
             text='Alerts'
@@ -60,6 +68,7 @@ class NavigationDrawer extends PureComponent {
             text='Accounts'
             icon={<AccountIcon />}
           />
+          */}
         </List>
       </Drawer>
     )

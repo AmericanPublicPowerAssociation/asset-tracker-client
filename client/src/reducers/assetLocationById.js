@@ -11,8 +11,8 @@ const assetLocationById = (state=initialState, action) => {
 
   if (UPDATE_ASSET_LOCATION === actionType) {
     const {id, longitude, latitude} = action.payload
-    return state.mergeDeep({
-      [id]: fromJS({longitude, latitude}),
+    return state.merge({
+      [id]: fromJS([longitude, latitude]),
     })
   }
 

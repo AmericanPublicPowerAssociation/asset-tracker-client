@@ -146,12 +146,12 @@ class App extends Component {
         })}>
           <Paper className={classes.paper}>
             <Route exact path='/' render={() => (
-              <MapWindow
+              <TableWindowContainer
                 onSelect={this.openInformationDrawer}
               />
             )} />
-            <Route exact path='/tables' render={() => (
-              <TableWindowContainer
+            <Route exact path='/maps' render={() => (
+              <MapWindow
                 onSelect={this.openInformationDrawer}
               />
             )} />
