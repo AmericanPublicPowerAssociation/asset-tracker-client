@@ -7,48 +7,14 @@ import {
   DEBOUNCE_THRESHOLD_IN_MILLISECONDS,
 } from '../constants'
 
-const getElements = (assetId, assetById, maximumDepth) => {
-  const getConnectedIds = (currentId, pastIds) => {
-    let connectedIds = []
-    const badIds = new Set([...pastIds, currentId])
-    for (const connectedId of assetById.get(currentId).get('connectedIds', [])) {
-      if (badIds.has(connectedId)) continue
-      // const isLine = assetById.get(connectedId).get('typeId') === 'l'
-      // if (!isLine) {
-      connectedIds.push(connectedId)
-      // }
-      // else {
-      // connectedIds = connectedIds.concat(getConnectedIds(connectedId, badIds))
-      // }
-    }
-    return connectedIds
-  }
-
-  const seenIds = new Set()
-  const idPairs = new Set()
-  let nextIds = assetId ? new Set([assetId]) : new Set()
-  for (let depth = 0; depth < maximumDepth; depth++) {
-    let nextNextIds = new Set()
-    for (const nextId of nextIds) {
-      const connectedIds = getConnectedIds(nextId, seenIds)
-      for (const connectedId of connectedIds) {
-        const ids = [nextId, connectedId]
-        ids.sort()
-        idPairs.add(ids.join(' '))
-        nextNextIds.add(connectedId)
-      }
-      seenIds.add(nextId)
-    }
-    nextIds = nextNextIds
-  }
+const getElements = (assetIdPairs, assetById) => {
   const elements = []
-  const nodeIds = [...seenIds, ...nextIds]
-  for (const id of nodeIds) {
-    const asset = assetById.get(id)
-    elements.push({data: {id, label: asset.get('name')}})
-  }
-  for (const idPair of idPairs) {
-    const [id1, id2] = idPair.split(' ')
+  for (const idPair of assetIdPairs) {
+    const [id1, id2] = idPair
+    idPair.forEach(id => {
+      const asset = assetById.get(id)
+      elements.push({data: {id, label: asset.get('name')}})
+    })
     if (id1 !== id2) {
       elements.push({data: {source: id1, target: id2}})
     }
@@ -90,13 +56,12 @@ class AssetCircuit extends PureComponent {
 
   render() {
     const {
-      focusingAssetId,
+      circuitAssetIdPairs,
       assetById,
     } = this.props
-    if (!focusingAssetId) return null
     return (
       <CytoscapeComponent
-        elements={getElements(focusingAssetId, assetById, CIRCUIT_DEPTH)}
+        elements={getElements(circuitAssetIdPairs, assetById, CIRCUIT_DEPTH)}
         layout={CYTOSCAPE_LAYOUT}
         style={{height: '100%', width: '100%'}}
         cy={this.onCy}

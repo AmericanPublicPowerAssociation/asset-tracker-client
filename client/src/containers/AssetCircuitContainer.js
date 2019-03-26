@@ -4,9 +4,12 @@ import {
   setFocusingAsset,
 } from '../actions'
 import AssetCircuit from '../components/AssetCircuit'
+import {
+  getCircuitAssetIdPairs,
+} from '../selectors'
 
 const mapStateToProps = state => ({
-  focusingAssetId: state.focusingAssetId,
+  circuitAssetIdPairs: getCircuitAssetIdPairs(state),
   assetById: state.assetById,
 })
 
