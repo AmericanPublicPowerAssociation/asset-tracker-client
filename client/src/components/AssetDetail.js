@@ -7,6 +7,9 @@ import { ASSET_TYPE_BY_ID } from '../constants'
 import AssetName from './AssetName'
 import AssetLocationContainer from '../containers/AssetLocationContainer'
 import AssetRelationChips from './AssetRelationChips'
+import Downshift from 'downshift';
+import Paper from '@material-ui/core/Paper';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const styles = theme => ({
   attribute: {
@@ -34,13 +37,16 @@ class AssetDetail extends PureComponent {
     const type = ASSET_TYPE_BY_ID[focusingAssetTypeId]
 
     if ((focusingAsset.get('vendorName', null) !== null && prevProps.focusingAsset.get('vendorName', null) === null) || focusingAsset.get('id') !== prevProps.focusingAsset.get('id')) {
+      console.log('swqitching')
       this.setState({
         vendorNameInput: focusingAsset.get('vendorName', ''),
         productNameInput: focusingAsset.get('productName', ''),
         versionInput: focusingAsset.get('productVersion', ''),
       })
     } else if (focusingAsset.get('vendorName') !== prevProps.focusingAsset.get('vendorName')) {
-      return 1;
+      this.setState({
+        vendorNameInput: focusingAsset.get('vendorName', ''),
+      })
     } else if (focusingAsset.get('productName') !== prevProps.focusingAsset.get('productName')) {
       return 1;
     } else if (focusingAsset.get('productVersion') !== prevProps.focusingAsset.get('productVersion')) {
@@ -98,6 +104,7 @@ class AssetDetail extends PureComponent {
       setRelatingAsset,
       updateAsset,
     } = this.props;
+    console.log(vendorNameInput)
     const focusingAssetTypeId = focusingAsset.get('typeId');
     if (!focusingAssetTypeId) return null;
     const focusingAssetType = ASSET_TYPE_BY_ID[focusingAssetTypeId];
@@ -136,28 +143,65 @@ class AssetDetail extends PureComponent {
           relatedAssets={childAssets}
           {...assetRelationChipsProps}
         />
-        <FormLabel>Vendor Name
-          <Select
-            options={vendorSearchHints}
-            inputValue={vendorNameInput}
-            value={{value: focusingAsset.get("vendorName"), label: focusingAsset.get("vendorName")}}
-            className={classes.attribute}
-            blurInputOnSelect={true}
-            onBlur={() => {}}
-            onChange={option =>
-                updateAsset({
-                  id: focusingAssetId,
-                  vendorName: option.value,
-                })
-            }
-            onInputChange={value => {
-                if (value !== '') {
-                  this.setState({
-                    vendorNameInput: value,
-                  })
+<Downshift
+  onChange={option =>
+      updateAsset({
+        id: focusingAssetId,
+        vendorName: option.value,
+      })
+  }
+  selectedItem={{value: focusingAsset.get("vendorName"), label: focusingAsset.get("vendorName")}}
+  itemToString={item => item.value}
+>
+        {({
+          getInputProps,
+          getItemProps,
+          isOpen,
+          inputValue: inputValue2,
+          selectedItem,
+          highlightedIndex,
+        }) => (
+          <div className={classes.container}>
+             <TextField
+                InputProps={{
+                  ...getInputProps({
+                    onChange: event => {
+                      if (event.target.value !==  '') {
+                        this.setState({
+                          vendorNameInput: event.target.value,
+                        })
+                      }},
+                  }),
+                }}
+                fullWidth={true}
+          />
+            {isOpen ? (
+              <Paper className={classes.paper} square>
+                {
+                vendorSearchHints.map((suggestion, index) => {
+                    const isHighlighted = highlightedIndex === index;
+                    const isSelected = (selectedItem.value || '').indexOf(suggestion.label) > -1;
+                    return (
+                      <MenuItem
+                        {...getItemProps({ item: suggestion.label })}
+                        key={suggestion.label}
+                        selected={isHighlighted}
+                        component="div"
+                        style={{
+                          fontWeight: isSelected ? 500 : 400,
+                        }}
+                      >
+                        {suggestion.label}
+                      </MenuItem>
+                    )
+                  }
+                )
                 }
-              }
-            }/></FormLabel>
+              </Paper>
+            ) : null}
+          </div>
+        )}
+</Downshift>
         <FormLabel>Product Name
           <Select
             inputValue={productNameInput}
