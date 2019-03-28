@@ -211,15 +211,24 @@ export const getMapSources = createSelector(
           featureSize = 2
           break
         case 'l':
-        case 's':
-        case 'S':
           v = asset.get('KV')
           if (v < 10) {
             featureSize = 1
           } else if (v < 50) {
             featureSize = 5
           } else {
+            featureSize = 10
+          }
+          break
+        case 's':
+        case 'S':
+          v = asset.get('KV')
+          if (v < 10) {
+            featureSize = 10
+          } else if (v < 50) {
             featureSize = 20
+          } else {
+            featureSize = 30
           }
           break
         case 'm':
