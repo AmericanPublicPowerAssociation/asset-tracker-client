@@ -1,11 +1,15 @@
 import React, { PureComponent } from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
-// import Downshift from 'downshift'
+import Paper from '@material-ui/core/Paper';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormLabel from '@material-ui/core/FormLabel'
+import Input from '@material-ui/core/Input'
+import Downshift from 'downshift'
+import deburr from 'lodash/deburr'
 import { ASSET_TYPE_BY_ID } from '../constants'
 import AssetName from './AssetName'
-import AssetRelationChips from './AssetRelationChips'
 import AssetLocationContainer from '../containers/AssetLocationContainer'
+import AssetRelationChips from './AssetRelationChips'
 
 const styles = theme => ({
   attribute: {
@@ -13,8 +17,15 @@ const styles = theme => ({
   },
 })
 
+const vendorNameSuggestions = [
+  {label: 'Schneider Electric'},
+  {label: 'Schweitzer Engineering Laboratories'},
+]
+
 class AssetDetail extends PureComponent {
-  state = {}
+  state = {
+    vendorNameValue: '',
+  }
 
   render() {
     const {
@@ -28,11 +39,15 @@ class AssetDetail extends PureComponent {
       setRelatingAsset,
       updateAsset,
     } = this.props
-    const focusingAssetTypeId = focusingAsset.get('typeId')
-    if (!focusingAssetTypeId) return null
-    const focusingAssetType = ASSET_TYPE_BY_ID[focusingAssetTypeId]
+    const {
+      vendorNameValue,
+    } = this.state
     const focusingAssetId = focusingAsset.get('id');
+    if (!focusingAssetId) return null
+    const focusingAssetTypeId = focusingAsset.get('typeId')
+    const focusingAssetType = ASSET_TYPE_BY_ID[focusingAssetTypeId]
     const locatable = focusingAssetType['locatable'] || false
+    const vendorName = focusingAsset.get('vendorName', '')
 
     const assetRelationChipsProps = {
       focusingAsset: focusingAsset,
@@ -65,37 +80,52 @@ class AssetDetail extends PureComponent {
           relatedAssets={childAssets}
           {...assetRelationChipsProps}
         />
+        <Downshift
+          inputValue={vendorNameValue || vendorName}
+          onChange={value => updateAsset({
+            id: focusingAssetId,
+            vendorName: value,
+          })}
+          onInputValueChange={value => this.setState({vendorNameValue: value})}
+        >
+        {({
+          getInputProps,
+          getItemProps,
+          getLabelProps,
+          getMenuProps,
+          inputValue,
+          isOpen,
+        }) => (
+          <div className={classes.attribute}>
+            <FormLabel {...getLabelProps()}>Vendor Name</FormLabel>
+            <Input fullWidth {...getInputProps()} />
+            <div {...getMenuProps()}>
+            {isOpen &&
+              <Paper square>
+              {
+                vendorNameSuggestions
+                  .filter(suggestion => !inputValue || suggestion.label.toLowerCase().includes(
+                    deburr(inputValue.trim()).toLowerCase()))
+                  .map((suggestion, index) => {
+                    const label = suggestion.label
+                    return (
+                      <MenuItem
+                        {...getItemProps({item: label})}
+                        key={label}
+                      >{label}</MenuItem>
+                    )
+                  })
+              }
+              </Paper>}
+            </div>
+          </div>
+        )}
+        </Downshift>
 
-        <TextField
-          label='Vendor Name'
-          value={focusingAsset.get('vendorName', '')}
-          fullWidth
-          className={classes.attribute}
-          onChange={event => updateAsset({
-            id: focusingAssetId,
-            vendorName: event.target.value,
-          })}
-          />
-        <TextField
+        {/*
           label='Product Name'
-          value={focusingAsset.get('productName', '')}
-          fullWidth
-          className={classes.attribute}
-          onChange={event => updateAsset({
-            id: focusingAssetId,
-            productName: event.target.value,
-          })}
-          />
-        <TextField
           label='Product Version'
-          value={focusingAsset.get('productVersion', '')}
-          fullWidth
-          className={classes.attribute}
-          onChange={event => updateAsset({
-            id: focusingAssetId,
-            productVersion: event.target.value,
-          })}
-          />
+        */}
       </div>
     )
   }

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
+import Input from '@material-ui/core/Input'
 
 const styles = {
   name: {
@@ -19,14 +19,12 @@ class AssetDetailFields extends PureComponent {
     const focusingAssetName = focusingAsset.get('name')
     if (!focusingAssetId) return null
     return (
-      <TextField
+      <Input
         value={focusingAssetName}
         fullWidth
         required
-        InputProps={{
-          classes: {
-            input: classes.name,
-          },
+        classes={{
+          input: classes.name,
         }}
         onChange={event => updateAsset({
           id: focusingAssetId,
