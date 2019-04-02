@@ -4,7 +4,7 @@ import Drawer from '@material-ui/core/Drawer'
 import IconButton from '@material-ui/core/IconButton'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import { INFORMATION_DRAWER_WIDTH } from '../constants'
-import AssetCircuitContainer from '../containers/AssetCircuitContainer'
+// import AssetCircuitContainer from '../containers/AssetCircuitContainer'
 import AssetDetailContainer from '../containers/AssetDetailContainer'
 
 const styles = theme => ({
@@ -62,12 +62,16 @@ class InformationDrawer extends PureComponent {
           </IconButton>
         </div>
         <div className={classes.frame}>
+          {/*
           <div className={classes.circuitPanel}>
             <AssetCircuitContainer />
           </div>
           <div className={classes.detailPanel}>
+          */}
             <AssetDetailContainer />
+          {/*
           </div>
+          */}
         </div>
       </Drawer>
     )

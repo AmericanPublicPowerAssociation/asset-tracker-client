@@ -56,6 +56,8 @@ class AssetDetail extends PureComponent {
       connectedAssets,
       parentAssets,
       childAssets,
+      addSelectedAssetType,
+      setFocusingAsset,
       setRelatingAsset,
       updateAsset,
     } = this.props
@@ -77,6 +79,8 @@ class AssetDetail extends PureComponent {
       focusingAsset: focusingAsset,
       relatingAssetId: relatingAssetId,
       relatingAssetKey: relatingAssetKey,
+      addSelectedAssetType: addSelectedAssetType,
+      setFocusingAsset: setFocusingAsset,
       setRelatingAsset: setRelatingAsset,
     }
     return (

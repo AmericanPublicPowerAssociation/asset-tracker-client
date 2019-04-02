@@ -155,14 +155,19 @@ class App extends Component {
                 onSelect={this.openInformationDrawer}
               />
             )} />
+          {/*
+            <Route exact path='/circuits' render={() => (
+              <CircuitWindow
+                onSelect={this.openInformationDrawer}
+              />
+            )} />
+          */}
             <Route exact path='/reports' render={() => (
               <ReportWindow />
             )} />
-
             <Route exact path='/reports/vulnerability' render={() => (
               <VulnerabilityReportWindowContainer />
             )} />
-
             <Route exact path='/alerts' render={() => (
               <AlertWindow />
             )} />

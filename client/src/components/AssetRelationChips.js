@@ -34,6 +34,8 @@ class AssetRelationChips extends PureComponent {
       relatingAssetId,
       relatingAssetKey,
       relatedAssets,
+      addSelectedAssetType,
+      setFocusingAsset,
       setRelatingAsset,
     } = this.props
     const assetId = focusingAsset.get('id')
@@ -47,11 +49,16 @@ class AssetRelationChips extends PureComponent {
         {relatedAssets.map(relatedAsset => {
           const relatedAssetId = relatedAsset.get('id')
           const relatedAssetName = relatedAsset.get('name')
+          const relatedAssetTypeId = relatedAsset.get('typeId')
           return (
             <Chip
               key={relatedAssetId}
               label={relatedAssetName}
               className={classes.chip}
+              onClick={() => {
+                addSelectedAssetType({id: relatedAssetTypeId})
+                setFocusingAsset({id: relatedAssetId})
+              }}
             />
           )
         })}

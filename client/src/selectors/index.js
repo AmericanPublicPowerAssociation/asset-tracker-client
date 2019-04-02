@@ -232,7 +232,7 @@ export const getMapSources = createSelector(
           }
           break
         case 'm':
-          v = asset.get('peakKW')
+          v = asset.get('KW')
           if (v < 10) {
             featureSize = 3
           } else if (v < 50) {
@@ -293,16 +293,20 @@ export const getMapSources = createSelector(
   })
 
 export const getMapLayers = createSelector([
+  getFocusingAssetId,
   getSelectedAssetTypeIds,
+  getSelectedAssetIds,
   getMapSources,
 ], (
+  focusingAssetId,
   selectedAssetTypeIds,
+  selectedAssetIds,
   mapSources,
 ) => selectedAssetTypeIds
     .filter(typeId => KEY_PREFIX + typeId in mapSources)
     .map(typeId => {
       const isLine = typeId === 'l'
-      const layerColor = {
+      let layerColor = {
         p: 'black',
         l: 'yellow',
         m: 'blue',
@@ -317,6 +321,19 @@ export const getMapLayers = createSelector([
         S: 'red',
         X: 'white',
       }[typeId]
+      if (isLine) {
+        const matchExpression = ['match', ['get', 'id']]
+        if (focusingAssetId) {
+          matchExpression.push(focusingAssetId, 'blue')
+        }
+        if (selectedAssetIds.size) {
+          matchExpression.push(selectedAssetIds.filter(id => id !== focusingAssetId).toJS(), 'cyan')
+        }
+        matchExpression.push(layerColor)
+        if (matchExpression.length > 3) {
+          layerColor = matchExpression
+        }
+      }
       return {
         id: KEY_PREFIX + typeId,
         type: isLine  ? 'line' : 'circle',

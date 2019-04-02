@@ -1,5 +1,7 @@
 import { connect } from 'react-redux'
 import {
+  addSelectedAssetType,
+  setFocusingAsset,
   setRelatingAsset,
   updateAsset,
 } from '../actions'
@@ -21,6 +23,10 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  addSelectedAssetType: payload => {dispatch(
+    addSelectedAssetType(payload))},
+  setFocusingAsset: payload => {dispatch(
+    setFocusingAsset(payload))},
   setRelatingAsset: payload => {dispatch(
     setRelatingAsset(payload))},
   updateAsset: payload => {dispatch(
