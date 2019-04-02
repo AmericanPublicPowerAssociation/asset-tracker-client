@@ -6,6 +6,7 @@ import TableIcon from '@material-ui/icons/ListAlt'
 import MapIcon from '@material-ui/icons/Map'
 // import CircuitIcon from '@material-ui/icons/SettingsInputComponent'
 import ReportIcon from '@material-ui/icons/Assessment'
+import WarningIcon from '@material-ui/icons/Warning'
 // import AlertIcon from '@material-ui/icons/Notifications'
 // import AccountIcon from '@material-ui/icons/AccountCircle'
 
@@ -14,6 +15,7 @@ class NavigationDrawer extends PureComponent {
     const {
 			classes,
       onClose,
+      vulnerableAssets,
       ...etc
     } = this.props
     return (
@@ -44,6 +46,19 @@ class NavigationDrawer extends PureComponent {
             text='Reports'
             icon={<ReportIcon />}
           />
+          <List
+            component='div'
+            disablePadding
+          >
+            <ListItemLink
+              to='/reports/vulnerability'
+              text='Vulnerability'
+              icon={<WarningIcon />}
+              badgeContent={vulnerableAssets.length ? vulnerableAssets.length : ''}
+              badgeColor='error'
+              inset
+            />
+          </List>
           {/*
           <ListItemLink
             to='/alerts'

@@ -7,12 +7,13 @@ import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import MenuIcon from '@material-ui/icons/Menu'
 import AddIcon from '@material-ui/icons/Add'
-import SunnyIcon from '@material-ui/icons/WbSunny'
-import SunnyOutlinedIcon from '@material-ui/icons/WbSunnyOutlined'
+// import SunnyIcon from '@material-ui/icons/WbSunny'
+// import SunnyOutlinedIcon from '@material-ui/icons/WbSunnyOutlined'
 // import SearchIcon from '@material-ui/icons/Search'
 import FilterListIcon from '@material-ui/icons/FilterList'
 import ReturnIcon from '@material-ui/icons/CenterFocusStrong'
 import Tooltip from '@material-ui/core/Tooltip'
+import Badge from '@material-ui/core/Badge'
 import {
   FILTER_LIST_DRAWER_WIDTH,
   INFORMATION_DRAWER_WIDTH,
@@ -61,12 +62,12 @@ class ApplicationBar extends PureComponent {
     const {
       classes,
       // Get local variables
-      isDark,
+      // isDark,
       isInformationDrawerOpen,
       isFilterListDrawerOpen,
       onMenuIconClick,
       onAddIconClick,
-      onThemeIconClick,
+      // onThemeIconClick,
       onFilterIconClick,
       // Get global variables
       selectedAssetIds,
@@ -74,6 +75,7 @@ class ApplicationBar extends PureComponent {
       locatingAsset,
       relatingAssetKey,
       relatingAsset,
+      vulnerableAssets,
       addSelectedAssetType,
       setFocusingAsset,
     } = this.props
@@ -113,10 +115,14 @@ class ApplicationBar extends PureComponent {
       >
         <Toolbar>
           <Tooltip title='Open Navigation' enterDelay={TOOLTIP_DELAY}>
-            <IconButton aria-label='Open Navigation'
-              className={classes.menuButton}
-              onClick={onMenuIconClick}
-            ><MenuIcon /></IconButton>
+              <IconButton aria-label='Open Navigation'
+                className={classes.menuButton}
+                onClick={onMenuIconClick}
+              >
+                <Badge badgeContent={vulnerableAssets.length ? vulnerableAssets.length : ''} color='error'>
+                  <MenuIcon />
+                </Badge>
+              </IconButton>
           </Tooltip>
 
           <Typography

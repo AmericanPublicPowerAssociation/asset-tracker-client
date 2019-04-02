@@ -7,6 +7,7 @@ import ApplicationBar from '../components/ApplicationBar'
 import {
   getLocatingAsset,
   getRelatingAsset,
+  getVulnerableAssets,
 } from '../selectors'
 
 const mapStateToProps = state => ({
@@ -15,6 +16,7 @@ const mapStateToProps = state => ({
   locatingAsset: getLocatingAsset(state),
   relatingAssetKey: state.relatingAssetKey,
   relatingAsset: getRelatingAsset(state),
+  vulnerableAssets: getVulnerableAssets(state),
 })
 
 const mapDispatchToProps = dispatch => ({

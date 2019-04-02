@@ -13,7 +13,7 @@ import {
   FILTER_LIST_DRAWER_WIDTH,
 } from '../constants'
 import Paper from '@material-ui/core/Paper'
-import NavigationDrawer from './NavigationDrawer'
+import NavigationDrawerContainer from '../containers/NavigationDrawerContainer'
 import InformationDrawer from './InformationDrawer'
 import FilterListDrawer from './FilterListDrawer'
 import MapWindow from './MapWindow'
@@ -176,7 +176,7 @@ class App extends Component {
             )} />
           </Paper>
         </main>
-        <NavigationDrawer
+        <NavigationDrawerContainer
           open={isNavigationDrawerOpen}
           onClose={this.closeNavigationDrawer}
         />
