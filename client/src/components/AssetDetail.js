@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, Fragment } from 'react'
 import Downshift from 'downshift'
 import deburr from 'lodash/deburr'
 import { withStyles } from '@material-ui/core/styles'
@@ -80,6 +80,7 @@ class AssetDetail extends PureComponent {
     const focusingAssetTypeId = focusingAsset.get('typeId')
     const focusingAssetType = ASSET_TYPE_BY_ID[focusingAssetTypeId]
     const locatable = focusingAssetType['locatable'] || false
+    const unique = focusingAssetType['unique'] || false
     const vendorName = focusingAsset.get('vendorName', '')
     const productName = focusingAsset.get('productName', '')
     const productVersion = focusingAsset.get('productVersion', '')
@@ -103,6 +104,8 @@ class AssetDetail extends PureComponent {
           focusingAsset={focusingAsset}
           updateAsset={updateAsset}
         />
+        {!unique &&
+<Fragment>
         <Downshift
           inputValue={vendorName}
           onInputValueChange={value => {
@@ -272,6 +275,9 @@ class AssetDetail extends PureComponent {
           </div>
         )}
         </Downshift>
+
+</Fragment>
+        }
 
         {locatable && <AssetLocationContainer />}
         <AssetRelationChips

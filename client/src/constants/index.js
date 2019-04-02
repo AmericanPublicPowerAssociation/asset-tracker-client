@@ -131,6 +131,7 @@ export const ASSET_TYPE_BY_ID = {
       {id: 'sX', name: 'Other'},
     ],
     locatable: true,
+    unique: true,
   },
   S: {
     name: 'Station',
@@ -138,6 +139,7 @@ export const ASSET_TYPE_BY_ID = {
     parentIds: [],
     childIds: ['p', 'm', 't', 'x', 'q', 'c', 'b', 'o', 'g', 'X'],
     locatable: true,
+    unique: true,
   },
   X: {
     name: 'Other',

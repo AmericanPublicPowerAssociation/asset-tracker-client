@@ -9,6 +9,7 @@ import {
 } from '../selectors'
 
 const mapStateToProps = state => ({
+  focusingAssetId: state.focusingAssetId,
   circuitAssetIdPairs: getCircuitAssetIdPairs(state),
   assetById: state.assetById,
 })

@@ -2,12 +2,12 @@ import React, { PureComponent } from 'react'
 import CytoscapeComponent from 'react-cytoscapejs'
 import { debounce } from 'lodash'
 import {
-  CIRCUIT_DEPTH,
+  // CIRCUIT_DEPTH,
   CYTOSCAPE_LAYOUT,
   DEBOUNCE_THRESHOLD_IN_MILLISECONDS,
 } from '../constants'
 
-const getElements = (assetIdPairs, assetById) => {
+const getElements = (assetIdPairs, focusingAssetId, assetById) => {
   const elements = []
   for (const idPair of assetIdPairs) {
     const [id1, id2] = idPair
@@ -18,6 +18,11 @@ const getElements = (assetIdPairs, assetById) => {
     if (id1 !== id2) {
       elements.push({data: {source: id1, target: id2}})
     }
+  }
+  if (focusingAssetId && !elements.length) {
+    const asset = assetById.get(focusingAssetId)
+    elements.push({data: {
+      id: focusingAssetId, label: asset.get('name')}})
   }
   return elements
 }
@@ -56,12 +61,16 @@ class AssetCircuit extends PureComponent {
 
   render() {
     const {
+      focusingAssetId,
       circuitAssetIdPairs,
       assetById,
     } = this.props
     return (
       <CytoscapeComponent
-        elements={getElements(circuitAssetIdPairs, assetById, CIRCUIT_DEPTH)}
+        elements={getElements(
+          circuitAssetIdPairs,
+          focusingAssetId,
+          assetById)}
         layout={CYTOSCAPE_LAYOUT}
         style={{height: '100%', width: '100%'}}
         cy={this.onCy}
