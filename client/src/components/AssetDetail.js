@@ -86,25 +86,6 @@ class AssetDetail extends PureComponent {
           focusingAsset={focusingAsset}
           updateAsset={updateAsset}
         />
-        {locatable && <AssetLocationContainer />}
-        <AssetRelationChips
-          label='Connections'
-          assetKey='connectedIds'
-          relatedAssets={connectedAssets}
-          {...assetRelationChipsProps}
-        />
-        <AssetRelationChips
-          label='Parents'
-          assetKey='parentIds'
-          relatedAssets={parentAssets}
-          {...assetRelationChipsProps}
-        />
-        <AssetRelationChips
-          label='Children'
-          assetKey='childIds'
-          relatedAssets={childAssets}
-          {...assetRelationChipsProps}
-        />
         <Downshift
           inputValue={vendorNameValue || vendorName}
           onChange={value => updateAsset({
@@ -242,6 +223,26 @@ class AssetDetail extends PureComponent {
         )}
         </Downshift>
         */}
+
+        {locatable && <AssetLocationContainer />}
+        <AssetRelationChips
+          label='Connections'
+          assetKey='connectedIds'
+          relatedAssets={connectedAssets}
+          {...assetRelationChipsProps}
+        />
+        <AssetRelationChips
+          label='Parents'
+          assetKey='parentIds'
+          relatedAssets={parentAssets}
+          {...assetRelationChipsProps}
+        />
+        <AssetRelationChips
+          label='Children'
+          assetKey='childIds'
+          relatedAssets={childAssets}
+          {...assetRelationChipsProps}
+        />
       </div>
     )
   }
