@@ -4,9 +4,9 @@ import AssetMapMarker from './AssetMapMarker'
 
 class AssetMap extends PureComponent {
   state = {
-    longitude: -79.60684769101411,
-    latitude: 36.19285069559501,
-    zoom: 14,
+    longitude: -79.62399908012085,
+    latitude: 36.1931536309396,
+    zoom: 13,
     pitch: 0,
     bearing: 0,
   }

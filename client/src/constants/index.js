@@ -147,7 +147,7 @@ export const ASSET_TYPE_BY_ID = {
     locatable: true,
   },
 }
-export const SELECTED_ASSET_TYPE_IDS = fromJS(['l'])
+export const SELECTED_ASSET_TYPE_IDS = fromJS(['l', 'm', 'x', 's'])
 export const DEFAULT_ASSET_TYPE_ID = 'p'
 
 export const ASSET_BY_ID = fromJS(
@@ -155,7 +155,7 @@ export const ASSET_BY_ID = fromJS(
     ...x,
     typeId: x.typeId[0],
   }}), {}))
-export const SORTED_ASSET_IDS = ASSET_BY_ID.keySeq().toList()
+export const SORTED_ASSET_IDS = fromJS(assets.map(asset => asset['id']))
 export const MAXIMUM_LIST_LENGTH = 50
 
 export const ASSET_LOCATION_BY_ID = fromJS(
