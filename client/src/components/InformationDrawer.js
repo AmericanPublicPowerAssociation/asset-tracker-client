@@ -35,7 +35,7 @@ const styles = theme => ({
     padding: '0 24px',
   },
   circuitPanel: {
-    height: '40%',
+    height: '33%',
   },
   detailPanel: {
   },

@@ -469,13 +469,14 @@ export const getVulnerableAssets = createSelector([
 ], (
   assetById,
 ) => {
-  console.log('hey')
   const vulnerableAssets = []
   assetById.forEach((asset, id) => {
     const vendorName = asset.get('vendorName')
     const productName = asset.get('productName')
+    const productVersion = asset.get('productVersion')
     if (vendorName !== 'Schweitzer Engineering Laboratories') return
     if (productName !== 'SEL-3620') return
+    if (productVersion === 'R206') return
     vulnerableAssets.push(asset)
   })
   return vulnerableAssets

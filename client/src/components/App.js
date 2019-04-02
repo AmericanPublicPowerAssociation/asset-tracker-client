@@ -18,7 +18,7 @@ import InformationDrawer from './InformationDrawer'
 import FilterListDrawer from './FilterListDrawer'
 import MapWindow from './MapWindow'
 import TableWindowContainer from '../containers/TableWindowContainer'
-import ReportWindow from './ReportWindow'
+import ReportWindowContainer from '../containers/ReportWindowContainer'
 import VulnerabilityReportWindowContainer from '../containers//VulnerabilityReportWindowContainer'
 import AlertWindow from './AlertWindow'
 import AccountWindow from './AccountWindow'
@@ -163,7 +163,7 @@ class App extends Component {
             )} />
           */}
             <Route exact path='/reports' render={() => (
-              <ReportWindow />
+              <ReportWindowContainer />
             )} />
             <Route exact path='/reports/vulnerability' render={() => (
               <VulnerabilityReportWindowContainer />

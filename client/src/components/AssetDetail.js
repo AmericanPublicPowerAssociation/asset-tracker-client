@@ -33,12 +33,15 @@ const PRODUCT_NAME_SUGGESTIONS = [
   {type: 'X', vendor: 'Schweitzer Engineering Laboratories', label: 'SEL-3620'},
 ]
 
-/*
-const productVersionSuggestions = [
-  {type: '', vendor: '', product: '', label: ''},
-  {type: '', vendor: '', product: '', label: ''},
+const PRODUCT_VERSION_SUGGESTIONS = [
+  {label: 'R202'},
+  {label: 'R203'},
+  {label: 'R203-V1'},
+  {label: 'R203-V2'},
+  {label: 'R204'},
+  {label: 'R204-V1'},
+  {label: 'R206'},
 ]
-*/
 
 class AssetDetail extends PureComponent {
   /*
@@ -79,7 +82,7 @@ class AssetDetail extends PureComponent {
     const locatable = focusingAssetType['locatable'] || false
     const vendorName = focusingAsset.get('vendorName', '')
     const productName = focusingAsset.get('productName', '')
-    // const productVersion = focusingAsset.get('productVersion', '')
+    const productVersion = focusingAsset.get('productVersion', '')
 
     const assetRelationChipsProps = {
       focusingAsset: focusingAsset,
@@ -92,6 +95,7 @@ class AssetDetail extends PureComponent {
 
     const vendorNameSuggestions = VENDOR_NAME_SUGGESTIONS.concat({'label': vendorName})
     const productNameSuggestions = PRODUCT_NAME_SUGGESTIONS.concat({'label': productName})
+    const productVersionSuggestions = PRODUCT_VERSION_SUGGESTIONS.concat({'label': productVersion})
 
     return (
       <div>
@@ -124,7 +128,6 @@ class AssetDetail extends PureComponent {
                   <IconButton
                     onClick={() => {
                       updateAsset({id: focusingAssetId, vendorName: ''})
-                      this.setState({vendorNameValue: ''})
                     }}
                   ><ClearIcon /></IconButton>
                 </InputAdornment>
@@ -183,7 +186,6 @@ class AssetDetail extends PureComponent {
                   <IconButton
                     onClick={() => {
                       updateAsset({id: focusingAssetId, productName: ''})
-                      this.setState({productNameValue: ''})
                     }}
                   ><ClearIcon /></IconButton>
                 </InputAdornment>
@@ -216,15 +218,12 @@ class AssetDetail extends PureComponent {
           </div>
         )}
         </Downshift>
-      {/*
+
         <Downshift
-          inputValue={productVersionValue || productVersion}
-          onChange={value => updateAsset({
-            id: focusingAssetId,
-            productVersion: value,
-          })}
-          onInputValueChange={value =>
-            this.setState({productVersionValue: value})}
+          inputValue={productVersion}
+          onInputValueChange={value => {
+            updateAsset({id: focusingAssetId, productVersion: value})
+          }}
         >
         {({
           getInputProps,
@@ -236,23 +235,34 @@ class AssetDetail extends PureComponent {
         }) => (
           <div className={classes.attribute}>
             <FormLabel {...getLabelProps()}>Product Version</FormLabel>
-            <Input fullWidth {...getInputProps()} />
+            <Input
+              fullWidth
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => {
+                      updateAsset({id: focusingAssetId, productVersion: ''})
+                    }}
+                  ><ClearIcon /></IconButton>
+                </InputAdornment>
+              }
+              {...getInputProps()}
+            />
             <div {...getMenuProps()}>
             {isOpen &&
               <Paper square>
               {
                 productVersionSuggestions
-                  .filter(suggestion => !inputValue || (
-                    suggestion.vendor === vendorName &&
-                    suggestion.product === productName &&
+                  .filter(suggestion => inputValue !== '' &&
                     suggestion.label.toLowerCase().includes(deburr(
-                      inputValue.trim()).toLowerCase())))
+                      inputValue.trim()).toLowerCase()))
                   .map((suggestion, index) => {
                     const label = suggestion.label
+                    const type = suggestion.type
                     return (
                       <MenuItem
                         {...getItemProps({item: label})}
-                        key={label}
+                        key={`${type}-${label}`}
                       >{label}</MenuItem>
                     )
                   })
@@ -262,7 +272,6 @@ class AssetDetail extends PureComponent {
           </div>
         )}
         </Downshift>
-        */}
 
         {locatable && <AssetLocationContainer />}
         <AssetRelationChips
