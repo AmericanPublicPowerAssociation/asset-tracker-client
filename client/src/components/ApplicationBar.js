@@ -142,13 +142,13 @@ class ApplicationBar extends PureComponent {
             ><AddIcon /></IconButton>
           </Tooltip>
 
+          {/*
           <Tooltip title='Toggle Brightness' enterDelay={TOOLTIP_DELAY}>
             <IconButton aria-label='Toggle Brightness'
               onClick={onThemeIconClick}
             >{isDark ? <SunnyIcon /> : <SunnyOutlinedIcon />}</IconButton>
           </Tooltip>
 
-          {/*
           <Tooltip title='Search Assets' enterDelay={TOOLTIP_DELAY}>
             <IconButton aria-label='Search Assets'
               onClick={() => alert('Not yet implemented!')}

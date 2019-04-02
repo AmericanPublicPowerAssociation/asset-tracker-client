@@ -384,6 +384,30 @@ export const getConnectionGraph = createSelector([
   return connectionGraph
 })
 
+export const getMeterAssetIds = createSelector([
+  getAssetById,
+], (
+  assetById,
+) => {
+  const meterAssetIds = []
+  assetById.forEach((asset, id) => {
+    if (asset.get('typeId') === 'm') meterAssetIds.push(id)
+  })
+  return meterAssetIds
+})
+
+export const getSwitchAssetIds = createSelector([
+  getAssetById,
+], (
+  assetById,
+) => {
+  const switchAssetIds = []
+  assetById.forEach((asset, id) => {
+    if (asset.get('typeId') === 'x') switchAssetIds.push(id)
+  })
+  return switchAssetIds
+})
+
 export const getRootAssetIds = createSelector([
   getAssetById,
   getConnectionGraph,
@@ -438,4 +462,21 @@ export const getCircuitAssetIdPairs = createSelector([
     }
   })
   return [...circuitAssetIdPairs].map(idPair => idPair.split(' '))
+})
+
+export const getVulnerableAssets = createSelector([
+  getAssetById,
+], (
+  assetById,
+) => {
+  console.log('hey')
+  const vulnerableAssets = []
+  assetById.forEach((asset, id) => {
+    const vendorName = asset.get('vendorName')
+    const productName = asset.get('productName')
+    if (vendorName !== 'Schweitzer Engineering Laboratories') return
+    if (productName !== 'SEL-3620') return
+    vulnerableAssets.push(asset)
+  })
+  return vulnerableAssets
 })

@@ -1,11 +1,14 @@
 import React, { PureComponent } from 'react'
+import Downshift from 'downshift'
+import deburr from 'lodash/deburr'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormLabel from '@material-ui/core/FormLabel'
 import Input from '@material-ui/core/Input'
-import Downshift from 'downshift'
-import deburr from 'lodash/deburr'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import IconButton from '@material-ui/core/IconButton'
+import ClearIcon from '@material-ui/icons/Clear'
 import { ASSET_TYPE_BY_ID } from '../constants'
 import AssetName from './AssetName'
 import AssetLocationContainer from '../containers/AssetLocationContainer'
@@ -17,14 +20,14 @@ const styles = theme => ({
   },
 })
 
-const vendorNameSuggestions = [
+const VENDOR_NAME_SUGGESTIONS = [
   {type: 'x', label: 'Schneider Electric'},
   {type: 'x', label: 'Schweitzer Engineering Laboratories'},
   // {type: 'c', label: 'Schweitzer Engineering Laboratories'},
   // {type: 'X', label: 'Schweitzer Engineering Laboratories'},
 ]
 
-const productNameSuggestions = [
+const PRODUCT_NAME_SUGGESTIONS = [
   {type: 'x', vendor: 'Schweitzer Engineering Laboratories', label: 'SEL-351'},
   {type: 'c', vendor: 'Schweitzer Engineering Laboratories', label: 'SEL-352'},
   {type: 'X', vendor: 'Schweitzer Engineering Laboratories', label: 'SEL-3620'},
@@ -38,11 +41,22 @@ const productVersionSuggestions = [
 */
 
 class AssetDetail extends PureComponent {
+  /*
   state = {
     vendorNameValue: '',
     productNameValue: '',
-    //productVersionValue: '',
+    // productVersionValue: '',
   }
+
+  componentWillReceiveProps = nextProps => {
+    if (this.props.focusingAsset.get('id') !== nextProps.focusingAsset.get('id')) {
+      this.setState({
+        vendorNameValue: '',
+        productNameValue: '',
+      })
+    }
+  }
+  */
 
   render() {
     const {
@@ -58,11 +72,6 @@ class AssetDetail extends PureComponent {
       setRelatingAsset,
       updateAsset,
     } = this.props
-    const {
-      vendorNameValue,
-      productNameValue,
-      //productVersionValue,
-    } = this.state
     const focusingAssetId = focusingAsset.get('id');
     if (!focusingAssetId) return null
     const focusingAssetTypeId = focusingAsset.get('typeId')
@@ -70,7 +79,7 @@ class AssetDetail extends PureComponent {
     const locatable = focusingAssetType['locatable'] || false
     const vendorName = focusingAsset.get('vendorName', '')
     const productName = focusingAsset.get('productName', '')
-    //const productVersion = focusingAsset.get('productVersion', '')
+    // const productVersion = focusingAsset.get('productVersion', '')
 
     const assetRelationChipsProps = {
       focusingAsset: focusingAsset,
@@ -80,6 +89,10 @@ class AssetDetail extends PureComponent {
       setFocusingAsset: setFocusingAsset,
       setRelatingAsset: setRelatingAsset,
     }
+
+    const vendorNameSuggestions = VENDOR_NAME_SUGGESTIONS.concat({'label': vendorName})
+    const productNameSuggestions = PRODUCT_NAME_SUGGESTIONS.concat({'label': productName})
+
     return (
       <div>
         <AssetName
@@ -87,12 +100,12 @@ class AssetDetail extends PureComponent {
           updateAsset={updateAsset}
         />
         <Downshift
-          inputValue={vendorNameValue || vendorName}
-          onChange={value => updateAsset({
-            id: focusingAssetId,
-            vendorName: value,
-          })}
-          onInputValueChange={value => this.setState({vendorNameValue: value})}
+          inputValue={vendorName}
+          onInputValueChange={value => {
+            updateAsset({id: focusingAssetId, vendorName: value})
+            // this.setState({vendorNameValue: value})
+            // console.log('onInputValueChange', value)
+          }}
         >
         {({
           getInputProps,
@@ -104,7 +117,20 @@ class AssetDetail extends PureComponent {
         }) => (
           <div className={classes.attribute}>
             <FormLabel {...getLabelProps()}>Vendor Name</FormLabel>
-            <Input fullWidth {...getInputProps()} />
+            <Input
+              fullWidth
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => {
+                      updateAsset({id: focusingAssetId, vendorName: ''})
+                      this.setState({vendorNameValue: ''})
+                    }}
+                  ><ClearIcon /></IconButton>
+                </InputAdornment>
+              }
+              {...getInputProps()}
+            />
             <div {...getMenuProps()}>
             {isOpen &&
               <Paper square>
@@ -133,12 +159,12 @@ class AssetDetail extends PureComponent {
         </Downshift>
 
         <Downshift
-          inputValue={productNameValue || productName}
-          onChange={value => updateAsset({
-            id: focusingAssetId,
-            productName: value,
-          })}
-          onInputValueChange={value => this.setState({productNameValue: value})}
+          inputValue={productName}
+          onInputValueChange={value => {
+            // this.setState({productNameValue: value})
+            // console.log('onInputValueChange', value)
+            updateAsset({id: focusingAssetId, productName: value})
+          }}
         >
         {({
           getInputProps,
@@ -150,7 +176,20 @@ class AssetDetail extends PureComponent {
         }) => (
           <div className={classes.attribute}>
             <FormLabel {...getLabelProps()}>Product Name</FormLabel>
-            <Input fullWidth {...getInputProps()} />
+            <Input
+              fullWidth
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => {
+                      updateAsset({id: focusingAssetId, productName: ''})
+                      this.setState({productNameValue: ''})
+                    }}
+                  ><ClearIcon /></IconButton>
+                </InputAdornment>
+              }
+              {...getInputProps()}
+            />
             <div {...getMenuProps()}>
             {isOpen &&
               <Paper square>
@@ -184,7 +223,8 @@ class AssetDetail extends PureComponent {
             id: focusingAssetId,
             productVersion: value,
           })}
-          onInputValueChange={value => this.setState({productVersionValue: value})}
+          onInputValueChange={value =>
+            this.setState({productVersionValue: value})}
         >
         {({
           getInputProps,
