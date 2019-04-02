@@ -18,18 +18,15 @@ const styles = theme => ({
 })
 
 const vendorNameSuggestions = [
-  // {type: '', label: 'General Electric'},
-  // {type: '', label: 'Schneider Electric'},
-  // {type: '', label: 'Schneider Electric'},
-  // {type: '', label: 'Schneider Electric'},
+  {type: 'x', label: 'Schneider Electric'},
   {type: 'x', label: 'Schweitzer Engineering Laboratories'},
-  {type: 'c', label: 'Schweitzer Engineering Laboratories'},
-  {type: 'X', label: 'Schweitzer Engineering Laboratories'},
+  // {type: 'c', label: 'Schweitzer Engineering Laboratories'},
+  // {type: 'X', label: 'Schweitzer Engineering Laboratories'},
 ]
 
 const productNameSuggestions = [
-  {type: 'c', vendor: 'Schweitzer Engineering Laboratories', label: 'SEL-351'},
-  {type: 'x', vendor: 'Schweitzer Engineering Laboratories', label: 'SEL-352'},
+  {type: 'x', vendor: 'Schweitzer Engineering Laboratories', label: 'SEL-351'},
+  {type: 'c', vendor: 'Schweitzer Engineering Laboratories', label: 'SEL-352'},
   {type: 'X', vendor: 'Schweitzer Engineering Laboratories', label: 'SEL-3620'},
 ]
 
@@ -133,7 +130,7 @@ class AssetDetail extends PureComponent {
               {
                 vendorNameSuggestions
                   .filter(suggestion => inputValue !== '' &&
-                    suggestion.type === focusingAssetTypeId &&
+                    // suggestion.type === focusingAssetTypeId &&
                     suggestion.label.toLowerCase().includes(
                       deburr(inputValue.trim()).toLowerCase()))
                   .map((suggestion, index) => {
@@ -179,8 +176,8 @@ class AssetDetail extends PureComponent {
               {
                 productNameSuggestions
                   .filter(suggestion => inputValue !== '' &&
-                    suggestion.type === focusingAssetTypeId &&
-                    suggestion.vendor === vendorName &&
+                    // suggestion.type === focusingAssetTypeId &&
+                    // suggestion.vendor === vendorName &&
                     suggestion.label.toLowerCase().includes(deburr(
                       inputValue.trim()).toLowerCase()))
                   .map((suggestion, index) => {

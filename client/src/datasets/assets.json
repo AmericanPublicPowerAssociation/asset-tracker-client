@@ -50,7 +50,7 @@
   },
   {
     "id": "abkD",
-    "typeId": "xc",
+    "typeId": "cm",
     "name": "Microcontroller 1",
     "parentIds": [
       "bhA8",
@@ -61,6 +61,8 @@
       "abkH",
       "abkI"
     ],
+    "vendorName": "Schweitzer Engineering Laboratories",
+    "productName": "SEL-352",
     "geometry": {
       "type": "Point",
       "coordinates": [
@@ -72,7 +74,7 @@
   },
   {
     "id": "abkH",
-    "typeId": "xc",
+    "typeId": "xr",
     "name": "Relay 1",
     "parentIds": [
       "bhA8",
@@ -82,6 +84,8 @@
       "abkD",
       "ahwT"
     ],
+    "vendorName": "Schweitzer Engineering Laboratories",
+    "productName": "SEL-351",
     "geometry": {
       "type": "Point",
       "coordinates": [
@@ -93,7 +97,7 @@
   },
   {
     "id": "abkI",
-    "typeId": "xc",
+    "typeId": "X",
     "name": "Gateway 1",
     "parentIds": [
       "bhA8",
@@ -102,6 +106,8 @@
     "connectedIds": [
       "abkD"
     ],
+    "vendorName": "Schweitzer Engineering Laboratories",
+    "productName": "",
     "geometry": {
       "type": "Point",
       "coordinates": [
