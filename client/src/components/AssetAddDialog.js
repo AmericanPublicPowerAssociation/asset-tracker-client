@@ -1,16 +1,24 @@
 import React, { PureComponent } from 'react'
+import { withStyles } from '@material-ui/core/styles'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
-import AssetTypeRadioButtons from './AssetTypeRadioButtons'
+import AssetTypeSelect from './AssetTypeSelect'
+
 import {
   // ASSET_TYPE_BY_ID,
   DEFAULT_ASSET_TYPE_ID,
 } from '../constants'
 import { getRandomString } from '../macros'
+
+const styles = theme => ({
+  attribute: {
+    margin: `${theme.spacing.unit * 3}px 0 0 0`,
+  },
+})
 
 class AssetAddDialog extends PureComponent {
   state = {
@@ -19,8 +27,8 @@ class AssetAddDialog extends PureComponent {
     vendorName: '',
   }
 
-  onAssetTypeClick = ({id}) => {
-    this.setState({assetTypeId: id})}
+	onAssetTypeChange = event => {
+		this.setState({assetTypeId: event.target.value})}
 
   onAssetNameChange = event => {
     this.setState({assetName: event.target.value})}
@@ -59,31 +67,35 @@ class AssetAddDialog extends PureComponent {
     onClose()}
 
   render() {
-    const { open, onClose } = this.props
+    const { classes, open, onClose } = this.props
     const { assetTypeId } = this.state
     return (
       <Dialog open={open} onClose={onClose}>
         <DialogTitle>Add Asset</DialogTitle>
         <DialogContent>
-          <AssetTypeRadioButtons
-            selectedAssetTypeId={assetTypeId}
-            onAssetTypeClick={this.onAssetTypeClick}
-          />
+          <AssetTypeSelect
+						value={assetTypeId}
+						onChange={this.onAssetTypeChange}
+					/>
           <TextField
             fullWidth
             label='Asset Name'
-            placeholder='x'
-            helperText='y'
+            // placeholder='x'
+            // helperText='y'
             onChange={this.onAssetNameChange}
+						className={classes.attribute}
           />
           <TextField 
             fullWidth 
             label='Vendor Name' 
-            placeholder='c' 
-            helperText='d' 
+            // placeholder='c' 
+            // helperText='d' 
             onChange={this.onVendorNameChange}
+						className={classes.attribute}
           />
+					{/*
           <TextField fullWidth label='Approximate Location' placeholder='z' helperText='a' />
+					*/}
         </DialogContent>
         <DialogActions>
           <Button onClick={this.onCancel}>Cancel</Button>
@@ -94,4 +106,4 @@ class AssetAddDialog extends PureComponent {
   }
 }
 
-export default AssetAddDialog
+export default withStyles(styles)(AssetAddDialog)
