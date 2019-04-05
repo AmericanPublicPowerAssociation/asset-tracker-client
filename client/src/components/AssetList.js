@@ -1,10 +1,11 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, Fragment } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import Switch from '@material-ui/core/Switch'
+import AssetFilterContainer from '../containers/AssetFilterContainer'
 
 const styles = theme => ({
   relating: {
@@ -31,6 +32,8 @@ class AssetList extends PureComponent {
     } = this.props
     const editingAssetId = relatingAssetId || locatingAssetId
     return (
+    <Fragment>
+      <AssetFilterContainer />
       <List disablePadding>
         {visibleAssets.map(visibleAsset => {
           const visibleAssetId = visibleAsset.get('id')
@@ -69,6 +72,7 @@ class AssetList extends PureComponent {
           )
         })}
       </List>
+    </Fragment>
     )
   }
 }
