@@ -10,12 +10,12 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import {
   CONTENT_PADDING,
   INFORMATION_DRAWER_WIDTH,
-  FILTER_LIST_DRAWER_WIDTH,
+  // FILTER_LIST_DRAWER_WIDTH,
 } from '../constants'
 import Paper from '@material-ui/core/Paper'
 import NavigationDrawerContainer from '../containers/NavigationDrawerContainer'
 import InformationDrawer from './InformationDrawer'
-import FilterListDrawer from './FilterListDrawer'
+// import FilterListDrawer from './FilterListDrawer'
 import MapWindow from './MapWindow'
 import TableWindowContainer from '../containers/TableWindowContainer'
 import ReportWindowContainer from '../containers/ReportWindowContainer'
@@ -59,12 +59,14 @@ const styles = theme => ({
       marginRight: 256,
     },
   },
+  /*
   mainWithFilterList: {
     marginRight: FILTER_LIST_DRAWER_WIDTH,
     [theme.breakpoints.down('md')]: {
       marginRight: 256,
     },
   },
+  */
   paper: {
     height: `calc(100vh - 56px - ${CONTENT_PADDING * 2}px)`,
     [`${theme.breakpoints.up('xs')} and (orientation: landscape)`]: {
@@ -82,7 +84,7 @@ class App extends Component {
     isDark: false,
     isNavigationDrawerOpen: false,
     isInformationDrawerOpen: false,
-    isFilterListDrawerOpen: false,
+    // isFilterListDrawerOpen: false,
     isAssetAddDialogOpen: false,
   }
 
@@ -94,16 +96,19 @@ class App extends Component {
   openInformationDrawer = () => {
     this.setState({
       isInformationDrawerOpen: true,
-      isFilterListDrawerOpen: false})}
+      // isFilterListDrawerOpen: false,
+    })}
   closeInformationDrawer = () => {
     this.setState({isInformationDrawerOpen: false})}
 
+  /*
   openFilterListDrawer = () => {
     this.setState({
       isFilterListDrawerOpen: true,
       isInformationDrawerOpen: false})}
   closeFilterListDrawer = () => {
     this.setState({isFilterListDrawerOpen: false})}
+  */
 
   openAssetAddDialog = () => {
     this.setState({isAssetAddDialogOpen: true})}
@@ -120,29 +125,28 @@ class App extends Component {
       isDark,
       isNavigationDrawerOpen,
       isInformationDrawerOpen,
-      isFilterListDrawerOpen,
+      // isFilterListDrawerOpen,
       isAssetAddDialogOpen,
     } = this.state
-    const isRightDrawerOpen =
-      isInformationDrawerOpen ||
-      isFilterListDrawerOpen
+    const isRightDrawerOpen = isInformationDrawerOpen
+    // || isFilterListDrawerOpen
     return (
       <MuiThemeProvider theme={isDark ? darkTheme : brightTheme}>
         <CssBaseline />
         <ApplicationBarContainer
           isDark={isDark}
           isInformationDrawerOpen={isInformationDrawerOpen}
-          isFilterListDrawerOpen={isFilterListDrawerOpen}
+          // isFilterListDrawerOpen={isFilterListDrawerOpen}
           onMenuIconClick={this.openNavigationDrawer}
           onAddIconClick={this.openAssetAddDialog}
           onThemeIconClick={this.toggleTheme}
-          onFilterIconClick={this.openFilterListDrawer}
+          // onFilterIconClick={this.openFilterListDrawer}
         />
         <div className={classes.toolbar} />
         <main className={classNames(classes.main, {
           [classes.mainTransition]: isRightDrawerOpen,
           [classes.mainWithInformation]: isInformationDrawerOpen,
-          [classes.mainWithFilterList]: isFilterListDrawerOpen,
+          // [classes.mainWithFilterList]: isFilterListDrawerOpen,
         })}>
           <Paper className={classes.paper}>
             <Route exact path='/' render={() => (
@@ -184,10 +188,12 @@ class App extends Component {
           open={isInformationDrawerOpen}
           onClose={this.closeInformationDrawer}
         />
+        {/*
         <FilterListDrawer
           open={isFilterListDrawerOpen}
           onClose={this.closeFilterListDrawer}
         />
+        */}
         <AssetAddDialogContainer
           open={isAssetAddDialogOpen}
           onClose={this.closeAssetAddDialog}

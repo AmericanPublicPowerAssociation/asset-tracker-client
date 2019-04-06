@@ -6,7 +6,7 @@ import mapStyle from '../datasets/map-style-satellite-streets.json'
 export const CONTENT_PADDING = 24
 
 export const INFORMATION_DRAWER_WIDTH = 512
-export const FILTER_LIST_DRAWER_WIDTH = 256
+// export const FILTER_LIST_DRAWER_WIDTH = 256
 
 export const ADD_ASSET = 'ADD_ASSET'
 export const UPDATE_ASSET = 'UPDATE_ASSET'

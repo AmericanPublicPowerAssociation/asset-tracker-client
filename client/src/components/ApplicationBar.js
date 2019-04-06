@@ -10,12 +10,12 @@ import AddIcon from '@material-ui/icons/Add'
 // import SunnyIcon from '@material-ui/icons/WbSunny'
 // import SunnyOutlinedIcon from '@material-ui/icons/WbSunnyOutlined'
 // import SearchIcon from '@material-ui/icons/Search'
-import FilterListIcon from '@material-ui/icons/FilterList'
+// import FilterListIcon from '@material-ui/icons/FilterList'
 import ReturnIcon from '@material-ui/icons/CenterFocusStrong'
 import Tooltip from '@material-ui/core/Tooltip'
 import Badge from '@material-ui/core/Badge'
 import {
-  FILTER_LIST_DRAWER_WIDTH,
+  // FILTER_LIST_DRAWER_WIDTH,
   INFORMATION_DRAWER_WIDTH,
   TOOLTIP_DELAY,
 } from '../constants'
@@ -44,6 +44,7 @@ const styles = theme => ({
       marginRight: 256,
     },
   },
+  /*
   appBarWithFilterList: {
     width: `calc(100% - ${FILTER_LIST_DRAWER_WIDTH}px)`,
     marginRight: FILTER_LIST_DRAWER_WIDTH,
@@ -52,6 +53,7 @@ const styles = theme => ({
       marginRight: 256,
     },
   },
+  */
   menuButton: {
     marginRight: 16,
   },
@@ -64,11 +66,11 @@ class ApplicationBar extends PureComponent {
       // Get local variables
       // isDark,
       isInformationDrawerOpen,
-      isFilterListDrawerOpen,
+      // isFilterListDrawerOpen,
       onMenuIconClick,
       onAddIconClick,
       // onThemeIconClick,
-      onFilterIconClick,
+      // onFilterIconClick,
       // Get global variables
       selectedAssetIds,
       focusingAssetId,
@@ -79,9 +81,8 @@ class ApplicationBar extends PureComponent {
       addSelectedAssetType,
       setFocusingAsset,
     } = this.props
-    const isRightDrawerOpen =
-      isInformationDrawerOpen ||
-      isFilterListDrawerOpen
+    const isRightDrawerOpen = isInformationDrawerOpen
+      // || isFilterListDrawerOpen
     const locatingAssetId = locatingAsset.get('id')
     const relatingAssetId = relatingAsset.get('id')
     const editingAssetId = locatingAssetId || relatingAssetId
@@ -110,7 +111,7 @@ class ApplicationBar extends PureComponent {
         className={classNames(classes.appBar, {
           [classes.appBarTransition]: isRightDrawerOpen,
           [classes.appBarWithInformation]: isInformationDrawerOpen,
-          [classes.appBarWithFilterList]: isFilterListDrawerOpen,
+          // [classes.appBarWithFilterList]: isFilterListDrawerOpen,
         })}
       >
         <Toolbar>
@@ -160,7 +161,6 @@ class ApplicationBar extends PureComponent {
               onClick={() => alert('Not yet implemented!')}
             ><SearchIcon /></IconButton>
           </Tooltip>
-          */}
 
           <Tooltip title='Filter Assets' enterDelay={TOOLTIP_DELAY}>
             <IconButton aria-label='Filter Assets'
@@ -168,6 +168,7 @@ class ApplicationBar extends PureComponent {
               onClick={onFilterIconClick}
             ><FilterListIcon /></IconButton>
           </Tooltip>
+          */}
         </Toolbar>
       </AppBar>
     )
