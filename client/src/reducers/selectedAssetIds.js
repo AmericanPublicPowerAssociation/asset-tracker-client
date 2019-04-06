@@ -1,7 +1,7 @@
 import { List } from 'immutable'
 import {
   SET_FOCUSING_ASSET,
-  SET_SELECTED_ASSET_IDS,
+  SET_SELECTED_ASSETS,
 } from '../constants'
 
 const initialState = List()
@@ -14,7 +14,7 @@ const selectedAssetIds = (state=initialState, action) => {
     if (!state.includes(id)) {
       return state.clear()
     }
-  } else if (SET_SELECTED_ASSET_IDS === actionType) {
+  } else if (SET_SELECTED_ASSETS === actionType) {
     const {ids} = action.payload
     return state.withMutations(state => {
       state.clear()

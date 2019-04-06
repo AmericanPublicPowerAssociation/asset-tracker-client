@@ -21,7 +21,7 @@ class AssetMap extends PureComponent {
       // Get local variables
       onSelect,
       // Get global variables
-      setSelectedAssetIds,
+      setSelectedAssets,
       setFocusingAsset,
     } = this.props
     const assetIds = [...new Set(
@@ -29,10 +29,10 @@ class AssetMap extends PureComponent {
       event.features.map(f => f.properties.id))]
     const assetCount = assetIds.length
     if (assetCount === 0) {
-      setSelectedAssetIds({ids: []})
+      setSelectedAssets({ids: []})
       return
     } else if (assetCount > 1) {
-      setSelectedAssetIds({ids: assetIds})
+      setSelectedAssets({ids: assetIds})
     }
     setFocusingAsset({id: assetIds[0]})
     onSelect()

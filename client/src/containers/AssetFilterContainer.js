@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { toggleSelectedAssetType } from '../actions'
+import { setSelectedAssetTypes } from '../actions'
 import AssetFilter from '../components/AssetFilter'
 
 const mapStateToProps = state => ({
@@ -7,8 +7,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  onAssetTypeClick: payload => {dispatch(
-    toggleSelectedAssetType(payload))},
+  setSelectedAssetTypes: payload => {dispatch(
+    setSelectedAssetTypes(payload))},
 })
 
 export default connect(
