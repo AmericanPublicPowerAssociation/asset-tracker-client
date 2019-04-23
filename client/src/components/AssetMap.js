@@ -1,9 +1,12 @@
 import React, { PureComponent } from 'react'
 import ReactMapGL, { NavigationControl } from 'react-map-gl'
+import { Map } from 'immutable'
 import AssetMapMarker from './AssetMapMarker'
+import { STREETS_MAP_STYLE, SATELLITE_STREETS_MAP_STYLE } from '../constants/index'
 
 class AssetMap extends PureComponent {
   state = {
+    withSatelliteImagery: false,  
     longitude: -79.62399908012085,
     latitude: 36.1931536309396,
     zoom: 13,
@@ -58,7 +61,10 @@ class AssetMap extends PureComponent {
       zoom,
       pitch,
       bearing,
+      withSatelliteImagery,
     } = this.state
+    const baseMapStyle = withSatelliteImagery ? SATELLITE_STREETS_MAP_STYLE : STREETS_MAP_STYLE
+
     return (
       <ReactMapGL
         width='100%'
@@ -68,7 +74,7 @@ class AssetMap extends PureComponent {
         zoom={zoom}
         pitch={pitch}
         bearing={bearing}
-        mapStyle={mapStyle}
+        mapStyle={baseMapStyle.mergeDeep(mapStyle)}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
         interactiveLayerIds={interactiveLayerIds.toJS()}
         onViewportChange={this.onViewportChange}

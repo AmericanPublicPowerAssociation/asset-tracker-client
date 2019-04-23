@@ -5,7 +5,6 @@ import {
   ASSET_TYPE_BY_ID,
   MAXIMUM_LIST_LENGTH,
   KEY_PREFIX,
-  MAP_STYLE,
   // PROPERTY_MINIMUM_VALUE,
   // PROPERTY_MAXIMUM_VALUE,
 } from '../constants'
@@ -358,7 +357,7 @@ export const getMapStyle = createSelector([
 ], (
   mapSources,
   mapLayers,
-) => MAP_STYLE.mergeDeep({sources: mapSources, layers: mapLayers}))
+) => ({sources: mapSources, layers: mapLayers}))
 
 export const getInteractiveLayerIds = createSelector([
   getMapLayers,
