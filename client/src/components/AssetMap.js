@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import ReactMapGL, { NavigationControl } from 'react-map-gl'
 import { Map } from 'immutable'
 import AssetMapMarker from './AssetMapMarker'
+import AssetMapToggleView from './AssetMapToggleView'
 import { STREETS_MAP_STYLE, SATELLITE_STREETS_MAP_STYLE } from '../constants/index'
 
 class AssetMap extends PureComponent {
@@ -41,6 +42,10 @@ class AssetMap extends PureComponent {
     onSelect()
   }
 
+  handleWithSatelliteImagery = dataFromChild => {
+    this.setState({ withSatelliteImagery: dataFromChild })
+  }
+
   getCursor = ({isHovering}) => {
     return isHovering ? 'pointer' : 'all-scroll'
   }
@@ -65,6 +70,7 @@ class AssetMap extends PureComponent {
     } = this.state
     const baseMapStyle = withSatelliteImagery ? SATELLITE_STREETS_MAP_STYLE : STREETS_MAP_STYLE
 
+    console.log(this.state.withSatelliteImagery)
     return (
       <ReactMapGL
         width='100%'
@@ -102,6 +108,9 @@ class AssetMap extends PureComponent {
           padding: '10px',
         }}>
           <NavigationControl onViewportChange={this.onViewportChange} />
+          <AssetMapToggleView 
+            handleWithSatelliteImagery={this.handleWithSatelliteImagery}
+          />
         </div>
       </ReactMapGL>
     )
