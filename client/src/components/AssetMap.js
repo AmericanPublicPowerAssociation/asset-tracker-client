@@ -11,7 +11,7 @@ class AssetMap extends PureComponent {
     bearing: 0,
   }
 
-  onViewportChange = viewport => {
+  updateViewport = viewport => {
     const {longitude, latitude, zoom, pitch, bearing} = viewport
     this.setState({longitude, latitude, zoom, pitch, bearing})
   }
@@ -71,7 +71,7 @@ class AssetMap extends PureComponent {
         mapStyle={mapStyle}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
         interactiveLayerIds={interactiveLayerIds.toJS()}
-        onViewportChange={this.onViewportChange}
+        onViewportChange={this.updateViewport}
         onClick={this.onClick}
         getCursor={this.getCursor}
       >
@@ -95,7 +95,7 @@ class AssetMap extends PureComponent {
           left: 0,
           padding: '10px',
         }}>
-          <NavigationControl onViewportChange={this.onViewportChange} />
+          <NavigationControl onViewportChange={this.updateViewport} />
         </div>
       </ReactMapGL>
     )
