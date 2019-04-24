@@ -1,7 +1,7 @@
 import { fromJS } from 'immutable'
 import assets from '../datasets/assets.json'
-// import mapStyle from '../datasets/map-style-streets.json'
-import mapStyle from '../datasets/map-style-satellite-streets.json'
+import streetsMapStyle from '../datasets/map-style-streets.json'
+import satelliteStreetsMapStyle from '../datasets/map-style-satellite-streets.json'
 
 export const CONTENT_PADDING = 24
 
@@ -171,7 +171,8 @@ export const FEATURE_GEOMETRY_BY_ID = fromJS(
     (o, x) => Object.assign(o, {[x.id]: x.geometry}), {}))
 export const FEATURE_COLOR_ATTRIBUTE = 'typeId'
 export const FEATURE_SIZE_ATTRIBUTE = 'KV'
-export const MAP_STYLE = fromJS(mapStyle)
+export const STREETS_MAP_STYLE = fromJS(streetsMapStyle)
+export const SATELLITE_STREETS_MAP_STYLE = fromJS(satelliteStreetsMapStyle)
 export const KEY_PREFIX = 'asset-tracker-'
 export const PROPERTY_MINIMUM_VALUE = 1
 export const PROPERTY_MAXIMUM_VALUE = 9
