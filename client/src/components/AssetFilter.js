@@ -22,7 +22,9 @@ class AssetFilter extends PureComponent {
 					renderValue={selected => (
 						<div>
             {selected.map(value =>
-              <Chip key={value} label={ASSET_TYPE_BY_ID[value]['name']} />
+              <Chip key={value} label={ASSET_TYPE_BY_ID[value]['name']} 
+								style={{ marginLeft: '4px' }}
+							/>
             )}
 						</div>
 					)}
