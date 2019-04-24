@@ -56,19 +56,26 @@ class AssetAddDialog extends PureComponent {
     } = this.props
     const {
       assetTypeId,
-      assetTypeName,
+      assetName,
       vendorName,
     } = this.state
-    const assetId = getRandomString(7)
-    addSelectedAssetType({id: assetTypeId})
-    addAsset({
-      id: assetId,
-      typeId: assetTypeId,
-      name: assetTypeName,
-      vendorName: vendorName,
-    })
-    setFocusingAsset({id: assetId})
-    onClose()}
+      if (assetName === ""){
+        alert('The Asset Name is empty, add a name to save.')
+      }
+      else {
+          const assetId = getRandomString(7)
+          addSelectedAssetType({id: assetTypeId})
+          addAsset({
+              id: assetId,
+              typeId: assetTypeId,
+              name: assetName,
+              vendorName: vendorName,
+          })
+          setFocusingAsset({id: assetId})
+          onClose()
+      }
+
+  }
 
   render() {
     const { classes, open, onClose } = this.props
