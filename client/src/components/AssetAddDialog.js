@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField'
 import AssetTypeSelect from './AssetTypeSelect'
 
 import {
-  // ASSET_TYPE_BY_ID,
+  ASSET_TYPE_BY_ID,
   DEFAULT_ASSET_TYPE_ID,
 } from '../constants'
 import { getRandomString } from '../macros'
@@ -23,12 +23,18 @@ const styles = theme => ({
 class AssetAddDialog extends PureComponent {
   state = {
     assetTypeId: DEFAULT_ASSET_TYPE_ID,
-    assetName: '',
+    assetName: ASSET_TYPE_BY_ID[DEFAULT_ASSET_TYPE_ID]['name']+ ' - ' + getRandomString(7),
     vendorName: '',
   }
 
-	onAssetTypeChange = event => {
-		this.setState({assetTypeId: event.target.value})}
+  onAssetTypeChange = event => {
+      const assetTypeId = event.target.value
+      const assetTypeName = ASSET_TYPE_BY_ID[assetTypeId]['name']
+      this.setState({
+        assetTypeId:  assetTypeId,
+        assetName: assetTypeName + ' - ' + getRandomString(7),
+    })
+  }
 
   onAssetNameChange = event => {
     this.setState({assetName: event.target.value})}
@@ -50,17 +56,15 @@ class AssetAddDialog extends PureComponent {
     } = this.props
     const {
       assetTypeId,
-      assetName,
+      assetTypeName,
       vendorName,
     } = this.state
-    // const assetTypeName = ASSET_TYPE_BY_ID[assetTypeId]['name']
     const assetId = getRandomString(7)
     addSelectedAssetType({id: assetTypeId})
     addAsset({
       id: assetId,
       typeId: assetTypeId,
-      // name: assetTypeName + ' ' + assetId,
-      name: assetName,
+      name: assetTypeName,
       vendorName: vendorName,
     })
     setFocusingAsset({id: assetId})
@@ -68,7 +72,7 @@ class AssetAddDialog extends PureComponent {
 
   render() {
     const { classes, open, onClose } = this.props
-    const { assetTypeId } = this.state
+    const { assetTypeId, assetName, vendorName } = this.state
     return (
       <Dialog open={open} onClose={onClose}>
         <DialogTitle>Add Asset</DialogTitle>
@@ -80,16 +84,14 @@ class AssetAddDialog extends PureComponent {
           <TextField
             fullWidth
             label='Asset Name'
-            // placeholder='x'
-            // helperText='y'
+            value={assetName}
             onChange={this.onAssetNameChange}
 						className={classes.attribute}
           />
           <TextField 
             fullWidth 
-            label='Vendor Name' 
-            // placeholder='c' 
-            // helperText='d' 
+            label='Vendor Name'
+            value={vendorName}
             onChange={this.onVendorNameChange}
 						className={classes.attribute}
           />
