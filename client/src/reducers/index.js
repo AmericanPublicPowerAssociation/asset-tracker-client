@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import reduceReducers from 'reduce-reducers'
 import assetById from './assetById'
 import assetLocationById from './assetLocationById'
 import featureGeometryById from './featureGeometryById'
@@ -12,7 +13,7 @@ import relatingAssetId from './relatingAssetId'
 import relatingAssetKey from './relatingAssetKey'
 import locatingAssetId from './locatingAssetId'
 
-export default combineReducers({
+const horizontalReducer = combineReducers({
   assetById,
   assetLocationById,
   featureGeometryById,
@@ -26,3 +27,11 @@ export default combineReducers({
   relatingAssetKey,
   locatingAssetId,
 })
+
+const verticalReducer = (state, action) => {
+  return state
+}
+
+export default reduceReducers(
+  horizontalReducer,
+  verticalReducer)
