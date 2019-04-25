@@ -1,20 +1,27 @@
-UPDATE_ASSET_GEOMETRY,
+  if (UPDATE_ASSET_LOCATION === actionType) {
+  }
 
-export const updateAssetLocation = payload => (dispatch, getState) => {
-  dispatch({type: UPDATE_ASSET_LOCATION, payload})
+    const {assetById, assetLocationById, featureGeometryById} = state
+    const {id, longitude, latitude} = actionPayload
+    const asset = assetById.get(id)
 
-  const {id, longitude, latitude} = payload
-  const {assetById, assetLocationById} = getState()
-  const asset = assetById.get(id)
-  const assetChildIds = asset.get('childIds', List())
-  assetChildIds.forEach(childId => {
-    const assetLocation = assetLocationById.get(childId)
-    if (assetLocation) return
-    dispatch({type: UPDATE_ASSET_GEOMETRY, payload: {id: childId, geometry: {
-      type: 'Point', coordinates: [longitude, latitude]}}})
-  })
+    const assetChildIds = asset.get('childIds', List())
+    featureGeometryById.withMutations(map => {
 
-  const assetParentIds = asset.get('parentIds', List())
+    })
+
+    assetChildIds.forEach(childId => {
+      const assetLocation = assetLocationById.get(childId)
+      if (assetLocation) return
+      featureGeometryById.merge([id])
+      dispatch({type: UPDATE_ASSET_GEOMETRY, payload: {id: childId, geometry: {
+        type: 'Point', coordinates: [longitude, latitude]}}})
+    })
+
+    const assetParentIds = asset.get('parentIds', List())
+
+    return state
+
   assetParentIds.forEach(parentId => {
     const assetParent = assetById.get(parentId)
     const assetTypeId = assetParent.get('typeId')
@@ -28,4 +35,3 @@ export const updateAssetLocation = payload => (dispatch, getState) => {
     dispatch({type: UPDATE_ASSET_GEOMETRY, payload: {id: parentId, geometry: {
       type: 'LineString', coordinates: poleXYs.toJS()}}})
   })
-}

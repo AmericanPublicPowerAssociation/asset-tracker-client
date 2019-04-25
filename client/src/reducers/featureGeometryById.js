@@ -9,14 +9,15 @@ const initialState = FEATURE_GEOMETRY_BY_ID
 
 const featureGeometryById = (state=initialState, action) => {
   const actionType = action.type
+  const actionPayload = action.payload
 
   if (UPDATE_ASSET_LOCATION === actionType) {
-    const {id, longitude, latitude} = action.payload
+    const {id, longitude, latitude} = actionPayload
     return state.merge({
       [id]: fromJS({type: 'Point', coordinates: [longitude, latitude]}),
     })
   } else if (UPDATE_ASSET_GEOMETRY === actionType) {
-    const {id, geometry} = action.payload
+    const {id, geometry} = actionPayload
     return state.merge({
       [id]: fromJS(geometry),
     })
