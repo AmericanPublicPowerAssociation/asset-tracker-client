@@ -11,6 +11,7 @@ import focusingAssetId from './focusingAssetId'
 import relatingAssetId from './relatingAssetId'
 import relatingAssetKey from './relatingAssetKey'
 import locatingAssetId from './locatingAssetId'
+import mapViewport from './mapViewport'
 
 export default combineReducers({
   assetById,
@@ -25,4 +26,5 @@ export default combineReducers({
   relatingAssetId,
   relatingAssetKey,
   locatingAssetId,
+  mapViewport,
 })

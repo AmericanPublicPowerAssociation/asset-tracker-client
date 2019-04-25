@@ -4,16 +4,23 @@ import AssetMapMarker from './AssetMapMarker'
 
 class AssetMap extends PureComponent {
   state = {
+    /*
     longitude: -79.62399908012085,
     latitude: 36.1931536309396,
     zoom: 13,
+    */
     pitch: 0,
     bearing: 0,
   }
 
   onViewportChange = viewport => {
+    console.log(viewport)
     const {longitude, latitude, zoom, pitch, bearing} = viewport
-    this.setState({longitude, latitude, zoom, pitch, bearing})
+    const {
+      setMapViewport,
+    } = this.props
+    // this.setState({pitch, bearing})
+    setMapViewport({longitude, latitude, zoom})
   }
 
   onClick = event => {
@@ -45,6 +52,7 @@ class AssetMap extends PureComponent {
   render () {
     const {
       mapStyle,
+      mapViewport,
       interactiveLayerIds,
       focusingAssetId,
       focusingAssetLocation,
@@ -53,12 +61,20 @@ class AssetMap extends PureComponent {
       updateAssetLocation,
     } = this.props
     const {
+      /*
       longitude,
       latitude,
       zoom,
+      */
       pitch,
       bearing,
     } = this.state
+    const {
+      longitude,
+      latitude,
+      zoom,
+    } = mapViewport
+    console.log(mapViewport.toJS())
     return (
       <ReactMapGL
         width='100%'

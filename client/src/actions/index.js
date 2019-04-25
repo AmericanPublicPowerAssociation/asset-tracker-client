@@ -12,6 +12,7 @@ import {
   SET_FOCUSING_ASSET,
   SET_RELATING_ASSET,
   SET_LOCATING_ASSET,
+  SET_MAP_VIEWPORT,
 } from '../constants'
 
 export const addAsset = payload => ({
@@ -67,3 +68,6 @@ export const setRelatingAsset = payload => ({
   type: SET_RELATING_ASSET, payload})
 export const setLocatingAsset = payload => ({
   type: SET_LOCATING_ASSET, payload})
+
+export const setMapViewport = payload => ({
+  type: SET_MAP_VIEWPORT, payload})

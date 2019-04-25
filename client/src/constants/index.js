@@ -25,6 +25,7 @@ export const SET_SELECTED_ASSETS = 'SET_SELECTED_ASSETS'
 export const SET_FOCUSING_ASSET = 'SET_FOCUSING_ASSET'
 export const SET_RELATING_ASSET = 'SET_RELATING_ASSET'
 export const SET_LOCATING_ASSET = 'SET_LOCATING_ASSET'
+export const SET_MAP_VIEWPORT = 'SET_MAP_VIEWPORT'
 
 export const ASSET_TYPE_BY_ID = {
   p: {
@@ -172,6 +173,13 @@ export const FEATURE_GEOMETRY_BY_ID = fromJS(
 export const FEATURE_COLOR_ATTRIBUTE = 'typeId'
 export const FEATURE_SIZE_ATTRIBUTE = 'KV'
 export const MAP_STYLE = fromJS(mapStyle)
+export const MAP_VIEWPORT = fromJS({
+  longitude: -79.62399908012085,
+  latitude: 36.1931536309396,
+  zoom: 13,
+  pitch: 0,
+  bearing: 0,
+})
 export const KEY_PREFIX = 'asset-tracker-'
 export const PROPERTY_MINIMUM_VALUE = 1
 export const PROPERTY_MAXIMUM_VALUE = 9
