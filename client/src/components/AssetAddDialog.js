@@ -25,6 +25,7 @@ class AssetAddDialog extends PureComponent {
     assetTypeId: DEFAULT_ASSET_TYPE_ID,
     assetName: ASSET_TYPE_BY_ID[DEFAULT_ASSET_TYPE_ID]['name']+ ' - ' + getRandomString(7),
     vendorName: '',
+    isAssetNameEmpty : false
   }
 
   onAssetTypeChange = event => {
@@ -37,7 +38,13 @@ class AssetAddDialog extends PureComponent {
   }
 
   onAssetNameChange = event => {
-    this.setState({assetName: event.target.value})}
+    this.setState({assetName: event.target.value})
+      if (event.target.value === ""){
+        this.setState({isAssetNameEmpty : true })
+      } else {
+         this.setState({isAssetNameEmpty : false })
+      }
+  }
 
   onVendorNameChange = event => {
     this.setState({vendorName: event.target.value})}
@@ -79,7 +86,29 @@ class AssetAddDialog extends PureComponent {
 
   render() {
     const { classes, open, onClose } = this.props
-    const { assetTypeId, assetName, vendorName } = this.state
+    const { assetTypeId, assetName, vendorName, isAssetNameEmpty } = this.state
+    let assetNameField;
+    if (isAssetNameEmpty) {
+      assetNameField = <TextField
+          error
+          fullWidth
+          label='Asset Name'
+          helperText="Name should not be empty"
+          value={assetName}
+          onChange={this.onAssetNameChange}
+          className={classes.attribute}
+      />
+    } else {
+
+        assetNameField = <TextField
+            fullWidth
+            label='Asset Name'
+            value={assetName}
+            onChange={this.onAssetNameChange}
+            className={classes.attribute}
+        />
+    }
+
     return (
       <Dialog open={open} onClose={onClose}>
         <DialogTitle>Add Asset</DialogTitle>
@@ -88,19 +117,13 @@ class AssetAddDialog extends PureComponent {
 						value={assetTypeId}
 						onChange={this.onAssetTypeChange}
 					/>
+          { assetNameField }
           <TextField
-            fullWidth
-            label='Asset Name'
-            value={assetName}
-            onChange={this.onAssetNameChange}
-						className={classes.attribute}
-          />
-          <TextField 
             fullWidth 
             label='Vendor Name'
             value={vendorName}
             onChange={this.onVendorNameChange}
-						className={classes.attribute}
+			className={classes.attribute}
           />
 					{/*
           <TextField fullWidth label='Approximate Location' placeholder='z' helperText='a' />

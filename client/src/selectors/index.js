@@ -427,7 +427,7 @@ export const getRootAssetIds = createSelector([
     }
     */
     if (['s', 'S'].includes(assetTypeId)) {
-      const childIds = asset.get('childIds')
+      const childIds = asset.get('childIds', [])
       for (const childId of childIds) {
         if (childId in connectionGraph) {
           rootAssetIds.push(childId)
