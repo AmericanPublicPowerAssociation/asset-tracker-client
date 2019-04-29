@@ -47,6 +47,7 @@ class AssetCircuit extends PureComponent {
 
       addSelectedAssetType({id: assetTypeId})
       setFocusingAsset({id: assetId})
+      console.log("Asset: ", assetById.get(assetId));
     }
 
     cy.off('add remove tap')
