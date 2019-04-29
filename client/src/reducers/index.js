@@ -11,6 +11,7 @@ import focusingAssetId from './focusingAssetId'
 import relatingAssetId from './relatingAssetId'
 import relatingAssetKey from './relatingAssetKey'
 import locatingAssetId from './locatingAssetId'
+import searchTerm from './searchTerm'
 
 export default combineReducers({
   assetById,
@@ -21,6 +22,7 @@ export default combineReducers({
   selectedAssetTypeIds,
   sortedAssetIds,
   selectedAssetIds,
+  searchTerm,
   focusingAssetId,
   relatingAssetId,
   relatingAssetKey,

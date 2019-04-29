@@ -16,6 +16,7 @@ class AssetFilter extends PureComponent {
 		return (
       <FormControl>
 				<Select
+					fullWidth
 					multiple
           value={selectedAssetTypeIds.toJS()}
           onChange={event => setSelectedAssetTypes({ids: event.target.value})}
