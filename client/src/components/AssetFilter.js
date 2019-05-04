@@ -16,13 +16,16 @@ class AssetFilter extends PureComponent {
 		return (
       <FormControl>
 				<Select
+					fullWidth
 					multiple
           value={selectedAssetTypeIds.toJS()}
           onChange={event => setSelectedAssetTypes({ids: event.target.value})}
 					renderValue={selected => (
 						<div>
             {selected.map(value =>
-              <Chip key={value} label={ASSET_TYPE_BY_ID[value]['name']} />
+              <Chip key={value} label={ASSET_TYPE_BY_ID[value]['name']} 
+								style={{ marginLeft: '4px' }}
+							/>
             )}
 						</div>
 					)}

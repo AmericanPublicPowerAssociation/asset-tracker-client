@@ -7,6 +7,7 @@ import {
   TOGGLE_ASSET_RELATION,
   ADD_SELECTED_ASSET_TYPE,
   TOGGLE_SELECTED_ASSET_TYPE,
+  SET_SEARCH_TERM,
   SET_SELECTED_ASSET_TYPES,
   SET_SELECTED_ASSETS,
   SET_FOCUSING_ASSET,
@@ -67,3 +68,5 @@ export const setRelatingAsset = payload => ({
   type: SET_RELATING_ASSET, payload})
 export const setLocatingAsset = payload => ({
   type: SET_LOCATING_ASSET, payload})
+export const setSearchTerm = payload => ({
+  type: SET_SEARCH_TERM, payload})
