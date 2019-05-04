@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import {
+  setMapViewport,
   setFocusingAsset,
   setSelectedAssets,
   updateAssetLocation,
@@ -14,6 +15,7 @@ import {
 
 const mapStateToProps = state => ({
   mapStyle: getMapStyle(state),
+  mapViewport: state.mapViewport,
   interactiveLayerIds: getInteractiveLayerIds(state),
   focusingAssetId: state.focusingAssetId,
   focusingAssetLocation: getFocusingAssetLocation(state),
@@ -22,6 +24,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  setMapViewport: payload => {dispatch(
+    setMapViewport(payload))},
   setFocusingAsset: payload => {dispatch(
     setFocusingAsset(payload))},
   setSelectedAssets: payload => {dispatch(

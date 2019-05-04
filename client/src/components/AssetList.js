@@ -1,4 +1,5 @@
 import React, { PureComponent, Fragment } from 'react'
+import { findDOMNode }  from 'react-dom'
 import { withStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -14,6 +15,17 @@ const styles = theme => ({
 })
 
 class AssetList extends PureComponent {
+  setScrollPositionAsset(assetId) {
+    if (assetId) {
+      findDOMNode(this.refs[assetId]).focus()
+    }
+  }
+
+  componentDidUpdate() {
+    const {focusingAssetId} = this.props
+    this.setScrollPositionAsset(focusingAssetId)
+  }
+
   render() {
     const {
       classes,
@@ -52,6 +64,7 @@ class AssetList extends PureComponent {
                 editingAssetId === visibleAssetId &&
                 classes.relating) || ''}
               key={visibleAssetId}
+              ref={visibleAssetId}
             >
               <ListItemText primary={visibleAssetName} />
               {

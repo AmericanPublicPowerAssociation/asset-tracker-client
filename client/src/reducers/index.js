@@ -12,6 +12,7 @@ import relatingAssetId from './relatingAssetId'
 import relatingAssetKey from './relatingAssetKey'
 import locatingAssetId from './locatingAssetId'
 import searchTerm from './searchTerm'
+import mapViewport from './mapViewport'
 
 export default combineReducers({
   assetById,
@@ -27,4 +28,5 @@ export default combineReducers({
   relatingAssetId,
   relatingAssetKey,
   locatingAssetId,
+  mapViewport,
 })

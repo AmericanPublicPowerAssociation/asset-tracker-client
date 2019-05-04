@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
 import ReactMapGL, { NavigationControl } from 'react-map-gl'
-import { Map } from 'immutable'
 import AssetMapMarker from './AssetMapMarker'
 import AssetMapToggleView from './AssetMapToggleView'
 import { STREETS_MAP_STYLE, SATELLITE_STREETS_MAP_STYLE } from '../constants/index'
@@ -8,16 +7,23 @@ import { STREETS_MAP_STYLE, SATELLITE_STREETS_MAP_STYLE } from '../constants/ind
 class AssetMap extends PureComponent {
   state = {
     withSatelliteImagery: false,  
+    /*
     longitude: -79.62399908012085,
     latitude: 36.1931536309396,
     zoom: 13,
+    */
     pitch: 0,
     bearing: 0,
   }
 
   onViewportChange = viewport => {
+    console.log(viewport)
     const {longitude, latitude, zoom, pitch, bearing} = viewport
-    this.setState({longitude, latitude, zoom, pitch, bearing})
+    const {
+      setMapViewport,
+    } = this.props
+    this.setState({pitch, bearing})
+    setMapViewport({longitude, latitude, zoom})
   }
 
   onClick = event => {
@@ -53,6 +59,7 @@ class AssetMap extends PureComponent {
   render () {
     const {
       mapStyle,
+      mapViewport,
       interactiveLayerIds,
       focusingAssetId,
       focusingAssetLocation,
@@ -61,9 +68,11 @@ class AssetMap extends PureComponent {
       updateAssetLocation,
     } = this.props
     const {
+      /*
       longitude,
       latitude,
       zoom,
+      */
       pitch,
       bearing,
       withSatelliteImagery,
@@ -71,6 +80,12 @@ class AssetMap extends PureComponent {
     const baseMapStyle = withSatelliteImagery ? SATELLITE_STREETS_MAP_STYLE : STREETS_MAP_STYLE
 
     console.log(this.state.withSatelliteImagery)
+    const {
+      longitude,
+      latitude,
+      zoom,
+    } = mapViewport
+    console.log(mapViewport.toJS())
     return (
       <ReactMapGL
         width='100%'
