@@ -1,4 +1,0 @@
-include README.md package.json requirements.txt
-recursive-include src *.js *.css
-recursive-include asset_tracker *.py *json
-graft experiments
