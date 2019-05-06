@@ -1,25 +1,42 @@
 import React, { PureComponent } from 'react'
+import { AgGridReact } from "ag-grid-react";
+
+import "ag-grid-community/dist/styles/ag-grid.css";
+import "ag-grid-community/dist/styles/ag-theme-material.css";
+
 import { withStyles } from '@material-ui/core/styles'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import TableCell from '@material-ui/core/TableCell'
+// import Table from '@material-ui/core/Table'
+// import TableBody from '@material-ui/core/TableBody'
+// import TableHead from '@material-ui/core/TableHead'
+// import TableRow from '@material-ui/core/TableRow'
+// import TableCell from '@material-ui/core/TableCell'
 import { ASSET_TYPE_BY_ID } from '../constants'
 
 const styles = () => ({
-	root: {
+  root: {
     height: '100%',
-	},
+  },
   hover: {
     cursor: 'pointer',
   },
 })
 
 class TableWindow extends PureComponent {
+  // componentDidMount() {
+  //   const { loadData } = this.props
+  //   loadData()
+  // }
+  onGridReady(params) {
+    this.gridAPI = params.api;
+    this.gridAPI.sizeColumnsToFit();
+    window.addEventListener("resize", () => this.gridAPI.sizeColumnsToFit());
+  }
   render() {
+    const columns = [
+      { headerName: "Asset Name", field: "name" },
+      { headerName: "Asset Type", field: "typeId" }
+    ];
     const {
-      classes,
       // Get local variables
       onSelect,
       // Get global variables
@@ -27,47 +44,30 @@ class TableWindow extends PureComponent {
       focusingAssetId,
       setFocusingAsset,
     } = this.props
+
     return (
-      <div className={classes.root}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Asset Name</TableCell>
-              <TableCell align='right'>Asset Type</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-          {visibleAssets.map(asset => {
-            const assetId = asset.get('id')
-            const assetName = asset.get('name')
-            const assetTypeId = asset.get('typeId')
-            return (
-              <TableRow
-                hover
-                selected={assetId === focusingAssetId}
-                classes={{
-                  hover: classes.hover,
-                }}
-                onClick={() => {
-                  setFocusingAsset({id: assetId})
-                  onSelect()
-                }}
-                key={assetId}
-              >
-                <TableCell component='th' scope='row'>
-                  {assetName}
-                </TableCell>
-                <TableCell align='right'>
-                  {ASSET_TYPE_BY_ID[assetTypeId].name}
-                </TableCell>
-              </TableRow>
-            )
-          })}
-          </TableBody>
-        </Table>
+      <div
+        // specify grid theme
+        className="ag-theme-material"
+        style={
+          {
+            // grid dimensions
+            height: "100rem",
+            padding: '30px',
+          }
+        } >
+        {/* <Button bsStyle='primary' onClick={(e) =>
+          this.gridAPI.exportDataAsCsv()
+        } >Download</Button> */}
+
+        < AgGridReact
+          defaultColDef={{ filter: true, sortable: true }}
+          columnDefs={columns}
+          onGridReady={this.onGridReady.bind(this)}
+          rowData={visibleAssets.toJS()} />
       </div>
-    )
+    );
   }
 }
 
-export default withStyles(styles)(TableWindow)
+export default withStyles(styles)(TableWindow);

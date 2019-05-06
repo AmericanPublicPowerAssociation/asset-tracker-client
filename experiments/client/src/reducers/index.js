@@ -10,6 +10,8 @@ import focusingAssetId from './focusingAssetId'
 import relatingAssetId from './relatingAssetId'
 import relatingAssetKey from './relatingAssetKey'
 import locatingAssetId from './locatingAssetId'
+import searchTerm from './searchTerm'
+import mapViewport from './mapViewport'
 
 const horizontalReducer = combineReducers({
   assetById,
@@ -20,10 +22,12 @@ const horizontalReducer = combineReducers({
   selectedAssetTypeIds,
   sortedAssetIds,
   selectedAssetIds,
+  searchTerm,
   focusingAssetId,
   relatingAssetId,
   relatingAssetKey,
   locatingAssetId,
+  mapViewport,
 })
 
 const verticalReducer = (state, action) => {

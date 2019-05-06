@@ -5,7 +5,6 @@ import {
   ASSET_TYPE_BY_ID,
   MAXIMUM_LIST_LENGTH,
   KEY_PREFIX,
-  MAP_STYLE,
   // PROPERTY_MINIMUM_VALUE,
   // PROPERTY_MAXIMUM_VALUE,
 } from '../constants'
@@ -25,6 +24,7 @@ const getRelatingAssetKey = state => state.relatingAssetKey
 const getFeatureGeometryById = state => state.featureGeometryById
 const getFeatureColorAttribute = state => state.featureColorAttribute
 const getFeatureSizeAttribute = state => state.featureSizeAttribute
+const getSearchTerm = state => state.searchTerm
 
 export const getFocusingAsset = createSelector(
   [getAssetById, getFocusingAssetId],
@@ -51,15 +51,21 @@ export const getVisibleAssets = createSelector([
   getSortedAssetIds,
   getSelectedAssetTypeIds,
   getAssetById,
+  getSearchTerm,
 ], (
   selectedAssetIds,
   sortedAssetIds,
   selectedAssetTypeIds,
   assetById,
-) => (selectedAssetIds.isEmpty() ? sortedAssetIds : selectedAssetIds)
+  searchTerm,
+) => {
+  console.log(searchTerm)
+  return (selectedAssetIds.isEmpty() ? sortedAssetIds : selectedAssetIds)
   .map(assetId => assetById.get(assetId))
   .filter(asset => selectedAssetTypeIds.includes(asset.get('typeId')))
-  .slice(0, MAXIMUM_LIST_LENGTH))
+  .filter(asset => asset.get('name').includes(searchTerm))
+  .slice(0, MAXIMUM_LIST_LENGTH)
+})
 
 export const getFocusingAssetLocation = createSelector(
   [getAssetLocationById, getFocusingAssetId, getParentIds, getChildIds],
@@ -358,7 +364,7 @@ export const getMapStyle = createSelector([
 ], (
   mapSources,
   mapLayers,
-) => MAP_STYLE.mergeDeep({sources: mapSources, layers: mapLayers}))
+) => ({sources: mapSources, layers: mapLayers}))
 
 export const getInteractiveLayerIds = createSelector([
   getMapLayers,
@@ -427,7 +433,7 @@ export const getRootAssetIds = createSelector([
     }
     */
     if (['s', 'S'].includes(assetTypeId)) {
-      const childIds = asset.get('childIds')
+      const childIds = asset.get('childIds', [])
       for (const childId of childIds) {
         if (childId in connectionGraph) {
           rootAssetIds.push(childId)
