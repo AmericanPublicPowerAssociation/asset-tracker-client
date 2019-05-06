@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import classNames from 'classnames'
 import {
   MuiThemeProvider,
@@ -24,6 +24,7 @@ import ReportsWindow from './ReportsWindow'
 import AlertsWindow from './AlertsWindow'
 import BookmarksWindow from './BookmarksWindow'
 import SettingsWindow from './SettingsWindow'
+import NotFoundWindow from './NotFoundWindow'
 
 
 const styles = theme => ({
@@ -121,30 +122,25 @@ class App extends Component {
           })}
         >
           <Paper className={classes.paper}>
-            <Route exact path='/' render={() => (
-              <DashboardsWindow />
-            )} />
-            <Route exact path='/tables' render={() => (
-              <TablesWindow />
-            )} />
-            <Route exact path='/maps' render={() => (
-              <MapsWindow />
-            )} />
-            <Route exact path='/circuits' render={() => (
-              <CircuitsWindow />
-            )} />
-            <Route exact path='/reports' render={() => (
-              <ReportsWindow />
-            )} />
-            <Route exact path='/alerts' render={() => (
-              <AlertsWindow />
-            )} />
-            <Route exact path='/bookmarks' render={() => (
-              <BookmarksWindow />
-            )} />
-            <Route exact path='/settings' render={() => (
-              <SettingsWindow />
-            )} />
+            <Switch>
+              <Route exact path='/' render={() => (
+                <DashboardsWindow />
+              )} />
+              <Route exact path='/tables' render={() => (
+                <TablesWindow />
+              )} />
+              <Route exact path='/maps' render={() => (
+                <MapsWindow />
+              )} />
+              <Route exact path='/circuits' render={() => (
+                <CircuitsWindow />
+              )} />
+              <Route exact path='/reports' component={ReportsWindow} />
+              <Route exact path='/alerts' component={AlertsWindow} />
+              <Route exact path='/bookmarks' component={BookmarksWindow} />
+              <Route exact path='/settings' component={SettingsWindow} />
+              <Route component={NotFoundWindow} />
+            </Switch>
           </Paper>
         </main>
         <NavigationDrawer
