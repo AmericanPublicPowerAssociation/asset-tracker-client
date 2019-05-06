@@ -3,7 +3,6 @@ import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
-import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import MenuIcon from '@material-ui/icons/Menu'
 import AddIcon from '@material-ui/icons/Add'
@@ -24,39 +23,6 @@ const styles = theme => ({
   grow: {
     flexGrow: 1,
   },
-  appBar: {
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarTransition: {
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  appBarWithInformation: {
-    width: `calc(100% - ${INFORMATION_DRAWER_WIDTH}px)`,
-    marginRight: INFORMATION_DRAWER_WIDTH,
-    [theme.breakpoints.down('md')]: {
-      width: `calc(100% - 256px)`,
-      marginRight: 256,
-    },
-  },
-  /*
-  appBarWithFilterList: {
-    width: `calc(100% - ${FILTER_LIST_DRAWER_WIDTH}px)`,
-    marginRight: FILTER_LIST_DRAWER_WIDTH,
-    [theme.breakpoints.down('md')]: {
-      width: `calc(100% - 256px)`,
-      marginRight: 256,
-    },
-  },
-  */
-  menuButton: {
-    marginRight: 16,
-  },
 })
 
 class ApplicationBar extends PureComponent {
@@ -65,12 +31,9 @@ class ApplicationBar extends PureComponent {
       classes,
       // Get local variables
       // isDark,
-      isInformationDrawerOpen,
-      // isFilterListDrawerOpen,
       onMenuIconClick,
       onAddIconClick,
       // onThemeIconClick,
-      // onFilterIconClick,
       // Get global variables
       selectedAssetIds,
       focusingAssetId,
@@ -82,7 +45,6 @@ class ApplicationBar extends PureComponent {
       setFocusingAsset,
     } = this.props
     const isRightDrawerOpen = isInformationDrawerOpen
-      // || isFilterListDrawerOpen
     const locatingAssetId = locatingAsset.get('id')
     const relatingAssetId = relatingAsset.get('id')
     const editingAssetId = locatingAssetId || relatingAssetId
@@ -105,33 +67,18 @@ class ApplicationBar extends PureComponent {
         'Asset Tracker'
     return (
       <AppBar
-        position='fixed'
         color={selectedAssetCount ? 'primary' :
           editingAssetId ? 'secondary' : 'default'}
-        className={classNames(classes.appBar, {
-          [classes.appBarTransition]: isRightDrawerOpen,
-          [classes.appBarWithInformation]: isInformationDrawerOpen,
-          // [classes.appBarWithFilterList]: isFilterListDrawerOpen,
-        })}
       >
         <Toolbar>
-          <Tooltip title='Open Navigation' enterDelay={TOOLTIP_DELAY}>
-              <IconButton aria-label='Open Navigation'
-                className={classes.menuButton}
-                onClick={onMenuIconClick}
-              >
-                <Badge badgeContent={vulnerableAssets.length ? vulnerableAssets.length : ''} color='error'>
-                  <MenuIcon />
-                </Badge>
-              </IconButton>
-          </Tooltip>
 
-          <Typography
-            variant='h6'
-            color='inherit'
-            className={classes.grow}
-            noWrap
-          >{applicationTitle}</Typography>
+          <Tooltip title='Open Navigation' enterDelay={TOOLTIP_DELAY}>
+            <IconButton >
+              <Badge badgeContent={vulnerableAssets.length ? vulnerableAssets.length : ''} color='error'>
+                <MenuIcon />
+              </Badge>
+            </IconButton>
+          </Tooltip>
 
         {withReturnIcon &&
           <Tooltip title='Return to Asset' enterDelay={TOOLTIP_DELAY}>
@@ -174,5 +121,3 @@ class ApplicationBar extends PureComponent {
     )
   }
 }
-
-export default withStyles(styles)(ApplicationBar)

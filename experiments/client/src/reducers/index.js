@@ -1,5 +1,3 @@
-import { combineReducers } from 'redux'
-import reduceReducers from 'reduce-reducers'
 import assetById from './assetById'
 import assetLocationById from './assetLocationById'
 import featureGeometryById from './featureGeometryById'
@@ -34,7 +32,3 @@ const verticalReducer = (state, action) => {
 
   return state
 }
-
-export default reduceReducers(
-  horizontalReducer,
-  verticalReducer)
