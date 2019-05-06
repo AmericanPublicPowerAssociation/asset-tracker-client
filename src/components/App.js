@@ -16,6 +16,14 @@ import {
   NAVIGATION_DRAWER_WIDTH,
   RIGHT_DRAWER_MINIMUM_WIDTH,
 } from '../constants'
+import DashboardsWindow from './DashboardsWindow'
+import TablesWindow from './TablesWindow'
+import MapsWindow from './MapsWindow'
+import CircuitsWindow from './CircuitsWindow'
+import ReportsWindow from './ReportsWindow'
+import AlertsWindow from './AlertsWindow'
+import BookmarksWindow from './BookmarksWindow'
+import SettingsWindow from './SettingsWindow'
 
 
 const styles = theme => ({
@@ -114,28 +122,28 @@ class App extends Component {
         >
           <Paper className={classes.paper}>
             <Route exact path='/' render={() => (
-              'Dashboard'
+              <DashboardsWindow />
             )} />
             <Route exact path='/tables' render={() => (
-              'Tables'
+              <TablesWindow />
             )} />
             <Route exact path='/maps' render={() => (
-              'Maps'
+              <MapsWindow />
             )} />
             <Route exact path='/circuits' render={() => (
-              'Circuits'
+              <CircuitsWindow />
             )} />
             <Route exact path='/reports' render={() => (
-              'Reports'
+              <ReportsWindow />
             )} />
             <Route exact path='/alerts' render={() => (
-              'Alerts'
+              <AlertsWindow />
             )} />
             <Route exact path='/bookmarks' render={() => (
-              'Bookmarks'
+              <BookmarksWindow />
             )} />
             <Route exact path='/settings' render={() => (
-              'Settings'
+              <SettingsWindow />
             )} />
           </Paper>
         </main>

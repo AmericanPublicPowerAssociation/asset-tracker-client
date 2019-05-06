@@ -30,7 +30,6 @@ class ApplicationBar extends PureComponent {
     const {
       classes,
       // Get local variables
-      // isDark,
       onMenuIconClick,
       onAddIconClick,
       // onThemeIconClick,
