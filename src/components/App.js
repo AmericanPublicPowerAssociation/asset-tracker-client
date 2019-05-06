@@ -45,6 +45,19 @@ const styles = theme => ({
       marginRight: RIGHT_DRAWER_MINIMUM_WIDTH,
     },
   },
+  paper: {
+    height: `calc(100vh - 56px - ${CONTENT_PADDING * 2}px)`,
+    [theme.breakpoints.down('xs')]: {
+      height: `calc(100vh - 56px)`,
+    },
+    [`${theme.breakpoints.up('xs')} and (orientation: landscape)`]: {
+      height: `calc(100vh - 48px)`,
+    },
+    [theme.breakpoints.up('sm')]: {
+      height: `calc(100vh - 64px - ${CONTENT_PADDING * 2}px)`,
+    },
+    overflow: 'auto',
+  },
 })
 const theme = {typography: {useNextVariants: true}}
 const morningTheme = createMuiTheme(theme)
@@ -99,7 +112,7 @@ class App extends Component {
             [classes.mainWithInformation]: isInformationDrawerOpen,
           })}
         >
-          <Paper>
+          <Paper className={classes.paper}>
             <Route exact path='/' render={() => (
               'Dashboard'
             )} />
@@ -117,6 +130,9 @@ class App extends Component {
             )} />
             <Route exact path='/alerts' render={() => (
               'Alerts'
+            )} />
+            <Route exact path='/bookmarks' render={() => (
+              'Bookmarks'
             )} />
             <Route exact path='/settings' render={() => (
               'Settings'
