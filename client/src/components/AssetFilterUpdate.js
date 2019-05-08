@@ -25,6 +25,7 @@ const styles = {
 class AssetFilterUpdate extends PureComponent {
   state = {
     isFilterListVisible: false,
+    isAssetTypeCheckboxesHidden: true,
   }
   render() {
     const { classes } = this.props;
@@ -40,6 +41,16 @@ class AssetFilterUpdate extends PureComponent {
             <IconButton 
               className={classes.iconButton}
               aria-label="Menu"
+              onClick={() => {
+                console.log('Iconbutton clicked')
+                if (this.state.isAssetTypeCheckboxesHidden) {
+                  this.setState({isAssetTypeCheckboxesHidden: false})
+                  console.log('ishidden = false')
+                } else {
+                  this.setState({isAssetTypeCheckboxesHidden: true})
+                  console.log('ishidden = true')
+                }
+              }}
               >
               <MenuIcon />
             </IconButton>
@@ -58,6 +69,9 @@ class AssetFilterUpdate extends PureComponent {
               <SearchIcon />
             </IconButton>
           </div>
+          {!this.state.isAssetTypeCheckboxesHidden && <AssetTypeCheckboxes 
+            selectedAssetTypeIds={selectedAssetTypeIds}
+            onAssetTypeClick={onAssetTypeClick} />}
           {/* <AssetTypeCheckboxes 
             selectedAssetTypeIds={selectedAssetTypeIds}
             onAssetTypeClick={onAssetTypeClick} /> */}
