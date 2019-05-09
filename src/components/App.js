@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Paper from '@material-ui/core/Paper'
+import { appaAuthClient } from 'appa-auth-client'
 import ApplicationBar from './ApplicationBar'
 import NavigationDrawer from './NavigationDrawer'
 import {
@@ -16,6 +17,7 @@ import {
   NAVIGATION_DRAWER_WIDTH,
   RIGHT_DRAWER_MINIMUM_WIDTH,
 } from '../constants'
+import ProtectedRoute from './ProtectedRoute'
 import DashboardsWindow from './DashboardsWindow'
 import TablesWindow from './TablesWindow'
 import MapsWindow from './MapsWindow'
@@ -75,10 +77,20 @@ const eveningTheme = createMuiTheme({...theme, palette: {type: 'dark'}})
 
 class App extends Component {
   state = {
+    isAuthenticated: false,
     isNavigationDrawerOpen: true,
     isInformationDrawerOpen: false,
     withMorningTheme: true,
   }
+
+  signIn = () => {
+    appaAuthClient.signIn(() => {
+      this.setState({isAuthenticated: true})
+    })}
+  signOut = () => {
+    appaAuthClient.signOut(() => {
+      this.setState({isAuthenticated: false})
+    })}
 
   openNavigationDrawer = () => {
     this.setState({
@@ -99,6 +111,7 @@ class App extends Component {
   render() {
     const { classes } = this.props
     const {
+      isAuthenticated,
       isNavigationDrawerOpen,
       isInformationDrawerOpen,
       withMorningTheme,
@@ -106,7 +119,7 @@ class App extends Component {
     const muiTheme = withMorningTheme ? morningTheme : eveningTheme
     const isDrawerOpen = isNavigationDrawerOpen || isInformationDrawerOpen
     return (
-      <MuiThemeProvider theme={muiTheme} className={classes.root}>
+      <MuiThemeProvider theme={muiTheme}>
         <CssBaseline />
         <ApplicationBar
           isNavigationDrawerOpen={isNavigationDrawerOpen}
@@ -123,22 +136,30 @@ class App extends Component {
         >
           <Paper className={classes.paper}>
             <Switch>
-              <Route exact path='/' render={() => (
+              <ProtectedRoute exact path='/' render={() => (
                 <DashboardsWindow />
               )} />
-              <Route exact path='/tables' render={() => (
+              <ProtectedRoute exact path='/tables' render={() => (
                 <TablesWindow />
               )} />
-              <Route exact path='/maps' render={() => (
+              <ProtectedRoute exact path='/maps' render={() => (
                 <MapsWindow />
               )} />
-              <Route exact path='/circuits' render={() => (
+              <ProtectedRoute exact path='/circuits' render={() => (
                 <CircuitsWindow />
               )} />
-              <Route exact path='/reports' component={ReportsWindow} />
-              <Route exact path='/alerts' component={AlertsWindow} />
-              <Route exact path='/bookmarks' component={BookmarksWindow} />
-              <Route exact path='/settings' component={SettingsWindow} />
+              <ProtectedRoute exact path='/reports' render={() => (
+                <ReportsWindow />
+              )} />
+              <ProtectedRoute exact path='/alerts' render={() => (
+                <AlertsWindow />
+              )} />
+              <ProtectedRoute exact path='/bookmarks' render={() => (
+                <BookmarksWindow />
+              )} />
+              <ProtectedRoute exact path='/settings' render={() => (
+                <SettingsWindow />
+              )} />
               <Route component={NotFoundWindow} />
             </Switch>
           </Paper>
@@ -147,7 +168,10 @@ class App extends Component {
           variant='persistent'
           anchor='left'
           open={isNavigationDrawerOpen}
+          isAuthenticated={isAuthenticated}
           closeNavigationDrawer={this.closeNavigationDrawer}
+          signIn={this.signIn}
+          signOut={this.signOut}
         />
       </MuiThemeProvider>
     )

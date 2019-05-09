@@ -21,11 +21,13 @@ class ListItemLink extends PureComponent {
       classes,
       to, text, icon, inset, nested,
       badgeContent, badgeColor,
+      ...etc
     } = this.props
     return (
       <ListItem button component={NavLink}
         exact to={to} activeClassName={classes.selected}
         className={nested ? classes.nested : ''}
+        {...etc}
       >
       {icon &&
         <ListItemIcon>
