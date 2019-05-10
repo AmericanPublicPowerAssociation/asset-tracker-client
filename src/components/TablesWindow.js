@@ -25,14 +25,20 @@ class TablesWindow extends PureComponent {
         <TableHead>
           <TableRow>
             <TableCell>Name</TableCell>
-            <TableCell align='right'>Type</TableCell>
+            <TableCell>Type</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
         {visibleAssets.map(asset => {
           const assetId = asset.get('id')
           const assetName = asset.get('name')
-          // const assetTypeId = asset.get('typeId')
+          const assetTypeId = asset.get('typeId')
+          const primaryType = ASSET_TYPE_BY_ID[assetTypeId[0]]
+          const secondaryType = primaryType.typeById[assetTypeId[1]]
+          const assetTypeNameParts = [primaryType.name]
+          if (secondaryType) {
+            assetTypeNameParts.push(secondaryType.name)
+          }
           return (
             <TableRow
               key={assetId}
@@ -40,10 +46,8 @@ class TablesWindow extends PureComponent {
               <TableCell component='th' scope='row'>
                 {assetName}
               </TableCell>
-              <TableCell align='right'>
-                {/*
-                {ASSET_TYPE_BY_ID[assetTypeId].name}
-                */}
+              <TableCell>
+                {assetTypeNameParts.join(' > ')}
               </TableCell>
             </TableRow>
           )
