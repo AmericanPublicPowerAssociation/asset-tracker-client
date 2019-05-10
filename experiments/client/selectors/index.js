@@ -55,7 +55,7 @@ export const getVisibleAssets = createSelector([
 ) => {
   return (selectedAssetIds.isEmpty() ? sortedAssetIds : selectedAssetIds)
   .filter(asset => selectedAssetTypeIds.includes(asset.get('typeId')))
-  .filter(asset => asset.get('name').includes(searchTerm))
+  .filter(asset => asset.get('name').toLowerCase().includes(searchTerm.toLowerCase()))
   .slice(0, MAXIMUM_LIST_LENGTH)
 })
 
@@ -199,7 +199,7 @@ export const getMapSources = createSelector(
       assetId,
     ) => {
       const asset = assetById.get(assetId)
-      const assetTypeId = asset.get('typeId')
+      const assetTypeId = asset.get('t ypeId')
       // const featureColor = {}[asset[featureColorAttribute]]
       let featureSize
 
