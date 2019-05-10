@@ -1,17 +1,3 @@
-import React, {Component} from 'react';
-
-import {library} from '@fortawesome/fontawesome-svg-core'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faSearch} from '@fortawesome/free-solid-svg-icons'
-
-import {Row, ControlLabel, Col, Panel, FormControl, Checkbox, FormGroup} from 'react-bootstrap';
-
-import '../css/SearchBar.css';
-
-
-library.add(faSearch)
-
-
 class SearchQuery extends Component {
   /*
    * query: String => current state of search input box

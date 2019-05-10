@@ -1,17 +1,3 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
-import {LinkContainer} from 'react-router-bootstrap';
-import {Button, Nav, Navbar, NavItem} from 'react-bootstrap';
-
-
-const Navigation = (props) => {
-  const {editMode} = props;
-  const preventDefault = (e) => {
-    if (editMode) {
-      e.preventDefault()
-    }
-  };
-
   return (
       <Navbar className={editMode ? 'editing': '' } fixedTop collapseOnSelect>
         <Navbar.Header>
@@ -53,7 +39,3 @@ const Navigation = (props) => {
         </Navbar.Collapse>
       </Navbar>
   );
-}
-
-
-export default Navigation;

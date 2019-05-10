@@ -19,7 +19,7 @@ import {
 } from '../constants'
 import ProtectedRoute from './ProtectedRoute'
 import DashboardsWindow from './DashboardsWindow'
-import TablesWindow from './TablesWindow'
+import TablesWindowContainer from '../containers/TablesWindowContainer'
 import MapsWindow from './MapsWindow'
 import CircuitsWindow from './CircuitsWindow'
 import ReportsWindow from './ReportsWindow'
@@ -140,7 +140,7 @@ class App extends Component {
                 <DashboardsWindow />
               )} />
               <ProtectedRoute exact path='/tables' render={() => (
-                <TablesWindow />
+                <TablesWindowContainer />
               )} />
               <ProtectedRoute exact path='/maps' render={() => (
                 <MapsWindow />

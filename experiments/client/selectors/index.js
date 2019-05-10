@@ -1,4 +1,3 @@
-import { createSelector } from 'reselect'
 import { fromJS, Map, List } from 'immutable'
 import { find_path as findPath } from 'dijkstrajs'
 import {
@@ -12,9 +11,7 @@ import {
   // normalizeNumber,
 } from '../macros'
 
-const getAssetById = state => state.assetById
 const getAssetLocationById = state => state.assetLocationById
-const getSortedAssetIds = state => state.sortedAssetIds
 const getSelectedAssetTypeIds = state => state.selectedAssetTypeIds
 const getSelectedAssetIds = state => state.selectedAssetIds
 const getFocusingAssetId = state => state.focusingAssetId
@@ -48,20 +45,15 @@ export const getChildAssets = createSelector(
 
 export const getVisibleAssets = createSelector([
   getSelectedAssetIds,
-  getSortedAssetIds,
   getSelectedAssetTypeIds,
   getAssetById,
   getSearchTerm,
 ], (
   selectedAssetIds,
-  sortedAssetIds,
   selectedAssetTypeIds,
-  assetById,
   searchTerm,
 ) => {
-  console.log(searchTerm)
   return (selectedAssetIds.isEmpty() ? sortedAssetIds : selectedAssetIds)
-  .map(assetId => assetById.get(assetId))
   .filter(asset => selectedAssetTypeIds.includes(asset.get('typeId')))
   .filter(asset => asset.get('name').includes(searchTerm))
   .slice(0, MAXIMUM_LIST_LENGTH)
