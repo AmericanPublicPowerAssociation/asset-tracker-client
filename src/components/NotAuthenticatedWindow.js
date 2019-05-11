@@ -36,7 +36,7 @@ class NotAuthenticatedWindow extends PureComponent {
               Asset Tracker is a service provided by the <a href='https://www.publicpower.org' target='_blank' rel='noopener noreferrer'>American Public Power Association</a> to help utilities extend the lifetime of their assets and provide reliable power to their customers.  
             </Typography>
             <Typography align='justify' paragraph>
-              Please sign in using the link in the navigation bar at the left.
+              Please sign in using the navigation bar at the left.
             </Typography>
           </Grid>
           <Grid item className={classes.hideIfSmall}>

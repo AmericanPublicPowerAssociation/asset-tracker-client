@@ -15,8 +15,8 @@ import TablesIcon from '@material-ui/icons/ListAlt'
 import MapsIcon from '@material-ui/icons/Map'
 import CircuitsIcon from '@material-ui/icons/SettingsInputComponent'
 import ReportsIcon from '@material-ui/icons/Assessment'
-import AlertsIcon from '@material-ui/icons/Notifications'
-import BookmarksIcon from '@material-ui/icons/Bookmarks'
+// import AlertsIcon from '@material-ui/icons/Notifications'
+// import BookmarksIcon from '@material-ui/icons/Bookmarks'
 import SettingsIcon from '@material-ui/icons/Settings'
 import ListItemLink from './ListItemLink'
 import { NAVIGATION_DRAWER_WIDTH } from '../constants'
@@ -66,11 +66,10 @@ class NavigationDrawer extends PureComponent {
             <ListItemLink to='/maps' text='Maps' icon={<MapsIcon />} />
             <ListItemLink to='/circuits' text='Circuits' icon={<CircuitsIcon />} />
             <ListItemLink to='/reports' text='Reports' icon={<ReportsIcon />} />
-            <ListItemLink to='/alerts' text='Alerts' icon={<AlertsIcon />}
-              // badgeContent={3}
-              // badgeColor='error'
-            />
+            {/*
+            <ListItemLink to='/alerts' text='Alerts' icon={<AlertsIcon />} />
             <ListItemLink to='/bookmarks' text='Bookmarks' icon={<BookmarksIcon />} />
+            */}
             <ListItemLink to='/settings' text='Settings' icon={<SettingsIcon />} />
             <ListItem button onClick={signOut}>
               <ListItemIcon>

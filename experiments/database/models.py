@@ -2,12 +2,10 @@ import enum
 from geoalchemy2 import Geometry
 from geoalchemy2.shape import to_shape
 from sqlalchemy import Column, ForeignKey, Table, create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.types import Enum, PickleType, String
 
 
-Base = declarative_base()
 AssetContent = Table(
     'asset_content', Base.metadata,
     Column('parent_asset_id', String, ForeignKey('asset.id')),
@@ -18,12 +16,10 @@ AssetConnection = Table(
     Column('right_asset_id', String, ForeignKey('asset.id')))
 
 
-"""
 class User(Base):
     utility_roles = [
         (utility_id, role_index),
     ]
-"""
 
 
 class UserRole(enum.IntEnum):
@@ -33,29 +29,7 @@ class UserRole(enum.IntEnum):
     Administrator = 3
 
 
-class AssetType(enum.IntEnum):
-    Station = 0
-    Substation = 1
-    PowerQuality = 2
-    Switch = 3
-    Transformer = 4
-    Meter = 5
-    Line = 6
-    Pole = 7
-    Busbar = 8
-    Control = 9
-    Miscellaneous = 10
-
-
 class Asset(Base):
-    __tablename__ = 'asset'
-    id = Column(String, primary_key=True)
-    name = Column(String)
-    description = Column(String)
-    type = Column(Enum(AssetType))
-    subtype_id = Column(String, ForeignKey('asset_subtype.id'))
-    utility_id = Column(String)
-    properties = PickleType()
     _contents = relationship(
         'Asset', secondary=AssetContent,
         primaryjoin=AssetContent.c.parent_asset_id == id,
@@ -73,9 +47,6 @@ class Asset(Base):
             geometry = kwargs.pop('geometry')
             kwargs['_geometry'] = geometry.wkt
         super(Asset, self).__init__(**kwargs)
-
-    def __repr__(self):
-        return '<Asset(id={})>'.format(self.id)
 
     @property
     def contained_assets(self):
@@ -116,13 +87,6 @@ class Asset(Base):
             self._connections.remove(asset)
         if self in asset._connections:
             asset._connections.remove(self)
-
-
-class AssetSubType(Base):
-    __tablename__ = 'asset_subtype'
-    id = Column(String, primary_key=True)
-    name = Column(String)
-    type_id = Column(Enum(AssetType))
 
 
 def configure_database(database_url):
