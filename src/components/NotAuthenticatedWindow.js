@@ -4,7 +4,6 @@ import {
 } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import YouTube from 'react-youtube'
 import { CONTENT_PADDING } from '../constants'
 
 const styles = theme => ({
@@ -40,13 +39,7 @@ class NotAuthenticatedWindow extends PureComponent {
             </Typography>
           </Grid>
           <Grid item className={classes.hideIfSmall}>
-            <YouTube videoId='45dLM3gWJ3U'
-              opts={{
-                playerVars: {
-                  loop: 1,
-                  rel: 0,
-                },
-              }} />
+            <iframe title='Asset Tracker Video Preview' width='560' height='315' frameBorder='0' src='https://www.youtube-nocookie.com/embed/45dLM3gWJ3U?rel=0'></iframe>
           </Grid>
         </Grid>
 

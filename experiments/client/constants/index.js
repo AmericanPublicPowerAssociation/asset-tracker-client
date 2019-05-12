@@ -24,8 +24,6 @@ export const SET_LOCATING_ASSET = 'SET_LOCATING_ASSET'
 export const SET_MAP_VIEWPORT = 'SET_MAP_VIEWPORT'
 
 export const SELECTED_ASSET_TYPE_IDS = fromJS(['l'])
-export const DEFAULT_ASSET_TYPE_ID = 'p'
-
 
 export const ASSET_LOCATION_BY_ID = fromJS(
   assets.filter(x => x.location).reduce(
@@ -52,4 +50,3 @@ export const CIRCUIT_DEPTH = 2
 export const CYTOSCAPE_LAYOUT = {'name': 'cose'}
 export const DEBOUNCE_THRESHOLD_IN_MILLISECONDS = 100
 
-export const TOOLTIP_DELAY = 500

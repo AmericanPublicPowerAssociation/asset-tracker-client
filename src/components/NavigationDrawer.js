@@ -39,7 +39,7 @@ class NavigationDrawer extends PureComponent {
   render() {
     const {
       classes,
-      isAuthenticated,
+      isUserAuthenticated,
       closeNavigationDrawer,
       signIn,
       signOut,
@@ -59,7 +59,7 @@ class NavigationDrawer extends PureComponent {
         </div>
         <Divider />
         <List>
-        {isAuthenticated ?
+        {isUserAuthenticated ?
           <Fragment>
             <ListItemLink to='/' text='Dashboards' icon={<DashboardsIcon />} />
             <ListItemLink to='/tables' text='Tables' icon={<TablesIcon />} />

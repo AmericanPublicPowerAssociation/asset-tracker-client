@@ -5,25 +5,14 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import MenuIcon from '@material-ui/icons/Menu'
-import AddIcon from '@material-ui/icons/Add'
 // import SunnyIcon from '@material-ui/icons/WbSunny'
 // import SunnyOutlinedIcon from '@material-ui/icons/WbSunnyOutlined'
 // import SearchIcon from '@material-ui/icons/Search'
-// import FilterListIcon from '@material-ui/icons/FilterList'
 import ReturnIcon from '@material-ui/icons/CenterFocusStrong'
-import Tooltip from '@material-ui/core/Tooltip'
 import Badge from '@material-ui/core/Badge'
 import {
-  // FILTER_LIST_DRAWER_WIDTH,
   INFORMATION_DRAWER_WIDTH,
-  TOOLTIP_DELAY,
 } from '../constants'
-
-const styles = theme => ({
-  grow: {
-    flexGrow: 1,
-  },
-})
 
 class ApplicationBar extends PureComponent {
   render() {
@@ -71,13 +60,10 @@ class ApplicationBar extends PureComponent {
       >
         <Toolbar>
 
-          <Tooltip title='Open Navigation' enterDelay={TOOLTIP_DELAY}>
             <IconButton >
               <Badge badgeContent={vulnerableAssets.length ? vulnerableAssets.length : ''} color='error'>
-                <MenuIcon />
               </Badge>
             </IconButton>
-          </Tooltip>
 
         {withReturnIcon &&
           <Tooltip title='Return to Asset' enterDelay={TOOLTIP_DELAY}>
@@ -88,12 +74,6 @@ class ApplicationBar extends PureComponent {
               }}
             ><ReturnIcon /></IconButton>
           </Tooltip>}
-
-          <Tooltip title='Add Asset' enterDelay={TOOLTIP_DELAY}>
-            <IconButton aria-label='Add Asset'
-              onClick={onAddIconClick}
-            ><AddIcon /></IconButton>
-          </Tooltip>
 
           {/*
           <Tooltip title='Toggle Brightness' enterDelay={TOOLTIP_DELAY}>

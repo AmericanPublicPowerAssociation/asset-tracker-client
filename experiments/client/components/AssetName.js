@@ -1,4 +1,3 @@
-import React, { PureComponent } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import Input from '@material-ui/core/Input'
 
@@ -8,8 +7,6 @@ const styles = {
   },
 }
 
-class AssetDetailFields extends PureComponent {
-  render() {
     const {
       classes,
       focusingAsset,
@@ -33,6 +30,3 @@ class AssetDetailFields extends PureComponent {
       />
     )
   }
-}
-
-export default withStyles(styles)(AssetDetailFields)

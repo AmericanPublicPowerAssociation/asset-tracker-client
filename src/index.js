@@ -9,16 +9,16 @@ import { Map } from 'immutable'
 import App from './components/App'
 import reduceState from './reducers'
 
+
 const initialState = Map()
-
 const enhanceStore = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-
 const store = createStore(
-  reduceState,
-  initialState,
+  reduceState, initialState,
   enhanceStore(applyMiddleware(thunk)))
 
+
 configureEnvironment()
+
 
 ReactDOM.render(
   <Provider store={store}>

@@ -9,14 +9,15 @@ import {
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Paper from '@material-ui/core/Paper'
 import { appaAuthClient } from 'appa-auth-client'
-import ApplicationBar from './ApplicationBar'
-import NavigationDrawer from './NavigationDrawer'
 import {
   CONTENT_PADDING,
   INFORMATION_DRAWER_WIDTH,
   NAVIGATION_DRAWER_WIDTH,
   RIGHT_DRAWER_MINIMUM_WIDTH,
 } from '../constants'
+import ApplicationBar from './ApplicationBar'
+import NavigationDrawer from './NavigationDrawer'
+import AssetAddDialog from './AssetAddDialog'
 import ProtectedRoute from './ProtectedRoute'
 import DashboardsWindow from './DashboardsWindow'
 import TablesWindowContainer from '../containers/TablesWindowContainer'
@@ -77,19 +78,21 @@ const eveningTheme = createMuiTheme({...theme, palette: {type: 'dark'}})
 
 class App extends Component {
   state = {
-    isAuthenticated: false,
+    isUserAuthenticated: false,
+    isUserMember: false,
     isNavigationDrawerOpen: true,
     isInformationDrawerOpen: false,
+    isAssetAddDialogOpen: false,
     withMorningTheme: true,
   }
 
   signIn = () => {
     appaAuthClient.signIn(() => {
-      this.setState({isAuthenticated: true})
-    })}
+      this.setState(appaAuthClient.getState())
+    }, ['leader'])}
   signOut = () => {
     appaAuthClient.signOut(() => {
-      this.setState({isAuthenticated: false})
+      this.setState(appaAuthClient.getState())
     })}
 
   openNavigationDrawer = () => {
@@ -108,12 +111,19 @@ class App extends Component {
     this.setState({
       isInformationDrawerOpen: false})}
 
+  openAssetAddDialog = () => {
+    this.setState({isAssetAddDialogOpen: true})}
+  closeAssetAddDialog = () => {
+    this.setState({isAssetAddDialogOpen: false})}
+
   render() {
     const { classes } = this.props
     const {
-      isAuthenticated,
+      isUserAuthenticated,
+      isUserMember,
       isNavigationDrawerOpen,
       isInformationDrawerOpen,
+      isAssetAddDialogOpen,
       withMorningTheme,
     } = this.state
     const muiTheme = withMorningTheme ? morningTheme : eveningTheme
@@ -122,9 +132,11 @@ class App extends Component {
       <MuiThemeProvider theme={muiTheme}>
         <CssBaseline />
         <ApplicationBar
+          isUserMember={isUserMember}
           isNavigationDrawerOpen={isNavigationDrawerOpen}
           isInformationDrawerOpen={isInformationDrawerOpen}
           openNavigationDrawer={this.openNavigationDrawer}
+          openAssetAddDialog={this.openAssetAddDialog}
         />
         <div className={classes.toolbar} />
         <main
@@ -168,11 +180,18 @@ class App extends Component {
           variant='persistent'
           anchor='left'
           open={isNavigationDrawerOpen}
-          isAuthenticated={isAuthenticated}
+          isUserAuthenticated={isUserAuthenticated}
           closeNavigationDrawer={this.closeNavigationDrawer}
           signIn={this.signIn}
           signOut={this.signOut}
         />
+      {isUserMember &&
+        <AssetAddDialog
+          open={isAssetAddDialogOpen}
+          onClose={this.closeAssetAddDialog}
+          onAdd={this.openInformationDrawer}
+        />
+      }
       </MuiThemeProvider>
     )
   }

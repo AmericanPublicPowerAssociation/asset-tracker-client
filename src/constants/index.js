@@ -5,6 +5,7 @@ export const RIGHT_DRAWER_MINIMUM_WIDTH = 256
 
 
 export const MAXIMUM_ASSET_LIST_LENGTH = 100
+export const TOOLTIP_DELAY = 500
 
 
 export const REPLACE_ASSETS = 'REPLACE_ASSETS'
@@ -135,3 +136,4 @@ export const ASSET_TYPE_BY_ID = {
     locatable: true,
   },
 }
+export const DEFAULT_ASSET_TYPE_ID = 'p'

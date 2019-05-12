@@ -3,13 +3,16 @@ import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
+import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
+import AddIcon from '@material-ui/icons/Add'
 import Typography from '@material-ui/core/Typography'
 import {
   INFORMATION_DRAWER_WIDTH,
   NAVIGATION_DRAWER_WIDTH,
   RIGHT_DRAWER_MINIMUM_WIDTH,
+  TOOLTIP_DELAY,
 } from '../constants'
 
 const styles = theme => ({
@@ -37,6 +40,9 @@ const styles = theme => ({
       marginRight: RIGHT_DRAWER_MINIMUM_WIDTH,
     },
   },
+  grow: {
+    flexGrow: 1,
+  },
   menuButton: {
     marginLeft: 12,
     marginRight: 20,
@@ -51,9 +57,11 @@ class ApplicationBar extends PureComponent {
     const {
       classes,
       // Get local variables
+      isUserMember,
       isNavigationDrawerOpen,
       isInformationDrawerOpen,
       openNavigationDrawer,
+      openAssetAddDialog,
       // Get global variables
     } = this.props
     const isDrawerOpen = isNavigationDrawerOpen || isInformationDrawerOpen
@@ -69,22 +77,31 @@ class ApplicationBar extends PureComponent {
         <Toolbar
           disableGutters={!isNavigationDrawerOpen}
         >
-          <IconButton
-            aria-label='Open Navigation'
-            color='inherit'
-            className={classNames(classes.menuButton, {
-              [classes.vanish]: isNavigationDrawerOpen,
-            })}
-            onClick={openNavigationDrawer}
-          >
-            <MenuIcon />
-          </IconButton>
+          <Tooltip title='Open Navigation' enterDelay={TOOLTIP_DELAY}>
+            <IconButton
+              aria-label='Open Navigation'
+              color='inherit'
+              className={classNames(classes.menuButton, {
+                [classes.vanish]: isNavigationDrawerOpen,
+              })}
+              onClick={openNavigationDrawer}
+            ><MenuIcon /></IconButton>
+          </Tooltip>
           <Typography
             variant='h6'
             color='inherit'
-            // className={classes.grow}
+            className={classes.grow}
             noWrap
           >{applicationTitle}</Typography>
+        {isUserMember &&
+          <Tooltip title='Add Asset' enterDelay={TOOLTIP_DELAY}>
+            <IconButton
+              aria-label='Add Asset'
+              color='inherit'
+              onClick={openAssetAddDialog}
+            ><AddIcon /></IconButton>
+          </Tooltip>
+        }
         </Toolbar>
       </AppBar>
     )
