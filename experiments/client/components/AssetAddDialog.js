@@ -29,8 +29,6 @@ import { getRandomString } from '../macros'
       onClose,
     } = this.props
     const {
-      assetTypeId,
-      assetName,
       vendorName,
     } = this.state
       if (assetName === ""){
@@ -40,9 +38,6 @@ import { getRandomString } from '../macros'
           const assetId = getRandomString(7)
           addSelectedAssetType({id: assetTypeId})
           addAsset({
-              id: assetId,
-              typeId: assetTypeId,
-              name: assetName,
               vendorName: vendorName,
           })
           setFocusingAsset({id: assetId})

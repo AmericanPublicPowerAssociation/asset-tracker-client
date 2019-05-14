@@ -17,7 +17,7 @@ import {
 } from '../constants'
 import ApplicationBar from './ApplicationBar'
 import NavigationDrawer from './NavigationDrawer'
-import AssetAddDialog from './AssetAddDialog'
+import AssetAddDialogContainer from '../containers/AssetAddDialogContainer'
 import ProtectedRoute from './ProtectedRoute'
 import DashboardsWindow from './DashboardsWindow'
 import TablesWindowContainer from '../containers/TablesWindowContainer'
@@ -186,7 +186,7 @@ class App extends Component {
           signOut={this.signOut}
         />
       {isUserMember &&
-        <AssetAddDialog
+        <AssetAddDialogContainer
           open={isAssetAddDialogOpen}
           onClose={this.closeAssetAddDialog}
           onAdd={this.openInformationDrawer}

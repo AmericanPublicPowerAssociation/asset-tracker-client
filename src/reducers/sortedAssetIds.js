@@ -1,18 +1,25 @@
-import { List, fromJS } from 'immutable'
+import { OrderedSet } from 'immutable'
 import {
+  MERGE_ASSETS,
   REPLACE_ASSETS,
 } from '../constants'
+import {
+  getOrderedIds,
+} from '../macros'
 
 
-const initialState = List()
+const initialState = OrderedSet()
 
 
 const sortedAssetIds = (state=initialState, action) => {
   const actionType = action.type
 
-  if (actionType === REPLACE_ASSETS) {
+  if (REPLACE_ASSETS === actionType) {
     const assets = action.payload
-    return fromJS(assets.map(asset => asset['id']))
+    return getOrderedIds(assets)
+  } else if (MERGE_ASSETS === actionType) {
+    const assets = action.payload
+    return state.union(getOrderedIds(assets))
   }
 
   return state

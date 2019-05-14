@@ -7,7 +7,6 @@ from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.types import Enum, Integer, PickleType, String
 
 
-Base = declarative_base()
 OrganizationMember = Table(
     'organization_member', Base.metadata,
     Column('parent_id', String, ForeignKey('organization.id')),
@@ -16,18 +15,6 @@ AssetConnection = Table(
     'asset_connection', Base.metadata,
     Column('l_asset_id', String, ForeignKey('asset.id')),
     Column('r_asset_id', String, ForeignKey('asset.id')))
-
-
-class AssetType(enum.IntEnum):
-    Pole = 1
-    Meter = 2
-    Line = 3
-    Switch = 4
-    Busbar = 5
-    Transformer = 6
-    Substation = 7
-    Station = 8
-    Other = 0
 
 
 class UserRole(enum.IntEnum):
@@ -85,9 +72,7 @@ class AssetSubType(Base):
 
 class Asset(Base):
     __tablename__ = 'asset'
-    id = Column(String, primary_key=True)
     organization_id = Column(String, ForeignKey('organization.id'))
-    type_id = Column(Enum(AssetType))
     subtype_id = Column(Integer, ForeignKey('asset_subtype.id'))
     vendor_id = Column(Integer, ForeignKey('vendor.id'))
     product_id = Column(Integer, ForeignKey('product.id'))

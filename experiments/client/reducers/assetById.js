@@ -1,21 +1,6 @@
-import { fromJS, List } from 'immutable'
-import {
-  ASSET_BY_ID,
-  ADD_ASSET,
-  UPDATE_ASSET,
-  TOGGLE_ASSET_RELATION,
-} from '../constants'
-
-const initialState = ASSET_BY_ID
-
 const assetById = (state=initialState, action) => {
 
-  if (ADD_ASSET === actionType || UPDATE_ASSET === actionType) {
-    const asset = action.payload
-    return state.mergeDeep({
-      [asset.id]: fromJS(asset),
-    })
-  } else if (TOGGLE_ASSET_RELATION === actionType) {
+  if (TOGGLE_ASSET_RELATION === actionType) {
     const {
       relatingAssetId,
       relatingAssetKey,
@@ -46,5 +31,3 @@ const assetById = (state=initialState, action) => {
   }
   return state
 }
-
-export default assetById

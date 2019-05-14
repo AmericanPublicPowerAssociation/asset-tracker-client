@@ -1,5 +1,4 @@
 import {
-  ADD_ASSET,
   UPDATE_ASSET,
   UPDATE_ASSET_LOCATION,
   TOGGLE_ASSET_RELATION,
@@ -12,8 +11,6 @@ import {
   SET_LOCATING_ASSET,
 } from '../constants'
 
-export const addAsset = payload => ({
-  type: ADD_ASSET, payload})
 export const updateAsset = payload => ({
   type: UPDATE_ASSET, payload})
 export const updateAssetLocation = payload => ({

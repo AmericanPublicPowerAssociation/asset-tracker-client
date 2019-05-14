@@ -1,7 +1,11 @@
-import { Map, fromJS } from 'immutable'
+import { Map } from 'immutable'
 import {
+  MERGE_ASSETS,
   REPLACE_ASSETS,
 } from '../constants'
+import {
+  getById,
+} from '../macros'
 
 
 const initialState = Map()
@@ -10,11 +14,12 @@ const initialState = Map()
 const assetById = (state=initialState, action) => {
   const actionType = action.type
 
-  if (actionType === REPLACE_ASSETS) {
+  if (REPLACE_ASSETS === actionType) {
     const assets = action.payload
-    return fromJS(assets.reduce((o, x) => Object.assign(o, {[x.id]: {
-      ...x, typeId: x.typeId,
-    }}), {}))
+    return getById(assets)
+  } else if (MERGE_ASSETS === actionType) {
+    const assets = action.payload
+    return state.mergeDeep(getById(assets))
   }
 
   return state

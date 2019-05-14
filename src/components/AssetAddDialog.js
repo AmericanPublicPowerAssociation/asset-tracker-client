@@ -22,9 +22,9 @@ const styles = theme => ({
 
 class AssetAddDialog extends PureComponent {
   state = {
-    assetTypeId: DEFAULT_ASSET_TYPE_ID,
-    assetName: '',
-    vendorName: '',
+    typeId: DEFAULT_ASSET_TYPE_ID,
+    name: '',
+    // vendorName: '',
   }
 
   onCancel = () => {
@@ -33,27 +33,27 @@ class AssetAddDialog extends PureComponent {
   }
 
   onOk = () => {
+    const {
+      onClose,
+      // Get redux props
+      addAsset,
+    } = this.props
+    const {
+      typeId,
+      name,
+    } = this.state
+    addAsset({typeId, name})
+    onClose()
   }
 
   changeAssetType = event => {
-    const assetTypeId = event.target.value
-    this.setState({
-      assetTypeId: assetTypeId,
-    })
-  }
-
+    this.setState({typeId: event.target.value})}
   changeAssetName = event => {
-    this.setState({
-      assetName: event.target.value,
-    })
-  }
+    this.setState({name: event.target.value})}
 
   /*
   changeVendorName = event => {
-    this.setState({
-      vendorName: event.target.value,
-    })
-  }
+    this.setState({vendorName: event.target.value})}
   */
 
   render() {
@@ -63,20 +63,24 @@ class AssetAddDialog extends PureComponent {
       onClose,
     } = this.props
     const {
-      assetTypeId,
-      assetName,
+      typeId,
+      name,
       // vendorName,
     } = this.state
     return (
-      <Dialog open={open} onClose={onClose}>
+      <Dialog
+        open={open}
+        onClose={onClose}
+        disableBackdropClick
+      >
         <DialogTitle>Add Asset</DialogTitle>
         <DialogContent>
           <AssetTypeSelect
-            value={assetTypeId}
+            value={typeId}
             onChange={this.changeAssetType}
           />
           <AssetName
-            value={assetName}
+            value={name}
             onChange={this.changeAssetName}
             className={classes.attribute}
           />

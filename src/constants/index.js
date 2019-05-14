@@ -9,6 +9,7 @@ export const TOOLTIP_DELAY = 500
 
 
 export const REPLACE_ASSETS = 'REPLACE_ASSETS'
+export const MERGE_ASSETS = 'MERGE_ASSETS'
 
 
 export const ASSET_TYPE_BY_ID = {

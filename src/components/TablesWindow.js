@@ -4,7 +4,7 @@ import TableBody from '@material-ui/core/TableBody'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
-import { ASSET_TYPE_BY_ID } from '../constants'
+import { getAssetTypeName } from '../routines'
 
 
 class TablesWindow extends PureComponent {
@@ -32,13 +32,7 @@ class TablesWindow extends PureComponent {
         {visibleAssets.map(asset => {
           const assetId = asset.get('id')
           const assetName = asset.get('name')
-          const assetTypeId = asset.get('typeId')
-          const primaryType = ASSET_TYPE_BY_ID[assetTypeId[0]]
-          const secondaryType = primaryType.typeById[assetTypeId[1]]
-          const assetTypeNameParts = [primaryType.name]
-          if (secondaryType) {
-            assetTypeNameParts.push(secondaryType.name)
-          }
+          const assetTypeName = getAssetTypeName(asset)
           return (
             <TableRow
               key={assetId}
@@ -47,7 +41,7 @@ class TablesWindow extends PureComponent {
                 {assetName}
               </TableCell>
               <TableCell>
-                {assetTypeNameParts.join(' > ')}
+                {assetTypeName}
               </TableCell>
             </TableRow>
           )
