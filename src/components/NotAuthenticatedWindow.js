@@ -1,7 +1,5 @@
 import React, { PureComponent } from 'react'
-import {
-  withStyles,
-} from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { CONTENT_PADDING } from '../constants'
@@ -18,7 +16,7 @@ const styles = theme => ({
 })
 
 class NotAuthenticatedWindow extends PureComponent {
-  render() {
+  render = () => {
     const { classes } = this.props
     return (
       <div className={classes.root}>

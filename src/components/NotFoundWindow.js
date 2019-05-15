@@ -2,7 +2,7 @@ import React, { Fragment, PureComponent } from 'react'
 import Typography from '@material-ui/core/Typography'
 
 class NotFoundWindow extends PureComponent {
-  render() {
+  render = () => {
     return (
       <Fragment>
         <Typography variant='h6' align='center' paragraph>

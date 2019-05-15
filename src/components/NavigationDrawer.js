@@ -36,7 +36,7 @@ const styles = theme => ({
 })
 
 class NavigationDrawer extends PureComponent {
-  render() {
+  render = () => {
     const {
       classes,
       isUserAuthenticated,

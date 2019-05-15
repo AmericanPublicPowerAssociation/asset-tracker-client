@@ -54,7 +54,7 @@ const styles = theme => ({
 })
 
 class ApplicationBar extends PureComponent {
-  render() {
+  render = () => {
     const {
       classes,
       // Get local variables

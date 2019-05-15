@@ -16,7 +16,7 @@ class TablesWindow extends PureComponent {
     refreshAssets()
   }
 
-  render() {
+  render = () => {
     const {
       visibleAssets,
     } = this.props

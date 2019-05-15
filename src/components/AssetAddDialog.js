@@ -56,7 +56,7 @@ class AssetAddDialog extends PureComponent {
     this.setState({vendorName: event.target.value})}
   */
 
-  render() {
+  render = () => {
     const {
       classes,
       open,

@@ -4,7 +4,7 @@ import { appaAuthClient } from 'appa-auth-client'
 import NotAuthenticatedWindow from './NotAuthenticatedWindow'
 
 class ProtectedRoute extends PureComponent {
-  render() {
+  render = () => {
     const {
       render,
       ...etc

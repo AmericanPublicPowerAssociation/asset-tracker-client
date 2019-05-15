@@ -7,7 +7,7 @@ import { ASSET_TYPE_BY_ID } from '../constants'
 
 
 class AssetTypeSelect extends PureComponent {
-	render() {
+  render = () => {
     const {
       ...etc
     } = this.props

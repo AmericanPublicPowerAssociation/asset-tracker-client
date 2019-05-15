@@ -1,4 +1,3 @@
-import React, { PureComponent } from 'react'
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
@@ -22,7 +21,6 @@ const styles = {
   },
 }
 
-class AssetFilterUpdate extends PureComponent {
   state = {
     isFilterListVisible: false,
     isAssetTypeCheckboxesHidden: true,
@@ -80,4 +78,3 @@ class AssetFilterUpdate extends PureComponent {
   }
 }
 
-export default withStyles(styles)(AssetFilterUpdate);

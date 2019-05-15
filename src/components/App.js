@@ -116,7 +116,10 @@ class App extends Component {
   closeAssetAddDialog = () => {
     this.setState({isAssetAddDialogOpen: false})}
 
-  render() {
+  toggleTheme = () => {
+    this.setState({withMorningTheme: !this.state.withMorningTheme})}
+
+  render = () => {
     const { classes } = this.props
     const {
       isUserAuthenticated,
@@ -126,10 +129,10 @@ class App extends Component {
       isAssetAddDialogOpen,
       withMorningTheme,
     } = this.state
-    const muiTheme = withMorningTheme ? morningTheme : eveningTheme
+    const theme = withMorningTheme ? morningTheme : eveningTheme
     const isDrawerOpen = isNavigationDrawerOpen || isInformationDrawerOpen
     return (
-      <MuiThemeProvider theme={muiTheme}>
+      <MuiThemeProvider theme={theme}>
         <CssBaseline />
         <ApplicationBar
           isUserMember={isUserMember}
@@ -170,7 +173,10 @@ class App extends Component {
                 <BookmarksWindow />
               )} />
               <ProtectedRoute exact path='/settings' render={() => (
-                <SettingsWindow />
+                <SettingsWindow
+                  withMorningTheme={withMorningTheme}
+                  toggleTheme={this.toggleTheme}
+                />
               )} />
               <Route component={NotFoundWindow} />
             </Switch>

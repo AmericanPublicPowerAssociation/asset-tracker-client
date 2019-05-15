@@ -3,7 +3,7 @@ import TextField from '@material-ui/core/TextField'
 
 
 class AssetName extends PureComponent {
-  render() {
+  render = () => {
     const {
       ...etc
     } = this.props
