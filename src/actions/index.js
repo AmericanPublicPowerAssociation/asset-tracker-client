@@ -1,4 +1,3 @@
-import axios from 'axios'
 import {
   MERGE_ASSETS,
   REPLACE_ASSETS,
@@ -8,8 +7,9 @@ import {
 export const refreshAssets = () => {
   return async dispatch => {
     try {
-      const response = await axios.get('/assets.json')
-      dispatch(replaceAssets(response.data))
+      const response = await fetch('/assets.json')
+      const assets = await response.json()
+      dispatch(replaceAssets(assets))
     } catch (error) {
       console.log(error)
     }
@@ -17,11 +17,15 @@ export const refreshAssets = () => {
 }
 
 
-export const addAsset = asset => {
+export const addAsset = assetParameters => {
   return async dispatch => {
     try {
-      const response = await axios.post('/assets.json', asset)
-      dispatch(mergeAssets([response.data]))
+      const response = await fetch('/assets.json', {
+        method: 'POST',
+        body: JSON.stringify(assetParameters),
+      })
+      const asset = await response.json()
+      dispatch(mergeAssets([asset]))
     } catch (error) {
       console.log(error)
     }

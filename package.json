@@ -6,7 +6,6 @@
     "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^3.0.2",
     "appa-auth-client": "file:../appa-auth-client/client",
-    "axios": "^0.18.0",
     "dijkstrajs": "^1.0.1",
     "dotenv": "^8.0.0",
     "downshift": "^3.2.10",

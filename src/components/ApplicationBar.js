@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import { Route } from 'react-router-dom'
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
@@ -66,6 +67,14 @@ class ApplicationBar extends PureComponent {
     } = this.props
     const isDrawerOpen = isNavigationDrawerOpen || isInformationDrawerOpen
     const applicationTitle = 'Asset Tracker'
+    const assetAddButton = isUserMember &&
+      <Tooltip title='Add Asset' enterDelay={TOOLTIP_DELAY}>
+        <IconButton
+          aria-label='Add Asset'
+          color='inherit'
+          onClick={openAssetAddDialog}
+        ><AddIcon /></IconButton>
+      </Tooltip>
     return (
       <AppBar
         className={classNames(classes.appBar, {
@@ -77,6 +86,7 @@ class ApplicationBar extends PureComponent {
         <Toolbar
           disableGutters={!isNavigationDrawerOpen}
         >
+
           <Tooltip title='Open Navigation' enterDelay={TOOLTIP_DELAY}>
             <IconButton
               aria-label='Open Navigation'
@@ -93,15 +103,11 @@ class ApplicationBar extends PureComponent {
             className={classes.grow}
             noWrap
           >{applicationTitle}</Typography>
-        {isUserMember &&
-          <Tooltip title='Add Asset' enterDelay={TOOLTIP_DELAY}>
-            <IconButton
-              aria-label='Add Asset'
-              color='inherit'
-              onClick={openAssetAddDialog}
-            ><AddIcon /></IconButton>
-          </Tooltip>
-        }
+
+          <Route exact path='/tables' render={() => assetAddButton }/>
+          <Route exact path='/maps' render={() => assetAddButton }/>
+          <Route exact path='/circuits' render={() => assetAddButton }/>
+
         </Toolbar>
       </AppBar>
     )
