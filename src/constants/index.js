@@ -14,6 +14,7 @@ export const TOOLTIP_DELAY = 500
 export const MERGE_ASSETS = 'MERGE_ASSETS'
 export const REPLACE_ASSETS = 'REPLACE_ASSETS'
 export const REPLACE_ASSET_TYPES = 'REPLACE_ASSET_TYPES'
+export const SET_ASSET_NAME_QUERY = 'SET_ASSET_NAME_QUERY'
 
 
 export const ASSET_TYPE_BY_ID = assetTypeById

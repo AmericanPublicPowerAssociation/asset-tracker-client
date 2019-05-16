@@ -11,7 +11,6 @@ const mapViewport = (state=initialState, action) => {
 
   if (SET_MAP_VIEWPORT === actionType) {
     const {longitude, latitude, zoom} = action.payload
-    console.log(action)
     return state.merge({
       longitude,
       latitude,

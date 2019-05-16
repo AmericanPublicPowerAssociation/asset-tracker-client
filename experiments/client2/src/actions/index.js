@@ -1,21 +1,3 @@
-import { List } from 'immutable'
-import {
-  ADD_ASSET,
-  UPDATE_ASSET,
-  UPDATE_ASSET_LOCATION,
-  UPDATE_ASSET_GEOMETRY,
-  TOGGLE_ASSET_RELATION,
-  ADD_SELECTED_ASSET_TYPE,
-  TOGGLE_SELECTED_ASSET_TYPE,
-  SET_SEARCH_TERM,
-  SET_SELECTED_ASSET_TYPES,
-  SET_SELECTED_ASSETS,
-  SET_FOCUSING_ASSET,
-  SET_RELATING_ASSET,
-  SET_LOCATING_ASSET,
-  SET_MAP_VIEWPORT,
-} from '../constants'
-
 export const addAsset = payload => ({
   type: ADD_ASSET, payload})
 export const updateAsset = payload => ({

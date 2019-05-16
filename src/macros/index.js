@@ -7,3 +7,9 @@ export const getById = items => fromJS(items.reduce((
 
 
 export const getOrderedIds = items => OrderedSet(items.map(item => item.id))
+
+
+export const splitTerms = text => compactWhitespace(text).trim().split(' ')
+
+
+export const compactWhitespace = text => text.replace(/\s\s+/g, ' ')

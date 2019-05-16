@@ -1,13 +1,15 @@
 import {
-  SET_SEARCH_TERM,
+  SET_ASSET_NAME_QUERY,
 } from '../constants'
+
 
 const initialState = ''
 
-const searchTerm = (state=initialState, action) => {
+
+const assetNameQuery = (state=initialState, action) => {
   const actionType = action.type
 
-  if (SET_SEARCH_TERM === actionType) {
+  if (SET_ASSET_NAME_QUERY === actionType) {
     const {query} = action.payload
     return query
   }
@@ -15,4 +17,5 @@ const searchTerm = (state=initialState, action) => {
   return state
 }
 
-export default searchTerm
+
+export default assetNameQuery

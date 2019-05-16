@@ -46,17 +46,12 @@ export const getChildAssets = createSelector(
 export const getVisibleAssets = createSelector([
   getSelectedAssetIds,
   getSelectedAssetTypeIds,
-  getAssetById,
-  getSearchTerm,
 ], (
   selectedAssetIds,
   selectedAssetTypeIds,
-  searchTerm,
 ) => {
   return (selectedAssetIds.isEmpty() ? sortedAssetIds : selectedAssetIds)
   .filter(asset => selectedAssetTypeIds.includes(asset.get('typeId')))
-  .filter(asset => asset.get('name').toLowerCase().includes(searchTerm.toLowerCase()))
-  .slice(0, MAXIMUM_LIST_LENGTH)
 })
 
 export const getFocusingAssetLocation = createSelector(
