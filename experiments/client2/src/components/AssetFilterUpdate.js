@@ -15,10 +15,8 @@ const {
   selectedAssetTypeIds,
   // setSelectedAssetTypes,
   onAssetTypeClick,
-  setSearchTerm,
 } = this.props
   return (
-    <Paper elevation={1}>
       <div className={classes.root}>
         <IconButton 
           className={classes.iconButton}
@@ -40,4 +38,3 @@ const {
       {/* <AssetTypeCheckboxes 
         selectedAssetTypeIds={selectedAssetTypeIds}
         onAssetTypeClick={onAssetTypeClick} /> */}
-    </Paper>

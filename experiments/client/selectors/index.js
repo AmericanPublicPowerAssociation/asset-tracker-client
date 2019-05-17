@@ -11,18 +11,6 @@ import {
   // normalizeNumber,
 } from '../macros'
 
-const getAssetLocationById = state => state.assetLocationById
-const getSelectedAssetTypeIds = state => state.selectedAssetTypeIds
-const getSelectedAssetIds = state => state.selectedAssetIds
-const getFocusingAssetId = state => state.focusingAssetId
-const getLocatingAssetId = state => state.locatingAssetId
-const getRelatingAssetId = state => state.relatingAssetId
-const getRelatingAssetKey = state => state.relatingAssetKey
-const getFeatureGeometryById = state => state.featureGeometryById
-const getFeatureColorAttribute = state => state.featureColorAttribute
-const getFeatureSizeAttribute = state => state.featureSizeAttribute
-const getSearchTerm = state => state.searchTerm
-
 export const getFocusingAsset = createSelector(
   [getAssetById, getFocusingAssetId],
   (assetById, focusingAssetId) => assetById.get(focusingAssetId, Map()))
@@ -45,13 +33,10 @@ export const getChildAssets = createSelector(
 
 export const getVisibleAssets = createSelector([
   getSelectedAssetIds,
-  getSelectedAssetTypeIds,
 ], (
   selectedAssetIds,
-  selectedAssetTypeIds,
 ) => {
   return (selectedAssetIds.isEmpty() ? sortedAssetIds : selectedAssetIds)
-  .filter(asset => selectedAssetTypeIds.includes(asset.get('typeId')))
 })
 
 export const getFocusingAssetLocation = createSelector(

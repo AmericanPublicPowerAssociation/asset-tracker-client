@@ -88,16 +88,3 @@ class Asset(Base):
 
 
 engine = create_engine('postgresql:///asset-tracker', echo=True)
-Base.metadata.create_all(engine)
-DatabaseSession = sessionmaker(bind=engine)
-DatabaseSession.configure(bind=engine)
-
-
-@contextmanager
-def database_connection(*args, **kwds):
-    db = DatabaseSession()
-    try:
-        yield db
-        db.commit()
-    finally:
-        db.close()

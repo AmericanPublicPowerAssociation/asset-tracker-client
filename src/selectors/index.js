@@ -3,16 +3,18 @@ import {
   MAXIMUM_ASSET_LIST_LENGTH,
 } from '../constants'
 import {
+  IntegerDefaultDict,
   splitTerms,
 } from '../macros'
 
 
-const getAssetById = state => state.get('assetById')
-const getAssetNameQuery = state => state.get('assetNameQuery')
-const getSortedAssetIds = state => state.get('sortedAssetIds')
+export const getAssetById = state => state.get('assetById')
+export const getAssetNameQuery = state => state.get('assetNameQuery')
+export const getSelectedAssetTypeIds = state => state.get('selectedAssetTypeIds')
+export const getSortedAssetIds = state => state.get('sortedAssetIds')
 
 
-export const getVisibleAssets = createSelector([
+export const getMatchingAssets = createSelector([
   getAssetById,
   getAssetNameQuery,
   getSortedAssetIds,
@@ -29,5 +31,30 @@ export const getVisibleAssets = createSelector([
       return lowercaseQueryTerms.every(
         term => lowercaseAssetName.includes(term))
     })
+})
+
+
+export const getVisibleAssets = createSelector([
+  getMatchingAssets,
+  getSelectedAssetTypeIds,
+], (
+  matchingAssets,
+  selectedAssetTypeIds,
+) => {
+  return matchingAssets
+    .filter(asset => selectedAssetTypeIds.includes(asset.get('typeId')))
     .slice(0, MAXIMUM_ASSET_LIST_LENGTH)
+})
+
+
+export const getCountByAssetTypeId = createSelector([
+  getMatchingAssets,
+], (
+  matchingAssets,
+) => {
+  return matchingAssets.reduce((countByAssetTypeId, asset) => {
+    const typeId = asset.get('typeId')
+    countByAssetTypeId[typeId] += 1
+    return countByAssetTypeId
+  }, new IntegerDefaultDict())
 })

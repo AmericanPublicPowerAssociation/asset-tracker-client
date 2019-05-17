@@ -2,12 +2,14 @@ import { combineReducers } from 'redux-immutable'
 import reduceReducers from 'reduce-reducers'
 import assetById from './assetById'
 import assetNameQuery from './assetNameQuery'
+import selectedAssetTypeIds from './selectedAssetTypeIds'
 import sortedAssetIds from './sortedAssetIds'
 
 
 const reduceHorizontally = combineReducers({
   assetById,
   assetNameQuery,
+  selectedAssetTypeIds,
   sortedAssetIds,
 })
 

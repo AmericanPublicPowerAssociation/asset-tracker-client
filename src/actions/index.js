@@ -1,7 +1,9 @@
 import {
+  ADD_SELECTED_ASSET_TYPE,
   MERGE_ASSETS,
   REPLACE_ASSETS,
   SET_ASSET_NAME_QUERY,
+  TOGGLE_SELECTED_ASSET_TYPE,
 } from '../constants'
 
 
@@ -62,3 +64,7 @@ export const mergeAssets = payload => ({
   type: MERGE_ASSETS, payload})
 export const setAssetNameQuery = payload => ({
   type: SET_ASSET_NAME_QUERY, payload})
+export const toggleSelectedAssetType = payload => ({
+  type: TOGGLE_SELECTED_ASSET_TYPE, payload})
+export const addSelectedAssetType = payload => ({
+  type: ADD_SELECTED_ASSET_TYPE, payload})

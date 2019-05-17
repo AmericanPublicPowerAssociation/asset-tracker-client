@@ -5,6 +5,8 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import InputBase from '@material-ui/core/InputBase'
+import Checkbox from '@material-ui/core/Checkbox'
+import { ASSET_TYPE_BY_ID } from '../constants'
 
 
 const styles = {
@@ -23,8 +25,13 @@ class AssetFilter extends PureComponent {
       classes,
       // Get global variables
       assetNameQuery,
+      selectedAssetTypeIds,
+      countByAssetTypeId,
       setAssetNameQuery,
+      toggleSelectedAssetType,
     } = this.props
+    const visibleAssetTypeIds = Object.keys(ASSET_TYPE_BY_ID).filter(
+      typeId => typeId in countByAssetTypeId)
     return (
       <Paper className={classes.root} square>
         <List>
@@ -42,9 +49,28 @@ class AssetFilter extends PureComponent {
           <ListItem>
             <ListItemText primary='Filter by Type' />
           </ListItem>
+          <List disablePadding>
+          {visibleAssetTypeIds.map(typeId => {
+            const assetType = ASSET_TYPE_BY_ID[typeId]
+            const assetCount = countByAssetTypeId[typeId]
+            const typeText = `${assetType.name} (${assetCount})`
+            return (
+              <ListItem button key={typeId}
+                onClick={() => toggleSelectedAssetType({typeId}) }
+              >
+                <Checkbox tabIndex={-1} disableRipple
+                  checked={selectedAssetTypeIds.includes(typeId)}
+                />
+                <ListItemText primary={typeText} />
+              </ListItem>
+            )
+          })}
+          </List>
+          {/*
           <ListItem>
             <ListItemText primary='Filter by Utility' />
           </ListItem>
+          */}
         </List>
       </Paper>
     )
