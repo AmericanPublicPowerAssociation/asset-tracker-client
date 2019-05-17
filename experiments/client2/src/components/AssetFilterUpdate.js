@@ -35,6 +35,3 @@ const {
       {!this.state.isAssetTypeCheckboxesHidden && <AssetTypeCheckboxes 
         selectedAssetTypeIds={selectedAssetTypeIds}
         onAssetTypeClick={onAssetTypeClick} />}
-      {/* <AssetTypeCheckboxes 
-        selectedAssetTypeIds={selectedAssetTypeIds}
-        onAssetTypeClick={onAssetTypeClick} /> */}

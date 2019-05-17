@@ -1,3 +1,4 @@
+import { Map } from 'immutable'
 import {
   ADD_SELECTED_ASSET_TYPE,
   MERGE_ASSETS,
@@ -17,21 +18,23 @@ export const refreshAssets = () => {
           dispatch(replaceAssets(assets))
           break
         case 400:
-          const error = await response.json()
-          alert(JSON.stringify(error))
+          const errorByKey = await response.json()
+          alert(errorByKey)
           break
         default:
           const text = await response.text()
-          console.log(text)
+          alert(text)
       }
     } catch (error) {
-      console.log(error)
+      alert(error)
     }
   }
 }
 
 
-export const addAsset = assetParameters => {
+export const addAsset = (assetParameters, onSuccess, onError) => {
+  console.log(onSuccess)
+  console.log(onError)
   return async dispatch => {
     try {
       const response = await fetch('/assets.json', {
@@ -42,17 +45,18 @@ export const addAsset = assetParameters => {
         case 200:
           const asset = await response.json()
           dispatch(mergeAssets([asset]))
+          onSuccess(asset)
           break
         case 400:
-          const error = await response.json()
-          alert(JSON.stringify(error))
+          const errorByKey = await response.json()
+          onError(Map(errorByKey))
           break
         default:
           const text = await response.text()
-          console.log(text)
+          alert(text)
       }
     } catch (error) {
-      console.log(error)
+      alert(error)
     }
   }
 }

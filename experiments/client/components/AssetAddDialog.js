@@ -31,9 +31,6 @@ import { getRandomString } from '../macros'
     const {
       vendorName,
     } = this.state
-      if (assetName === ""){
-        alert('The Asset Name is empty, add a name to save.')
-      }
       else {
           const assetId = getRandomString(7)
           addSelectedAssetType({id: assetTypeId})

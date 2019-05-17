@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import { Map } from 'immutable'
 import { withStyles } from '@material-ui/core/styles'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
@@ -22,9 +23,11 @@ const styles = theme => ({
 
 class AssetAddDialog extends PureComponent {
   state = {
+    utilityId: 'abc',
     typeId: DEFAULT_ASSET_TYPE_ID,
     name: '',
     // vendorName: '',
+    errorByKey: Map(),
   }
 
   onCancel = () => {
@@ -34,22 +37,49 @@ class AssetAddDialog extends PureComponent {
 
   onOk = () => {
     const {
-      onClose,
       // Get redux props
       addAsset,
     } = this.props
     const {
+      utilityId,
       typeId,
       name,
     } = this.state
-    addAsset({typeId, name})
+    addAsset({utilityId, typeId, name}, this.onSuccess, this.onError)
+  }
+
+  onSuccess = asset => {
+    const {
+      onClose,
+    } = this.props
     onClose()
   }
 
+  onError = errorByKey => {
+    this.setState({errorByKey})
+  }
+
   changeAssetType = event => {
-    this.setState({typeId: event.target.value})}
+    this.setState({typeId: event.target.value})
+  }
+
   changeAssetName = event => {
-    this.setState({name: event.target.value})}
+    const {
+      errorByKey,
+    } = this.state
+    const value = event.target.value.trim()
+    if (!value.length) {
+      this.setState({
+        name: value,
+        errorByKey: errorByKey.set('name', 'cannot be empty'),
+      })
+    } else {
+      this.setState({
+        name: value,
+        errorByKey: errorByKey.delete('name'),
+      })
+    }
+  }
 
   /*
   changeVendorName = event => {
@@ -66,7 +96,13 @@ class AssetAddDialog extends PureComponent {
       typeId,
       name,
       // vendorName,
+      errorByKey,
     } = this.state
+    const nameError = errorByKey.get('name')
+    const assetNameProps = nameError ? {
+      error: true,
+      helperText: nameError,
+    } : {}
     return (
       <Dialog
         open={open}
@@ -83,6 +119,7 @@ class AssetAddDialog extends PureComponent {
             value={name}
             onChange={this.changeAssetName}
             className={classes.attribute}
+            {...assetNameProps}
           />
           {/*
           <VendorName

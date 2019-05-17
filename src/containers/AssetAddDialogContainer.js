@@ -10,8 +10,8 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
-  addAsset: payload => {dispatch(
-    addAsset(payload))},
+  addAsset: (...payload) => {dispatch(
+    addAsset(...payload))},
 })
 
 
