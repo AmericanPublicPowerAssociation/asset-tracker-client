@@ -1,30 +1,27 @@
 import React, { PureComponent } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
+import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
-import { INFORMATION_DRAWER_WIDTH } from '../constants'
-import AssetCircuitContainer from '../containers/AssetCircuitContainer'
+import {
+  INFORMATION_DRAWER_WIDTH,
+  RIGHT_DRAWER_MINIMUM_WIDTH,
+} from '../constants'
 import AssetDetailContainer from '../containers/AssetDetailContainer'
 
+
 const styles = theme => ({
-  drawer: {
-    width: INFORMATION_DRAWER_WIDTH,
-    flexShrink: 0,
-    [theme.breakpoints.down('md')]: {
-      width: 256,
-    },
-  },
   drawerPaper: {
     width: INFORMATION_DRAWER_WIDTH,
     [theme.breakpoints.down('md')]: {
-      width: 256,
+      width: RIGHT_DRAWER_MINIMUM_WIDTH,
     },
   },
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
-    padding: '0 8px',
+    padding: `0 ${theme.spacing.unit}px`,
     ...theme.mixins.toolbar,
     justifyContent: 'flex-start',
   },
@@ -32,17 +29,18 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
-    padding: '0 24px',
+    padding: `0 ${theme.spacing.unit * 3}px`,
   },
-  circuitPanel: {
+  overviewPanel: {
     height: '33%',
   },
   detailPanel: {
   },
 })
 
+
 class InformationDrawer extends PureComponent {
-  render() {
+  render = () => {
     const {
       classes,
       onClose,
@@ -50,10 +48,9 @@ class InformationDrawer extends PureComponent {
     } = this.props
     return (
       <Drawer
-        className={classes.drawer}
-        variant='persistent'
-        anchor='right'
-        classes={{ paper: classes.drawerPaper }}
+        classes={{
+          paper: classes.drawerPaper,
+        }}
         {...etc}
       >
         <div className={classes.drawerHeader}>
@@ -61,9 +58,10 @@ class InformationDrawer extends PureComponent {
             <ChevronRightIcon />
           </IconButton>
         </div>
+        <Divider />
         <div className={classes.frame}>
-          <div className={classes.circuitPanel}>
-            <AssetCircuitContainer />
+          <div className={classes.overviewPanel}>
+            {/* <AssetCircuitContainer /> */}
           </div>
           <div className={classes.detailPanel}>
             <AssetDetailContainer />
@@ -73,5 +71,6 @@ class InformationDrawer extends PureComponent {
     )
   }
 }
+
 
 export default withStyles(styles)(InformationDrawer)

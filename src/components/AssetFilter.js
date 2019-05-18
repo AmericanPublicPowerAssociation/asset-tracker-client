@@ -23,7 +23,7 @@ class AssetFilter extends PureComponent {
   render = () => {
     const {
       classes,
-      // Get global variables
+      // Get redux variables
       assetNameQuery,
       selectedAssetTypeIds,
       countByAssetTypeId,

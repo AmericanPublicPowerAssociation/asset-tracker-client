@@ -4,6 +4,7 @@ import {
   MERGE_ASSETS,
   REPLACE_ASSETS,
   SET_ASSET_NAME_QUERY,
+  SET_FOCUSING_ASSET,
   TOGGLE_SELECTED_ASSET_TYPE,
 } from '../constants'
 
@@ -33,8 +34,6 @@ export const refreshAssets = () => {
 
 
 export const addAsset = (assetParameters, onSuccess, onError) => {
-  console.log(onSuccess)
-  console.log(onError)
   return async dispatch => {
     try {
       const response = await fetch('/assets.json', {
@@ -72,3 +71,5 @@ export const toggleSelectedAssetType = payload => ({
   type: TOGGLE_SELECTED_ASSET_TYPE, payload})
 export const addSelectedAssetType = payload => ({
   type: ADD_SELECTED_ASSET_TYPE, payload})
+export const setFocusingAsset = payload => ({
+  type: SET_FOCUSING_ASSET, payload})

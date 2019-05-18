@@ -14,6 +14,9 @@ const styles = theme => ({
   root: {
     height: '100%',
   },
+  hover: {
+    cursor: 'pointer',
+  },
 })
 
 
@@ -29,7 +32,11 @@ class TablesWindow extends PureComponent {
   render = () => {
     const {
       classes,
+      onSelect,
+      // Get redux variables
       visibleAssets,
+      focusingAssetId,
+      setFocusingAsset,
     } = this.props
     return (
       <Grid container className={classes.root}>
@@ -51,6 +58,15 @@ class TablesWindow extends PureComponent {
               const assetTypeName = getAssetTypeName(asset)
               return (
                 <TableRow
+                  hover
+                  classes={{
+                    hover: classes.hover,
+                  }}
+                  selected={assetId === focusingAssetId}
+                  onClick={() => {
+                    setFocusingAsset({id: assetId})
+                    onSelect()
+                  }}
                   key={assetId}
                 >
                   <TableCell component='th' scope='row'>

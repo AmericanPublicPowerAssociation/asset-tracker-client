@@ -19,10 +19,11 @@ import ReportsIcon from '@material-ui/icons/Assessment'
 // import BookmarksIcon from '@material-ui/icons/Bookmarks'
 import SettingsIcon from '@material-ui/icons/Settings'
 import ListItemLink from './ListItemLink'
-import { NAVIGATION_DRAWER_WIDTH } from '../constants'
+import {
+  NAVIGATION_DRAWER_WIDTH,
+} from '../constants'
 
 const styles = theme => ({
-  toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: NAVIGATION_DRAWER_WIDTH,
   },
@@ -40,7 +41,7 @@ class NavigationDrawer extends PureComponent {
     const {
       classes,
       isUserAuthenticated,
-      closeNavigationDrawer,
+      onClose,
       signIn,
       signOut,
       ...etc
@@ -53,7 +54,7 @@ class NavigationDrawer extends PureComponent {
         {...etc}
       >
         <div className={classes.drawerHeader}>
-          <IconButton onClick={closeNavigationDrawer}>
+          <IconButton onClick={onClose}>
             <ChevronLeftIcon />
           </IconButton>
         </div>

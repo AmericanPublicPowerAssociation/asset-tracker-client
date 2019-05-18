@@ -11,10 +11,6 @@ import {
   // normalizeNumber,
 } from '../macros'
 
-export const getFocusingAsset = createSelector(
-  [getAssetById, getFocusingAssetId],
-  (assetById, focusingAssetId) => assetById.get(focusingAssetId, Map()))
-
 export const getParentIds = createSelector(
   [getAssetById, getFocusingAsset],
   (assetById, focusingAsset) => focusingAsset.get('parentIds', List()))

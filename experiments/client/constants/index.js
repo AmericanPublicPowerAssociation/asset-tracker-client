@@ -1,8 +1,6 @@
 import streetsMapStyle from '../datasets/map-style-streets.json'
 import satelliteStreetsMapStyle from '../datasets/map-style-satellite-streets.json'
 
-export const INFORMATION_DRAWER_WIDTH = 512
-
 export const ASSET_LOCATION_BY_ID = fromJS(
   assets.filter(x => x.location).reduce(
     (o, x) => Object.assign(o, {[x.id]: x.location}), {}))
@@ -26,4 +24,3 @@ export const PROPERTY_MAXIMUM_VALUE = 9
 
 export const CIRCUIT_DEPTH = 2
 export const CYTOSCAPE_LAYOUT = {'name': 'cose'}
-export const DEBOUNCE_THRESHOLD_IN_MILLISECONDS = 100

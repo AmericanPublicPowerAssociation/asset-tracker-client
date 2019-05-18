@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
 import CytoscapeComponent from 'react-cytoscapejs'
-import { debounce } from 'lodash'
 import {
   // CIRCUIT_DEPTH,
   CYTOSCAPE_LAYOUT,

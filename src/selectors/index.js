@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect'
+import { Map } from 'immutable'
 import {
   MAXIMUM_ASSET_LIST_LENGTH,
 } from '../constants'
@@ -10,6 +11,7 @@ import {
 
 export const getAssetById = state => state.get('assetById')
 export const getAssetNameQuery = state => state.get('assetNameQuery')
+export const getFocusingAssetId = state => state.get('focusingAssetId')
 export const getSelectedAssetTypeIds = state => state.get('selectedAssetTypeIds')
 export const getSortedAssetIds = state => state.get('sortedAssetIds')
 
@@ -57,4 +59,15 @@ export const getCountByAssetTypeId = createSelector([
     countByAssetTypeId[typeId] += 1
     return countByAssetTypeId
   }, new IntegerDefaultDict())
+})
+
+
+export const getFocusingAsset = createSelector([
+  getFocusingAssetId,
+  getAssetById,
+], (
+  focusingAssetId,
+  assetById,
+) => {
+  return assetById.get(focusingAssetId, Map())
 })

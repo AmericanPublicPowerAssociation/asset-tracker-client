@@ -1,7 +1,5 @@
-import React, { PureComponent, Fragment } from 'react'
 import Downshift from 'downshift'
 import deburr from 'lodash/deburr'
-import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormLabel from '@material-ui/core/FormLabel'
@@ -43,7 +41,6 @@ const PRODUCT_VERSION_SUGGESTIONS = [
   {label: 'R206'},
 ]
 
-class AssetDetail extends PureComponent {
   /*
   state = {
     vendorNameValue: '',
@@ -75,6 +72,7 @@ class AssetDetail extends PureComponent {
       setRelatingAsset,
       updateAsset,
     } = this.props
+
     const focusingAssetId = focusingAsset.get('id');
     if (!focusingAssetId) return null
     const focusingAssetTypeId = focusingAsset.get('typeId')
@@ -101,7 +99,6 @@ class AssetDetail extends PureComponent {
     return (
       <div>
         <AssetName
-          focusingAsset={focusingAsset}
           updateAsset={updateAsset}
         />
         {!unique &&
@@ -301,6 +298,3 @@ class AssetDetail extends PureComponent {
       </div>
     )
   }
-}
-
-export default withStyles(styles)(AssetDetail)

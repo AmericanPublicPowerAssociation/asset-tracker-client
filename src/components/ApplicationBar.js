@@ -22,6 +22,7 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    padding: `0 ${theme.spacing.unit}px`,
   },
   appBarShift: {
     transition: theme.transitions.create(['margin', 'width'], {
@@ -45,7 +46,7 @@ const styles = theme => ({
     flexGrow: 1,
   },
   menuButton: {
-    marginLeft: 12,
+    marginLeft: 4,
     marginRight: 20,
   },
   vanish: {
@@ -57,13 +58,11 @@ class ApplicationBar extends PureComponent {
   render = () => {
     const {
       classes,
-      // Get local variables
       isUserMember,
       isNavigationDrawerOpen,
       isInformationDrawerOpen,
       openNavigationDrawer,
       openAssetAddDialog,
-      // Get global variables
     } = this.props
     const isDrawerOpen = isNavigationDrawerOpen || isInformationDrawerOpen
     const applicationTitle = 'Asset Tracker'

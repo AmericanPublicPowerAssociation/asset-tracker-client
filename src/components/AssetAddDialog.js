@@ -52,6 +52,13 @@ class AssetAddDialog extends PureComponent {
     const {
       onClose,
     } = this.props
+    const {
+      errorByKey,
+    } = this.state
+    this.setState({
+      name: '',
+      errorByKey: errorByKey.clear(),
+    })
     onClose()
   }
 
@@ -63,22 +70,14 @@ class AssetAddDialog extends PureComponent {
     this.setState({typeId: event.target.value})
   }
 
-  changeAssetName = event => {
+  setAssetNameProps = (value, errorText) => {
     const {
       errorByKey,
     } = this.state
-    const value = event.target.value.trim()
-    if (!value.length) {
-      this.setState({
-        name: value,
-        errorByKey: errorByKey.set('name', 'cannot be empty'),
-      })
-    } else {
-      this.setState({
-        name: value,
-        errorByKey: errorByKey.delete('name'),
-      })
-    }
+    this.setState({
+      name: value,
+      errorByKey: errorByKey.set('name', errorText),
+    })
   }
 
   /*
@@ -98,11 +97,6 @@ class AssetAddDialog extends PureComponent {
       // vendorName,
       errorByKey,
     } = this.state
-    const nameError = errorByKey.get('name')
-    const assetNameProps = nameError ? {
-      error: true,
-      helperText: nameError,
-    } : {}
     return (
       <Dialog
         open={open}
@@ -117,9 +111,9 @@ class AssetAddDialog extends PureComponent {
           />
           <AssetName
             value={name}
-            onChange={this.changeAssetName}
+            errorText={errorByKey.get('name')}
+            setProps={this.setAssetNameProps}
             className={classes.attribute}
-            {...assetNameProps}
           />
           {/*
           <VendorName

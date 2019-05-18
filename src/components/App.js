@@ -17,6 +17,7 @@ import {
 } from '../constants'
 import ApplicationBar from './ApplicationBar'
 import NavigationDrawer from './NavigationDrawer'
+import InformationDrawer from './InformationDrawer'
 import AssetAddDialogContainer from '../containers/AssetAddDialogContainer'
 import ProtectedRoute from './ProtectedRoute'
 import DashboardsWindow from './DashboardsWindow'
@@ -155,13 +156,19 @@ class App extends Component {
                 <DashboardsWindow />
               )} />
               <ProtectedRoute exact path='/tables' render={() => (
-                <TablesWindowContainer />
+                <TablesWindowContainer
+                  onSelect={this.openInformationDrawer}
+                />
               )} />
               <ProtectedRoute exact path='/maps' render={() => (
-                <MapsWindow />
+                <MapsWindow
+                  onSelect={this.openInformationDrawer}
+                />
               )} />
               <ProtectedRoute exact path='/circuits' render={() => (
-                <CircuitsWindow />
+                <CircuitsWindow
+                  onSelect={this.openInformationDrawer}
+                />
               )} />
               <ProtectedRoute exact path='/reports' render={() => (
                 <ReportsWindow />
@@ -187,9 +194,15 @@ class App extends Component {
           anchor='left'
           open={isNavigationDrawerOpen}
           isUserAuthenticated={isUserAuthenticated}
-          closeNavigationDrawer={this.closeNavigationDrawer}
+          onClose={this.closeNavigationDrawer}
           signIn={this.signIn}
           signOut={this.signOut}
+        />
+        <InformationDrawer
+          variant='persistent'
+          anchor='right'
+          open={isInformationDrawerOpen}
+          onClose={this.closeInformationDrawer}
         />
       {isUserMember &&
         <AssetAddDialogContainer
