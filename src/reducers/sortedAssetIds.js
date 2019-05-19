@@ -1,6 +1,6 @@
 import { OrderedSet } from 'immutable'
 import {
-  MERGE_ASSETS,
+  REPLACE_ASSET,
   REPLACE_ASSETS,
 } from '../constants'
 import {
@@ -12,17 +12,18 @@ const initialState = OrderedSet()
 
 
 const sortedAssetIds = (state=initialState, action) => {
-  const actionType = action.type
-
-  if (REPLACE_ASSETS === actionType) {
-    const assets = action.payload
-    return getOrderedIds(assets)
-  } else if (MERGE_ASSETS === actionType) {
-    const assets = action.payload
-    return state.union(getOrderedIds(assets))
+  switch (action.type) {
+    case REPLACE_ASSETS: {
+      const assets = action.payload
+      return getOrderedIds(assets)
+    }
+    case REPLACE_ASSET: {
+      const asset = action.payload
+      return state.add(asset.get('id'))
+    }
+    default:
+      return state
   }
-
-  return state
 }
 
 

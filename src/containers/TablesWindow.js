@@ -1,9 +1,9 @@
 import { connect } from 'react-redux'
+import TablesWindow from '../components/TablesWindow'
 import {
   refreshAssets,
   setFocusingAsset,
 } from '../actions'
-import TablesWindow from '../components/TablesWindow'
 import {
   getFocusingAssetId,
   getVisibleAssets,
@@ -17,8 +17,8 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
-  refreshAssets: payload => {dispatch(
-    refreshAssets(payload))},
+  refreshAssets: (...args) => {dispatch(
+    refreshAssets(...args))},
   setFocusingAsset: payload => {dispatch(
     setFocusingAsset(payload))}
 })

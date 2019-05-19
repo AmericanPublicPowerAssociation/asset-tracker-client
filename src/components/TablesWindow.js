@@ -6,7 +6,7 @@ import TableBody from '@material-ui/core/TableBody'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
-import AssetFilterContainer from '../containers/AssetFilterContainer'
+import AssetFilter from '../containers/AssetFilter'
 import { getAssetTypeName } from '../routines'
 
 
@@ -26,7 +26,16 @@ class TablesWindow extends PureComponent {
     const {
       refreshAssets,
     } = this.props
-    refreshAssets()
+    refreshAssets({}, {
+      onError: this.onError,
+      onSuccess: this.onSuccess,
+    })
+  }
+
+  onError = errors => {
+  }
+
+  onSuccess = assets => {
   }
 
   render = () => {
@@ -41,7 +50,7 @@ class TablesWindow extends PureComponent {
     return (
       <Grid container className={classes.root}>
         <Grid item>
-          <AssetFilterContainer />
+          <AssetFilter />
         </Grid>
         <Grid item xs>
           <Table>

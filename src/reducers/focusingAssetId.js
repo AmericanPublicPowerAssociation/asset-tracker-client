@@ -7,14 +7,14 @@ const initialState = null
 
 
 const focusingAssetId = (state=initialState, action) => {
-  const actionType = action.type
-
-  if (SET_FOCUSING_ASSET === actionType) {
-    const {id} = action.payload
-    return id
+  switch (action.type) {
+    case SET_FOCUSING_ASSET: {
+      const {id} = action.payload
+      return id
+    }
+    default:
+      return state
   }
-
-  return state
 }
 
 

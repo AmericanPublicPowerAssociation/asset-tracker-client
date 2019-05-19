@@ -17,8 +17,6 @@ const reduceHorizontally = combineReducers({
 
 
 const reduceVertically = (state, action) => {
-  // const actionType = action.type
-  // const actionPayload = action.payload
   return state
 }
 

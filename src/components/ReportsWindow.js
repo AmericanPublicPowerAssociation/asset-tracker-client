@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import Typography from '@material-ui/core/Typography'
 
+
 class ReportsWindow extends PureComponent {
   render = () => {
     return (
@@ -10,5 +11,6 @@ class ReportsWindow extends PureComponent {
     )
   }
 }
+
 
 export default ReportsWindow

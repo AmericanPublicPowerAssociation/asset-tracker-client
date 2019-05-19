@@ -6,6 +6,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 
+
 const styles = theme => ({
   selected: {
     backgroundColor: theme.palette.action.selected,
@@ -15,19 +16,20 @@ const styles = theme => ({
   },
 })
 
+
 class ListItemLink extends PureComponent {
   render = () => {
     const {
       classes,
       to, text, icon, inset, nested,
       badgeContent, badgeColor,
-      ...etc
+      ...props
     } = this.props
     return (
       <ListItem button component={NavLink}
         exact to={to} activeClassName={classes.selected}
         className={nested ? classes.nested : ''}
-        {...etc}
+        {...props}
       >
       {icon &&
         <ListItemIcon>
@@ -44,5 +46,6 @@ class ListItemLink extends PureComponent {
     )
   }
 }
+
 
 export default withStyles(styles)(ListItemLink)

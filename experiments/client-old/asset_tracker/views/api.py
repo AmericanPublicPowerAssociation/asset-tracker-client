@@ -12,8 +12,6 @@ from ..utils import make_random_string, serialize
 
 @view_defaults(renderer='json')
 class API:
-    def __init__(self, request):
-        self.request = request
 
     @view_config(route_name='center.json')
     def get_center(self):

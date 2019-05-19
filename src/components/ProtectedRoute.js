@@ -3,14 +3,15 @@ import { Route } from 'react-router-dom'
 import { appaAuthClient } from 'appa-auth-client'
 import NotAuthenticatedWindow from './NotAuthenticatedWindow'
 
+
 class ProtectedRoute extends PureComponent {
   render = () => {
     const {
       render,
-      ...etc
+      ...props
     } = this.props
     return (
-      <Route {...etc} render={() => (
+      <Route {...props} render={() => (
         appaAuthClient.isAuthenticated() ?
         render() :
         <NotAuthenticatedWindow />
@@ -18,5 +19,6 @@ class ProtectedRoute extends PureComponent {
     )
   }
 }
+
 
 export default ProtectedRoute

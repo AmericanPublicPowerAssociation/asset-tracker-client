@@ -8,7 +8,7 @@ import {
   INFORMATION_DRAWER_WIDTH,
   RIGHT_DRAWER_MINIMUM_WIDTH,
 } from '../constants'
-import AssetDetailContainer from '../containers/AssetDetailContainer'
+import AssetDetail from '../containers/AssetDetail'
 
 
 const styles = theme => ({
@@ -44,14 +44,14 @@ class InformationDrawer extends PureComponent {
     const {
       classes,
       onClose,
-      ...etc
+      ...props
     } = this.props
     return (
       <Drawer
         classes={{
           paper: classes.drawerPaper,
         }}
-        {...etc}
+        {...props}
       >
         <div className={classes.drawerHeader}>
           <IconButton onClick={onClose}>
@@ -61,10 +61,10 @@ class InformationDrawer extends PureComponent {
         <Divider />
         <div className={classes.frame}>
           <div className={classes.overviewPanel}>
-            {/* <AssetCircuitContainer /> */}
+            {/* <AssetCircuit /> */}
           </div>
           <div className={classes.detailPanel}>
-            <AssetDetailContainer />
+            <AssetDetail />
           </div>
         </div>
       </Drawer>

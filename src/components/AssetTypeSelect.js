@@ -9,12 +9,12 @@ import { ASSET_TYPE_BY_ID } from '../constants'
 class AssetTypeSelect extends PureComponent {
   render = () => {
     const {
-      ...etc
+      ...props
     } = this.props
     return (
       <FormControl fullWidth>
 			  <InputLabel htmlFor='asset-type-select'>Asset Type</InputLabel>
-        <NativeSelect {...etc} input={<Input id='asset-type-select' />} >
+        <NativeSelect {...props} input={<Input id='asset-type-select' />} >
         {Object.entries(ASSET_TYPE_BY_ID).map(([id, {name}]) =>
           <option value={id} key={id}>{name}</option> 
         )}

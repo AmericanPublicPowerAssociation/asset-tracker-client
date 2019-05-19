@@ -1,20 +1,21 @@
 import { connect } from 'react-redux'
-import AssetDetail from '../components/AssetDetail'
+import AssetAddDialog from '../components/AssetAddDialog'
 import {
-  getFocusingAsset,
-} from '../selectors'
+  addAsset,
+} from '../actions'
 
 
 const mapStateToProps = state => ({
-  focusingAsset: getFocusingAsset(state),
 })
 
 
 const mapDispatchToProps = dispatch => ({
+  addAsset: (...args) => {dispatch(
+    addAsset(...args))},
 })
 
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(AssetDetail)
+)(AssetAddDialog)

@@ -8,7 +8,6 @@ import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
 import AssetTypeSelect from './AssetTypeSelect'
 import AssetName from './AssetName'
-// import VendorName from './VendorName'
 import {
   DEFAULT_ASSET_TYPE_ID,
 } from '../constants'
@@ -22,12 +21,20 @@ const styles = theme => ({
 
 
 class AssetAddDialog extends PureComponent {
+
   state = {
     utilityId: 'abc',
     typeId: DEFAULT_ASSET_TYPE_ID,
     name: '',
-    // vendorName: '',
-    errorByKey: Map(),
+    errors: Map(),
+  }
+
+  changeAssetType = event => {
+    this.setState({typeId: event.target.value})
+  }
+
+  updateAsset = attributes => {
+    this.setState({...attributes})
   }
 
   onCancel = () => {
@@ -36,67 +43,28 @@ class AssetAddDialog extends PureComponent {
   }
 
   onOk = () => {
-    const {
-      // Get redux props
-      addAsset,
-    } = this.props
-    const {
-      utilityId,
-      typeId,
-      name,
-    } = this.state
-    addAsset({utilityId, typeId, name}, this.onSuccess, this.onError)
+    const { addAsset } = this.props
+    const { utilityId, typeId, name } = this.state
+    addAsset({utilityId, typeId, name}, {
+      onError: this.onError,
+      onSuccess: this.onSuccess,
+    })
+  }
+
+  onError = errors => {
+    this.setState({errors})
   }
 
   onSuccess = asset => {
-    const {
-      onClose,
-    } = this.props
-    const {
-      errorByKey,
-    } = this.state
-    this.setState({
-      name: '',
-      errorByKey: errorByKey.clear(),
-    })
+    const { onClose } = this.props
+    const { errors } = this.state
+    this.setState({name: '', errors: errors.clear()})
     onClose()
   }
 
-  onError = errorByKey => {
-    this.setState({errorByKey})
-  }
-
-  changeAssetType = event => {
-    this.setState({typeId: event.target.value})
-  }
-
-  setAssetNameProps = (value, errorText) => {
-    const {
-      errorByKey,
-    } = this.state
-    this.setState({
-      name: value,
-      errorByKey: errorByKey.set('name', errorText),
-    })
-  }
-
-  /*
-  changeVendorName = event => {
-    this.setState({vendorName: event.target.value})}
-  */
-
   render = () => {
-    const {
-      classes,
-      open,
-      onClose,
-    } = this.props
-    const {
-      typeId,
-      name,
-      // vendorName,
-      errorByKey,
-    } = this.state
+    const { classes, open, onClose } = this.props
+    const { typeId, name, errors } = this.state
     return (
       <Dialog
         open={open}
@@ -110,18 +78,11 @@ class AssetAddDialog extends PureComponent {
             onChange={this.changeAssetType}
           />
           <AssetName
-            value={name}
-            errorText={errorByKey.get('name')}
-            setProps={this.setAssetNameProps}
+            name={name}
+            errorText={errors.get('name')}
             className={classes.attribute}
+            onUpdate={this.updateAsset}
           />
-          {/*
-          <VendorName
-            value={vendorName}
-            onChange={this.changeVendorName}
-            className={classes.attribute}
-          />
-          */}
         </DialogContent>
         <DialogActions>
           <Button onClick={this.onCancel}>Cancel</Button>

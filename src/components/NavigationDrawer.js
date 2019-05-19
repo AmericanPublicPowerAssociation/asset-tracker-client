@@ -23,6 +23,7 @@ import {
   NAVIGATION_DRAWER_WIDTH,
 } from '../constants'
 
+
 const styles = theme => ({
   drawerPaper: {
     width: NAVIGATION_DRAWER_WIDTH,
@@ -36,6 +37,7 @@ const styles = theme => ({
   },
 })
 
+
 class NavigationDrawer extends PureComponent {
   render = () => {
     const {
@@ -44,14 +46,14 @@ class NavigationDrawer extends PureComponent {
       onClose,
       signIn,
       signOut,
-      ...etc
+      ...props
     } = this.props
     return (
       <Drawer
         classes={{
           paper: classes.drawerPaper,
         }}
-        {...etc}
+        {...props}
       >
         <div className={classes.drawerHeader}>
           <IconButton onClick={onClose}>
@@ -91,5 +93,6 @@ class NavigationDrawer extends PureComponent {
     )
   }
 }
+
 
 export default withStyles(styles)(NavigationDrawer)

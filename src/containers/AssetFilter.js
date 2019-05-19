@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import AssetFilter from '../components/AssetFilter'
 import {
   setAssetNameQuery,
   toggleSelectedAssetType,
@@ -8,7 +9,6 @@ import {
   getCountByAssetTypeId,
   getSelectedAssetTypeIds,
 } from '../selectors'
-import AssetFilter from '../components/AssetFilter'
 
 
 const mapStateToProps = state => ({

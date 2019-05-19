@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { CONTENT_PADDING } from '../constants'
 
+
 const styles = theme => ({
   root: {
     padding: CONTENT_PADDING,
@@ -14,6 +15,7 @@ const styles = theme => ({
     },
   },
 })
+
 
 class NotAuthenticatedWindow extends PureComponent {
   render = () => {
@@ -45,5 +47,6 @@ class NotAuthenticatedWindow extends PureComponent {
     )
   }
 }
+
 
 export default withStyles(styles)(NotAuthenticatedWindow)

@@ -18,10 +18,10 @@ import {
 import ApplicationBar from './ApplicationBar'
 import NavigationDrawer from './NavigationDrawer'
 import InformationDrawer from './InformationDrawer'
-import AssetAddDialogContainer from '../containers/AssetAddDialogContainer'
+import AssetAddDialog from '../containers/AssetAddDialog'
 import ProtectedRoute from './ProtectedRoute'
 import DashboardsWindow from './DashboardsWindow'
-import TablesWindowContainer from '../containers/TablesWindowContainer'
+import TablesWindow from '../containers/TablesWindow'
 import MapsWindow from './MapsWindow'
 import CircuitsWindow from './CircuitsWindow'
 import ReportsWindow from './ReportsWindow'
@@ -78,6 +78,7 @@ const eveningTheme = createMuiTheme({...theme, palette: {type: 'dark'}})
 
 
 class App extends Component {
+
   state = {
     isUserAuthenticated: false,
     isUserMember: false,
@@ -90,35 +91,44 @@ class App extends Component {
   signIn = () => {
     appaAuthClient.signIn(() => {
       this.setState(appaAuthClient.getState())
-    }, ['leader'])}
+    }, ['leader'])
+  }
   signOut = () => {
     appaAuthClient.signOut(() => {
       this.setState(appaAuthClient.getState())
-    })}
+    })
+  }
 
   openNavigationDrawer = () => {
     this.setState({
       isNavigationDrawerOpen: true,
-      isInformationDrawerOpen: false})}
+      isInformationDrawerOpen: false})
+  }
   closeNavigationDrawer = () => {
     this.setState({
-      isNavigationDrawerOpen: false})}
+      isNavigationDrawerOpen: false})
+  }
 
   openInformationDrawer = () => {
     this.setState({
       isInformationDrawerOpen: true,
-      isNavigationDrawerOpen: false})}
+      isNavigationDrawerOpen: false})
+  }
   closeInformationDrawer = () => {
     this.setState({
-      isInformationDrawerOpen: false})}
+      isInformationDrawerOpen: false})
+  }
 
   openAssetAddDialog = () => {
-    this.setState({isAssetAddDialogOpen: true})}
+    this.setState({isAssetAddDialogOpen: true})
+  }
   closeAssetAddDialog = () => {
-    this.setState({isAssetAddDialogOpen: false})}
+    this.setState({isAssetAddDialogOpen: false})
+  }
 
   toggleTheme = () => {
-    this.setState({withMorningTheme: !this.state.withMorningTheme})}
+    this.setState({withMorningTheme: !this.state.withMorningTheme})
+  }
 
   render = () => {
     const { classes } = this.props
@@ -156,7 +166,7 @@ class App extends Component {
                 <DashboardsWindow />
               )} />
               <ProtectedRoute exact path='/tables' render={() => (
-                <TablesWindowContainer
+                <TablesWindow
                   onSelect={this.openInformationDrawer}
                 />
               )} />
@@ -205,7 +215,7 @@ class App extends Component {
           onClose={this.closeInformationDrawer}
         />
       {isUserMember &&
-        <AssetAddDialogContainer
+        <AssetAddDialog
           open={isAssetAddDialogOpen}
           onClose={this.closeAssetAddDialog}
           onAdd={this.openInformationDrawer}

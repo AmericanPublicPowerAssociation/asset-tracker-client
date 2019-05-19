@@ -1,75 +1,38 @@
-import { Map } from 'immutable'
 import {
+  ADD_ASSET,
   ADD_SELECTED_ASSET_TYPE,
-  MERGE_ASSETS,
+  REFRESH_ASSETS,
+  REPLACE_ASSET,
   REPLACE_ASSETS,
+  SERVER,
   SET_ASSET_NAME_QUERY,
   SET_FOCUSING_ASSET,
   TOGGLE_SELECTED_ASSET_TYPE,
+  UPDATE_ASSET,
 } from '../constants'
 
 
-export const refreshAssets = () => {
-  return async dispatch => {
-    try {
-      const response = await fetch('/assets.json')
-      switch (response.status) {
-        case 200:
-          const assets = await response.json()
-          dispatch(replaceAssets(assets))
-          break
-        case 400:
-          const errorByKey = await response.json()
-          alert(errorByKey)
-          break
-        default:
-          const text = await response.text()
-          alert(text)
-      }
-    } catch (error) {
-      alert(error)
-    }
-  }
-}
+export const refreshAssets = (payload, callback) => ({
+  payload, callback, api: SERVER, type: REFRESH_ASSETS})
+export const addAsset = (payload, callback) => ({
+  payload, callback, api: SERVER, type: ADD_ASSET})
+export const updateAsset = (payload, callback) => ({
+  payload, callback, api: SERVER, type: UPDATE_ASSET})
 
 
-export const addAsset = (assetParameters, onSuccess, onError) => {
-  return async dispatch => {
-    try {
-      const response = await fetch('/assets.json', {
-        method: 'POST',
-        body: JSON.stringify(assetParameters),
-      })
-      switch (response.status) {
-        case 200:
-          const asset = await response.json()
-          dispatch(mergeAssets([asset]))
-          onSuccess(asset)
-          break
-        case 400:
-          const errorByKey = await response.json()
-          onError(Map(errorByKey))
-          break
-        default:
-          const text = await response.text()
-          alert(text)
-      }
-    } catch (error) {
-      alert(error)
-    }
-  }
-}
-
-
+export const replaceAsset = payload => ({
+  payload, type: REPLACE_ASSET})
 export const replaceAssets = payload => ({
-  type: REPLACE_ASSETS, payload})
-export const mergeAssets = payload => ({
-  type: MERGE_ASSETS, payload})
+  payload, type: REPLACE_ASSETS})
+
+
 export const setAssetNameQuery = payload => ({
-  type: SET_ASSET_NAME_QUERY, payload})
+  payload, type: SET_ASSET_NAME_QUERY})
 export const toggleSelectedAssetType = payload => ({
-  type: TOGGLE_SELECTED_ASSET_TYPE, payload})
+  payload, type: TOGGLE_SELECTED_ASSET_TYPE})
 export const addSelectedAssetType = payload => ({
-  type: ADD_SELECTED_ASSET_TYPE, payload})
+  payload, type: ADD_SELECTED_ASSET_TYPE})
+
+
 export const setFocusingAsset = payload => ({
-  type: SET_FOCUSING_ASSET, payload})
+  payload, type: SET_FOCUSING_ASSET})

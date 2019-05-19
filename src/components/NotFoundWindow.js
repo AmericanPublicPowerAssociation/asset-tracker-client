@@ -1,6 +1,7 @@
 import React, { Fragment, PureComponent } from 'react'
 import Typography from '@material-ui/core/Typography'
 
+
 class NotFoundWindow extends PureComponent {
   render = () => {
     return (
@@ -15,5 +16,6 @@ class NotFoundWindow extends PureComponent {
     )
   }
 }
+
 
 export default NotFoundWindow

@@ -7,14 +7,14 @@ const initialState = ''
 
 
 const assetNameQuery = (state=initialState, action) => {
-  const actionType = action.type
-
-  if (SET_ASSET_NAME_QUERY === actionType) {
-    const {query} = action.payload
-    return query
+  switch (action.type) {
+    case SET_ASSET_NAME_QUERY: {
+      const {query} = action.payload
+      return query
+    }
+    default:
+      return state
   }
-
-  return state
 }
 
 

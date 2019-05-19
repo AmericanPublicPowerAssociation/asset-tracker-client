@@ -9,11 +9,16 @@ import {
 } from '../macros'
 
 
-export const getAssetById = state => state.get('assetById')
-export const getAssetNameQuery = state => state.get('assetNameQuery')
-export const getFocusingAssetId = state => state.get('focusingAssetId')
-export const getSelectedAssetTypeIds = state => state.get('selectedAssetTypeIds')
-export const getSortedAssetIds = state => state.get('sortedAssetIds')
+export const getAssetById = state => state.get(
+  'assetById')
+export const getAssetNameQuery = state => state.get(
+  'assetNameQuery')
+export const getFocusingAssetId = state => state.get(
+  'focusingAssetId')
+export const getSelectedAssetTypeIds = state => state.get(
+  'selectedAssetTypeIds')
+export const getSortedAssetIds = state => state.get(
+  'sortedAssetIds')
 
 
 export const getMatchingAssets = createSelector([

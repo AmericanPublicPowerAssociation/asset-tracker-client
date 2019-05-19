@@ -1,6 +1,6 @@
 import { Map } from 'immutable'
 import {
-  MERGE_ASSETS,
+  REPLACE_ASSET,
   REPLACE_ASSETS,
 } from '../constants'
 import {
@@ -12,17 +12,18 @@ const initialState = Map()
 
 
 const assetById = (state=initialState, action) => {
-  const actionType = action.type
-
-  if (REPLACE_ASSETS === actionType) {
-    const assets = action.payload
-    return getById(assets)
-  } else if (MERGE_ASSETS === actionType) {
-    const assets = action.payload
-    return state.mergeDeep(getById(assets))
+  switch (action.type) {
+    case REPLACE_ASSETS: {
+      const assets = action.payload
+      return getById(assets)
+    }
+    case REPLACE_ASSET: {
+      const asset = action.payload
+      return state.set(asset.get('id'), asset)
+    }
+    default:
+      return state
   }
-
-  return state
 }
 
 

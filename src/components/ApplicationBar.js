@@ -16,6 +16,7 @@ import {
   TOOLTIP_DELAY,
 } from '../constants'
 
+
 const styles = theme => ({
   appBar: {
     transition: theme.transitions.create(['margin', 'width'], {
@@ -53,6 +54,7 @@ const styles = theme => ({
     display: 'none',
   },
 })
+
 
 class ApplicationBar extends PureComponent {
   render = () => {
@@ -112,5 +114,6 @@ class ApplicationBar extends PureComponent {
     )
   }
 }
+
 
 export default withStyles(styles)(ApplicationBar)

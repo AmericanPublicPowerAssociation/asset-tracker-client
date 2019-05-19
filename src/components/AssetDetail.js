@@ -9,35 +9,37 @@ const styles = theme => ({
 
 
 class AssetDetail extends PureComponent {
-  state = {
-    name: '',
-    errorByKey: Map(),
+
+  updateAsset = attributes => {
+    const {
+      focusingAsset,
+      updateAsset,
+    } = this.props
+    const id = focusingAsset.get('id')
+    updateAsset({id, ...attributes}, {
+      onSuccess: this.onSuccess,
+      onError: this.onError,
+    })
   }
 
-  setAssetNameProps = (value, errorText) => {
-    const {
-      errorByKey,
-    } = this.state
-    this.setState({
-      name: value,
-      errorByKey: errorByKey.set('name', errorText),
-    })
+  onSuccess = asset => {
+  }
+
+  onError = errors => {
   }
 
   render = () => {
     const {
       focusingAsset,
     } = this.props
-    const {
-      errorByKey,
-    } = this.state
     const name = focusingAsset.get('name')
+    const errors = focusingAsset.get('errors', Map())
     return (
       <Fragment>
         <AssetName
-          value={name}
-          errorText={errorByKey.get('name')}
-          setProps={this.setAssetNameProps}
+          name={name}
+          errorText={errors.get('name')}
+          onUpdate={this.updateAsset}
         />
       </Fragment>
     )
