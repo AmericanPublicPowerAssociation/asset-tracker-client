@@ -10,6 +10,13 @@ const styles = theme => ({
 
 class AssetDetail extends PureComponent {
 
+  componentDidUpdate = prevProps => {
+    const { focusingAsset } = this.props
+    if (prevProps.focusingAsset.get('id') !== focusingAsset.get('id')) {
+      this.trackingAsset = focusingAsset
+    }
+  }
+
   trackChanges = attributes => {
     const { focusingAsset, mergeAsset } = this.props
     const id = focusingAsset.get('id')
@@ -18,8 +25,10 @@ class AssetDetail extends PureComponent {
 
   saveChanges = attributes => {
     const { focusingAsset, changeAsset } = this.props
-    const id = focusingAsset.get('id')
-    changeAsset({id, ...attributes}, {
+    if (this.trackingAsset === focusingAsset) {
+      return
+    }
+    changeAsset({id: focusingAsset.get('id'), ...attributes}, {
       onError: this.onError,
       onSuccess: this.onSuccess,
     })
