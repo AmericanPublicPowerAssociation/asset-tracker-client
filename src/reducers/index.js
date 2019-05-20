@@ -3,8 +3,8 @@ import reduceReducers from 'reduce-reducers'
 import assetById from './assetById'
 import sortedAssetIds from './sortedAssetIds'
 import focusingAssetId from './focusingAssetId'
-import assetFiltersByAttribute from './assetFiltersByAttribute'
-import assetFilter from './assetFilter'
+import assetFilterKeysByAttribute from './assetFilterKeysByAttribute'
+import assetFilterValueByAttribute from './assetFilterValueByAttribute'
 // import assetAddDialog from './assetAddDialog'
 import {
   SET_FOCUSING_ASSET,
@@ -12,14 +12,11 @@ import {
 
 
 const reduceHorizontally = combineReducers({
-  // Remember assets
   sortedAssetIds,
   assetById,
   focusingAssetId,
-  // Remember filters
-  assetFiltersByAttribute,
-  // Remember components
-  assetFilter,
+  assetFilterValueByAttribute,
+  assetFilterKeysByAttribute,
   // assetAddDialog,
 })
 

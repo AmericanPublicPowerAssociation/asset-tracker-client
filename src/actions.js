@@ -1,16 +1,16 @@
 import {
   ADD_ASSET,
   CHANGE_ASSET,
-  EXCLUDE_ASSET_ATTRIBUTE_FILTER,
-  INCLUDE_ASSET_ATTRIBUTE_FILTER,
+  EXCLUDE_ASSET_FILTER_KEY,
+  INCLUDE_ASSET_FILTER_KEY,
   LOG_ERROR,
   REFRESH_ASSETS,
   REPLACE_ASSET,
   REPLACE_ASSETS,
-  SET_ASSET_ATTRIBUTE_FILTERS,
-  SET_ASSET_FILTER,
+  SET_ASSET_FILTER_KEYS,
+  SET_ASSET_FILTER_VALUE,
   SET_FOCUSING_ASSET,
-  TOGGLE_ASSET_ATTRIBUTE_FILTER,
+  TOGGLE_ASSET_FILTER_KEY,
 } from './constants'
 
 
@@ -32,19 +32,19 @@ export const replaceAssets = payload => ({
   payload, type: REPLACE_ASSETS})
 
 
-export const excludeAssetAttributeFilter = payload => ({
-  payload, type: EXCLUDE_ASSET_ATTRIBUTE_FILTER})
-export const includeAssetAttributeFilter = payload => ({
-  payload, type: INCLUDE_ASSET_ATTRIBUTE_FILTER})
-export const setAssetAttributeFilters = payload => ({
-  payload, type: SET_ASSET_ATTRIBUTE_FILTERS})
-export const toggleAssetAttributeFilter = payload => ({
-  payload, type: TOGGLE_ASSET_ATTRIBUTE_FILTER})
+export const excludeAssetFilterKey = payload => ({
+  payload, type: EXCLUDE_ASSET_FILTER_KEY})
+export const includeAssetFilterKey = payload => ({
+  payload, type: INCLUDE_ASSET_FILTER_KEY})
+export const setAssetFilterKeys = payload => ({
+  payload, type: SET_ASSET_FILTER_KEYS})
+export const toggleAssetFilterKey = payload => ({
+  payload, type: TOGGLE_ASSET_FILTER_KEY})
 
 
 export const setFocusingAsset = payload => ({
   payload, type: SET_FOCUSING_ASSET})
 
 
-export const setAssetFilter = payload => ({
-  payload, type: SET_ASSET_FILTER})
+export const setAssetFilterValue = payload => ({
+  payload, type: SET_ASSET_FILTER_VALUE})

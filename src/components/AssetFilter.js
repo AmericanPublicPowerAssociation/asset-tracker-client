@@ -7,7 +7,6 @@ import ListItemText from '@material-ui/core/ListItemText'
 import InputBase from '@material-ui/core/InputBase'
 import Checkbox from '@material-ui/core/Checkbox'
 import { ASSET_TYPE_BY_ID } from '../constants'
-import { splitTerms } from '../macros'
 
 
 const styles = {
@@ -22,28 +21,24 @@ const styles = {
 
 class AssetFilter extends PureComponent {
 
-  setAssetNameFilters = name => {
-    const {
-      setAssetAttributeFilters,
-      setAssetFilter,
-    } = this.props
-    setAssetFilter({name})
-    setAssetAttributeFilters({name: splitTerms(name.toLowerCase())})
+  setAssetFilterName = name => {
+    const { setAssetFilterValue } = this.props
+    setAssetFilterValue({name})
   }
 
   render = () => {
     const {
       classes,
       // Get redux variables
-      assetFilter,
-      assetFiltersByAttribute,
+      assetFilterValueByAttribute,
+      assetFilterKeysByAttribute,
       countByAssetTypeId,
-      toggleAssetAttributeFilter,
+      toggleAssetFilterKey,
     } = this.props
-    const name = assetFilter.get('name')
+    const name = assetFilterValueByAttribute.get('name')
     const visibleAssetTypeIds = Object.keys(ASSET_TYPE_BY_ID).filter(
       typeId => typeId in countByAssetTypeId)
-    const selectedAssetTypeIds = assetFiltersByAttribute.get('typeId')
+    const selectedAssetTypeIds = assetFilterKeysByAttribute.get('typeId')
     return (
       <Paper className={classes.root} square>
         <List>
@@ -54,7 +49,7 @@ class AssetFilter extends PureComponent {
               inputProps={{
                 className: classes.nameInput,
               }}
-              onChange={event => this.setAssetNameFilters(event.target.value)}
+              onChange={event => this.setAssetFilterName(event.target.value)}
             />
           </ListItem>
         {visibleAssetTypeIds.length > 0 &&
@@ -69,7 +64,7 @@ class AssetFilter extends PureComponent {
             const typeText = `${assetType.name} (${assetCount})`
             return (
               <ListItem button key={typeId}
-                onClick={() => toggleAssetAttributeFilter({typeId}) }
+                onClick={() => toggleAssetFilterKey({typeId}) }
               >
                 <Checkbox tabIndex={-1} disableRipple
                   checked={selectedAssetTypeIds.has(typeId)}

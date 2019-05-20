@@ -1,50 +1,46 @@
 import { Map, Set } from 'immutable'
 import {
-  EXCLUDE_ASSET_ATTRIBUTE_FILTER,
-  INCLUDE_ASSET_ATTRIBUTE_FILTER,
-  SET_ASSET_ATTRIBUTE_FILTERS,
-  TOGGLE_ASSET_ATTRIBUTE_FILTER,
+  EXCLUDE_ASSET_FILTER_KEY,
+  INCLUDE_ASSET_FILTER_KEY,
+  SET_ASSET_FILTER_KEYS,
+  TOGGLE_ASSET_FILTER_KEY,
 } from '../constants'
 
 
 const initialState = Map({
-  name: Set(),
   typeId: Set(),
 })
 
 
-const assetFiltersByAttribute = (state=initialState, action) => {
+const assetFilterKeysByAttribute = (state=initialState, action) => {
   switch (action.type) {
-    case SET_ASSET_ATTRIBUTE_FILTERS: {
+    case SET_ASSET_FILTER_KEYS: {
       return state.withMutations(state => {
         Object.entries(action.payload).forEach(([attribute, value]) => {
           state.set(attribute, Set(value))
         })
       })
     }
-    case INCLUDE_ASSET_ATTRIBUTE_FILTER: {
+    case INCLUDE_ASSET_FILTER_KEY: {
       return state.withMutations(state => {
         Object.entries(action.payload).forEach(([attribute, value]) => {
-          state.get(attribute).add(value)
+          state.update(attribute, set => set.add(value))
         })
       })
     }
-    case EXCLUDE_ASSET_ATTRIBUTE_FILTER: {
+    case EXCLUDE_ASSET_FILTER_KEY: {
       return state.withMutations(state => {
         Object.entries(action.payload).forEach(([attribute, value]) => {
-          state.get(attribute).delete(value)
+          state.update(attribute, set => set.delete(value))
         })
       })
     }
-    case TOGGLE_ASSET_ATTRIBUTE_FILTER: {
+    case TOGGLE_ASSET_FILTER_KEY: {
       return state.withMutations(state => {
         Object.entries(action.payload).forEach(([attribute, value]) => {
-          const attributeFilters = state.get(attribute)
-          if (attributeFilters.has(value)) {
-            attributeFilters.delete(value)
-          } else {
-            attributeFilters.add(value)
-          }
+          state.update(attribute, set => set.has(value) ?
+            set.delete(value) :
+            set.add(value))
         })
       })
     }
@@ -54,4 +50,4 @@ const assetFiltersByAttribute = (state=initialState, action) => {
 }
 
 
-export default assetFiltersByAttribute
+export default assetFilterKeysByAttribute

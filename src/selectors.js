@@ -5,6 +5,7 @@ import {
 } from './constants'
 import {
   IntegerDefaultDict,
+  splitTerms,
 } from './macros'
 
 
@@ -12,59 +13,44 @@ export const getAssetById = state => state.get(
   'assetById')
 export const getSortedAssetIds = state => state.get(
   'sortedAssetIds')
-export const getAssetFiltersByAttribute = state => state.get(
-  'assetFiltersByAttribute')
+export const getAssetFilterKeysByAttribute = state => state.get(
+  'assetFilterKeysByAttribute')
+export const getAssetFilterValueByAttribute = state => state.get(
+  'assetFilterValueByAttribute')
 export const getFocusingAssetId = state => state.get(
   'focusingAssetId')
-export const getAssetFilter = state => state.get(
-  'assetFilter')
-
-
-export const getAssetNameFilters = createSelector([
-  getAssetFiltersByAttribute,
-], (
-  assetFiltersByAttribute,
-) => {
-  return assetFiltersByAttribute.get('name')
-})
-
-
-export const getAssetTypeIdFilters = createSelector([
-  getAssetFiltersByAttribute,
-], (
-  assetFiltersByAttribute,
-) => {
-  return assetFiltersByAttribute.get('typeId')
-})
 
 
 export const getMatchingAssets = createSelector([
   getAssetById,
-  getAssetNameFilters,
+  getAssetFilterValueByAttribute,
   getSortedAssetIds,
 ], (
   assetById,
-  assetNameFilters,
+  assetFilterValueByAttribute,
   sortedAssetIds,
 ) => {
+  const assetNameTerms = splitTerms(assetFilterValueByAttribute.get(
+    'name').toLowerCase())
   return sortedAssetIds
     .map(assetId => assetById.get(assetId))
     .filter(asset => {
       const lowercaseAssetName = asset.get('name').toLowerCase()
-      return assetNameFilters.every(text => lowercaseAssetName.includes(text))
+      return assetNameTerms.every(term => lowercaseAssetName.includes(term))
     })
 })
 
 
 export const getVisibleAssets = createSelector([
   getMatchingAssets,
-  getAssetTypeIdFilters,
+  getAssetFilterKeysByAttribute,
 ], (
   matchingAssets,
-  assetTypeIdFilters,
+  assetFilterKeysByAttribute,
 ) => {
+  const selectedAssetTypeIds = assetFilterKeysByAttribute.get('typeId')
   return matchingAssets
-    .filter(asset => assetTypeIdFilters.has(asset.get('typeId')))
+    .filter(asset => selectedAssetTypeIds.has(asset.get('typeId')))
     .slice(0, MAXIMUM_ASSET_LIST_LENGTH)
 })
 
