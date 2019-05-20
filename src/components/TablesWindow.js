@@ -23,19 +23,8 @@ const styles = theme => ({
 class TablesWindow extends PureComponent {
 
   componentDidMount() {
-    const {
-      refreshAssets,
-    } = this.props
-    refreshAssets({}, {
-      onError: this.onError,
-      onSuccess: this.onSuccess,
-    })
-  }
-
-  onError = errors => {
-  }
-
-  onSuccess = assets => {
+    const { refreshAssets } = this.props
+    refreshAssets()
   }
 
   render = () => {

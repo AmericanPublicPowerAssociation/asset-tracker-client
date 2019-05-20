@@ -18,9 +18,11 @@ class AssetDetail extends PureComponent {
   }
 
   trackChanges = attributes => {
+    /*
     const { focusingAsset, mergeAsset } = this.props
     const id = focusingAsset.get('id')
     mergeAsset(fromJS({id, ...attributes}))
+    */
   }
 
   saveChanges = attributes => {
@@ -35,9 +37,11 @@ class AssetDetail extends PureComponent {
   }
 
   onError = errors => {
+    /*
     const { focusingAsset, mergeAsset } = this.props
     const id = focusingAsset.get('id')
     mergeAsset(fromJS({id, errors}))
+    */
   }
 
   render = () => {

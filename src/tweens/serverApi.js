@@ -62,6 +62,3 @@ const serverApi = ({ dispatch, getState }) => next => async action => {
     alert(error)
   }
 }
-
-
-export default serverApi

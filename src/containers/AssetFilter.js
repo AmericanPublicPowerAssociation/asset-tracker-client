@@ -1,28 +1,31 @@
 import { connect } from 'react-redux'
 import AssetFilter from '../components/AssetFilter'
 import {
-  setAssetNameQuery,
-  toggleSelectedAssetType,
+  setAssetAttributeFilters,
+  setAssetFilter,
+  toggleAssetAttributeFilter,
 } from '../actions'
 import {
-  getAssetNameQuery,
+  getAssetFilter,
+  getAssetFiltersByAttribute,
   getCountByAssetTypeId,
-  getSelectedAssetTypeIds,
 } from '../selectors'
 
 
 const mapStateToProps = state => ({
-  assetNameQuery: getAssetNameQuery(state),
+  assetFilter: getAssetFilter(state),
+  assetFiltersByAttribute: getAssetFiltersByAttribute(state),
   countByAssetTypeId: getCountByAssetTypeId(state),
-  selectedAssetTypeIds: getSelectedAssetTypeIds(state),
 })
 
 
 const mapDispatchToProps = dispatch => ({
-  setAssetNameQuery: payload => {dispatch(
-    setAssetNameQuery(payload))},
-  toggleSelectedAssetType: payload => {dispatch(
-    toggleSelectedAssetType(payload))},
+  setAssetFilter: payload => {dispatch(
+    setAssetFilter(payload))},
+  setAssetAttributeFilters: payload => {dispatch(
+    setAssetAttributeFilters(payload))},
+  toggleAssetAttributeFilter: payload => {dispatch(
+    toggleAssetAttributeFilter(payload))},
 })
 
 

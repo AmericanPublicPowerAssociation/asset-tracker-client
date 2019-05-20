@@ -17,8 +17,8 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
-  refreshAssets: (...args) => {dispatch(
-    refreshAssets(...args))},
+  refreshAssets: payload => {dispatch(
+    refreshAssets(payload))},
   setFocusingAsset: payload => {dispatch(
     setFocusingAsset(payload))}
 })

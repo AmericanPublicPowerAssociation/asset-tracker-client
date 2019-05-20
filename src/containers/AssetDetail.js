@@ -2,7 +2,6 @@ import { connect } from 'react-redux'
 import AssetDetail from '../components/AssetDetail'
 import {
   changeAsset,
-  mergeAsset,
 } from '../actions'
 import {
   getFocusingAsset,
@@ -15,8 +14,6 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
-  mergeAsset: payload => {dispatch(
-    mergeAsset(payload))},
   changeAsset: (...args) => {dispatch(
     changeAsset(...args))},
 })

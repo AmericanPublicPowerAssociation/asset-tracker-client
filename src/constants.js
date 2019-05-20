@@ -1,4 +1,4 @@
-import assetTypeById from '../datasets/assetTypeById.json'
+import assetTypeById from './datasets/assetTypeById.json'
 
 
 export const CONTENT_PADDING = 24
@@ -12,21 +12,28 @@ export const TOOLTIP_DELAY = 500
 export const DEBOUNCE_THRESHOLD_IN_MILLISECONDS = 100
 
 
-export const SERVER = 'SERVER'
-export const SERVER_ASSETS_URL = '/assets.json'
-export const SERVER_ASSET_URL = '/assets/_.json'
+export const LOG_ERROR = 'LOG_ERROR'
 
 
 export const REFRESH_ASSETS = 'REFRESH_ASSETS'
 export const ADD_ASSET = 'ADD_ASSET'
 export const CHANGE_ASSET = 'CHANGE_ASSET'
-export const MERGE_ASSET = 'MERGE_ASSET'
+
+
 export const REPLACE_ASSET = 'REPLACE_ASSET'
 export const REPLACE_ASSETS = 'REPLACE_ASSETS'
-export const SET_ASSET_NAME_QUERY = 'SET_ASSET_NAME_QUERY'
-export const TOGGLE_SELECTED_ASSET_TYPE = 'TOGGLE_SELECTED_ASSET_TYPE'
-export const ADD_SELECTED_ASSET_TYPE = 'ADD_SELECTED_ASSET_TYPE'
+
+
+export const EXCLUDE_ASSET_ATTRIBUTE_FILTER = 'EXCLUDE_ASSET_ATTRIBUTE_FILTER'
+export const INCLUDE_ASSET_ATTRIBUTE_FILTER = 'INCLUDE_ASSET_ATTRIBUTE_FILTER'
+export const SET_ASSET_ATTRIBUTE_FILTERS = 'SET_ASSET_ATTRIBUTE_FILTERS'
+export const TOGGLE_ASSET_ATTRIBUTE_FILTER = 'TOGGLE_ASSET_ATTRIBUTE_FILTER'
+
+
 export const SET_FOCUSING_ASSET = 'SET_FOCUSING_ASSET'
+
+
+export const SET_ASSET_FILTER = 'SET_ASSET_FILTER'
 
 
 export const ASSET_TYPE_BY_ID = assetTypeById

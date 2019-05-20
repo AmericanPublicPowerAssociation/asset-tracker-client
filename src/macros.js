@@ -18,7 +18,13 @@ export const getOrderedIds = items => OrderedSet(items.map(
   item => item.get('id')))
 
 
-export const splitTerms = text => compactWhitespace(text).trim().split(' ')
+export const splitTerms = text => {
+  const rawTerms = compactWhitespace(text.trim()).match(/\w+|"[^"]+"/g)
+  if (!rawTerms) {
+    return []
+  }
+  return rawTerms.map(term => term.replace(/"/g, ''))
+}
 
 
 export const compactWhitespace = text => text.replace(/\s\s+/g, ' ')

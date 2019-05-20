@@ -1,4 +1,4 @@
-import { ASSET_TYPE_BY_ID } from '../constants'
+import { ASSET_TYPE_BY_ID } from './constants'
 
 
 export const getAssetTypeName = asset => {
