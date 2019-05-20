@@ -5,11 +5,11 @@ import {
 } from '../actions'
 import {
   ADD_ASSET,
+  CHANGE_ASSET,
   REFRESH_ASSETS,
   SERVER,
   SERVER_ASSETS_URL,
   SERVER_ASSET_URL,
-  UPDATE_ASSET,
 } from '../constants'
 
 
@@ -24,7 +24,7 @@ const FETCH_BY_TYPE = {
     url: SERVER_ASSETS_URL,
     onSuccess: replaceAsset,
   },
-  [UPDATE_ASSET]: {
+  [CHANGE_ASSET]: {
     method: 'PATCH',
     url: SERVER_ASSET_URL,
     onSuccess: replaceAsset,
@@ -50,10 +50,10 @@ const serverApi = ({ dispatch, getState }) => next => async action => {
     switch (response.status) {
       case 200:
         dispatch(onSuccess(data))
-        callback.onSuccess(data)
+        callback.onSuccess && callback.onSuccess(data)
         break
       case 400:
-        callback.onError(data)
+        callback.onError && callback.onError(data)
         break
       default:
         alert(await response.text())

@@ -29,11 +29,11 @@ class AssetAddDialog extends PureComponent {
     errors: Map(),
   }
 
-  changeAssetType = event => {
+  trackType = event => {
     this.setState({typeId: event.target.value})
   }
 
-  updateAsset = attributes => {
+  trackChanges = attributes => {
     this.setState({...attributes})
   }
 
@@ -75,13 +75,13 @@ class AssetAddDialog extends PureComponent {
         <DialogContent>
           <AssetTypeSelect
             value={typeId}
-            onChange={this.changeAssetType}
+            onChange={this.trackType}
           />
           <AssetName
             name={name}
             errorText={errors.get('name')}
             className={classes.attribute}
-            onUpdate={this.updateAsset}
+            onChange={this.trackChanges}
           />
         </DialogContent>
         <DialogActions>

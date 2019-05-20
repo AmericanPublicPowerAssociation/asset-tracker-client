@@ -4,34 +4,22 @@ import TextField from '@material-ui/core/TextField'
 
 class AssetName extends PureComponent {
 
-  state = {
-    name: '',
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const name = nextProps.name
-    this.setState({
-      name,
-      oldName: name,
-    })
-  }
-
   onChange = event => {
-    this.setState({name: event.target.value})
+    const { onChange } = this.props
+    onChange && onChange({name: event.target.value})
   }
 
   onBlur = event => {
-    const { name, oldName } = this.state
-    if (name === oldName) {
-      return
-    }
-    const { onUpdate } = this.props
-    onUpdate({name})
+    const { onBlur } = this.props
+    onBlur && onBlur({name: event.target.value})
   }
 
   render = () => {
-    const { className, errorText } = this.props
-    const { name } = this.state
+    const {
+      name,
+      errorText,
+      className,
+    } = this.props
     const errorProps = errorText ? {
       error: true,
       helperText: errorText,
@@ -52,6 +40,7 @@ class AssetName extends PureComponent {
       />
     )
   }
+
 }
 
 
