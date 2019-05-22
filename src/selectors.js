@@ -19,6 +19,10 @@ export const getAssetFilterValueByAttribute = state => state.get(
   'assetFilterValueByAttribute')
 export const getFocusingAssetId = state => state.get(
   'focusingAssetId')
+export const getAddingAsset = state => state.get(
+  'addingAsset')
+export const getApp = state => state.get(
+  'app')
 
 
 export const getMatchingAssets = createSelector([
@@ -77,3 +81,17 @@ export const getFocusingAsset = createSelector([
 ) => {
   return assetById.get(focusingAssetId, Map())
 })
+
+
+export const getIsUserAuthenticated = createSelector([
+  getApp], app => app.get('isUserAuthenticated'))
+export const getIsUserMember = createSelector([
+  getApp], app => app.get('isUserMember'))
+export const getIsUserLeader = createSelector([
+  getApp], app => app.get('isUserLeader'))
+export const getIsNavigationDrawerOpen = createSelector([
+  getApp], app => app.get('isNavigationDrawerOpen'))
+export const getIsInformationDrawerOpen = createSelector([
+  getApp], app => app.get('isInformationDrawerOpen'))
+export const getWithMorningTheme = createSelector([
+  getApp], app => app.get('withMorningTheme'))

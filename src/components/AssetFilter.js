@@ -12,6 +12,7 @@ import { ASSET_TYPE_BY_ID } from '../constants'
 const styles = {
   root: {
     height: '100%',
+    overflow: 'auto',
   },
   nameInput: {
     padding: 0,

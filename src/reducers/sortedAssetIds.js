@@ -1,25 +1,31 @@
-import { OrderedSet } from 'immutable'
+import { List } from 'immutable'
 import {
   REPLACE_ASSET,
   REPLACE_ASSETS,
 } from '../constants'
 import {
-  getOrderedIds,
+  getIds,
 } from '../macros'
 
 
-const initialState = OrderedSet()
+const initialState = List()
 
 
 const sortedAssetIds = (state=initialState, action) => {
   switch (action.type) {
     case REPLACE_ASSETS: {
       const assets = action.payload
-      return getOrderedIds(assets)
+      return state.clear().merge(getIds(assets))
     }
     case REPLACE_ASSET: {
       const asset = action.payload
-      return state.add(asset.get('id'))
+      const assetId = asset.get('id')
+
+      if (!state.has(assetId)) {
+        return state.insert(0, assetId)
+      }
+
+      return state
     }
     default:
       return state

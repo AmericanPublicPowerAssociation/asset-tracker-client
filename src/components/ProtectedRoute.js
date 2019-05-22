@@ -1,21 +1,25 @@
 import React, { PureComponent } from 'react'
 import { Route } from 'react-router-dom'
-import { appaAuthClient } from 'appa-auth-client'
 import NotAuthenticatedWindow from './NotAuthenticatedWindow'
+import NotAuthorizedWindow from './NotAuthorizedWindow'
 
 
 class ProtectedRoute extends PureComponent {
   render = () => {
     const {
-      render,
+      isUserAuthenticated,
+      isUserAuthorized,
+      component,
       ...props
     } = this.props
     return (
-      <Route {...props} render={() => (
-        appaAuthClient.isAuthenticated() ?
-        render() :
-        <NotAuthenticatedWindow />
-      )} />
+      <Route {...props} component={
+        isUserAuthenticated ? (
+          isUserAuthorized === undefined || isUserAuthorized ?
+          component :
+          NotAuthorizedWindow
+        ) : NotAuthenticatedWindow
+      } />
     )
   }
 }

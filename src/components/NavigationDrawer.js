@@ -42,21 +42,24 @@ class NavigationDrawer extends PureComponent {
   render = () => {
     const {
       classes,
+      isNavigationDrawerOpen,
       isUserAuthenticated,
-      onClose,
+      closeNavigationDrawer,
       signIn,
       signOut,
-      ...props
     } = this.props
     return (
       <Drawer
+        variant='persistent'
+        anchor='left'
         classes={{
           paper: classes.drawerPaper,
         }}
-        {...props}
+        open={isNavigationDrawerOpen}
+        onClose={closeNavigationDrawer}
       >
         <div className={classes.drawerHeader}>
-          <IconButton onClick={onClose}>
+          <IconButton onClick={closeNavigationDrawer}>
             <ChevronLeftIcon />
           </IconButton>
         </div>

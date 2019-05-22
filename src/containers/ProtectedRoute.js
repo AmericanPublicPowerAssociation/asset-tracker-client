@@ -1,21 +1,22 @@
 import { connect } from 'react-redux'
-import TablesWindow from '../components/TablesWindow'
+import ProtectedRoute from '../components/ProtectedRoute'
 import {
-  refreshAssets,
 } from '../actions'
+import {
+  getIsUserAuthenticated,
+} from '../selectors'
 
 
 const mapStateToProps = state => ({
+  isUserAuthenticated: getIsUserAuthenticated(state),
 })
 
 
 const mapDispatchToProps = dispatch => ({
-  refreshAssets: payload => {dispatch(
-    refreshAssets(payload))},
 })
 
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(TablesWindow)
+)(ProtectedRoute)

@@ -1,4 +1,4 @@
-import { Map, OrderedSet } from 'immutable'
+import { Map } from 'immutable'
 
 
 export class IntegerDefaultDict {
@@ -14,8 +14,8 @@ export const getById = items => items.reduce((
   itemById, item) => itemById.set(item.get('id'), item), Map())
 
 
-export const getOrderedIds = items => OrderedSet(items.map(
-  item => item.get('id')))
+export const getIds = items => items.map(
+  item => item.get('id'))
 
 
 export const splitTerms = text => {

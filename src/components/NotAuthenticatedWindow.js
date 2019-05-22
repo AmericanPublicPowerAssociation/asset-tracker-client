@@ -22,6 +22,7 @@ class NotAuthenticatedWindow extends PureComponent {
     const { classes } = this.props
     return (
       <div className={classes.root}>
+
         <Typography variant='h6' align='center' paragraph>
           Sign In Required
         </Typography>

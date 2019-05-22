@@ -1,5 +1,5 @@
 import React, { Fragment, PureComponent } from 'react'
-import { Map, fromJS } from 'immutable'
+import { Map } from 'immutable'
 import { withStyles } from '@material-ui/core/styles'
 import AssetName from './AssetName'
 
@@ -9,13 +9,6 @@ const styles = theme => ({
 
 
 class AssetDetail extends PureComponent {
-
-  componentDidUpdate = prevProps => {
-    const { focusingAsset } = this.props
-    if (prevProps.focusingAsset.get('id') !== focusingAsset.get('id')) {
-      this.trackingAsset = focusingAsset
-    }
-  }
 
   trackChanges = attributes => {
     /*

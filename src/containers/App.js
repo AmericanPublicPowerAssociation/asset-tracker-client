@@ -1,21 +1,24 @@
 import { connect } from 'react-redux'
-import TablesWindow from '../components/TablesWindow'
+import App from '../components/App'
 import {
-  refreshAssets,
 } from '../actions'
+import {
+  getIsUserMember,
+  getWithMorningTheme,
+} from '../selectors'
 
 
 const mapStateToProps = state => ({
+  isUserMember: getIsUserMember(state),
+  withMorningTheme: getWithMorningTheme(state),
 })
 
 
 const mapDispatchToProps = dispatch => ({
-  refreshAssets: payload => {dispatch(
-    refreshAssets(payload))},
 })
 
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(TablesWindow)
+)(App)

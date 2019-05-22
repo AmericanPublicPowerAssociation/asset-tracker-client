@@ -43,18 +43,21 @@ class InformationDrawer extends PureComponent {
   render = () => {
     const {
       classes,
-      onClose,
-      ...props
+      isInformationDrawerOpen,
+      closeInformationDrawer,
     } = this.props
     return (
       <Drawer
+        variant='persistent'
+        anchor='right'
         classes={{
           paper: classes.drawerPaper,
         }}
-        {...props}
+        open={isInformationDrawerOpen}
+        onClose={closeInformationDrawer}
       >
         <div className={classes.drawerHeader}>
-          <IconButton onClick={onClose}>
+          <IconButton onClick={closeInformationDrawer}>
             <ChevronRightIcon />
           </IconButton>
         </div>

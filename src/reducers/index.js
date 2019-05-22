@@ -5,19 +5,22 @@ import sortedAssetIds from './sortedAssetIds'
 import focusingAssetId from './focusingAssetId'
 import assetFilterKeysByAttribute from './assetFilterKeysByAttribute'
 import assetFilterValueByAttribute from './assetFilterValueByAttribute'
-// import assetAddDialog from './assetAddDialog'
+import addingAsset from './addingAsset'
+import app from './app'
 import {
   SET_FOCUSING_ASSET,
 } from '../constants'
 
 
 const reduceHorizontally = combineReducers({
+  app,
   sortedAssetIds,
   assetById,
   focusingAssetId,
   assetFilterValueByAttribute,
   assetFilterKeysByAttribute,
-  // assetAddDialog,
+  addingAsset,
+  trackingAsset: (state={}) => state,
 })
 
 
