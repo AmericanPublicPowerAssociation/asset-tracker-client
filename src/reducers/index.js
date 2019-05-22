@@ -30,7 +30,12 @@ const reduceVertically = (state, action) => {
       const {id} = action.payload
       const assetById = state.get('assetById')
       const focusingAsset = assetById.get(id)
-      return state.set('trackingAsset', focusingAsset)
+      const typeId = focusingAsset.get('typeId')
+      return state.mergeDeep({
+        assetFilterKeysByAttribute: {typeId: [typeId[0]]},
+      }).merge({
+        trackingAsset: focusingAsset,
+      })
     }
     default:
       return state

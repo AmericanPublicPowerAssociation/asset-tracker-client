@@ -64,7 +64,8 @@ const styles = theme => ({
 
 
 class Main extends Component {
-  render = () => {
+
+  render() {
     const {
       classes,
       isInformationDrawerOpen,
@@ -95,6 +96,7 @@ class Main extends Component {
       </main>
     )
   }
+
 }
 
 

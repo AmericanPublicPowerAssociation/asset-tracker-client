@@ -22,7 +22,7 @@ const eveningTheme = createMuiTheme({...theme, palette: {type: 'dark'}})
 
 class App extends Component {
 
-  render = () => {
+  render() {
     const {
       classes,
       isUserMember,

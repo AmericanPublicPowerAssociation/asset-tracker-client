@@ -40,7 +40,7 @@ const styles = theme => ({
 
 
 class InformationDrawer extends PureComponent {
-  render = () => {
+  render() {
     const {
       classes,
       isInformationDrawerOpen,

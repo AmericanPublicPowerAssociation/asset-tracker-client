@@ -5,7 +5,8 @@ import NotAuthorizedWindow from './NotAuthorizedWindow'
 
 
 class ProtectedRoute extends PureComponent {
-  render = () => {
+
+  render() {
     const {
       isUserAuthenticated,
       isUserAuthorized,
@@ -22,6 +23,7 @@ class ProtectedRoute extends PureComponent {
       } />
     )
   }
+
 }
 
 

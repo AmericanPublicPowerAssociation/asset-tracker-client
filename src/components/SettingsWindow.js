@@ -14,7 +14,8 @@ const styles = theme => ({
 
 
 class SettingsWindow extends PureComponent {
-  render = () => {
+
+  render() {
     const {
       classes,
       withMorningTheme,
@@ -37,6 +38,7 @@ class SettingsWindow extends PureComponent {
       </div>
     )
   }
+
 }
 
 

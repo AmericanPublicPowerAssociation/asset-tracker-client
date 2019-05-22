@@ -29,15 +29,7 @@ class AssetDetail extends PureComponent {
     })
   }
 
-  onError = errors => {
-    /*
-    const { focusingAsset, mergeAsset } = this.props
-    const id = focusingAsset.get('id')
-    mergeAsset(fromJS({id, errors}))
-    */
-  }
-
-  render = () => {
+  render() {
     const { focusingAsset } = this.props
     const id = focusingAsset.get('id')
     if (!id) {

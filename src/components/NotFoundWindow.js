@@ -3,7 +3,8 @@ import Typography from '@material-ui/core/Typography'
 
 
 class NotFoundWindow extends PureComponent {
-  render = () => {
+
+  render() {
     return (
       <Fragment>
         <Typography variant='h6' align='center' paragraph>
@@ -15,6 +16,7 @@ class NotFoundWindow extends PureComponent {
       </Fragment>
     )
   }
+
 }
 
 

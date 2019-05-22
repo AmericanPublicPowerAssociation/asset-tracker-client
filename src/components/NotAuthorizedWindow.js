@@ -12,7 +12,7 @@ const styles = theme => ({
 
 
 class NotAuthorizedWindow extends PureComponent {
-  render = () => {
+  render() {
     const { classes } = this.props
     return (
       <div className={classes.root}>

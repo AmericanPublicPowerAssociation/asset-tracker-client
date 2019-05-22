@@ -28,7 +28,7 @@ class AssetAddDialog extends PureComponent {
     addAsset(addingAsset)
   }
 
-  render = () => {
+  render() {
     const {
       classes,
       addingAsset,

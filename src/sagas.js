@@ -14,6 +14,7 @@ import {
   replaceAssets,
   setAddingAssetValue,
   setAppValue,
+  setFocusingAsset,
 } from './actions'
 import {
   ADD_ASSET,
@@ -61,7 +62,7 @@ function* watchAddAsset() {
           const asset = fromJS(yield response.json())
           yield put(replaceAsset(asset))
           yield put(setAddingAssetValue({isOpen: false, errors: Map()}))
-          // yield put(includeAssetFilterKey({typeId: asset.get('typeId')}))
+          yield put(setFocusingAsset({id: asset.get('id')}))
           break
         }
         case 400:

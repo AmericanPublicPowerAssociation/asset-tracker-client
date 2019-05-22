@@ -27,7 +27,7 @@ class AssetFilter extends PureComponent {
     setAssetFilterValue({name})
   }
 
-  render = () => {
+  render() {
     const {
       classes,
       // Get redux variables

@@ -39,7 +39,8 @@ const styles = theme => ({
 
 
 class NavigationDrawer extends PureComponent {
-  render = () => {
+
+  render() {
     const {
       classes,
       isNavigationDrawerOpen,
@@ -95,6 +96,7 @@ class NavigationDrawer extends PureComponent {
       </Drawer>
     )
   }
+
 }
 
 

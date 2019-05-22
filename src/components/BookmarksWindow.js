@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography'
 
 
 class BookmarksWindow extends PureComponent {
-  render = () => {
+  render() {
     return (
       <Typography variant='h6' align='center'>
         Bookmarks

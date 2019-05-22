@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import { findDOMNode }  from 'react-dom'
 import { withStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -16,7 +17,18 @@ const styles = theme => ({
 
 
 class AssetTable extends PureComponent {
-  render = () => {
+
+  componentDidUpdate() {
+    const { focusingAssetId } = this.props
+    if (focusingAssetId) {
+      findDOMNode(this.refs[focusingAssetId]).scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      })
+    }
+  }
+
+  render() {
     const {
       classes,
       // Get redux variables
@@ -48,6 +60,7 @@ class AssetTable extends PureComponent {
                 setFocusingAsset({id: assetId})
               }}
               key={assetId}
+              ref={assetId}
             >
               <TableCell component='th' scope='row'>
                 {assetName}

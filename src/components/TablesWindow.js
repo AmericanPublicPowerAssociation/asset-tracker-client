@@ -23,7 +23,7 @@ class TablesWindow extends PureComponent {
     refreshAssets()
   }
 
-  render = () => {
+  render() {
     const { classes } = this.props
     return (
       <Grid container className={classes.root}>

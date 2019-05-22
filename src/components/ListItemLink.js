@@ -18,7 +18,8 @@ const styles = theme => ({
 
 
 class ListItemLink extends PureComponent {
-  render = () => {
+
+  render() {
     const {
       classes,
       to, text, icon, inset, nested,
@@ -45,6 +46,7 @@ class ListItemLink extends PureComponent {
       </ListItem>
     )
   }
+
 }
 
 

@@ -57,7 +57,8 @@ const styles = theme => ({
 
 
 class ApplicationBar extends PureComponent {
-  render = () => {
+
+  render() {
     const {
       classes,
       isUserMember,
@@ -113,6 +114,7 @@ class ApplicationBar extends PureComponent {
       </AppBar>
     )
   }
+
 }
 
 
