@@ -1,7 +1,7 @@
 import { ASSET_TYPE_BY_ID } from './constants'
 
 
-export const getAssetTypeName = asset => {
+export function getAssetTypeName(asset) {
   const assetTypeId = asset.get('typeId')
   const primaryTypeId = assetTypeId[0]
   const primaryType = ASSET_TYPE_BY_ID[primaryTypeId]
@@ -13,4 +13,9 @@ export const getAssetTypeName = asset => {
     assetTypeNameParts.push(secondaryType.name)
   }
   return assetTypeNameParts.join(' > ')
+}
+
+
+export function rinseAsset(asset) {
+  return asset.deleteAll(['isOpen', 'errors'])
 }

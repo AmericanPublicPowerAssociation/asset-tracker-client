@@ -2,6 +2,7 @@ import { Map } from 'immutable'
 import {
   REPLACE_ASSET,
   REPLACE_ASSETS,
+  REPLACE_ASSET_ERRORS,
 } from '../constants'
 import {
   getById,
@@ -19,7 +20,14 @@ const assetById = (state=initialState, action) => {
     }
     case REPLACE_ASSET: {
       const asset = action.payload
-      return state.set(asset.get('id'), asset)
+      const id = asset.get('id')
+      return state.set(id, asset)
+    }
+    case REPLACE_ASSET_ERRORS: {
+      const asset = action.payload
+      const id = asset.get('id')
+      const errors = asset.get('errors')
+      return state.update(id, asset => asset.set('errors', errors))
     }
     default:
       return state

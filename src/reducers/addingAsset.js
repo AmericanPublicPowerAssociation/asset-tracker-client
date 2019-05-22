@@ -3,6 +3,7 @@ import {
   CLOSE_ASSET_ADD_DIALOG,
   DEFAULT_ASSET_TYPE_ID,
   OPEN_ASSET_ADD_DIALOG,
+  SET_ADDING_ASSET_ERRORS,
   SET_ADDING_ASSET_VALUE,
 } from '../constants'
 
@@ -26,6 +27,9 @@ const addingAsset = (state=initialState, action) => {
     }
     case SET_ADDING_ASSET_VALUE: {
       return state.merge(action.payload)
+    }
+    case SET_ADDING_ASSET_ERRORS: {
+      return state.set('errors', action.payload)
     }
     default:
       return state

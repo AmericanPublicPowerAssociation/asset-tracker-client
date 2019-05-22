@@ -11,17 +11,23 @@ import { appaAuthClient } from 'appa-auth-client'
 import {
   logError,
   replaceAsset,
+  replaceAssetErrors,
   replaceAssets,
+  setAddingAssetErrors,
   setAddingAssetValue,
   setAppValue,
   setFocusingAsset,
 } from './actions'
 import {
   ADD_ASSET,
+  CHANGE_ASSET,
   REFRESH_ASSETS,
   SIGN_IN,
   SIGN_OUT,
 } from './constants'
+import {
+  rinseAsset,
+} from './routines'
 
 
 function* watchRefreshAssets() {
@@ -35,10 +41,7 @@ function* watchRefreshAssets() {
           break
         }
         default:
-          yield put(logError({
-            status: response.status,
-            text: yield response.text(),
-          }))
+          yield put(logError({status: response.status}))
       }
     } catch (error) {
       yield put(logError({text: error}))
@@ -49,9 +52,7 @@ function* watchRefreshAssets() {
 
 function* watchAddAsset() {
   yield takeEvery(ADD_ASSET, function* addAsset(action) {
-    const { payload } = action
-    delete payload.isOpen
-    delete payload.errors
+    const payload = rinseAsset(action.payload)
     try {
       const response = yield call(fetch, '/assets.json', {
         method: 'POST',
@@ -67,13 +68,41 @@ function* watchAddAsset() {
         }
         case 400:
           const errors = fromJS(yield response.json())
-          yield put(setAddingAssetValue({errors}))
+          yield put(setAddingAssetErrors(errors))
           break
         default:
-          yield put(logError({
-            status: response.status,
-            text: yield response.text(),
-          }))
+          yield put(logError({status: response.status}))
+      }
+    } catch (error) {
+      yield put(logError({text: error}))
+    }
+  })
+}
+
+
+function* watchChangeAsset() {
+  yield takeEvery(CHANGE_ASSET, function* changeAsset(action) {
+    const payload = rinseAsset(action.payload)
+    const id = payload.get('id')
+    const url = '/assets/_.json'.replace('_', id)
+    try {
+      const response = yield call(fetch, url, {
+        method: 'PATCH',
+        body: JSON.stringify(payload),
+      })
+      switch (response.status) {
+        case 200: {
+          const asset = fromJS(yield response.json())
+          yield put(replaceAsset(asset))
+          break
+        }
+        case 400: {
+          const asset = fromJS({id, errors: yield response.json()})
+          yield put(replaceAssetErrors(asset))
+          break
+        }
+        default:
+          yield put(logError({status: response.status}))
       }
     } catch (error) {
       yield put(logError({text: error}))
@@ -102,6 +131,7 @@ export default function* reduceSaga() {
   yield all([
     watchRefreshAssets(),
     watchAddAsset(),
+    watchChangeAsset(),
     watchSignIn(),
     watchSignOut(),
   ])

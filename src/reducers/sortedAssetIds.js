@@ -20,11 +20,9 @@ const sortedAssetIds = (state=initialState, action) => {
     case REPLACE_ASSET: {
       const asset = action.payload
       const assetId = asset.get('id')
-
-      if (!state.has(assetId)) {
+      if (!state.includes(assetId)) {
         return state.insert(0, assetId)
       }
-
       return state
     }
     default:

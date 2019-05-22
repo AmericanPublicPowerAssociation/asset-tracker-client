@@ -12,7 +12,9 @@ import {
   OPEN_NAVIGATION_DRAWER,
   REFRESH_ASSETS,
   REPLACE_ASSET,
+  REPLACE_ASSET_ERRORS,
   REPLACE_ASSETS,
+  SET_ADDING_ASSET_ERRORS,
   SET_ADDING_ASSET_VALUE,
   SET_APP_VALUE,
   SET_ASSET_FILTER_KEYS,
@@ -37,10 +39,12 @@ export const changeAsset = payload => ({
   payload, type: CHANGE_ASSET})
 
 
-export const replaceAsset = payload => ({
-  payload, type: REPLACE_ASSET})
 export const replaceAssets = payload => ({
   payload, type: REPLACE_ASSETS})
+export const replaceAsset = payload => ({
+  payload, type: REPLACE_ASSET})
+export const replaceAssetErrors = payload => ({
+  payload, type: REPLACE_ASSET_ERRORS})
 
 
 export const closeInformationDrawer = payload => ({
@@ -81,6 +85,8 @@ export const closeAssetAddDialog = payload => ({
   payload, type: CLOSE_ASSET_ADD_DIALOG})
 export const setAddingAssetValue = payload => ({
   payload, type: SET_ADDING_ASSET_VALUE})
+export const setAddingAssetErrors = payload => ({
+  payload, type: SET_ADDING_ASSET_ERRORS})
 
 
 export const signIn = payload => ({

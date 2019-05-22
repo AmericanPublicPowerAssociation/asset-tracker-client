@@ -10,15 +10,18 @@ export class IntegerDefaultDict {
 }
 
 
-export const getById = items => items.reduce((
-  itemById, item) => itemById.set(item.get('id'), item), Map())
+export function getById(items) {
+  return items.reduce((
+    itemById, item) => itemById.set(item.get('id'), item), Map())
+}
 
 
-export const getIds = items => items.map(
-  item => item.get('id'))
+export function getIds(items) {
+  return items.map(item => item.get('id'))
+}
 
 
-export const splitTerms = text => {
+export function splitTerms(text) {
   const rawTerms = compactWhitespace(text.trim()).match(/\w+|"[^"]+"/g)
   if (!rawTerms) {
     return []
@@ -27,4 +30,6 @@ export const splitTerms = text => {
 }
 
 
-export const compactWhitespace = text => text.replace(/\s\s+/g, ' ')
+export function compactWhitespace(text) {
+  return text.replace(/\s\s+/g, ' ')
+}

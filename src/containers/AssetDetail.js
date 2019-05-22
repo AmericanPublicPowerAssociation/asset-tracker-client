@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import AssetDetail from '../components/AssetDetail'
 import {
   changeAsset,
+  replaceAsset,
 } from '../actions'
 import {
   getFocusingAsset,
@@ -14,8 +15,10 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
-  changeAsset: (...args) => {dispatch(
-    changeAsset(...args))},
+  changeAsset: payload => {dispatch(
+    changeAsset(payload))},
+  replaceAsset: payload => {dispatch(
+    replaceAsset(payload))},
 })
 
 

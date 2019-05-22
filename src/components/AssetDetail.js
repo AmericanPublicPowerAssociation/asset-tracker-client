@@ -1,5 +1,5 @@
 import React, { Fragment, PureComponent } from 'react'
-import { Map } from 'immutable'
+import { Map, fromJS } from 'immutable'
 import { withStyles } from '@material-ui/core/styles'
 import AssetName from './AssetName'
 
@@ -11,22 +11,13 @@ const styles = theme => ({
 class AssetDetail extends PureComponent {
 
   trackChanges = attributes => {
-    /*
-    const { focusingAsset, mergeAsset } = this.props
-    const id = focusingAsset.get('id')
-    mergeAsset(fromJS({id, ...attributes}))
-    */
+    const { focusingAsset, replaceAsset } = this.props
+    replaceAsset(focusingAsset.merge(fromJS(attributes)))
   }
 
-  saveChanges = attributes => {
+  saveChanges = () => {
     const { focusingAsset, changeAsset } = this.props
-    if (this.trackingAsset === focusingAsset) {
-      return
-    }
-    changeAsset({id: focusingAsset.get('id'), ...attributes}, {
-      onError: this.onError,
-      onSuccess: this.onSuccess,
-    })
+    changeAsset(focusingAsset)
   }
 
   render() {
@@ -42,7 +33,8 @@ class AssetDetail extends PureComponent {
         <AssetName
           name={name}
           errorText={errors.get('name')}
-          onChange={this.trackChanges}
+          onChange={event => this.trackChanges({
+            name: event.target.value})}
           onBlur={this.saveChanges}
         />
       </Fragment>
