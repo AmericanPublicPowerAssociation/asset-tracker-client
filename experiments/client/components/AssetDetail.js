@@ -10,7 +10,6 @@ import ClearIcon from '@material-ui/icons/Clear'
 import { ASSET_TYPE_BY_ID } from '../constants'
 import AssetName from './AssetName'
 import AssetLocationContainer from '../containers/AssetLocationContainer'
-import AssetRelationChips from './AssetRelationChips'
 
 const styles = theme => ({
   attribute: {
@@ -84,9 +83,6 @@ const PRODUCT_VERSION_SUGGESTIONS = [
     const productVersion = focusingAsset.get('productVersion', '')
 
     const assetRelationChipsProps = {
-      focusingAsset: focusingAsset,
-      relatingAssetId: relatingAssetId,
-      relatingAssetKey: relatingAssetKey,
       addSelectedAssetType: addSelectedAssetType,
       setFocusingAsset: setFocusingAsset,
       setRelatingAsset: setRelatingAsset,
@@ -275,26 +271,7 @@ const PRODUCT_VERSION_SUGGESTIONS = [
 
 </Fragment>
         }
-
         {locatable && <AssetLocationContainer />}
-        <AssetRelationChips
-          label='Connections'
-          assetKey='connectedIds'
-          relatedAssets={connectedAssets}
-          {...assetRelationChipsProps}
-        />
-        <AssetRelationChips
-          label='Parents'
-          assetKey='parentIds'
-          relatedAssets={parentAssets}
-          {...assetRelationChipsProps}
-        />
-        <AssetRelationChips
-          label='Children'
-          assetKey='childIds'
-          relatedAssets={childAssets}
-          {...assetRelationChipsProps}
-        />
       </div>
     )
   }

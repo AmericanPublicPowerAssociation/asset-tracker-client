@@ -1,12 +1,14 @@
 import { combineReducers } from 'redux-immutable'
 import reduceReducers from 'reduce-reducers'
-import assetById from './assetById'
+import app from './app'
 import sortedAssetIds from './sortedAssetIds'
+import assetById from './assetById'
 import focusingAssetId from './focusingAssetId'
+import relatingAssetId from './relatingAssetId'
+import relatingAssetKey from './relatingAssetKey'
 import assetFilterKeysByAttribute from './assetFilterKeysByAttribute'
 import assetFilterValueByAttribute from './assetFilterValueByAttribute'
 import addingAsset from './addingAsset'
-import app from './app'
 import {
   SET_FOCUSING_ASSET,
 } from '../constants'
@@ -17,9 +19,11 @@ const reduceHorizontally = combineReducers({
   sortedAssetIds,
   assetById,
   focusingAssetId,
+  relatingAssetId,
+  relatingAssetKey,
+  addingAsset,
   assetFilterValueByAttribute,
   assetFilterKeysByAttribute,
-  addingAsset,
   trackingAsset: (state={}) => state,
 })
 

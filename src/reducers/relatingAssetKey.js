@@ -2,7 +2,9 @@ import {
   SET_RELATING_ASSET,
 } from '../constants'
 
+
 const initialState = null
+
 
 const relatingAssetKey = (state=initialState, action) => {
   const actionType = action.type
@@ -14,5 +16,6 @@ const relatingAssetKey = (state=initialState, action) => {
 
   return state
 }
+
 
 export default relatingAssetKey

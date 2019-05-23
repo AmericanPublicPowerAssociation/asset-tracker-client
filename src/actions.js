@@ -20,6 +20,7 @@ import {
   SET_ASSET_FILTER_KEYS,
   SET_ASSET_FILTER_VALUE,
   SET_FOCUSING_ASSET,
+  SET_RELATING_ASSET,
   SIGN_IN,
   SIGN_OUT,
   TOGGLE_ASSET_FILTER_KEY,
@@ -77,6 +78,8 @@ export const toggleAssetFilterKey = payload => ({
 
 export const setFocusingAsset = payload => ({
   payload, type: SET_FOCUSING_ASSET})
+export const setRelatingAsset = payload => ({
+  payload, type: SET_RELATING_ASSET})
 
 
 export const openAssetAddDialog = payload => ({

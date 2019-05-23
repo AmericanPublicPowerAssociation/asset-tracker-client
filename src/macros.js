@@ -33,3 +33,8 @@ export function splitTerms(text) {
 export function compactWhitespace(text) {
   return text.replace(/\s\s+/g, ' ')
 }
+
+
+export function capitalize(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1)
+}

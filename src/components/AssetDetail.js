@@ -2,6 +2,7 @@ import React, { Fragment, PureComponent } from 'react'
 import { Map, fromJS } from 'immutable'
 import { withStyles } from '@material-ui/core/styles'
 import AssetName from './AssetName'
+import AssetRelationChips from '../containers/AssetRelationChips'
 
 
 const styles = theme => ({
@@ -21,7 +22,12 @@ class AssetDetail extends PureComponent {
   }
 
   render() {
-    const { focusingAsset } = this.props
+    const {
+      focusingAsset,
+      connectedAssets,
+      parentAssets,
+      childAssets,
+    } = this.props
     const id = focusingAsset.get('id')
     if (!id) {
       return null
@@ -36,6 +42,21 @@ class AssetDetail extends PureComponent {
           onChange={event => this.trackChanges({
             name: event.target.value})}
           onBlur={this.saveChanges}
+        />
+        <AssetRelationChips
+          label='Connections'
+          assetKey='connectedIds'
+          relatedAssets={connectedAssets}
+        />
+        <AssetRelationChips
+          label='Parents'
+          assetKey='parentIds'
+          relatedAssets={parentAssets}
+        />
+        <AssetRelationChips
+          label='Children'
+          assetKey='childIds'
+          relatedAssets={childAssets}
         />
       </Fragment>
     )

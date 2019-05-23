@@ -11,21 +11,6 @@ import {
   // normalizeNumber,
 } from '../macros'
 
-export const getParentIds = createSelector(
-  [getAssetById, getFocusingAsset],
-  (assetById, focusingAsset) => focusingAsset.get('parentIds', List()))
-
-export const getParentAssets = createSelector(
-  [getAssetById, getParentIds],
-  (assetById, parentIds) => parentIds.map(assetId => assetById.get(assetId)))
-
-export const getChildIds = createSelector(
-  [getAssetById, getFocusingAsset],
-  (assetById, focusingAsset) => focusingAsset.get('childIds', List()))
-
-export const getChildAssets = createSelector(
-  [getAssetById, getChildIds],
-  (assetById, childIds) => childIds.map(assetId => assetById.get(assetId)))
 
 export const getVisibleAssets = createSelector([
   getSelectedAssetIds,
@@ -73,24 +58,10 @@ export const getLocatingAssetLocation = createSelector(
   (assetLocationById, locatingAssetId) => assetLocationById.get(
     locatingAssetId, List()))
 
-export const getRelatingAsset = createSelector(
-  [getAssetById, getRelatingAssetId],
-  (assetById, relatingAssetId) => assetById.get(relatingAssetId, Map()))
-
 export const getConnectedAssets = createSelector(
   [getAssetById, getFocusingAsset],
   (assetById, focusingAsset) => focusingAsset.get(
     'connectedIds', List()).map(assetId => assetById.get(assetId)))
-
-export const getRelatedAssetTypeIds = createSelector(
-  [getRelatingAsset, getRelatingAssetKey],
-  (relatingAsset, relatingAssetKey) => relatingAsset.get('typeId') ?
-    ASSET_TYPE_BY_ID[relatingAsset.get('typeId')][relatingAssetKey] :
-    [])
-
-export const getRelatedAssetIds = createSelector(
-  [getRelatingAsset, getRelatingAssetKey],
-  (relatingAsset, relatingAssetKey) => relatingAsset.get(relatingAssetKey, []))
 
 /*
 export const getFeatureGeometryById = createSelector(

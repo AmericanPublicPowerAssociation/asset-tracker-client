@@ -1,16 +1,15 @@
 import { ASSET_TYPE_BY_ID } from './constants'
 
 
-export function getAssetTypeName(asset) {
-  const assetTypeId = asset.get('typeId')
-  const primaryTypeId = assetTypeId[0]
-  const primaryType = ASSET_TYPE_BY_ID[primaryTypeId]
-  const assetTypeNameParts = [primaryType.name]
-  const secondaryTypeId = assetTypeId[1]
-  if (secondaryTypeId) {
-    const secondaryTypeById = primaryType.typeById
-    const secondaryType = secondaryTypeById[secondaryTypeId]
-    assetTypeNameParts.push(secondaryType.name)
+export function getAssetTypeName(assetTypeId) {
+  const primaryAssetTypeId = assetTypeId[0]
+  const primaryAssetType = ASSET_TYPE_BY_ID[primaryAssetTypeId]
+  const assetTypeNameParts = [primaryAssetType.name]
+  const secondaryAssetTypeId = assetTypeId[1]
+  if (secondaryAssetTypeId) {
+    const secondaryAssetTypeById = primaryAssetType.typeById
+    const secondaryAssetType = secondaryAssetTypeById[secondaryAssetTypeId]
+    assetTypeNameParts.push(secondaryAssetType.name)
   }
   return assetTypeNameParts.join(' > ')
 }

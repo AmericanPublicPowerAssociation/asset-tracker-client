@@ -6,6 +6,8 @@ import TableBody from '@material-ui/core/TableBody'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
+import Switch from '@material-ui/core/Switch'
+import { capitalize } from '../macros'
 import { getAssetTypeName } from '../routines'
 
 
@@ -35,21 +37,32 @@ class AssetTable extends PureComponent {
       // Get redux variables
       visibleAssets,
       focusingAssetId,
+      relatingAssetId,
+      relatingAssetKey,
+      relatedAssetTypeIds,
       setFocusingAsset,
     } = this.props
+
     return (
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Name</TableCell>
             <TableCell>Type</TableCell>
+            <TableCell>Name</TableCell>
+          {relatingAssetId &&
+            <TableCell align='right'>
+              {capitalize(relatingAssetKey.replace('Ids', ''))}
+            </TableCell>
+          }
           </TableRow>
         </TableHead>
         <TableBody>
         {visibleAssets.map(asset => {
           const assetId = asset.get('id')
           const assetName = asset.get('name')
-          const assetTypeName = getAssetTypeName(asset)
+          const assetTypeId = asset.get('typeId')
+          const primaryAssetTypeId = assetTypeId[0]
+          const assetTypeName = getAssetTypeName(assetTypeId)
           return (
             <TableRow
               hover
@@ -63,12 +76,23 @@ class AssetTable extends PureComponent {
               key={assetId}
               ref={assetId}
             >
-              <TableCell component='th' scope='row'>
-                {assetName}
-              </TableCell>
               <TableCell>
                 {assetTypeName}
               </TableCell>
+              <TableCell component='th' scope='row'>
+                {assetName}
+              </TableCell>
+            {
+              relatingAssetId &&
+              <TableCell align='right'>
+              {
+                relatingAssetId !== assetId &&
+                relatedAssetTypeIds.includes(primaryAssetTypeId) &&
+                <Switch
+                />
+              }
+              </TableCell>
+            }
             </TableRow>
           )
         })}

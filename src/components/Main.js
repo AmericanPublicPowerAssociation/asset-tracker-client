@@ -23,11 +23,11 @@ import {
 
 const styles = theme => ({
   main: {
-    padding: CONTENT_PADDING,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    padding: CONTENT_PADDING,
     [theme.breakpoints.down('xs')]: {
       padding: 0,
     },

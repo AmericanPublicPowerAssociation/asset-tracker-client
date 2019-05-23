@@ -11,6 +11,9 @@ import {
 import {
   rinseAsset,
 } from '../routines'
+import {
+  getTrackingAsset,
+} from '../selectors'
 
 
 const validationMiddleware = ({ dispatch, getState }) => next => action => {
@@ -27,7 +30,7 @@ const validationMiddleware = ({ dispatch, getState }) => next => action => {
     }
     case CHANGE_ASSET: {
       const asset = action.payload
-      const trackingAsset = getState().get('trackingAsset')
+      const trackingAsset = getTrackingAsset(getState())
       // Return if asset did not change
       if (rinseAsset(asset).equals(rinseAsset(trackingAsset))) {
         return

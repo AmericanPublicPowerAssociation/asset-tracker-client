@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect'
-import { Map } from 'immutable'
+import { List, Map } from 'immutable'
 import {
+  ASSET_TYPE_BY_ID,
   MAXIMUM_ASSET_LIST_LENGTH,
 } from './constants'
 import {
@@ -9,20 +10,26 @@ import {
 } from './macros'
 
 
-export const getAssetById = state => state.get(
-  'assetById')
+export const getApp = state => state.get(
+  'app')
 export const getSortedAssetIds = state => state.get(
   'sortedAssetIds')
+export const getAssetById = state => state.get(
+  'assetById')
+export const getFocusingAssetId = state => state.get(
+  'focusingAssetId')
+export const getRelatingAssetId = state => state.get(
+  'relatingAssetId')
+export const getRelatingAssetKey = state => state.get(
+  'relatingAssetKey')
+export const getAddingAsset = state => state.get(
+  'addingAsset')
 export const getAssetFilterKeysByAttribute = state => state.get(
   'assetFilterKeysByAttribute')
 export const getAssetFilterValueByAttribute = state => state.get(
   'assetFilterValueByAttribute')
-export const getFocusingAssetId = state => state.get(
-  'focusingAssetId')
-export const getAddingAsset = state => state.get(
-  'addingAsset')
-export const getApp = state => state.get(
-  'app')
+export const getTrackingAsset = state => state.get(
+  'trackingAsset')
 
 
 export const getMatchingAssets = createSelector([
@@ -78,8 +85,76 @@ export const getFocusingAsset = createSelector([
 ], (
   focusingAssetId,
   assetById,
+) => assetById.get(focusingAssetId, Map()))
+
+
+export const getRelatingAsset = createSelector([
+  getRelatingAssetId,
+  getAssetById,
+], (
+  relatingAssetId,
+  assetById,
+) => assetById.get(relatingAssetId, Map()))
+
+
+export const getParentIds = createSelector([
+  getFocusingAsset,
+], focusingAsset => focusingAsset.get('parentIds', List()))
+export const getChildIds = createSelector([
+  getFocusingAsset,
+], focusingAsset => focusingAsset.get('childIds', List()))
+export const getConnectedIds = createSelector([
+  getFocusingAsset,
+], focusingAsset => focusingAsset.get('connectedIds', List()))
+
+
+export const getParentAssets = createSelector([
+  getParentIds,
+  getAssetById,
+], (
+  parentIds,
+  assetById,
+) => parentIds.map(assetId => assetById.get(assetId)))
+
+
+export const getChildAssets = createSelector([
+  getChildIds,
+  getAssetById,
+], (
+  childIds,
+  assetById,
+) => childIds.map(assetId => assetById.get(assetId)))
+
+
+export const getConnectedAssets = createSelector([
+  getConnectedIds,
+  getAssetById,
+], (
+  connectedIds,
+  assetById,
+) => connectedIds.map(assetId => assetById.get(assetId)))
+
+
+export const getRelatedAssetIds = createSelector([
+  getRelatingAsset,
+  getRelatingAssetKey,
+], (
+  relatingAsset,
+  relatingAssetKey,
+) => relatingAsset.get(relatingAssetKey, List()))
+
+
+export const getRelatedAssetTypeIds = createSelector([
+  getRelatingAsset,
+  getRelatingAssetKey,
+], (
+  relatingAsset,
+  relatingAssetKey,
 ) => {
-  return assetById.get(focusingAssetId, Map())
+  const relatingAssetTypeId = relatingAsset.get('typeId')
+  return relatingAssetTypeId ?
+    ASSET_TYPE_BY_ID[relatingAssetTypeId][relatingAssetKey] :
+    List()
 })
 
 

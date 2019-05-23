@@ -1,35 +1,32 @@
 import { connect } from 'react-redux'
-import AssetTable from '../components/AssetTable'
+import AssetRelationChips from '../components/AssetRelationChips'
 import {
   setFocusingAsset,
+  setRelatingAsset,
 } from '../actions'
 import {
-  getFocusingAssetId,
-  getRelatedAssetIds,
-  getRelatedAssetTypeIds,
+  getFocusingAsset,
   getRelatingAssetId,
   getRelatingAssetKey,
-  getVisibleAssets,
 } from '../selectors'
 
 
 const mapStateToProps = state => ({
-  visibleAssets: getVisibleAssets(state),
-  focusingAssetId: getFocusingAssetId(state),
+  focusingAsset: getFocusingAsset(state),
   relatingAssetId: getRelatingAssetId(state),
   relatingAssetKey: getRelatingAssetKey(state),
-  relatedAssetIds: getRelatedAssetIds(state),
-  relatedAssetTypeIds: getRelatedAssetTypeIds(state),
 })
 
 
 const mapDispatchToProps = dispatch => ({
   setFocusingAsset: payload => {dispatch(
     setFocusingAsset(payload))},
+  setRelatingAsset: payload => {dispatch(
+    setRelatingAsset(payload))},
 })
 
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(AssetTable)
+)(AssetRelationChips)

@@ -1,13 +1,15 @@
 import {
-  SET_FOCUSING_ASSET,
+  SET_RELATING_ASSET,
 } from '../constants'
+
 
 const initialState = null
 
-const focusingAssetId = (state=initialState, action) => {
+
+const relatingAssetId = (state=initialState, action) => {
   const actionType = action.type
 
-  if (SET_FOCUSING_ASSET === actionType) {
+  if (SET_RELATING_ASSET === actionType) {
     const {id} = action.payload
     return id
   }
@@ -15,4 +17,5 @@ const focusingAssetId = (state=initialState, action) => {
   return state
 }
 
-export default focusingAssetId
+
+export default relatingAssetId

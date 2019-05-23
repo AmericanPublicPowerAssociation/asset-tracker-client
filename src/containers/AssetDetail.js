@@ -5,12 +5,22 @@ import {
   replaceAsset,
 } from '../actions'
 import {
+  getChildAssets,
+  getConnectedAssets,
   getFocusingAsset,
+  getParentAssets,
+  getRelatingAssetId,
+  getRelatingAssetKey,
 } from '../selectors'
 
 
 const mapStateToProps = state => ({
   focusingAsset: getFocusingAsset(state),
+  relatingAssetId: getRelatingAssetId(state),
+  relatingAssetKey: getRelatingAssetKey(state),
+  connectedAssets: getConnectedAssets(state),
+  parentAssets: getParentAssets(state),
+  childAssets: getChildAssets(state),
 })
 
 

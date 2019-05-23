@@ -10,6 +10,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import AddIcon from '@material-ui/icons/Add'
 import Typography from '@material-ui/core/Typography'
 import {
+  CONTENT_PADDING,
   INFORMATION_DRAWER_WIDTH,
   NAVIGATION_DRAWER_WIDTH,
   RIGHT_DRAWER_MINIMUM_WIDTH,
@@ -37,7 +38,7 @@ const styles = theme => ({
   appBarWithNavigation: {
     width: `calc(100% - ${NAVIGATION_DRAWER_WIDTH}px)`,
     marginLeft: NAVIGATION_DRAWER_WIDTH,
-    paddingLeft: theme.spacing.unit * 3,
+    paddingLeft: CONTENT_PADDING,
     [theme.breakpoints.down('xs')]: {
       paddingLeft: theme.spacing.unit * 2,
     },
