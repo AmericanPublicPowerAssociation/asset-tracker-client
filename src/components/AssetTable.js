@@ -20,8 +20,9 @@ class AssetTable extends PureComponent {
 
   componentDidUpdate() {
     const { focusingAssetId } = this.props
-    if (focusingAssetId) {
-      findDOMNode(this.refs[focusingAssetId]).scrollIntoView({
+    const ref = this.refs[focusingAssetId]
+    if (ref) {
+      findDOMNode(ref).scrollIntoView({
         behavior: 'smooth',
         block: 'center',
       })

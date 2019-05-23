@@ -23,7 +23,6 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    padding: `0 ${theme.spacing.unit}px`,
   },
   appBarShift: {
     transition: theme.transitions.create(['margin', 'width'], {
@@ -47,7 +46,7 @@ const styles = theme => ({
     flexGrow: 1,
   },
   menuButton: {
-    marginLeft: 4,
+    marginLeft: 12,
     marginRight: 20,
   },
   vanish: {
