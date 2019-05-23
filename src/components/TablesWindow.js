@@ -12,6 +12,9 @@ const styles = theme => ({
   frame: {
     height: '100%',
     overflow: 'auto',
+    [theme.breakpoints.down('sm')]: {
+      height: 'auto',
+    },
   },
 })
 
@@ -30,7 +33,7 @@ class TablesWindow extends PureComponent {
         <Grid item className={classes.frame}>
           <AssetFilter />
         </Grid>
-        <Grid item className={classes.frame} xs>
+        <Grid item className={classes.frame} xs={12} sm={12} md>
           <AssetTable />
         </Grid>
       </Grid>

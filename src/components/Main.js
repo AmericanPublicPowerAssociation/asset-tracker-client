@@ -59,6 +59,7 @@ const styles = theme => ({
       height: `calc(100vh - 64px - ${CONTENT_PADDING * 2}px)`,
     },
     overflow: 'auto',
+    'overflow-x': 'auto',
   },
 })
 

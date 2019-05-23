@@ -23,6 +23,10 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    padding: `0 ${theme.spacing.unit}px 0 ${theme.spacing.unit}px`,
+    [theme.breakpoints.down('xs')]: {
+      padding: 0,
+    },
   },
   appBarShift: {
     transition: theme.transitions.create(['margin', 'width'], {
@@ -33,6 +37,10 @@ const styles = theme => ({
   appBarWithNavigation: {
     width: `calc(100% - ${NAVIGATION_DRAWER_WIDTH}px)`,
     marginLeft: NAVIGATION_DRAWER_WIDTH,
+    paddingLeft: theme.spacing.unit * 3,
+    [theme.breakpoints.down('xs')]: {
+      paddingLeft: theme.spacing.unit * 2,
+    },
   },
   appBarWithInformation: {
     width: `calc(100% - ${INFORMATION_DRAWER_WIDTH}px)`,
@@ -45,9 +53,8 @@ const styles = theme => ({
   grow: {
     flexGrow: 1,
   },
-  menuButton: {
-    marginLeft: 12,
-    marginRight: 20,
+  leftButton: {
+    marginRight: 8,
   },
   vanish: {
     display: 'none',
@@ -84,15 +91,12 @@ class ApplicationBar extends PureComponent {
           [classes.appBarWithInformation]: isInformationDrawerOpen,
         })}
       >
-        <Toolbar
-          disableGutters={!isNavigationDrawerOpen}
-        >
-
+        <Toolbar disableGutters>
           <Tooltip title='Open Navigation' enterDelay={TOOLTIP_DELAY}>
             <IconButton
               aria-label='Open Navigation'
               color='inherit'
-              className={classNames(classes.menuButton, {
+              className={classNames(classes.leftButton, {
                 [classes.vanish]: isNavigationDrawerOpen,
               })}
               onClick={openNavigationDrawer}
