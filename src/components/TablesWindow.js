@@ -33,7 +33,7 @@ class TablesWindow extends PureComponent {
         <Grid item className={classes.frame}>
           <AssetFilter />
         </Grid>
-        <Grid item className={classes.frame} xs={12} sm={12} md>
+        <Grid item className={classes.frame} xs={12} sm>
           <AssetTable />
         </Grid>
       </Grid>

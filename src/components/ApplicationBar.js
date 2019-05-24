@@ -8,6 +8,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import AddIcon from '@material-ui/icons/Add'
+// import ReturnIcon from '@material-ui/icons/CenterFocusStrong'
 import Typography from '@material-ui/core/Typography'
 import {
   CONTENT_PADDING,
@@ -71,11 +72,26 @@ class ApplicationBar extends PureComponent {
       isUserMember,
       isNavigationDrawerOpen,
       isInformationDrawerOpen,
+      relatingAsset,
+      relatingAssetKey,
       openNavigationDrawer,
       openAssetAddDialog,
     } = this.props
     const isDrawerOpen = isNavigationDrawerOpen || isInformationDrawerOpen
-    const applicationTitle = 'Asset Tracker'
+    const relatingAssetId = relatingAsset.get('id')
+
+    const editingAssetId = relatingAssetId
+    const editingAsset = relatingAsset
+    const editingAssetName = editingAsset.get('name')
+    const editingAttributeName = {
+      connectedIds: 'Connections',
+      parentIds: 'Parents',
+      childIds: 'Children',
+    }[relatingAssetKey]
+
+    const applicationTitle = editingAssetId ?
+      `Editing ${editingAttributeName} for ${editingAssetName}` :
+      'Asset Tracker'
     const assetAddButton = isUserMember &&
       <Tooltip title='Add Asset' enterDelay={TOOLTIP_DELAY}>
         <IconButton
@@ -91,6 +107,7 @@ class ApplicationBar extends PureComponent {
           [classes.appBarWithNavigation]: isNavigationDrawerOpen,
           [classes.appBarWithInformation]: isInformationDrawerOpen,
         })}
+        color={editingAssetId ? 'secondary' : 'default'}
       >
         <Toolbar disableGutters>
           <Tooltip title='Open Navigation' enterDelay={TOOLTIP_DELAY}>
@@ -109,6 +126,22 @@ class ApplicationBar extends PureComponent {
             className={classes.grow}
             noWrap
           >{applicationTitle}</Typography>
+
+      {/*
+
+      {editingAssetId &&
+        {editingAssetId !== focusingAssetId &&
+          <Tooltip title='Return to Asset' enterDelay={TOOLTIP_DELAY}>
+            <IconButton aria-label='Return to Asset'
+              onClick={() => {
+                setFocusingAsset({id: editingAssetId})
+              }}
+            ><ReturnIcon /></IconButton>
+          </Tooltip>}
+        }
+      }
+
+      */}
 
           <Route exact path='/tables' render={() => assetAddButton }/>
           <Route exact path='/maps' render={() => assetAddButton }/>

@@ -30,4 +30,3 @@ class NavigationDrawer extends PureComponent {
     )
   }
 }
-

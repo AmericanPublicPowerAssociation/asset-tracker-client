@@ -8,6 +8,8 @@ import {
   getIsInformationDrawerOpen,
   getIsNavigationDrawerOpen,
   getIsUserMember,
+  getRelatingAsset,
+  getRelatingAssetKey,
 } from '../selectors'
 
 
@@ -15,6 +17,8 @@ const mapStateToProps = state => ({
   isUserMember: getIsUserMember(state),
   isNavigationDrawerOpen: getIsNavigationDrawerOpen(state),
   isInformationDrawerOpen: getIsInformationDrawerOpen(state),
+  relatingAsset: getRelatingAsset(state),
+  relatingAssetKey: getRelatingAssetKey(state),
 })
 
 
