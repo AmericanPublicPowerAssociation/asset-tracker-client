@@ -1,13 +1,4 @@
-import Downshift from 'downshift'
 import deburr from 'lodash/deburr'
-import Paper from '@material-ui/core/Paper';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormLabel from '@material-ui/core/FormLabel'
-import Input from '@material-ui/core/Input'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import IconButton from '@material-ui/core/IconButton'
-import ClearIcon from '@material-ui/icons/Clear'
-import { ASSET_TYPE_BY_ID } from '../constants'
 import AssetName from './AssetName'
 import AssetLocationContainer from '../containers/AssetLocationContainer'
 
@@ -74,10 +65,7 @@ const PRODUCT_VERSION_SUGGESTIONS = [
 
     const focusingAssetId = focusingAsset.get('id');
     if (!focusingAssetId) return null
-    const focusingAssetTypeId = focusingAsset.get('typeId')
-    const focusingAssetType = ASSET_TYPE_BY_ID[focusingAssetTypeId]
     const locatable = focusingAssetType['locatable'] || false
-    const unique = focusingAssetType['unique'] || false
     const vendorName = focusingAsset.get('vendorName', '')
     const productName = focusingAsset.get('productName', '')
     const productVersion = focusingAsset.get('productVersion', '')
@@ -94,67 +82,17 @@ const PRODUCT_VERSION_SUGGESTIONS = [
 
     return (
       <div>
-        <AssetName
-          updateAsset={updateAsset}
-        />
-        {!unique &&
-<Fragment>
-        <Downshift
-          inputValue={vendorName}
-          onInputValueChange={value => {
-            updateAsset({id: focusingAssetId, vendorName: value})
-            // this.setState({vendorNameValue: value})
-            // console.log('onInputValueChange', value)
-          }}
-        >
         {({
-          getInputProps,
-          getItemProps,
-          getLabelProps,
-          getMenuProps,
           inputValue,
-          isOpen,
         }) => (
-          <div className={classes.attribute}>
-            <FormLabel {...getLabelProps()}>Vendor Name</FormLabel>
-            <Input
-              fullWidth
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => {
-                      updateAsset({id: focusingAssetId, vendorName: ''})
-                    }}
-                  ><ClearIcon /></IconButton>
-                </InputAdornment>
-              }
-              {...getInputProps()}
-            />
-            <div {...getMenuProps()}>
-            {isOpen &&
-              <Paper square>
-              {
-                vendorNameSuggestions
-                  .filter(suggestion => inputValue !== '' &&
-                    // suggestion.type === focusingAssetTypeId &&
-                    suggestion.label.toLowerCase().includes(
-                      deburr(inputValue.trim()).toLowerCase()))
-                  .map((suggestion, index) => {
-                    const label = suggestion.label
-                    const type = suggestion.type
-                    return (
-                      <MenuItem
-                        {...getItemProps({item: label})}
-                        key={`${type}-${label}`}
-                      >{label}</MenuItem>
-                    )
-                  })
-              }
-              </Paper>}
-            </div>
-          </div>
+            {
+              vendorNameSuggestions
+                .filter(suggestion => inputValue !== '' &&
+                  // suggestion.type === focusingAssetTypeId &&
+                  suggestion.label.toLowerCase().includes(
+                    deburr(inputValue.trim()).toLowerCase()))
+            }
         )}
-
         </Downshift>
 
         <Downshift
@@ -269,8 +207,6 @@ const PRODUCT_VERSION_SUGGESTIONS = [
         )}
         </Downshift>
 
-</Fragment>
-        }
         {locatable && <AssetLocationContainer />}
       </div>
     )
