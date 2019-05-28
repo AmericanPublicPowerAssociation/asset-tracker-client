@@ -1,6 +1,8 @@
 import { connect } from 'react-redux'
 import AssetTable from '../components/AssetTable'
 import {
+  addAssetRelation,
+  dropAssetRelation,
   setFocusingAsset,
 } from '../actions'
 import {
@@ -18,14 +20,18 @@ const mapStateToProps = state => ({
   focusingAssetId: getFocusingAssetId(state),
   relatingAssetId: getRelatingAssetId(state),
   relatingAssetKey: getRelatingAssetKey(state),
-  relatedAssetIds: getRelatedAssetIds(state),
   relatedAssetTypeIds: getRelatedAssetTypeIds(state),
+  relatedAssetIds: getRelatedAssetIds(state),
 })
 
 
 const mapDispatchToProps = dispatch => ({
   setFocusingAsset: payload => {dispatch(
     setFocusingAsset(payload))},
+  addAssetRelation: payload => {dispatch(
+    addAssetRelation(payload))},
+  dropAssetRelation: payload => {dispatch(
+    dropAssetRelation(payload))},
 })
 
 

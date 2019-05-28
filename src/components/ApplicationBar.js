@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Fragment, PureComponent } from 'react'
 import { Route } from 'react-router-dom'
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
@@ -7,8 +7,9 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
+import EditingOpenIcon from '@material-ui/icons/CenterFocusStrong'
+import EditingSaveIcon from '@material-ui/icons/Check'
 import AddIcon from '@material-ui/icons/Add'
-// import ReturnIcon from '@material-ui/icons/CenterFocusStrong'
 import Typography from '@material-ui/core/Typography'
 import {
   CONTENT_PADDING,
@@ -72,14 +73,17 @@ class ApplicationBar extends PureComponent {
       isUserMember,
       isNavigationDrawerOpen,
       isInformationDrawerOpen,
+      focusingAssetId,
       relatingAsset,
       relatingAssetKey,
       openNavigationDrawer,
       openAssetAddDialog,
+      setFocusingAsset,
+      setRelatingAsset,
     } = this.props
+
     const isDrawerOpen = isNavigationDrawerOpen || isInformationDrawerOpen
     const relatingAssetId = relatingAsset.get('id')
-
     const editingAssetId = relatingAssetId
     const editingAsset = relatingAsset
     const editingAssetName = editingAsset.get('name')
@@ -92,14 +96,41 @@ class ApplicationBar extends PureComponent {
     const applicationTitle = editingAssetId ?
       `Editing ${editingAttributeName} for ${editingAssetName}` :
       'Asset Tracker'
+
+    const editingAssetOpenButton =
+      editingAssetId &&
+      editingAssetId !== focusingAssetId &&
+      <Tooltip title='Open Editing Asset' enterDelay={TOOLTIP_DELAY}>
+        <IconButton aria-label='Open Editing Asset' color='inherit'
+          onClick={() => setFocusingAsset({id: editingAssetId})}
+        ><EditingOpenIcon /></IconButton>
+      </Tooltip>
+
+    const editingAssetSaveButton =
+      editingAssetId &&
+      <Tooltip title='Save Editing Asset' enterDelay={TOOLTIP_DELAY}>
+        <IconButton aria-label='Save Editing Asset' color='inherit'
+          onClick={() => {
+            setFocusingAsset({id: editingAssetId})
+            setRelatingAsset({id: null, key: null})
+          }}
+        ><EditingSaveIcon /></IconButton>
+      </Tooltip>
+
     const assetAddButton = isUserMember &&
       <Tooltip title='Add Asset' enterDelay={TOOLTIP_DELAY}>
-        <IconButton
-          aria-label='Add Asset'
-          color='inherit'
+        <IconButton aria-label='Add Asset' color='inherit'
           onClick={openAssetAddDialog}
         ><AddIcon /></IconButton>
       </Tooltip>
+
+    const assetButtonGroup =
+      <Fragment>
+        {editingAssetOpenButton}
+        {editingAssetSaveButton}
+        {assetAddButton}
+      </Fragment>
+
     return (
       <AppBar
         className={classNames(classes.appBar, {
@@ -110,16 +141,16 @@ class ApplicationBar extends PureComponent {
         color={editingAssetId ? 'secondary' : 'default'}
       >
         <Toolbar disableGutters>
+
           <Tooltip title='Open Navigation' enterDelay={TOOLTIP_DELAY}>
-            <IconButton
-              aria-label='Open Navigation'
-              color='inherit'
+            <IconButton aria-label='Open Navigation' color='inherit'
               className={classNames(classes.leftButton, {
                 [classes.vanish]: isNavigationDrawerOpen,
               })}
               onClick={openNavigationDrawer}
             ><MenuIcon /></IconButton>
           </Tooltip>
+
           <Typography
             variant='h6'
             color='inherit'
@@ -127,24 +158,8 @@ class ApplicationBar extends PureComponent {
             noWrap
           >{applicationTitle}</Typography>
 
-      {/*
-
-      {editingAssetId &&
-        {editingAssetId !== focusingAssetId &&
-          <Tooltip title='Return to Asset' enterDelay={TOOLTIP_DELAY}>
-            <IconButton aria-label='Return to Asset'
-              onClick={() => {
-                setFocusingAsset({id: editingAssetId})
-              }}
-            ><ReturnIcon /></IconButton>
-          </Tooltip>}
-        }
-      }
-
-      */}
-
-          <Route exact path='/tables' render={() => assetAddButton }/>
-          <Route exact path='/maps' render={() => assetAddButton }/>
+          <Route exact path='/tables' render={() => assetButtonGroup }/>
+          <Route exact path='/maps' render={() => editingAssetSaveButton }/>
           <Route exact path='/circuits' render={() => assetAddButton }/>
 
         </Toolbar>

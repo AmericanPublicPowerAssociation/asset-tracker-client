@@ -9,6 +9,8 @@ import {
 } from 'redux-saga/effects'
 import { appaAuthClient } from 'appa-auth-client'
 import {
+  excludeAssetRelation,
+  includeAssetRelation,
   logError,
   replaceAsset,
   replaceAssetErrors,
@@ -20,7 +22,9 @@ import {
 } from './actions'
 import {
   ADD_ASSET,
+  ADD_ASSET_RELATION,
   CHANGE_ASSET,
+  DROP_ASSET_RELATION,
   REFRESH_ASSETS,
   SIGN_IN,
   SIGN_OUT,
@@ -31,7 +35,7 @@ import {
 
 
 function* watchRefreshAssets() {
-  yield takeLatest(REFRESH_ASSETS, function* refreshAssets() {
+  yield takeLatest(REFRESH_ASSETS, function* () {
     try {
       const response = yield call(fetch, '/assets.json')
       switch (response.status) {
@@ -51,7 +55,7 @@ function* watchRefreshAssets() {
 
 
 function* watchAddAsset() {
-  yield takeEvery(ADD_ASSET, function* addAsset(action) {
+  yield takeEvery(ADD_ASSET, function* (action) {
     const payload = rinseAsset(action.payload)
     try {
       const response = yield call(fetch, '/assets.json', {
@@ -81,10 +85,10 @@ function* watchAddAsset() {
 
 
 function* watchChangeAsset() {
-  yield takeEvery(CHANGE_ASSET, function* changeAsset(action) {
+  yield takeEvery(CHANGE_ASSET, function* (action) {
     const payload = rinseAsset(action.payload)
     const id = payload.get('id')
-    const url = '/assets/_.json'.replace('_', id)
+    const url = `/assets/${id}.json`
     try {
       const response = yield call(fetch, url, {
         method: 'PATCH',
@@ -111,8 +115,56 @@ function* watchChangeAsset() {
 }
 
 
+function* watchAddAssetRelation() {
+  yield takeEvery(ADD_ASSET_RELATION, function* (action) {
+    const actionPayload = action.payload
+    const { id, key, otherId } = actionPayload
+    const url = `/assets/${id}/${key}/${otherId}.json`
+    yield put(includeAssetRelation(actionPayload))
+    try {
+      const response = yield call(fetch, url, {
+        method: 'PATCH',
+      })
+      switch (response.status) {
+        case 400:
+          yield put(excludeAssetRelation(actionPayload))
+          break
+        default:
+          yield put(logError({status: response.status}))
+      }
+    } catch (error) {
+      yield put(logError({text: error}))
+    }
+  })
+}
+
+
+function* watchDropAssetRelation() {
+  yield takeEvery(DROP_ASSET_RELATION, function* (action) {
+    const actionPayload = action.payload
+    const { id, key, otherId } = actionPayload
+    const url = `/assets/${id}/${key}/${otherId}.json`
+    yield put(excludeAssetRelation(actionPayload))
+    try {
+      const response = yield call(fetch, url, {
+        method: 'DELETE',
+      })
+      switch (response.status) {
+        case 400:
+          yield put(includeAssetRelation(actionPayload))
+          break
+        default:
+          yield put(logError({status: response.status}))
+      }
+    } catch (error) {
+      yield put(logError({text: error}))
+    }
+  })
+}
+
+
 function* watchSignIn() {
-  yield takeLeading(SIGN_IN, function* signIn() {
+  yield takeLeading(SIGN_IN, function* () {
     const authState = yield appaAuthClient.signIn()
     yield put(setAppValue(authState))
   })
@@ -120,18 +172,20 @@ function* watchSignIn() {
 
 
 function* watchSignOut() {
-  yield takeLeading(SIGN_OUT, function* signOut() {
+  yield takeLeading(SIGN_OUT, function* () {
     const authState = yield appaAuthClient.signOut()
     yield put(setAppValue(authState))
   })
 }
 
 
-export default function* reduceSaga() {
+export default function* () {
   yield all([
     watchRefreshAssets(),
     watchAddAsset(),
     watchChangeAsset(),
+    watchAddAssetRelation(),
+    watchDropAssetRelation(),
     watchSignIn(),
     watchSignOut(),
   ])

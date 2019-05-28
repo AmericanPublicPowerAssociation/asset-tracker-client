@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import { findDOMNode }  from 'react-dom'
+import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -15,6 +16,9 @@ const styles = theme => ({
   hover: {
     cursor: 'pointer',
   },
+  hide: {
+    visibility: 'hidden',
+  },
 })
 
 
@@ -24,10 +28,7 @@ class AssetTable extends PureComponent {
     const { focusingAssetId } = this.props
     const ref = this.refs[focusingAssetId]
     if (ref) {
-      findDOMNode(ref).scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      })
+      findDOMNode(ref).scrollIntoView({behavior: 'smooth', block: 'center'})
     }
   }
 
@@ -40,7 +41,10 @@ class AssetTable extends PureComponent {
       relatingAssetId,
       relatingAssetKey,
       relatedAssetTypeIds,
+      relatedAssetIds,
       setFocusingAsset,
+      addAssetRelation,
+      dropAssetRelation,
     } = this.props
 
     return (
@@ -63,6 +67,12 @@ class AssetTable extends PureComponent {
           const assetTypeId = asset.get('typeId')
           const primaryAssetTypeId = assetTypeId[0]
           const assetTypeName = getAssetTypeName(assetTypeId)
+          const isRelated = relatedAssetIds.includes(assetId)
+          const actionPayload = {
+            id: relatingAssetId,
+            key: relatingAssetKey,
+            otherId: assetId,
+          }
           return (
             <TableRow
               hover
@@ -85,12 +95,18 @@ class AssetTable extends PureComponent {
             {
               relatingAssetId &&
               <TableCell align='right'>
-              {
-                relatingAssetId !== assetId &&
-                relatedAssetTypeIds.includes(primaryAssetTypeId) &&
                 <Switch
+                  className={classNames({
+                    [classes.hide]:
+                      relatedAssetTypeIds.includes(primaryAssetTypeId) ||
+                      relatingAssetId === assetId
+                  })}
+                  checked={isRelated}
+                  onChange={() => isRelated ?
+                    dropAssetRelation(actionPayload) :
+                    addAssetRelation(actionPayload)
+                  }
                 />
-              }
               </TableCell>
             }
             </TableRow>

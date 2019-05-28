@@ -1,19 +1,23 @@
 import {
   ADD_ASSET,
+  ADD_ASSET_RELATION,
   CHANGE_ASSET,
   CLOSE_ASSET_ADD_DIALOG,
   CLOSE_INFORMATION_DRAWER,
   CLOSE_NAVIGATION_DRAWER,
+  DROP_ASSET_RELATION,
   EXCLUDE_ASSET_FILTER_KEY,
+  EXCLUDE_ASSET_RELATION,
   INCLUDE_ASSET_FILTER_KEY,
+  INCLUDE_ASSET_RELATION,
   LOG_ERROR,
   OPEN_ASSET_ADD_DIALOG,
   OPEN_INFORMATION_DRAWER,
   OPEN_NAVIGATION_DRAWER,
   REFRESH_ASSETS,
   REPLACE_ASSET,
-  REPLACE_ASSET_ERRORS,
   REPLACE_ASSETS,
+  REPLACE_ASSET_ERRORS,
   SET_ADDING_ASSET_ERRORS,
   SET_ADDING_ASSET_VALUE,
   SET_APP_VALUE,
@@ -40,6 +44,12 @@ export const changeAsset = payload => ({
   payload, type: CHANGE_ASSET})
 
 
+export const addAssetRelation = payload => ({
+  payload, type: ADD_ASSET_RELATION})
+export const dropAssetRelation = payload => ({
+  payload, type: DROP_ASSET_RELATION})
+
+
 export const replaceAssets = payload => ({
   payload, type: REPLACE_ASSETS})
 export const replaceAsset = payload => ({
@@ -60,6 +70,12 @@ export const setAppValue = payload => ({
   payload, type: SET_APP_VALUE})
 export const toggleTheme = payload => ({
   payload, type: TOGGLE_THEME})
+
+
+export const excludeAssetRelation = payload => ({
+  payload, type: EXCLUDE_ASSET_RELATION})
+export const includeAssetRelation = payload => ({
+  payload, type: INCLUDE_ASSET_RELATION})
 
 
 export const setAssetFilterValue = payload => ({

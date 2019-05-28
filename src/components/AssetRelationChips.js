@@ -5,7 +5,7 @@ import FormControl from '@material-ui/core/FormControl'
 import FormLabel from '@material-ui/core/FormLabel'
 import Chip from '@material-ui/core/Chip'
 import AddIcon from '@material-ui/icons/Add'
-import CheckIcon from '@material-ui/icons/Check'
+import SaveIcon from '@material-ui/icons/Check'
 import { ASSET_TYPE_BY_ID } from '../constants'
 
 
@@ -64,7 +64,7 @@ class AssetRelationChips extends PureComponent {
         })}
 
           <Chip
-            label={relatingAssetId ? <CheckIcon /> : <AddIcon />}
+            label={relatingAssetId ? <SaveIcon /> : <AddIcon />}
             color={relatingAssetId ? 'secondary' : 'primary'}
             className={classNames(classes.chip, {
               [classes.hide]: relatingAssetId && (
