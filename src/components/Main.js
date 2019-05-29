@@ -9,7 +9,7 @@ import {
 import ProtectedRoute from '../containers/ProtectedRoute'
 import DashboardsWindow from './DashboardsWindow'
 import TablesWindow from '../containers/TablesWindow'
-import MapsWindow from './MapsWindow'
+import MapsWindow from '../containers/MapsWindow'
 import CircuitsWindow from './CircuitsWindow'
 import ReportsWindow from './ReportsWindow'
 import AlertsWindow from './AlertsWindow'

@@ -159,8 +159,8 @@ class ApplicationBar extends PureComponent {
           >{applicationTitle}</Typography>
 
           <Route exact path='/tables' render={() => assetButtonGroup }/>
-          <Route exact path='/maps' render={() => editingAssetSaveButton }/>
-          <Route exact path='/circuits' render={() => assetAddButton }/>
+          <Route exact path='/maps' render={() => assetButtonGroup }/>
+          <Route exact path='/circuits' render={() => assetButtonGroup }/>
 
         </Toolbar>
       </AppBar>

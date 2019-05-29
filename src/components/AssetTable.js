@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react'
-import { findDOMNode }  from 'react-dom'
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
@@ -9,7 +8,10 @@ import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
 import Switch from '@material-ui/core/Switch'
 import { capitalize } from '../macros'
-import { getAssetTypeName } from '../routines'
+import {
+  getAssetTypeName,
+  scrollToFocusingAsset,
+} from '../routines'
 
 
 const styles = theme => ({
@@ -19,17 +21,16 @@ const styles = theme => ({
   hide: {
     visibility: 'hidden',
   },
+  editing: {
+    backgroundColor: theme.palette.secondary.main,
+  },
 })
 
 
 class AssetTable extends PureComponent {
 
   componentDidUpdate() {
-    const { focusingAssetId } = this.props
-    const ref = this.refs[focusingAssetId]
-    if (ref) {
-      findDOMNode(ref).scrollIntoView({behavior: 'smooth', block: 'center'})
-    }
+    scrollToFocusingAsset(this)
   }
 
   render() {
@@ -46,6 +47,8 @@ class AssetTable extends PureComponent {
       addAssetRelation,
       dropAssetRelation,
     } = this.props
+
+    const editingAssetId = relatingAssetId
 
     return (
       <Table>
@@ -75,16 +78,19 @@ class AssetTable extends PureComponent {
           }
           return (
             <TableRow
+              className={classNames({
+                [classes.editing]: editingAssetId && editingAssetId === assetId,
+              })}
               hover
               classes={{
                 hover: classes.hover,
               }}
               selected={assetId === focusingAssetId}
+              key={assetId}
+              ref={assetId}
               onClick={() => {
                 setFocusingAsset({id: assetId})
               }}
-              key={assetId}
-              ref={assetId}
             >
               <TableCell>
                 {assetTypeName}

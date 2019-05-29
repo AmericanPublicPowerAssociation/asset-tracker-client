@@ -1,3 +1,4 @@
+import { findDOMNode }  from 'react-dom'
 import { ASSET_TYPE_BY_ID } from './constants'
 
 
@@ -23,4 +24,13 @@ export function rinseAsset(asset) {
     'parentIds',
     'childIds',
   ])
+}
+
+
+export function scrollToFocusingAsset(component) {
+  const { focusingAssetId } = component.props
+  const ref = component.refs[focusingAssetId]
+  if (ref) {
+    findDOMNode(ref).scrollIntoView({behavior: 'smooth', block: 'center'})
+  }
 }
