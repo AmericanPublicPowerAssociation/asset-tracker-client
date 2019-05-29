@@ -10,9 +10,6 @@ import { ASSET_TYPE_BY_ID } from '../constants'
 
 
 const styles = theme => ({
-  root: {
-    margin: `${theme.spacing.unit * 3}px 0 0 0`,
-  },
   chip: {
     margin: `${theme.spacing.unit}px 8px 0 0`,
   },
@@ -27,6 +24,7 @@ class AssetRelationChips extends PureComponent {
   render() {
     const {
       classes,
+      className,
       label,
       assetKey,
       relatedAssets,
@@ -46,7 +44,7 @@ class AssetRelationChips extends PureComponent {
     if (!relatedAssetTypeIds.length) return null
 
     return (
-      <FormControl fullWidth className={classes.root}>
+      <FormControl fullWidth className={className}>
         <FormLabel>{label}</FormLabel>
         <div>
 

@@ -30,6 +30,12 @@ export const getAssetFilterValueByAttribute = state => state.get(
   'assetFilterValueByAttribute')
 export const getTrackingAsset = state => state.get(
   'trackingAsset')
+export const getMapViewport = state => state.get(
+  'mapViewport')
+export const getMapStyle = state => state.get(
+  'mapStyle')
+export const getBaseMapStyleName = state => state.get(
+  'baseMapStyleName')
 
 
 export const getMatchingAssets = createSelector([

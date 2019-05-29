@@ -1,4 +1,7 @@
+import { fromJS } from 'immutable'
 import assetTypeById from './datasets/assetTypeById.json'
+import streetsMapStyle from './datasets/streetsMapStyle.json'
+import satelliteStreetsMapStyle from './datasets/satelliteStreetsMapStyle.json'
 
 
 export const CONTENT_PADDING = 24
@@ -60,6 +63,9 @@ export const SET_ADDING_ASSET_VALUE = 'SET_ADDING_ASSET_VALUE'
 export const SET_ADDING_ASSET_ERRORS = 'SET_ADDING_ASSET_ERRORS'
 
 
+export const SET_MAP_VIEWPORT = 'SET_MAP_VIEWPORT'
+
+
 export const SIGN_IN = 'SIGN_IN'
 export const SIGN_OUT = 'SIGN_OUT'
 
@@ -67,3 +73,8 @@ export const SIGN_OUT = 'SIGN_OUT'
 export const ASSET_TYPE_BY_ID = assetTypeById
 export const DEFAULT_ASSET_TYPE_ID = 'p'
 export const SELECTED_ASSET_TYPE_IDS = ['l']
+
+
+export const STREETS_MAP_STYLE = fromJS(streetsMapStyle)
+export const SATELLITE_STREETS_MAP_STYLE = fromJS(satelliteStreetsMapStyle)
+export const BASE_MAP_STYLE_NAME = 'streets'

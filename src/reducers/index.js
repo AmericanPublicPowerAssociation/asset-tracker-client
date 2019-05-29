@@ -15,6 +15,8 @@ import relatingAssetKey from './relatingAssetKey'
 import assetFilterKeysByAttribute from './assetFilterKeysByAttribute'
 import assetFilterValueByAttribute from './assetFilterValueByAttribute'
 import addingAsset from './addingAsset'
+import mapViewport from './mapViewport'
+import baseMapStyleName from './baseMapStyleName'
 import {
   SET_FOCUSING_ASSET,
 } from '../constants'
@@ -35,6 +37,8 @@ const reduceHorizontally = combineReducers({
   productNameSuggestions,
   productVersionSuggestions,
   vulnerableAssets,
+  mapViewport,
+  baseMapStyleName,
 })
 
 

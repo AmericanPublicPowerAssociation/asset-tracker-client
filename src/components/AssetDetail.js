@@ -8,6 +8,7 @@ import {
   ProductVersion,
 } from 'asset-vulnerability-report'
 import AssetName from './AssetName'
+import AssetLocation from './AssetLocation'
 import AssetRelationChips from '../containers/AssetRelationChips'
 import { ASSET_TYPE_BY_ID } from '../constants'
 
@@ -59,6 +60,7 @@ class AssetDetail extends PureComponent {
     const productVersion = focusingAsset.get('productVersion', '')
 
     const unique = primaryAssetType.unique || false
+    const locatable = primaryAssetType['locatable'] || false
     const errors = focusingAsset.get('errors', Map())
     return (
       <Fragment>
@@ -96,17 +98,25 @@ class AssetDetail extends PureComponent {
           trackChanges={this.trackChanges}
           saveChanges={this.saveChanges}
         />
+        <AssetLocation
+          className={classNames(classes.attribute, {
+            [classes.vanish]: locatable,
+          })}
+        />
         <AssetRelationChips
+          className={classes.attribute}
           label='Connections'
           assetKey='connectedIds'
           relatedAssets={connectedAssets}
         />
         <AssetRelationChips
+          className={classes.attribute}
           label='Parents'
           assetKey='parentIds'
           relatedAssets={parentAssets}
         />
         <AssetRelationChips
+          className={classes.attribute}
           label='Children'
           assetKey='childIds'
           relatedAssets={childAssets}

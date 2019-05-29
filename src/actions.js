@@ -24,6 +24,7 @@ import {
   SET_ASSET_FILTER_KEYS,
   SET_ASSET_FILTER_VALUE,
   SET_FOCUSING_ASSET,
+  SET_MAP_VIEWPORT,
   SET_RELATING_ASSET,
   SIGN_IN,
   SIGN_OUT,
@@ -106,6 +107,10 @@ export const setAddingAssetValue = payload => ({
   payload, type: SET_ADDING_ASSET_VALUE})
 export const setAddingAssetErrors = payload => ({
   payload, type: SET_ADDING_ASSET_ERRORS})
+
+
+export const setMapViewport = payload => ({
+  type: SET_MAP_VIEWPORT, payload})
 
 
 export const signIn = payload => ({

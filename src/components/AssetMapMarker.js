@@ -2,11 +2,13 @@ import React, { PureComponent } from 'react'
 import { Marker } from 'react-map-gl'
 import PlaceIcon from '@material-ui/icons/Place'
 
+
 class AssetMapMarker extends PureComponent {
+
   render() {
     const {
-      draggable,
       color,
+      draggable,
       assetId,
       assetLocation,
       defaultLongitude,
@@ -25,24 +27,16 @@ class AssetMapMarker extends PureComponent {
         offsetLeft={-17}
         offsetTop={-32}
         onDragEnd={event => {
-          const [
-            longitude,
-            latitude,
-          ] = event.lngLat
-          updateAssetLocation({
-            id: assetId,
-            longitude: longitude,
-            latitude: latitude,
-          })
+          const [ longitude, latitude ] = event.lngLat
+          updateAssetLocation({id: assetId, longitude, latitude})
         }}
       >
-        <PlaceIcon
-          nativeColor={color}
-          fontSize='large'
-        />
+        <PlaceIcon nativeColor={color} fontSize='large' />
       </Marker>
     )
   }
+
 }
+
 
 export default AssetMapMarker

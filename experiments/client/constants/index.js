@@ -1,6 +1,3 @@
-import streetsMapStyle from '../datasets/map-style-streets.json'
-import satelliteStreetsMapStyle from '../datasets/map-style-satellite-streets.json'
-
 export const ASSET_LOCATION_BY_ID = fromJS(
   assets.filter(x => x.location).reduce(
     (o, x) => Object.assign(o, {[x.id]: x.location}), {}))
@@ -9,8 +6,6 @@ export const FEATURE_GEOMETRY_BY_ID = fromJS(
     (o, x) => Object.assign(o, {[x.id]: x.geometry}), {}))
 export const FEATURE_COLOR_ATTRIBUTE = 'typeId'
 export const FEATURE_SIZE_ATTRIBUTE = 'KV'
-export const STREETS_MAP_STYLE = fromJS(streetsMapStyle)
-export const SATELLITE_STREETS_MAP_STYLE = fromJS(satelliteStreetsMapStyle)
 export const MAP_VIEWPORT = fromJS({
   longitude: -79.62399908012085,
   latitude: 36.1931536309396,

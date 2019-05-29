@@ -33,7 +33,7 @@ const styles = theme => ({
     overflow: 'auto',
   },
   overviewPanel: {
-    height: '33%',
+    height: '25%',
   },
   detailPanel: {
   },
