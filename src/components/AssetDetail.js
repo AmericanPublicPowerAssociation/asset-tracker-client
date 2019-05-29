@@ -29,8 +29,11 @@ class AssetDetail extends PureComponent {
     replaceAsset(focusingAsset.merge(fromJS(attributes)))
   }
 
-  saveChanges = () => {
-    const { focusingAsset, changeAsset } = this.props
+  saveChanges = attributes => {
+    let { focusingAsset, changeAsset } = this.props
+    if (attributes && !attributes.target) {
+      focusingAsset = focusingAsset.merge(fromJS(attributes))
+    }
     changeAsset(focusingAsset)
   }
 
@@ -67,25 +70,31 @@ class AssetDetail extends PureComponent {
         />
         <VendorName
           className={classes.attribute}
-          value={vendorName}
-          setValue={value => this.trackChanges({vendorName: value})}
-          saveValue={this.saveChanges}
+          typeId={assetTypeId}
+          vendorName={vendorName}
+          trackChanges={this.trackChanges}
+          saveChanges={this.saveChanges}
         />
         <ProductName
           className={classNames(classes.attribute, {
             [classes.vanish]: unique,
           })}
-          value={productName}
-          setValue={value => this.trackChanges({productName: value})}
-          saveValue={this.saveChanges}
+          typeId={assetTypeId}
+          vendorName={vendorName}
+          productName={productName}
+          trackChanges={this.trackChanges}
+          saveChanges={this.saveChanges}
         />
         <ProductVersion
           className={classNames(classes.attribute, {
             [classes.vanish]: unique,
           })}
-          value={productVersion}
-          setValue={value => this.trackChanges({productVersion: value})}
-          saveValue={this.saveChanges}
+          typeId={assetTypeId}
+          vendorName={vendorName}
+          productName={productName}
+          productVersion={productVersion}
+          trackChanges={this.trackChanges}
+          saveChanges={this.saveChanges}
         />
         <AssetRelationChips
           label='Connections'

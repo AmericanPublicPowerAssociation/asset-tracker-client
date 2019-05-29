@@ -1,5 +1,10 @@
 import { combineReducers } from 'redux-immutable'
 import reduceReducers from 'reduce-reducers'
+import {
+  productNameSuggestions,
+  productVersionSuggestions,
+  vendorNameSuggestions,
+} from 'asset-vulnerability-report'
 import app from './app'
 import sortedAssetIds from './sortedAssetIds'
 import assetById from './assetById'
@@ -25,6 +30,9 @@ const reduceHorizontally = combineReducers({
   assetFilterValueByAttribute,
   assetFilterKeysByAttribute,
   trackingAsset: (state={}) => state,
+  vendorNameSuggestions,
+  productNameSuggestions,
+  productVersionSuggestions,
 })
 
 

@@ -9,6 +9,11 @@ import {
 } from 'redux-saga/effects'
 import { appaAuthClient } from 'appa-auth-client'
 import {
+  watchSuggestVendorNames,
+  // watchSuggestProductNames,
+  // watchSuggestProductVersions,
+} from 'asset-vulnerability-report'
+import {
   excludeAssetRelation,
   includeAssetRelation,
   logError,
@@ -188,5 +193,8 @@ export default function* () {
     watchDropAssetRelation(),
     watchSignIn(),
     watchSignOut(),
+    watchSuggestVendorNames(),
+    // watchSuggestProductNames(),
+    // watchSuggestProductVersions(),
   ])
 }
