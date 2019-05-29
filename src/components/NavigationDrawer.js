@@ -13,7 +13,7 @@ import SignInIcon from '@material-ui/icons/Lock'
 import SignOutIcon from '@material-ui/icons/LockOpen'
 import TablesIcon from '@material-ui/icons/ListAlt'
 import MapsIcon from '@material-ui/icons/Map'
-import CircuitsIcon from '@material-ui/icons/SettingsInputComponent'
+// import CircuitsIcon from '@material-ui/icons/SettingsInputComponent'
 import ReportsIcon from '@material-ui/icons/Assessment'
 // import AlertsIcon from '@material-ui/icons/Notifications'
 // import BookmarksIcon from '@material-ui/icons/Bookmarks'
@@ -71,7 +71,9 @@ class NavigationDrawer extends PureComponent {
             <ListItemLink to='/' text='Dashboards' icon={<DashboardsIcon />} />
             <ListItemLink to='/tables' text='Tables' icon={<TablesIcon />} />
             <ListItemLink to='/maps' text='Maps' icon={<MapsIcon />} />
+            {/*
             <ListItemLink to='/circuits' text='Circuits' icon={<CircuitsIcon />} />
+            */}
             <ListItemLink to='/reports' text='Reports' icon={<ReportsIcon />} />
             {/*
             <ListItemLink to='/alerts' text='Alerts' icon={<AlertsIcon />} />

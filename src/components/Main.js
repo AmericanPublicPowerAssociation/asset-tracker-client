@@ -3,6 +3,9 @@ import { Route, Switch } from 'react-router-dom'
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
+import {
+  VulnerabilitiesWindow,
+} from 'asset-vulnerability-report'
 import ProtectedRoute from '../containers/ProtectedRoute'
 import DashboardsWindow from './DashboardsWindow'
 import TablesWindow from '../containers/TablesWindow'
@@ -83,15 +86,26 @@ class Main extends Component {
       >
         <Paper className={classes.paper}>
           <Switch>
-            <ProtectedRoute exact path='/' component={DashboardsWindow} />
-            <ProtectedRoute exact path='/tables' component={TablesWindow} />
-            <ProtectedRoute exact path='/maps' component={MapsWindow} />
-            <ProtectedRoute exact path='/circuits' component={CircuitsWindow} />
-            <ProtectedRoute exact path='/reports' component={ReportsWindow} />
-            <ProtectedRoute exact path='/alerts' component={AlertsWindow} />
-            <ProtectedRoute exact path='/bookmarks' component={BookmarksWindow} />
-            <ProtectedRoute exact path='/settings' component={SettingsWindow} />
-            <Route component={NotFoundWindow} />
+            <ProtectedRoute exact path='/'
+              component={DashboardsWindow} />
+            <ProtectedRoute exact path='/tables'
+              component={TablesWindow} />
+            <ProtectedRoute exact path='/maps'
+              component={MapsWindow} />
+            <ProtectedRoute exact path='/circuits'
+              component={CircuitsWindow} />
+            <ProtectedRoute exact path='/reports'
+              component={ReportsWindow} />
+            <ProtectedRoute exact path='/reports/vulnerabilities'
+              component={VulnerabilitiesWindow} />
+            <ProtectedRoute exact path='/alerts'
+              component={AlertsWindow} />
+            <ProtectedRoute exact path='/bookmarks'
+              component={BookmarksWindow} />
+            <ProtectedRoute exact path='/settings'
+              component={SettingsWindow} />
+            <Route
+              component={NotFoundWindow} />
           </Switch>
         </Paper>
       </main>

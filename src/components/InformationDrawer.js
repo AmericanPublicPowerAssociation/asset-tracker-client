@@ -30,6 +30,7 @@ const styles = theme => ({
     flexDirection: 'column',
     height: '100%',
     padding: `0 ${theme.spacing.unit * 3}px`,
+    overflow: 'auto',
   },
   overviewPanel: {
     height: '33%',

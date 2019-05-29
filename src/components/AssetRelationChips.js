@@ -48,7 +48,7 @@ class AssetRelationChips extends PureComponent {
     return (
       <FormControl fullWidth className={classes.root}>
         <FormLabel>{label}</FormLabel>
-        <div className={classes.chipGroup}>
+        <div>
 
         {relatedAssets.map(relatedAsset => {
           const relatedAssetId = relatedAsset.get('id')

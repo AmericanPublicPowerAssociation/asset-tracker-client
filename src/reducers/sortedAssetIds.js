@@ -15,7 +15,10 @@ const sortedAssetIds = (state=initialState, action) => {
   switch (action.type) {
     case REPLACE_ASSETS: {
       const assets = action.payload
-      return state.clear().merge(getIds(assets))
+      return state.withMutations(state => {
+        state.clear()
+        state.merge(getIds(assets))
+      })
     }
     case REPLACE_ASSET: {
       const asset = action.payload

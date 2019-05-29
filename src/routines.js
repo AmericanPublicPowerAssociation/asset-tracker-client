@@ -16,5 +16,11 @@ export function getAssetTypeName(assetTypeId) {
 
 
 export function rinseAsset(asset) {
-  return asset.deleteAll(['isOpen', 'errors'])
+  return asset.deleteAll([
+    'isOpen',
+    'errors',
+    'connectedIds',
+    'parentIds',
+    'childIds',
+  ])
 }

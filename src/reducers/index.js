@@ -4,6 +4,7 @@ import {
   productNameSuggestions,
   productVersionSuggestions,
   vendorNameSuggestions,
+  vulnerableAssets,
 } from 'asset-vulnerability-report'
 import app from './app'
 import sortedAssetIds from './sortedAssetIds'
@@ -33,6 +34,7 @@ const reduceHorizontally = combineReducers({
   vendorNameSuggestions,
   productNameSuggestions,
   productVersionSuggestions,
+  vulnerableAssets,
 })
 
 

@@ -12,6 +12,7 @@ import {
   watchSuggestVendorNames,
   watchSuggestProductNames,
   watchSuggestProductVersions,
+  watchRefreshVulnerableAssets,
 } from 'asset-vulnerability-report'
 import {
   excludeAssetRelation,
@@ -196,5 +197,6 @@ export default function* () {
     watchSuggestVendorNames(),
     watchSuggestProductNames(),
     watchSuggestProductVersions(),
+    watchRefreshVulnerableAssets(),
   ])
 }

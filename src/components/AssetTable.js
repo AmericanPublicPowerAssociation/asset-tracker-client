@@ -98,7 +98,7 @@ class AssetTable extends PureComponent {
                 <Switch
                   className={classNames({
                     [classes.hide]:
-                      relatedAssetTypeIds.includes(primaryAssetTypeId) ||
+                      !relatedAssetTypeIds.includes(primaryAssetTypeId) ||
                       relatingAssetId === assetId
                   })}
                   checked={isRelated}
