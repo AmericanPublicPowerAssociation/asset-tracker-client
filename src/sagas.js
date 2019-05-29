@@ -10,8 +10,8 @@ import {
 import { appaAuthClient } from 'appa-auth-client'
 import {
   watchSuggestVendorNames,
-  // watchSuggestProductNames,
-  // watchSuggestProductVersions,
+  watchSuggestProductNames,
+  watchSuggestProductVersions,
 } from 'asset-vulnerability-report'
 import {
   excludeAssetRelation,
@@ -194,7 +194,7 @@ export default function* () {
     watchSignIn(),
     watchSignOut(),
     watchSuggestVendorNames(),
-    // watchSuggestProductNames(),
-    // watchSuggestProductVersions(),
+    watchSuggestProductNames(),
+    watchSuggestProductVersions(),
   ])
 }
