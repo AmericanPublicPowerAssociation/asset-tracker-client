@@ -20,6 +20,8 @@ export const getFocusingAssetId = state => state.get(
   'focusingAssetId')
 export const getRelatingAssetId = state => state.get(
   'relatingAssetId')
+export const getLocatingAssetId = state => state.get(
+  'locatingAssetId')
 export const getRelatingAssetKey = state => state.get(
   'relatingAssetKey')
 export const getAddingAsset = state => state.get(
@@ -36,6 +38,8 @@ export const getMapStyle = state => state.get(
   'mapStyle')
 export const getBaseMapStyleName = state => state.get(
   'baseMapStyleName')
+export const getAssetLocationById = state => state.get(
+  'assetLocationById')
 
 
 export const getMatchingAssets = createSelector([
@@ -103,6 +107,15 @@ export const getRelatingAsset = createSelector([
 ) => assetById.get(relatingAssetId, Map()))
 
 
+export const getLocatingAssetLocation = createSelector([
+  getLocatingAssetId,
+  getAssetLocationById,
+], (
+  locatingAssetId,
+  assetLocationById,
+) => assetLocationById.get(locatingAssetId, List()))
+
+
 export const getParentIds = createSelector([
   getFocusingAsset,
 ], focusingAsset => focusingAsset.get('parentIds', List()))
@@ -161,6 +174,25 @@ export const getRelatedAssetTypeIds = createSelector([
   return relatingAssetTypeId ?
     ASSET_TYPE_BY_ID[relatingAssetTypeId][relatingAssetKey] :
     List()
+})
+
+
+export const getFocusingAssetLocation = createSelector([
+  getFocusingAssetId,
+  getAssetLocationById,
+  getParentIds,
+], (
+  focusingAssetId,
+  assetLocationById,
+  parentIds,
+) => {
+  let assetLocation = assetLocationById.get(focusingAssetId)
+  if (assetLocation) return assetLocation
+  for (const parentId of parentIds) {
+    assetLocation = assetLocationById.get(parentId)
+    if (assetLocation) return assetLocation
+  }
+  return List()
 })
 
 

@@ -29,14 +29,14 @@ class AssetMap extends PureComponent {
   render() {
     const {
       classes,
+      baseMapStyleName,
+      mapStyle,
       mapViewport,
       focusingAssetId,
       focusingAssetLocation,
       locatingAssetId,
       locatingAssetLocation,
-      baseMapStyleName,
-      mapStyle,
-      updateAssetLocation,
+      replaceAssetLocation,
     } = this.props
     const { longitude, latitude, zoom, pitch, bearing } = mapViewport.toJS()
     const baseMapStyle = {
@@ -57,18 +57,18 @@ class AssetMap extends PureComponent {
         onViewportChange={this.updateViewport}
       >
         <AssetMapMarker
-          color='white'
+          color='blue'
           assetId={focusingAssetId}
           assetLocation={focusingAssetLocation}
         />
         <AssetMapMarker
-          color='yellow'
+          color='red'
           draggable
           assetId={locatingAssetId}
           assetLocation={locatingAssetLocation}
           defaultLongitude={longitude}
           defaultLatitude={latitude}
-          updateAssetLocation={updateAssetLocation}
+          replaceAssetLocation={replaceAssetLocation}
         />
         <div className={classes.mapToolbar}>
           <NavigationControl onViewportChange={this.updateViewport} />

@@ -12,7 +12,11 @@ export class IntegerDefaultDict {
 
 export function getById(items) {
   return items.reduce((
-    itemById, item) => itemById.set(item.get('id'), item), Map())
+    itemById, item,
+  ) => itemById.set(
+    item.get('id'),
+    item,
+  ), Map())
 }
 
 

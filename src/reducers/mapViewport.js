@@ -5,6 +5,8 @@ import {
 
 
 const initialState = Map({
+  longitude: 0,
+  latitude: 0,
 })
 
 

@@ -8,7 +8,7 @@ import {
   ProductVersion,
 } from 'asset-vulnerability-report'
 import AssetName from './AssetName'
-import AssetLocation from './AssetLocation'
+import AssetLocation from '../containers/AssetLocation'
 import AssetRelationChips from '../containers/AssetRelationChips'
 import { ASSET_TYPE_BY_ID } from '../constants'
 
@@ -100,7 +100,7 @@ class AssetDetail extends PureComponent {
         />
         <AssetLocation
           className={classNames(classes.attribute, {
-            [classes.vanish]: locatable,
+            [classes.vanish]: !locatable,
           })}
         />
         <AssetRelationChips

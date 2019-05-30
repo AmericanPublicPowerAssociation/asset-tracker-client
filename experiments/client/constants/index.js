@@ -1,18 +1,9 @@
-export const ASSET_LOCATION_BY_ID = fromJS(
-  assets.filter(x => x.location).reduce(
-    (o, x) => Object.assign(o, {[x.id]: x.location}), {}))
 export const FEATURE_GEOMETRY_BY_ID = fromJS(
   assets.reduce(
     (o, x) => Object.assign(o, {[x.id]: x.geometry}), {}))
 export const FEATURE_COLOR_ATTRIBUTE = 'typeId'
 export const FEATURE_SIZE_ATTRIBUTE = 'KV'
-export const MAP_VIEWPORT = fromJS({
-  longitude: -79.62399908012085,
-  latitude: 36.1931536309396,
-  zoom: 13,
-  pitch: 0,
-  bearing: 0,
-})
+
 export const KEY_PREFIX = 'asset-tracker-'
 export const PROPERTY_MINIMUM_VALUE = 1
 export const PROPERTY_MAXIMUM_VALUE = 9

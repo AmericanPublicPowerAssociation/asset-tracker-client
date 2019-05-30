@@ -4,19 +4,24 @@ import {
 } from '../actions'
 import AssetLocation from '../components/AssetLocation'
 import {
+  getFocusingAssetId,
   getFocusingAssetLocation,
+  getLocatingAssetId,
 } from '../selectors'
 
+
 const mapStateToProps = state => ({
-  focusingAssetId: state.focusingAssetId,
+  focusingAssetId: getFocusingAssetId(state),
   focusingAssetLocation: getFocusingAssetLocation(state),
-  locatingAssetId: state.locatingAssetId,
+  locatingAssetId: getLocatingAssetId(state),
 })
+
 
 const mapDispatchToProps = dispatch => ({
   setLocatingAsset: payload => {dispatch(
     setLocatingAsset(payload))},
 })
+
 
 export default connect(
   mapStateToProps,

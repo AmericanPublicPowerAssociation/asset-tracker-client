@@ -16,27 +16,29 @@ const initialState = Map()
 
 const assetById = (state=initialState, action) => {
   const actionType = action.type
-  const actionPayload = action.payload
 
   switch (actionType) {
     case REPLACE_ASSETS: {
-      const assets = actionPayload
-      return getById(assets)
+      const assets = action.payload
+      return state.withMutations(state => {
+        state.clear()
+        state.merge(getById(assets))
+      })
     }
     case REPLACE_ASSET: {
-      const asset = actionPayload
+      const asset = action.payload
       const id = asset.get('id')
       return state.set(id, asset)
     }
     case REPLACE_ASSET_ERRORS: {
-      const asset = actionPayload
+      const asset = action.payload
       const id = asset.get('id')
       const errors = asset.get('errors')
       return state.update(id, asset => asset.set('errors', errors))
     }
     case INCLUDE_ASSET_RELATION:
     case EXCLUDE_ASSET_RELATION: {
-      const { id, key, otherId } = actionPayload
+      const { id, key, otherId } = action.payload
       if (id === otherId) {
         return state
       }

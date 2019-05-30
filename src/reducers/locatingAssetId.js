@@ -2,17 +2,20 @@ import {
   SET_LOCATING_ASSET,
 } from '../constants'
 
+
 const initialState = null
 
+
 const locatingAssetId = (state=initialState, action) => {
-  const actionType = action.type
-
-  if (SET_LOCATING_ASSET === actionType) {
-    const {id} = action.payload
-    return id
+  switch (action.type) {
+    case SET_LOCATING_ASSET: {
+      const {id} = action.payload
+      return id
+    }
+    default:
+      return state
   }
-
-  return state
 }
+
 
 export default locatingAssetId

@@ -18,12 +18,14 @@ import {
   REPLACE_ASSET,
   REPLACE_ASSETS,
   REPLACE_ASSET_ERRORS,
+  REPLACE_ASSET_LOCATION,
   SET_ADDING_ASSET_ERRORS,
   SET_ADDING_ASSET_VALUE,
   SET_APP_VALUE,
   SET_ASSET_FILTER_KEYS,
   SET_ASSET_FILTER_VALUE,
   SET_FOCUSING_ASSET,
+  SET_LOCATING_ASSET,
   SET_MAP_VIEWPORT,
   SET_RELATING_ASSET,
   SIGN_IN,
@@ -57,6 +59,8 @@ export const replaceAsset = payload => ({
   payload, type: REPLACE_ASSET})
 export const replaceAssetErrors = payload => ({
   payload, type: REPLACE_ASSET_ERRORS})
+export const replaceAssetLocation = payload => ({
+  payload, type: REPLACE_ASSET_LOCATION})
 
 
 export const closeInformationDrawer = payload => ({
@@ -97,6 +101,8 @@ export const setFocusingAsset = payload => ({
   payload, type: SET_FOCUSING_ASSET})
 export const setRelatingAsset = payload => ({
   payload, type: SET_RELATING_ASSET})
+export const setLocatingAsset = payload => ({
+  payload, type: SET_LOCATING_ASSET})
 
 
 export const openAssetAddDialog = payload => ({
