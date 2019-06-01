@@ -56,7 +56,7 @@ class AssetRelationChips extends PureComponent {
               key={relatedAssetId}
               label={relatedAssetName}
               className={classes.chip}
-              onClick={() => setFocusingAsset({id: relatingAssetId})}
+              onClick={() => setFocusingAsset({id: relatedAssetId})}
             />
           )
         })}

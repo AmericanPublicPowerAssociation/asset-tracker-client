@@ -50,6 +50,7 @@ class AssetDetail extends PureComponent {
     if (!id) {
       return null
     }
+
     const name = focusingAsset.get('name')
     const assetTypeId = focusingAsset.get('typeId')
     const primaryAssetTypeId = assetTypeId[0]
@@ -62,6 +63,7 @@ class AssetDetail extends PureComponent {
     const unique = primaryAssetType.unique || false
     const locatable = primaryAssetType['locatable'] || false
     const errors = focusingAsset.get('errors', Map())
+
     return (
       <Fragment>
         <AssetName
