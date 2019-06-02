@@ -1,6 +1,6 @@
 import React, { Fragment, PureComponent } from 'react'
 import classNames from 'classnames'
-import { Map, fromJS } from 'immutable'
+import { Map } from 'immutable'
 import { withStyles } from '@material-ui/core/styles'
 import {
   VendorName,
@@ -25,16 +25,15 @@ const styles = theme => ({
 class AssetDetail extends PureComponent {
 
   trackChanges = attributes => {
-    const { focusingAsset, setAsset } = this.props
-    setAsset(focusingAsset.merge(fromJS(attributes)))
+    const { focusingAsset, mergeAsset } = this.props
+    const id = focusingAsset.get('id')
+    mergeAsset({id, ...attributes})
   }
 
   saveChanges = attributes => {
     let { focusingAsset, changeAsset } = this.props
-    if (attributes && !attributes.target) {
-      focusingAsset = focusingAsset.merge(fromJS(attributes))
-    }
-    changeAsset(focusingAsset)
+    const id = focusingAsset.get('id')
+    changeAsset({id, ...attributes})
   }
 
   render() {
@@ -67,7 +66,7 @@ class AssetDetail extends PureComponent {
           name={name}
           errorText={errors.get('name')}
           onChange={event => this.trackChanges({name: event.target.value})}
-          onBlur={this.saveChanges}
+          onBlur={() => this.saveChanges({name})}
         />
         <VendorName
           className={classes.attribute}

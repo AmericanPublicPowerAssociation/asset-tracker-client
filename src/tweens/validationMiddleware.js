@@ -9,9 +9,6 @@ import {
   CHANGE_ASSET,
 } from '../constants'
 import {
-  rinseAsset,
-} from '../routines'
-import {
   getTrackingAsset,
 } from '../selectors'
 
@@ -21,7 +18,7 @@ const validationMiddleware = ({ dispatch, getState }) => next => action => {
   switch (action.type) {
     case ADD_ASSET: {
       const asset = action.payload
-      checkAssetName(asset, errors)
+      checkAssetName(asset.get('name'), errors)
       if (Object.keys(errors).length) {
         dispatch(setAddingAssetErrors(Map(errors)))
         return
@@ -31,12 +28,21 @@ const validationMiddleware = ({ dispatch, getState }) => next => action => {
     case CHANGE_ASSET: {
       const asset = action.payload
       const trackingAsset = getTrackingAsset(getState())
-      // Return if asset did not change
-      if (rinseAsset(asset).equals(rinseAsset(trackingAsset))) {
+
+      let hasChanged = false
+      for (const [k, v] of Object.entries(asset)) {
+        if (v !== trackingAsset.get(k)) {
+          hasChanged = true
+        }
+      }
+      if (!hasChanged) {
         return
       }
-      const id = asset.get('id')
-      checkAssetName(asset, errors)
+
+      const { id } = asset
+      if ('name' in asset) {
+        checkAssetName(asset.name, errors)
+      }
       if (Object.keys(errors).length) {
         dispatch(setAssetErrors(fromJS({id, errors})))
         return
@@ -51,9 +57,8 @@ const validationMiddleware = ({ dispatch, getState }) => next => action => {
 }
 
 
-function checkAssetName(asset, errors) {
-  const name = asset.get('name').trim()
-  if (!name.length) {
+function checkAssetName(name, errors) {
+  if (!name.trim().length) {
     errors.name = 'cannot be empty'
   }
 }

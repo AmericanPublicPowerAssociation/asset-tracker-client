@@ -2,6 +2,7 @@ import { List, Map } from 'immutable'
 import {
   EXCLUDE_ASSET_RELATION,
   INCLUDE_ASSET_RELATION,
+  MERGE_ASSET,
   SET_ASSET,
   SET_ASSETS,
   SET_ASSET_ERRORS,
@@ -29,6 +30,11 @@ const assetById = (state=initialState, action) => {
       const asset = action.payload
       const id = asset.get('id')
       return state.set(id, asset)
+    }
+    case MERGE_ASSET: {
+      const partialAsset = action.payload
+      const { id } = partialAsset
+      return state.mergeDeep({[id]: partialAsset})
     }
     case SET_ASSET_ERRORS: {
       const { id, errors }= action.payload

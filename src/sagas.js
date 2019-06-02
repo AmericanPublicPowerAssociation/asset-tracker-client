@@ -86,8 +86,8 @@ function* watchAddAsset() {
 
 function* watchChangeAsset() {
   yield takeEvery(CHANGE_ASSET, function* (action) {
-    const payload = rinseAsset(action.payload)
-    const id = payload.get('id')
+    const payload = action.payload
+    const { id } = payload
     const url = `/assets/${id}.json`
     yield fetchSafely(url, {
       method: 'PATCH',

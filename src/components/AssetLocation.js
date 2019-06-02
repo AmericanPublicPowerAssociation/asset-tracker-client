@@ -82,11 +82,13 @@ class AssetLocation extends PureComponent {
             })}
             label={locatingAssetId ? <SaveIcon /> : updateIcon}
             color={locatingAssetId ? 'secondary' : 'primary'}
-            onClick={() => setLocatingAsset(locatingAssetId ? {
-              id: null,
-            } : {
-              id: focusingAssetId,
-            })}
+            onClick={() => {
+              if (!locatingAssetId) {
+                setLocatingAsset({id: focusingAssetId})
+              } else {
+                setLocatingAsset({id: null})
+              }
+            }}
           />
         </div>
 

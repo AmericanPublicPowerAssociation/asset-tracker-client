@@ -29,7 +29,10 @@ export const DROP_ASSET_RELATION = 'DROP_ASSET_RELATION'
 
 export const SET_ASSET_TYPES = 'SET_ASSET_TYPES'
 export const SET_ASSETS = 'SET_ASSETS'
+
 export const SET_ASSET = 'SET_ASSET'
+export const MERGE_ASSET = 'MERGE_ASSET'
+
 export const SET_ASSET_ERRORS = 'SET_ASSET_ERRORS'
 export const SET_ASSET_LOCATION = 'SET_ASSET_LOCATION'
 

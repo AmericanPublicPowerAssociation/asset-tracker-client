@@ -11,6 +11,7 @@ import {
   INCLUDE_ASSET_FILTER_KEY,
   INCLUDE_ASSET_RELATION,
   LOG_ERROR,
+  MERGE_ASSET,
   OPEN_ASSET_ADD_DIALOG,
   OPEN_INFORMATION_DRAWER,
   OPEN_NAVIGATION_DRAWER,
@@ -63,6 +64,8 @@ export const setAssets = payload => ({
   payload, type: SET_ASSETS})
 export const setAsset = payload => ({
   payload, type: SET_ASSET})
+export const mergeAsset = payload => ({
+  payload, type: MERGE_ASSET})
 export const setAssetErrors = payload => ({
   payload, type: SET_ASSET_ERRORS})
 export const setAssetLocation = payload => ({

@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import AssetDetail from '../components/AssetDetail'
 import {
   changeAsset,
-  setAsset,
+  mergeAsset,
 } from '../actions'
 import {
   getChildAssets,
@@ -29,8 +29,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   changeAsset: payload => {dispatch(
     changeAsset(payload))},
-  setAsset: payload => {dispatch(
-    setAsset(payload))},
+  mergeAsset: payload => {dispatch(
+    mergeAsset(payload))},
 })
 
 
