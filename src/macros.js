@@ -1,6 +1,3 @@
-import { Map } from 'immutable'
-
-
 export class IntegerDefaultDict {
   constructor() {
     return new Proxy({}, {
@@ -10,13 +7,13 @@ export class IntegerDefaultDict {
 }
 
 
-export function getById(items) {
+export function getById(items, d) {
   return items.reduce((
     itemById, item,
   ) => itemById.set(
     item.get('id'),
     item,
-  ), Map())
+  ), d)
 }
 
 

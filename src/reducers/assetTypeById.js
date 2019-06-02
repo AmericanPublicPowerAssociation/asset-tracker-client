@@ -1,4 +1,4 @@
-import { Map } from 'immutable'
+import { OrderedMap } from 'immutable'
 import {
   SET_ASSET_TYPES,
 } from '../constants'
@@ -7,7 +7,7 @@ import {
 } from '../macros'
 
 
-const initialState = Map()
+const initialState = OrderedMap()
 
 
 const assetTypeById = (state=initialState, action) => {
@@ -16,7 +16,7 @@ const assetTypeById = (state=initialState, action) => {
       const assetTypes = action.payload
       return state.withMutations(state => {
         state.clear()
-        state.merge(getById(assetTypes))
+        state.merge(getById(assetTypes, state))
       })
     }
     default:

@@ -22,7 +22,7 @@ const assetById = (state=initialState, action) => {
       const assets = action.payload
       return state.withMutations(state => {
         state.clear()
-        state.merge(getById(assets))
+        state.merge(getById(assets, state))
       })
     }
     case SET_ASSET: {
