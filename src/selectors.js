@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect'
 import { List, Map } from 'immutable'
 import {
-  ASSET_TYPE_BY_ID,
   MAXIMUM_ASSET_LIST_LENGTH,
 } from './constants'
 import {
@@ -16,6 +15,8 @@ export const getSortedAssetIds = state => state.get(
   'sortedAssetIds')
 export const getAssetById = state => state.get(
   'assetById')
+export const getAssetTypeById = state => state.get(
+  'assetTypeById')
 export const getFocusingAssetId = state => state.get(
   'focusingAssetId')
 export const getRelatingAssetId = state => state.get(
@@ -81,11 +82,11 @@ export const getCountByAssetTypeId = createSelector([
 ], (
   matchingAssets,
 ) => {
-  return matchingAssets.reduce((countByAssetTypeId, asset) => {
+  return Map(matchingAssets.reduce((countByAssetTypeId, asset) => {
     const typeId = asset.get('typeId')
     countByAssetTypeId[typeId] += 1
     return countByAssetTypeId
-  }, new IntegerDefaultDict())
+  }, new IntegerDefaultDict()))
 })
 
 
@@ -96,6 +97,21 @@ export const getFocusingAsset = createSelector([
   focusingAssetId,
   assetById,
 ) => assetById.get(focusingAssetId, Map()))
+
+
+export const getFocusingAssetType = createSelector([
+  getFocusingAsset,
+  getAssetTypeById,
+], (
+  focusingAsset,
+  assetTypeById,
+) => {
+  const focusingAssetTypeId = focusingAsset.get('typeId')
+  if (!focusingAssetTypeId) {
+    return Map()
+  }
+  return assetTypeById.get(focusingAssetTypeId[0])
+})
 
 
 export const getRelatingAsset = createSelector([
@@ -166,13 +182,15 @@ export const getRelatedAssetIds = createSelector([
 export const getRelatedAssetTypeIds = createSelector([
   getRelatingAsset,
   getRelatingAssetKey,
+  getAssetTypeById,
 ], (
   relatingAsset,
   relatingAssetKey,
+  assetTypeById,
 ) => {
   const relatingAssetTypeId = relatingAsset.get('typeId')
   return relatingAssetTypeId ?
-    ASSET_TYPE_BY_ID[relatingAssetTypeId][relatingAssetKey] :
+    assetTypeById.get(relatingAssetTypeId).get(relatingAssetKey) :
     List()
 })
 

@@ -6,6 +6,7 @@ import {
   setFocusingAsset,
 } from '../actions'
 import {
+  getAssetTypeById,
   getFocusingAssetId,
   getRelatedAssetIds,
   getRelatedAssetTypeIds,
@@ -22,6 +23,7 @@ const mapStateToProps = state => ({
   relatingAssetKey: getRelatingAssetKey(state),
   relatedAssetTypeIds: getRelatedAssetTypeIds(state),
   relatedAssetIds: getRelatedAssetIds(state),
+  assetTypeById: getAssetTypeById(state),
 })
 
 

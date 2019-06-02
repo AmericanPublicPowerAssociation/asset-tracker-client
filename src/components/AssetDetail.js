@@ -10,7 +10,6 @@ import {
 import AssetName from './AssetName'
 import AssetLocation from '../containers/AssetLocation'
 import AssetRelationChips from '../containers/AssetRelationChips'
-import { ASSET_TYPE_BY_ID } from '../constants'
 
 
 const styles = theme => ({
@@ -26,8 +25,8 @@ const styles = theme => ({
 class AssetDetail extends PureComponent {
 
   trackChanges = attributes => {
-    const { focusingAsset, replaceAsset } = this.props
-    replaceAsset(focusingAsset.merge(fromJS(attributes)))
+    const { focusingAsset, setAsset } = this.props
+    setAsset(focusingAsset.merge(fromJS(attributes)))
   }
 
   saveChanges = attributes => {
@@ -42,6 +41,7 @@ class AssetDetail extends PureComponent {
     const {
       classes,
       focusingAsset,
+      focusingAssetType,
       connectedAssets,
       parentAssets,
       childAssets,
@@ -52,16 +52,13 @@ class AssetDetail extends PureComponent {
     }
 
     const name = focusingAsset.get('name')
-    const assetTypeId = focusingAsset.get('typeId')
-    const primaryAssetTypeId = assetTypeId[0]
-    const primaryAssetType = ASSET_TYPE_BY_ID[primaryAssetTypeId]
-
+    const typeId = focusingAsset.get('typeId')
     const vendorName = focusingAsset.get('vendorName', '')
     const productName = focusingAsset.get('productName', '')
     const productVersion = focusingAsset.get('productVersion', '')
 
-    const unique = primaryAssetType.unique || false
-    const locatable = primaryAssetType['locatable'] || false
+    const unique = focusingAssetType.get('unique', false)
+    const locatable = focusingAssetType.get('locatable', false)
     const errors = focusingAsset.get('errors', Map())
 
     return (
@@ -74,7 +71,7 @@ class AssetDetail extends PureComponent {
         />
         <VendorName
           className={classes.attribute}
-          typeId={assetTypeId}
+          typeId={typeId}
           vendorName={vendorName}
           trackChanges={this.trackChanges}
           saveChanges={this.saveChanges}
@@ -83,7 +80,7 @@ class AssetDetail extends PureComponent {
           className={classNames(classes.attribute, {
             [classes.vanish]: unique,
           })}
-          typeId={assetTypeId}
+          typeId={typeId}
           vendorName={vendorName}
           productName={productName}
           trackChanges={this.trackChanges}
@@ -93,7 +90,7 @@ class AssetDetail extends PureComponent {
           className={classNames(classes.attribute, {
             [classes.vanish]: unique,
           })}
-          typeId={assetTypeId}
+          typeId={typeId}
           vendorName={vendorName}
           productName={productName}
           productVersion={productVersion}

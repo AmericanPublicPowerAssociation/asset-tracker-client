@@ -13,7 +13,7 @@ class AssetMapMarker extends PureComponent {
       assetLocation,
       defaultLongitude,
       defaultLatitude,
-      replaceAssetLocation,
+      setAssetLocation,
     } = this.props
     if (!assetId) return null
     const assetLongitude = assetLocation.get(0, defaultLongitude)
@@ -28,7 +28,7 @@ class AssetMapMarker extends PureComponent {
         offsetTop={-32}
         onDragEnd={event => {
           const [ longitude, latitude ] = event.lngLat
-          replaceAssetLocation({id: assetId, longitude, latitude})
+          setAssetLocation({id: assetId, longitude, latitude})
         }}
       >
         <PlaceIcon nativeColor={color} fontSize='large' />

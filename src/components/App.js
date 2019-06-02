@@ -22,6 +22,11 @@ const eveningTheme = createMuiTheme({...theme, palette: {type: 'dark'}})
 
 class App extends Component {
 
+  componentDidMount() {
+    const { refreshAssetTypes } = this.props
+    refreshAssetTypes()
+  }
+
   render() {
     const {
       classes,

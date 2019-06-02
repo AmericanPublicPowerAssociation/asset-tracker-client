@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react'
 import classNames from 'classnames'
+import { List } from 'immutable'
 import { withStyles } from '@material-ui/core/styles'
 import FormControl from '@material-ui/core/FormControl'
 import FormLabel from '@material-ui/core/FormLabel'
 import Chip from '@material-ui/core/Chip'
 import AddIcon from '@material-ui/icons/Add'
 import SaveIcon from '@material-ui/icons/Check'
-import { ASSET_TYPE_BY_ID } from '../constants'
 
 
 const styles = theme => ({
@@ -32,16 +32,17 @@ class AssetRelationChips extends PureComponent {
       relatingAssetId,
       relatingAssetKey,
       focusingAsset,
+      focusingAssetType,
       setFocusingAsset,
       setRelatingAsset,
     } = this.props
     const assetId = focusingAsset.get('id')
 
     // Skip if the focusing asset cannot relate to other assets in this key
-    const primaryAssetTypeId = focusingAsset.get('typeId')[0]
-    const relatedAssetTypeIds = ASSET_TYPE_BY_ID[primaryAssetTypeId][
-      assetKey] || []
-    if (!relatedAssetTypeIds.length) return null
+    const relatedAssetTypeIds = focusingAssetType.get(assetKey, List())
+    if (relatedAssetTypeIds.isEmpty()) {
+      return null
+    }
 
     return (
       <FormControl fullWidth className={className}>

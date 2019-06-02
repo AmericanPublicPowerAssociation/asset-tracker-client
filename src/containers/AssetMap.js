@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import AssetMap from '../components/AssetMap'
 import {
-  replaceAssetLocation,
+  setAssetLocation,
   setMapViewport,
 } from '../actions'
 import {
@@ -29,8 +29,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setMapViewport: payload => {dispatch(
     setMapViewport(payload))},
-  replaceAssetLocation: payload => {dispatch(
-    replaceAssetLocation(payload))},
+  setAssetLocation: payload => {dispatch(
+    setAssetLocation(payload))},
 })
 
 

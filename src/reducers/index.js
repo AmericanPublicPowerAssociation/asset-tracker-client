@@ -19,6 +19,7 @@ import mapViewport from './mapViewport'
 import baseMapStyleName from './baseMapStyleName'
 import locatingAssetId from './locatingAssetId'
 import assetLocationById from './assetLocationById'
+import assetTypeById from './assetTypeById'
 import {
   SET_FOCUSING_ASSET,
 } from '../constants'
@@ -43,6 +44,7 @@ const reduceHorizontally = combineReducers({
   baseMapStyleName,
   locatingAssetId,
   assetLocationById,
+  assetTypeById,
 })
 
 

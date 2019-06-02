@@ -1,5 +1,4 @@
 import { fromJS } from 'immutable'
-import assetTypeById from './datasets/assetTypeById.json'
 import streetsMapStyle from './datasets/streetsMapStyle.json'
 import satelliteStreetsMapStyle from './datasets/satelliteStreetsMapStyle.json'
 
@@ -18,6 +17,7 @@ export const DEBOUNCE_THRESHOLD_IN_MILLISECONDS = 100
 export const LOG_ERROR = 'LOG_ERROR'
 
 
+export const REFRESH_ASSET_TYPES = 'REFRESH_ASSET_TYPES'
 export const REFRESH_ASSETS = 'REFRESH_ASSETS'
 export const ADD_ASSET = 'ADD_ASSET'
 export const CHANGE_ASSET = 'CHANGE_ASSET'
@@ -27,10 +27,11 @@ export const ADD_ASSET_RELATION = 'ADD_ASSET_RELATION'
 export const DROP_ASSET_RELATION = 'DROP_ASSET_RELATION'
 
 
-export const REPLACE_ASSETS = 'REPLACE_ASSETS'
-export const REPLACE_ASSET = 'REPLACE_ASSET'
-export const REPLACE_ASSET_ERRORS = 'REPLACE_ASSET_ERRORS'
-export const REPLACE_ASSET_LOCATION = 'REPLACE_ASSET_LOCATION'
+export const SET_ASSET_TYPES = 'SET_ASSET_TYPES'
+export const SET_ASSETS = 'SET_ASSETS'
+export const SET_ASSET = 'SET_ASSET'
+export const SET_ASSET_ERRORS = 'SET_ASSET_ERRORS'
+export const SET_ASSET_LOCATION = 'SET_ASSET_LOCATION'
 
 
 export const CLOSE_INFORMATION_DRAWER = 'CLOSE_INFORMATION_DRAWER'
@@ -72,7 +73,6 @@ export const SIGN_IN = 'SIGN_IN'
 export const SIGN_OUT = 'SIGN_OUT'
 
 
-export const ASSET_TYPE_BY_ID = assetTypeById
 export const DEFAULT_ASSET_TYPE_ID = 'p'
 export const SELECTED_ASSET_TYPE_IDS = ['l']
 

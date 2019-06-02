@@ -1,6 +1,6 @@
 import { Map, fromJS } from 'immutable'
 import {
-  replaceAssetErrors,
+  setAssetErrors,
   setAddingAssetErrors,
   setFocusingAsset,
 } from '../actions'
@@ -38,7 +38,7 @@ const validationMiddleware = ({ dispatch, getState }) => next => action => {
       const id = asset.get('id')
       checkAssetName(asset, errors)
       if (Object.keys(errors).length) {
-        dispatch(replaceAssetErrors(fromJS({id, errors})))
+        dispatch(setAssetErrors(fromJS({id, errors})))
         return
       }
       // Update trackingAsset

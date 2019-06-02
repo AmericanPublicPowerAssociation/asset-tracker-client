@@ -6,7 +6,9 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import InputBase from '@material-ui/core/InputBase'
 import Checkbox from '@material-ui/core/Checkbox'
-import { ASSET_TYPE_BY_ID } from '../constants'
+import {
+  getAssetTypeName,
+} from '../routines'
 
 
 const styles = {
@@ -33,36 +35,32 @@ class AssetFilter extends PureComponent {
       // Get redux variables
       assetFilterValueByAttribute,
       assetFilterKeysByAttribute,
+      assetTypeById,
       countByAssetTypeId,
       toggleAssetFilterKey,
     } = this.props
     const name = assetFilterValueByAttribute.get('name')
-    const visibleAssetTypeIds = Object.keys(ASSET_TYPE_BY_ID).filter(
-      typeId => typeId in countByAssetTypeId)
     const selectedAssetTypeIds = assetFilterKeysByAttribute.get('typeId')
     return (
-      <Paper className={classes.root} square>
+      <Paper className={classes.root} elevation={0} square>
         <List>
           <ListItem>
             <InputBase
               value={name}
               placeholder='Filter by Name'
-              inputProps={{
-                className: classes.nameInput,
-              }}
+              inputProps={{ className: classes.nameInput }}
               onChange={event => this.setAssetFilterName(event.target.value)}
             />
           </ListItem>
-        {visibleAssetTypeIds.length > 0 &&
+        {!countByAssetTypeId.isEmpty() &&
         <Fragment>
           <ListItem>
             <ListItemText primary='Filter by Type' />
           </ListItem>
           <List disablePadding>
-          {visibleAssetTypeIds.map(typeId => {
-            const assetType = ASSET_TYPE_BY_ID[typeId]
-            const assetCount = countByAssetTypeId[typeId]
-            const typeText = `${assetType.name} (${assetCount})`
+          {countByAssetTypeId.entrySeq().map(([typeId, count]) => {
+            const typeName = getAssetTypeName(typeId, assetTypeById)
+            const typeText = `${typeName} (${count})`
             return (
               <ListItem button key={typeId}
                 onClick={() => toggleAssetFilterKey({typeId}) }
@@ -77,11 +75,11 @@ class AssetFilter extends PureComponent {
           </List>
         </Fragment>
         }
-          {/*
+        {/*
           <ListItem>
             <ListItemText primary='Filter by Utility' />
           </ListItem>
-          */}
+        */}
         </List>
       </Paper>
     )

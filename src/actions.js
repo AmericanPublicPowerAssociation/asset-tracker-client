@@ -15,15 +15,17 @@ import {
   OPEN_INFORMATION_DRAWER,
   OPEN_NAVIGATION_DRAWER,
   REFRESH_ASSETS,
-  REPLACE_ASSET,
-  REPLACE_ASSETS,
-  REPLACE_ASSET_ERRORS,
-  REPLACE_ASSET_LOCATION,
+  REFRESH_ASSET_TYPES,
   SET_ADDING_ASSET_ERRORS,
   SET_ADDING_ASSET_VALUE,
   SET_APP_VALUE,
+  SET_ASSET,
+  SET_ASSETS,
+  SET_ASSET_ERRORS,
   SET_ASSET_FILTER_KEYS,
   SET_ASSET_FILTER_VALUE,
+  SET_ASSET_LOCATION,
+  SET_ASSET_TYPES,
   SET_FOCUSING_ASSET,
   SET_LOCATING_ASSET,
   SET_MAP_VIEWPORT,
@@ -39,6 +41,8 @@ export const logError = payload => ({
   payload, type: LOG_ERROR})
 
 
+export const refreshAssetTypes = payload => ({
+  payload, type: REFRESH_ASSET_TYPES})
 export const refreshAssets = payload => ({
   payload, type: REFRESH_ASSETS})
 export const addAsset = payload => ({
@@ -53,14 +57,16 @@ export const dropAssetRelation = payload => ({
   payload, type: DROP_ASSET_RELATION})
 
 
-export const replaceAssets = payload => ({
-  payload, type: REPLACE_ASSETS})
-export const replaceAsset = payload => ({
-  payload, type: REPLACE_ASSET})
-export const replaceAssetErrors = payload => ({
-  payload, type: REPLACE_ASSET_ERRORS})
-export const replaceAssetLocation = payload => ({
-  payload, type: REPLACE_ASSET_LOCATION})
+export const setAssetTypes = payload => ({
+  payload, type: SET_ASSET_TYPES})
+export const setAssets = payload => ({
+  payload, type: SET_ASSETS})
+export const setAsset = payload => ({
+  payload, type: SET_ASSET})
+export const setAssetErrors = payload => ({
+  payload, type: SET_ASSET_ERRORS})
+export const setAssetLocation = payload => ({
+  payload, type: SET_ASSET_LOCATION})
 
 
 export const closeInformationDrawer = payload => ({

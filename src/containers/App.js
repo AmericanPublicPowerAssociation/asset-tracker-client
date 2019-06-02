@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import App from '../components/App'
 import {
+  refreshAssetTypes,
 } from '../actions'
 import {
   getIsUserMember,
@@ -15,6 +16,8 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
+  refreshAssetTypes: payload => {dispatch(
+    refreshAssetTypes(payload))},
 })
 
 

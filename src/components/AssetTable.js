@@ -43,6 +43,7 @@ class AssetTable extends PureComponent {
       relatingAssetKey,
       relatedAssetTypeIds,
       relatedAssetIds,
+      assetTypeById,
       setFocusingAsset,
       addAssetRelation,
       dropAssetRelation,
@@ -69,7 +70,7 @@ class AssetTable extends PureComponent {
           const assetName = asset.get('name')
           const assetTypeId = asset.get('typeId')
           const primaryAssetTypeId = assetTypeId[0]
-          const assetTypeName = getAssetTypeName(assetTypeId)
+          const assetTypeName = getAssetTypeName(assetTypeId, assetTypeById)
           const isRelated = relatedAssetIds.includes(assetId)
           const actionPayload = {
             id: relatingAssetId,

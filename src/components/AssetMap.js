@@ -36,7 +36,7 @@ class AssetMap extends PureComponent {
       focusingAssetLocation,
       locatingAssetId,
       locatingAssetLocation,
-      replaceAssetLocation,
+      setAssetLocation,
     } = this.props
     const { longitude, latitude, zoom, pitch, bearing } = mapViewport.toJS()
     const baseMapStyle = {
@@ -68,7 +68,7 @@ class AssetMap extends PureComponent {
           assetLocation={locatingAssetLocation}
           defaultLongitude={longitude}
           defaultLatitude={latitude}
-          replaceAssetLocation={replaceAssetLocation}
+          setAssetLocation={setAssetLocation}
         />
         <div className={classes.mapToolbar}>
           <NavigationControl onViewportChange={this.updateViewport} />

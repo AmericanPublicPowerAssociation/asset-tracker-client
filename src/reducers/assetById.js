@@ -2,9 +2,9 @@ import { List, Map } from 'immutable'
 import {
   EXCLUDE_ASSET_RELATION,
   INCLUDE_ASSET_RELATION,
-  REPLACE_ASSET,
-  REPLACE_ASSETS,
-  REPLACE_ASSET_ERRORS,
+  SET_ASSET,
+  SET_ASSETS,
+  SET_ASSET_ERRORS,
 } from '../constants'
 import {
   getById,
@@ -18,22 +18,20 @@ const assetById = (state=initialState, action) => {
   const actionType = action.type
 
   switch (actionType) {
-    case REPLACE_ASSETS: {
+    case SET_ASSETS: {
       const assets = action.payload
       return state.withMutations(state => {
         state.clear()
         state.merge(getById(assets))
       })
     }
-    case REPLACE_ASSET: {
+    case SET_ASSET: {
       const asset = action.payload
       const id = asset.get('id')
       return state.set(id, asset)
     }
-    case REPLACE_ASSET_ERRORS: {
-      const asset = action.payload
-      const id = asset.get('id')
-      const errors = asset.get('errors')
+    case SET_ASSET_ERRORS: {
+      const { id, errors }= action.payload
       return state.update(id, asset => asset.set('errors', errors))
     }
     case INCLUDE_ASSET_RELATION:

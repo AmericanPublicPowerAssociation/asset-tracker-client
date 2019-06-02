@@ -1,7 +1,7 @@
 import { List } from 'immutable'
 import {
-  REPLACE_ASSET,
-  REPLACE_ASSETS,
+  SET_ASSET,
+  SET_ASSETS,
 } from '../constants'
 import {
   getIds,
@@ -13,14 +13,14 @@ const initialState = List()
 
 const sortedAssetIds = (state=initialState, action) => {
   switch (action.type) {
-    case REPLACE_ASSETS: {
+    case SET_ASSETS: {
       const assets = action.payload
       return state.withMutations(state => {
         state.clear()
         state.merge(getIds(assets))
       })
     }
-    case REPLACE_ASSET: {
+    case SET_ASSET: {
       const asset = action.payload
       const assetId = asset.get('id')
       if (!state.includes(assetId)) {
