@@ -1,6 +1,6 @@
 import { OrderedMap } from 'immutable'
 import {
-  SET_ASSET_TYPES,
+  RESET_ASSET_TYPES,
 } from '../constants'
 import {
   getById,
@@ -12,11 +12,11 @@ const initialState = OrderedMap()
 
 const assetTypeById = (state=initialState, action) => {
   switch (action.type) {
-    case SET_ASSET_TYPES: {
+    case RESET_ASSET_TYPES: {
       const assetTypes = action.payload
       return state.withMutations(state => {
         state.clear()
-        state.merge(getById(assetTypes, state))
+        state.merge(getById(assetTypes, initialState))
       })
     }
     default:

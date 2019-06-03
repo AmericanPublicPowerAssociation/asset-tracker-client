@@ -18,12 +18,13 @@ import {
   excludeAssetRelation,
   includeAssetRelation,
   logError,
+  resetAssetTypes,
+  resetAssets,
   setAddingAssetErrors,
   setAddingAssetValue,
   setAppValue,
   setAsset,
   setAssetErrors,
-  setAssetTypes,
   setAssets,
   setFocusingAsset,
 } from './actions'
@@ -46,7 +47,7 @@ function* watchRefreshAssetTypes() {
   yield takeLatest(REFRESH_ASSET_TYPES, function* () {
     yield fetchSafely('/assetTypes.json', {}, {
       on200: function* (assetTypes) {
-        yield put(setAssetTypes(assetTypes))
+        yield put(resetAssetTypes(assetTypes))
       },
     })
   })
@@ -57,7 +58,7 @@ function* watchRefreshAssets() {
   yield takeLatest(REFRESH_ASSETS, function* () {
     yield fetchSafely('/assets.json', {}, {
       on200: function* (assets) {
-        yield put(setAssets(assets))
+        yield put(resetAssets(assets))
       },
     })
   })
@@ -93,8 +94,8 @@ function* watchChangeAsset() {
       method: 'PATCH',
       body: JSON.stringify(payload),
     }, {
-      on200: function* (asset) {
-        yield put(setAsset(asset))
+      on200: function* (assets) {
+        yield put(setAssets(assets))
       },
       on400: function* (errors) {
         yield put(setAssetErrors({id, errors}))
@@ -113,6 +114,9 @@ function* watchAddAssetRelation() {
     yield fetchSafely(url, {
       method: 'PATCH',
     }, {
+      on200: function* (assets) {
+        yield put(setAssets(assets))
+      },
       on400: function* (errors) {
         yield put(excludeAssetRelation(actionPayload))
       },
@@ -130,6 +134,9 @@ function* watchDropAssetRelation() {
     yield fetchSafely(url, {
       method: 'DELETE',
     }, {
+      on200: function* (assets) {
+        yield put(resetAssets(assets))
+      },
       on400: function* (errors) {
         yield put(includeAssetRelation(actionPayload))
       },

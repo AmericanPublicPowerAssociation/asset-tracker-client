@@ -1,4 +1,5 @@
 import { findDOMNode }  from 'react-dom'
+import { Map } from 'immutable'
 
 
 export function getAssetTypeName(assetTypeId, assetTypeById) {
@@ -33,6 +34,34 @@ export function scrollToFocusingAsset(component) {
   const { focusingAssetId } = component.props
   const ref = component.refs[focusingAssetId]
   if (ref) {
-    findDOMNode(ref).scrollIntoView({behavior: 'smooth', block: 'center'})
+    findDOMNode(ref).scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    })
   }
+}
+
+
+export function getFeatureSize(asset, assetTypeById) {
+  const typeId = asset.get('typeId')
+  const assetType = assetTypeById.get(typeId)
+  const size = assetType.get('size', 5)
+  const sizeAttribute = assetType.get('sizeAttribute')
+  const value = asset.get(sizeAttribute)
+  const sizeByValue = assetType.get('sizeByValue', Map())
+  const boundaryValues = sizeByValue.keySeq().sort()
+
+  for (const boundaryValue of boundaryValues) {
+    if (value < boundaryValue) {
+      return sizeByValue.get(boundaryValue)
+    }
+  }
+  return size
+}
+
+
+export function getFeatureKey(asset) {
+  const typeId = asset.get('typeId')
+  // !!! Add utilityId
+  return typeId[0]
 }

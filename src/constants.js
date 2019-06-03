@@ -27,7 +27,8 @@ export const ADD_ASSET_RELATION = 'ADD_ASSET_RELATION'
 export const DROP_ASSET_RELATION = 'DROP_ASSET_RELATION'
 
 
-export const SET_ASSET_TYPES = 'SET_ASSET_TYPES'
+export const RESET_ASSET_TYPES = 'RESET_ASSET_TYPES'
+export const RESET_ASSETS = 'RESET_ASSETS'
 export const SET_ASSETS = 'SET_ASSETS'
 
 export const SET_ASSET = 'SET_ASSET'
@@ -83,3 +84,4 @@ export const SELECTED_ASSET_TYPE_IDS = ['l']
 export const STREETS_MAP_STYLE = fromJS(streetsMapStyle)
 export const SATELLITE_STREETS_MAP_STYLE = fromJS(satelliteStreetsMapStyle)
 export const BASE_MAP_STYLE_NAME = 'streets'
+export const KEY_PREFIX = 'asset-tracker-'

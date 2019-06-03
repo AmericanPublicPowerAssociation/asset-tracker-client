@@ -1,5 +1,3 @@
-import AssetMapToggleView from './AssetMapToggleView'
-
 class AssetMap extends PureComponent {
 
   state = {

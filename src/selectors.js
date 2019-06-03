@@ -1,12 +1,17 @@
 import { createSelector } from 'reselect'
-import { List, Map } from 'immutable'
+import { List, Map, fromJS } from 'immutable'
 import {
+  KEY_PREFIX,
   MAXIMUM_ASSET_LIST_LENGTH,
 } from './constants'
 import {
   IntegerDefaultDict,
   splitTerms,
 } from './macros'
+import {
+  getFeatureKey,
+  getFeatureSize,
+} from './routines'
 
 
 export const getApp = state => state.get(
@@ -35,20 +40,11 @@ export const getTrackingAsset = state => state.get(
   'trackingAsset')
 export const getMapViewport = state => state.get(
   'mapViewport')
-export const getMapStyle = state => state.get(
-  'mapStyle')
 export const getBaseMapStyleName = state => state.get(
   'baseMapStyleName')
 
 
-export const getAssetLocationById = createSelector([
-  getAssetById,
-], (
-  assetById,
-) => assetById.map(asset => asset.get('location')))
-
-
-export const getMatchingAssets = createSelector([
+export const getValueMatchingAssets = createSelector([
   getAssetById,
   getAssetFilterValueByAttribute,
   getSortedAssetIds,
@@ -69,25 +65,25 @@ export const getMatchingAssets = createSelector([
 
 
 export const getVisibleAssets = createSelector([
-  getMatchingAssets,
+  getValueMatchingAssets,
   getAssetFilterKeysByAttribute,
 ], (
-  matchingAssets,
+  valueMatchingAssets,
   assetFilterKeysByAttribute,
 ) => {
   const selectedAssetTypeIds = assetFilterKeysByAttribute.get('typeId')
-  return matchingAssets
+  return valueMatchingAssets
     .filter(asset => selectedAssetTypeIds.has(asset.get('typeId')))
     .slice(0, MAXIMUM_ASSET_LIST_LENGTH)
 })
 
 
 export const getCountByAssetTypeId = createSelector([
-  getMatchingAssets,
+  getValueMatchingAssets,
 ], (
-  matchingAssets,
+  valueMatchingAssets,
 ) => {
-  return Map(matchingAssets.reduce((countByAssetTypeId, asset) => {
+  return Map(valueMatchingAssets.reduce((countByAssetTypeId, asset) => {
     const typeId = asset.get('typeId')
     countByAssetTypeId[typeId] += 1
     return countByAssetTypeId
@@ -119,6 +115,13 @@ export const getFocusingAssetType = createSelector([
 })
 
 
+export const getFocusingAssetLocation = createSelector([
+  getFocusingAsset,
+], (
+  focusingAsset,
+) => focusingAsset.get('location', List()))
+
+
 export const getRelatingAsset = createSelector([
   getRelatingAssetId,
   getAssetById,
@@ -138,12 +141,10 @@ export const getLocatingAsset = createSelector([
 
 
 export const getLocatingAssetLocation = createSelector([
-  getLocatingAssetId,
-  getAssetLocationById,
+  getLocatingAsset,
 ], (
-  locatingAssetId,
-  assetLocationById,
-) => assetLocationById.get(locatingAssetId, List()))
+  locatingAsset,
+) => locatingAsset.get('location', List()))
 
 
 export const getParentIds = createSelector([
@@ -209,18 +210,84 @@ export const getRelatedAssetTypeIds = createSelector([
 })
 
 
-export const getFocusingAssetLocation = createSelector([
-  getFocusingAssetId,
-  getAssetLocationById,
-  getParentIds,
+export const getMapSources = createSelector([
+  getValueMatchingAssets,
+  getAssetTypeById,
 ], (
-  focusingAssetId,
-  assetLocationById,
-  parentIds,
+  valueMatchingAssets,
+  assetTypeById,
 ) => {
-  let assetLocation = assetLocationById.get(focusingAssetId)
-  return assetLocation ? assetLocation : List()
+  if (valueMatchingAssets.isEmpty()) {
+    return Map()
+  }
+  const featuresByKey = valueMatchingAssets
+    .filter(asset => asset.has('geometry'))
+    .reduce((
+      featuresByKey,
+      asset,
+    ) => {
+      const id = asset.get('id')
+      const size = getFeatureSize(asset, assetTypeById)
+      const properties = {id, size}
+      const geometry = asset.get('geometry')
+      const feature = fromJS({type: 'Feature', properties, geometry})
+      const key = getFeatureKey(asset)
+      return featuresByKey.update(
+        key, List(), features => features.push(feature))
+    }, Map())
+    return featuresByKey.mapEntries(([key, features]) => [
+      KEY_PREFIX + key, {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features,
+        },
+      },
+    ])
 })
+
+
+export const getMapLayers = createSelector([
+  getAssetFilterKeysByAttribute,
+  getMapSources,
+], (
+  assetFilterKeysByAttribute,
+  mapSources,
+) => {
+  const selectedKeys = assetFilterKeysByAttribute.get('typeId')
+  return selectedKeys
+    .filter(key => mapSources.has(KEY_PREFIX + key))
+    .map(key => {
+      const keyTerms = key.split('-')
+      const typeId = keyTerms[0]
+      const isLine = 'l' === typeId
+      return {
+        id: KEY_PREFIX + key,
+        source: KEY_PREFIX + key,
+        type: isLine ? 'line' : 'circle',
+        paint: isLine ? {
+          'line-width': ['get', 'size'],
+          'line-color': 'black',
+          'line-opacity': 0.8,
+        } : {
+          'circle-radius': ['get', 'size'],
+          'circle-color': 'black',
+          'circle-stroke-color': 'white',
+          'circle-stroke-width': 1,
+          'circle-opacity': 0.8,
+        },
+      }
+    })
+})
+
+
+export const getMapStyle = createSelector([
+  getMapSources,
+  getMapLayers,
+], (
+  mapSources,
+  mapLayers,
+) => ({sources: mapSources.toJS(), layers: mapLayers.toJS()}))
 
 
 export const getIsUserAuthenticated = createSelector([

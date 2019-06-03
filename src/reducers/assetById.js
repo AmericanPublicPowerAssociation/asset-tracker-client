@@ -3,6 +3,7 @@ import {
   EXCLUDE_ASSET_RELATION,
   INCLUDE_ASSET_RELATION,
   MERGE_ASSET,
+  RESET_ASSETS,
   SET_ASSET,
   SET_ASSETS,
   SET_ASSET_ERRORS,
@@ -20,12 +21,16 @@ const assetById = (state=initialState, action) => {
   const actionType = action.type
 
   switch (actionType) {
-    case SET_ASSETS: {
+    case RESET_ASSETS: {
       const assets = action.payload
       return state.withMutations(state => {
         state.clear()
-        state.merge(getById(assets, state))
+        state.merge(getById(assets, initialState))
       })
+    }
+    case SET_ASSETS: {
+      const assets = action.payload
+      return state.merge(getById(assets, initialState))
     }
     case SET_ASSET: {
       const asset = action.payload

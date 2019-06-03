@@ -67,9 +67,9 @@ class AssetRelationChips extends PureComponent {
               enterDelay={TOOLTIP_DELAY}
               placement='bottom'
               title={relatedAssetTypeName}
+              key={relatedAssetId}
             >
               <Chip
-                key={relatedAssetId}
                 label={relatedAssetName}
                 className={classes.chip}
                 onClick={() => setFocusingAsset({id: relatedAssetId})}

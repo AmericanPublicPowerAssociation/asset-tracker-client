@@ -17,6 +17,8 @@ import {
   OPEN_NAVIGATION_DRAWER,
   REFRESH_ASSETS,
   REFRESH_ASSET_TYPES,
+  RESET_ASSETS,
+  RESET_ASSET_TYPES,
   SET_ADDING_ASSET_ERRORS,
   SET_ADDING_ASSET_VALUE,
   SET_APP_VALUE,
@@ -26,7 +28,6 @@ import {
   SET_ASSET_FILTER_KEYS,
   SET_ASSET_FILTER_VALUE,
   SET_ASSET_LOCATION,
-  SET_ASSET_TYPES,
   SET_FOCUSING_ASSET,
   SET_LOCATING_ASSET,
   SET_MAP_VIEWPORT,
@@ -58,8 +59,10 @@ export const dropAssetRelation = payload => ({
   payload, type: DROP_ASSET_RELATION})
 
 
-export const setAssetTypes = payload => ({
-  payload, type: SET_ASSET_TYPES})
+export const resetAssetTypes = payload => ({
+  payload, type: RESET_ASSET_TYPES})
+export const resetAssets = payload => ({
+  payload, type: RESET_ASSETS})
 export const setAssets = payload => ({
   payload, type: SET_ASSETS})
 export const setAsset = payload => ({
