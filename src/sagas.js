@@ -135,7 +135,7 @@ function* watchDropAssetRelation() {
       method: 'DELETE',
     }, {
       on200: function* (assets) {
-        yield put(resetAssets(assets))
+        yield put(setAssets(assets))
       },
       on400: function* (errors) {
         yield put(includeAssetRelation(actionPayload))
