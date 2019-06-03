@@ -1,5 +1,3 @@
-class AssetMap extends PureComponent {
-
   state = {
     withSatelliteImagery: false,  
   }
@@ -34,8 +32,6 @@ class AssetMap extends PureComponent {
     return isHovering ? 'pointer' : 'all-scroll'
   }
 
-  render () {
-    return (
       <ReactMapGL
         interactiveLayerIds={interactiveLayerIds.toJS()}
         onClick={this.onClick}
@@ -45,6 +41,3 @@ class AssetMap extends PureComponent {
           handleWithSatelliteImagery={this.handleWithSatelliteImagery}
         />
       </ReactMapGL>
-    )
-  }
-}

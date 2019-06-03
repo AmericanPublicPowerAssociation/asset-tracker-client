@@ -32,6 +32,7 @@ class AssetList extends PureComponent {
       classes,
       visibleAssets,
       focusingAssetId,
+      locatingAssetId,
       relatingAssetId,
       relatingAssetKey,
       relatedAssetTypeIds,
@@ -40,7 +41,9 @@ class AssetList extends PureComponent {
       addAssetRelation,
       dropAssetRelation,
     } = this.props
-    const editingAssetId = relatingAssetId
+
+    const editingAssetId = locatingAssetId || relatingAssetId
+
     return(
       <List disablePadding>
       {visibleAssets.map(asset => {

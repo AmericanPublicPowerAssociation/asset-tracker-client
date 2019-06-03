@@ -1,1 +1,0 @@
-const editingAssetId = relatingAssetId || locatingAssetId
