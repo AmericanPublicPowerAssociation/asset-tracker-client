@@ -1,5 +1,3 @@
-import {APIget, APIsearch, APIaddAsset, APIeditAsset, APIdeleteAsset} from './api'
-
 export const ADD_ASSET = 'ADD_ASSET';
 export const REMOVE_ASSET = 'REMOVE_ASSET';
 export const EDIT_ASSET = 'EDIT_ASSET';
@@ -7,11 +5,6 @@ export const RECEIVE_ASSETS = 'RECEIVE_ASSETS'
 export const SET_SELECTED = 'SET_SELECTED'
 export const TOGGLE_EDIT = 'TOGGLE_EDIT'
 
-
-export const addAsset = asset => ({
-  type: ADD_ASSET,
-  asset
-})
 
 export const toggleEdit = editMode => ({
   type: TOGGLE_EDIT,

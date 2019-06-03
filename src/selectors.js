@@ -219,12 +219,7 @@ export const getFocusingAssetLocation = createSelector([
   parentIds,
 ) => {
   let assetLocation = assetLocationById.get(focusingAssetId)
-  if (assetLocation) return assetLocation
-  for (const parentId of parentIds) {
-    assetLocation = assetLocationById.get(parentId)
-    if (assetLocation) return assetLocation
-  }
-  return List()
+  return assetLocation ? assetLocation : List()
 })
 
 

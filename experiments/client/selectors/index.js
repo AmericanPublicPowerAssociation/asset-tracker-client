@@ -1,15 +1,5 @@
 import { fromJS, Map, List } from 'immutable'
 import { find_path as findPath } from 'dijkstrajs'
-import {
-  ASSET_TYPE_BY_ID,
-  MAXIMUM_LIST_LENGTH,
-  KEY_PREFIX,
-  // PROPERTY_MINIMUM_VALUE,
-  // PROPERTY_MAXIMUM_VALUE,
-} from '../constants'
-import {
-  // normalizeNumber,
-} from '../macros'
 
 
 export const getVisibleAssets = createSelector([
@@ -19,15 +9,6 @@ export const getVisibleAssets = createSelector([
 ) => {
   return (selectedAssetIds.isEmpty() ? sortedAssetIds : selectedAssetIds)
 })
-
-export const getLocatingAsset = createSelector(
-  [getAssetById, getLocatingAssetId],
-  (assetById, locatingAssetId) => assetById.get(locatingAssetId, Map()))
-
-export const getConnectedAssets = createSelector(
-  [getAssetById, getFocusingAsset],
-  (assetById, focusingAsset) => focusingAsset.get(
-    'connectedIds', List()).map(assetId => assetById.get(assetId)))
 
 /*
 export const getFeatureGeometryById = createSelector(
@@ -42,6 +23,7 @@ export const getFeatureGeometryById = createSelector(
         location.get(0)]}
       featureGeometryById[id] = assetGeometry
       const assetTypeId = asset.get('typeId')
+
       for (const childId of asset.get('childIds', [])) {
         featureGeometryById[childId] = assetGeometry
       }
@@ -112,7 +94,7 @@ export const getMapSources = createSelector(
       assetId,
     ) => {
       const asset = assetById.get(assetId)
-      const assetTypeId = asset.get('t ypeId')
+      const assetTypeId = asset.get('typeId')
       // const featureColor = {}[asset[featureColorAttribute]]
       let featureSize
 
@@ -373,22 +355,4 @@ export const getCircuitAssetIdPairs = createSelector([
     }
   })
   return [...circuitAssetIdPairs].map(idPair => idPair.split(' '))
-})
-
-export const getVulnerableAssets = createSelector([
-  getAssetById,
-], (
-  assetById,
-) => {
-  const vulnerableAssets = []
-  assetById.forEach((asset, id) => {
-    const vendorName = asset.get('vendorName')
-    const productName = asset.get('productName')
-    const productVersion = asset.get('productVersion')
-    if (vendorName !== 'Schweitzer Engineering Laboratories') return
-    if (productName !== 'SEL-3620') return
-    if (productVersion === 'R206') return
-    vulnerableAssets.push(asset)
-  })
-  return vulnerableAssets
 })

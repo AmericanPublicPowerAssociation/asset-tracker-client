@@ -5,6 +5,7 @@ import {
   setRelatingAsset,
 } from '../actions'
 import {
+  getAssetTypeById,
   getFocusingAsset,
   getFocusingAssetType,
   getRelatingAssetId,
@@ -17,6 +18,7 @@ const mapStateToProps = state => ({
   focusingAssetType: getFocusingAssetType(state),
   relatingAssetId: getRelatingAssetId(state),
   relatingAssetKey: getRelatingAssetKey(state),
+  assetTypeById: getAssetTypeById(state),
 })
 
 

@@ -56,11 +56,11 @@ class AssetLocation extends PureComponent {
         {hasLocation && showCoordinates &&
         <Fragment>
           {' ('}
-          <Tooltip enterDelay={TOOLTIP_DELAY} placement='top' title='Longitude'>
+          <Tooltip enterDelay={TOOLTIP_DELAY} placement='bottom' title='Longitude'>
             <span>{focusingAssetLocation.get(0)}</span>
           </Tooltip>
           {', '}
-          <Tooltip enterDelay={TOOLTIP_DELAY} placement='top' title='Latitude'>
+          <Tooltip enterDelay={TOOLTIP_DELAY} placement='bottom' title='Latitude'>
             <span>{focusingAssetLocation.get(1)}</span>
           </Tooltip>
           {') '}
@@ -69,12 +69,14 @@ class AssetLocation extends PureComponent {
         </FormLabel>
         <div>
         {hasLocation &&
-          <Chip
-            className={classes.chip}
-            label={<PlaceIcon />}
-            color={showCoordinates ? 'primary' : 'default'}
-            onClick={() => this.setState({showCoordinates: !showCoordinates})}
-          />
+          <Tooltip enterDelay={TOOLTIP_DELAY} placement='bottom' title='Show Coordinates'>
+            <Chip
+              className={classes.chip}
+              label={<PlaceIcon />}
+              color={showCoordinates ? 'primary' : 'default'}
+              onClick={() => this.setState({showCoordinates: !showCoordinates})}
+            />
+          </Tooltip>
         }
           <Chip
             className={classNames(classes.chip, {
