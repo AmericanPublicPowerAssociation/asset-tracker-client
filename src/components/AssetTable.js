@@ -39,7 +39,7 @@ class AssetTable extends PureComponent {
       // Get redux variables
       visibleAssets,
       focusingAssetId,
-      // locatingAssetId,
+      locatingAssetId,
       relatingAssetId,
       relatingAssetKey,
       relatedAssetTypeIds,
@@ -50,8 +50,7 @@ class AssetTable extends PureComponent {
       dropAssetRelation,
     } = this.props
 
-    // const editingAssetId = locatingAssetId || relatingAssetId
-    const editingAssetId = relatingAssetId
+    const editingAssetId = locatingAssetId || relatingAssetId
 
     return (
       <Table>
