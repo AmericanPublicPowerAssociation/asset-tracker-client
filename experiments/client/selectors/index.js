@@ -1,4 +1,3 @@
-import { fromJS, Map, List } from 'immutable'
 import { find_path as findPath } from 'dijkstrajs'
 
 
@@ -10,67 +9,6 @@ export const getVisibleAssets = createSelector([
   return (selectedAssetIds.isEmpty() ? sortedAssetIds : selectedAssetIds)
 })
 
-
-export const getMapSources = createSelector(
-      switch (assetTypeId) {
-        case 'p':
-          featureSize = 2
-          break
-        case 'l':
-          v = asset.get('KV')
-          if (v < 10) {
-            featureSize = 1
-          } else if (v < 50) {
-            featureSize = 5
-          } else {
-            featureSize = 10
-          }
-          break
-        case 's':
-        case 'S':
-          v = asset.get('KV')
-          if (v < 10) {
-            featureSize = 10
-          } else if (v < 50) {
-            featureSize = 20
-          } else {
-            featureSize = 30
-          }
-          break
-        case 'm':
-          v = asset.get('KW')
-          if (v < 10) {
-            featureSize = 3
-          } else if (v < 50) {
-            featureSize = 6
-          } else {
-            featureSize = 9
-          }
-          break
-        case 't':
-          featureSize = 3
-          break
-        case 'x':
-          featureSize = 4
-          break
-        case 'q':
-          featureSize = 5
-          break
-        case 'c':
-          featureSize = 6
-          break
-        case 'b':
-          featureSize = 7
-          break
-        case 'o':
-          featureSize = 8
-          break
-        case 'g':
-          featureSize = 9
-          break
-        default:
-          featureSize = 10
-      }
 
 export const getMapLayers = createSelector([
   getFocusingAssetId,
