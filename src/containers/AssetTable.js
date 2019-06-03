@@ -8,7 +8,7 @@ import {
 import {
   getAssetTypeById,
   getFocusingAssetId,
-  getLocatingAssetId,
+  // getLocatingAssetId,
   getRelatedAssetIds,
   getRelatedAssetTypeIds,
   getRelatingAssetId,
@@ -20,7 +20,7 @@ import {
 const mapStateToProps = state => ({
   visibleAssets: getVisibleAssets(state),
   focusingAssetId: getFocusingAssetId(state),
-  locatingAssetId: getLocatingAssetId(state),
+  // locatingAssetId: getLocatingAssetId(state),
   relatingAssetId: getRelatingAssetId(state),
   relatingAssetKey: getRelatingAssetKey(state),
   relatedAssetTypeIds: getRelatedAssetTypeIds(state),
