@@ -40,6 +40,7 @@ class AssetLocation extends PureComponent {
       focusingAssetLocation,
       locatingAssetId,
       setLocatingAsset,
+      changeAsset,
     } = this.props
     const {
       showCoordinates,
@@ -87,6 +88,10 @@ class AssetLocation extends PureComponent {
                 setLocatingAsset({id: focusingAssetId})
               } else {
                 setLocatingAsset({id: null})
+                changeAsset({
+                  id: focusingAssetId,
+                  location: focusingAssetLocation,
+                })
               }
             }}
           />

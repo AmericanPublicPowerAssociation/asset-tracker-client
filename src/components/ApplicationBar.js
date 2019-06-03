@@ -74,20 +74,24 @@ class ApplicationBar extends PureComponent {
       isNavigationDrawerOpen,
       isInformationDrawerOpen,
       focusingAssetId,
+      locatingAsset,
       relatingAsset,
       relatingAssetKey,
       openNavigationDrawer,
       openAssetAddDialog,
       setFocusingAsset,
+      setLocatingAsset,
       setRelatingAsset,
     } = this.props
 
     const isDrawerOpen = isNavigationDrawerOpen || isInformationDrawerOpen
+    const locatingAssetId = locatingAsset.get('id')
     const relatingAssetId = relatingAsset.get('id')
-    const editingAssetId = relatingAssetId
-    const editingAsset = relatingAsset
+
+    const editingAssetId = locatingAssetId || relatingAssetId
+    const editingAsset = locatingAssetId ? locatingAsset : relatingAsset
     const editingAssetName = editingAsset.get('name')
-    const editingAttributeName = {
+    const editingAttributeName = locatingAssetId ? 'Location' : {
       connectedIds: 'Connections',
       parentIds: 'Parents',
       childIds: 'Children',
@@ -112,6 +116,7 @@ class ApplicationBar extends PureComponent {
         <IconButton aria-label='Save Editing Asset' color='inherit'
           onClick={() => {
             setFocusingAsset({id: editingAssetId})
+            setLocatingAsset({id: null})
             setRelatingAsset({id: null, key: null})
           }}
         ><EditingSaveIcon /></IconButton>

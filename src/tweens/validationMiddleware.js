@@ -1,4 +1,4 @@
-import { Map, fromJS } from 'immutable'
+import { List, Map, fromJS } from 'immutable'
 import {
   setAssetErrors,
   setAddingAssetErrors,
@@ -31,7 +31,10 @@ const validationMiddleware = ({ dispatch, getState }) => next => action => {
 
       let hasChanged = false
       for (const [k, v] of Object.entries(asset)) {
-        if (v !== trackingAsset.get(k)) {
+        const trackingValue = trackingAsset.get(k)
+        if (trackingValue instanceof List && !List(v).equals(trackingValue)) {
+          hasChanged = true
+        } else if (v !== trackingValue) {
           hasChanged = true
         }
       }

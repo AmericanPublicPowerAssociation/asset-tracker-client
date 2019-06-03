@@ -39,8 +39,13 @@ export const getMapStyle = state => state.get(
   'mapStyle')
 export const getBaseMapStyleName = state => state.get(
   'baseMapStyleName')
-export const getAssetLocationById = state => state.get(
-  'assetLocationById')
+
+
+export const getAssetLocationById = createSelector([
+  getAssetById,
+], (
+  assetById,
+) => assetById.map(asset => asset.get('location')))
 
 
 export const getMatchingAssets = createSelector([
@@ -121,6 +126,15 @@ export const getRelatingAsset = createSelector([
   relatingAssetId,
   assetById,
 ) => assetById.get(relatingAssetId, Map()))
+
+
+export const getLocatingAsset = createSelector([
+  getLocatingAssetId,
+  getAssetById,
+], (
+  locatingAssetId,
+  assetById,
+) => assetById.get(locatingAssetId, Map()))
 
 
 export const getLocatingAssetLocation = createSelector([

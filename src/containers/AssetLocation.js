@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import {
+  changeAsset,
   setLocatingAsset,
 } from '../actions'
 import AssetLocation from '../components/AssetLocation'
@@ -20,6 +21,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setLocatingAsset: payload => {dispatch(
     setLocatingAsset(payload))},
+  changeAsset: payload => {dispatch(
+    changeAsset(payload))},
 })
 
 

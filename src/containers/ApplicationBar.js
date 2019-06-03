@@ -4,6 +4,7 @@ import {
   openAssetAddDialog,
   openNavigationDrawer,
   setFocusingAsset,
+  setLocatingAsset,
   setRelatingAsset,
 } from '../actions'
 import {
@@ -11,6 +12,7 @@ import {
   getIsNavigationDrawerOpen,
   getIsUserMember,
   getFocusingAssetId,
+  getLocatingAsset,
   getRelatingAsset,
   getRelatingAssetKey,
 } from '../selectors'
@@ -21,6 +23,7 @@ const mapStateToProps = state => ({
   isNavigationDrawerOpen: getIsNavigationDrawerOpen(state),
   isInformationDrawerOpen: getIsInformationDrawerOpen(state),
   focusingAssetId: getFocusingAssetId(state),
+  locatingAsset: getLocatingAsset(state),
   relatingAsset: getRelatingAsset(state),
   relatingAssetKey: getRelatingAssetKey(state),
 })
@@ -33,6 +36,8 @@ const mapDispatchToProps = dispatch => ({
     openNavigationDrawer(payload))},
   setFocusingAsset: payload => {dispatch(
     setFocusingAsset(payload))},
+  setLocatingAsset: payload => {dispatch(
+    setLocatingAsset(payload))},
   setRelatingAsset: payload => {dispatch(
     setRelatingAsset(payload))},
 })

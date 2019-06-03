@@ -6,6 +6,7 @@ import {
   SET_ASSET,
   SET_ASSETS,
   SET_ASSET_ERRORS,
+  SET_ASSET_LOCATION,
 } from '../constants'
 import {
   getById,
@@ -39,6 +40,11 @@ const assetById = (state=initialState, action) => {
     case SET_ASSET_ERRORS: {
       const { id, errors }= action.payload
       return state.update(id, asset => asset.set('errors', errors))
+    }
+    case SET_ASSET_LOCATION: {
+      const { id, longitude, latitude } = action.payload
+      const location = List([longitude, latitude])
+      return state.update(id, asset => asset.set('location', location))
     }
     case INCLUDE_ASSET_RELATION:
     case EXCLUDE_ASSET_RELATION: {
