@@ -7,6 +7,8 @@ import { CONTENT_PADDING } from '../constants'
 const styles = theme => ({
   root: {
     padding: CONTENT_PADDING,
+    height: '100%',
+    overflow: 'auto',
   },
 })
 
@@ -16,14 +18,12 @@ class NotAuthorizedWindow extends PureComponent {
     const { classes } = this.props
     return (
       <div className={classes.root}>
-
         <Typography variant='h6' align='center' paragraph>
           Not Authorized
         </Typography>
         <Typography align='center' paragraph>
           You are not authorized to access this resource.
         </Typography>
-
       </div>
     )
   }

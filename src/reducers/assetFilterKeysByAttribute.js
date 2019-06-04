@@ -2,13 +2,14 @@ import { Map, Set } from 'immutable'
 import {
   EXCLUDE_ASSET_FILTER_KEY,
   INCLUDE_ASSET_FILTER_KEY,
+  SELECTED_ASSET_TYPE_IDS,
   SET_ASSET_FILTER_KEYS,
   TOGGLE_ASSET_FILTER_KEY,
 } from '../constants'
 
 
 const initialState = Map({
-  typeId: Set(),
+  typeId: Set(SELECTED_ASSET_TYPE_IDS),
 })
 
 

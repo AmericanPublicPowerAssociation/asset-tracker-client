@@ -8,6 +8,8 @@ import { CONTENT_PADDING } from '../constants'
 const styles = theme => ({
   root: {
     padding: CONTENT_PADDING,
+    height: '100%',
+    overflow: 'auto',
   },
   hideIfSmall: {
     [theme.breakpoints.down('sm')]: {

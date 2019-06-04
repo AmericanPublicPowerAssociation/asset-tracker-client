@@ -7,7 +7,7 @@ import AssetList from '../containers/AssetList'
 
 
 const styles = theme => ({
-  fullHeight: {
+  root: {
     height: '100%',
   },
   mapFrame: {
@@ -19,9 +19,25 @@ const styles = theme => ({
       height: '50%',
     },
   },
+  frame: {
+    display: 'flex',
+    flexDirection: 'column',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'row',
+    },
+    height: '100%',
+  },
   filterPanel: {
+    maxHeight: '50%',
+    [theme.breakpoints.down('sm')]: {
+      maxHeight: '100%',
+      maxWidth: '50%',
+    },
+    overflow: 'auto',
   },
   listPanel: {
+    flex: 1,
+    overflow: 'auto',
   },
 })
 
@@ -38,19 +54,19 @@ class MapsWindow extends PureComponent {
       classes,
     } = this.props
     return (
-      <Grid container className={classes.fullHeight}>
+      <Grid container className={classes.root}>
         <Grid item xs={12} sm={12} md={9} className={classes.mapFrame}>
           <AssetMap />
         </Grid>
         <Grid item xs={12} sm={12} md={3} className={classes.tableFrame}>
-          <Grid container direction='column' className={classes.fullHeight}>
-            <Grid item className={classes.filterPanel} xs>
+          <div className={classes.frame}>
+            <div className={classes.filterPanel}>
               <AssetFilter />
-            </Grid>
-            <Grid item className={classes.listPanel} xs>
+            </div>
+            <div className={classes.listPanel}>
               <AssetList />
-            </Grid>
-          </Grid>
+            </div>
+          </div>
         </Grid>
       </Grid>
     )

@@ -12,6 +12,10 @@ import {
 
 
 const styles = theme => ({
+  root: {
+    height: '100%',
+    overflow: 'auto',
+  },
   hide: {
     visibility: 'hidden',
   },
@@ -45,7 +49,7 @@ class AssetList extends PureComponent {
     const editingAssetId = locatingAssetId || relatingAssetId
 
     return(
-      <List disablePadding>
+      <List className={classes.root}>
       {visibleAssets.map(asset => {
         const assetId = asset.get('id')
         const assetName = asset.get('name')

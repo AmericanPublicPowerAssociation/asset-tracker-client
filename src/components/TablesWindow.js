@@ -11,10 +11,10 @@ const styles = theme => ({
   },
   frame: {
     height: '100%',
-    overflow: 'auto',
     [theme.breakpoints.down('sm')]: {
       height: 'auto',
     },
+    overflow: 'auto',
   },
 })
 
