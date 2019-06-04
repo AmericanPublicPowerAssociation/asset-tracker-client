@@ -5,7 +5,7 @@ import AssetMapMarker from './AssetMapMarker'
 import {
   // STREETS_MAP_STYLE,
   DARK_MAP_STYLE,
-  EDITING_COLOR
+  EDITING_COLOR,
   FOCUSING_COLOR,
   SATELLITE_STREETS_MAP_STYLE,
 } from '../constants'
