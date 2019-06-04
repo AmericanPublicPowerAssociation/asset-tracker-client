@@ -45,7 +45,11 @@ const styles = theme => ({
 class MapsWindow extends PureComponent {
 
   componentDidMount() {
-    const { refreshAssets } = this.props
+    const {
+      refreshAssetTypes,
+      refreshAssets,
+    } = this.props
+    refreshAssetTypes()
     refreshAssets()
   }
 

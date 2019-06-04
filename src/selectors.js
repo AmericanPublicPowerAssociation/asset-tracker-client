@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect'
 import { List, Map, fromJS } from 'immutable'
 import {
+  FOCUSING_COLOR,
   KEY_PREFIX,
   MAXIMUM_ASSET_LIST_LENGTH,
 } from './constants'
@@ -248,11 +249,15 @@ export const getMapSources = createSelector([
 
 
 export const getMapLayers = createSelector([
-  getAssetFilterKeysByAttribute,
   getMapSources,
+  getFocusingAssetId,
+  getAssetFilterKeysByAttribute,
+  getAssetTypeById,
 ], (
-  assetFilterKeysByAttribute,
   mapSources,
+  focusingAssetId,
+  assetFilterKeysByAttribute,
+  assetTypeById,
 ) => {
   const selectedKeys = assetFilterKeysByAttribute.get('typeId')
   return selectedKeys
@@ -260,18 +265,33 @@ export const getMapLayers = createSelector([
     .map(key => {
       const keyTerms = key.split('-')
       const typeId = keyTerms[0]
-      const isLine = 'l' === typeId
+      const primaryTypeId = typeId[0]
+      const assetType = assetTypeById.get(primaryTypeId)
+      const isLine = 'l' === primaryTypeId
+
+      let layerColor = assetType.get('color')
+      if (isLine) {
+        const matchExpression = ['match', ['get', 'id']]
+        if (focusingAssetId) {
+          matchExpression.push(focusingAssetId, FOCUSING_COLOR)
+        }
+        matchExpression.push(layerColor)
+        if (matchExpression.length > 3) {
+          layerColor = matchExpression
+        }
+      }
+
       return {
         id: KEY_PREFIX + key,
         source: KEY_PREFIX + key,
         type: isLine ? 'line' : 'circle',
         paint: isLine ? {
           'line-width': ['get', 'size'],
-          'line-color': 'black',
+          'line-color': layerColor,
           'line-opacity': 0.8,
         } : {
           'circle-radius': ['get', 'size'],
-          'circle-color': 'black',
+          'circle-color': layerColor,
           'circle-stroke-color': 'white',
           'circle-stroke-width': 1,
           'circle-opacity': 0.8,

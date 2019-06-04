@@ -67,5 +67,5 @@ export function getFeatureSize(asset, assetTypeById) {
 export function getFeatureKey(asset) {
   const typeId = asset.get('typeId')
   // !!! Add utilityId
-  return typeId[0]
+  return typeId
 }

@@ -10,47 +10,9 @@ export const getVisibleAssets = createSelector([
 })
 
 
-export const getMapLayers = createSelector([
-  getFocusingAssetId,
-  getSelectedAssetTypeIds,
-  getSelectedAssetIds,
-  getMapSources,
-], (
-  focusingAssetId,
-  selectedAssetTypeIds,
-  selectedAssetIds,
-  mapSources,
-) => selectedAssetTypeIds
-    .map(typeId => {
-      let layerColor = {
-        p: 'black',
-        l: 'yellow',
-        m: 'blue',
-        t: 'pink',
-        x: 'magenta',
-        q: 'green',
-        c: 'violet',
-        b: 'gray',
-        o: 'brown',
-        g: 'darkred',
-        s: 'orange',
-        S: 'red',
-        X: 'white',
-      }[typeId]
-      if (isLine) {
-        const matchExpression = ['match', ['get', 'id']]
-        if (focusingAssetId) {
-          matchExpression.push(focusingAssetId, 'blue')
-        }
         if (selectedAssetIds.size) {
           matchExpression.push(selectedAssetIds.filter(id => id !== focusingAssetId).toJS(), 'cyan')
         }
-        matchExpression.push(layerColor)
-        if (matchExpression.length > 3) {
-          layerColor = matchExpression
-        }
-      }
-    }))
 
 export const getInteractiveLayerIds = createSelector([
   getMapLayers,

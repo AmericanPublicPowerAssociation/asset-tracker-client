@@ -22,7 +22,11 @@ const styles = theme => ({
 class TablesWindow extends PureComponent {
 
   componentDidMount() {
-    const { refreshAssets } = this.props
+    const {
+      refreshAssetTypes,
+      refreshAssets,
+    } = this.props
+    refreshAssetTypes()
     refreshAssets()
   }
 

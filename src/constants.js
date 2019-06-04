@@ -1,5 +1,6 @@
 import { fromJS } from 'immutable'
-import streetsMapStyle from './datasets/streetsMapStyle.json'
+import darkMapStyle from './datasets/darkMapStyle.json'
+// import streetsMapStyle from './datasets/streetsMapStyle.json'
 import satelliteStreetsMapStyle from './datasets/satelliteStreetsMapStyle.json'
 
 
@@ -81,7 +82,10 @@ export const DEFAULT_ASSET_TYPE_ID = 'p'
 export const SELECTED_ASSET_TYPE_IDS = ['l']
 
 
-export const STREETS_MAP_STYLE = fromJS(streetsMapStyle)
+export const DARK_MAP_STYLE = fromJS(darkMapStyle)
+// export const STREETS_MAP_STYLE = fromJS(streetsMapStyle)
 export const SATELLITE_STREETS_MAP_STYLE = fromJS(satelliteStreetsMapStyle)
-export const BASE_MAP_STYLE_NAME = 'streets'
+export const BASE_MAP_STYLE_NAME = 'dark'
 export const KEY_PREFIX = 'asset-tracker-'
+export const FOCUSING_COLOR = 'cyan'
+export const SELECTED_COLOR = 'lime'

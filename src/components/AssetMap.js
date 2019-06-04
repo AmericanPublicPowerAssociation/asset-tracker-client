@@ -3,8 +3,9 @@ import ReactMapGL, { NavigationControl } from 'react-map-gl'
 import { withStyles } from '@material-ui/core/styles'
 import AssetMapMarker from './AssetMapMarker'
 import {
+  DARK_MAP_STYLE,
   SATELLITE_STREETS_MAP_STYLE,
-  STREETS_MAP_STYLE,
+  // STREETS_MAP_STYLE,
 } from '../constants'
 
 
@@ -40,7 +41,8 @@ class AssetMap extends PureComponent {
     } = this.props
     const { longitude, latitude, zoom, pitch, bearing } = mapViewport.toJS()
     const baseMapStyle = {
-      streets: STREETS_MAP_STYLE,
+      dark: DARK_MAP_STYLE,
+      // streets: STREETS_MAP_STYLE,
       satelliteStreets: SATELLITE_STREETS_MAP_STYLE,
     }[baseMapStyleName]
     return(
