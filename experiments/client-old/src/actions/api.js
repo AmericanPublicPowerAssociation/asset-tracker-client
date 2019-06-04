@@ -1,15 +1,3 @@
-const TIMEOUT = 500;
-
-
-export const APIget = () => {
-    return new Promise((res, rej) => {
-      setTimeout(() => {
-        res(assets)
-      }, TIMEOUT)
-    })
-}
-
-
 export const APIsearch = (filters) => {
     return new Promise((res, rej) => {
       setTimeout(() => {
@@ -66,55 +54,6 @@ export const APIdeleteAsset = (id) => {
         if (!data.success) {
           throw Error(data.message);
         }
-      })
-      */
-  }
-
-export const APIaddAsset = (asset) => {
-    return new Promise((res, rej) => {
-      setTimeout(() => {
-        asset.id = assets.length;
-        assets = assets.concat([asset])
-        res({asset_id: asset.id})
-      }, TIMEOUT)
-    })
-    /*
-    return fetch(`${api_base_url}/add-asset`, {
-      method: 'POST',
-      body: JSON.stringify({asset})
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw Error(res.statusText);
-        }
-        return res.json()
-      })
-      .then((data) => {
-        // TODO: handle case for failure
-        const {asset_id} = JSON.parse(data);
-        return asset_id
-      })
-      */
-  }
-
-export const APIeditAsset = (asset) => {
-    return new Promise((res, rej) => {
-      setTimeout(() => {
-        assets = assets.map((a) =>
-          a.id === asset.id ? asset : a)
-        res({asset_id: asset.id})
-      }, TIMEOUT)
-    })
-    /*
-    return fetch(`${api_base_url}/edit-asset`, {
-      method: 'POST',
-      body: JSON.stringify({asset})
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw Error(res.statusText);
-        }
-        return res
       })
       */
   }

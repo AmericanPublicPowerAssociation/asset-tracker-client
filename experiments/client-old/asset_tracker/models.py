@@ -1,20 +1,7 @@
-import enum
-from contextlib import contextmanager
-from geoalchemy2 import Geometry
-from sqlalchemy import Column, ForeignKey, Table, create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, sessionmaker
-from sqlalchemy.types import Enum, Integer, PickleType, String
-
-
 OrganizationMember = Table(
     'organization_member', Base.metadata,
     Column('parent_id', String, ForeignKey('organization.id')),
     Column('child_id', String, ForeignKey('organization.id')))
-AssetConnection = Table(
-    'asset_connection', Base.metadata,
-    Column('l_asset_id', String, ForeignKey('asset.id')),
-    Column('r_asset_id', String, ForeignKey('asset.id')))
 
 
 class UserRole(enum.IntEnum):
@@ -42,26 +29,6 @@ class User(Base):
     role = Column(Enum(UserRole))
 
 
-class Vendor(Base):
-    __tablename__ = 'vendor'
-    id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False, unique=True)
-
-
-class Product(Base):
-    __tablename__ = 'product'
-    id = Column(Integer, primary_key=True)
-    vendor_id = Column(Integer, ForeignKey('vendor.id'))
-    name = Column(String)
-
-
-class ProductVersion(Base):
-    __tablename__ = 'product_version'
-    id = Column(Integer, primary_key=True)
-    product_id = Column(Integer, ForeignKey('product.id'))
-    version = Column(String)
-
-
 class AssetSubType(Base):
     __tablename__ = 'asset_subtype'
     id = Column(Integer, primary_key=True)
@@ -74,17 +41,3 @@ class Asset(Base):
     __tablename__ = 'asset'
     organization_id = Column(String, ForeignKey('organization.id'))
     subtype_id = Column(Integer, ForeignKey('asset_subtype.id'))
-    vendor_id = Column(Integer, ForeignKey('vendor.id'))
-    product_id = Column(Integer, ForeignKey('product.id'))
-    version_id = Column(Integer, ForeignKey('product_version.id'))
-    parent_id = Column(String, ForeignKey('asset.id'))
-    name = Column(String)
-    geometry = Column(Geometry('POINT', srid=4326))
-    properties = PickleType()
-    connected_assets = relationship(
-        'Asset', secondary=AssetConnection,
-        primaryjoin=AssetConnection.c.l_asset_id == id,
-        secondaryjoin=AssetConnection.c.r_asset_id == id)
-
-
-engine = create_engine('postgresql:///asset-tracker', echo=True)
