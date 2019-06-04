@@ -88,4 +88,5 @@ export const SATELLITE_STREETS_MAP_STYLE = fromJS(satelliteStreetsMapStyle)
 export const BASE_MAP_STYLE_NAME = 'dark'
 export const KEY_PREFIX = 'asset-tracker-'
 export const FOCUSING_COLOR = 'cyan'
+export const EDITING_COLOR = 'red'
 export const SELECTED_COLOR = 'lime'

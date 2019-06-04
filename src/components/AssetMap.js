@@ -3,9 +3,11 @@ import ReactMapGL, { NavigationControl } from 'react-map-gl'
 import { withStyles } from '@material-ui/core/styles'
 import AssetMapMarker from './AssetMapMarker'
 import {
-  DARK_MAP_STYLE,
-  SATELLITE_STREETS_MAP_STYLE,
   // STREETS_MAP_STYLE,
+  DARK_MAP_STYLE,
+  EDITING_COLOR
+  FOCUSING_COLOR,
+  SATELLITE_STREETS_MAP_STYLE,
 } from '../constants'
 
 
@@ -59,12 +61,12 @@ class AssetMap extends PureComponent {
         onViewportChange={this.updateViewport}
       >
         <AssetMapMarker
-          color='blue'
+          color={FOCUSING_COLOR}
           assetId={focusingAssetId}
           assetLocation={focusingAssetLocation}
         />
         <AssetMapMarker
-          color='red'
+          color={EDITING_COLOR}
           draggable
           assetId={locatingAssetId}
           assetLocation={locatingAssetLocation}
