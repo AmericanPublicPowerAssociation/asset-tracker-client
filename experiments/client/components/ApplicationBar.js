@@ -1,6 +1,7 @@
 const selectedAssetCount = selectedAssetIds.count()
 const applicationTitle = selectedAssetCount ? `Selected ${selectedAssetCount} Assets`
 
+
 <AppBar color={selectedAssetCount ? 'primary'}>
   <Toolbar>
     <IconButton >
