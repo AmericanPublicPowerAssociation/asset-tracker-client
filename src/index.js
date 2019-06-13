@@ -23,8 +23,6 @@ const store = createStore(reduceState, initialState, enhanceStore(
 
 configureEnvironment()
 sagaMiddleware.run(reduceSaga)
-
-
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import {
   MuiThemeProvider,
   createMuiTheme,
@@ -37,10 +37,10 @@ class App extends Component {
         <Main />
         <NavigationDrawer />
       {isUserMember &&
-      <Fragment>
+      <>
         <InformationDrawer />
         <AssetAddDialog />
-      </Fragment>
+      </>
       }
       </MuiThemeProvider>
     )
