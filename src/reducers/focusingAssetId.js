@@ -6,14 +6,15 @@ import {
 const initialState = null
 
 
-const focusingAssetId = (state=initialState, action) => {
+const focusingAssetId = (state = initialState, action) => {
   switch (action.type) {
     case SET_FOCUSING_ASSET: {
       const {id} = action.payload
       return id
     }
-    default:
+    default: {
       return state
+    }
   }
 }
 

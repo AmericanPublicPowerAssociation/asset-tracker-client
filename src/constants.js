@@ -74,10 +74,6 @@ export const SET_ADDING_ASSET_ERRORS = 'SET_ADDING_ASSET_ERRORS'
 export const SET_MAP_VIEWPORT = 'SET_MAP_VIEWPORT'
 
 
-export const SIGN_IN = 'SIGN_IN'
-export const SIGN_OUT = 'SIGN_OUT'
-
-
 export const DEFAULT_ASSET_TYPE_ID = 'p'
 export const SELECTED_ASSET_TYPE_IDS = ['l']
 

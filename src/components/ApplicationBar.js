@@ -1,4 +1,4 @@
-import React, { Fragment, PureComponent } from 'react'
+import React, { PureComponent } from 'react'
 import { Route } from 'react-router-dom'
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
@@ -130,11 +130,11 @@ class ApplicationBar extends PureComponent {
       </Tooltip>
 
     const assetButtonGroup =
-      <Fragment>
+      <>
         {editingAssetOpenButton}
         {editingAssetSaveButton}
         {assetAddButton}
-      </Fragment>
+      </>
 
     return (
       <AppBar

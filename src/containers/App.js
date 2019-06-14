@@ -1,7 +1,10 @@
 import { connect } from 'react-redux'
-import App from '../components/App'
 import {
   getIsUserMember,
+  refreshAuth,
+} from 'appa-auth-client'
+import App from '../components/App'
+import {
   getWithMorningTheme,
 } from '../selectors'
 
@@ -13,6 +16,8 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
+  refreshAuth: payload => {dispatch(
+    refreshAuth(payload))}
 })
 
 

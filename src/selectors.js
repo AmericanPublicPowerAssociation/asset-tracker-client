@@ -310,12 +310,6 @@ export const getMapStyle = createSelector([
 ) => ({sources: mapSources.toJS(), layers: mapLayers.toJS()}))
 
 
-export const getIsUserAuthenticated = createSelector([
-  getApp], app => app.get('isUserAuthenticated'))
-export const getIsUserMember = createSelector([
-  getApp], app => app.get('isUserMember'))
-export const getIsUserLeader = createSelector([
-  getApp], app => app.get('isUserLeader'))
 export const getIsNavigationDrawerOpen = createSelector([
   getApp], app => app.get('isNavigationDrawerOpen'))
 export const getIsInformationDrawerOpen = createSelector([

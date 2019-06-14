@@ -13,7 +13,7 @@ const initialState = Map({
 })
 
 
-const assetFilterKeysByAttribute = (state=initialState, action) => {
+const assetFilterKeysByAttribute = (state = initialState, action) => {
   switch (action.type) {
     case SET_ASSET_FILTER_KEYS: {
       return state.withMutations(state => {
@@ -45,8 +45,9 @@ const assetFilterKeysByAttribute = (state=initialState, action) => {
         })
       })
     }
-    default:
+    default: {
       return state
+    }
   }
 }
 

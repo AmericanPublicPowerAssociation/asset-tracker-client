@@ -12,14 +12,11 @@ import {
 const initialState = List()
 
 
-const sortedAssetIds = (state=initialState, action) => {
+const sortedAssetIds = (state = initialState, action) => {
   switch (action.type) {
     case RESET_ASSETS: {
       const assets = action.payload
-      return state.withMutations(state => {
-        state.clear()
-        state.merge(getIds(assets))
-      })
+      return getIds(assets)
     }
     case SET_ASSETS: {
       const assets = action.payload
@@ -40,8 +37,9 @@ const sortedAssetIds = (state=initialState, action) => {
       }
       return state
     }
-    default:
+    default: {
       return state
+    }
   }
 }
 

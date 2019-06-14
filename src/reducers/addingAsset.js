@@ -17,7 +17,7 @@ const initialState = Map({
 })
 
 
-const addingAsset = (state=initialState, action) => {
+const addingAsset = (state = initialState, action) => {
   switch (action.type) {
     case OPEN_ASSET_ADD_DIALOG: {
       return state.set('isOpen', true)
@@ -31,8 +31,9 @@ const addingAsset = (state=initialState, action) => {
     case SET_ADDING_ASSET_ERRORS: {
       return state.set('errors', action.payload)
     }
-    default:
+    default: {
       return state
+    }
   }
 }
 

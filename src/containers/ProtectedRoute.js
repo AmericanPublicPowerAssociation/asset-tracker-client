@@ -1,10 +1,10 @@
 import { connect } from 'react-redux'
+import {
+  getIsUserAuthenticated,
+} from 'appa-auth-client'
 import ProtectedRoute from '../components/ProtectedRoute'
 import {
 } from '../actions'
-import {
-  getIsUserAuthenticated,
-} from '../selectors'
 
 
 const mapStateToProps = state => ({

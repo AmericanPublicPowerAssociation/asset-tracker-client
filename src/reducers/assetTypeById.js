@@ -10,17 +10,15 @@ import {
 const initialState = OrderedMap()
 
 
-const assetTypeById = (state=initialState, action) => {
+const assetTypeById = (state = initialState, action) => {
   switch (action.type) {
     case RESET_ASSET_TYPES: {
       const assetTypes = action.payload
-      return state.withMutations(state => {
-        state.clear()
-        state.merge(getById(assetTypes, initialState))
-      })
+      return getById(assetTypes, initialState)
     }
-    default:
+    default: {
       return state
+    }
   }
 }
 

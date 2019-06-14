@@ -6,10 +6,11 @@ import {
 const initialState = BASE_MAP_STYLE_NAME
 
 
-const baseMapStyleName = (state=initialState, action) => {
+const baseMapStyleName = (state = initialState, action) => {
   switch (action.type) {
-    default:
+    default: {
       return state
+    }
   }
 }
 

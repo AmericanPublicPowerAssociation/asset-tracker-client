@@ -32,8 +32,6 @@ import {
   SET_LOCATING_ASSET,
   SET_MAP_VIEWPORT,
   SET_RELATING_ASSET,
-  SIGN_IN,
-  SIGN_OUT,
   TOGGLE_ASSET_FILTER_KEY,
   TOGGLE_THEME,
 } from './constants'
@@ -129,9 +127,3 @@ export const setAddingAssetErrors = payload => ({
 
 export const setMapViewport = payload => ({
   type: SET_MAP_VIEWPORT, payload})
-
-
-export const signIn = payload => ({
-  payload, type: SIGN_IN})
-export const signOut = payload => ({
-  payload, type: SIGN_OUT})

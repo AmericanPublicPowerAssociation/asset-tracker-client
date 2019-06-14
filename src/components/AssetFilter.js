@@ -1,4 +1,4 @@
-import React, { Fragment, PureComponent } from 'react'
+import React, { PureComponent } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import List from '@material-ui/core/List'
@@ -53,7 +53,7 @@ class AssetFilter extends PureComponent {
             />
           </ListItem>
         {!countByAssetTypeId.isEmpty() &&
-        <Fragment>
+        <>
           <ListItem>
             <ListItemText primary='Filter by Type' />
           </ListItem>
@@ -73,7 +73,7 @@ class AssetFilter extends PureComponent {
             )
           })}
           </List>
-        </Fragment>
+        </>
         }
         {/*
           <ListItem>

@@ -1,3 +1,13 @@
+import {
+  call,
+  put,
+} from 'redux-saga/effects'
+import { fromJS } from 'immutable'
+import { 
+  logError,
+} from './actions'
+
+
 export class IntegerDefaultDict {
   constructor() {
     return new Proxy({}, {
@@ -38,4 +48,22 @@ export function compactWhitespace(text) {
 
 export function capitalize(text) {
   return text.charAt(0).toUpperCase() + text.slice(1)
+}
+
+
+export function* fetchSafely(url, options, callbacks) {
+  try {
+    const response = yield call(fetch, url, options)
+    const status = response.status
+    const { on200, on400 } = callbacks
+    if (on200 && status === 200) {
+      yield on200(fromJS(yield response.json()))
+    } else if (on400 && status === 400) {
+      yield on400(fromJS(yield response.json()))
+    } else {
+      yield put(logError({status}))
+    }
+  } catch (error) {
+    yield put(logError({text: error}))
+  }
 }

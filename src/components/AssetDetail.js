@@ -1,4 +1,4 @@
-import React, { Fragment, PureComponent } from 'react'
+import React, { PureComponent } from 'react'
 import classNames from 'classnames'
 import { Map } from 'immutable'
 import { withStyles } from '@material-ui/core/styles'
@@ -61,7 +61,7 @@ class AssetDetail extends PureComponent {
     const errors = focusingAsset.get('errors', Map())
 
     return (
-      <Fragment>
+      <>
         <AssetName
           name={name}
           errorText={errors.get('name')}
@@ -119,7 +119,7 @@ class AssetDetail extends PureComponent {
           assetKey='childIds'
           relatedAssets={childAssets}
         />
-      </Fragment>
+      </>
     )
   }
 }

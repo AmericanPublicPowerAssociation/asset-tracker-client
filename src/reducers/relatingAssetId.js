@@ -6,15 +6,16 @@ import {
 const initialState = null
 
 
-const relatingAssetId = (state=initialState, action) => {
-  const actionType = action.type
-
-  if (SET_RELATING_ASSET === actionType) {
-    const {id} = action.payload
-    return id
+const relatingAssetId = (state = initialState, action) => {
+  switch (action.type) {
+    case SET_RELATING_ASSET: {
+      const {id} = action.payload
+      return id
+    }
+    default: {
+      return state
+    }
   }
-
-  return state
 }
 
 

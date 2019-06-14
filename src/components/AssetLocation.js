@@ -1,4 +1,4 @@
-import React, { Fragment, PureComponent } from 'react'
+import React, { PureComponent } from 'react'
 import { Redirect, Switch } from 'react-router-dom'
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
@@ -54,7 +54,7 @@ class AssetLocation extends PureComponent {
         <FormLabel>
           Location
         {hasLocation && showCoordinates &&
-        <Fragment>
+        <>
           {' ('}
           <Tooltip enterDelay={TOOLTIP_DELAY} placement='top' title='Longitude'>
             <span>{focusingAssetLocation.get(0)}</span>
@@ -64,7 +64,7 @@ class AssetLocation extends PureComponent {
             <span>{focusingAssetLocation.get(1)}</span>
           </Tooltip>
           {') '}
-        </Fragment>
+        </>
         }
         </FormLabel>
         <div>

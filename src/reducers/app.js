@@ -11,16 +11,13 @@ import {
 
 
 const initialState = Map({
-  isUserAuthenticated: false,
-  isUserMember: false,
-  isUserLeader: false,
   isNavigationDrawerOpen: true,
   isInformationDrawerOpen: false,
   withMorningTheme: true,
 })
 
 
-const app = (state=initialState, action) => {
+const app = (state = initialState, action) => {
   switch (action.type) {
     case OPEN_NAVIGATION_DRAWER: {
       return state.merge({
@@ -53,8 +50,9 @@ const app = (state=initialState, action) => {
     case SET_APP_VALUE: {
       return state.merge(fromJS(action.payload))
     }
-    default:
+    default: {
       return state
+    }
   }
 }
 

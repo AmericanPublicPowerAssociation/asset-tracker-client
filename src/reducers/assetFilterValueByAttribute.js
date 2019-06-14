@@ -9,13 +9,14 @@ const initialState = Map({
 })
 
 
-const assetFilterValueByAttribute= (state=initialState, action) => {
+const assetFilterValueByAttribute = (state = initialState, action) => {
   switch (action.type) {
     case SET_ASSET_FILTER_VALUE: {
       return state.merge(action.payload)
     }
-    default:
+    default: {
       return state
+    }
   }
 }
 

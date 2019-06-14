@@ -1,17 +1,19 @@
 import { connect } from 'react-redux'
+import {
+  getAuthUrl,
+  getIsUserAuthenticated,
+} from 'appa-auth-client'
 import NavigationDrawer from '../components/NavigationDrawer'
 import {
   closeNavigationDrawer,
-  signIn,
-  signOut,
 } from '../actions'
 import {
   getIsNavigationDrawerOpen,
-  getIsUserAuthenticated,
 } from '../selectors'
 
 
 const mapStateToProps = state => ({
+  authUrl: getAuthUrl(state),
   isNavigationDrawerOpen: getIsNavigationDrawerOpen(state),
   isUserAuthenticated: getIsUserAuthenticated(state),
 })
@@ -20,10 +22,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   closeNavigationDrawer: payload => {dispatch(
     closeNavigationDrawer(payload))},
-  signIn: payload => {dispatch(
-    signIn(payload))},
-  signOut: payload => {dispatch(
-    signOut(payload))},
 })
 
 

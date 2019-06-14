@@ -1,4 +1,7 @@
 import { connect } from 'react-redux'
+import {
+  getIsUserMember,
+} from 'appa-auth-client'
 import ApplicationBar from '../components/ApplicationBar'
 import {
   openAssetAddDialog,
@@ -10,7 +13,6 @@ import {
 import {
   getIsInformationDrawerOpen,
   getIsNavigationDrawerOpen,
-  getIsUserMember,
   getFocusingAssetId,
   getLocatingAsset,
   getRelatingAsset,

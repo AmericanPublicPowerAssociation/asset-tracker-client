@@ -1,6 +1,9 @@
 import { combineReducers } from 'redux-immutable'
 import reduceReducers from 'reduce-reducers'
 import {
+  auth,
+} from 'appa-auth-client'
+import {
   productNameSuggestions,
   productVersionSuggestions,
   vendorNameSuggestions,
@@ -26,6 +29,7 @@ import {
 
 const reduceHorizontally = combineReducers({
   app,
+  auth,
   sortedAssetIds,
   assetById,
   focusingAssetId,
@@ -34,7 +38,7 @@ const reduceHorizontally = combineReducers({
   addingAsset,
   assetFilterValueByAttribute,
   assetFilterKeysByAttribute,
-  trackingAsset: (state={}) => state,
+  trackingAsset: (state = {}) => state,
   vendorNameSuggestions,
   productNameSuggestions,
   productVersionSuggestions,
@@ -59,8 +63,9 @@ const reduceVertically = (state, action) => {
         trackingAsset: focusingAsset,
       })
     }
-    default:
+    default: {
       return state
+    }
   }
 }
 

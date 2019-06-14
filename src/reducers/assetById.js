@@ -17,16 +17,13 @@ import {
 const initialState = Map()
 
 
-const assetById = (state=initialState, action) => {
+const assetById = (state = initialState, action) => {
   const actionType = action.type
 
   switch (actionType) {
     case RESET_ASSETS: {
       const assets = action.payload
-      return state.withMutations(state => {
-        state.clear()
-        state.merge(getById(assets, initialState))
-      })
+      return getById(assets, initialState)
     }
     case SET_ASSETS: {
       const assets = action.payload
@@ -77,8 +74,9 @@ const assetById = (state=initialState, action) => {
         [otherId]: otherAsset.set(otherKey, toggle(otherRelatedAssetIds, id)),
       })
     }
-    default:
+    default: {
       return state
+    }
   }
 }
 
