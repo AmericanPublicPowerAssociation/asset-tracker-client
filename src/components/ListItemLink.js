@@ -26,9 +26,20 @@ class ListItemLink extends PureComponent {
       badgeContent, badgeColor,
       ...props
     } = this.props
+
+    let component
+    let componentProps
+    if (to.startsWith('/')) {
+      component = NavLink
+      componentProps = {exact: true, to, activeClassName: classes.selected}
+    } else {
+      component = 'a'
+      componentProps = {href: to}
+    }
+
     return (
-      <ListItem button component={NavLink}
-        exact to={to} activeClassName={classes.selected}
+      <ListItem button component={component}
+        {...componentProps}
         className={nested ? classes.nested : ''}
         {...props}
       >
