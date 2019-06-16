@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
+import Tooltip from '@material-ui/core/Tooltip'
+import IconButton from '@material-ui/core/IconButton'
 import Divider from '@material-ui/core/Divider'
 import List from '@material-ui/core/List'
-import IconButton from '@material-ui/core/IconButton'
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
+import LeftCloseIcon from '@material-ui/icons/ChevronLeft'
 import DashboardsIcon from '@material-ui/icons/Dashboard'
 import SignInIcon from '@material-ui/icons/Lock'
 import SignOutIcon from '@material-ui/icons/LockOpen'
@@ -18,6 +19,7 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import ListItemLink from './ListItemLink'
 import {
   NAVIGATION_DRAWER_WIDTH,
+  TOOLTIP_DELAY,
 } from '../constants'
 
 
@@ -56,9 +58,13 @@ class NavigationDrawer extends PureComponent {
         onClose={closeNavigationDrawer}
       >
         <div className={classes.drawerHeader}>
-          <IconButton onClick={closeNavigationDrawer}>
-            <ChevronLeftIcon />
-          </IconButton>
+
+          <Tooltip title='Close Navigation' enterDelay={TOOLTIP_DELAY}>
+            <IconButton onClick={closeNavigationDrawer}>
+              <LeftCloseIcon />
+            </IconButton>
+          </Tooltip>
+
         </div>
         <Divider />
         <List>
