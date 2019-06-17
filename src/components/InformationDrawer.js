@@ -1,12 +1,14 @@
 import React, { PureComponent } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
-import Divider from '@material-ui/core/Divider'
+import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
-import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import Divider from '@material-ui/core/Divider'
+import RightCloseIcon from '@material-ui/icons/ChevronRight'
 import {
   INFORMATION_DRAWER_WIDTH,
   RIGHT_DRAWER_MINIMUM_WIDTH,
+  TOOLTIP_DELAY,
 } from '../constants'
 import AssetDetail from '../containers/AssetDetail'
 
@@ -58,9 +60,11 @@ class InformationDrawer extends PureComponent {
         onClose={closeInformationDrawer}
       >
         <div className={classes.drawerHeader}>
-          <IconButton onClick={closeInformationDrawer}>
-            <ChevronRightIcon />
-          </IconButton>
+          <Tooltip title='Close Information' enterDelay={TOOLTIP_DELAY}>
+            <IconButton onClick={closeInformationDrawer}>
+              <RightCloseIcon />
+            </IconButton>
+          </Tooltip>
         </div>
         <Divider />
         <div className={classes.frame}>
