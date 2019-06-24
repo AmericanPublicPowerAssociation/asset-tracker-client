@@ -7,7 +7,7 @@ import {
 import { Map } from 'immutable'
 import {
   watchRefreshAuth,
-} from 'appa-auth-client'
+} from 'appa-auth-consumer'
 import {
   watchSuggestVendorNames,
   watchSuggestProductNames,

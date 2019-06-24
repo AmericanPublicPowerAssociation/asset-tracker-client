@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import {
   getIsUserMember,
   refreshAuth,
-} from 'appa-auth-client'
+} from 'appa-auth-consumer'
 import App from '../components/App'
 import {
   getWithMorningTheme,

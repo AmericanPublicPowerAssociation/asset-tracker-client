@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import {
   getIsUserMember,
-} from 'appa-auth-client'
+} from 'appa-auth-consumer'
 import ApplicationBar from '../components/ApplicationBar'
 import {
   openAssetAddDialog,

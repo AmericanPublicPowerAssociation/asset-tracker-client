@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import {
   getAuthUrl,
   getIsUserAuthenticated,
-} from 'appa-auth-client'
+} from 'appa-auth-consumer'
 import NavigationDrawer from '../components/NavigationDrawer'
 import {
   closeNavigationDrawer,

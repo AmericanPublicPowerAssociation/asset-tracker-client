@@ -2,7 +2,7 @@ import { combineReducers } from 'redux-immutable'
 import reduceReducers from 'reduce-reducers'
 import {
   auth,
-} from 'appa-auth-client'
+} from 'appa-auth-consumer'
 import {
   productNameSuggestions,
   productVersionSuggestions,

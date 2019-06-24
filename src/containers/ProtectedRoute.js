@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import {
   getIsUserAuthenticated,
-} from 'appa-auth-client'
+} from 'appa-auth-consumer'
 import ProtectedRoute from '../components/ProtectedRoute'
 import {
 } from '../actions'
