@@ -82,9 +82,9 @@ class NavigationDrawer extends PureComponent {
             <ListItemLink to='/bookmarks' text='Bookmarks' icon={<BookmarksIcon />} />
             */}
             <ListItemLink to='/settings' text='Settings' icon={<SettingsIcon />} />
-            <ListItemLink to={authUrl} text='Sign Out' icon={<SignOutIcon />} />
+            <ListItemLink to={authUrl} text='Sign Out' icon={<SignOutIcon />} redirect />
           </> :
-          <ListItemLink to={authUrl} text='Sign In' icon={<SignInIcon />} />
+          <ListItemLink to={authUrl} text='Sign In' icon={<SignInIcon />} redirect />
         }
         </List>
       </Drawer>

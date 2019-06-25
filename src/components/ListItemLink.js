@@ -22,19 +22,19 @@ class ListItemLink extends PureComponent {
   render() {
     const {
       classes,
-      to, text, icon, inset, nested,
+      to, text, icon, inset, nested, redirect,
       badgeContent, badgeColor,
       ...props
     } = this.props
 
     let component
     let componentProps
-    if (to.startsWith('/')) {
-      component = NavLink
-      componentProps = {exact: true, to, activeClassName: classes.selected}
-    } else {
+    if (redirect) {
       component = 'a'
       componentProps = {href: to}
+    } else {
+      component = NavLink
+      componentProps = {exact: true, to, activeClassName: classes.selected}
     }
 
     return (
