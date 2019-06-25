@@ -27,19 +27,17 @@ class ListItemLink extends PureComponent {
       ...props
     } = this.props
 
-    let component
-    let componentProps
+    let component, componentProps
     if (redirect) {
       component = 'a'
       componentProps = {href: to}
     } else {
       component = NavLink
-      componentProps = {exact: true, to, activeClassName: classes.selected}
+      componentProps = {to, exact: true, activeClassName: classes.selected}
     }
 
     return (
-      <ListItem button component={component}
-        {...componentProps}
+      <ListItem button component={component} {...componentProps}
         className={nested ? classes.nested : ''}
         {...props}
       >
