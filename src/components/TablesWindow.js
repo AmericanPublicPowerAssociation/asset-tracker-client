@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react'
 import { withStyles } from '@material-ui/core/styles'
+import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 import AssetFilter from '../containers/AssetFilter'
 import AssetTable from '../containers/AssetTable'
 
 
 const styles = theme => ({
-  root: {
+  fullHeight: {
     height: '100%',
   },
   frame: {
@@ -33,14 +34,16 @@ class TablesWindow extends PureComponent {
   render() {
     const { classes } = this.props
     return (
-      <Grid container className={classes.root}>
-        <Grid item className={classes.frame}>
-          <AssetFilter />
+      <Paper className={classes.fullHeight}>
+        <Grid container className={classes.fullHeight}>
+          <Grid item className={classes.frame}>
+            <AssetFilter />
+          </Grid>
+          <Grid item className={classes.frame} xs={12} sm>
+            <AssetTable />
+          </Grid>
         </Grid>
-        <Grid item className={classes.frame} xs={12} sm>
-          <AssetTable />
-        </Grid>
-      </Grid>
+      </Paper>
     )
   }
 }

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import { withStyles } from '@material-ui/core/styles'
+import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { CONTENT_PADDING } from '../constants'
@@ -24,7 +25,7 @@ class NotAuthenticatedWindow extends PureComponent {
   render() {
     const { classes } = this.props
     return (
-      <div className={classes.root}>
+      <Paper className={classes.root}>
 
         <Typography variant='h6' align='center' paragraph>
           Sign In Required
@@ -47,7 +48,7 @@ class NotAuthenticatedWindow extends PureComponent {
           </Grid>
         </Grid>
 
-      </div>
+      </Paper>
     )
   }
 

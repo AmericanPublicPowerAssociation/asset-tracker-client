@@ -1,18 +1,19 @@
 import React, { PureComponent } from 'react'
 import { withStyles } from '@material-ui/core/styles'
+import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Switch from '@material-ui/core/Switch'
 import { CONTENT_PADDING } from '../constants'
 
 
-const styles = theme => ({
+const styles = {
   root: {
     padding: CONTENT_PADDING,
     height: '100%',
     overflow: 'auto',
   },
-})
+}
 
 
 class SettingsWindow extends PureComponent {
@@ -24,7 +25,7 @@ class SettingsWindow extends PureComponent {
       toggleTheme,
     } = this.props
     return (
-      <div className={classes.root}>
+      <Paper className={classes.root}>
         <Typography variant='h6' align='center' paragraph>
           Settings
         </Typography>
@@ -37,7 +38,7 @@ class SettingsWindow extends PureComponent {
           }
           label='Use Morning Theme'
         />
-      </div>
+      </Paper>
     )
   }
 

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper'
 import {
   VulnerabilitiesWindow,
 } from 'asset-vulnerability-report'
@@ -12,8 +11,6 @@ import TablesWindow from '../containers/TablesWindow'
 import MapsWindow from '../containers/MapsWindow'
 import CircuitsWindow from './CircuitsWindow'
 import ReportsWindow from './ReportsWindow'
-import AlertsWindow from './AlertsWindow'
-import BookmarksWindow from './BookmarksWindow'
 import SettingsWindow from '../containers/SettingsWindow'
 import NotFoundWindow from './NotFoundWindow'
 import {
@@ -30,10 +27,17 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    padding: CONTENT_PADDING,
+    height: `calc(100vh - 56px)`,
     [theme.breakpoints.down('xs')]: {
-      padding: 0,
+      height: `calc(100vh - 56px)`,
     },
+    [`${theme.breakpoints.up('xs')} and (orientation: landscape)`]: {
+      height: `calc(100vh - 48px)`,
+    },
+    [theme.breakpoints.up('sm')]: {
+      height: `calc(100vh - 64px)`,
+    },
+    padding: CONTENT_PADDING,
   },
   mainShift: {
     transition: theme.transitions.create('margin', {
@@ -48,18 +52,6 @@ const styles = theme => ({
     marginRight: INFORMATION_DRAWER_WIDTH,
     [theme.breakpoints.down('md')]: {
       marginRight: RIGHT_DRAWER_MINIMUM_WIDTH,
-    },
-  },
-  paper: {
-    height: `calc(100vh - 56px - ${CONTENT_PADDING * 2}px)`,
-    [theme.breakpoints.down('xs')]: {
-      height: `calc(100vh - 56px)`,
-    },
-    [`${theme.breakpoints.up('xs')} and (orientation: landscape)`]: {
-      height: `calc(100vh - 48px)`,
-    },
-    [theme.breakpoints.up('sm')]: {
-      height: `calc(100vh - 64px - ${CONTENT_PADDING * 2}px)`,
     },
   },
 })
@@ -82,30 +74,24 @@ class Main extends Component {
           [classes.mainWithInformation]: isInformationDrawerOpen,
         })}
       >
-        <Paper className={classes.paper}>
-          <Switch>
-            <ProtectedRoute exact path='/'
-              component={DashboardsWindow} />
-            <ProtectedRoute exact path='/tables'
-              component={TablesWindow} />
-            <ProtectedRoute exact path='/maps'
-              component={MapsWindow} />
-            <ProtectedRoute exact path='/circuits'
-              component={CircuitsWindow} />
-            <ProtectedRoute exact path='/reports'
-              component={ReportsWindow} />
-            <ProtectedRoute exact path='/reports/vulnerabilities'
-              component={VulnerabilitiesWindow} />
-            <ProtectedRoute exact path='/alerts'
-              component={AlertsWindow} />
-            <ProtectedRoute exact path='/bookmarks'
-              component={BookmarksWindow} />
-            <ProtectedRoute exact path='/settings'
-              component={SettingsWindow} />
-            <Route
-              component={NotFoundWindow} />
-          </Switch>
-        </Paper>
+        <Switch>
+          <ProtectedRoute exact path='/'
+            component={DashboardsWindow} />
+          <ProtectedRoute exact path='/tables'
+            component={TablesWindow} />
+          <ProtectedRoute exact path='/maps'
+            component={MapsWindow} />
+          <ProtectedRoute exact path='/circuits'
+            component={CircuitsWindow} />
+          <ProtectedRoute exact path='/reports'
+            component={ReportsWindow} />
+          <ProtectedRoute exact path='/reports/vulnerabilities'
+            component={VulnerabilitiesWindow} />
+          <ProtectedRoute exact path='/settings'
+            component={SettingsWindow} />
+          <Route
+            component={NotFoundWindow} />
+        </Switch>
       </main>
     )
   }
