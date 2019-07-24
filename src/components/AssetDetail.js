@@ -66,7 +66,7 @@ class AssetDetail extends PureComponent {
           name={name}
           errorText={errors.get('name')}
           inputProps={{
-            style: {fontSize: 32},
+            style: {fontSize: '2rem'},
           }}
           onChange={event => this.trackChanges({name: event.target.value})}
           onBlur={() => this.saveChanges({name})}
