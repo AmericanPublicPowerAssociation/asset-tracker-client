@@ -31,13 +31,8 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
-    padding: `0 ${theme.spacing.unit * 3}px`,
+    padding: theme.spacing.unit * 3,
     overflow: 'auto',
-  },
-  overviewPanel: {
-    height: '25%',
-  },
-  detailPanel: {
   },
 })
 
@@ -68,12 +63,7 @@ class InformationDrawer extends PureComponent {
         </div>
         <Divider />
         <div className={classes.frame}>
-          <div className={classes.overviewPanel}>
-            {/* <AssetCircuit /> */}
-          </div>
-          <div className={classes.detailPanel}>
-            <AssetDetail />
-          </div>
+          <AssetDetail />
         </div>
       </Drawer>
     )

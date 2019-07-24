@@ -65,9 +65,13 @@ class AssetDetail extends PureComponent {
         <AssetName
           name={name}
           errorText={errors.get('name')}
+          inputProps={{
+            style: {fontSize: 32},
+          }}
           onChange={event => this.trackChanges({name: event.target.value})}
           onBlur={() => this.saveChanges({name})}
         />
+        {/* <AssetCircuit /> */}
         <VendorName
           className={classes.attribute}
           typeId={typeId}

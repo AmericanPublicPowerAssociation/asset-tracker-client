@@ -108,7 +108,3 @@ class SearchQuery extends Component {
     );
   }
 }
-
-
-export default SearchQuery;
-
