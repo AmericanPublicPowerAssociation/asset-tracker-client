@@ -47,6 +47,7 @@ class NavigationDrawer extends PureComponent {
       isUserAuthenticated,
       closeNavigationDrawer,
     } = this.props
+
     return (
       <Drawer
         variant='persistent'
