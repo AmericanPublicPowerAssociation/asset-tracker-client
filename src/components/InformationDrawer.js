@@ -14,18 +14,18 @@ import AssetDetail from '../containers/AssetDetail'
 
 
 const styles = theme => ({
-  drawerPaper: {
-    width: INFORMATION_DRAWER_WIDTH,
-    [theme.breakpoints.down('md')]: {
-      width: RIGHT_DRAWER_MINIMUM_WIDTH,
-    },
-  },
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
     padding: `0 ${theme.spacing.unit}px`,
     ...theme.mixins.toolbar,
     justifyContent: 'flex-start',
+  },
+  drawerPaper: {
+    width: INFORMATION_DRAWER_WIDTH,
+    [theme.breakpoints.down('md')]: {
+      width: RIGHT_DRAWER_MINIMUM_WIDTH,
+    },
   },
   frame: {
     display: 'flex',
@@ -60,7 +60,7 @@ class InformationDrawer extends PureComponent {
         onClose={closeInformationDrawer}
       >
         <div className={classes.drawerHeader}>
-          <Tooltip title='Close Information' enterDelay={TOOLTIP_DELAY}>
+          <Tooltip title='Close' enterDelay={TOOLTIP_DELAY}>
             <IconButton onClick={closeInformationDrawer}>
               <RightCloseIcon />
             </IconButton>

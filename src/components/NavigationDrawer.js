@@ -24,15 +24,15 @@ import {
 
 
 const styles = theme => ({
-  drawerPaper: {
-    width: NAVIGATION_DRAWER_WIDTH,
-  },
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
     padding: `0 ${theme.spacing.unit}px`,
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
+  },
+  drawerPaper: {
+    width: NAVIGATION_DRAWER_WIDTH,
   },
 })
 
@@ -60,7 +60,7 @@ class NavigationDrawer extends PureComponent {
       >
         <div className={classes.drawerHeader}>
 
-          <Tooltip title='Close Navigation' enterDelay={TOOLTIP_DELAY}>
+          <Tooltip title='Close' enterDelay={TOOLTIP_DELAY}>
             <IconButton onClick={closeNavigationDrawer}>
               <LeftCloseIcon />
             </IconButton>
