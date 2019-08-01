@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { Map } from 'immutable'
 import { withStyles } from '@material-ui/core/styles'
 import {
@@ -14,7 +14,7 @@ import AssetRelationChips from '../containers/AssetRelationChips'
 
 const styles = theme => ({
   attribute: {
-    margin: `${theme.spacing.unit * 3}px 0 0 0`,
+    margin: `${theme.spacing(3)}px 0 0 0`,
   },
   vanish: {
     display: 'none',
@@ -80,7 +80,7 @@ class AssetDetail extends PureComponent {
           saveChanges={this.saveChanges}
         />
         <ProductName
-          className={classNames(classes.attribute, {
+          className={clsx(classes.attribute, {
             [classes.vanish]: unique,
           })}
           typeId={typeId}
@@ -90,7 +90,7 @@ class AssetDetail extends PureComponent {
           saveChanges={this.saveChanges}
         />
         <ProductVersion
-          className={classNames(classes.attribute, {
+          className={clsx(classes.attribute, {
             [classes.vanish]: unique,
           })}
           typeId={typeId}
@@ -101,7 +101,7 @@ class AssetDetail extends PureComponent {
           saveChanges={this.saveChanges}
         />
         <AssetLocation
-          className={classNames(classes.attribute, {
+          className={clsx(classes.attribute, {
             [classes.vanish]: !locatable,
           })}
         />

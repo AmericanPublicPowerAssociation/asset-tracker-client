@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { withStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -80,7 +80,7 @@ class AssetTable extends PureComponent {
           }
           return (
             <TableRow
-              className={classNames({
+              className={clsx({
                 [classes.editing]: editingAssetId && editingAssetId === assetId,
               })}
               hover
@@ -104,7 +104,7 @@ class AssetTable extends PureComponent {
               relatingAssetId &&
               <TableCell align='right'>
                 <Switch
-                  className={classNames({
+                  className={clsx({
                     [classes.hide]:
                       !relatedAssetTypeIds.includes(primaryAssetTypeId) ||
                       relatingAssetId === assetId

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { withStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -63,7 +63,7 @@ class AssetList extends PureComponent {
         }
         return (
           <ListItem
-            className={classNames({
+            className={clsx({
               [classes.editing]: editingAssetId && editingAssetId === assetId,
             })}
             button
@@ -79,7 +79,7 @@ class AssetList extends PureComponent {
             relatingAssetId &&
             <ListItemSecondaryAction>
               <Switch
-                className={classNames({
+                className={clsx({
                   [classes.hide]:
                     !relatedAssetTypeIds.includes(primaryAssetTypeId) ||
                     relatingAssetId === assetId

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { Redirect, Switch } from 'react-router-dom'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { withStyles } from '@material-ui/core/styles'
 import FormControl from '@material-ui/core/FormControl'
 import FormLabel from '@material-ui/core/FormLabel'
@@ -17,7 +17,7 @@ import {
 
 const styles = theme => ({
   chip: {
-    margin: `${theme.spacing.unit}px ${theme.spacing.unit}px 0 0`,
+    margin: `${theme.spacing(1)}px ${theme.spacing(1)}px 0 0`,
   },
   hide: {
     visibility: 'hidden',
@@ -79,7 +79,7 @@ class AssetLocation extends PureComponent {
           </Tooltip>
         }
           <Chip
-            className={classNames(classes.chip, {
+            className={clsx(classes.chip, {
               [classes.hide]: locatingAssetId &&
                 locatingAssetId !== focusingAssetId,
             })}

@@ -15,9 +15,8 @@ import AssetAddDialog from '../containers/AssetAddDialog'
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 })
-const theme = {typography: {useNextVariants: true}}
-const morningTheme = createMuiTheme(theme)
-const eveningTheme = createMuiTheme({...theme, palette: {type: 'dark'}})
+const morningTheme = createMuiTheme()
+const eveningTheme = createMuiTheme({palette: {type: 'dark'}})
 
 
 class App extends Component {

@@ -12,7 +12,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.action.selected,
   },
   nested: {
-    paddingLeft: theme.spacing.unit * 4,
+    paddingLeft: theme.spacing(4),
   },
 })
 
