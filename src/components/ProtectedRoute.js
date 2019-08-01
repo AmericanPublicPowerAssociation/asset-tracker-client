@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { Route } from 'react-router-dom'
-import NotAuthenticatedWindow from './NotAuthenticatedWindow'
+import NotAuthenticatedWindow from '../containers/NotAuthenticatedWindow'
 import NotAuthorizedWindow from './NotAuthorizedWindow'
 
 
