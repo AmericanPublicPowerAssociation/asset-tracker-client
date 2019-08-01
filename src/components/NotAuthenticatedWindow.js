@@ -34,31 +34,31 @@ class NotAuthenticatedWindow extends PureComponent {
         <Typography variant='h6' align='center' paragraph>
           Sign In Required
         </Typography>
-        <Grid container direction='column'
-          alignContent='center'
+
+        <Grid
+          container
+          direction='column'
           alignItems='center'
-          justify='center'
         >
+
           <Grid item md={6} xs={9}>
             <Typography align='justify' paragraph>
-              Asset Tracker is a service provided by the <a href='https://www.publicpower.org' target='_blank' rel='noopener noreferrer'>American Public Power Association</a> to help utilities extend the lifetime of their assets and provide reliable power to their customers.
-            </Typography>
-            <Typography align='justify' paragraph>
-              Please sign in using the navigation bar at the left.
+              Asset Tracker is a service provided by the <a href='//www.publicpower.org' target='_blank' rel='noopener noreferrer'>American Public Power Association</a> to help utilities extend the lifetime of their assets and provide reliable power to their customers.
             </Typography>
           </Grid>
+
           <Grid item className={classes.hideIfSmall}>
-            <iframe title='Asset Tracker Video Preview' width='560' height='315' frameBorder='0' src='https://www.youtube-nocookie.com/embed/45dLM3gWJ3U?rel=0'></iframe>
+            <iframe title='Asset Tracker Preview' width='560' height='315' frameBorder='0' src='//www.youtube-nocookie.com/embed/45dLM3gWJ3U?rel=0' />
           </Grid>
-          <Grid>
-            <Button component='a' variant='contained' href={authUrl} color='primary' size='large'>
-              Sign in
+
+          <Grid item>
+            <Button component='a' href={authUrl} variant='contained' color='primary' size='large'>
+              Sign In
             </Button>
           </Grid>
         </Grid>
 
-
-      </Paper >
+      </Paper>
     )
   }
 
