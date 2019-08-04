@@ -50,11 +50,11 @@ class AssetDetail extends PureComponent {
       return null
     }
 
-    const name = focusingAsset.get('name')
     const typeId = focusingAsset.get('typeId')
-    const vendorName = focusingAsset.get('vendorName', '')
-    const productName = focusingAsset.get('productName', '')
-    const productVersion = focusingAsset.get('productVersion', '')
+    const name = focusingAsset.get('name')
+    const vendorName = focusingAsset.get('vendorName', null)
+    const productName = focusingAsset.get('productName', null)
+    const productVersion = focusingAsset.get('productVersion', null)
 
     const unique = focusingAssetType.get('unique', false)
     const locatable = focusingAssetType.get('locatable', false)
