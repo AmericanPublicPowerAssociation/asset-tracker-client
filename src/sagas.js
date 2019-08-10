@@ -25,14 +25,15 @@ import {
   setAssetErrors,
   setAssets,
   setFocusingAsset,
+  closeAssetsUploadDialog,
 } from './actions'
 import {
-  ADD_ASSET,
-  ADD_ASSET_RELATION,
-  CHANGE_ASSET,
-  DROP_ASSET_RELATION,
-  REFRESH_ASSETS,
-  REFRESH_ASSET_TYPES,
+    ADD_ASSET,
+    ADD_ASSET_RELATION,
+    CHANGE_ASSET,
+    DROP_ASSET_RELATION,
+    REFRESH_ASSETS,
+    REFRESH_ASSET_TYPES, UPLOAD_ASSETS_CSV_FILE,
 } from './constants'
 import {
   fetchSafely,
@@ -82,6 +83,29 @@ function* watchAddAsset() {
     })
   })
 }
+
+function* watchUploadFileAssets() {
+    yield takeEvery(UPLOAD_ASSETS_CSV_FILE, function* (action) {
+        console.log(action.payload);
+        var data = new FormData()
+        data.append('file', action.payload);
+        yield fetchSafely('/assets/', {
+            method: 'POST',
+            headers: {
+              "Content-Type": 'multipart/form-data'
+            },
+            body: data,
+        }, {
+            on200: function* (asset) {
+              yield put(closeAssetsUploadDialog())
+            },
+            on400: function* (errors) {
+                yield put(closeAssetsUploadDialog())
+            },
+        })
+    })
+}
+
 
 
 function* watchChangeAsset() {
@@ -150,6 +174,7 @@ export default function* () {
     watchRefreshAssetTypes(),
     watchRefreshAssets(),
     watchAddAsset(),
+    watchUploadFileAssets(),
     watchChangeAsset(),
     watchAddAssetRelation(),
     watchDropAssetRelation(),

@@ -10,6 +10,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import EditingOpenIcon from '@material-ui/icons/CenterFocusStrong'
 import EditingSaveIcon from '@material-ui/icons/Check'
 import AddIcon from '@material-ui/icons/Add'
+import CloudUploadIcon from '@material-ui/icons/CloudUpload'
 import Typography from '@material-ui/core/Typography'
 import {
   CONTENT_PADDING,
@@ -79,6 +80,7 @@ class ApplicationBar extends PureComponent {
       relatingAssetKey,
       openNavigationDrawer,
       openAssetAddDialog,
+      openAssetsUploadDialog,
       setFocusingAsset,
       setLocatingAsset,
       setRelatingAsset,
@@ -129,11 +131,19 @@ class ApplicationBar extends PureComponent {
         ><AddIcon /></IconButton>
       </Tooltip>
 
+    const uploadAssetsCSV = isUserMember &&
+      <Tooltip title='Upload CSV' enterDelay={TOOLTIP_DELAY}>
+        <IconButton aria-label='Upload CSV' color='inherit'
+          onClick={openAssetsUploadDialog}
+        ><CloudUploadIcon /> </IconButton>
+      </Tooltip>
+
     const assetButtonGroup =
       <>
         {editingAssetOpenButton}
         {editingAssetSaveButton}
         {assetAddButton}
+        {uploadAssetsCSV}
       </>
 
     return (
