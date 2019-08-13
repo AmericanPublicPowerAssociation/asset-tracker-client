@@ -18,6 +18,12 @@ const styles = theme => ({
       display: 'none',
     },
   },
+  button: {
+    width: '200px',
+    marginTop: '10%',
+    fontSize: '30px',
+    padding: '10px 0px',
+  },
 })
 
 class NotAuthenticatedWindow extends PureComponent {
@@ -50,8 +56,8 @@ class NotAuthenticatedWindow extends PureComponent {
           <Grid item className={classes.hideIfSmall}>
             <iframe title='Asset Tracker Video Preview' width='560' height='315' frameBorder='0' src='https://www.youtube-nocookie.com/embed/45dLM3gWJ3U?rel=0'></iframe>
           </Grid>
-          <Grid>
-            <Button component='a' variant='contained' href={authUrl} color='primary' size='large'>
+          <Grid item md={6} xs={9}>
+            <Button component='a' variant='contained' href={authUrl} color='primary' className={classes.button}>
               Sign in
             </Button>
           </Grid>
