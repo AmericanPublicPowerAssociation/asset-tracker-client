@@ -25,7 +25,7 @@ import assetTypeById from './assetTypeById'
 import {
   SET_FOCUSING_ASSET,
 } from '../constants'
-
+import {getFocusingAsset} from '../selectors'
 
 const reduceHorizontally = combineReducers({
   app,
@@ -56,9 +56,11 @@ const reduceVertically = (state, action) => {
       const {id} = action.payload
       const assetById = state.get('assetById')
       const focusingAsset = assetById.get(id)
+      const [lon, lat] = focusingAsset.get('location');
       const typeId = focusingAsset.get('typeId')
       return state.mergeDeep({
         assetFilterKeysByAttribute: {typeId: [typeId[0]]},
+        mapViewport: {latitude: lat, longitude: lon},
       }).merge({
         trackingAsset: focusingAsset,
       })
