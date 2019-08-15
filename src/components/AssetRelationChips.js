@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { List } from 'immutable'
 import { withStyles } from '@material-ui/core/styles'
 import FormControl from '@material-ui/core/FormControl'
@@ -18,7 +18,7 @@ import {
 
 const styles = theme => ({
   chip: {
-    margin: `${theme.spacing.unit}px 8px 0 0`,
+    margin: `${theme.spacing(1)}px ${theme.spacing(1)}px 0 0`,
   },
   hide: {
     visibility: 'hidden',
@@ -81,7 +81,7 @@ class AssetRelationChips extends PureComponent {
           <Chip
             label={relatingAssetId ? <SaveIcon /> : <AddIcon />}
             color={relatingAssetId ? 'secondary' : 'primary'}
-            className={classNames(classes.chip, {
+            className={clsx(classes.chip, {
               [classes.hide]: relatingAssetId && (
                 relatingAssetId !== assetId ||
                 relatingAssetKey !== assetKey),

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { Map } from 'immutable'
 import { withStyles } from '@material-ui/core/styles'
 import {
@@ -14,7 +14,7 @@ import AssetRelationChips from '../containers/AssetRelationChips'
 
 const styles = theme => ({
   attribute: {
-    margin: `${theme.spacing.unit * 3}px 0 0 0`,
+    margin: `${theme.spacing(3)}px 0 0 0`,
   },
   vanish: {
     display: 'none',
@@ -50,11 +50,11 @@ class AssetDetail extends PureComponent {
       return null
     }
 
-    const name = focusingAsset.get('name')
     const typeId = focusingAsset.get('typeId')
-    const vendorName = focusingAsset.get('vendorName', '')
-    const productName = focusingAsset.get('productName', '')
-    const productVersion = focusingAsset.get('productVersion', '')
+    const name = focusingAsset.get('name')
+    const vendorName = focusingAsset.get('vendorName', null)
+    const productName = focusingAsset.get('productName', null)
+    const productVersion = focusingAsset.get('productVersion', null)
 
     const unique = focusingAssetType.get('unique', false)
     const locatable = focusingAssetType.get('locatable', false)
@@ -65,9 +65,13 @@ class AssetDetail extends PureComponent {
         <AssetName
           name={name}
           errorText={errors.get('name')}
+          inputProps={{
+            style: {fontSize: '2rem'},
+          }}
           onChange={event => this.trackChanges({name: event.target.value})}
           onBlur={() => this.saveChanges({name})}
         />
+        {/* <AssetCircuit /> */}
         <VendorName
           className={classes.attribute}
           typeId={typeId}
@@ -76,7 +80,7 @@ class AssetDetail extends PureComponent {
           saveChanges={this.saveChanges}
         />
         <ProductName
-          className={classNames(classes.attribute, {
+          className={clsx(classes.attribute, {
             [classes.vanish]: unique,
           })}
           typeId={typeId}
@@ -86,7 +90,7 @@ class AssetDetail extends PureComponent {
           saveChanges={this.saveChanges}
         />
         <ProductVersion
-          className={classNames(classes.attribute, {
+          className={clsx(classes.attribute, {
             [classes.vanish]: unique,
           })}
           typeId={typeId}
@@ -97,7 +101,7 @@ class AssetDetail extends PureComponent {
           saveChanges={this.saveChanges}
         />
         <AssetLocation
-          className={classNames(classes.attribute, {
+          className={clsx(classes.attribute, {
             [classes.vanish]: !locatable,
           })}
         />

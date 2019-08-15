@@ -11,7 +11,7 @@ import AssetName from './AssetName'
 
 const styles = theme => ({
   attribute: {
-    margin: `${theme.spacing.unit * 3}px 0 0 0`,
+    margin: `${theme.spacing(3)}px 0 0 0`,
   },
 })
 

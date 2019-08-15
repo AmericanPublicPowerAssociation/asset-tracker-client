@@ -9,6 +9,7 @@ class AssetName extends PureComponent {
       name,
       errorText,
       className,
+      inputProps,
       onChange,
       onBlur,
     } = this.props
@@ -26,6 +27,7 @@ class AssetName extends PureComponent {
         InputLabelProps={{
           shrink: true,
         }}
+        inputProps={inputProps}
         {...errorProps}
         onChange={onChange}
         onBlur={onBlur}

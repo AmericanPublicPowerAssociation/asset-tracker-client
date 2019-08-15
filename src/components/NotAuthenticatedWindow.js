@@ -37,34 +37,36 @@ class NotAuthenticatedWindow extends PureComponent {
     return (
       <Paper className={classes.root}>
 
-        <Typography variant='h6' align='center' paragraph>
-          Sign In Required
-        </Typography>
-        <Grid container direction='column'
-          alignContent='center'
+        <Grid
+          container
+          direction='column'
           alignItems='center'
-          justify='center'
+          spacing={3}
         >
-          <Grid item md={6} xs={9}>
-            <Typography align='justify' paragraph>
-              Asset Tracker is a service provided by the <a href='https://www.publicpower.org' target='_blank' rel='noopener noreferrer'>American Public Power Association</a> to help utilities extend the lifetime of their assets and provide reliable power to their customers.
-            </Typography>
-            <Typography align='justify' paragraph>
-              Please sign in using the navigation bar at the left.
+          <Grid item>
+            <Typography variant='h6' align='center'>
+              Sign In Required
             </Typography>
           </Grid>
-          <Grid item className={classes.hideIfSmall}>
-            <iframe title='Asset Tracker Video Preview' width='560' height='315' frameBorder='0' src='https://www.youtube-nocookie.com/embed/45dLM3gWJ3U?rel=0'></iframe>
+
+          <Grid item md={6} xs={9}>
+            <Typography align='justify'>
+              Asset Tracker is a service provided by the <a href='//www.publicpower.org' target='_blank' rel='noopener noreferrer'>American Public Power Association</a> to help utilities extend the lifetime of their assets and provide reliable power to their customers.
+            </Typography>
           </Grid>
           <Grid item md={6} xs={9}>
             <Button component='a' variant='contained' href={authUrl} color='primary' className={classes.button}>
               Sign in
             </Button>
           </Grid>
+
+          <Grid item className={classes.hideIfSmall}>
+            <iframe title='Asset Tracker Preview' width='560' height='315' frameBorder='0' src='//www.youtube-nocookie.com/embed/45dLM3gWJ3U?rel=0' />
+          </Grid>
+
         </Grid>
 
-
-      </Paper >
+      </Paper>
     )
   }
 

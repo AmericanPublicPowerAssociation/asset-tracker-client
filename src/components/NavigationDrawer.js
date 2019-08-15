@@ -13,8 +13,6 @@ import TablesIcon from '@material-ui/icons/ListAlt'
 import MapsIcon from '@material-ui/icons/Map'
 // import CircuitsIcon from '@material-ui/icons/SettingsInputComponent'
 // import ReportsIcon from '@material-ui/icons/Assessment'
-// import AlertsIcon from '@material-ui/icons/Notifications'
-// import BookmarksIcon from '@material-ui/icons/Bookmarks'
 import SettingsIcon from '@material-ui/icons/Settings'
 import ListItemLink from './ListItemLink'
 import {
@@ -27,7 +25,7 @@ const styles = theme => ({
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
-    padding: `0 ${theme.spacing.unit}px`,
+    padding: `0 ${theme.spacing(1)}px`,
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
   },
@@ -77,8 +75,6 @@ class NavigationDrawer extends PureComponent {
             {/*
             <ListItemLink to='/circuits' text='Circuits' icon={<CircuitsIcon />} />
             <ListItemLink to='/reports' text='Reports' icon={<ReportsIcon />} />
-            <ListItemLink to='/alerts' text='Alerts' icon={<AlertsIcon />} />
-            <ListItemLink to='/bookmarks' text='Bookmarks' icon={<BookmarksIcon />} />
             */}
             <ListItemLink to='/settings' text='Settings' icon={<SettingsIcon />} />
             <ListItemLink to={authUrl} text='Sign Out' icon={<SignOutIcon />} redirect />

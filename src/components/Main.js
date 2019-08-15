@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { withStyles } from '@material-ui/core/styles'
 import {
   VulnerabilitiesWindow,
@@ -68,7 +68,7 @@ class Main extends Component {
     const isDrawerOpen = isNavigationDrawerOpen || isInformationDrawerOpen
     return (
       <main
-        className={classNames(classes.main, {
+        className={clsx(classes.main, {
           [classes.mainShift]: isDrawerOpen,
           [classes.mainWithNavigation]: isNavigationDrawerOpen,
           [classes.mainWithInformation]: isInformationDrawerOpen,

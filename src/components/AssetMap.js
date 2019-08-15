@@ -16,7 +16,7 @@ const styles = theme => ({
     position: 'absolute',
     top: 0,
     left: 0,
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
   },
 })
 

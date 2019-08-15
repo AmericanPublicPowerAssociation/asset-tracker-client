@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { Route } from 'react-router-dom'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -26,7 +26,7 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    padding: `0 ${theme.spacing.unit}px 0 ${theme.spacing.unit}px`,
+    padding: `0 ${theme.spacing(1)}px 0 ${theme.spacing(1)}px`,
     [theme.breakpoints.down('xs')]: {
       padding: 0,
     },
@@ -42,7 +42,7 @@ const styles = theme => ({
     marginLeft: NAVIGATION_DRAWER_WIDTH,
     paddingLeft: CONTENT_PADDING,
     [theme.breakpoints.down('xs')]: {
-      paddingLeft: theme.spacing.unit * 2,
+      paddingLeft: theme.spacing(2),
     },
   },
   appBarWithInformation: {
@@ -138,7 +138,7 @@ class ApplicationBar extends PureComponent {
 
     return (
       <AppBar
-        className={classNames(classes.appBar, {
+        className={clsx(classes.appBar, {
           [classes.appBarShift]: isDrawerOpen,
           [classes.appBarWithNavigation]: isNavigationDrawerOpen,
           [classes.appBarWithInformation]: isInformationDrawerOpen,
@@ -149,7 +149,7 @@ class ApplicationBar extends PureComponent {
 
           <Tooltip title='Open Navigation' enterDelay={TOOLTIP_DELAY}>
             <IconButton aria-label='Open Navigation' color='inherit'
-              className={classNames(classes.leftButton, {
+              className={clsx(classes.leftButton, {
                 [classes.vanish]: isNavigationDrawerOpen,
               })}
               onClick={openNavigationDrawer}

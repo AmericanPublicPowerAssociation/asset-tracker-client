@@ -31,7 +31,7 @@ class AssetMapMarker extends PureComponent {
           setAssetLocation({id: assetId, longitude, latitude})
         }}
       >
-        <PlaceIcon nativeColor={color} fontSize='large' />
+        <PlaceIcon htmlColor={color} fontSize='large' />
       </Marker>
     )
   }

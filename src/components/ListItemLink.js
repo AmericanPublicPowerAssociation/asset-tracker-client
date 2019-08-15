@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, forwardRef } from 'react'
 import { NavLink } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles'
 import Badge from '@material-ui/core/Badge'
@@ -12,9 +12,12 @@ const styles = theme => ({
     backgroundColor: theme.palette.action.selected,
   },
   nested: {
-    paddingLeft: theme.spacing.unit * 4,
+    paddingLeft: theme.spacing(4),
   },
 })
+
+
+const AdapterNavLink = forwardRef((props, ref) => <NavLink {...props} innerRef={ref} />)
 
 
 class ListItemLink extends PureComponent {
@@ -32,7 +35,7 @@ class ListItemLink extends PureComponent {
       component = 'a'
       componentProps = {href: to}
     } else {
-      component = NavLink
+      component = AdapterNavLink
       componentProps = {to, exact: true, activeClassName: classes.selected}
     }
 
