@@ -54,7 +54,7 @@ const reduceHorizontally = combineReducers({
 const reduceVertically = (state, action) => {
   switch (action.type) {
     case RESET_ASSETS_PACK: {
-      const boundingBox = state.get('boundingBox')
+      const boundingBox = action.payload.get('boundingBox').toJS()
       const {longitude, latitude, zoom} = new WebMercatorViewport(state.get('mapViewport').toJS())
             .fitBounds(boundingBox, {
               padding: 80,
@@ -63,7 +63,6 @@ const reduceVertically = (state, action) => {
       return state.mergeDeep({
         mapViewport: {longitude, latitude, zoom}
       })
-      return state;
     }
     case SET_FOCUSING_ASSET: {
       const {id} = action.payload
