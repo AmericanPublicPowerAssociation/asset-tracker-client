@@ -17,6 +17,7 @@ import {
 import {
   excludeAssetRelation,
   includeAssetRelation,
+  resetAssetsPack,
   resetAssetTypes,
   resetAssets,
   setAddingAssetErrors,
@@ -31,6 +32,7 @@ import {
   ADD_ASSET_RELATION,
   CHANGE_ASSET,
   DROP_ASSET_RELATION,
+  REFRESH_ASSETS_PACK,
   REFRESH_ASSETS,
   REFRESH_ASSET_TYPES,
 } from './constants'
@@ -40,6 +42,17 @@ import {
 import {
   rinseAsset,
 } from './routines'
+
+
+function* watchRefreshAssetsPack() {
+  yield takeLatest(REFRESH_ASSETS_PACK, function* () {
+    yield fetchSafely('/assetsPack.json', {}, {
+      on200: function* (assetsPack) {
+        yield put(resetAssetsPack(assetsPack))
+      },
+    }) 
+  })
+}
 
 
 function* watchRefreshAssetTypes() {
@@ -148,6 +161,7 @@ export default function* () {
   yield all([
     watchRefreshAuth(),
     watchRefreshAssetTypes(),
+    watchRefreshAssetsPack(),
     watchRefreshAssets(),
     watchAddAsset(),
     watchChangeAsset(),

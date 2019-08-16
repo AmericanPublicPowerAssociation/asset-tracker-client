@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux-immutable'
 import reduceReducers from 'reduce-reducers'
+import WebMercatorViewport from 'viewport-mercator-project'
 import {
   auth,
 } from 'appa-auth-consumer'
@@ -23,9 +24,9 @@ import baseMapStyleName from './baseMapStyleName'
 import locatingAssetId from './locatingAssetId'
 import assetTypeById from './assetTypeById'
 import {
+  RESET_ASSETS_PACK,
   SET_FOCUSING_ASSET,
 } from '../constants'
-import {getFocusingAsset} from '../selectors'
 
 const reduceHorizontally = combineReducers({
   app,
@@ -52,6 +53,18 @@ const reduceHorizontally = combineReducers({
 
 const reduceVertically = (state, action) => {
   switch (action.type) {
+    case RESET_ASSETS_PACK: {
+      const boundingBox = state.get('boundingBox')
+      const {longitude, latitude, zoom} = new WebMercatorViewport(state.get('mapViewport').toJS())
+            .fitBounds(boundingBox, {
+              padding: 80,
+              offset: [0, -100]
+            });
+      return state.mergeDeep({
+        mapViewport: {longitude, latitude, zoom}
+      })
+      return state;
+    }
     case SET_FOCUSING_ASSET: {
       const {id} = action.payload
       const assetById = state.get('assetById')
