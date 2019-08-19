@@ -24,8 +24,10 @@ import {
   setAsset,
   setAssetErrors,
   setAssets,
+  setAddingAssetCSVFileErrors,
   setFocusingAsset,
   closeAssetsUploadDialog,
+  refreshAssets,
 } from './actions'
 import {
     ADD_ASSET,
@@ -91,16 +93,15 @@ function* watchUploadFileAssets() {
         data.append('file', action.payload);
         yield fetchSafely('/assets/', {
             method: 'POST',
-            headers: {
-              "Content-Type": 'multipart/form-data'
-            },
             body: data,
         }, {
             on200: function* (asset) {
               yield put(closeAssetsUploadDialog())
+              yield put(refreshAssets())
             },
             on400: function* (errors) {
                 yield put(closeAssetsUploadDialog())
+                yield put(setAddingAssetCSVFileErrors(errors))
             },
         })
     })

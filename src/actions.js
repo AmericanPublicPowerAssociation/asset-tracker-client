@@ -36,6 +36,8 @@ import {
   SET_MAP_VIEWPORT,
   SET_RELATING_ASSET,
   SET_ASSET_CSV_FILE,
+  SET_ADDING_CSV_ASSETS_ERRORS,
+  HIDE_ADDING_CSV_ASSETS_ERRORS,
   TOGGLE_ASSET_FILTER_KEY,
   TOGGLE_THEME,
 } from './constants'
@@ -135,7 +137,10 @@ export const uploadAssetsCSVFile = payload => ({
   payload, type: UPLOAD_ASSETS_CSV_FILE});
 export const setAssetCSVFile = payload => ({
   payload, type: SET_ASSET_CSV_FILE});
-
+export const setAddingAssetCSVFileErrors = payload => ({
+  payload, type: SET_ADDING_CSV_ASSETS_ERRORS});
+export const hideAddingAssetCSVFileErrors = payload => ({
+  payload, type: HIDE_ADDING_CSV_ASSETS_ERRORS});
 
 export const setMapViewport = payload => ({
   type: SET_MAP_VIEWPORT, payload})
