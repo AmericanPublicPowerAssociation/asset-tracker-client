@@ -52,7 +52,7 @@ export function capitalize(text) {
 
 
 export function* fetchSafely(url, options, callbacks) {
-  //try {
+  try {
     const response = yield call(fetch, url, options)
     const status = response.status
     const { on200, on400 } = callbacks
@@ -63,7 +63,7 @@ export function* fetchSafely(url, options, callbacks) {
     } else {
       yield put(logError({status}))
     }
-  ////} catch (error) {
-  //yield put(logError({text: error}))
-  //}
+  } catch (error) {
+    yield put(logError({text: error}))
+  }
 }

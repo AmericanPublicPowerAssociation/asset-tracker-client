@@ -24,7 +24,7 @@ import baseMapStyleName from './baseMapStyleName'
 import locatingAssetId from './locatingAssetId'
 import assetTypeById from './assetTypeById'
 import {
-  RESET_ASSETS_PACK,
+  RESET_ASSETS_KIT,
   SET_FOCUSING_ASSET,
 } from '../constants'
 
@@ -53,26 +53,36 @@ const reduceHorizontally = combineReducers({
 
 const reduceVertically = (state, action) => {
   switch (action.type) {
-    case RESET_ASSETS_PACK: {
+    case RESET_ASSETS_KIT: {
       const boundingBox = action.payload.get('boundingBox').toJS()
-      const {longitude, latitude, zoom} = new WebMercatorViewport(state.get('mapViewport').toJS())
-            .fitBounds(boundingBox, {
-              padding: 80,
-              offset: [0, -100]
-            });
+      const mapViewport = state.get('mapViewport').toJS()
+      const {
+        longitude,
+        latitude,
+        zoom,
+      } = new WebMercatorViewport(mapViewport).fitBounds(boundingBox, {
+        padding: 24,
+        offset: [0, 0],
+      })
       return state.mergeDeep({
-        mapViewport: {longitude, latitude, zoom}
+        mapViewport: {
+          longitude,
+          latitude,
+          zoom,
+        },
       })
     }
     case SET_FOCUSING_ASSET: {
-      const {id} = action.payload
+      const { id } = action.payload
       const assetById = state.get('assetById')
       const focusingAsset = assetById.get(id)
-      const [lon, lat] = focusingAsset.get('location');
+      const [longitude, latitude] = focusingAsset.get('location')
       const typeId = focusingAsset.get('typeId')
       return state.mergeDeep({
+        // Ensure that focusingAssetType is visible
         assetFilterKeysByAttribute: {typeId: [typeId[0]]},
-        mapViewport: {latitude: lat, longitude: lon},
+        // Center mapViewport on focusingAsset
+        mapViewport: {longitude, latitude},
       }).merge({
         trackingAsset: focusingAsset,
       })

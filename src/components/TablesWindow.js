@@ -24,9 +24,9 @@ class TablesWindow extends PureComponent {
 
   componentDidMount() {
     const {
-      refreshAssetsPack,
+      refreshAssetsKit,
     } = this.props
-    refreshAssetsPack()
+    refreshAssetsKit()
   }
 
   render() {
