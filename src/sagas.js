@@ -32,7 +32,7 @@ import {
   ADD_ASSET_RELATION,
   CHANGE_ASSET,
   DROP_ASSET_RELATION,
-  REFRESH_ASSETS_PACK,
+  REFRESH_ASSETS_KIT,
   REFRESH_ASSETS,
   REFRESH_ASSET_TYPES,
 } from './constants'
@@ -45,10 +45,10 @@ import {
 
 
 function* watchRefreshAssetsPack() {
-  yield takeLatest(REFRESH_ASSETS_PACK, function* () {
-    yield fetchSafely('/assetsPack.json', {}, {
-      on200: function* (assetsPack) {
-        yield put(resetAssetsPack(assetsPack))
+  yield takeLatest(REFRESH_ASSETS_KIT, function* () {
+    yield fetchSafely('/assetsKit.json', {}, {
+      on200: function* (assetsKit) {
+        yield put(resetAssetsPack(assetsKit))
       },
     }) 
   })

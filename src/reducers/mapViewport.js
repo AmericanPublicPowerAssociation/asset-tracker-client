@@ -13,7 +13,11 @@ const initialState = Map({
 const mapViewport = (state = initialState, action) => {
   switch (action.type) {
     case SET_MAP_VIEWPORT: {
-      return state.merge(action.payload)
+      return state.merge(
+        action.payload,
+      ).mergeDeep({
+        transitionDuration: 0,
+      })
     }
     default: {
       return state
