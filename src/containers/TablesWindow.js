@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import TablesWindow from '../components/TablesWindow'
 import {
-  refreshAssetsPack,
+  refreshAssetsKit,
 } from '../actions'
 
 
@@ -10,8 +10,8 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
-  refreshAssetsPack: payload => {dispatch(
-    refreshAssetsPack(payload))},
+  refreshAssetsKit: payload => {dispatch(
+    refreshAssetsKit(payload))},
 })
 
 

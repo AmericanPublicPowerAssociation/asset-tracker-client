@@ -17,9 +17,7 @@ import {
 import {
   excludeAssetRelation,
   includeAssetRelation,
-  resetAssetsPack,
-  resetAssetTypes,
-  resetAssets,
+  resetAssetsKit,
   setAddingAssetErrors,
   setAddingAssetValue,
   setAsset,
@@ -33,8 +31,6 @@ import {
   CHANGE_ASSET,
   DROP_ASSET_RELATION,
   REFRESH_ASSETS_KIT,
-  REFRESH_ASSETS,
-  REFRESH_ASSET_TYPES,
 } from './constants'
 import {
   fetchSafely,
@@ -44,35 +40,13 @@ import {
 } from './routines'
 
 
-function* watchRefreshAssetsPack() {
+function* watchRefreshAssetsKit() {
   yield takeLatest(REFRESH_ASSETS_KIT, function* () {
     yield fetchSafely('/assetsKit.json', {}, {
       on200: function* (assetsKit) {
-        yield put(resetAssetsPack(assetsKit))
+        yield put(resetAssetsKit(assetsKit))
       },
     }) 
-  })
-}
-
-
-function* watchRefreshAssetTypes() {
-  yield takeLatest(REFRESH_ASSET_TYPES, function* () {
-    yield fetchSafely('/assetTypes.json', {}, {
-      on200: function* (assetTypes) {
-        yield put(resetAssetTypes(assetTypes))
-      },
-    })
-  })
-}
-
-
-function* watchRefreshAssets() {
-  yield takeLatest(REFRESH_ASSETS, function* () {
-    yield fetchSafely('/assets.json', {}, {
-      on200: function* (assets) {
-        yield put(resetAssets(assets))
-      },
-    })
   })
 }
 
@@ -160,9 +134,7 @@ function* watchDropAssetRelation() {
 export default function* () {
   yield all([
     watchRefreshAuth(),
-    watchRefreshAssetTypes(),
-    watchRefreshAssetsPack(),
-    watchRefreshAssets(),
+    watchRefreshAssetsKit(),
     watchAddAsset(),
     watchChangeAsset(),
     watchAddAssetRelation(),

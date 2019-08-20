@@ -16,7 +16,7 @@
     "react": "^16.8.6",
     "react-cytoscapejs": "^1.1.0",
     "react-dom": "^16.8.6",
-    "react-map-gl": "^5.0.7",
+    "react-map-gl": "^5.0.10",
     "react-redux": "^7.0.3",
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.0.1",

@@ -19,8 +19,6 @@ export const LOG_ERROR = 'LOG_ERROR'
 
 
 export const REFRESH_ASSETS_KIT = 'REFRESH_ASSETS_KIT'
-export const REFRESH_ASSET_TYPES = 'REFRESH_ASSET_TYPES'
-export const REFRESH_ASSETS = 'REFRESH_ASSETS'
 export const ADD_ASSET = 'ADD_ASSET'
 export const CHANGE_ASSET = 'CHANGE_ASSET'
 
@@ -30,8 +28,6 @@ export const DROP_ASSET_RELATION = 'DROP_ASSET_RELATION'
 
 
 export const RESET_ASSETS_KIT = 'RESET_ASSETS_KIT'
-export const RESET_ASSET_TYPES = 'RESET_ASSET_TYPES'
-export const RESET_ASSETS = 'RESET_ASSETS'
 export const SET_ASSETS = 'SET_ASSETS'
 
 export const SET_ASSET = 'SET_ASSET'

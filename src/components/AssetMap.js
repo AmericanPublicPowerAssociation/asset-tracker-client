@@ -24,9 +24,29 @@ const styles = theme => ({
 class AssetMap extends PureComponent {
 
   updateViewport = viewport => {
-    const { longitude, latitude, zoom, pitch, bearing, width, height } = viewport
-    const { setMapViewport } = this.props
-    setMapViewport({longitude, latitude, zoom, pitch, bearing, width, height})
+    const {
+      longitude,
+      latitude,
+      zoom,
+      pitch,
+      bearing,
+      altitude,
+      width,
+      height,
+    } = viewport
+    const {
+      setMapViewport,
+    } = this.props
+    setMapViewport({
+      longitude,
+      latitude,
+      zoom,
+      pitch,
+      bearing,
+      altitude,
+      width,
+      height,
+    })
   }
 
   render() {

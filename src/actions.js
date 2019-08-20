@@ -17,8 +17,6 @@ import {
   OPEN_NAVIGATION_DRAWER,
   REFRESH_ASSETS_KIT,
   RESET_ASSETS_KIT,
-  RESET_ASSETS,
-  RESET_ASSET_TYPES,
   SET_ADDING_ASSET_ERRORS,
   SET_ADDING_ASSET_VALUE,
   SET_APP_VALUE,
@@ -41,7 +39,7 @@ export const logError = payload => ({
   payload, type: LOG_ERROR})
 
 
-export const refreshAssetsPack = payload => ({
+export const refreshAssetsKit = payload => ({
   payload, type: REFRESH_ASSETS_KIT})
 export const addAsset = payload => ({
   payload, type: ADD_ASSET})
@@ -55,12 +53,8 @@ export const dropAssetRelation = payload => ({
   payload, type: DROP_ASSET_RELATION})
 
 
-export const resetAssetsPack = payload => ({
+export const resetAssetsKit = payload => ({
   payload, type: RESET_ASSETS_KIT})
-export const resetAssetTypes = payload => ({
-  payload, type: RESET_ASSET_TYPES})
-export const resetAssets = payload => ({
-  payload, type: RESET_ASSETS})
 export const setAssets = payload => ({
   payload, type: SET_ASSETS})
 export const setAsset = payload => ({
