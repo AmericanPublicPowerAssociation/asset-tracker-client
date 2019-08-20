@@ -7,6 +7,7 @@ import {
   CLOSE_NAVIGATION_DRAWER,
   CLOSE_ASSETS_UPLOAD_DIALOG,
   UPLOAD_ASSETS_CSV_FILE,
+  DOWNLOAD_ASSETS_CSV_FILE,
   DROP_ASSET_RELATION,
   EXCLUDE_ASSET_FILTER_KEY,
   EXCLUDE_ASSET_RELATION,
@@ -135,6 +136,8 @@ export const closeAssetsUploadDialog = payload => ({
   payload, type: CLOSE_ASSETS_UPLOAD_DIALOG})
 export const uploadAssetsCSVFile = payload => ({
   payload, type: UPLOAD_ASSETS_CSV_FILE});
+export const downloadAssetsUploadDialog = payload => ({
+  payload, type: DOWNLOAD_ASSETS_CSV_FILE});
 export const setAssetCSVFile = payload => ({
   payload, type: SET_ASSET_CSV_FILE});
 export const setAddingAssetCSVFileErrors = payload => ({

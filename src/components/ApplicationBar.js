@@ -11,6 +11,7 @@ import EditingOpenIcon from '@material-ui/icons/CenterFocusStrong'
 import EditingSaveIcon from '@material-ui/icons/Check'
 import AddIcon from '@material-ui/icons/Add'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload'
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
 import Typography from '@material-ui/core/Typography'
 import {
   CONTENT_PADDING,
@@ -81,6 +82,7 @@ class ApplicationBar extends PureComponent {
       openNavigationDrawer,
       openAssetAddDialog,
       openAssetsUploadDialog,
+      downloadAssetsUploadDialog,
       setFocusingAsset,
       setLocatingAsset,
       setRelatingAsset,
@@ -136,7 +138,15 @@ class ApplicationBar extends PureComponent {
         <IconButton aria-label='Upload CSV' color='inherit'
           onClick={openAssetsUploadDialog}
         ><CloudUploadIcon /> </IconButton>
-      </Tooltip>
+      </Tooltip>;
+
+
+    const downloadAssetsCSV = isUserMember &&
+        <Tooltip title='Download CSV' enterDelay={TOOLTIP_DELAY}>
+            <IconButton aria-label='Download CSV' color='inherit'
+                        onClick={downloadAssetsUploadDialog}
+            ><CloudDownloadIcon /> </IconButton>
+        </Tooltip>;
 
     const assetButtonGroup =
       <>
@@ -144,6 +154,7 @@ class ApplicationBar extends PureComponent {
         {editingAssetSaveButton}
         {assetAddButton}
         {uploadAssetsCSV}
+        {downloadAssetsCSV}
       </>
 
     return (
