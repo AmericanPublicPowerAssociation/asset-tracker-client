@@ -9,6 +9,7 @@ import ProtectedRoute from '../containers/ProtectedRoute'
 import DashboardsWindow from './DashboardsWindow'
 import TablesWindow from '../containers/TablesWindow'
 import MapsWindow from '../containers/MapsWindow'
+import LogsWindow from '../containers/LogsWindow'
 import CircuitsWindow from './CircuitsWindow'
 import ReportsWindow from './ReportsWindow'
 import SettingsWindow from '../containers/SettingsWindow'
@@ -81,6 +82,8 @@ class Main extends Component {
             component={TablesWindow} />
           <ProtectedRoute exact path='/maps'
             component={MapsWindow} />
+          <ProtectedRoute exact path='/logs'
+            component={LogsWindow} />
           <ProtectedRoute exact path='/circuits'
             component={CircuitsWindow} />
           <ProtectedRoute exact path='/reports'
