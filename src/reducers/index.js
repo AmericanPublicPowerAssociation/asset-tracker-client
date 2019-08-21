@@ -55,15 +55,17 @@ const reduceVertically = (state, action) => {
   switch (action.type) {
     case RESET_ASSETS_KIT: {
       const boundingBox = action.payload.get('boundingBox').toJS()
+      if (!boundingBox.length) {
+        return state
+      }
       const mapViewport = state.get('mapViewport').toJS()
       const {
         longitude,
         latitude,
         zoom,
-      } = new WebMercatorViewport(mapViewport).fitBounds(boundingBox, {
-        padding: 24,
-        offset: [0, 0],
-      })
+      } = new WebMercatorViewport(
+        mapViewport,
+      ).fitBounds(boundingBox)
       return state.mergeDeep({
         mapViewport: {
           longitude,
@@ -73,27 +75,30 @@ const reduceVertically = (state, action) => {
       })
     }
     case SET_FOCUSING_ASSET: {
+      const mergingPatch = {}
+      const settingPatch = {}
+
       const { id } = action.payload
       const assetById = state.get('assetById')
       const focusingAsset = assetById.get(id)
-      const coord = focusingAsset.get('location')
+      const focusingAssetLocation = focusingAsset.get('location')
       const typeId = focusingAsset.get('typeId')
-      if (coord !== undefined ) {
-        // Center mapViewport on focusingAsset when coordinate is available
-        state = state.mergeDeep({
-          mapViewport: {
-            longitude: coord.get(0),
-            latitude: coord.get(1),
-            transitionDuration: 1000,
-          }
-        })
+
+      // Ensure that focusingAssetType is visible
+      mergingPatch['assetFilterKeysByAttribute'] = {typeId: [typeId[0]]}
+      // Center mapViewport on focusingAsset
+      if (focusingAssetLocation) {
+        const [longitude, latitude] = focusingAssetLocation
+        mergingPatch['mapViewport'] = {
+          longitude,
+          latitude,
+          transitionDuration: 1000,
+        }
       }
-      return state.mergeDeep({
-        // Ensure that focusingAssetType is visible
-        assetFilterKeysByAttribute: {typeId: [typeId[0]]},
-      }).merge({
-        trackingAsset: focusingAsset,
-      })
+      // Store a reference copy to track changes
+      settingPatch['trackingAsset'] = focusingAsset
+
+      return state.mergeDeep(mergingPatch).merge(settingPatch)
     }
     default: {
       return state
