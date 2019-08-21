@@ -89,7 +89,11 @@ const reduceVertically = (state, action) => {
       // Center mapViewport on focusingAsset
       if (focusingAssetLocation) {
         const [longitude, latitude] = focusingAssetLocation
-        mergingPatch['mapViewport'] = {longitude, latitude}
+        mergingPatch['mapViewport'] = {
+          longitude,
+          latitude,
+          transitionDuration: 1000,
+        }
       }
       // Store a reference copy to track changes
       settingPatch['trackingAsset'] = focusingAsset
