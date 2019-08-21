@@ -1,36 +1,75 @@
 import React, { PureComponent } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
+import Card from '@material-ui/core/Card'
+import Grid from '@material-ui/core/Grid'
+import Link from '@material-ui/core/Link'
+import CardActionArea from '@material-ui/core/CardActionArea'
 
 
-const styles = {
+const styles = theme => ({
   fullHeight: {
     height: '100%',
   },
-}
+  card: {
+  },
+  title: {
+    fontSize: 24,
+  },
+  cardActionArea: {
+    // width: theme.spacing(48),
+    padding: theme.spacing(3),
+  }
+})
 
 
 class LogsWindow extends PureComponent {
-  
-  componentDidMount(){
-    const {
-      refreshLogs,
-    } = this.props
-    refreshLogs()
-  }
 
   render() {
-    const { classes, logs } = this.props
+    const { classes } = this.props
+
     return (
-      <Paper className={classes.fullHeight}>
-        <Typography variant='h6' align='center'>
-          Logs
-        </Typography>
-        {logs}
-      </Paper>
+
+      <Grid container spacing={3}>
+        <Grid item xs>
+          <Link
+            underline='none'
+            component={RouterLink}
+            to='/logs/assets'
+          >
+            <Card className={classes.card}>
+              <CardActionArea className={classes.cardActionArea}>
+                <Typography className={classes.title} align='center'>
+                  Asset Maintenance Log
+                </Typography>
+              </CardActionArea>
+            </Card>
+          </Link>
+        </Grid>
+
+        <Grid item xs>
+          <Link
+            underline='none'
+            component={RouterLink}
+            to='/logs/users'
+          >
+            <Card className={classes.card}>
+              <CardActionArea className={classes.cardActionArea}>
+                <Typography className={classes.title} align='center'>
+                  User Audit Trail
+                </Typography>
+              </CardActionArea>
+            </Card>
+          </Link>
+        </Grid>
+      </Grid>
+
     )
   }
+
+
+
 }
 
 

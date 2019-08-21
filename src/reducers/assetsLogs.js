@@ -1,14 +1,14 @@
 import {
-  RESET_LOGS,
+  RESET_ASSETS_LOGS,
 } from '../constants'
 
 
 const initialState = null
 
 
-const logs = (state = initialState, action) => {
+const assetsLogs = (state = initialState, action) => {
   switch (action.type) {
-    case RESET_LOGS: {
+    case RESET_ASSETS_LOGS: {
       const assetsLogs = action.payload
       return assetsLogs
     }
@@ -19,4 +19,4 @@ const logs = (state = initialState, action) => {
 }
 
 
-export default logs
+export default assetsLogs
