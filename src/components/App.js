@@ -10,7 +10,7 @@ import Main from '../containers/Main'
 import NavigationDrawer from '../containers/NavigationDrawer'
 import InformationDrawer from '../containers/InformationDrawer'
 import AssetAddDialog from '../containers/AssetAddDialog'
-
+import AssetUploadFileDialog from '../containers/AssetUploadFileDialog'
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -46,6 +46,7 @@ class App extends Component {
       <>
         <InformationDrawer />
         <AssetAddDialog />
+        <AssetUploadFileDialog />
       </>
       }
       </MuiThemeProvider>

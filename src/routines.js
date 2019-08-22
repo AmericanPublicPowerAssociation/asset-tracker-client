@@ -13,7 +13,8 @@ export function getAssetTypeName(assetTypeId, assetTypeById) {
   if (secondaryAssetTypeId) {
     const secondaryAssetTypeById = primaryAssetType.get('typeById')
     const secondaryAssetType = secondaryAssetTypeById[secondaryAssetTypeId]
-    assetTypeNameParts.push(secondaryAssetType.name)
+    if (secondaryAssetType !== undefined && secondaryAssetType !== null)
+      assetTypeNameParts.push(secondaryAssetType.name)
   }
   return assetTypeNameParts.join(' > ')
 }
