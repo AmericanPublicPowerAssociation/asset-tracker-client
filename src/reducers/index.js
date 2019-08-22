@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux-immutable'
 import reduceReducers from 'reduce-reducers'
+import WebMercatorViewport from 'viewport-mercator-project'
 import {
   auth,
 } from 'appa-auth-consumer'
@@ -23,9 +24,9 @@ import baseMapStyleName from './baseMapStyleName'
 import locatingAssetId from './locatingAssetId'
 import assetTypeById from './assetTypeById'
 import {
+  RESET_ASSETS_KIT,
   SET_FOCUSING_ASSET,
 } from '../constants'
-
 
 const reduceHorizontally = combineReducers({
   app,
@@ -52,16 +53,52 @@ const reduceHorizontally = combineReducers({
 
 const reduceVertically = (state, action) => {
   switch (action.type) {
+    case RESET_ASSETS_KIT: {
+      const boundingBox = action.payload.get('boundingBox').toJS()
+      if (!boundingBox.length) {
+        return state
+      }
+      const mapViewport = state.get('mapViewport').toJS()
+      const {
+        longitude,
+        latitude,
+        zoom,
+      } = new WebMercatorViewport(
+        mapViewport,
+      ).fitBounds(boundingBox)
+      return state.mergeDeep({
+        mapViewport: {
+          longitude,
+          latitude,
+          zoom,
+        },
+      })
+    }
     case SET_FOCUSING_ASSET: {
-      const {id} = action.payload
+      const mergingPatch = {}
+      const settingPatch = {}
+
+      const { id } = action.payload
       const assetById = state.get('assetById')
       const focusingAsset = assetById.get(id)
+      const focusingAssetLocation = focusingAsset.get('location')
       const typeId = focusingAsset.get('typeId')
-      return state.mergeDeep({
-        assetFilterKeysByAttribute: {typeId: [typeId[0]]},
-      }).merge({
-        trackingAsset: focusingAsset,
-      })
+
+      // Ensure that focusingAssetType is visible
+      mergingPatch['assetFilterKeysByAttribute'] = {typeId: [typeId[0]]}
+      // Center mapViewport on focusingAsset
+      if (focusingAssetLocation) {
+        const [longitude, latitude] = focusingAssetLocation
+        mergingPatch['mapViewport'] = {
+          longitude,
+          latitude,
+          transitionDuration: 1000,
+        }
+      }
+      // Store a reference copy to track changes
+      settingPatch['trackingAsset'] = focusingAsset
+
+      return state.mergeDeep(mergingPatch).merge(settingPatch)
     }
     default: {
       return state

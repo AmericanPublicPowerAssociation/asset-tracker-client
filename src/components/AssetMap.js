@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import ReactMapGL, { NavigationControl } from 'react-map-gl'
+import ReactMapGL, { NavigationControl, FlyToInterpolator } from 'react-map-gl'
 import { withStyles } from '@material-ui/core/styles'
 import AssetMapMarker from './AssetMapMarker'
 import {
@@ -24,9 +24,29 @@ const styles = theme => ({
 class AssetMap extends PureComponent {
 
   updateViewport = viewport => {
-    const { longitude, latitude, zoom, pitch, bearing } = viewport
-    const { setMapViewport } = this.props
-    setMapViewport({longitude, latitude, zoom, pitch, bearing})
+    const {
+      longitude,
+      latitude,
+      zoom,
+      pitch,
+      bearing,
+      altitude,
+      width,
+      height,
+    } = viewport
+    const {
+      setMapViewport,
+    } = this.props
+    setMapViewport({
+      longitude,
+      latitude,
+      zoom,
+      pitch,
+      bearing,
+      altitude,
+      width,
+      height,
+    })
   }
 
   render() {
@@ -41,7 +61,7 @@ class AssetMap extends PureComponent {
       locatingAssetLocation,
       setAssetLocation,
     } = this.props
-    const { longitude, latitude, zoom, pitch, bearing } = mapViewport.toJS()
+    const { longitude, latitude, zoom, pitch, bearing, transitionDuration } = mapViewport.toJS()
     const baseMapStyle = {
       dark: DARK_MAP_STYLE,
       // streets: STREETS_MAP_STYLE,
@@ -59,6 +79,8 @@ class AssetMap extends PureComponent {
         bearing={bearing}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
         onViewportChange={this.updateViewport}
+        transitionDuration={transitionDuration}
+        transitionInterpolator={new FlyToInterpolator()}
       >
         <AssetMapMarker
           color={FOCUSING_COLOR}
