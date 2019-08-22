@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import { fromJS } from 'immutable'
 import ReactMapGL, { NavigationControl, FlyToInterpolator } from 'react-map-gl'
 import { withStyles } from '@material-ui/core/styles'
 import AssetMapMarker from './AssetMapMarker'
@@ -23,7 +24,17 @@ const styles = theme => ({
 
 class AssetMap extends PureComponent {
 
+  constructor(props) {
+    super(props)
+    this.mapRef = React.createRef()
+  }
+
+  componentDidMount() {
+    this.map = this.mapRef.getMap()
+  }
+
   updateViewport = viewport => {
+    const bounds = this.map !== undefined ? fromJS(this.map.getBounds().toArray()) :  undefined
     const {
       longitude,
       latitude,
@@ -46,6 +57,7 @@ class AssetMap extends PureComponent {
       altitude,
       width,
       height,
+      bounds,
     })
   }
 
@@ -77,6 +89,7 @@ class AssetMap extends PureComponent {
         zoom={zoom}
         pitch={pitch}
         bearing={bearing}
+        ref={ map => this.mapRef = map }
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
         onViewportChange={this.updateViewport}
         transitionDuration={transitionDuration}

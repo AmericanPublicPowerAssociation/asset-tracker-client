@@ -27,6 +27,8 @@ import {
   RESET_ASSETS_KIT,
   SET_FOCUSING_ASSET,
 } from '../constants'
+import { getMapViewport } from '../selectors'
+
 
 const reduceHorizontally = combineReducers({
   app,
@@ -76,21 +78,28 @@ const reduceVertically = (state, action) => {
       const { id } = action.payload
       const assetById = state.get('assetById')
       const focusingAsset = assetById.get(id)
-      const coord = focusingAsset.get('location')
+      const [longitude, latitude] = focusingAsset.get('location', [])
       const typeId = focusingAsset.get('typeId')
-      if (coord !== undefined ) {
-        // Center mapViewport on focusingAsset when coordinate is available
-        state = state.mergeDeep({
-          mapViewport: {
-            longitude: coord.get(0),
-            latitude: coord.get(1),
-            transitionDuration: 1000,
+      const bounds = getMapViewport(state).get('bounds') 
+      console.log(bounds)
+      window.bounds = bounds
+      let mapViewport = {}
+      if ( bounds !== undefined  && longitude !== undefined) {
+        const sw_bounds = bounds.get(0)
+        const ne_bounds = bounds.get(1)
+        const isInBounds = longitude >= sw_bounds.get(0) && 
+                           longitude <= ne_bounds.get(0) && 
+                           latitude >= sw_bounds.get(1) && 
+                           latitude <= ne_bounds.get(1)
+          if (!isInBounds) {
+            mapViewport = { longitude, latitude, transitionDuration: 1000 }
           }
-        })
       }
       return state.mergeDeep({
         // Ensure that focusingAssetType is visible
         assetFilterKeysByAttribute: {typeId: [typeId[0]]},
+        // Center mapViewport on focusingAsset when coordinate is available
+        mapViewport
       }).merge({
         trackingAsset: focusingAsset,
       })
