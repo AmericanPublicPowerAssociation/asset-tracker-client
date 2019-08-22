@@ -57,15 +57,17 @@ const reduceVertically = (state, action) => {
   switch (action.type) {
     case RESET_ASSETS_KIT: {
       const boundingBox = action.payload.get('boundingBox').toJS()
+      if (!boundingBox.length) {
+        return state
+      }
       const mapViewport = state.get('mapViewport').toJS()
       const {
         longitude,
         latitude,
         zoom,
-      } = new WebMercatorViewport(mapViewport).fitBounds(boundingBox, {
-        padding: 24,
-        offset: [0, 0],
-      })
+      } = new WebMercatorViewport(
+        mapViewport,
+      ).fitBounds(boundingBox)
       return state.mergeDeep({
         mapViewport: {
           longitude,
@@ -75,34 +77,38 @@ const reduceVertically = (state, action) => {
       })
     }
     case SET_FOCUSING_ASSET: {
+      const mergingPatch = {}
+      const settingPatch = {}
+
       const { id } = action.payload
       const assetById = state.get('assetById')
       const focusingAsset = assetById.get(id)
-      const [longitude, latitude] = focusingAsset.get('location', [])
+      const focusingAssetLocation = focusingAsset.get('location')
       const typeId = focusingAsset.get('typeId')
+
+      // Ensure that focusingAssetType is visible
+      mergingPatch['assetFilterKeysByAttribute'] = {typeId: [typeId[0]]}
+      // Center mapViewport on focusingAsset
       const bounds = getMapViewport(state).get('bounds') 
-      console.log(bounds)
-      window.bounds = bounds
-      let mapViewport = {}
-      if ( bounds !== undefined  && longitude !== undefined) {
+      if (focusingAssetLocation && bounds !== undefined) {
+        const [longitude, latitude] = focusingAssetLocation
         const sw_bounds = bounds.get(0)
         const ne_bounds = bounds.get(1)
         const isInBounds = longitude >= sw_bounds.get(0) && 
                            longitude <= ne_bounds.get(0) && 
                            latitude >= sw_bounds.get(1) && 
                            latitude <= ne_bounds.get(1)
-          if (!isInBounds) {
-            mapViewport = { longitude, latitude, transitionDuration: 1000 }
-          }
+        if (!isInBounds) {
+          mergingPatch['mapViewport'] = {
+          longitude,
+          latitude,
+          transitionDuration: 1000,}
+        }
       }
-      return state.mergeDeep({
-        // Ensure that focusingAssetType is visible
-        assetFilterKeysByAttribute: {typeId: [typeId[0]]},
-        // Center mapViewport on focusingAsset when coordinate is available
-        mapViewport
-      }).merge({
-        trackingAsset: focusingAsset,
-      })
+      // Store a reference copy to track changes
+      settingPatch['trackingAsset'] = focusingAsset
+
+      return state.mergeDeep(mergingPatch).merge(settingPatch)
     }
     default: {
       return state
