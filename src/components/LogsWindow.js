@@ -13,6 +13,7 @@ const styles = theme => ({
     height: '100%',
   },
   card: {
+    //width: theme.spacing(32),
   },
   title: {
     fontSize: 24,
