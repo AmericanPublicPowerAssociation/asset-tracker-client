@@ -29,12 +29,12 @@ import {
   refreshAssets,
 } from './actions'
 import {
-    ADD_ASSET,
-    ADD_ASSET_RELATION,
-    CHANGE_ASSET,
-    DROP_ASSET_RELATION,
-    REFRESH_ASSETS_KIT,
-    UPLOAD_ASSETS_CSV_FILE,
+  ADD_ASSET,
+  ADD_ASSET_RELATION,
+  CHANGE_ASSET,
+  DROP_ASSET_RELATION,
+  REFRESH_ASSETS_KIT,
+  UPLOAD_ASSETS_CSV_FILE,
 } from './constants'
 import {
   fetchSafely,
@@ -74,9 +74,9 @@ function* watchAddAsset() {
   })
 }
 
-function* watchUploadFileAssets() {
-    yield takeEvery(UPLOAD_ASSETS_CSV_FILE, function* (action) {
-        console.log(action.payload);
+
+function* watchUploadAssetsCsv() {
+    yield takeEvery(UPLOAD_ASSETS_CSV, function* (action) {
         var data = new FormData()
         data.append('file', action.payload);
         yield fetchSafely('/assets/', {
