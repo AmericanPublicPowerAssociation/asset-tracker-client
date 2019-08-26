@@ -28,6 +28,8 @@ import {
   RESET_ASSETS_KIT,
   SET_FOCUSING_ASSET,
 } from '../constants'
+import { getMapViewport } from '../selectors'
+
 
 
 const reduceHorizontally = combineReducers({
@@ -90,12 +92,20 @@ const reduceVertically = (state, action) => {
       // Ensure that focusingAssetType is visible
       mergingPatch['assetFilterKeysByAttribute'] = {typeId: [typeId[0]]}
       // Center mapViewport on focusingAsset
-      if (focusingAssetLocation) {
+      const bounds = getMapViewport(state).get('bounds') 
+      if (focusingAssetLocation && bounds !== undefined) {
         const [longitude, latitude] = focusingAssetLocation
-        mergingPatch['mapViewport'] = {
+        const sw_bounds = bounds.get(0)
+        const ne_bounds = bounds.get(1)
+        const isInBounds = longitude >= sw_bounds.get(0) && 
+                           longitude <= ne_bounds.get(0) && 
+                           latitude >= sw_bounds.get(1) && 
+                           latitude <= ne_bounds.get(1)
+        if (!isInBounds) {
+          mergingPatch['mapViewport'] = {
           longitude,
           latitude,
-          transitionDuration: 1000,
+          transitionDuration: 1000,}
         }
       }
       // Store a reference copy to track changes
