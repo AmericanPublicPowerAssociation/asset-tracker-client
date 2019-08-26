@@ -7,7 +7,7 @@ import {
 import {
   getAddingAsset,
 } from '../selectors'
-import AssetUploadFileDialog from "../components/AssetUploadFileDialog";
+import AssetUploadFileDialog from '../components/AssetUploadFileDialog';
 
 
 const mapStateToProps = state => ({

@@ -37,6 +37,8 @@ import {
   REFRESH_ASSETS_KIT,
   REFRESH_ASSETS_LOGS,
   UPLOAD_ASSETS_CSV,
+  UPLOAD_ASSETS_CSV_FILE,
+  DOWNLOAD_ASSETS_CSV_FILE,
 } from './constants'
 import {
   fetchSafely,
@@ -87,6 +89,8 @@ function* watchAddAsset() {
   })
 }
 
+// function* watchUploadFileAssets() {
+//    yield takeEvery(UPLOAD_ASSETS_CSV_FILE, function* (action) {
 
 function* watchUploadAssetsCsv() {
     yield takeEvery(UPLOAD_ASSETS_CSV, function* (action) {
@@ -108,7 +112,11 @@ function* watchUploadAssetsCsv() {
     })
 }
 
-
+function* watchDownloadFileAssets() {
+    yield takeEvery(DOWNLOAD_ASSETS_CSV_FILE, function* (action) {
+      window.location = '/assets.csv';
+    })
+}
 
 function* watchChangeAsset() {
   yield takeEvery(CHANGE_ASSET, function* (action) {
@@ -176,7 +184,9 @@ export default function* () {
     watchRefreshAssetsKit(),
     watchRefreshAssetsLogs(),
     watchAddAsset(),
-    watchUploadAssetsCsv(),
+    watchUploadFileAssets(),
+    watchDownloadFileAssets(),
+    // watchUploadAssetsCsv(),
     watchChangeAsset(),
     watchAddAssetRelation(),
     watchDropAssetRelation(),
