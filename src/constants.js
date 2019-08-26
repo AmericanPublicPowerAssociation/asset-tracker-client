@@ -19,6 +19,7 @@ export const LOG_ERROR = 'LOG_ERROR'
 
 
 export const REFRESH_ASSETS_KIT = 'REFRESH_ASSETS_KIT'
+export const REFRESH_ASSETS_LOGS = 'REFRESH_ASSETS_LOGS'
 export const ADD_ASSET = 'ADD_ASSET'
 export const CHANGE_ASSET = 'CHANGE_ASSET'
 
@@ -28,6 +29,7 @@ export const DROP_ASSET_RELATION = 'DROP_ASSET_RELATION'
 
 
 export const RESET_ASSETS_KIT = 'RESET_ASSETS_KIT'
+export const RESET_ASSETS_LOGS = 'RESET_ASSETS_LOGS'
 export const SET_ASSETS = 'SET_ASSETS'
 
 export const SET_ASSET = 'SET_ASSET'
