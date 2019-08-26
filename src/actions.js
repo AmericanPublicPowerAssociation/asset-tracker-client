@@ -6,6 +6,7 @@ import {
   CLOSE_INFORMATION_DRAWER,
   CLOSE_NAVIGATION_DRAWER,
   CLOSE_ASSETS_UPLOAD_DIALOG,
+  UPLOAD_ASSETS_CSV,
   UPLOAD_ASSETS_CSV_FILE,
   DOWNLOAD_ASSETS_CSV_FILE,
   DROP_ASSET_RELATION,
@@ -19,10 +20,10 @@ import {
   OPEN_INFORMATION_DRAWER,
   OPEN_NAVIGATION_DRAWER,
   OPEN_ASSETS_UPLOAD_DIALOG,
-  REFRESH_ASSETS,
-  REFRESH_ASSET_TYPES,
-  RESET_ASSETS,
-  RESET_ASSET_TYPES,
+  REFRESH_ASSETS_KIT,
+  REFRESH_ASSETS_LOGS,
+  RESET_ASSETS_KIT,
+  RESET_ASSETS_LOGS,
   SET_ADDING_ASSET_ERRORS,
   SET_ADDING_ASSET_VALUE,
   SET_APP_VALUE,
@@ -48,10 +49,10 @@ export const logError = payload => ({
   payload, type: LOG_ERROR})
 
 
-export const refreshAssetTypes = payload => ({
-  payload, type: REFRESH_ASSET_TYPES})
-export const refreshAssets = payload => ({
-  payload, type: REFRESH_ASSETS})
+export const refreshAssetsKit = payload => ({
+  payload, type: REFRESH_ASSETS_KIT})
+export const refreshAssetsLogs = payload => ({
+  payload, type: REFRESH_ASSETS_LOGS})
 export const addAsset = payload => ({
   payload, type: ADD_ASSET})
 export const changeAsset = payload => ({
@@ -64,10 +65,10 @@ export const dropAssetRelation = payload => ({
   payload, type: DROP_ASSET_RELATION})
 
 
-export const resetAssetTypes = payload => ({
-  payload, type: RESET_ASSET_TYPES})
-export const resetAssets = payload => ({
-  payload, type: RESET_ASSETS})
+export const resetAssetsKit = payload => ({
+  payload, type: RESET_ASSETS_KIT})
+export const resetAssetsLogs = payload => ({
+  payload, type: RESET_ASSETS_LOGS})
 export const setAssets = payload => ({
   payload, type: SET_ASSETS})
 export const setAsset = payload => ({
@@ -136,6 +137,7 @@ export const closeAssetsUploadDialog = payload => ({
   payload, type: CLOSE_ASSETS_UPLOAD_DIALOG})
 export const uploadAssetsCSVFile = payload => ({
   payload, type: UPLOAD_ASSETS_CSV_FILE});
+//  payload, type: UPLOAD_ASSETS_CSV});
 export const downloadAssetsUploadDialog = payload => ({
   payload, type: DOWNLOAD_ASSETS_CSV_FILE});
 export const setAssetCSVFile = payload => ({

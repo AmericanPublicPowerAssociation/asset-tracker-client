@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
-import ReactMapGL, { NavigationControl } from 'react-map-gl'
+import { fromJS } from 'immutable'
+import ReactMapGL, { NavigationControl, FlyToInterpolator } from 'react-map-gl'
 import { withStyles } from '@material-ui/core/styles'
 import AssetMapMarker from './AssetMapMarker'
 import {
@@ -23,10 +24,41 @@ const styles = theme => ({
 
 class AssetMap extends PureComponent {
 
+  constructor(props) {
+    super(props)
+    this.mapRef = React.createRef()
+  }
+
+  componentDidMount() {
+    this.map = this.mapRef.getMap()
+  }
+
   updateViewport = viewport => {
-    const { longitude, latitude, zoom, pitch, bearing } = viewport
-    const { setMapViewport } = this.props
-    setMapViewport({longitude, latitude, zoom, pitch, bearing})
+    const bounds = this.map !== undefined ? fromJS(this.map.getBounds().toArray()) :  undefined
+    const {
+      longitude,
+      latitude,
+      zoom,
+      pitch,
+      bearing,
+      altitude,
+      width,
+      height,
+    } = viewport
+    const {
+      setMapViewport,
+    } = this.props
+    setMapViewport({
+      longitude,
+      latitude,
+      zoom,
+      pitch,
+      bearing,
+      altitude,
+      width,
+      height,
+      bounds,
+    })
   }
 
   render() {
@@ -41,7 +73,7 @@ class AssetMap extends PureComponent {
       locatingAssetLocation,
       setAssetLocation,
     } = this.props
-    const { longitude, latitude, zoom, pitch, bearing } = mapViewport.toJS()
+    const { longitude, latitude, zoom, pitch, bearing, transitionDuration } = mapViewport.toJS()
     const baseMapStyle = {
       dark: DARK_MAP_STYLE,
       // streets: STREETS_MAP_STYLE,
@@ -57,8 +89,11 @@ class AssetMap extends PureComponent {
         zoom={zoom}
         pitch={pitch}
         bearing={bearing}
+        ref={ map => this.mapRef = map }
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
         onViewportChange={this.updateViewport}
+        transitionDuration={transitionDuration}
+        transitionInterpolator={new FlyToInterpolator()}
       >
         <AssetMapMarker
           color={FOCUSING_COLOR}

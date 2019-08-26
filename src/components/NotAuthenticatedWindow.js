@@ -18,6 +18,12 @@ const styles = theme => ({
       display: 'none',
     },
   },
+  button: {
+    width: '200px',
+    marginTop: '10%',
+    fontSize: '30px',
+    padding: '10px 0px',
+  },
 })
 
 class NotAuthenticatedWindow extends PureComponent {
@@ -48,10 +54,9 @@ class NotAuthenticatedWindow extends PureComponent {
               Asset Tracker is a service provided by the <a href='//www.publicpower.org' target='_blank' rel='noopener noreferrer'>American Public Power Association</a> to help utilities extend the lifetime of their assets and provide reliable power to their customers.
             </Typography>
           </Grid>
-
-          <Grid item>
-            <Button component='a' href={authUrl} variant='contained' color='primary' size='large'>
-              Sign In
+          <Grid item md={6} xs={9}>
+            <Button component='a' variant='contained' href={authUrl} color='primary' className={classes.button}>
+              Sign in
             </Button>
           </Grid>
 

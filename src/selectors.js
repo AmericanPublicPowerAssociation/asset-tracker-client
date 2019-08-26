@@ -43,6 +43,8 @@ export const getMapViewport = state => state.get(
   'mapViewport')
 export const getBaseMapStyleName = state => state.get(
   'baseMapStyleName')
+export const getAssetsLogs = state => state.get(
+  'assetsLogs')
 
 
 export const getValueMatchingAssets = createSelector([

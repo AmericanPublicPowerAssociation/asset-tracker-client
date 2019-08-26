@@ -15,27 +15,30 @@ import {
   watchRefreshVulnerableAssets,
 } from 'asset-vulnerability-report'
 import {
+  closeAssetsUploadDialog,
   excludeAssetRelation,
   includeAssetRelation,
-  resetAssetTypes,
-  resetAssets,
+  refreshAssetsKit,
+  resetAssetsKit,
+  resetAssetsLogs,
+  setAddingAssetCSVFileErrors,
   setAddingAssetErrors,
   setAddingAssetValue,
   setAsset,
   setAssetErrors,
   setAssets,
-  setAddingAssetCSVFileErrors,
   setFocusingAsset,
-  closeAssetsUploadDialog,
-  refreshAssets,
 } from './actions'
 import {
-    ADD_ASSET,
-    ADD_ASSET_RELATION,
-    CHANGE_ASSET,
-    DROP_ASSET_RELATION,
-    REFRESH_ASSETS,
-    REFRESH_ASSET_TYPES, UPLOAD_ASSETS_CSV_FILE, DOWNLOAD_ASSETS_CSV_FILE,
+  ADD_ASSET,
+  ADD_ASSET_RELATION,
+  CHANGE_ASSET,
+  DROP_ASSET_RELATION,
+  REFRESH_ASSETS_KIT,
+  REFRESH_ASSETS_LOGS,
+  UPLOAD_ASSETS_CSV,
+  UPLOAD_ASSETS_CSV_FILE,
+  DOWNLOAD_ASSETS_CSV_FILE,
 } from './constants'
 import {
   fetchSafely,
@@ -45,24 +48,24 @@ import {
 } from './routines'
 
 
-function* watchRefreshAssetTypes() {
-  yield takeLatest(REFRESH_ASSET_TYPES, function* () {
-    yield fetchSafely('/assetTypes.json', {}, {
-      on200: function* (assetTypes) {
-        yield put(resetAssetTypes(assetTypes))
+function* watchRefreshAssetsKit() {
+  yield takeLatest(REFRESH_ASSETS_KIT, function* () {
+    yield fetchSafely('/assetsKit.json', {}, {
+      on200: function* (assetsKit) {
+        yield put(resetAssetsKit(assetsKit))
       },
-    })
+    }) 
   })
 }
 
 
-function* watchRefreshAssets() {
-  yield takeLatest(REFRESH_ASSETS, function* () {
-    yield fetchSafely('/assets.json', {}, {
-      on200: function* (assets) {
-        yield put(resetAssets(assets))
+function* watchRefreshAssetsLogs() {
+  yield takeLatest(REFRESH_ASSETS_LOGS, function* () {
+    yield fetchSafely('/assetsLogs.json', {}, {
+      on200: function* (assetsLogs) {
+        yield put(resetAssetsLogs(assetsLogs))
       },
-    })
+    }) 
   })
 }
 
@@ -86,8 +89,11 @@ function* watchAddAsset() {
   })
 }
 
-function* watchUploadFileAssets() {
-    yield takeEvery(UPLOAD_ASSETS_CSV_FILE, function* (action) {
+// function* watchUploadFileAssets() {
+//    yield takeEvery(UPLOAD_ASSETS_CSV_FILE, function* (action) {
+
+function* watchUploadAssetsCsv() {
+    yield takeEvery(UPLOAD_ASSETS_CSV, function* (action) {
         var data = new FormData()
         data.append('file', action.payload);
         yield fetchSafely('/assets/', {
@@ -96,7 +102,7 @@ function* watchUploadFileAssets() {
         }, {
             on200: function* (asset) {
               yield put(closeAssetsUploadDialog())
-              yield put(refreshAssets())
+              yield put(refreshAssetsKit())
             },
             on400: function* (errors) {
                 yield put(closeAssetsUploadDialog())
@@ -175,11 +181,12 @@ function* watchDropAssetRelation() {
 export default function* () {
   yield all([
     watchRefreshAuth(),
-    watchRefreshAssetTypes(),
-    watchRefreshAssets(),
+    watchRefreshAssetsKit(),
+    watchRefreshAssetsLogs(),
     watchAddAsset(),
     watchUploadFileAssets(),
     watchDownloadFileAssets(),
+    // watchUploadAssetsCsv(),
     watchChangeAsset(),
     watchAddAssetRelation(),
     watchDropAssetRelation(),
