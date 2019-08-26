@@ -15,6 +15,7 @@ import AssetsLogsWindow from '../containers/AssetsLogsWindow'
 import CircuitsWindow from './CircuitsWindow'
 import ReportsWindow from './ReportsWindow'
 import SettingsWindow from '../containers/SettingsWindow'
+import SummaryWindow from '../containers/SummaryWindow'
 import NotFoundWindow from './NotFoundWindow'
 import {
   CONTENT_PADDING,
@@ -100,6 +101,8 @@ class Main extends Component {
             component={VulnerabilitiesWindow} />
           <ProtectedRoute exact path='/settings'
             component={SettingsWindow} />
+          <ProtectedRoute exact path='/summary'
+            component={SummaryWindow} />
           <Route
             component={NotFoundWindow} />
         </Switch>
