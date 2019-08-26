@@ -28,6 +28,7 @@ import {
   SET_ASSET_LOCATION,
   SET_FOCUSING_ASSET,
   SET_LOCATING_ASSET,
+  TOGGLE_SELECTED_ASSET,
   SET_MAP_VIEWPORT,
   SET_RELATING_ASSET,
   TOGGLE_ASSET_FILTER_KEY,
@@ -107,6 +108,8 @@ export const setRelatingAsset = payload => ({
   payload, type: SET_RELATING_ASSET})
 export const setLocatingAsset = payload => ({
   payload, type: SET_LOCATING_ASSET})
+export const toggleSelectedAsset = payload => ({
+  payload, type: TOGGLE_SELECTED_ASSET})
 
 
 export const openAssetAddDialog = payload => ({

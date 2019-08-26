@@ -23,6 +23,7 @@ import mapViewport from './mapViewport'
 import baseMapStyleName from './baseMapStyleName'
 import locatingAssetId from './locatingAssetId'
 import assetTypeById from './assetTypeById'
+import selectedAssetIds from './selectedAssetIds'
 import {
   RESET_ASSETS_KIT,
   SET_FOCUSING_ASSET,
@@ -50,6 +51,7 @@ const reduceHorizontally = combineReducers({
   baseMapStyleName,
   locatingAssetId,
   assetTypeById,
+  selectedAssetIds,
 })
 
 
@@ -73,6 +75,7 @@ const reduceVertically = (state, action) => {
           longitude,
           latitude,
           zoom,
+          bounds: action.payload.get('boundingBox')
         },
       })
     }
@@ -85,10 +88,11 @@ const reduceVertically = (state, action) => {
       const focusingAsset = assetById.get(id)
       const focusingAssetLocation = focusingAsset.get('location')
       const typeId = focusingAsset.get('typeId')
-
+      const selectedAssetIds = state.get('selectedAssetIds')
       // Ensure that focusingAssetType is visible
       mergingPatch['assetFilterKeysByAttribute'] = {typeId: [typeId[0]]}
       // Center mapViewport on focusingAsset
+
       const bounds = getMapViewport(state).get('bounds') 
       if (focusingAssetLocation && bounds !== undefined) {
         const [longitude, latitude] = focusingAssetLocation
@@ -100,9 +104,9 @@ const reduceVertically = (state, action) => {
                            latitude <= ne_bounds.get(1)
         if (!isInBounds) {
           mergingPatch['mapViewport'] = {
-          longitude,
-          latitude,
-          transitionDuration: 1000,}
+            longitude,
+            latitude,
+            transitionDuration: 1000,}
         }
       }
       // Store a reference copy to track changes
