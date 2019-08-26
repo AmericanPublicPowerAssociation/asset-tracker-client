@@ -15,19 +15,19 @@ import {
   watchRefreshVulnerableAssets,
 } from 'asset-vulnerability-report'
 import {
+  closeAssetsUploadDialog,
   excludeAssetRelation,
   includeAssetRelation,
+  refreshAssetsKit,
   resetAssetsKit,
   resetAssetsLogs,
+  setAddingAssetCSVFileErrors,
   setAddingAssetErrors,
   setAddingAssetValue,
   setAsset,
   setAssetErrors,
   setAssets,
-  setAddingAssetCSVFileErrors,
   setFocusingAsset,
-  closeAssetsUploadDialog,
-  refreshAssets,
 } from './actions'
 import {
   ADD_ASSET,
@@ -35,8 +35,8 @@ import {
   CHANGE_ASSET,
   DROP_ASSET_RELATION,
   REFRESH_ASSETS_KIT,
-  UPLOAD_ASSETS_CSV,
   REFRESH_ASSETS_LOGS,
+  UPLOAD_ASSETS_CSV,
 } from './constants'
 import {
   fetchSafely,
@@ -98,7 +98,7 @@ function* watchUploadAssetsCsv() {
         }, {
             on200: function* (asset) {
               yield put(closeAssetsUploadDialog())
-              yield put(refreshAssets())
+              yield put(refreshAssetsKit())
             },
             on400: function* (errors) {
                 yield put(closeAssetsUploadDialog())
