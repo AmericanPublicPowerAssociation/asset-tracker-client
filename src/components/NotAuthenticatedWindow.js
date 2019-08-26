@@ -20,9 +20,13 @@ const styles = theme => ({
   },
   button: {
     width: '200px',
-    marginTop: '10%',
+    margin: '10% 0',
     fontSize: '30px',
     padding: '10px 0px',
+    [theme.breakpoints.down('xs')]: {
+      width: '150px',
+      fontSize: '24px',
+    },
   },
 })
 
@@ -43,20 +47,15 @@ class NotAuthenticatedWindow extends PureComponent {
           alignItems='center'
           spacing={3}
         >
-          <Grid item>
-            <Typography variant='h6' align='center'>
-              Sign In Required
-            </Typography>
-          </Grid>
-
           <Grid item md={6} xs={9}>
             <Typography align='justify'>
               Asset Tracker is a service provided by the <a href='//www.publicpower.org' target='_blank' rel='noopener noreferrer'>American Public Power Association</a> to help utilities extend the lifetime of their assets and provide reliable power to their customers.
             </Typography>
           </Grid>
+
           <Grid item md={6} xs={9}>
             <Button component='a' variant='contained' href={authUrl} color='primary' className={classes.button}>
-              Sign in
+              Sign In
             </Button>
           </Grid>
 

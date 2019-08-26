@@ -37,8 +37,7 @@ import {
   REFRESH_ASSETS_KIT,
   REFRESH_ASSETS_LOGS,
   UPLOAD_ASSETS_CSV,
-  UPLOAD_ASSETS_CSV_FILE,
-  DOWNLOAD_ASSETS_CSV_FILE,
+  DOWNLOAD_ASSETS_CSV,
 } from './constants'
 import {
   fetchSafely,
@@ -89,14 +88,11 @@ function* watchAddAsset() {
   })
 }
 
-// function* watchUploadFileAssets() {
-//    yield takeEvery(UPLOAD_ASSETS_CSV_FILE, function* (action) {
-
 function* watchUploadAssetsCsv() {
     yield takeEvery(UPLOAD_ASSETS_CSV, function* (action) {
         var data = new FormData()
         data.append('file', action.payload);
-        yield fetchSafely('/assets/', {
+        yield fetchSafely('/assets.csv', {
             method: 'POST',
             body: data,
         }, {
@@ -113,9 +109,9 @@ function* watchUploadAssetsCsv() {
 }
 
 function* watchDownloadFileAssets() {
-    yield takeEvery(DOWNLOAD_ASSETS_CSV_FILE, function* (action) {
-      window.location = '/assets.csv';
-    })
+  yield takeEvery(DOWNLOAD_ASSETS_CSV, function (action) {
+    window.location = '/assets.csv'
+  })
 }
 
 function* watchChangeAsset() {
@@ -184,9 +180,8 @@ export default function* () {
     watchRefreshAssetsKit(),
     watchRefreshAssetsLogs(),
     watchAddAsset(),
-    watchUploadFileAssets(),
+    watchUploadAssetsCsv(),
     watchDownloadFileAssets(),
-    // watchUploadAssetsCsv(),
     watchChangeAsset(),
     watchAddAssetRelation(),
     watchDropAssetRelation(),
