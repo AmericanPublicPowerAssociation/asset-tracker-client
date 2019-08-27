@@ -111,9 +111,6 @@ class Main extends Component {
   }
 
 }
-/*
- *
-*/
 
 
 export default withStyles(styles)(Main)

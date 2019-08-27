@@ -45,7 +45,10 @@ export function scrollToFocusingAsset(component) {
 
 export function getFeatureSize(asset, assetTypeById) {
   const typeId = asset.get('typeId')
-  const assetType = assetTypeById.get(typeId)
+
+  // const assetType = assetTypeById.get(typeId)
+  const assetType = assetTypeById.get(typeId[0])
+
   const sizeAttribute = assetType.get('sizeAttribute')
   const sizeByValue = assetType.get('sizeByValue', Map())
   const boundaryValues = sizeByValue.keySeq().sort()

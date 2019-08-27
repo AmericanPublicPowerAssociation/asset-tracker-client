@@ -19,13 +19,13 @@ const styles = theme => ({
     },
   },
   button: {
-    width: '200px',
-    margin: '10% 0',
     fontSize: '30px',
-    padding: '10px 0px',
+    width: '200px',
+    margin: '10px 0',
+    padding: '10px 0',
     [theme.breakpoints.down('xs')]: {
-      width: '150px',
       fontSize: '24px',
+      width: '150px',
     },
   },
 })

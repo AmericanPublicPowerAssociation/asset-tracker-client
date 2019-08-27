@@ -35,6 +35,7 @@ import { getMapViewport } from '../selectors'
 const reduceHorizontally = combineReducers({
   app,
   auth,
+  assetTypeById,
   sortedAssetIds,
   assetById,
   focusingAssetId,
@@ -51,7 +52,6 @@ const reduceHorizontally = combineReducers({
   mapViewport,
   baseMapStyleName,
   locatingAssetId,
-  assetTypeById,
   assetsLogs,
 })
 

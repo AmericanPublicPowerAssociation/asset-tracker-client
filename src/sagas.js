@@ -101,8 +101,8 @@ function* watchUploadAssetsCsv() {
               yield put(refreshAssetsKit())
             },
             on400: function* (errors) {
-                yield put(closeAssetsUploadDialog())
-                yield put(setAddingAssetCSVFileErrors(errors))
+              yield put(closeAssetsUploadDialog())
+              yield put(setAddingAssetCSVFileErrors(errors))
             },
         })
     })

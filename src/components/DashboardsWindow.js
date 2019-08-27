@@ -4,10 +4,8 @@ import {
   VulnerabilitiesCard,
 } from 'asset-vulnerability-report'
 import { withStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import CardActionArea from '@material-ui/core/CardActionArea'
-import CardContent from '@material-ui/core/CardContent'
 import Grid from '@material-ui/core/Grid'
 import Link from '@material-ui/core/Link'
 import Typography from '@material-ui/core/Typography'
@@ -40,7 +38,55 @@ class DashboardsWindow extends PureComponent {
         <Grid container spacing={3}>
 
           <Grid item xs>
+            <Link
+              underline='none'
+              component={RouterLink}
+              to=''
+            >
+              <Card className={classes.card}>
+                <CardActionArea className={classes.cardActionArea}>
+                  <Typography className={classes.title} align='center'>
+                    Tasks
+                  </Typography>
+                </CardActionArea>
+              </Card>
+            </Link>
+          </Grid>
+
+          <Grid item xs>
             <VulnerabilitiesCard />
+          </Grid>
+
+          <Grid item xs>
+            <Link
+              underline='none'
+              component={RouterLink}
+              to='/reports/benchmarks'
+            >
+              <Card className={classes.card}>
+                <CardActionArea className={classes.cardActionArea}>
+                  <Typography className={classes.title} align='center'>
+                    Benchmarks
+                  </Typography>
+                </CardActionArea>
+              </Card>
+            </Link>
+          </Grid>
+
+          <Grid item xs>
+            <Link
+              underline='none'
+              component={RouterLink}
+              to='/logs/assets'
+            >
+              <Card className={classes.card}>
+                <CardActionArea className={classes.cardActionArea}>
+                  <Typography className={classes.title} align='center'>
+                    Maintenance Logs
+                  </Typography>
+                </CardActionArea>
+              </Card>
+            </Link>
           </Grid>
 
           <Grid item xs>
@@ -52,39 +98,7 @@ class DashboardsWindow extends PureComponent {
               <Card className={classes.card}>
                 <CardActionArea className={classes.cardActionArea}>
                   <Typography className={classes.title} align='center'>
-                  High prority Requests
-                  </Typography>
-                </CardActionArea>
-              </Card>
-            </Link>
-          </Grid>
-
-          <Grid item xs>
-            <Link
-              underline='none'
-              component={RouterLink}
-              to='/logs/assets'
-            >
-              <Card className={classes.card}>
-                <CardActionArea className={classes.cardActionArea}>
-                  <Typography className={classes.title} align='center'>
-                  High Security risks Assets
-                  </Typography>
-                </CardActionArea>
-              </Card>
-            </Link>
-          </Grid>
-
-          <Grid item xs>
-            <Link
-              underline='none'
-              component={RouterLink}
-              to='/logs/assets'
-            >
-              <Card className={classes.card}>
-                <CardActionArea className={classes.cardActionArea}>
-                  <Typography className={classes.title} align='center'>
-                  Important notification
+                    Audit Trails
                   </Typography>
                 </CardActionArea>
               </Card>
@@ -92,24 +106,7 @@ class DashboardsWindow extends PureComponent {
           </Grid>
 
         </Grid>
-    
-        <Grid container spacing={16}>
-          <Grid item  xs={6} md={2} xl={2}>
-            <VulnerabilitiesCard />
-          </Grid>
-          <Grid item  xs={6} md={2} xl={2}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6" component="h6">
-                  Summary
-                  </Typography>
-                <Button
-                  component={Link}
-                  to="/summary">View</Button>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
+
       </>
     )
   }
