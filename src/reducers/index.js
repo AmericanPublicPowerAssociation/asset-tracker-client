@@ -87,14 +87,43 @@ const reduceVertically = (state, action) => {
       const assetById = state.get('assetById')
       const focusingAsset = assetById.get(id)
       const focusingAssetLocation = focusingAsset.get('location')
+      const focusingAssetId = focusingAsset.get('id')
       const typeId = focusingAsset.get('typeId')
       const selectedAssetIds = state.get('selectedAssetIds')
+      const mapViewport = state.get('mapViewport').toJS()
       // Ensure that focusingAssetType is visible
       mergingPatch['assetFilterKeysByAttribute'] = {typeId: [typeId[0]]}
       // Center mapViewport on focusingAsset
-
       const bounds = getMapViewport(state).get('bounds') 
-      if (focusingAssetLocation && bounds !== undefined) {
+
+      if ((selectedAssetIds.size === 1 && !selectedAssetIds.has(focusingAssetId)) || selectedAssetIds.size > 1) {
+        const computeBounds = selectedAssetIds.add(focusingAssetId).reduce( (bounds, currentId) => {
+          const location = assetById.get(currentId).get('location')
+          const curLon= location.get(0)
+          const curLat = location.get(1)
+          if (location) {
+            if (bounds[0][0] > curLon) { bounds[0][0] = curLon }
+            if (bounds[0][1] > curLat) { bounds[0][1] = curLat }
+            if (bounds[1][0] < curLon) { bounds[1][0] = curLon }
+            if (bounds[1][1] < curLat) { bounds[1][1] = curLat }
+          }
+          return bounds 
+        }, [[Infinity, Infinity], [-Infinity, -Infinity]] )  
+
+        const {
+          longitude,
+          latitude,
+          zoom,
+        } = new WebMercatorViewport(
+          mapViewport,
+        ).fitBounds(computeBounds)
+        mergingPatch['mapViewport'] = {
+          longitude,
+          latitude,
+          zoom
+        }
+      }
+      else if (focusingAssetLocation && bounds !== undefined) {
         const [longitude, latitude] = focusingAssetLocation
         const sw_bounds = bounds.get(0)
         const ne_bounds = bounds.get(1)
