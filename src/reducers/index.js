@@ -96,12 +96,12 @@ const reduceVertically = (state, action) => {
       // Center mapViewport on focusingAsset
       const bounds = getMapViewport(state).get('bounds') 
 
-      if ((selectedAssetIds.size === 1 && !selectedAssetIds.has(focusingAssetId)) || selectedAssetIds.size > 1) {
+      if (selectedAssetIds.size > 1) {
         const computeBounds = selectedAssetIds.add(focusingAssetId).reduce( (bounds, currentId) => {
           const location = assetById.get(currentId).get('location')
-          const curLon= location.get(0)
-          const curLat = location.get(1)
           if (location) {
+            const curLon= location.get(0)
+            const curLat = location.get(1)
             if (bounds[0][0] > curLon) { bounds[0][0] = curLon }
             if (bounds[0][1] > curLat) { bounds[0][1] = curLat }
             if (bounds[1][0] < curLon) { bounds[1][0] = curLon }

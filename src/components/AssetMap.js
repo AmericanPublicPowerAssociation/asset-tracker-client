@@ -72,6 +72,8 @@ class AssetMap extends PureComponent {
       locatingAssetId,
       locatingAssetLocation,
       setAssetLocation,
+      assetById,
+      selectedAssetIds
     } = this.props
     const { longitude, latitude, zoom, pitch, bearing, transitionDuration } = mapViewport.toJS()
     const baseMapStyle = {
@@ -100,6 +102,19 @@ class AssetMap extends PureComponent {
           assetId={focusingAssetId}
           assetLocation={focusingAssetLocation}
         />
+            {
+          selectedAssetIds.reduce( (list, id) => {
+            const curAsset = assetById.get(id)
+            if (curAsset.has('location')) {
+              const curLocation = curAsset.get('location')
+              list.push(<AssetMapMarker color={FOCUSING_COLOR}
+              assetId={id}
+              key={id}
+              assetLocation={curLocation} />)
+            }
+            return list
+          }, []) 
+        }
         <AssetMapMarker
           color={EDITING_COLOR}
           draggable
