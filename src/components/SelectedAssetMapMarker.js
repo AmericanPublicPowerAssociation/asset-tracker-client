@@ -50,6 +50,7 @@ class SelectedAssetMapMarker extends PureComponent {
         break
       case 'm':
         icon = MeterLight
+        offsetLeft = -20
         break
       case 't':
         icon = Transformer
@@ -57,7 +58,7 @@ class SelectedAssetMapMarker extends PureComponent {
       case 'x':
         icon = Switch
         offsetLeft = -25
-        offsetTop = -32
+        offsetTop = -28
         break
       case 'q':
         icon = Power
@@ -71,18 +72,21 @@ class SelectedAssetMapMarker extends PureComponent {
       case 'o':
         icon = StorageLight
         offsetLeft = -25
-        offsetTop = - 45
+        offsetTop = -32
         break
       case 'g':
         icon = GeneratorLight
         offsetLeft = -12
-        offsetTop = -36
+        offsetTop = -32
         break
       case 's':
         icon = Substation
+        offsetLeft = -35
+        offsetTop = -36
         break
       case 'S':
         icon = Station
+        offsetLeft = -25
         break
       default:
         break
