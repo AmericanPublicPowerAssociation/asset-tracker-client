@@ -15,9 +15,13 @@ import {
   watchRefreshVulnerableAssets,
 } from 'asset-vulnerability-report'
 import {
+  closeAssetsUploadDialog,
   excludeAssetRelation,
   includeAssetRelation,
+  refreshAssetsKit,
   resetAssetsKit,
+  resetAssetsLogs,
+  setAddingAssetCSVFileErrors,
   setAddingAssetErrors,
   setAddingAssetValue,
   setAsset,
@@ -31,6 +35,9 @@ import {
   CHANGE_ASSET,
   DROP_ASSET_RELATION,
   REFRESH_ASSETS_KIT,
+  REFRESH_ASSETS_LOGS,
+  UPLOAD_ASSETS_CSV,
+  DOWNLOAD_ASSETS_CSV,
 } from './constants'
 import {
   fetchSafely,
@@ -45,6 +52,17 @@ function* watchRefreshAssetsKit() {
     yield fetchSafely('/assetsKit.json', {}, {
       on200: function* (assetsKit) {
         yield put(resetAssetsKit(assetsKit))
+      },
+    }) 
+  })
+}
+
+
+function* watchRefreshAssetsLogs() {
+  yield takeLatest(REFRESH_ASSETS_LOGS, function* () {
+    yield fetchSafely('/assetsLogs.json', {}, {
+      on200: function* (assetsLogs) {
+        yield put(resetAssetsLogs(assetsLogs))
       },
     }) 
   })
@@ -70,6 +88,31 @@ function* watchAddAsset() {
   })
 }
 
+function* watchUploadAssetsCsv() {
+    yield takeEvery(UPLOAD_ASSETS_CSV, function* (action) {
+        var data = new FormData()
+        data.append('file', action.payload);
+        yield fetchSafely('/assets.csv', {
+            method: 'POST',
+            body: data,
+        }, {
+            on200: function* (asset) {
+              yield put(closeAssetsUploadDialog())
+              yield put(refreshAssetsKit())
+            },
+            on400: function* (errors) {
+              yield put(closeAssetsUploadDialog())
+              yield put(setAddingAssetCSVFileErrors(errors))
+            },
+        })
+    })
+}
+
+function* watchDownloadFileAssets() {
+  yield takeEvery(DOWNLOAD_ASSETS_CSV, function (action) {
+    window.location = '/assets.csv'
+  })
+}
 
 function* watchChangeAsset() {
   yield takeEvery(CHANGE_ASSET, function* (action) {
@@ -135,7 +178,10 @@ export default function* () {
   yield all([
     watchRefreshAuth(),
     watchRefreshAssetsKit(),
+    watchRefreshAssetsLogs(),
     watchAddAsset(),
+    watchUploadAssetsCsv(),
+    watchDownloadFileAssets(),
     watchChangeAsset(),
     watchAddAssetRelation(),
     watchDropAssetRelation(),

@@ -24,6 +24,7 @@ import baseMapStyleName from './baseMapStyleName'
 import locatingAssetId from './locatingAssetId'
 import assetTypeById from './assetTypeById'
 import selectedAssetIds from './selectedAssetIds'
+import assetsLogs from './assetsLogs'
 import {
   RESET_ASSETS_KIT,
   SET_FOCUSING_ASSET,
@@ -31,9 +32,11 @@ import {
 import { getMapViewport } from '../selectors'
 
 
+
 const reduceHorizontally = combineReducers({
   app,
   auth,
+  assetTypeById,
   sortedAssetIds,
   assetById,
   focusingAssetId,
@@ -50,8 +53,8 @@ const reduceHorizontally = combineReducers({
   mapViewport,
   baseMapStyleName,
   locatingAssetId,
-  assetTypeById,
   selectedAssetIds,
+  assetsLogs,
 })
 
 
