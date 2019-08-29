@@ -19,7 +19,7 @@ const morningTheme = createMuiTheme()
 const eveningTheme = createMuiTheme({palette: {type: 'dark'}})
 
 
-class App extends Component {
+class App extends Component {x
 
   componentDidMount() {
     const {
