@@ -81,10 +81,7 @@ class AssetList extends PureComponent {
             <ListItemIcon>
               <Checkbox tabIndex={-1} disableRipple
                 checked={selectedAssetIds.has(assetId)}
-                onClick={ (e)=> {
-                  e.stopPropagation()
-                  toggleSelectedAsset(assetId)
-                }}
+                onClick={ ()=> toggleSelectedAsset(assetId) }
               />
             </ListItemIcon>
             <ListItemText primary={assetName} />
