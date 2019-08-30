@@ -57,9 +57,6 @@ class AssetsLogsWindow extends PureComponent {
       return (
         <Paper className={classes.fullHeight}>
           <Grid container className={classes.fullHeight}>
-            <Grid item className={classes.frame}>
-              <AssetFilter />
-            </Grid>
             <Grid item className={classes.frame} >
               {assetsLogs}
             </Grid>
