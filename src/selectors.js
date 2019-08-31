@@ -45,6 +45,9 @@ export const getBaseMapStyleName = state => state.get(
   'baseMapStyleName')
 export const getAssetsLogs = state => state.get(
   'assetsLogs')
+export const getAssetTasks = state => state.get(
+  'assetTasks'
+)
 
 
 export const getValueMatchingAssets = createSelector([

@@ -32,10 +32,6 @@ class DashboardsWindow extends PureComponent {
     const { classes } = this.props
 
     return (
-      // <>
-      //   <VulnerabilitiesCard />
-      // </>
-      
       <Grid container spacing={3}>
       <Grid item xs>
       <VulnerabilitiesCard />

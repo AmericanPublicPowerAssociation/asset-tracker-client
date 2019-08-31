@@ -112,7 +112,7 @@ const rows = [
 ];
 
 
-class AssetsLogsTable extends PureComponent {
+class AssetTaskTable extends PureComponent {
     
 
     constructor(props) {
@@ -302,7 +302,7 @@ class AssetsLogsTable extends PureComponent {
                     </Typography>
                         ) : (
                                 <Typography variant="h6" id="tableTitle">
-                                    Asset Maintenance Log
+                                    Asset Tasks
                     </Typography>
                             )}
                     </div>
@@ -422,4 +422,4 @@ class AssetsLogsTable extends PureComponent {
 
 
 
-export default withStyles(styles)(AssetsLogsTable)
+export default withStyles(styles)(AssetTaskTable)

@@ -19,6 +19,7 @@ import {
   includeAssetRelation,
   resetAssetsKit,
   resetAssetsLogs,
+  resetAssetTasks,
   setAddingAssetErrors,
   setAddingAssetValue,
   setAsset,
@@ -33,6 +34,7 @@ import {
   DROP_ASSET_RELATION,
   REFRESH_ASSETS_KIT,
   REFRESH_ASSETS_LOGS,
+  REFRESH_ASSET_TASKS,
 } from './constants'
 import {
   fetchSafely,
@@ -63,6 +65,15 @@ function* watchRefreshAssetsLogs() {
   })
 }
 
+function* watchRefreshAssetTasks() {
+  yield takeLatest(REFRESH_ASSET_TASKS, function* () {
+    yield fetchSafely('/tasks.json', {}, {
+      on200: function* (assetTasks) {
+        yield put(resetAssetsLogs(assetTasks))
+      },
+    }) 
+  })
+}
 
 function* watchAddAsset() {
   yield takeEvery(ADD_ASSET, function* (action) {
@@ -149,6 +160,7 @@ export default function* () {
     watchRefreshAuth(),
     watchRefreshAssetsKit(),
     watchRefreshAssetsLogs(),
+    watchRefreshAssetTasks(),
     watchAddAsset(),
     watchChangeAsset(),
     watchAddAssetRelation(),

@@ -12,10 +12,12 @@ import SignOutIcon from '@material-ui/icons/LockOpen'
 import TablesIcon from '@material-ui/icons/ListAlt'
 import MapsIcon from '@material-ui/icons/Map'
 import LogsIcon from '@material-ui/icons/Assignment'
+import ReportsIcon from '@material-ui/icons/Assignment'
 // import CircuitsIcon from '@material-ui/icons/SettingsInputComponent'
 // import ReportsIcon from '@material-ui/icons/Assessment'
 import SettingsIcon from '@material-ui/icons/Settings'
 import ListItemLink from './ListItemLink'
+import AlarmOnIcon from '@material-ui/icons/AlarmOn';
 import {
   NAVIGATION_DRAWER_WIDTH,
   TOOLTIP_DELAY,
@@ -70,13 +72,14 @@ class NavigationDrawer extends PureComponent {
         <List>
         {isUserAuthenticated ?
           <>
-            <ListItemLink to='/' text='Dashboards' icon={<DashboardsIcon />} />
-            <ListItemLink to='/tables' text='Tables' icon={<TablesIcon />} />
+            <ListItemLink to='/' text='Dashboard' icon={<DashboardsIcon />} />
+            <ListItemLink to='/tasks' text='Tasks' icon={<AlarmOnIcon />} />
+            <ListItemLink to='/tables' text='Assets' icon={<TablesIcon />} />
+            <ListItemLink to='/reports' text='Reports' icon={<ReportsIcon />} />  
             <ListItemLink to='/maps' text='Maps' icon={<MapsIcon />} />
             <ListItemLink to='/logs' text='Logs' icon={<LogsIcon />} />
             {/*
             <ListItemLink to='/circuits' text='Circuits' icon={<CircuitsIcon />} />
-            <ListItemLink to='/reports' text='Reports' icon={<ReportsIcon />} />
             */}
             <ListItemLink to='/settings' text='Settings' icon={<SettingsIcon />} />
             <ListItemLink to={authUrl} text='Sign Out' icon={<SignOutIcon />} redirect />

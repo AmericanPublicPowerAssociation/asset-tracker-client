@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
-import AssetsLogsTable from '../components/AssetsLogsTable'
+import AssetTasksTable from '../components/AssetTasksTable'
 
 
 const styles = theme => ({
@@ -19,29 +19,29 @@ const styles = theme => ({
 })
 
 
-class AssetsLogsWindow extends PureComponent {
+class AssetTasksWindow extends PureComponent {
 
   componentDidMount() {
     const {
-      refreshAssetsLogs,
+      refreshAssetTasks,
     } = this.props
-    refreshAssetsLogs()
+    refreshAssetTasks()
   }
 
   render() {
     const {
       classes,
-      assetsLogs,
+      assetsTasks,
     } = this.props
 
       return (
         <Paper className={classes.fullHeight}>
           <Grid container className={classes.fullHeight}>
             <Grid item className={classes.frame} >
-              {assetsLogs}
+              {assetsTasks}
             </Grid>
             <Grid item className={classes.frame}>
-            <AssetsLogsTable/>
+            <AssetTasksTable/>
             </Grid>
           </Grid>
         </Paper>
@@ -50,4 +50,4 @@ class AssetsLogsWindow extends PureComponent {
   }
 
 
-  export default withStyles(styles)(AssetsLogsWindow)
+  export default withStyles(styles)(AssetTasksWindow)
