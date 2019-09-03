@@ -23,12 +23,14 @@ import {
   setAddingAssetErrors,
   setAddingAssetValue,
   setAsset,
+  setTask,
   setAssetErrors,
   setAssets,
   setFocusingAsset,
 } from './actions'
 import {
   ADD_ASSET,
+  ADD_TASK,
   ADD_ASSET_RELATION,
   CHANGE_ASSET,
   DROP_ASSET_RELATION,
@@ -40,7 +42,7 @@ import {
   fetchSafely,
 } from './macros'
 import {
-  rinseAsset,
+  rinseAsset, rinseTask,
 } from './routines'
 
 
@@ -67,9 +69,10 @@ function* watchRefreshAssetsLogs() {
 
 function* watchRefreshAssetTasks() {
   yield takeLatest(REFRESH_ASSET_TASKS, function* () {
+    console.log('AHAHHAHA')
     yield fetchSafely('/tasks.json', {}, {
       on200: function* (assetTasks) {
-        yield put(resetAssetsLogs(assetTasks))
+        yield put(resetAssetTasks(assetTasks))
       },
     }) 
   })
@@ -93,6 +96,25 @@ function* watchAddAsset() {
     })
   })
 }
+
+// function* watchAddTask() {
+//   yield takeEvery(ADD_TASK, function* (action) {
+//     const payload = rinseTask(action.payload)
+//     yield fetchSafely('/tasks.json', {
+//       method: 'POST',
+//       body: JSON.stringify(payload),
+//     }, {
+//       on200: function* (task) {
+//         yield put(setTask(task))
+//         yield put(setAddingTaskValue({isOpen: false, errors: Map()}))
+//         yield put(setFocusingTask({id: task.get('id')}))
+//       },
+//       on400: function* (errors) {
+//         yield put(setAddingTaskErrors(errors))
+//       },
+//     })
+//   })
+// }
 
 
 function* watchChangeAsset() {
@@ -162,6 +184,7 @@ export default function* () {
     watchRefreshAssetsLogs(),
     watchRefreshAssetTasks(),
     watchAddAsset(),
+    // watchAddTask(),
     watchChangeAsset(),
     watchAddAssetRelation(),
     watchDropAssetRelation(),

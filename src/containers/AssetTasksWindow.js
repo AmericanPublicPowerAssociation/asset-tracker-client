@@ -14,7 +14,9 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
-  refreshAssetTasks: payload => {dispatch(
+  refreshAssetTasks: payload => {
+    console.log('ACTION CALLED!!!')
+    dispatch(
     refreshAssetTasks(payload))},
 })
 

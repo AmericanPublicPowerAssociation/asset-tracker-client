@@ -33,6 +33,8 @@ export const getRelatingAssetKey = state => state.get(
   'relatingAssetKey')
 export const getAddingAsset = state => state.get(
   'addingAsset')
+export const getAddingTask = state => state.get(
+  'addingTask')
 export const getAssetFilterKeysByAttribute = state => state.get(
   'assetFilterKeysByAttribute')
 export const getAssetFilterValueByAttribute = state => state.get(

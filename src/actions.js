@@ -3,6 +3,7 @@ import {
   ADD_ASSET_RELATION,
   CHANGE_ASSET,
   CLOSE_ASSET_ADD_DIALOG,
+  CLOSE_TASK_ADD_DIALOG,
   CLOSE_INFORMATION_DRAWER,
   CLOSE_NAVIGATION_DRAWER,
   DROP_ASSET_RELATION,
@@ -13,6 +14,7 @@ import {
   LOG_ERROR,
   MERGE_ASSET,
   OPEN_ASSET_ADD_DIALOG,
+  OPEN_TASK_ADD_DIALOG,
   OPEN_INFORMATION_DRAWER,
   OPEN_NAVIGATION_DRAWER,
   REFRESH_ASSETS_KIT,
@@ -23,8 +25,10 @@ import {
   RESET_ASSET_TASKS,
   SET_ADDING_ASSET_ERRORS,
   SET_ADDING_ASSET_VALUE,
+  SET_ADDING_TASK_VALUE,
   SET_APP_VALUE,
   SET_ASSET,
+  SET_TASK,
   SET_ASSETS,
   SET_ASSET_ERRORS,
   SET_ASSET_FILTER_KEYS,
@@ -56,6 +60,9 @@ export const refreshAssetTasks = payload => ({
 export const addAsset = payload => ({
   payload, type: ADD_ASSET
 })
+export const addTask = payload => ({
+  payload, type: ADD_ASSET
+})
 export const changeAsset = payload => ({
   payload, type: CHANGE_ASSET
 })
@@ -83,6 +90,9 @@ export const setAssets = payload => ({
 })
 export const setAsset = payload => ({
   payload, type: SET_ASSET
+})
+export const setTask = payload => ({
+  payload, type: SET_TASK
 })
 export const mergeAsset = payload => ({
   payload, type: MERGE_ASSET
@@ -159,8 +169,17 @@ export const openAssetAddDialog = payload => ({
 export const closeAssetAddDialog = payload => ({
   payload, type: CLOSE_ASSET_ADD_DIALOG
 })
+export const openTaskAddDialog = payload => ({
+  payload, type: OPEN_TASK_ADD_DIALOG
+})
+export const closeTaskAddDialog = payload => ({
+  payload, type: CLOSE_TASK_ADD_DIALOG
+})
 export const setAddingAssetValue = payload => ({
   payload, type: SET_ADDING_ASSET_VALUE
+})
+export const setAddingTaskValue = payload => ({
+  payload, type: SET_ADDING_TASK_VALUE
 })
 export const setAddingAssetErrors = payload => ({
   payload, type: SET_ADDING_ASSET_ERRORS

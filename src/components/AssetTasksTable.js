@@ -20,7 +20,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
-
+import TaskAddDialog from './TaskAddDialog'
 
 
 const styles = theme => ({
@@ -113,8 +113,14 @@ const rows = [
 
 
 class AssetTaskTable extends PureComponent {
-    
+    // componentDidMount() {
+    //     const {
+    //       refreshAssetTasks,
+    //     } = this.props
+    //     refreshAssetTasks()
+    //   }
 
+  /*
     constructor(props) {
         super(props)
         this.state = {
@@ -183,6 +189,7 @@ class AssetTaskTable extends PureComponent {
      handleChangeDense(event) {
         this.setState({ dense: event.target.checked });
     }
+    */
 
     
 
@@ -190,7 +197,25 @@ class AssetTaskTable extends PureComponent {
 
         const {
             classes,
+            rows,
         } = this.props
+
+      
+      if (!rows) {
+        return 'hey'
+      }
+
+      return (
+        <Table>
+          {rows.map(row => (
+            <TableRow>
+              <TableCell>
+                {row.get('id')}
+              </TableCell>
+            </TableRow>
+          ))}
+        </Table>
+      )
 
         // const [order, setOrder] = React.useState('asc');
         // const [orderBy, setOrderBy] = React.useState('calories');
@@ -202,6 +227,7 @@ class AssetTaskTable extends PureComponent {
         
 
         
+        /*
         const isSelected = name => this.state.selected.indexOf(name) !== -1;
 
         const emptyRows = this.state.rowsPerPage - Math.min(this.state.rowsPerPage, rows.length - this.state.page * this.state.rowsPerPage)
@@ -315,10 +341,10 @@ class AssetTaskTable extends PureComponent {
                                 </IconButton>
                             </Tooltip>
                         ) : (
-                                <Tooltip title="Filter list">
-                                    <IconButton aria-label="filter list">
-                                        <FilterListIcon />
-                                    </IconButton>
+                                <Tooltip title="Add Task">
+                                    
+                                        <TaskAddDialog />
+                                   
                                 </Tooltip>
                             )}
                     </div>
@@ -417,6 +443,7 @@ class AssetTaskTable extends PureComponent {
                 />
             </div>
         );
+                    */
     }
 }
 

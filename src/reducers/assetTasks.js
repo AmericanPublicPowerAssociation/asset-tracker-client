@@ -10,6 +10,8 @@ import {
     switch (action.type) {
       case RESET_ASSET_TASKS: {
         const assetTasks = action.payload
+        console.log('hmm')
+        console.log('HHHHHHHHHH')
         return assetTasks
       }
       default: {

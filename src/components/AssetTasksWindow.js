@@ -22,6 +22,7 @@ const styles = theme => ({
 class AssetTasksWindow extends PureComponent {
 
   componentDidMount() {
+    console.log('COMPONENT DID MOUNT!!!')
     const {
       refreshAssetTasks,
     } = this.props
@@ -34,6 +35,8 @@ class AssetTasksWindow extends PureComponent {
       assetsTasks,
     } = this.props
 
+    console.log('WHEEE  ', assetsTasks)
+
       return (
         <Paper className={classes.fullHeight}>
           <Grid container className={classes.fullHeight}>
@@ -41,7 +44,7 @@ class AssetTasksWindow extends PureComponent {
               {assetsTasks}
             </Grid>
             <Grid item className={classes.frame}>
-            <AssetTasksTable/>
+            <AssetTasksTable rows = {assetsTasks}/>
             </Grid>
           </Grid>
         </Paper>

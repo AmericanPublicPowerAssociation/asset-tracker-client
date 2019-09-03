@@ -86,18 +86,17 @@ class Main extends Component {
             component={TablesWindow} />
           <ProtectedRoute exact path='/maps'
             component={MapsWindow} />
-            <ProtectedRoute exact path='/tasks'
+          <ProtectedRoute exact path='/tasks'
             component={TasksWindow} />
-            <ProtectedRoute exact path='/tasks/assets'
+          <ProtectedRoute exact path='/tasks/assets'
             component={AssetTasksWindow} />
           <ProtectedRoute exact path='/logs'
             component={LogsWindow} />
           <ProtectedRoute exact path='/logs/assets'
             component={AssetsLogsWindow} />
-          {/*
-          <ProtectedRoute exact path='/logs/users'
+          {/*<ProtectedRoute exact path='/logs/users'
             component={UsersLogsWindow} />
-          */}
+           */}
           <ProtectedRoute exact path='/circuits'
             component={CircuitsWindow} />
           <ProtectedRoute exact path='/reports'
