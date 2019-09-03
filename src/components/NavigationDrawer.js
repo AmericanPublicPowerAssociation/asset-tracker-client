@@ -72,7 +72,7 @@ class NavigationDrawer extends PureComponent {
         <List>
         {isUserAuthenticated ?
           <>
-            <ListItemLink to='/' text='Dashboard' icon={<DashboardsIcon />} />
+            <ListItemLink to='/' text='Dashboards' icon={<DashboardsIcon />} />
             <ListItemLink to='/tasks' text='Tasks' icon={<AlarmOnIcon />} />
             <ListItemLink to='/tables' text='Assets' icon={<TablesIcon />} />
             <ListItemLink to='/reports' text='Reports' icon={<ReportsIcon />} />  
