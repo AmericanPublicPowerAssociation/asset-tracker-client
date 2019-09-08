@@ -12,8 +12,8 @@ import {
   watchSuggestVendorNames,
   watchSuggestProductNames,
   watchSuggestProductVersions,
-  watchRefreshVulnerableAssets,
-} from 'asset-vulnerability-report'
+  watchRefreshRisks,
+} from 'asset-report-risks'
 import {
   closeAssetsUploadDialog,
   excludeAssetRelation,
@@ -188,6 +188,6 @@ export default function* () {
     watchSuggestVendorNames(),
     watchSuggestProductNames(),
     watchSuggestProductVersions(),
-    watchRefreshVulnerableAssets(),
+    watchRefreshRisks(),
   ])
 }

@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import {
-  VulnerabilitiesCard,
-} from 'asset-vulnerability-report'
+  RisksCard,
+} from 'asset-report-risks'
 import { withStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardActionArea from '@material-ui/core/CardActionArea'
@@ -54,7 +54,7 @@ class DashboardsWindow extends PureComponent {
           </Grid>
 
           <Grid item xs>
-            <VulnerabilitiesCard />
+            <RisksCard />
           </Grid>
 
           <Grid item xs>

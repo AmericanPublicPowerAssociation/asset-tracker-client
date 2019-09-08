@@ -3,8 +3,8 @@ import { Route, Switch } from 'react-router-dom'
 import clsx from 'clsx'
 import { withStyles } from '@material-ui/core/styles'
 import {
-  VulnerabilitiesWindow,
-} from 'asset-vulnerability-report'
+  RisksWindow,
+} from 'asset-report-risks'
 import ProtectedRoute from '../containers/ProtectedRoute'
 import DashboardsWindow from './DashboardsWindow'
 import TablesWindow from '../containers/TablesWindow'
@@ -97,8 +97,8 @@ class Main extends Component {
             component={CircuitsWindow} />
           <ProtectedRoute exact path='/reports'
             component={ReportsWindow} />
-          <ProtectedRoute exact path='/reports/vulnerabilities'
-            component={VulnerabilitiesWindow} />
+          <ProtectedRoute exact path='/reports/risks'
+            component={RisksWindow} />
           <ProtectedRoute exact path='/settings'
             component={SettingsWindow} />
           <ProtectedRoute exact path='/summary'
