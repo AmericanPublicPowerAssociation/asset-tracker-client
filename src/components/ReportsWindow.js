@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import {
   RisksCard,
-} from 'asset-vulnerability-report'
+} from 'asset-report-risks'
 
 
 class ReportsWindow extends PureComponent {
