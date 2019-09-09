@@ -30,6 +30,16 @@ export function rinseAsset(asset) {
   ])
 }
 
+export function rinseTask(task) {
+  return task.deleteAll([
+    'isOpen',
+    'errors',
+    // 'connectedIds',
+    // 'parentIds',
+    // 'childIds',
+  ])
+}
+
 
 export function scrollToFocusingAsset(component) {
   const { focusingAssetId } = component.props

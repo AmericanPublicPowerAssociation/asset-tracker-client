@@ -21,21 +21,25 @@ import {
   refreshAssetsKit,
   resetAssetsKit,
   resetAssetsLogs,
+  resetAssetTasks,
   setAddingAssetCSVFileErrors,
   setAddingAssetErrors,
   setAddingAssetValue,
   setAsset,
+  setTask,
   setAssetErrors,
   setAssets,
   setFocusingAsset,
 } from './actions'
 import {
   ADD_ASSET,
+  ADD_TASK,
   ADD_ASSET_RELATION,
   CHANGE_ASSET,
   DROP_ASSET_RELATION,
   REFRESH_ASSETS_KIT,
   REFRESH_ASSETS_LOGS,
+  REFRESH_ASSET_TASKS,
   UPLOAD_ASSETS_CSV,
   DOWNLOAD_ASSETS_CSV,
 } from './constants'
@@ -43,7 +47,7 @@ import {
   fetchSafely,
 } from './macros'
 import {
-  rinseAsset,
+  rinseAsset, rinseTask,
 } from './routines'
 
 
@@ -69,6 +73,18 @@ function* watchRefreshAssetsLogs() {
 }
 
 
+function* watchRefreshAssetTasks() {
+  yield takeLatest(REFRESH_ASSET_TASKS, function* () {
+    console.log('AHAHHAHA')
+    yield fetchSafely('/tasks.json', {}, {
+      on200: function* (assetTasks) {
+        yield put(resetAssetTasks(assetTasks))
+      },
+    }) 
+  })
+}
+
+
 function* watchAddAsset() {
   yield takeEvery(ADD_ASSET, function* (action) {
     const payload = rinseAsset(action.payload)
@@ -87,6 +103,27 @@ function* watchAddAsset() {
     })
   })
 }
+
+
+// function* watchAddTask() {
+//   yield takeEvery(ADD_TASK, function* (action) {
+//     const payload = rinseTask(action.payload)
+//     yield fetchSafely('/tasks.json', {
+//       method: 'POST',
+//       body: JSON.stringify(payload),
+//     }, {
+//       on200: function* (task) {
+//         yield put(setTask(task))
+//         yield put(setAddingTaskValue({isOpen: false, errors: Map()}))
+//         yield put(setFocusingTask({id: task.get('id')}))
+//       },
+//       on400: function* (errors) {
+//         yield put(setAddingTaskErrors(errors))
+//       },
+//     })
+//   })
+// }
+
 
 function* watchUploadAssetsCsv() {
     yield takeEvery(UPLOAD_ASSETS_CSV, function* (action) {
@@ -108,11 +145,13 @@ function* watchUploadAssetsCsv() {
     })
 }
 
+
 function* watchDownloadFileAssets() {
   yield takeEvery(DOWNLOAD_ASSETS_CSV, function (action) {
     window.location = '/assets.csv'
   })
 }
+
 
 function* watchChangeAsset() {
   yield takeEvery(CHANGE_ASSET, function* (action) {
@@ -179,7 +218,9 @@ export default function* () {
     watchRefreshAuth(),
     watchRefreshAssetsKit(),
     watchRefreshAssetsLogs(),
+    watchRefreshAssetTasks(),
     watchAddAsset(),
+    // watchAddTask(),
     watchUploadAssetsCsv(),
     watchDownloadFileAssets(),
     watchChangeAsset(),

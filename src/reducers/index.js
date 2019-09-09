@@ -19,12 +19,14 @@ import relatingAssetKey from './relatingAssetKey'
 import assetFilterKeysByAttribute from './assetFilterKeysByAttribute'
 import assetFilterValueByAttribute from './assetFilterValueByAttribute'
 import addingAsset from './addingAsset'
+import addingTask from './addingTask'
 import mapViewport from './mapViewport'
 import baseMapStyleName from './baseMapStyleName'
 import locatingAssetId from './locatingAssetId'
 import assetTypeById from './assetTypeById'
 import selectedAssetIds from './selectedAssetIds'
 import assetsLogs from './assetsLogs'
+import assetTasks from './assetTasks'
 import {
   RESET_ASSETS_KIT,
   SET_FOCUSING_ASSET,
@@ -43,6 +45,8 @@ const reduceHorizontally = combineReducers({
   relatingAssetId,
   relatingAssetKey,
   addingAsset,
+  addingTask,
+  assetTasks,
   assetFilterValueByAttribute,
   assetFilterKeysByAttribute,
   trackingAsset: (state = {}) => state,
