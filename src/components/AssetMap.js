@@ -3,6 +3,7 @@ import { fromJS } from 'immutable'
 import ReactMapGL, { NavigationControl, FlyToInterpolator } from 'react-map-gl'
 import { withStyles } from '@material-ui/core/styles'
 import AssetMapMarker from './AssetMapMarker'
+import SelectedAssetMapMarker from './SelectedAssetMapMarker'
 import {
   // STREETS_MAP_STYLE,
   DARK_MAP_STYLE,
@@ -72,6 +73,8 @@ class AssetMap extends PureComponent {
       locatingAssetId,
       locatingAssetLocation,
       setAssetLocation,
+      assetById,
+      selectedAssetIds,
     } = this.props
     const { longitude, latitude, zoom, pitch, bearing, transitionDuration } = mapViewport.toJS()
     const baseMapStyle = {
@@ -100,6 +103,24 @@ class AssetMap extends PureComponent {
           assetId={focusingAssetId}
           assetLocation={focusingAssetLocation}
         />
+        {
+          selectedAssetIds.reduce( (list, id) => {
+            const curAsset = assetById.get(id)
+            if (curAsset.has('location')) {
+              const curLocation = curAsset.get('location')
+              const curTypeId = curAsset.get('typeId')
+              const curName = curAsset.get('name')
+              list.push(
+                <SelectedAssetMapMarker
+                  name={curName}
+                  assetId={id}
+                  assetType={curTypeId}
+                  key={id}
+                  assetLocation={curLocation} />)
+            }
+            return list
+          }, []) 
+        }
         <AssetMapMarker
           color={EDITING_COLOR}
           draggable

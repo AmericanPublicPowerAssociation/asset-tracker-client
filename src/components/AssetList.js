@@ -3,7 +3,9 @@ import clsx from 'clsx'
 import { withStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText'
+import Checkbox from '@material-ui/core/Checkbox';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import Switch from '@material-ui/core/Switch'
 import {
@@ -44,6 +46,8 @@ class AssetList extends PureComponent {
       setFocusingAsset,
       addAssetRelation,
       dropAssetRelation,
+      toggleSelectedAsset,
+      selectedAssetIds,
     } = this.props
 
     const editingAssetId = locatingAssetId || relatingAssetId
@@ -74,6 +78,12 @@ class AssetList extends PureComponent {
               setFocusingAsset({id: assetId})
             }}
           >
+            <ListItemIcon>
+              <Checkbox tabIndex={-1} disableRipple
+                checked={selectedAssetIds.has(assetId)}
+                onClick={ ()=> toggleSelectedAsset(assetId) }
+              />
+            </ListItemIcon>
             <ListItemText primary={assetName} />
           {
             relatingAssetId &&
