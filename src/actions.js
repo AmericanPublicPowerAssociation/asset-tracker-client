@@ -6,6 +6,9 @@ import {
   CLOSE_TASK_ADD_DIALOG,
   CLOSE_INFORMATION_DRAWER,
   CLOSE_NAVIGATION_DRAWER,
+  CLOSE_ASSETS_UPLOAD_DIALOG,
+  UPLOAD_ASSETS_CSV,
+  DOWNLOAD_ASSETS_CSV,
   DROP_ASSET_RELATION,
   EXCLUDE_ASSET_FILTER_KEY,
   EXCLUDE_ASSET_RELATION,
@@ -17,6 +20,7 @@ import {
   OPEN_TASK_ADD_DIALOG,
   OPEN_INFORMATION_DRAWER,
   OPEN_NAVIGATION_DRAWER,
+  OPEN_ASSETS_UPLOAD_DIALOG,
   REFRESH_ASSETS_KIT,
   REFRESH_ASSETS_LOGS,
   REFRESH_ASSET_TASKS,
@@ -36,8 +40,12 @@ import {
   SET_ASSET_LOCATION,
   SET_FOCUSING_ASSET,
   SET_LOCATING_ASSET,
+  TOGGLE_SELECTED_ASSET,
   SET_MAP_VIEWPORT,
   SET_RELATING_ASSET,
+  SET_ASSET_CSV_FILE,
+  SET_ADDING_CSV_ASSETS_ERRORS,
+  HIDE_ADDING_CSV_ASSETS_ERRORS,
   TOGGLE_ASSET_FILTER_KEY,
   TOGGLE_THEME,
 } from './constants'
@@ -161,6 +169,9 @@ export const setRelatingAsset = payload => ({
 export const setLocatingAsset = payload => ({
   payload, type: SET_LOCATING_ASSET
 })
+export const toggleSelectedAsset = payload => ({
+  payload, type: TOGGLE_SELECTED_ASSET
+})
 
 
 export const openAssetAddDialog = payload => ({
@@ -185,6 +196,20 @@ export const setAddingAssetErrors = payload => ({
   payload, type: SET_ADDING_ASSET_ERRORS
 })
 
+export const openAssetsUploadDialog = payload => ({
+  payload, type: OPEN_ASSETS_UPLOAD_DIALOG})
+export const closeAssetsUploadDialog = payload => ({
+  payload, type: CLOSE_ASSETS_UPLOAD_DIALOG})
+export const uploadAssetsCsv = payload => ({
+  payload, type: UPLOAD_ASSETS_CSV})
+export const downloadAssetsUploadDialog = payload => ({
+  payload, type: DOWNLOAD_ASSETS_CSV})
+export const setAssetCSVFile = payload => ({
+  payload, type: SET_ASSET_CSV_FILE})
+export const setAddingAssetCSVFileErrors = payload => ({
+  payload, type: SET_ADDING_CSV_ASSETS_ERRORS})
+export const hideAddingAssetCSVFileErrors = payload => ({
+  payload, type: HIDE_ADDING_CSV_ASSETS_ERRORS})
 
 export const setMapViewport = payload => ({
   type: SET_MAP_VIEWPORT, payload

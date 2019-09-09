@@ -6,6 +6,8 @@ import ApplicationBar from '../components/ApplicationBar'
 import {
   openAssetAddDialog,
   openNavigationDrawer,
+  openAssetsUploadDialog,
+  downloadAssetsUploadDialog,
   setFocusingAsset,
   setLocatingAsset,
   setRelatingAsset,
@@ -36,6 +38,10 @@ const mapDispatchToProps = dispatch => ({
     openAssetAddDialog(payload))},
   openNavigationDrawer: payload => {dispatch(
     openNavigationDrawer(payload))},
+  openAssetsUploadDialog: payload => {dispatch(
+    openAssetsUploadDialog(payload))},
+  downloadAssetsUploadDialog: payload => {dispatch(
+    downloadAssetsUploadDialog(payload))},
   setFocusingAsset: payload => {dispatch(
     setFocusingAsset(payload))},
   setLocatingAsset: payload => {dispatch(

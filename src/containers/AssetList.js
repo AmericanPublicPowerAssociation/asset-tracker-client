@@ -4,6 +4,7 @@ import {
   addAssetRelation,
   dropAssetRelation,
   setFocusingAsset,
+  toggleSelectedAsset,
 } from '../actions'
 import {
   getFocusingAssetId,
@@ -24,6 +25,7 @@ const mapStateToProps = state => ({
   relatingAssetKey: getRelatingAssetKey(state),
   relatedAssetTypeIds: getRelatedAssetTypeIds(state),
   relatedAssetIds: getRelatedAssetIds(state),
+  selectedAssetIds: state.get('selectedAssetIds'),
 })
 
 
@@ -34,6 +36,8 @@ const mapDispatchToProps = dispatch => ({
     addAssetRelation(payload))},
   dropAssetRelation: payload => {dispatch(
     dropAssetRelation(payload))},
+  toggleSelectedAsset: payload => {dispatch(
+    toggleSelectedAsset(payload))}
 })
 
 

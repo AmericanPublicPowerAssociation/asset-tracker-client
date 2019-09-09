@@ -12,6 +12,7 @@ import {
   getLocatingAssetLocation,
   getMapStyle,
   getMapViewport,
+  getAssetById
 } from '../selectors'
 
 
@@ -23,6 +24,8 @@ const mapStateToProps = state => ({
   focusingAssetLocation: getFocusingAssetLocation(state),
   locatingAssetId: getLocatingAssetId(state),
   locatingAssetLocation: getLocatingAssetLocation(state),
+  assetById: getAssetById(state),
+  selectedAssetIds: state.get('selectedAssetIds'),
 })
 
 

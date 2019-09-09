@@ -15,11 +15,14 @@ import {
   watchRefreshVulnerableAssets,
 } from 'asset-vulnerability-report'
 import {
+  closeAssetsUploadDialog,
   excludeAssetRelation,
   includeAssetRelation,
+  refreshAssetsKit,
   resetAssetsKit,
   resetAssetsLogs,
   resetAssetTasks,
+  setAddingAssetCSVFileErrors,
   setAddingAssetErrors,
   setAddingAssetValue,
   setAsset,
@@ -37,6 +40,8 @@ import {
   REFRESH_ASSETS_KIT,
   REFRESH_ASSETS_LOGS,
   REFRESH_ASSET_TASKS,
+  UPLOAD_ASSETS_CSV,
+  DOWNLOAD_ASSETS_CSV,
 } from './constants'
 import {
   fetchSafely,
@@ -67,6 +72,7 @@ function* watchRefreshAssetsLogs() {
   })
 }
 
+
 function* watchRefreshAssetTasks() {
   yield takeLatest(REFRESH_ASSET_TASKS, function* () {
     console.log('AHAHHAHA')
@@ -77,6 +83,7 @@ function* watchRefreshAssetTasks() {
     }) 
   })
 }
+
 
 function* watchAddAsset() {
   yield takeEvery(ADD_ASSET, function* (action) {
@@ -97,6 +104,7 @@ function* watchAddAsset() {
   })
 }
 
+
 // function* watchAddTask() {
 //   yield takeEvery(ADD_TASK, function* (action) {
 //     const payload = rinseTask(action.payload)
@@ -115,6 +123,34 @@ function* watchAddAsset() {
 //     })
 //   })
 // }
+
+
+function* watchUploadAssetsCsv() {
+    yield takeEvery(UPLOAD_ASSETS_CSV, function* (action) {
+        var data = new FormData()
+        data.append('file', action.payload);
+        yield fetchSafely('/assets.csv', {
+            method: 'POST',
+            body: data,
+        }, {
+            on200: function* (asset) {
+              yield put(closeAssetsUploadDialog())
+              yield put(refreshAssetsKit())
+            },
+            on400: function* (errors) {
+              yield put(closeAssetsUploadDialog())
+              yield put(setAddingAssetCSVFileErrors(errors))
+            },
+        })
+    })
+}
+
+
+function* watchDownloadFileAssets() {
+  yield takeEvery(DOWNLOAD_ASSETS_CSV, function (action) {
+    window.location = '/assets.csv'
+  })
+}
 
 
 function* watchChangeAsset() {
@@ -185,6 +221,8 @@ export default function* () {
     watchRefreshAssetTasks(),
     watchAddAsset(),
     // watchAddTask(),
+    watchUploadAssetsCsv(),
+    watchDownloadFileAssets(),
     watchChangeAsset(),
     watchAddAssetRelation(),
     watchDropAssetRelation(),

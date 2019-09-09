@@ -1,15 +1,15 @@
 import React, { PureComponent } from 'react'
-import {
-  VulnerabilitiesCard,
-} from 'asset-vulnerability-report'
-
 import { Link as RouterLink } from 'react-router-dom'
+import {
+  RisksCard,
+} from 'asset-report-risks'
 import { withStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card'
+import CardActionArea from '@material-ui/core/CardActionArea'
 import Grid from '@material-ui/core/Grid'
 import Link from '@material-ui/core/Link'
-import CardActionArea from '@material-ui/core/CardActionArea'
+import Typography from '@material-ui/core/Typography'
+
 
 const styles = theme => ({
   fullHeight: {
@@ -27,67 +27,83 @@ const styles = theme => ({
   }
 })
 
+
 class DashboardsWindow extends PureComponent {
   render() {
     const { classes } = this.props
 
     return (
-      <Grid container spacing={3}>
-      <Grid item xs>
-      <VulnerabilitiesCard />
-      </Grid>
+      <>
+      
+        <Grid container spacing={3}>
 
-      <Grid item xs>
-        <Link
-          underline='none'
-          component={RouterLink}
-          to='/logs/users'
-        >
-          <Card className={classes.card}>
-            <CardActionArea className={classes.cardActionArea}>
-              <Typography className={classes.title} align='center'>
-              High prority Requests
-              </Typography>
-            </CardActionArea>
-          </Card>
-        </Link>
-      </Grid>
+          <Grid item xs>
+            <Link
+              underline='none'
+              component={RouterLink}
+              to=''
+            >
+              <Card className={classes.card}>
+                <CardActionArea className={classes.cardActionArea}>
+                  <Typography className={classes.title} align='center'>
+                    Tasks
+                  </Typography>
+                </CardActionArea>
+              </Card>
+            </Link>
+          </Grid>
 
-      <Grid item xs>
-        <Link
-          underline='none'
-          component={RouterLink}
-          to='/logs/assets'
-        >
-          <Card className={classes.card}>
-            <CardActionArea className={classes.cardActionArea}>
-              <Typography className={classes.title} align='center'>
-              High Security risks Assets
-              </Typography>
-            </CardActionArea>
-          </Card>
-        </Link>
-      </Grid>
+          <Grid item xs>
+            <Link
+              underline='none'
+              component={RouterLink}
+              to='/reports/benchmarks'
+            >
+              <Card className={classes.card}>
+                <CardActionArea className={classes.cardActionArea}>
+                  <Typography className={classes.title} align='center'>
+                    Benchmarks
+                  </Typography>
+                </CardActionArea>
+              </Card>
+            </Link>
+          </Grid>
 
-      <Grid item xs>
-        <Link
-          underline='none'
-          component={RouterLink}
-          to='/logs/assets'
-        >
-          <Card className={classes.card}>
-            <CardActionArea className={classes.cardActionArea}>
-              <Typography className={classes.title} align='center'>
-              Important notification
-              </Typography>
-            </CardActionArea>
-          </Card>
-        </Link>
-      </Grid>
+          <Grid item xs>
+            <Link
+              underline='none'
+              component={RouterLink}
+              to='/logs/assets'
+            >
+              <Card className={classes.card}>
+                <CardActionArea className={classes.cardActionArea}>
+                  <Typography className={classes.title} align='center'>
+                    Maintenance Logs
+                  </Typography>
+                </CardActionArea>
+              </Card>
+            </Link>
+          </Grid>
 
-    </Grid>
+          <Grid item xs>
+            <Link
+              underline='none'
+              component={RouterLink}
+              to='/logs/users'
+            >
+              <Card className={classes.card}>
+                <CardActionArea className={classes.cardActionArea}>
+                  <Typography className={classes.title} align='center'>
+                    Audit Trails
+                  </Typography>
+                </CardActionArea>
+              </Card>
+            </Link>
+          </Grid>
 
-    
+        </Grid>
+
+      </>
     )
   }
 }
