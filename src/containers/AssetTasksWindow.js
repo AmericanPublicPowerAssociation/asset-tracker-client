@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import AssetTasksWindow from '../components/AssetTasksWindow'
 import {
-  refreshAssetTasks,
+  refreshTasks,
 } from '../actions'
 import {
   getAssetTasks,
@@ -14,10 +14,9 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
-  refreshAssetTasks: payload => {
-    console.log('ACTION CALLED!!!')
+  refreshTasks: payload => {
     dispatch(
-    refreshAssetTasks(payload))},
+      refreshTasks(payload))},
 })
 
 

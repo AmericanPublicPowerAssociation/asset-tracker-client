@@ -22,11 +22,10 @@ const styles = theme => ({
 class AssetTasksWindow extends PureComponent {
 
   componentDidMount() {
-    console.log('COMPONENT DID MOUNT!!!')
     const {
-      refreshAssetTasks,
+      refreshTasks,
     } = this.props
-    refreshAssetTasks()
+    refreshTasks()
   }
 
   render() {

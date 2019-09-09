@@ -21,25 +21,25 @@ import {
   refreshAssetsKit,
   resetAssetsKit,
   resetAssetsLogs,
-  resetAssetTasks,
+  resetTasks,
   setAddingAssetCSVFileErrors,
   setAddingAssetErrors,
   setAddingAssetValue,
   setAsset,
-  setTask,
+  // setTask,
   setAssetErrors,
   setAssets,
   setFocusingAsset,
 } from './actions'
 import {
   ADD_ASSET,
-  ADD_TASK,
+  // ADD_TASK,
   ADD_ASSET_RELATION,
   CHANGE_ASSET,
   DROP_ASSET_RELATION,
   REFRESH_ASSETS_KIT,
   REFRESH_ASSETS_LOGS,
-  REFRESH_ASSET_TASKS,
+  REFRESH_TASKS,
   UPLOAD_ASSETS_CSV,
   DOWNLOAD_ASSETS_CSV,
 } from './constants'
@@ -47,7 +47,8 @@ import {
   fetchSafely,
 } from './macros'
 import {
-  rinseAsset, rinseTask,
+  rinseAsset,
+  // rinseTask,
 } from './routines'
 
 
@@ -73,12 +74,11 @@ function* watchRefreshAssetsLogs() {
 }
 
 
-function* watchRefreshAssetTasks() {
-  yield takeLatest(REFRESH_ASSET_TASKS, function* () {
-    console.log('AHAHHAHA')
+function* watchRefreshTasks() {
+  yield takeLatest(REFRESH_TASKS, function* () {
     yield fetchSafely('/tasks.json', {}, {
       on200: function* (assetTasks) {
-        yield put(resetAssetTasks(assetTasks))
+        yield put(resetTasks(assetTasks))
       },
     }) 
   })
@@ -130,6 +130,7 @@ function* watchUploadAssetsCsv() {
         var data = new FormData()
         data.append('file', action.payload);
         yield fetchSafely('/assets.csv', {
+          // method: 'PATCH',
             method: 'POST',
             body: data,
         }, {
@@ -218,7 +219,7 @@ export default function* () {
     watchRefreshAuth(),
     watchRefreshAssetsKit(),
     watchRefreshAssetsLogs(),
-    watchRefreshAssetTasks(),
+    watchRefreshTasks(),
     watchAddAsset(),
     // watchAddTask(),
     watchUploadAssetsCsv(),

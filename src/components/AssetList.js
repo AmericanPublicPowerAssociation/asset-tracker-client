@@ -80,6 +80,7 @@ class AssetList extends PureComponent {
           >
             <ListItemIcon>
               <Checkbox tabIndex={-1} disableRipple
+                color='primary'
                 checked={selectedAssetIds.has(assetId)}
                 onClick={ ()=> toggleSelectedAsset(assetId) }
               />

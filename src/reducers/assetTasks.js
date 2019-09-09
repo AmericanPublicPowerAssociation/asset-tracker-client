@@ -1,24 +1,22 @@
 import {
-    RESET_ASSET_TASKS,
-  } from '../constants'
+  RESET_TASKS,
+} from '../constants'
   
-  
-  const initialState = null
-  
-  
-  const assetTasks = (state = initialState, action) => {
-    switch (action.type) {
-      case RESET_ASSET_TASKS: {
-        const assetTasks = action.payload
-        console.log('hmm')
-        console.log('HHHHHHHHHH')
-        return assetTasks
-      }
-      default: {
-        return state
-      }
+
+const initialState = null
+
+
+const assetTasks = (state = initialState, action) => {
+  switch (action.type) {
+    case RESET_TASKS: {
+      const assetTasks = action.payload
+      return assetTasks
+    }
+    default: {
+      return state
     }
   }
-  
-  
-  export default assetTasks
+}
+
+
+export default assetTasks

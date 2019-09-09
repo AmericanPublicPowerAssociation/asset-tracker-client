@@ -23,10 +23,10 @@ import {
   OPEN_ASSETS_UPLOAD_DIALOG,
   REFRESH_ASSETS_KIT,
   REFRESH_ASSETS_LOGS,
-  REFRESH_ASSET_TASKS,
+  REFRESH_TASKS,
   RESET_ASSETS_KIT,
   RESET_ASSETS_LOGS,
-  RESET_ASSET_TASKS,
+  RESET_TASKS,
   SET_ADDING_ASSET_ERRORS,
   SET_ADDING_ASSET_VALUE,
   SET_ADDING_TASK_VALUE,
@@ -62,8 +62,8 @@ export const refreshAssetsKit = payload => ({
 export const refreshAssetsLogs = payload => ({
   payload, type: REFRESH_ASSETS_LOGS
 })
-export const refreshAssetTasks = payload => ({
-  payload, type: REFRESH_ASSET_TASKS
+export const refreshTasks = payload => ({
+  payload, type: REFRESH_TASKS
 })
 export const addAsset = payload => ({
   payload, type: ADD_ASSET
@@ -90,8 +90,8 @@ export const resetAssetsKit = payload => ({
 export const resetAssetsLogs = payload => ({
   payload, type: RESET_ASSETS_LOGS
 })
-export const resetAssetTasks = payload => ({
-  payload, type: RESET_ASSET_TASKS
+export const resetTasks = payload => ({
+  payload, type: RESET_TASKS
 })
 export const setAssets = payload => ({
   payload, type: SET_ASSETS
