@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import {
-  VulnerabilitiesCard,
-} from 'asset-vulnerability-report'
+  RisksCard,
+} from 'asset-report-risks'
 
 
 class ReportsWindow extends PureComponent {
@@ -9,7 +9,7 @@ class ReportsWindow extends PureComponent {
   render() {
     return (
       <>
-        <VulnerabilitiesCard />
+        <RisksCard />
       </>
     )
   }

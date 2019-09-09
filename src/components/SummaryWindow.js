@@ -3,6 +3,7 @@ import { Grid } from '@material-ui/core'
 import RadialChart from './RadialChart';
 import BarChart from './BarChart';
 
+
 class SummaryWindow extends PureComponent {
   render() {
     const chart1 = {

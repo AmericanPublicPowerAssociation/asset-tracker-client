@@ -54,6 +54,10 @@ class DashboardsWindow extends PureComponent {
           </Grid>
 
           <Grid item xs>
+            <RisksCard />
+          </Grid>
+
+          <Grid item xs>
             <Link
               underline='none'
               component={RouterLink}

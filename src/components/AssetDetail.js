@@ -6,7 +6,7 @@ import {
   VendorName,
   ProductName,
   ProductVersion,
-} from 'asset-vulnerability-report'
+} from 'asset-report-risks'
 import AssetName from './AssetName'
 import AssetLocation from '../containers/AssetLocation'
 import AssetRelationChips from '../containers/AssetRelationChips'
