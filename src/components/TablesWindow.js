@@ -7,13 +7,16 @@ import AssetTable from '../containers/AssetTable'
 
 
 const styles = theme => ({
-  fullHeight: {
+  paper: {
+    height: '100%',
+  },
+  grid: {
     height: '100%',
   },
   frame: {
     height: '100%',
     [theme.breakpoints.down('sm')]: {
-      height: 'auto',
+      height: '50%',
     },
     overflow: 'auto',
   },
@@ -32,12 +35,16 @@ class TablesWindow extends PureComponent {
   render() {
     const { classes } = this.props
     return (
-      <Paper className={classes.fullHeight}>
-        <Grid container className={classes.fullHeight}>
-          <Grid item className={classes.frame}>
+      <Paper className={classes.paper}>
+        <Grid container className={classes.grid}>
+          <Grid item className={classes.frame}
+            xs={12} sm={12} md={4} lg={3} xl={2}
+          >
             <AssetFilter />
           </Grid>
-          <Grid item className={classes.frame} xs={12} sm>
+          <Grid item className={classes.frame}
+            xs={12} sm={12} md={8} lg={9} xl={10}
+          >
             <AssetTable />
           </Grid>
         </Grid>

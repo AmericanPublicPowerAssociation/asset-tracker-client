@@ -11,15 +11,14 @@ import {
 } from '../routines'
 
 
-const styles = {
+const styles = theme => ({
   root: {
     height: '100%',
-    overflow: 'auto',
   },
   nameInput: {
     padding: 0,
   },
-}
+})
 
 
 class AssetFilter extends PureComponent {

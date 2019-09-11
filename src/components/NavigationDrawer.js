@@ -9,12 +9,11 @@ import LeftCloseIcon from '@material-ui/icons/ChevronLeft'
 import DashboardsIcon from '@material-ui/icons/Dashboard'
 import SignInIcon from '@material-ui/icons/Lock'
 import SignOutIcon from '@material-ui/icons/LockOpen'
-import TablesIcon from '@material-ui/icons/ListAlt'
+import AssetsIcon from '@material-ui/icons/ListAlt'
 import MapsIcon from '@material-ui/icons/Map'
 import LogsIcon from '@material-ui/icons/Assignment'
-import ReportsIcon from '@material-ui/icons/Assignment'
+import RisksIcon from '@material-ui/icons/ErrorOutline'
 // import CircuitsIcon from '@material-ui/icons/SettingsInputComponent'
-// import ReportsIcon from '@material-ui/icons/Assessment'
 import ExportsIcon from '@material-ui/icons/GetApp'
 import SettingsIcon from '@material-ui/icons/Settings'
 import ListItemLink from './ListItemLink'
@@ -75,9 +74,9 @@ class NavigationDrawer extends PureComponent {
           <>
             <ListItemLink to='/' text='Dashboards' icon={<DashboardsIcon />} />
             <ListItemLink to='/tasks' text='Tasks' icon={<AlarmOnIcon />} />
-            <ListItemLink to='/tables' text='Assets' icon={<TablesIcon />} />
-            <ListItemLink to='/reports' text='Reports' icon={<ReportsIcon />} />  
+            <ListItemLink to='/assets' text='Assets' icon={<AssetsIcon />} />
             <ListItemLink to='/maps' text='Maps' icon={<MapsIcon />} />
+            <ListItemLink to='/risks' text='Risks' icon={<RisksIcon />} />  
             <ListItemLink to='/logs' text='Logs' icon={<LogsIcon />} />
             {/*
             <ListItemLink to='/circuits' text='Circuits' icon={<CircuitsIcon />} />

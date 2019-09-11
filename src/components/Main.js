@@ -10,14 +10,14 @@ import DashboardsWindow from './DashboardsWindow'
 import TablesWindow from '../containers/TablesWindow'
 import MapsWindow from '../containers/MapsWindow'
 import LogsWindow from '../containers/LogsWindow'
-import AssetsLogsWindow from '../containers/AssetsLogsWindow'
+// import AssetsLogsWindow from '../containers/AssetsLogsWindow'
 import TasksWindow from '../containers/TasksWindow'
-import AssetTasksWindow from '../containers/AssetTasksWindow'
+// import AssetTasksWindow from '../containers/AssetTasksWindow'
 // import UsersLogsWindow from '../containers/UsersLogsWindow'
-import CircuitsWindow from './CircuitsWindow'
-import ReportsWindow from './ReportsWindow'
+// import CircuitsWindow from './CircuitsWindow'
+// import ReportsWindow from './ReportsWindow'
 import SettingsWindow from '../containers/SettingsWindow'
-import SummaryWindow from '../containers/SummaryWindow'
+// import SummaryWindow from '../containers/SummaryWindow'
 import NotFoundWindow from './NotFoundWindow'
 import {
   CONTENT_PADDING,
@@ -83,31 +83,26 @@ class Main extends Component {
         <Switch>
           <ProtectedRoute exact path='/'
             component={DashboardsWindow} />
-          <ProtectedRoute exact path='/tables'
+          <ProtectedRoute exact path='/assets'
             component={TablesWindow} />
           <ProtectedRoute exact path='/maps'
             component={MapsWindow} />
           <ProtectedRoute exact path='/tasks'
             component={TasksWindow} />
-          <ProtectedRoute exact path='/tasks/assets'
-            component={AssetTasksWindow} />
           <ProtectedRoute exact path='/logs'
             component={LogsWindow} />
-          <ProtectedRoute exact path='/logs/assets'
-            component={AssetsLogsWindow} />
-          {/*<ProtectedRoute exact path='/logs/users'
-            component={UsersLogsWindow} />
-           */}
+          {/*
           <ProtectedRoute exact path='/circuits'
             component={CircuitsWindow} />
+          <ProtectedRoute exact path='/summary'
+            component={SummaryWindow} />
           <ProtectedRoute exact path='/reports'
             component={ReportsWindow} />
-          <ProtectedRoute exact path='/reports/risks'
+          */}
+          <ProtectedRoute exact path='/risks'
             component={RisksWindow} />
           <ProtectedRoute exact path='/settings'
             component={SettingsWindow} />
-          <ProtectedRoute exact path='/summary'
-            component={SummaryWindow} />
           <Route
             component={NotFoundWindow} />
         </Switch>
