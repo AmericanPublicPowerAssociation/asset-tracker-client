@@ -1,77 +1,52 @@
-import React, { PureComponent } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
-import { withStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
-import Card from '@material-ui/core/Card'
+import React, { useEffect } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
-import Link from '@material-ui/core/Link'
-import CardActionArea from '@material-ui/core/CardActionArea'
+import AssetFilter from '../containers/AssetFilter'
+import TasksTable from '../components/TasksTable'
 
 
-const styles = theme => ({
-  fullHeight: {
+const useStyles = makeStyles(theme => ({
+  paper: {
     height: '100%',
   },
-  card: {
-    //width: theme.spacing(32),
+  grid: {
+    height: '100%',
   },
-  title: {
-    fontSize: 24,
+  frame: {
+    height: '100%',
+    [theme.breakpoints.down('sm')]: {
+      height: '50%',
+    },
+    overflow: 'auto',
   },
-  cardActionArea: {
-    // width: theme.spacing(48),
-    padding: theme.spacing(3),
-  }
-})
+}))
 
 
-class TasksWindow extends PureComponent {
+export default function TasksWindow(props) {
+  const classes = useStyles()
 
-  render() {
-    const { classes } = this.props
+  useEffect(() => {
+    const {
+      refreshTasks,
+    } = props
+    refreshTasks()
+  }, [props])
 
-    return (
-
-      <Grid container spacing={3}>
-        <Grid item xs>
-          <Link
-            underline='none'
-            component={RouterLink}
-            to='/tasks/assets'
-          >
-            <Card className={classes.card}>
-              <CardActionArea className={classes.cardActionArea}>
-                <Typography className={classes.title} align='center'>
-                  Asset Tasks
-                </Typography>
-              </CardActionArea>
-            </Card>
-          </Link>
+  return (
+    <Paper className={classes.paper}>
+      <Grid container className={classes.grid}>
+        <Grid item className={classes.frame}
+          xs={12} sm={12} md={4} lg={3} xl={2}
+        >
+          <AssetFilter />
         </Grid>
-
-        <Grid item xs>
-          <Link
-            underline='none'
-            component={RouterLink}
-            to='/tasks/users'
-          >
-            <Card className={classes.card}>
-              <CardActionArea className={classes.cardActionArea}>
-                <Typography className={classes.title} align='center'>
-                  OtherTasks
-                </Typography>
-              </CardActionArea>
-            </Card>
-          </Link>
+        <Grid item className={classes.frame}
+          xs={12} sm={12} md={8} lg={9} xl={10}
+        >
+          <TasksTable />
         </Grid>
       </Grid>
-
-    )
-  }
-
-
-
+    </Paper>
+  )
 }
-
-
-export default withStyles(styles)(TasksWindow)

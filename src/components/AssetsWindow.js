@@ -23,7 +23,7 @@ const styles = theme => ({
 })
 
 
-class TablesWindow extends PureComponent {
+class AssetsWindow extends PureComponent {
 
   componentDidMount() {
     const {
@@ -54,4 +54,4 @@ class TablesWindow extends PureComponent {
 }
 
 
-export default withStyles(styles)(TablesWindow)
+export default withStyles(styles)(AssetsWindow)

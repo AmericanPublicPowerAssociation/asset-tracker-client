@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import TablesWindow from '../components/TablesWindow'
+import AssetsWindow from '../components/AssetsWindow'
 import {
   refreshAssetsKit,
 } from '../actions'
@@ -18,4 +18,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(TablesWindow)
+)(AssetsWindow)

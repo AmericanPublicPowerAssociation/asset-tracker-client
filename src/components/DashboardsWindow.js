@@ -15,14 +15,10 @@ const styles = theme => ({
   fullHeight: {
     height: '100%',
   },
-  card: {
-    width: theme.spacing(32)
-  },
   title: {
     fontSize: 24,
   },
   cardActionArea: {
-    // width: theme.spacing(48),
     padding: theme.spacing(3),
   }
 })
@@ -41,9 +37,9 @@ class DashboardsWindow extends PureComponent {
             <Link
               underline='none'
               component={RouterLink}
-              to=''
+              to='/tasks'
             >
-              <Card className={classes.card}>
+              <Card>
                 <CardActionArea className={classes.cardActionArea}>
                   <Typography className={classes.title} align='center'>
                     Tasks
@@ -61,44 +57,12 @@ class DashboardsWindow extends PureComponent {
             <Link
               underline='none'
               component={RouterLink}
-              to='/reports/benchmarks'
+              to='/logs'
             >
               <Card className={classes.card}>
                 <CardActionArea className={classes.cardActionArea}>
                   <Typography className={classes.title} align='center'>
-                    Benchmarks
-                  </Typography>
-                </CardActionArea>
-              </Card>
-            </Link>
-          </Grid>
-
-          <Grid item xs>
-            <Link
-              underline='none'
-              component={RouterLink}
-              to='/logs/assets'
-            >
-              <Card className={classes.card}>
-                <CardActionArea className={classes.cardActionArea}>
-                  <Typography className={classes.title} align='center'>
-                    Maintenance Logs
-                  </Typography>
-                </CardActionArea>
-              </Card>
-            </Link>
-          </Grid>
-
-          <Grid item xs>
-            <Link
-              underline='none'
-              component={RouterLink}
-              to='/logs/users'
-            >
-              <Card className={classes.card}>
-                <CardActionArea className={classes.cardActionArea}>
-                  <Typography className={classes.title} align='center'>
-                    Audit Trails
+                    Logs
                   </Typography>
                 </CardActionArea>
               </Card>

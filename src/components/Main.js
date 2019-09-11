@@ -7,7 +7,7 @@ import {
 } from 'asset-report-risks'
 import ProtectedRoute from '../containers/ProtectedRoute'
 import DashboardsWindow from './DashboardsWindow'
-import TablesWindow from '../containers/TablesWindow'
+import AssetsWindow from '../containers/AssetsWindow'
 import MapsWindow from '../containers/MapsWindow'
 import LogsWindow from '../containers/LogsWindow'
 // import AssetsLogsWindow from '../containers/AssetsLogsWindow'
@@ -84,7 +84,7 @@ class Main extends Component {
           <ProtectedRoute exact path='/'
             component={DashboardsWindow} />
           <ProtectedRoute exact path='/assets'
-            component={TablesWindow} />
+            component={AssetsWindow} />
           <ProtectedRoute exact path='/maps'
             component={MapsWindow} />
           <ProtectedRoute exact path='/tasks'

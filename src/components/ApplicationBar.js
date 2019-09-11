@@ -138,15 +138,14 @@ class ApplicationBar extends PureComponent {
         <IconButton aria-label='Upload CSV' color='inherit'
           onClick={openAssetsUploadDialog}
         ><CloudUploadIcon /> </IconButton>
-      </Tooltip>;
-
+      </Tooltip>
 
     const downloadAssetsCSV = isUserMember &&
-        <Tooltip title='Download CSV' enterDelay={TOOLTIP_DELAY}>
-            <IconButton aria-label='Download CSV' color='inherit'
-                        onClick={downloadAssetsUploadDialog}
-            ><CloudDownloadIcon /> </IconButton>
-        </Tooltip>;
+      <Tooltip title='Download CSV' enterDelay={TOOLTIP_DELAY}>
+        <IconButton aria-label='Download CSV' color='inherit'
+          onClick={downloadAssetsUploadDialog}
+        ><CloudDownloadIcon /> </IconButton>
+      </Tooltip>
 
     const assetButtonGroup =
       <>
@@ -184,7 +183,7 @@ class ApplicationBar extends PureComponent {
             noWrap
           >{applicationTitle}</Typography>
 
-          <Route exact path='/tables' render={() => assetButtonGroup }/>
+          <Route exact path='/assets' render={() => assetButtonGroup }/>
           <Route exact path='/maps' render={() => assetButtonGroup }/>
           <Route exact path='/circuits' render={() => assetButtonGroup }/>
 
