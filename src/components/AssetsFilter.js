@@ -21,8 +21,8 @@ const styles = theme => ({
 
 class AssetsFilter extends PureComponent {
 
-  setAssetsFiltersName = name => {
-    const { setAssetsFiltersValue } = this.props
+  setAssetsFilterName = name => {
+    const { setAssetsFilterValue } = this.props
     setAssetsFilterValue({name})
   }
 
