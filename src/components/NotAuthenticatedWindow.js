@@ -4,12 +4,11 @@ import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
-import { CONTENT_PADDING } from '../constants'
 
 
 const styles = theme => ({
   root: {
-    padding: CONTENT_PADDING,
+    padding: theme.spacing(3),
     height: '100%',
     overflow: 'auto',
   },

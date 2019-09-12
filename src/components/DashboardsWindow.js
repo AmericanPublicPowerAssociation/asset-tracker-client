@@ -9,12 +9,14 @@ import CardActionArea from '@material-ui/core/CardActionArea'
 import Grid from '@material-ui/core/Grid'
 import Link from '@material-ui/core/Link'
 import Typography from '@material-ui/core/Typography'
-import { CONTENT_PADDING } from '../constants'
 
 
 const styles = theme => ({
-  grid: {
-    padding: CONTENT_PADDING,
+  container: {
+    padding: theme.spacing(3),
+  },
+  item: {
+    padding: theme.spacing(3),
   },
   title: {
     fontSize: 24,
@@ -31,10 +33,9 @@ class DashboardsWindow extends PureComponent {
 
     return (
       <>
-      
-        <Grid container spacing={3} className={classes.grid}>
+        <Grid container className={classes.container}>
 
-          <Grid item xs>
+          <Grid item xs className={classes.item}>
             <Link
               underline='none'
               component={RouterLink}
@@ -50,11 +51,11 @@ class DashboardsWindow extends PureComponent {
             </Link>
           </Grid>
 
-          <Grid item xs>
+          <Grid item xs className={classes.item}>
             <RisksCard />
           </Grid>
 
-          <Grid item xs>
+          <Grid item xs className={classes.item}>
             <Link
               underline='none'
               component={RouterLink}
@@ -71,7 +72,6 @@ class DashboardsWindow extends PureComponent {
           </Grid>
 
         </Grid>
-
       </>
     )
   }

@@ -4,7 +4,6 @@ import darkMapStyle from './datasets/darkMapStyle.json'
 import satelliteStreetsMapStyle from './datasets/satelliteStreetsMapStyle.json'
 
 
-export const CONTENT_PADDING = 24
 export const NAVIGATION_DRAWER_WIDTH = 192
 export const INFORMATION_DRAWER_WIDTH = 512
 export const RIGHT_DRAWER_MINIMUM_WIDTH = 256

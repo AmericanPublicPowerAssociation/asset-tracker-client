@@ -14,7 +14,6 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload'
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
 import Typography from '@material-ui/core/Typography'
 import {
-  CONTENT_PADDING,
   INFORMATION_DRAWER_WIDTH,
   NAVIGATION_DRAWER_WIDTH,
   RIGHT_DRAWER_MINIMUM_WIDTH,
@@ -42,7 +41,7 @@ const styles = theme => ({
   appBarWithNavigation: {
     width: `calc(100% - ${NAVIGATION_DRAWER_WIDTH}px)`,
     marginLeft: NAVIGATION_DRAWER_WIDTH,
-    paddingLeft: CONTENT_PADDING,
+    paddingLeft: theme.spacing(3),
     [theme.breakpoints.down('xs')]: {
       paddingLeft: theme.spacing(2),
     },
