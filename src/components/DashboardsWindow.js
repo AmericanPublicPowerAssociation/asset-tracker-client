@@ -9,18 +9,19 @@ import CardActionArea from '@material-ui/core/CardActionArea'
 import Grid from '@material-ui/core/Grid'
 import Link from '@material-ui/core/Link'
 import Typography from '@material-ui/core/Typography'
+import { CONTENT_PADDING } from '../constants'
 
 
 const styles = theme => ({
-  fullHeight: {
-    height: '100%',
+  grid: {
+    padding: CONTENT_PADDING,
   },
   title: {
     fontSize: 24,
   },
   cardActionArea: {
     padding: theme.spacing(3),
-  }
+  },
 })
 
 
@@ -31,7 +32,7 @@ class DashboardsWindow extends PureComponent {
     return (
       <>
       
-        <Grid container spacing={3}>
+        <Grid container spacing={3} className={classes.grid}>
 
           <Grid item xs>
             <Link

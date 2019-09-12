@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 import AssetsMap from '../containers/AssetsMap'
 import AssetsFilter from '../containers/AssetsFilter'
@@ -8,7 +7,7 @@ import AssetList from '../containers/AssetList'
 
 
 const styles = theme => ({
-  fullHeight: {
+  grid: {
     height: '100%',
   },
   mapFrame: {
@@ -57,23 +56,21 @@ class MapsWindow extends PureComponent {
       classes,
     } = this.props
     return (
-      <Paper className={classes.fullHeight}>
-        <Grid container className={classes.fullHeight}>
-          <Grid item xs={12} sm={12} md={9} className={classes.mapFrame}>
-            <AssetsMap />
-          </Grid>
-          <Grid item xs={12} sm={12} md={3} className={classes.tableFrame}>
-            <div className={classes.frame}>
-              <div className={classes.filterPanel}>
-                <AssetsFilter />
-              </div>
-              <div className={classes.listPanel}>
-                <AssetList />
-              </div>
-            </div>
-          </Grid>
+      <Grid container className={classes.grid}>
+        <Grid item xs={12} sm={12} md={9} className={classes.mapFrame}>
+          <AssetsMap />
         </Grid>
-      </Paper>
+        <Grid item xs={12} sm={12} md={3} className={classes.tableFrame}>
+          <div className={classes.frame}>
+            <div className={classes.filterPanel}>
+              <AssetsFilter />
+            </div>
+            <div className={classes.listPanel}>
+              <AssetList />
+            </div>
+          </div>
+        </Grid>
+      </Grid>
     )
   }
 

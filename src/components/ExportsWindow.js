@@ -6,7 +6,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-export default function LogsWindow(props) {
+export default function ExportsWindow(props) {
   const classes = useStyles()
 
   return (

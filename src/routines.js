@@ -66,19 +66,21 @@ export function getFeatureSize(asset, assetTypeById) {
 
   const sizeAttribute = primaryAssetType.get('featureSizeAttribute')
   const sizeByValue = primaryAssetType.get('featureSizeByValue', Map())
-  const boundaryValues = sizeByValue.keySeq().sort()
+  const boundaryStrings = sizeByValue.keySeq().sortBy(_ => parseFloat(_))
 
-  const value = asset.get(sizeAttribute)
+  let value = asset.get(sizeAttribute)
   if (value === undefined) {
-    const minimumSize = sizeByValue.get(boundaryValues.get(0))
+    const minimumSize = sizeByValue.get(boundaryStrings.get(0))
     return minimumSize
   }
-  for (const boundaryValue of boundaryValues) {
+  value = parseFloat(value)
+  for (const boundaryString of boundaryStrings) {
+    const boundaryValue = parseFloat(boundaryStrings)
     if (value < boundaryValue) {
-      return sizeByValue.get(boundaryValue)
+      return sizeByValue.get(boundaryString)
     }
   }
-  const maximumSize = sizeByValue.get(boundaryValues.get(-1))
+  const maximumSize = sizeByValue.get(boundaryStrings.get(-1))
   return maximumSize
 }
 
