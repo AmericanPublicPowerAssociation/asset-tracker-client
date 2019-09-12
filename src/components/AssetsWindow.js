@@ -38,12 +38,12 @@ class AssetsWindow extends PureComponent {
       <Paper className={classes.paper}>
         <Grid container className={classes.grid}>
           <Grid item className={classes.frame}
-            xs={12} sm={12} md={4} lg={3} xl={2}
+            xs={12} sm={5} md={4} lg={3} xl={2}
           >
             <AssetFilter />
           </Grid>
           <Grid item className={classes.frame}
-            xs={12} sm={12} md={8} lg={9} xl={10}
+            xs={12} sm={7} md={8} lg={9} xl={10}
           >
             <AssetTable />
           </Grid>

@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import clsx from 'clsx'
 import { Map } from 'immutable'
 import { withStyles } from '@material-ui/core/styles'
+import TextField from '@material-ui/core/TextField'
 import {
   VendorName,
   ProductName,
@@ -52,12 +53,15 @@ class AssetDetail extends PureComponent {
 
     const typeId = focusingAsset.get('typeId')
     const name = focusingAsset.get('name')
+
     const vendorName = focusingAsset.get('vendorName', null)
     const productName = focusingAsset.get('productName', null)
     const productVersion = focusingAsset.get('productVersion', null)
 
     const unique = focusingAssetType.get('unique', false)
     const locatable = focusingAssetType.get('locatable', false)
+    const inputTypeByAttribute = focusingAssetType.get(
+      'inputTypeByAttribute', Map())
     const errors = focusingAsset.get('errors', Map())
 
     return (
@@ -71,7 +75,9 @@ class AssetDetail extends PureComponent {
           onChange={event => this.trackChanges({name: event.target.value})}
           onBlur={() => this.saveChanges({name})}
         />
-        {/* <AssetCircuit /> */}
+      {/*
+        <AssetCircuit />
+      */}
         <VendorName
           className={classes.attribute}
           typeId={typeId}
@@ -105,6 +111,29 @@ class AssetDetail extends PureComponent {
             [classes.vanish]: !locatable,
           })}
         />
+    <>
+    {inputTypeByAttribute.entrySeq().map(([attribute, inputType]) => {
+      const value = focusingAsset.get(attribute, '')
+      return (
+        <TextField
+          value={value}
+          className={classes.attribute}
+          label={attribute}
+          type={inputType}
+          key={attribute}
+          onChange={event => {
+            let v = event.target.value
+            if (inputType === 'number') {
+              v = parseFloat(v)
+            }
+            this.trackChanges({[attribute]: v})
+          }}
+          onBlur={() => this.saveChanges({
+            [attribute]: value})}
+        />
+      )
+    })}
+    </>
         <AssetRelationChips
           className={classes.attribute}
           label='Connections'

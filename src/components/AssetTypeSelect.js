@@ -16,8 +16,7 @@ class AssetTypeSelect extends PureComponent {
 			  <InputLabel htmlFor='asset-type-select'>Asset Type</InputLabel>
         <NativeSelect {...props} input={<Input id='asset-type-select' />} >
         {assetTypeById.entrySeq().map(([id, type]) =>
-          <option value={id} key={id}>{type.get('name')}</option> 
-        )}
+          <option value={id} key={id}>{type.get('name')}</option>)}
         </NativeSelect>
       </FormControl>
     )

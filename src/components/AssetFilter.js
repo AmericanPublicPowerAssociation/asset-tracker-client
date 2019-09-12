@@ -6,14 +6,12 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import InputBase from '@material-ui/core/InputBase'
 import Checkbox from '@material-ui/core/Checkbox'
-import {
-  getAssetTypeName,
-} from '../routines'
 
 
 const styles = theme => ({
   root: {
     height: '100%',
+    backgroundColor: '#FAFAFA',
   },
   nameInput: {
     padding: 0,
@@ -40,6 +38,8 @@ class AssetFilter extends PureComponent {
     } = this.props
     const name = assetFilterValueByAttribute.get('name')
     const selectedAssetTypeIds = assetFilterKeysByAttribute.get('typeId')
+    const countedAssetTypeById = assetTypeById.filter((type, typeId) =>
+      countByAssetTypeId.has(typeId))
     return (
       <Paper className={classes.root} elevation={0} square>
         <List>
@@ -57,8 +57,9 @@ class AssetFilter extends PureComponent {
             <ListItemText primary='Filter by Type' />
           </ListItem>
           <List disablePadding>
-          {countByAssetTypeId.entrySeq().map(([typeId, count]) => {
-            const typeName = getAssetTypeName(typeId, assetTypeById)
+          {countedAssetTypeById.entrySeq().map(([typeId, type]) => {
+            const typeName = type.get('name')
+            const count = countByAssetTypeId.get(typeId)
             const typeText = `${typeName} (${count})`
             return (
               <ListItem button key={typeId}

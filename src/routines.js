@@ -8,13 +8,15 @@ export function getAssetTypeName(assetTypeId, assetTypeById) {
   if (!primaryAssetType) {
     return '?'
   }
-  const assetTypeNameParts = [primaryAssetType.get('name')]
+  const primaryAssetTypeName = primaryAssetType.get('name')
+  const assetTypeNameParts = [primaryAssetTypeName]
   const secondaryAssetTypeId = assetTypeId[1]
   if (secondaryAssetTypeId) {
-    const secondaryAssetTypeById = primaryAssetType.get('typeById')
-    const secondaryAssetType = secondaryAssetTypeById[secondaryAssetTypeId]
-    if (secondaryAssetType !== undefined && secondaryAssetType !== null)
-      assetTypeNameParts.push(secondaryAssetType.name)
+    const nameById = primaryAssetType.get('nameById')
+    const name = nameById.get(secondaryAssetTypeId)
+    if (name) {
+      assetTypeNameParts.push(name)
+    }
   }
   return assetTypeNameParts.join(' > ')
 }
@@ -56,11 +58,14 @@ export function scrollToFocusingAsset(component) {
 export function getFeatureSize(asset, assetTypeById) {
   const typeId = asset.get('typeId')
 
-  // const assetType = assetTypeById.get(typeId)
-  const assetType = assetTypeById.get(typeId[0])
+  const primaryAssetType = assetTypeById.get(typeId[0])
+  const size = primaryAssetType.get('featureSize')
+  if (size) {
+    return size
+  }
 
-  const sizeAttribute = assetType.get('sizeAttribute')
-  const sizeByValue = assetType.get('sizeByValue', Map())
+  const sizeAttribute = primaryAssetType.get('featureSizeAttribute')
+  const sizeByValue = primaryAssetType.get('featureSizeByValue', Map())
   const boundaryValues = sizeByValue.keySeq().sort()
 
   const value = asset.get(sizeAttribute)

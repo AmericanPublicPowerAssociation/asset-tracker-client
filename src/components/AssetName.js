@@ -24,9 +24,6 @@ class AssetName extends PureComponent {
         fullWidth
         required
         className={className}
-        InputLabelProps={{
-          shrink: true,
-        }}
         inputProps={inputProps}
         {...errorProps}
         onChange={onChange}

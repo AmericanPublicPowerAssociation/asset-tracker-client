@@ -81,7 +81,10 @@ export const getVisibleAssets = createSelector([
 ) => {
   const selectedAssetTypeIds = assetFilterKeysByAttribute.get('typeId')
   return valueMatchingAssets
-    .filter(asset => selectedAssetTypeIds.has(asset.get('typeId')))
+    .filter(asset => {
+      const primaryAssetTypeId = asset.get('typeId')[0]
+      return selectedAssetTypeIds.has(primaryAssetTypeId)
+    })
     .slice(0, MAXIMUM_ASSET_LIST_LENGTH)
 })
 
@@ -92,8 +95,9 @@ export const getCountByAssetTypeId = createSelector([
   valueMatchingAssets,
 ) => {
   return Map(valueMatchingAssets.reduce((countByAssetTypeId, asset) => {
-    const typeId = asset.get('typeId')
-    countByAssetTypeId[typeId] += 1
+    // const typeId = asset.get('typeId')
+    const primaryAssetTypeId = asset.get('typeId')[0]
+    countByAssetTypeId[primaryAssetTypeId] += 1
     return countByAssetTypeId
   }, new IntegerDefaultDict()))
 })
@@ -276,7 +280,7 @@ export const getMapLayers = createSelector([
       const assetType = assetTypeById.get(primaryTypeId)
       const isLine = 'l' === primaryTypeId
 
-      let layerColor = assetType.get('color')
+      let layerColor = assetType.get('featureColor')
       if (isLine) {
         const matchExpression = ['match', ['get', 'id']]
         if (focusingAssetId) {
