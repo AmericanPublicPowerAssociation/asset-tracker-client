@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
-import AssetMap from '../containers/AssetMap'
-import AssetFilter from '../containers/AssetFilter'
+import AssetsMap from '../containers/AssetsMap'
+import AssetsFilter from '../containers/AssetsFilter'
 import AssetList from '../containers/AssetList'
 
 
@@ -60,12 +60,12 @@ class MapsWindow extends PureComponent {
       <Paper className={classes.fullHeight}>
         <Grid container className={classes.fullHeight}>
           <Grid item xs={12} sm={12} md={9} className={classes.mapFrame}>
-            <AssetMap />
+            <AssetsMap />
           </Grid>
           <Grid item xs={12} sm={12} md={3} className={classes.tableFrame}>
             <div className={classes.frame}>
               <div className={classes.filterPanel}>
-                <AssetFilter />
+                <AssetsFilter />
               </div>
               <div className={classes.listPanel}>
                 <AssetList />

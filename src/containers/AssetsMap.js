@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import AssetMap from '../components/AssetMap'
+import AssetsMap from '../components/AssetsMap'
 import {
   setAssetLocation,
   setMapViewport,
@@ -40,4 +40,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(AssetMap)
+)(AssetsMap)

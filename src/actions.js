@@ -141,21 +141,21 @@ export const includeAssetRelation = payload => ({
 })
 
 
-export const setAssetFilterValue = payload => ({
+export const setAssetsFilterValue = payload => ({
   payload, type: SET_ASSET_FILTER_VALUE
 })
 
 
-export const excludeAssetFilterKey = payload => ({
+export const excludeAssetsFilterKey = payload => ({
   payload, type: EXCLUDE_ASSET_FILTER_KEY
 })
-export const includeAssetFilterKey = payload => ({
+export const includeAssetsFilterKey = payload => ({
   payload, type: INCLUDE_ASSET_FILTER_KEY
 })
-export const setAssetFilterKeys = payload => ({
+export const setAssetsFilterKeys = payload => ({
   payload, type: SET_ASSET_FILTER_KEYS
 })
-export const toggleAssetFilterKey = payload => ({
+export const toggleAssetsFilterKey = payload => ({
   payload, type: TOGGLE_ASSET_FILTER_KEY
 })
 

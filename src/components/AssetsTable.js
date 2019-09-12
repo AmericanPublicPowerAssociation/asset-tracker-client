@@ -27,7 +27,7 @@ const styles = theme => ({
 })
 
 
-class AssetTable extends PureComponent {
+class AssetsTable extends PureComponent {
 
   componentDidUpdate() {
     scrollToFocusingAsset(this)
@@ -127,4 +127,4 @@ class AssetTable extends PureComponent {
 }
 
 
-export default withStyles(styles)(AssetTable)
+export default withStyles(styles)(AssetsTable)

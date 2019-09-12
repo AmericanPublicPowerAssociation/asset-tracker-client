@@ -35,9 +35,9 @@ export const getAddingAsset = state => state.get(
   'addingAsset')
 export const getAddingTask = state => state.get(
   'addingTask')
-export const getAssetFilterKeysByAttribute = state => state.get(
+export const getAssetsFilterKeysByAttribute = state => state.get(
   'assetFilterKeysByAttribute')
-export const getAssetFilterValueByAttribute = state => state.get(
+export const getAssetsFilterValueByAttribute = state => state.get(
   'assetFilterValueByAttribute')
 export const getTrackingAsset = state => state.get(
   'trackingAsset')
@@ -54,7 +54,7 @@ export const getTasks = state => state.get(
 
 export const getValueMatchingAssets = createSelector([
   getAssetById,
-  getAssetFilterValueByAttribute,
+  getAssetsFilterValueByAttribute,
   getSortedAssetIds,
 ], (
   assetById,
@@ -74,7 +74,7 @@ export const getValueMatchingAssets = createSelector([
 
 export const getVisibleAssets = createSelector([
   getValueMatchingAssets,
-  getAssetFilterKeysByAttribute,
+  getAssetsFilterKeysByAttribute,
 ], (
   valueMatchingAssets,
   assetFilterKeysByAttribute,
@@ -262,7 +262,7 @@ export const getMapSources = createSelector([
 export const getMapLayers = createSelector([
   getMapSources,
   getFocusingAssetId,
-  getAssetFilterKeysByAttribute,
+  getAssetsFilterKeysByAttribute,
   getAssetTypeById,
 ], (
   mapSources,

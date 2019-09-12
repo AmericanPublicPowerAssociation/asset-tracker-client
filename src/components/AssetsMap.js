@@ -23,7 +23,7 @@ const styles = theme => ({
 })
 
 
-class AssetMap extends PureComponent {
+class AssetsMap extends PureComponent {
 
   constructor(props) {
     super(props)
@@ -140,4 +140,4 @@ class AssetMap extends PureComponent {
 }
 
 
-export default withStyles(styles)(AssetMap)
+export default withStyles(styles)(AssetsMap)

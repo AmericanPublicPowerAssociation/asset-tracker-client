@@ -19,11 +19,11 @@ const styles = theme => ({
 })
 
 
-class AssetFilter extends PureComponent {
+class AssetsFilter extends PureComponent {
 
-  setAssetFilterName = name => {
-    const { setAssetFilterValue } = this.props
-    setAssetFilterValue({name})
+  setAssetsFiltersName = name => {
+    const { setAssetsFiltersValue } = this.props
+    setAssetsFilterValue({name})
   }
 
   render() {
@@ -34,7 +34,7 @@ class AssetFilter extends PureComponent {
       assetFilterKeysByAttribute,
       assetTypeById,
       countByAssetTypeId,
-      toggleAssetFilterKey,
+      toggleAssetsFilterKey,
     } = this.props
     const name = assetFilterValueByAttribute.get('name')
     const selectedAssetTypeIds = assetFilterKeysByAttribute.get('typeId')
@@ -48,7 +48,7 @@ class AssetFilter extends PureComponent {
               value={name}
               placeholder='Filter by Name'
               inputProps={{ className: classes.nameInput }}
-              onChange={event => this.setAssetFilterName(event.target.value)}
+              onChange={event => this.setAssetsFilterName(event.target.value)}
             />
           </ListItem>
         {!countByAssetTypeId.isEmpty() &&
@@ -63,7 +63,7 @@ class AssetFilter extends PureComponent {
             const typeText = `${typeName} (${count})`
             return (
               <ListItem button key={typeId}
-                onClick={() => toggleAssetFilterKey({typeId}) }
+                onClick={() => toggleAssetsFilterKey({typeId}) }
               >
                 <Checkbox tabIndex={-1} disableRipple
                   checked={selectedAssetTypeIds.has(typeId)}
@@ -87,4 +87,4 @@ class AssetFilter extends PureComponent {
 }
 
 
-export default withStyles(styles)(AssetFilter)
+export default withStyles(styles)(AssetsFilter)

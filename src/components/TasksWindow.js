@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
-import AssetFilter from '../containers/AssetFilter'
+import AssetsFilter from '../containers/AssetsFilter'
 import TasksTable from '../components/TasksTable'
 
 
@@ -39,7 +39,7 @@ export default function TasksWindow(props) {
         <Grid item className={classes.frame}
           xs={12} sm={12} md={4} lg={3} xl={2}
         >
-          <AssetFilter />
+          <AssetsFilter />
         </Grid>
         <Grid item className={classes.frame}
           xs={12} sm={12} md={8} lg={9} xl={10}

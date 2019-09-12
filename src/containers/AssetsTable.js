@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import AssetTable from '../components/AssetTable'
+import AssetsTable from '../components/AssetsTable'
 import {
   addAssetRelation,
   dropAssetRelation,
@@ -42,4 +42,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(AssetTable)
+)(AssetsTable)
