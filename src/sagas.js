@@ -130,8 +130,7 @@ function* watchUploadAssetsCsv() {
         var data = new FormData()
         data.append('file', action.payload);
         yield fetchSafely('/assets.csv', {
-          // method: 'PATCH',
-            method: 'POST',
+            method: 'PATCH',
             body: data,
         }, {
             on200: function* (asset) {
