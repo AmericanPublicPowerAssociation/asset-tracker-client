@@ -68,7 +68,8 @@ function* watchRefreshAssetsKit() {
       const url = `/assetsKit.json?column=${column}&desc=${desc}` 
       yield fetchSafely(url, {}, {
         on200: function* (assetsKit) {
-          yield put(sortAssets(assetsKit))
+          const payload = assetsKit.merge({column, desc})
+          yield put(sortAssets(payload))
         }
       })
     }

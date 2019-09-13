@@ -73,7 +73,7 @@ class AssetsTable extends PureComponent {
             <TableCell>
               <TableSortLabel
                 active={'typeid' === curSortColumn}
-                direction={ ('typedid' === curSortColumn && orderByDesc) ? 'asc': 'desc'}
+                direction={ ('typeid' === curSortColumn && orderByDesc) ? 'asc': 'desc'}
                 onClick={
                   () => this.onSortClick('typeid', curSortColumn, orderByDesc)}>
                 Type

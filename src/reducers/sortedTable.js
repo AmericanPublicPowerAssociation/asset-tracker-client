@@ -1,7 +1,6 @@
 import { Map } from 'immutable'
 
 import {
-  RESET_ASSETS_KIT,
   SET_SORTED_ASSETS,
 } from '../constants'
 
@@ -14,6 +13,12 @@ const initialState = Map({
 
 const sortedAssets = (state = initialState, action) => {
   switch (action.type) {
+    case SET_SORTED_ASSETS: {
+      const payload = action.payload
+      const column = payload.get('column')
+      const desc = payload.get('desc')
+      return state.mergeDeep({column, desc})
+    }
     default: {
       return state
     }
