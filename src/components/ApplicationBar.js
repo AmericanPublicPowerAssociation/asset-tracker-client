@@ -125,21 +125,21 @@ class ApplicationBar extends PureComponent {
         ><EditingSaveIcon /></IconButton>
       </Tooltip>
 
-    const assetAddButton = isUserMember &&
+    const assetAddButton = isUserMember && !editingAssetId &&
       <Tooltip title='Add Asset' enterDelay={TOOLTIP_DELAY}>
         <IconButton aria-label='Add Asset' color='inherit'
           onClick={openAssetAddDialog}
         ><AddIcon /></IconButton>
       </Tooltip>
 
-    const uploadAssetsCSV = isUserMember &&
+    const uploadAssetsCSV = isUserMember && !editingAssetId &&
       <Tooltip title='Upload CSV' enterDelay={TOOLTIP_DELAY}>
         <IconButton aria-label='Upload CSV' color='inherit'
           onClick={openAssetsUploadDialog}
         ><CloudUploadIcon /> </IconButton>
       </Tooltip>
 
-    const downloadAssetsCSV = isUserMember &&
+    const downloadAssetsCSV = isUserMember && !editingAssetId &&
       <Tooltip title='Download CSV' enterDelay={TOOLTIP_DELAY}>
         <IconButton aria-label='Download CSV' color='inherit'
           onClick={downloadAssetsUploadDialog}

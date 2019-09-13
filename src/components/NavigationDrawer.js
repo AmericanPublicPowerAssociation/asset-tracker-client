@@ -72,20 +72,31 @@ class NavigationDrawer extends PureComponent {
         <List>
         {isUserAuthenticated ?
           <>
-            <ListItemLink to='/' text='Dashboards' icon={<DashboardsIcon />} />
-            <ListItemLink to='/tasks' text='Tasks' icon={<AlarmOnIcon />} />
-            <ListItemLink to='/assets' text='Assets' icon={<AssetsIcon />} />
-            <ListItemLink to='/maps' text='Maps' icon={<MapsIcon />} />
-            <ListItemLink to='/risks' text='Risks' icon={<RisksIcon />} />  
-            <ListItemLink to='/logs' text='Logs' icon={<LogsIcon />} />
-            {/*
-            <ListItemLink to='/circuits' text='Circuits' icon={<CircuitsIcon />} />
-            */}
-            <ListItemLink to='/exports' text='Exports' icon={<ExportsIcon />} />
-            <ListItemLink to='/settings' text='Settings' icon={<SettingsIcon />} />
-            <ListItemLink to={authUrl} text='Sign Out' icon={<SignOutIcon />} redirect />
+            <ListItemLink to='/' text='Dashboards'
+              icon={<DashboardsIcon />} />
+            <ListItemLink to='/tasks' text='Tasks'
+              icon={<AlarmOnIcon />} />
+            <ListItemLink to='/assets' text='Assets'
+              icon={<AssetsIcon />} />
+            <ListItemLink to='/maps' text='Maps'
+              icon={<MapsIcon />} />
+            <ListItemLink to='/risks' text='Risks'
+              icon={<RisksIcon />} />
+            <ListItemLink to='/logs' text='Logs'
+              icon={<LogsIcon />} />
+          {/*
+            <ListItemLink to='/circuits' text='Circuits'
+              icon={<CircuitsIcon />} />
+            <ListItemLink to='/exports' text='Exports'
+              icon={<ExportsIcon />} />
+          */}
+            <ListItemLink to='/settings' text='Settings'
+              icon={<SettingsIcon />} />
+            <ListItemLink to={authUrl} text='Sign Out'
+              icon={<SignOutIcon />} redirect />
           </> :
-          <ListItemLink to={authUrl} text='Sign In' icon={<SignInIcon />} redirect />
+            <ListItemLink to={authUrl} text='Sign In'
+              icon={<SignInIcon />} redirect />
         }
         </List>
       </Drawer>

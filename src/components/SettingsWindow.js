@@ -20,7 +20,7 @@ export default function SettingsWindow(props) {
   const {
     withMorningTheme,
     toggleTheme,
-  } = this.props
+  } = props
 
   return (
     <Paper className={classes.root}>
