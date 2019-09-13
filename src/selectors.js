@@ -17,12 +17,12 @@ import {
 
 export const getApp = state => state.get(
   'app')
-export const getSortedAssetIds = state => state.get(
-  'sortedAssetIds')
-export const getAssetById = state => state.get(
-  'assetById')
 export const getAssetTypeById = state => state.get(
   'assetTypeById')
+export const getAssetById = state => state.get(
+  'assetById')
+export const getSortedAssetIds = state => state.get(
+  'sortedAssetIds')
 export const getFocusingAssetId = state => state.get(
   'focusingAssetId')
 export const getRelatingAssetId = state => state.get(

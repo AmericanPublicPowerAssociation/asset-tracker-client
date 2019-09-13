@@ -13,6 +13,7 @@ import {
   watchSuggestProductNames,
   watchSuggestProductVersions,
   watchRefreshRisks,
+  watchRefreshRiskMetrics,
 } from 'asset-report-risks'
 import {
   closeAssetsUploadDialog,
@@ -230,5 +231,6 @@ export default function* () {
     watchSuggestProductNames(),
     watchSuggestProductVersions(),
     watchRefreshRisks(),
+    watchRefreshRiskMetrics(),
   ])
 }

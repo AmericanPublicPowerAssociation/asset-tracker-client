@@ -13,16 +13,16 @@ import Typography from '@material-ui/core/Typography'
 
 const styles = theme => ({
   container: {
-    padding: theme.spacing(3),
+    padding: theme.spacing(1),
   },
   item: {
-    padding: theme.spacing(3),
+    padding: theme.spacing(1),
   },
   title: {
     fontSize: 24,
   },
   cardActionArea: {
-    padding: theme.spacing(3),
+    padding: theme.spacing(1),
   },
 })
 
@@ -51,8 +51,8 @@ class DashboardsWindow extends PureComponent {
             </Link>
           </Grid>
 
-          <Grid item xs className={classes.item}>
-            <RisksCard />
+          <Grid item xs={6} className={classes.item}>
+            <RisksCard to='/risks' />
           </Grid>
 
           <Grid item xs className={classes.item}>
