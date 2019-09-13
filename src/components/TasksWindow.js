@@ -1,44 +1,50 @@
 import React, { useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import Grid from '@material-ui/core/Grid'
-import AssetsFilter from '../containers/AssetsFilter'
-import TasksTable from '../components/TasksTable'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import TableCell from '@material-ui/core/TableCell'
 
 
 const useStyles = makeStyles(theme => ({
-  grid: {
-    height: '100%',
-  },
-  frame: {
-    height: '100%',
-    [theme.breakpoints.down('sm')]: {
-      height: '50%',
-    },
-    overflow: 'auto',
+  table: {
   },
 }))
 
 
 export default function TasksWindow(props) {
   const classes = useStyles()
-  const { refreshTasks } = props
+  const { tasks, refreshTasks } = props
 
   useEffect(() => {
     refreshTasks()
   }, [refreshTasks])
 
   return (
-    <Grid container className={classes.grid}>
-      <Grid item className={classes.frame}
-        xs={12} sm={12} md={4} lg={3} xl={2}
-      >
-        <AssetsFilter />
-      </Grid>
-      <Grid item className={classes.frame}
-        xs={12} sm={12} md={8} lg={9} xl={10}
-      >
-        <TasksTable />
-      </Grid>
-    </Grid>
+    <Table className={classes.table}>
+      <TableHead>
+        <TableRow>
+          <TableCell>Asset</TableCell>
+          <TableCell>Reference URI</TableCell>
+          <TableCell>Task</TableCell>
+          <TableCell>Owner</TableCell>
+          <TableCell align='right'>Status</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+    {tasks && tasks.map(task => {
+      return (
+        <TableRow>
+          <TableCell>{task.get('assetName')}</TableCell>
+          <TableCell>{task.get('referenceUri')}</TableCell>
+          <TableCell>{task.get('name')}</TableCell>
+          <TableCell>{task.get('assignmentUserId')}</TableCell>
+          <TableCell align='right'>{task.get('status')}</TableCell>
+        </TableRow>
+      )
+    })}
+      </TableBody>
+    </Table>
   )
 }

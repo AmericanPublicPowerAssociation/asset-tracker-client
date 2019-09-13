@@ -13,37 +13,37 @@ import {
   watchSuggestProductNames,
   watchSuggestProductVersions,
   watchRefreshRisks,
-  // watchRefreshRiskMetrics,
 } from 'asset-report-risks'
 import {
   closeAssetsUploadDialog,
   excludeAssetRelation,
   includeAssetRelation,
   refreshAssetsKit,
+  resetAssetTasks,
   resetAssetsKit,
-  resetAssetsLogs,
   resetDashboards,
+  resetLogs,
   resetTasks,
   setAddingAssetCSVFileErrors,
   setAddingAssetErrors,
   setAddingAssetValue,
-  sortAssets,
   setAsset,
-  // setTask,
   setAssetErrors,
   setAssets,
   setFocusingAsset,
+  sortAssets,
 } from './actions'
 import {
-  ADD_ASSET,
   // ADD_TASK,
+  ADD_ASSET,
   ADD_ASSET_RELATION,
   CHANGE_ASSET,
   DOWNLOAD_ASSETS_CSV,
   DROP_ASSET_RELATION,
   REFRESH_ASSETS_KIT,
-  REFRESH_ASSETS_LOGS,
+  REFRESH_ASSET_TASKS,
   REFRESH_DASHBOARDS,
+  REFRESH_LOGS,
   REFRESH_TASKS,
   UPLOAD_ASSETS_CSV,
 } from './constants'
@@ -91,11 +91,25 @@ function* watchRefreshAssetsKit() {
 }
 
 
-function* watchRefreshAssetsLogs() {
-  yield takeLatest(REFRESH_ASSETS_LOGS, function* () {
-    yield fetchSafely('/assetsLogs.json', {}, {
-      on200: function* (assetsLogs) {
-        yield put(resetAssetsLogs(assetsLogs))
+function *watchRefreshAssetTasks() {
+  yield takeLatest(REFRESH_ASSET_TASKS, function* (action) {
+    const payload = action.payload
+    const { id } = payload
+    const url = `/assets/${id}/tasks.json`
+    yield fetchSafely(url, {}, {
+      on200: function* (logs) {
+        yield put(resetAssetTasks(logs))
+      },
+    })
+  })
+}
+
+
+function* watchRefreshLogs() {
+  yield takeLatest(REFRESH_LOGS, function* () {
+    yield fetchSafely('/logs.json', {}, {
+      on200: function* (logs) {
+        yield put(resetLogs(logs))
       },
     })
   })
@@ -245,7 +259,8 @@ export default function* () {
   yield all([
     watchRefreshAuth(),
     watchRefreshAssetsKit(),
-    watchRefreshAssetsLogs(),
+    watchRefreshAssetTasks(),
+    watchRefreshLogs(),
     watchRefreshTasks(),
     watchAddAsset(),
     // watchAddTask(),
@@ -259,6 +274,5 @@ export default function* () {
     watchSuggestProductVersions(),
     watchRefreshRisks(),
     watchRefreshDashboards(),
-    // watchRefreshRiskMetrics(),
   ])
 }

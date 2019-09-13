@@ -15,6 +15,7 @@ import sortedAssetIds from './sortedAssetIds'
 import sortedTable from './sortedTable'
 import assetById from './assetById'
 import focusingAssetId from './focusingAssetId'
+import focusingAssetTasks from './focusingAssetTasks'
 import relatingAssetId from './relatingAssetId'
 import relatingAssetKey from './relatingAssetKey'
 import assetFilterKeysByAttribute from './assetFilterKeysByAttribute'
@@ -26,7 +27,7 @@ import baseMapStyleName from './baseMapStyleName'
 import locatingAssetId from './locatingAssetId'
 import assetTypeById from './assetTypeById'
 import selectedAssetIds from './selectedAssetIds'
-import assetsLogs from './assetsLogs'
+import logs from './logs'
 import assetTasks from './assetTasks'
 import dashboards from './dashboards'
 import {
@@ -45,6 +46,7 @@ const reduceHorizontally = combineReducers({
   sortedAssetIds,
   assetById,
   focusingAssetId,
+  focusingAssetTasks,
   relatingAssetId,
   relatingAssetKey,
   addingAsset,
@@ -61,7 +63,7 @@ const reduceHorizontally = combineReducers({
   baseMapStyleName,
   locatingAssetId,
   selectedAssetIds,
-  assetsLogs,
+  logs,
   dashboards,
 })
 
