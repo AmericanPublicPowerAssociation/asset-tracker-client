@@ -12,6 +12,7 @@ import {
 } from 'asset-report-risks'
 import app from './app'
 import sortedAssetIds from './sortedAssetIds'
+import sortedTable from './sortedTable'
 import assetById from './assetById'
 import focusingAssetId from './focusingAssetId'
 import relatingAssetId from './relatingAssetId'
@@ -39,6 +40,7 @@ const reduceHorizontally = combineReducers({
   app,
   auth,
   assetTypeById,
+  sortedTable,
   sortedAssetIds,
   assetById,
   focusingAssetId,

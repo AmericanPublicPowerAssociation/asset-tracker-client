@@ -26,6 +26,7 @@ const mapStateToProps = state => ({
   relatedAssetTypeIds: getRelatedAssetTypeIds(state),
   relatedAssetIds: getRelatedAssetIds(state),
   assetTypeById: getAssetTypeById(state),
+  sortedTable: state.get('sortedTable'),
 })
 
 

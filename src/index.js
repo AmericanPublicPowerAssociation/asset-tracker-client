@@ -11,7 +11,6 @@ import reduceState from './reducers'
 import reduceSaga from './sagas'
 import validationMiddleware from './tweens/validationMiddleware'
 
-
 const initialState = Map()
 const enhanceStore = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const sagaMiddleware = createSagaMiddleware()

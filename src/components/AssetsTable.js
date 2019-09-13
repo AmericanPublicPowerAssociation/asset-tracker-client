@@ -7,6 +7,7 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
 import Switch from '@material-ui/core/Switch'
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { capitalize } from '../macros'
 import {
   getAssetTypeName,
@@ -48,16 +49,30 @@ class AssetsTable extends PureComponent {
       setFocusingAsset,
       addAssetRelation,
       dropAssetRelation,
+      sortedTable,
     } = this.props
-
+    
+    const sortColumn = sortedTable.get('column')
+    const sortOrder = sortedTable.get('order')
     const editingAssetId = locatingAssetId || relatingAssetId
-
     return (
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Type</TableCell>
-            <TableCell>Name</TableCell>
+            <TableCell>
+              <TableSortLabel
+                active={'typeid' === sortColumn}
+                direction={sortOrder}>
+                Type
+              </TableSortLabel>
+            </TableCell>
+            <TableCell>
+              <TableSortLabel
+                active={'name' === sortColumn}
+                direction={sortOrder}>
+                Name
+              </TableSortLabel>
+            </TableCell>
           {relatingAssetId &&
             <TableCell align='right'>
               {capitalize(relatingAssetKey.replace('Ids', ''))}

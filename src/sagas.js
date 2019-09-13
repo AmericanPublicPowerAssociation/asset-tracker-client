@@ -25,6 +25,7 @@ import {
   setAddingAssetCSVFileErrors,
   setAddingAssetErrors,
   setAddingAssetValue,
+  sortAssets,
   setAsset,
   // setTask,
   setAssetErrors,
@@ -53,12 +54,24 @@ import {
 
 
 function* watchRefreshAssetsKit() {
-  yield takeLatest(REFRESH_ASSETS_KIT, function* () {
-    yield fetchSafely('/assetsKit.json', {}, {
-      on200: function* (assetsKit) {
-        yield put(resetAssetsKit(assetsKit))
-      },
-    }) 
+  yield takeLatest(REFRESH_ASSETS_KIT, function* (action) {
+    const payload = action.payload
+    const { column, desc } = payload
+    if (!column || !desc) {
+      yield fetchSafely('/assetsKit.json', {}, {
+        on200: function* (assetsKit) {
+          yield put(resetAssetsKit(assetsKit))
+        },
+      })
+    }
+    else {
+      const url = `/assetsKit.js?column=${column}&desc=${desc}` 
+      yield fetchSafely(url, {}, {
+        on200: function* (assetsKit) {
+          yield put(sortAssets(assetsKit))
+        }
+      })
+    }
   })
 }
 
