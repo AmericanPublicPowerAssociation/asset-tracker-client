@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function TasksWindow(props) {
   const classes = useStyles()
-  const { tasks, refreshTasks } = props
+  const { taskById, refreshTasks } = props
 
   useEffect(() => {
     refreshTasks()
@@ -33,9 +33,9 @@ export default function TasksWindow(props) {
         </TableRow>
       </TableHead>
       <TableBody>
-    {tasks && tasks.map(task => {
+    {taskById.entrySeq().map(([id, task]) => {
       return (
-        <TableRow>
+        <TableRow key={id}>
           <TableCell>{task.get('assetName')}</TableCell>
           <TableCell>{task.get('referenceUri')}</TableCell>
           <TableCell>{task.get('name')}</TableCell>

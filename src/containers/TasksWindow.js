@@ -4,12 +4,12 @@ import {
   refreshTasks,
 } from '../actions'
 import {
-  getTasks,
+  getTaskById,
 } from '../selectors'
 
 
 const mapStateToProps = state => ({
-  tasks: getTasks(state),
+  taskById: getTaskById(state),
 })
 
 

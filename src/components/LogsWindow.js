@@ -32,7 +32,7 @@ export default function LogsWindow(props) {
         </TableRow>
       </TableHead>
       <TableBody>
-    {logs && logs.map(log => {
+    {logs.map(log => {
       return (
         <TableRow>
           <TableCell>{log.get('userId')}</TableCell>

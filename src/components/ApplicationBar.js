@@ -10,8 +10,8 @@ import MenuIcon from '@material-ui/icons/Menu'
 import EditingOpenIcon from '@material-ui/icons/CenterFocusStrong'
 import EditingSaveIcon from '@material-ui/icons/Check'
 import AddIcon from '@material-ui/icons/Add'
-import CloudUploadIcon from '@material-ui/icons/CloudUpload'
-import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
+import UploadIcon from '@material-ui/icons/VerticalAlignTop'
+import DownloadIcon from '@material-ui/icons/VerticalAlignBottom'
 import Typography from '@material-ui/core/Typography'
 import {
   INFORMATION_DRAWER_WIDTH,
@@ -136,14 +136,14 @@ class ApplicationBar extends PureComponent {
       <Tooltip title='Upload CSV' enterDelay={TOOLTIP_DELAY}>
         <IconButton aria-label='Upload CSV' color='inherit'
           onClick={openAssetsUploadDialog}
-        ><CloudUploadIcon /> </IconButton>
+        ><UploadIcon /> </IconButton>
       </Tooltip>
 
     const downloadAssetsCSV = isUserMember && !editingAssetId &&
       <Tooltip title='Download CSV' enterDelay={TOOLTIP_DELAY}>
         <IconButton aria-label='Download CSV' color='inherit'
           onClick={downloadAssetsUploadDialog}
-        ><CloudDownloadIcon /> </IconButton>
+        ><DownloadIcon /> </IconButton>
       </Tooltip>
 
     const assetButtonGroup =

@@ -23,9 +23,10 @@ export const REFRESH_LOGS = 'REFRESH_LOGS'
 export const REFRESH_TASKS = 'REFRESH_TASKS'
 export const REFRESH_ASSET_TASKS = 'REFRESH_ASSET_TASKS'
 export const ADD_ASSET = 'ADD_ASSET'
-export const ADD_TASK = 'ADD_TASK'
 export const CHANGE_ASSET = 'CHANGE_ASSET'
 
+export const ADD_TASK = 'ADD_TASK'
+export const SET_TASK = 'SET_TASK'
 
 export const ADD_ASSET_RELATION = 'ADD_ASSET_RELATION'
 export const DROP_ASSET_RELATION = 'DROP_ASSET_RELATION'
@@ -40,7 +41,6 @@ export const SET_ASSETS = 'SET_ASSETS'
 export const SET_SORTED_ASSETS = 'SET_SORTED_ASSETS'
 
 export const SET_ASSET = 'SET_ASSET'
-export const SET_TASK = 'SET_TASK'
 export const MERGE_ASSET = 'MERGE_ASSET'
 
 export const SET_ASSET_ERRORS = 'SET_ASSET_ERRORS'

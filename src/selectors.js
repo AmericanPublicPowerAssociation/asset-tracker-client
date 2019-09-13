@@ -49,8 +49,8 @@ export const getBaseMapStyleName = state => state.get(
   'baseMapStyleName')
 export const getLogs = state => state.get(
   'logs')
-export const getTasks = state => state.get(
-  'tasks')
+export const getTaskById = state => state.get(
+  'taskById')
 export const getDashboards = state => state.get(
   'dashboards')
 

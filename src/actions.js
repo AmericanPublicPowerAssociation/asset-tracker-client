@@ -1,6 +1,7 @@
 import {
   ADD_ASSET,
   ADD_ASSET_RELATION,
+  ADD_TASK,
   CHANGE_ASSET,
   CLOSE_ASSET_ADD_DIALOG,
   CLOSE_TASK_ADD_DIALOG,
@@ -33,6 +34,7 @@ import {
   RESET_TASKS,
   SET_ADDING_ASSET_ERRORS,
   SET_ADDING_ASSET_VALUE,
+  SET_ADDING_TASK_ERRORS,
   SET_ADDING_TASK_VALUE,
   SET_APP_VALUE,
   SET_SORTED_ASSETS,
@@ -77,11 +79,9 @@ export const refreshTasks = payload => ({
 export const addAsset = payload => ({
   payload, type: ADD_ASSET})
 export const addTask = payload => ({
-  payload, type: ADD_ASSET
-})
+  payload, type: ADD_TASK})
 export const changeAsset = payload => ({
-  payload, type: CHANGE_ASSET
-})
+  payload, type: CHANGE_ASSET})
 
 
 export const addAssetRelation = payload => ({
@@ -170,26 +170,22 @@ export const toggleSelectedAsset = payload => ({
 
 
 export const openAssetAddDialog = payload => ({
-  payload, type: OPEN_ASSET_ADD_DIALOG
-})
+  payload, type: OPEN_ASSET_ADD_DIALOG})
 export const closeAssetAddDialog = payload => ({
-  payload, type: CLOSE_ASSET_ADD_DIALOG
-})
-export const openTaskAddDialog = payload => ({
-  payload, type: OPEN_TASK_ADD_DIALOG
-})
-export const closeTaskAddDialog = payload => ({
-  payload, type: CLOSE_TASK_ADD_DIALOG
-})
+  payload, type: CLOSE_ASSET_ADD_DIALOG})
 export const setAddingAssetValue = payload => ({
-  payload, type: SET_ADDING_ASSET_VALUE
-})
-export const setAddingTaskValue = payload => ({
-  payload, type: SET_ADDING_TASK_VALUE
-})
+  payload, type: SET_ADDING_ASSET_VALUE})
 export const setAddingAssetErrors = payload => ({
-  payload, type: SET_ADDING_ASSET_ERRORS
-})
+  payload, type: SET_ADDING_ASSET_ERRORS})
+
+export const openTaskAddDialog = payload => ({
+  payload, type: OPEN_TASK_ADD_DIALOG})
+export const closeTaskAddDialog = payload => ({
+  payload, type: CLOSE_TASK_ADD_DIALOG})
+export const setAddingTaskValue = payload => ({
+  payload, type: SET_ADDING_TASK_VALUE})
+export const setAddingTaskErrors = payload => ({
+  payload, type: SET_ADDING_TASK_ERRORS})
 
 export const openAssetsUploadDialog = payload => ({
   payload, type: OPEN_ASSETS_UPLOAD_DIALOG})

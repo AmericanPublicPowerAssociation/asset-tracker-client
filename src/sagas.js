@@ -19,7 +19,6 @@ import {
   excludeAssetRelation,
   includeAssetRelation,
   refreshAssetsKit,
-  resetAssetTasks,
   resetAssetsKit,
   resetDashboards,
   resetLogs,
@@ -27,14 +26,17 @@ import {
   setAddingAssetCSVFileErrors,
   setAddingAssetErrors,
   setAddingAssetValue,
+  setAddingTaskErrors,
+  setAddingTaskValue,
   setAsset,
   setAssetErrors,
   setAssets,
   setFocusingAsset,
+  setTask,
   sortAssets,
 } from './actions'
 import {
-  // ADD_TASK,
+  ADD_TASK,
   ADD_ASSET,
   ADD_ASSET_RELATION,
   CHANGE_ASSET,
@@ -52,7 +54,7 @@ import {
 } from './macros'
 import {
   rinseAsset,
-  // rinseTask,
+  rinseTask,
 } from './routines'
 
 
@@ -97,8 +99,8 @@ function *watchRefreshAssetTasks() {
     const { id } = payload
     const url = `/assets/${id}/tasks.json`
     yield fetchSafely(url, {}, {
-      on200: function* (logs) {
-        yield put(resetAssetTasks(logs))
+      on200: function* (tasks) {
+        yield put(resetTasks(tasks))
       },
     })
   })
@@ -119,8 +121,8 @@ function* watchRefreshLogs() {
 function* watchRefreshTasks() {
   yield takeLatest(REFRESH_TASKS, function* () {
     yield fetchSafely('/tasks.json', {}, {
-      on200: function* (assetTasks) {
-        yield put(resetTasks(assetTasks))
+      on200: function* (tasks) {
+        yield put(resetTasks(tasks))
       },
     })
   })
@@ -147,24 +149,23 @@ function* watchAddAsset() {
 }
 
 
-// function* watchAddTask() {
-//   yield takeEvery(ADD_TASK, function* (action) {
-//     const payload = rinseTask(action.payload)
-//     yield fetchSafely('/tasks.json', {
-//       method: 'POST',
-//       body: JSON.stringify(payload),
-//     }, {
-//       on200: function* (task) {
-//         yield put(setTask(task))
-//         yield put(setAddingTaskValue({isOpen: false, errors: Map()}))
-//         yield put(setFocusingTask({id: task.get('id')}))
-//       },
-//       on400: function* (errors) {
-//         yield put(setAddingTaskErrors(errors))
-//       },
-//     })
-//   })
-// }
+function* watchAddTask() {
+  yield takeEvery(ADD_TASK, function* (action) {
+    const payload = rinseTask(action.payload)
+    yield fetchSafely('/tasks.json', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }, {
+      on200: function* (task) {
+        yield put(setTask(task))
+        yield put(setAddingTaskValue({isOpen: false, errors: Map()}))
+      },
+      on400: function* (errors) {
+        yield put(setAddingTaskErrors(errors))
+      },
+    })
+  })
+}
 
 
 function* watchUploadAssetsCsv() {
@@ -263,7 +264,7 @@ export default function* () {
     watchRefreshLogs(),
     watchRefreshTasks(),
     watchAddAsset(),
-    // watchAddTask(),
+    watchAddTask(),
     watchUploadAssetsCsv(),
     watchDownloadFileAssets(),
     watchChangeAsset(),

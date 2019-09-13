@@ -1,9 +1,10 @@
+import { List } from 'immutable'
 import {
   RESET_LOGS,
 } from '../constants'
 
 
-const initialState = null
+const initialState = List()
 
 
 const logs = (state = initialState, action) => {

@@ -8,6 +8,8 @@ import TableBody from '@material-ui/core/TableBody'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
+import Chip from '@material-ui/core/Chip'
+import AddIcon from '@material-ui/icons/Add'
 import {
   VendorName,
   ProductName,
@@ -33,11 +35,13 @@ export default function AssetDetail(props) {
   const {
     focusingAsset,
     focusingAssetType,
-    focusingAssetTasks,
     connectedAssets,
     parentAssets,
     childAssets,
     refreshAssetTasks,
+    openTaskAddDialog,
+    setAddingTaskValue,
+    taskById,
   } = props
 
   function trackChanges(attributes) {
@@ -173,9 +177,9 @@ export default function AssetDetail(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-      {focusingAssetTasks && focusingAssetTasks.map(task => {
+      {taskById.entrySeq().map(([id, task]) => {
         return (
-          <TableRow>
+          <TableRow key={id}>
             <TableCell>{task.get('name')}</TableCell>
             <TableCell>{task.get('assignmentUserId')}</TableCell>
             <TableCell align='right'>{task.get('status')}</TableCell>
@@ -184,6 +188,16 @@ export default function AssetDetail(props) {
       })}
         </TableBody>
       </Table>
+
+      <Chip
+        label=<AddIcon />
+        color='primary'
+        onClick={() => {
+          setAddingTaskValue({assetId: id})
+          openTaskAddDialog()
+        }}
+      />
+
     </>
   )
 }

@@ -3,29 +3,31 @@ import AssetDetail from '../components/AssetDetail'
 import {
   changeAsset,
   mergeAsset,
+  openTaskAddDialog,
   refreshAssetTasks,
+  setAddingTaskValue,
 } from '../actions'
 import {
   getChildAssets,
   getConnectedAssets,
   getFocusingAsset,
-  getFocusingAssetTasks,
   getFocusingAssetType,
   getParentAssets,
   getRelatingAssetId,
   getRelatingAssetKey,
+  getTaskById,
 } from '../selectors'
 
 
 const mapStateToProps = state => ({
   focusingAsset: getFocusingAsset(state),
   focusingAssetType: getFocusingAssetType(state),
-  focusingAssetTasks: getFocusingAssetTasks(state),
   relatingAssetId: getRelatingAssetId(state),
   relatingAssetKey: getRelatingAssetKey(state),
   connectedAssets: getConnectedAssets(state),
   parentAssets: getParentAssets(state),
   childAssets: getChildAssets(state),
+  taskById: getTaskById(state),
 })
 
 
@@ -36,6 +38,10 @@ const mapDispatchToProps = dispatch => ({
     mergeAsset(payload))},
   refreshAssetTasks: payload => {dispatch(
     refreshAssetTasks(payload))},
+  openTaskAddDialog: payload => {dispatch(
+    openTaskAddDialog(payload))},
+  setAddingTaskValue: payload => {dispatch(
+    setAddingTaskValue(payload))},
 })
 
 

@@ -32,6 +32,7 @@ export function rinseAsset(asset) {
   ])
 }
 
+
 export function rinseTask(task) {
   return task.deleteAll([
     'isOpen',
