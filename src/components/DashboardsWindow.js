@@ -10,6 +10,7 @@ import Grid from '@material-ui/core/Grid'
 import Link from '@material-ui/core/Link'
 import Typography from '@material-ui/core/Typography'
 import Table from '@material-ui/core/Table'
+import TableHead from '@material-ui/core/TableHead'
 import TableBody from '@material-ui/core/TableBody'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
@@ -138,6 +139,26 @@ export default function DashboardsWindow(props) {
               <Typography className={classes.title} align='center'>
                 Logs
               </Typography>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>User ID</TableCell>
+                    <TableCell>Event</TableCell>
+                    <TableCell align='right'>Timestamp</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+              {logsSummary.get('recentLogs').map((log, index) => {
+                return (
+                  <TableRow key={index}>
+                    <TableCell>{log.get('userId')}</TableCell>
+                    <TableCell>{log.get('event')}</TableCell>
+                    <TableCell align='right'>{log.get('timestamp')}</TableCell>
+                  </TableRow>
+                )
+              })}
+                </TableBody>
+              </Table>
             </CardActionArea>
           </Card>
         </Link>

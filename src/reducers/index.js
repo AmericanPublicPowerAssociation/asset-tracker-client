@@ -26,8 +26,8 @@ import baseMapStyleName from './baseMapStyleName'
 import locatingAssetId from './locatingAssetId'
 import assetTypeById from './assetTypeById'
 import selectedAssetIds from './selectedAssetIds'
-import assetsLogs from './assetsLogs'
-import assetTasks from './assetTasks'
+import logs from './logs'
+import taskById from './taskById'
 import dashboards from './dashboards'
 import {
   RESET_ASSETS_KIT,
@@ -49,7 +49,6 @@ const reduceHorizontally = combineReducers({
   relatingAssetKey,
   addingAsset,
   addingTask,
-  assetTasks,
   assetFilterValueByAttribute,
   assetFilterKeysByAttribute,
   trackingAsset: (state = {}) => state,
@@ -61,7 +60,8 @@ const reduceHorizontally = combineReducers({
   baseMapStyleName,
   locatingAssetId,
   selectedAssetIds,
-  assetsLogs,
+  taskById,
+  logs,
   dashboards,
 })
 

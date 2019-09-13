@@ -1,7 +1,6 @@
 import { Map } from 'immutable'
 import {
   CLOSE_TASK_ADD_DIALOG,
-  //DEFAULT_TASK_TYPE_ID,
   OPEN_TASK_ADD_DIALOG,
   SET_ADDING_TASK_ERRORS,
   SET_ADDING_TASK_VALUE,
@@ -10,8 +9,6 @@ import {
 
 const initialState = Map({
   isOpen: false,
-  //utilityId: 'abc',  // !!!
-  //typeId: DEFAULT_TASK_TYPE_ID,
   name: '',
   errors: Map(),
 })

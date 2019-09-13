@@ -3,6 +3,9 @@ import AssetDetail from '../components/AssetDetail'
 import {
   changeAsset,
   mergeAsset,
+  openTaskAddDialog,
+  refreshAssetTasks,
+  setAddingTaskValue,
 } from '../actions'
 import {
   getChildAssets,
@@ -12,6 +15,7 @@ import {
   getParentAssets,
   getRelatingAssetId,
   getRelatingAssetKey,
+  getTaskById,
 } from '../selectors'
 
 
@@ -23,6 +27,7 @@ const mapStateToProps = state => ({
   connectedAssets: getConnectedAssets(state),
   parentAssets: getParentAssets(state),
   childAssets: getChildAssets(state),
+  taskById: getTaskById(state),
 })
 
 
@@ -31,6 +36,12 @@ const mapDispatchToProps = dispatch => ({
     changeAsset(payload))},
   mergeAsset: payload => {dispatch(
     mergeAsset(payload))},
+  refreshAssetTasks: payload => {dispatch(
+    refreshAssetTasks(payload))},
+  openTaskAddDialog: payload => {dispatch(
+    openTaskAddDialog(payload))},
+  setAddingTaskValue: payload => {dispatch(
+    setAddingTaskValue(payload))},
 })
 
 

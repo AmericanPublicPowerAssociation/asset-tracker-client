@@ -25,6 +25,8 @@ export const getSortedAssetIds = state => state.get(
   'sortedAssetIds')
 export const getFocusingAssetId = state => state.get(
   'focusingAssetId')
+export const getFocusingAssetTasks = state => state.get(
+  'focusingAssetTasks')
 export const getRelatingAssetId = state => state.get(
   'relatingAssetId')
 export const getLocatingAssetId = state => state.get(
@@ -45,10 +47,10 @@ export const getMapViewport = state => state.get(
   'mapViewport')
 export const getBaseMapStyleName = state => state.get(
   'baseMapStyleName')
-export const getAssetsLogs = state => state.get(
-  'assetsLogs')
-export const getTasks = state => state.get(
-  'tasks')
+export const getLogs = state => state.get(
+  'logs')
+export const getTaskById = state => state.get(
+  'taskById')
 export const getDashboards = state => state.get(
   'dashboards')
 

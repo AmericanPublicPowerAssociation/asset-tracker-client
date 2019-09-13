@@ -1,6 +1,7 @@
 import {
   ADD_ASSET,
   ADD_ASSET_RELATION,
+  ADD_TASK,
   CHANGE_ASSET,
   CLOSE_ASSET_ADD_DIALOG,
   CLOSE_TASK_ADD_DIALOG,
@@ -22,15 +23,18 @@ import {
   OPEN_NAVIGATION_DRAWER,
   OPEN_ASSETS_UPLOAD_DIALOG,
   REFRESH_ASSETS_KIT,
-  REFRESH_ASSETS_LOGS,
+  REFRESH_ASSET_TASKS,
+  REFRESH_LOGS,
   REFRESH_DASHBOARDS,
   REFRESH_TASKS,
   RESET_ASSETS_KIT,
-  RESET_ASSETS_LOGS,
+  RESET_ASSET_TASKS,
+  RESET_LOGS,
   RESET_DASHBOARDS,
   RESET_TASKS,
   SET_ADDING_ASSET_ERRORS,
   SET_ADDING_ASSET_VALUE,
+  SET_ADDING_TASK_ERRORS,
   SET_ADDING_TASK_VALUE,
   SET_APP_VALUE,
   SET_SORTED_ASSETS,
@@ -66,18 +70,18 @@ export const refreshAssetsKit = payload => {
   }
   return {payload, type: REFRESH_ASSETS_KIT}
 }
-export const refreshAssetsLogs = payload => ({
-  payload, type: REFRESH_ASSETS_LOGS})
+export const refreshAssetTasks = payload => ({
+  payload, type: REFRESH_ASSET_TASKS})
+export const refreshLogs = payload => ({
+  payload, type: REFRESH_LOGS})
 export const refreshTasks = payload => ({
   payload, type: REFRESH_TASKS})
 export const addAsset = payload => ({
   payload, type: ADD_ASSET})
 export const addTask = payload => ({
-  payload, type: ADD_ASSET
-})
+  payload, type: ADD_TASK})
 export const changeAsset = payload => ({
-  payload, type: CHANGE_ASSET
-})
+  payload, type: CHANGE_ASSET})
 
 
 export const addAssetRelation = payload => ({
@@ -91,73 +95,55 @@ export const dropAssetRelation = payload => ({
 export const resetDashboards = payload => ({
   payload, type: RESET_DASHBOARDS})
 export const resetAssetsKit = (payload={}) => ({
-  payload, type: RESET_ASSETS_KIT
-})
-export const resetAssetsLogs = payload => ({
-  payload, type: RESET_ASSETS_LOGS
-})
+  payload, type: RESET_ASSETS_KIT})
+export const resetAssetTasks = (payload={}) => ({
+  payload, type: RESET_ASSET_TASKS})
+export const resetLogs = payload => ({
+  payload, type: RESET_LOGS})
 export const resetTasks = payload => ({
-  payload, type: RESET_TASKS
-})
+  payload, type: RESET_TASKS})
 export const sortAssets = payload => ({
-  payload, type: SET_SORTED_ASSETS
-})
+  payload, type: SET_SORTED_ASSETS})
 export const setAssets = payload => ({
-  payload, type: SET_ASSETS
-})
+  payload, type: SET_ASSETS})
 export const setAsset = payload => ({
-  payload, type: SET_ASSET
-})
+  payload, type: SET_ASSET})
 export const setTask = payload => ({
-  payload, type: SET_TASK
-})
+  payload, type: SET_TASK})
 export const mergeAsset = payload => ({
-  payload, type: MERGE_ASSET
-})
+  payload, type: MERGE_ASSET})
 export const setAssetErrors = payload => ({
-  payload, type: SET_ASSET_ERRORS
-})
+  payload, type: SET_ASSET_ERRORS})
 export const setAssetLocation = payload => ({
-  payload, type: SET_ASSET_LOCATION
-})
+  payload, type: SET_ASSET_LOCATION})
 
 
 export const closeInformationDrawer = payload => ({
-  payload, type: CLOSE_INFORMATION_DRAWER
-})
+  payload, type: CLOSE_INFORMATION_DRAWER})
 export const closeNavigationDrawer = payload => ({
-  payload, type: CLOSE_NAVIGATION_DRAWER
-})
+  payload, type: CLOSE_NAVIGATION_DRAWER})
 export const openInformationDrawer = payload => ({
-  payload, type: OPEN_INFORMATION_DRAWER
-})
+  payload, type: OPEN_INFORMATION_DRAWER})
 export const openNavigationDrawer = payload => ({
-  payload, type: OPEN_NAVIGATION_DRAWER
-})
+  payload, type: OPEN_NAVIGATION_DRAWER})
 export const setAppValue = payload => ({
-  payload, type: SET_APP_VALUE
-})
+  payload, type: SET_APP_VALUE})
 export const toggleTheme = payload => ({
-  payload, type: TOGGLE_THEME
-})
+  payload, type: TOGGLE_THEME})
 
 
 export const excludeAssetRelation = payload => ({
-  payload, type: EXCLUDE_ASSET_RELATION
-})
+  payload, type: EXCLUDE_ASSET_RELATION})
 export const includeAssetRelation = payload => ({
-  payload, type: INCLUDE_ASSET_RELATION
-})
+  payload, type: INCLUDE_ASSET_RELATION})
 
 
 export const setAssetsFilterValue = payload => ({
-  payload, type: SET_ASSET_FILTER_VALUE
-})
+  payload, type: SET_ASSET_FILTER_VALUE})
 
 
 export const excludeAssetsFilterKey = payload => ({
-  payload, type: EXCLUDE_ASSET_FILTER_KEY
-})
+  payload, type: EXCLUDE_ASSET_FILTER_KEY})
 export const includeAssetsFilterKey = payload => ({
   payload, type: INCLUDE_ASSET_FILTER_KEY
 })
@@ -184,26 +170,22 @@ export const toggleSelectedAsset = payload => ({
 
 
 export const openAssetAddDialog = payload => ({
-  payload, type: OPEN_ASSET_ADD_DIALOG
-})
+  payload, type: OPEN_ASSET_ADD_DIALOG})
 export const closeAssetAddDialog = payload => ({
-  payload, type: CLOSE_ASSET_ADD_DIALOG
-})
-export const openTaskAddDialog = payload => ({
-  payload, type: OPEN_TASK_ADD_DIALOG
-})
-export const closeTaskAddDialog = payload => ({
-  payload, type: CLOSE_TASK_ADD_DIALOG
-})
+  payload, type: CLOSE_ASSET_ADD_DIALOG})
 export const setAddingAssetValue = payload => ({
-  payload, type: SET_ADDING_ASSET_VALUE
-})
-export const setAddingTaskValue = payload => ({
-  payload, type: SET_ADDING_TASK_VALUE
-})
+  payload, type: SET_ADDING_ASSET_VALUE})
 export const setAddingAssetErrors = payload => ({
-  payload, type: SET_ADDING_ASSET_ERRORS
-})
+  payload, type: SET_ADDING_ASSET_ERRORS})
+
+export const openTaskAddDialog = payload => ({
+  payload, type: OPEN_TASK_ADD_DIALOG})
+export const closeTaskAddDialog = payload => ({
+  payload, type: CLOSE_TASK_ADD_DIALOG})
+export const setAddingTaskValue = payload => ({
+  payload, type: SET_ADDING_TASK_VALUE})
+export const setAddingTaskErrors = payload => ({
+  payload, type: SET_ADDING_TASK_ERRORS})
 
 export const openAssetsUploadDialog = payload => ({
   payload, type: OPEN_ASSETS_UPLOAD_DIALOG})
