@@ -57,7 +57,7 @@ function* watchRefreshAssetsKit() {
   yield takeLatest(REFRESH_ASSETS_KIT, function* (action) {
     const payload = action.payload
     const { column, desc } = payload
-    if (!column) {
+    if (!column && desc == null) {
       yield fetchSafely('/assetsKit.json', {}, {
         on200: function* (assetsKit) {
           yield put(resetAssetsKit(assetsKit))
