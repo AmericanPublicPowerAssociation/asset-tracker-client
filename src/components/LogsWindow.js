@@ -32,13 +32,13 @@ export default function LogsWindow(props) {
         </TableRow>
       </TableHead>
       <TableBody>
-    {logs.map(log => {
+    {logs.map((log, index) => {
       return (
-        <TableRow>
+        <TableRow key={index}>
           <TableCell>{log.get('userId')}</TableCell>
           <TableCell>{log.get('event')}</TableCell>
           <TableCell>{log.get('attributes').entrySeq().map(([k, v]) => k + ' = ' + v).join(', ')}</TableCell>
-          <TableCell align='right'>{log.get('timetamp')}</TableCell>
+          <TableCell align='right'>{log.get('timestamp')}</TableCell>
         </TableRow>
       )
     })}
