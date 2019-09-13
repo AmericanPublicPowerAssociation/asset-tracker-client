@@ -74,8 +74,9 @@ export function getFeatureSize(asset, assetTypeById) {
     return minimumSize
   }
   value = parseFloat(value)
+
   for (const boundaryString of boundaryStrings) {
-    const boundaryValue = parseFloat(boundaryStrings)
+    const boundaryValue = parseFloat(boundaryString)
     if (value < boundaryValue) {
       return sizeByValue.get(boundaryString)
     }
