@@ -2,6 +2,7 @@ import { List } from 'immutable'
 import {
   RESET_ASSETS_KIT,
   SET_ASSET,
+  SET_SORTED_ASSETS,
   SET_ASSETS,
 } from '../constants'
 import {
@@ -14,7 +15,8 @@ const initialState = List()
 
 const sortedAssetIds = (state = initialState, action) => {
   switch (action.type) {
-    case RESET_ASSETS_KIT: {
+    case RESET_ASSETS_KIT:
+    case SET_SORTED_ASSETS: {
       const assets = action.payload.get('assets')
       return getIds(assets)
     }

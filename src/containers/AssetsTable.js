@@ -3,6 +3,7 @@ import AssetsTable from '../components/AssetsTable'
 import {
   addAssetRelation,
   dropAssetRelation,
+  refreshAssetsKit,
   setFocusingAsset,
 } from '../actions'
 import {
@@ -26,6 +27,7 @@ const mapStateToProps = state => ({
   relatedAssetTypeIds: getRelatedAssetTypeIds(state),
   relatedAssetIds: getRelatedAssetIds(state),
   assetTypeById: getAssetTypeById(state),
+  sortedTable: state.get('sortedTable'),
 })
 
 
@@ -36,6 +38,8 @@ const mapDispatchToProps = dispatch => ({
     addAssetRelation(payload))},
   dropAssetRelation: payload => {dispatch(
     dropAssetRelation(payload))},
+  refreshAssetsKit: payload => {dispatch(
+    refreshAssetsKit(payload))},
 })
 
 

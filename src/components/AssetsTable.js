@@ -7,6 +7,7 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
 import Switch from '@material-ui/core/Switch'
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { capitalize } from '../macros'
 import {
   getAssetTypeName,
@@ -33,6 +34,17 @@ class AssetsTable extends PureComponent {
     scrollToFocusingAsset(this)
   }
 
+  onSortClick(clickedColumn, curCol, desc) {
+    const column = clickedColumn
+    if (clickedColumn === curCol) {
+      desc = !desc
+    }
+    else {
+      desc = false
+    }
+    this.props.refreshAssetsKit({column, desc})
+  }
+
   render() {
     const {
       classes,
@@ -48,16 +60,34 @@ class AssetsTable extends PureComponent {
       setFocusingAsset,
       addAssetRelation,
       dropAssetRelation,
+      sortedTable,
     } = this.props
-
+    
+    const curSortColumn = sortedTable.get('column')
+    const orderByDesc = sortedTable.get('desc')
     const editingAssetId = locatingAssetId || relatingAssetId
-
     return (
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Type</TableCell>
-            <TableCell>Name</TableCell>
+            <TableCell>
+              <TableSortLabel
+                active={'typeid' === curSortColumn}
+                direction={ ('typeid' === curSortColumn && orderByDesc) ? 'asc': 'desc'}
+                onClick={
+                  () => this.onSortClick('typeid', curSortColumn, orderByDesc)}>
+                Type
+              </TableSortLabel>
+            </TableCell>
+            <TableCell>
+              <TableSortLabel
+                active={'name' === curSortColumn}
+                direction={ ('name' === curSortColumn && orderByDesc) ? 'asc': 'desc'}
+                onClick={
+                  () => this.onSortClick('name', curSortColumn, orderByDesc)}>
+                Name
+              </TableSortLabel>
+            </TableCell>
           {relatingAssetId &&
             <TableCell align='right'>
               {capitalize(relatingAssetKey.replace('Ids', ''))}

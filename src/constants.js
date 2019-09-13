@@ -33,6 +33,7 @@ export const RESET_ASSETS_KIT = 'RESET_ASSETS_KIT'
 export const RESET_ASSETS_LOGS = 'RESET_ASSETS_LOGS'
 export const RESET_TASKS = 'RESET_TASKS'
 export const SET_ASSETS = 'SET_ASSETS'
+export const SET_SORTED_ASSETS = 'SET_SORTED_ASSETS'
 
 export const SET_ASSET = 'SET_ASSET'
 export const SET_TASK = 'SET_TASK'

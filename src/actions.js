@@ -31,6 +31,7 @@ import {
   SET_ADDING_ASSET_VALUE,
   SET_ADDING_TASK_VALUE,
   SET_APP_VALUE,
+  SET_SORTED_ASSETS,
   SET_ASSET,
   SET_TASK,
   SET_ASSETS,
@@ -56,9 +57,12 @@ export const logError = payload => ({
 })
 
 
-export const refreshAssetsKit = payload => ({
-  payload, type: REFRESH_ASSETS_KIT
-})
+export const refreshAssetsKit = payload => {
+  if (!payload){
+    payload = {}
+  }
+  return {payload, type: REFRESH_ASSETS_KIT}
+}
 export const refreshAssetsLogs = payload => ({
   payload, type: REFRESH_ASSETS_LOGS
 })
@@ -84,7 +88,7 @@ export const dropAssetRelation = payload => ({
 })
 
 
-export const resetAssetsKit = payload => ({
+export const resetAssetsKit = (payload={}) => ({
   payload, type: RESET_ASSETS_KIT
 })
 export const resetAssetsLogs = payload => ({
@@ -92,6 +96,9 @@ export const resetAssetsLogs = payload => ({
 })
 export const resetTasks = payload => ({
   payload, type: RESET_TASKS
+})
+export const sortAssets = payload => ({
+  payload, type: SET_SORTED_ASSETS
 })
 export const setAssets = payload => ({
   payload, type: SET_ASSETS
