@@ -23,9 +23,11 @@ import {
   OPEN_ASSETS_UPLOAD_DIALOG,
   REFRESH_ASSETS_KIT,
   REFRESH_ASSETS_LOGS,
+  REFRESH_DASHBOARDS,
   REFRESH_TASKS,
   RESET_ASSETS_KIT,
   RESET_ASSETS_LOGS,
+  RESET_DASHBOARDS,
   RESET_TASKS,
   SET_ADDING_ASSET_ERRORS,
   SET_ADDING_ASSET_VALUE,
@@ -53,10 +55,11 @@ import {
 
 
 export const logError = payload => ({
-  payload, type: LOG_ERROR
-})
+  payload, type: LOG_ERROR})
 
 
+export const refreshDashboards = payload => ({
+  payload, type: REFRESH_DASHBOARDS})
 export const refreshAssetsKit = payload => {
   if (!payload){
     payload = {}
@@ -64,14 +67,11 @@ export const refreshAssetsKit = payload => {
   return {payload, type: REFRESH_ASSETS_KIT}
 }
 export const refreshAssetsLogs = payload => ({
-  payload, type: REFRESH_ASSETS_LOGS
-})
+  payload, type: REFRESH_ASSETS_LOGS})
 export const refreshTasks = payload => ({
-  payload, type: REFRESH_TASKS
-})
+  payload, type: REFRESH_TASKS})
 export const addAsset = payload => ({
-  payload, type: ADD_ASSET
-})
+  payload, type: ADD_ASSET})
 export const addTask = payload => ({
   payload, type: ADD_ASSET
 })
@@ -88,6 +88,8 @@ export const dropAssetRelation = payload => ({
 })
 
 
+export const resetDashboards = payload => ({
+  payload, type: RESET_DASHBOARDS})
 export const resetAssetsKit = (payload={}) => ({
   payload, type: RESET_ASSETS_KIT
 })

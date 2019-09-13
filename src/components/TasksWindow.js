@@ -21,13 +21,11 @@ const useStyles = makeStyles(theme => ({
 
 export default function TasksWindow(props) {
   const classes = useStyles()
+  const { refreshTasks } = props
 
   useEffect(() => {
-    const {
-      refreshTasks,
-    } = props
     refreshTasks()
-  }, [props])
+  }, [refreshTasks])
 
   return (
     <Grid container className={classes.grid}>

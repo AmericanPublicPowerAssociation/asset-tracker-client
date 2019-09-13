@@ -6,10 +6,11 @@ import {
   RisksWindow,
 } from 'asset-report-risks'
 import ProtectedRoute from '../containers/ProtectedRoute'
-import DashboardsWindow from './DashboardsWindow'
+import DashboardsWindow from '../containers/DashboardsWindow'
 import TasksWindow from '../containers/TasksWindow'
 import AssetsWindow from '../containers/AssetsWindow'
 import MapsWindow from '../containers/MapsWindow'
+import CircuitsWindow from '../components/CircuitsWindow'
 import LogsWindow from '../containers/LogsWindow'
 import ExportsWindow from '../containers/ExportsWindow'
 import SettingsWindow from '../containers/SettingsWindow'
@@ -82,6 +83,8 @@ class Main extends Component {
             component={AssetsWindow} />
           <ProtectedRoute exact path='/maps'
             component={MapsWindow} />
+          <ProtectedRoute exact path='/circuits'
+            component={CircuitsWindow} />
           <ProtectedRoute exact path='/risks'
             component={RisksWindow} />
           <ProtectedRoute exact path='/logs'

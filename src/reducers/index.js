@@ -9,7 +9,6 @@ import {
   productVersionSuggestions,
   vendorNameSuggestions,
   risks,
-  riskMetrics,
 } from 'asset-report-risks'
 import app from './app'
 import sortedAssetIds from './sortedAssetIds'
@@ -29,6 +28,7 @@ import assetTypeById from './assetTypeById'
 import selectedAssetIds from './selectedAssetIds'
 import assetsLogs from './assetsLogs'
 import assetTasks from './assetTasks'
+import dashboards from './dashboards'
 import {
   RESET_ASSETS_KIT,
   SET_FOCUSING_ASSET,
@@ -57,12 +57,12 @@ const reduceHorizontally = combineReducers({
   productNameSuggestions,
   productVersionSuggestions,
   risks,
-  riskMetrics,
   mapViewport,
   baseMapStyleName,
   locatingAssetId,
   selectedAssetIds,
   assetsLogs,
+  dashboards,
 })
 
 

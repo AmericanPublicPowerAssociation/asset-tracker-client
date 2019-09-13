@@ -13,7 +13,7 @@ import {
   watchSuggestProductNames,
   watchSuggestProductVersions,
   watchRefreshRisks,
-  watchRefreshRiskMetrics,
+  // watchRefreshRiskMetrics,
 } from 'asset-report-risks'
 import {
   closeAssetsUploadDialog,
@@ -22,6 +22,7 @@ import {
   refreshAssetsKit,
   resetAssetsKit,
   resetAssetsLogs,
+  resetDashboards,
   resetTasks,
   setAddingAssetCSVFileErrors,
   setAddingAssetErrors,
@@ -38,12 +39,13 @@ import {
   // ADD_TASK,
   ADD_ASSET_RELATION,
   CHANGE_ASSET,
+  DOWNLOAD_ASSETS_CSV,
   DROP_ASSET_RELATION,
   REFRESH_ASSETS_KIT,
   REFRESH_ASSETS_LOGS,
+  REFRESH_DASHBOARDS,
   REFRESH_TASKS,
   UPLOAD_ASSETS_CSV,
-  DOWNLOAD_ASSETS_CSV,
 } from './constants'
 import {
   fetchSafely,
@@ -52,6 +54,17 @@ import {
   rinseAsset,
   // rinseTask,
 } from './routines'
+
+
+function* watchRefreshDashboards() {
+  yield takeLatest(REFRESH_DASHBOARDS, function* () {
+    yield fetchSafely('/dashboards.json', {}, {
+      on200: function* (dashboards) {
+        yield put(resetDashboards(dashboards))
+      },
+    })
+  })
+}
 
 
 function* watchRefreshAssetsKit() {
@@ -66,7 +79,7 @@ function* watchRefreshAssetsKit() {
       })
     }
     else {
-      const url = `/assetsKit.json?column=${column}&desc=${desc}` 
+      const url = `/assetsKit.json?column=${column}&desc=${desc}`
       yield fetchSafely(url, {}, {
         on200: function* (assetsKit) {
           const payload = assetsKit.merge({column, desc})
@@ -84,7 +97,7 @@ function* watchRefreshAssetsLogs() {
       on200: function* (assetsLogs) {
         yield put(resetAssetsLogs(assetsLogs))
       },
-    }) 
+    })
   })
 }
 
@@ -95,7 +108,7 @@ function* watchRefreshTasks() {
       on200: function* (assetTasks) {
         yield put(resetTasks(assetTasks))
       },
-    }) 
+    })
   })
 }
 
@@ -245,6 +258,7 @@ export default function* () {
     watchSuggestProductNames(),
     watchSuggestProductVersions(),
     watchRefreshRisks(),
-    watchRefreshRiskMetrics(),
+    watchRefreshDashboards(),
+    // watchRefreshRiskMetrics(),
   ])
 }
