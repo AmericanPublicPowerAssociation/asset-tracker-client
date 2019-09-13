@@ -128,7 +128,6 @@ class SelectedAssetMapMarker extends PureComponent {
       assetType,
       name)
   }
-
 }
 
 
