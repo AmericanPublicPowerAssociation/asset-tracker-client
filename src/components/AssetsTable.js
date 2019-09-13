@@ -34,6 +34,17 @@ class AssetsTable extends PureComponent {
     scrollToFocusingAsset(this)
   }
 
+  onSortClick(clickedColumn, curCol, desc) {
+    const column = clickedColumn
+    if (clickedColumn === curCol) {
+      desc = !desc
+    }
+    else {
+      desc = false
+    }
+    this.props.refreshAssetsKit({column, desc})
+  }
+
   render() {
     const {
       classes,
@@ -52,8 +63,8 @@ class AssetsTable extends PureComponent {
       sortedTable,
     } = this.props
     
-    const sortColumn = sortedTable.get('column')
-    const sortOrder = sortedTable.get('order')
+    const curSortColumn = sortedTable.get('column')
+    const orderByDesc = sortedTable.get('desc')
     const editingAssetId = locatingAssetId || relatingAssetId
     return (
       <Table>
@@ -61,15 +72,19 @@ class AssetsTable extends PureComponent {
           <TableRow>
             <TableCell>
               <TableSortLabel
-                active={'typeid' === sortColumn}
-                direction={sortOrder}>
+                active={'typeid' === curSortColumn}
+                direction={ ('typedid' === curSortColumn && orderByDesc) ? 'asc': 'desc'}
+                onClick={
+                  () => this.onSortClick('typeid', curSortColumn, orderByDesc)}>
                 Type
               </TableSortLabel>
             </TableCell>
             <TableCell>
               <TableSortLabel
-                active={'name' === sortColumn}
-                direction={sortOrder}>
+                active={'name' === curSortColumn}
+                direction={ ('name' === curSortColumn && orderByDesc) ? 'asc': 'desc'}
+                onClick={
+                  () => this.onSortClick('name', curSortColumn, orderByDesc)}>
                 Name
               </TableSortLabel>
             </TableCell>

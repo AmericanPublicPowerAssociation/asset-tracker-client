@@ -7,8 +7,8 @@ import {
 
 
 const initialState = Map({
-  column: 'name',
-  order: 'desc'
+  column: null,
+  order: null
 })
 
 

@@ -57,7 +57,7 @@ function* watchRefreshAssetsKit() {
   yield takeLatest(REFRESH_ASSETS_KIT, function* (action) {
     const payload = action.payload
     const { column, desc } = payload
-    if (!column || !desc) {
+    if (!column) {
       yield fetchSafely('/assetsKit.json', {}, {
         on200: function* (assetsKit) {
           yield put(resetAssetsKit(assetsKit))
@@ -65,7 +65,7 @@ function* watchRefreshAssetsKit() {
       })
     }
     else {
-      const url = `/assetsKit.js?column=${column}&desc=${desc}` 
+      const url = `/assetsKit.json?column=${column}&desc=${desc}` 
       yield fetchSafely(url, {}, {
         on200: function* (assetsKit) {
           yield put(sortAssets(assetsKit))
