@@ -106,7 +106,8 @@ class AssetsMap extends PureComponent {
         {
           selectedAssetIds.reduce( (list, id) => {
             const curAsset = assetById.get(id)
-            if (curAsset.has('location')) {
+            if (curAsset.has('location') &&
+                id !== focusingAssetId) {
               const curLocation = curAsset.get('location')
               const curTypeId = curAsset.get('typeId')
               const curName = curAsset.get('name')

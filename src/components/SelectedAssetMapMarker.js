@@ -1,18 +1,18 @@
 import React, { PureComponent } from 'react'
 import { Marker } from 'react-map-gl'
 import PlaceIcon from '@material-ui/icons/Place'
-import Busbar from '../images/assets/busbar-16.svg'
-import Control from '../images/assets/control-16.svg'
-import Station from '../images/assets/generating-station-16.svg'
-import GeneratorLight from '../images/assets/generator-light-16.svg'
-import Line from '../images/assets/line-16.svg'
-import MeterLight from '../images/assets/meter-dark-16.svg'
-import Pole from '../images/assets/pole-16.svg'
-import Power from '../images/assets/power-16.svg'
-import StorageLight from '../images/assets/storage-light-16.svg'
-import Substation from '../images/assets/substation-16.svg'
-import Switch from '../images/assets/switch-16.svg'
-import Transformer from '../images/assets/transformer-16.svg'
+import { ReactComponent as Busbar } from '../images/assets/busbar-16.svg'
+import { ReactComponent as Control } from '../images/assets/control-16.svg'
+import { ReactComponent as Station } from '../images/assets/generating-station-16.svg'
+import { ReactComponent as GeneratorLight } from '../images/assets/generator-light-16.svg'
+import { ReactComponent as Line } from '../images/assets/line-16.svg'
+import { ReactComponent as MeterLight } from '../images/assets/meter-dark-16.svg'
+import { ReactComponent as Pole } from '../images/assets/pole-16.svg'
+import { ReactComponent as Power } from '../images/assets/power-16.svg'
+import { ReactComponent as StorageLight } from '../images/assets/storage-light-16.svg'
+import { ReactComponent as Substation } from '../images/assets/substation-16.svg'
+import { ReaectComponent as Switch } from '../images/assets/switch-16.svg'
+import { ReactComponent as Transformer } from '../images/assets/transformer-16.svg'
 import {
   FOCUSING_COLOR,
 } from '../constants'
@@ -33,59 +33,60 @@ class SelectedAssetMapMarker extends PureComponent {
     assetLatitude,
     assetType,
     name) => {
-    let icon;
-    const default_icon = <PlaceIcon 
+    const defaultFill = 'red'
+    let Icon;
+    const defaultIcon = <PlaceIcon 
       htmlColor={FOCUSING_COLOR} 
       fontSize='large' />
     let offsetLeft = -17
     let offsetTop = -32
     switch(assetType){
       case 'p':
-        icon = Pole
+        Icon = Pole
         offsetLeft = -17
         offsetTop = -32
         break
       case 'l':
-        icon = Line
+        Icon = Line
         break
       case 'm':
-        icon = MeterLight
+        Icon = MeterLight
         offsetLeft = -20
         break
       case 't':
-        icon = Transformer
+        Icon = Transformer
         break
       case 'x':
-        icon = Switch
+        Icon = Switch
         offsetLeft = -25
         offsetTop = -28
         break
       case 'q':
-        icon = Power
+        Icon = Power
         break
       case 'c':
-        icon = Control
+        Icon = Control
         break
       case 'b':
-        icon = Busbar
+        Icon = Busbar
         break
       case 'o':
-        icon = StorageLight
+        Icon = StorageLight
         offsetLeft = -25
         offsetTop = -32
         break
       case 'g':
-        icon = GeneratorLight
+        Icon = GeneratorLight
         offsetLeft = -12
         offsetTop = -32
         break
       case 's':
-        icon = Substation
+        Icon = Substation
         offsetLeft = -35
         offsetTop = -36
         break
       case 'S':
-        icon = Station
+        Icon = Station
         offsetLeft = -25
         break
       default:
@@ -97,9 +98,9 @@ class SelectedAssetMapMarker extends PureComponent {
         latitude={assetLatitude}
         offsetLeft={offsetLeft}
         offsetTop={offsetTop} >
-        { icon ? 
-            <img src={icon} alt="selected-assets"/> :
-            default_icon
+        { Icon ? 
+            <Icon fill={defaultFill} /> :
+            defaultIcon
         }
         { name && <div style={textStyle}>{name}</div>}
       </Marker>
@@ -127,7 +128,6 @@ class SelectedAssetMapMarker extends PureComponent {
       assetType,
       name)
   }
-
 }
 
 
