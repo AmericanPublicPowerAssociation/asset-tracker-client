@@ -2,6 +2,8 @@ import { connect } from 'react-redux'
 import AssetsMap from '../components/AssetsMap'
 import {
   setAssetLocation,
+  setSelectedAsset,
+  setFocusingAsset,
   setMapViewport,
 } from '../actions'
 import {
@@ -10,6 +12,7 @@ import {
   getFocusingAssetLocation,
   getLocatingAssetId,
   getLocatingAssetLocation,
+  getInteractiveLayerIds,
   getMapStyle,
   getMapViewport,
   getAssetById
@@ -18,6 +21,7 @@ import {
 
 const mapStateToProps = state => ({
   baseMapStyleName: getBaseMapStyleName(state),
+  interactiveLayerIds: getInteractiveLayerIds(state),
   mapStyle: getMapStyle(state),
   mapViewport: getMapViewport(state),
   focusingAssetId: getFocusingAssetId(state),
@@ -34,6 +38,10 @@ const mapDispatchToProps = dispatch => ({
     setMapViewport(payload))},
   setAssetLocation: payload => {dispatch(
     setAssetLocation(payload))},
+  setFocusingAsset: (payload) => {dispatch(
+    setFocusingAsset(payload))},
+  setSelectedAsset: (payload) => {dispatch(
+    setSelectedAsset(payload))},
 })
 
 

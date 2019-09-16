@@ -315,6 +315,13 @@ export const getMapLayers = createSelector([
 })
 
 
+export const getInteractiveLayerIds = createSelector([
+  getMapLayers,  
+], (
+  mapLayers,
+) => mapLayers.map(layer => layer.id))
+
+
 export const getMapStyle = createSelector([
   getMapSources,
   getMapLayers,
