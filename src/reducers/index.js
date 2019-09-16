@@ -80,7 +80,7 @@ const reduceVertically = (state, action) => {
         zoom,
       } = new WebMercatorViewport(
         mapViewport,
-      ).fitBounds(boundingBox)
+      ).fitBounds(boundingBox, {padding: 100})
       return state.mergeDeep({
         mapViewport: {
           longitude,
@@ -136,7 +136,7 @@ const reduceVertically = (state, action) => {
           zoom,
         } = new WebMercatorViewport(
           mapViewport,
-        ).fitBounds(computeBounds)
+        ).fitBounds(computeBounds, {padding: 100,})
         mergingPatch['mapViewport'] = {
           longitude,
           latitude,
