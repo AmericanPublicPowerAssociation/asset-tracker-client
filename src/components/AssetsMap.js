@@ -68,12 +68,12 @@ class AssetsMap extends PureComponent {
           e.features &&
           e.features.map(f => f.properties.id))]
     const assetCount = assetIds.length
-    if (assetCount === 0) {
-      setSelectedAsset({ids: []})
-      return
+    console.log(e)
+    console.log(this.props.mapStyle)
+    if (assetCount > 0) {
+      setSelectedAsset({ids: assetIds})
+      setFocusingAsset({id: assetIds[0]})
     }
-    setSelectedAsset({ids: assetIds})
-    setFocusingAsset({id: assetIds[0]})
   }
 
   render() {
