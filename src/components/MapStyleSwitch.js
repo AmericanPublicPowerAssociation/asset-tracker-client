@@ -41,15 +41,11 @@ class MapStyleSwitch extends PureComponent {
     setBaseMapStyleName(styleName)
   }
 
-  nextMapStyle = () => {
-    const { curBaseMapStyleName } = this.props
-    return mapStyles[curBaseMapStyleName]
-  }
-
   render() {
-    const { nextBaseMapStyleName } = this.props
+    const { nextBaseMapStyleName, curBaseMapStyleName } = this.props
+    const toolTipTitle = `Change MapStyle: ${curBaseMapStyleName} -> ${nextBaseMapStyleName}`
     return ( 
-      <Tooltip title="Change Map Style" placement="bottom-start">
+      <Tooltip title={toolTipTitle} placement="bottom-start">
         <div>
         <button
           onClick={() => {this.onClick(nextBaseMapStyleName)}}
