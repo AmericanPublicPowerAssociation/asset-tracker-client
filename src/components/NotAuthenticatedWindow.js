@@ -59,7 +59,7 @@ class NotAuthenticatedWindow extends PureComponent {
           </Grid>
 
           <Grid item className={classes.hideIfSmall}>
-            <iframe title='Asset Tracker Preview' width='560' height='315' frameBorder='0' src='//www.youtube-nocookie.com/embed/45dLM3gWJ3U?rel=0' />
+            <iframe title='Asset Tracker Preview' width='560' height='315' frameBorder='0' src='//www.youtube-nocookie.com/embed/8VtQicHeZEE?rel=0' />
           </Grid>
 
         </Grid>
