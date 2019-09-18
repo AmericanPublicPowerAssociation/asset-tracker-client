@@ -12,6 +12,7 @@ const focusingAssetId = (state = initialState, action) => {
       const {id} = action.payload
       return id
     }
+    
     default: {
       return state
     }
