@@ -16,8 +16,8 @@
         },
         "mapbox:sdk-support": {
             "js": "0.54.0",
-            "android": "6.7.0",
-            "ios": "4.7.0"
+            "android": "7.4.0",
+            "ios": "4.11.0"
         }
     },
     "center": [-71.02, 42.3624],
@@ -28,7 +28,7 @@
             "type": "vector"
         }
     },
-    "sprite": "mapbox://sprites/crosscompute/cjwhos8qp0mzl1cp5urb1g74k/cj530pqtvmepv7xox0ujq2mef",
+    "sprite": "mapbox://sprites/crosscompute/ck0paot17297e1cnwpolk5cr8/cj530pqtvmepv7xox0ujq2mef",
     "glyphs": "mapbox://fonts/crosscompute/{fontstack}/{range}.pbf",
     "layers": [
         {
@@ -3682,9 +3682,9 @@
             }
         }
     ],
-    "created": "2019-06-04T10:55:06.381Z",
-    "id": "cjwhos8qp0mzl1cp5urb1g74k",
-    "modified": "2019-06-04T10:55:06.381Z",
+    "created": "2019-09-18T13:21:30.375Z",
+    "id": "ck0paot17297e1cnwpolk5cr8",
+    "modified": "2019-09-18T13:21:30.375Z",
     "owner": "crosscompute",
     "visibility": "private",
     "draft": false
