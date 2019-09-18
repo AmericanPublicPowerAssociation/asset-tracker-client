@@ -5,6 +5,7 @@ import TableBody from '@material-ui/core/TableBody'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
+import { TASK_STATUS_BY_ID } from '../constants'
 
 
 const useStyles = makeStyles(theme => ({
@@ -40,6 +41,8 @@ export default function TasksWindow(props) {
       </TableHead>
       <TableBody>
     {taskById.entrySeq().map(([id, task]) => {
+      const statusValue = task.get('status')
+      const statusName = TASK_STATUS_BY_ID.get(statusValue)
       return (
         <TableRow
           key={id}
@@ -48,15 +51,13 @@ export default function TasksWindow(props) {
             openTaskEditDialog()
           }}
           hover
-          classes={{
-            hover: classes.hover,
-          }}
+          classes={{ hover: classes.hover }}
         >
           <TableCell>{task.get('name')}</TableCell>
           <TableCell>{task.get('assetName')}</TableCell>
           <TableCell>{task.get('referenceUri')}</TableCell>
           <TableCell>{task.get('assignmentUserId')}</TableCell>
-          <TableCell align='right'>{task.get('status')}</TableCell>
+          <TableCell align='right'>{statusName}</TableCell>
         </TableRow>
       )
     })}

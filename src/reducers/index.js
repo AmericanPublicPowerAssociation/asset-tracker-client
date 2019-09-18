@@ -30,6 +30,7 @@ import logs from './logs'
 import taskById from './taskById'
 import dashboards from './dashboards'
 import {
+  MAP_PADDING,
   RESET_ASSETS_KIT,
   SET_FOCUSING_ASSET,
 } from '../constants'
@@ -80,7 +81,7 @@ const reduceVertically = (state, action) => {
         zoom,
       } = new WebMercatorViewport(
         mapViewport,
-      ).fitBounds(boundingBox, {padding: 20,})
+      ).fitBounds(boundingBox, {padding: MAP_PADDING})
       return state.mergeDeep({
         mapViewport: {
           longitude,
@@ -136,7 +137,7 @@ const reduceVertically = (state, action) => {
           zoom,
         } = new WebMercatorViewport(
           mapViewport,
-        ).fitBounds(computeBounds, {padding: 20,})
+        ).fitBounds(computeBounds, {padding: MAP_PADDING})
         mergingPatch['mapViewport'] = {
           longitude,
           latitude,

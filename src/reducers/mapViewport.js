@@ -1,5 +1,6 @@
 import { Map } from 'immutable'
 import {
+  MAP_PADDING,
   SET_MAP_VIEWPORT,
 } from '../constants'
 
@@ -7,6 +8,8 @@ import {
 const initialState = Map({
   longitude: 0,
   latitude: 0,
+  width: MAP_PADDING * 2 + 1,
+  height: MAP_PADDING * 2 + 1,
 })
 
 

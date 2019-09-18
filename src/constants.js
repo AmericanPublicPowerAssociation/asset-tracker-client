@@ -1,4 +1,4 @@
-import { fromJS } from 'immutable'
+import { OrderedMap, fromJS } from 'immutable'
 import darkMapStyle from './datasets/darkMapStyle.json'
 // import streetsMapStyle from './datasets/streetsMapStyle.json'
 import satelliteStreetsMapStyle from './datasets/satelliteStreetsMapStyle.json'
@@ -108,3 +108,11 @@ export const KEY_PREFIX = 'asset-tracker-'
 export const FOCUSING_COLOR = 'cyan'
 export const EDITING_COLOR = 'red'
 export const SELECTED_COLOR = 'lime'
+export const MAP_PADDING = 20
+
+export const TASK_STATUS_BY_ID = OrderedMap([
+  [-100, 'Cancelled'],
+  [0, 'New'],
+  [50, 'Pending'],
+  [100, 'Done'],
+])

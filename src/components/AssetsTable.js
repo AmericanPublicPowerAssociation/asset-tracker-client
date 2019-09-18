@@ -114,9 +114,7 @@ class AssetsTable extends PureComponent {
                 [classes.editing]: editingAssetId && editingAssetId === assetId,
               })}
               hover
-              classes={{
-                hover: classes.hover,
-              }}
+              classes={{ hover: classes.hover }}
               selected={assetId === focusingAssetId}
               key={assetId}
               ref={assetId}

@@ -48,6 +48,7 @@ export default function AssetTasks(props) {
                 id: null,
                 assetId,
                 name: '',
+                status: 0,
               })
               openTaskEditDialog()
             }}
