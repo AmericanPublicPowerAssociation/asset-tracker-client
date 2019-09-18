@@ -8,26 +8,32 @@ import TableCell from '@material-ui/core/TableCell'
 
 
 const useStyles = makeStyles(theme => ({
-  table: {
+  hover: {
+    cursor: 'pointer',
   },
 }))
 
 
 export default function TasksWindow(props) {
   const classes = useStyles()
-  const { taskById, refreshTasks } = props
+  const {
+    taskById,
+    refreshTasks,
+    openTaskEditDialog,
+    setEditingTaskValues,
+  } = props
 
   useEffect(() => {
     refreshTasks()
   }, [refreshTasks])
 
   return (
-    <Table className={classes.table}>
+    <Table>
       <TableHead>
         <TableRow>
+          <TableCell>Task</TableCell>
           <TableCell>Asset</TableCell>
           <TableCell>Reference URI</TableCell>
-          <TableCell>Task</TableCell>
           <TableCell>Owner</TableCell>
           <TableCell align='right'>Status</TableCell>
         </TableRow>
@@ -35,10 +41,20 @@ export default function TasksWindow(props) {
       <TableBody>
     {taskById.entrySeq().map(([id, task]) => {
       return (
-        <TableRow key={id}>
+        <TableRow
+          key={id}
+          onClick={() => {
+            setEditingTaskValues(task)
+            openTaskEditDialog()
+          }}
+          hover
+          classes={{
+            hover: classes.hover,
+          }}
+        >
+          <TableCell>{task.get('name')}</TableCell>
           <TableCell>{task.get('assetName')}</TableCell>
           <TableCell>{task.get('referenceUri')}</TableCell>
-          <TableCell>{task.get('name')}</TableCell>
           <TableCell>{task.get('assignmentUserId')}</TableCell>
           <TableCell align='right'>{task.get('status')}</TableCell>
         </TableRow>

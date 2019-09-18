@@ -3,9 +3,9 @@ import AssetDetail from '../components/AssetDetail'
 import {
   changeAsset,
   mergeAsset,
-  openTaskAddDialog,
+  openTaskEditDialog,
   refreshAssetTasks,
-  setAddingTaskValue,
+  setEditingTaskValues,
 } from '../actions'
 import {
   getChildAssets,
@@ -38,10 +38,10 @@ const mapDispatchToProps = dispatch => ({
     mergeAsset(payload))},
   refreshAssetTasks: payload => {dispatch(
     refreshAssetTasks(payload))},
-  openTaskAddDialog: payload => {dispatch(
-    openTaskAddDialog(payload))},
-  setAddingTaskValue: payload => {dispatch(
-    setAddingTaskValue(payload))},
+  openTaskEditDialog: payload => {dispatch(
+    openTaskEditDialog(payload))},
+  setEditingTaskValues: payload => {dispatch(
+    setEditingTaskValues(payload))},
 })
 
 

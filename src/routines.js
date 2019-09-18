@@ -37,9 +37,6 @@ export function rinseTask(task) {
   return task.deleteAll([
     'isOpen',
     'errors',
-    // 'connectedIds',
-    // 'parentIds',
-    // 'childIds',
   ])
 }
 

@@ -57,26 +57,26 @@ class AssetRelationChips extends PureComponent {
         <FormLabel>{label}</FormLabel>
         <div>
 
-        {relatedAssets.map(relatedAsset => {
-          const relatedAssetId = relatedAsset.get('id')
-          const relatedAssetName = relatedAsset.get('name')
-          const relatedAssetTypeId = relatedAsset.get('typeId')
-          const relatedAssetTypeName = getAssetTypeName(relatedAssetTypeId, assetTypeById)
-          return (
-            <Tooltip
-              enterDelay={TOOLTIP_DELAY}
-              placement='bottom'
-              title={relatedAssetTypeName}
-              key={relatedAssetId}
-            >
-              <Chip
-                label={relatedAssetName}
-                className={classes.chip}
-                onClick={() => setFocusingAsset({id: relatedAssetId})}
-              />
-            </Tooltip>
-          )
-        })}
+    {relatedAssets.map(relatedAsset => {
+      const relatedAssetId = relatedAsset.get('id')
+      const relatedAssetName = relatedAsset.get('name')
+      const relatedAssetTypeId = relatedAsset.get('typeId')
+      const relatedAssetTypeName = getAssetTypeName(relatedAssetTypeId, assetTypeById)
+      return (
+        <Tooltip
+          enterDelay={TOOLTIP_DELAY}
+          placement='bottom'
+          title={relatedAssetTypeName}
+          key={relatedAssetId}
+        >
+          <Chip
+            label={relatedAssetName}
+            className={classes.chip}
+            onClick={() => setFocusingAsset({id: relatedAssetId})}
+          />
+        </Tooltip>
+      )
+    })}
 
           <Chip
             label={relatingAssetId ? <SaveIcon /> : <AddIcon />}

@@ -1,15 +1,15 @@
 import { Map } from 'immutable'
 import {
-    CLOSE_ASSET_ADD_DIALOG,
-    CLOSE_ASSETS_UPLOAD_DIALOG,
-    DEFAULT_ASSET_TYPE_ID,
-    OPEN_ASSET_ADD_DIALOG,
-    OPEN_ASSETS_UPLOAD_DIALOG,
-    SET_ADDING_ASSET_ERRORS,
-    SET_ADDING_ASSET_VALUE,
-    SET_ADDING_CSV_ASSETS_ERRORS,
-    SET_ASSET_CSV_FILE,
-    HIDE_ADDING_CSV_ASSETS_ERRORS,
+  CLOSE_ASSETS_UPLOAD_DIALOG,
+  CLOSE_ASSET_ADD_DIALOG,
+  DEFAULT_ASSET_TYPE_ID,
+  HIDE_ADDING_CSV_ASSETS_ERRORS,
+  OPEN_ASSETS_UPLOAD_DIALOG,
+  OPEN_ASSET_ADD_DIALOG,
+  SET_ADDING_ASSET_ERRORS,
+  SET_ADDING_ASSET_VALUES,
+  SET_ADDING_CSV_ASSETS_ERRORS,
+  SET_ASSET_CSV_FILE,
 } from '../constants'
 
 
@@ -21,8 +21,8 @@ const initialState = Map({
   errors: Map(),
   uploaderIsOpen: false,
   uploaderErrors: {
-      'open': false,
-      'errors': []
+    'open': false,
+    'errors': []
   }
 })
 
@@ -35,7 +35,7 @@ const addingAsset = (state = initialState, action) => {
     case CLOSE_ASSET_ADD_DIALOG: {
       return state.set('isOpen', false)
     }
-    case SET_ADDING_ASSET_VALUE: {
+    case SET_ADDING_ASSET_VALUES: {
       return state.merge(action.payload)
     }
     case SET_ADDING_ASSET_ERRORS: {

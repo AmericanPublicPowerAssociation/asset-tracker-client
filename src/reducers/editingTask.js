@@ -1,9 +1,9 @@
 import { Map } from 'immutable'
 import {
-  CLOSE_TASK_ADD_DIALOG,
-  OPEN_TASK_ADD_DIALOG,
-  SET_ADDING_TASK_ERRORS,
-  SET_ADDING_TASK_VALUE,
+  CLOSE_TASK_EDIT_DIALOG,
+  OPEN_TASK_EDIT_DIALOG,
+  SET_EDITING_TASK_ERRORS,
+  SET_EDITING_TASK_VALUES,
 } from '../constants'
 
 
@@ -14,18 +14,18 @@ const initialState = Map({
 })
 
 
-const addingTask = (state = initialState, action) => {
+const editingTask = (state = initialState, action) => {
   switch (action.type) {
-    case OPEN_TASK_ADD_DIALOG: {
+    case OPEN_TASK_EDIT_DIALOG: {
       return state.set('isOpen', true)
     }
-    case CLOSE_TASK_ADD_DIALOG: {
+    case CLOSE_TASK_EDIT_DIALOG: {
       return state.set('isOpen', false)
     }
-    case SET_ADDING_TASK_VALUE: {
+    case SET_EDITING_TASK_VALUES: {
       return state.merge(action.payload)
     }
-    case SET_ADDING_TASK_ERRORS: {
+    case SET_EDITING_TASK_ERRORS: {
       return state.set('errors', action.payload)
     }
     default: {
@@ -35,4 +35,4 @@ const addingTask = (state = initialState, action) => {
 }
 
 
-export default addingTask
+export default editingTask

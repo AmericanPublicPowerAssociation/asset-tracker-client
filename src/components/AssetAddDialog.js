@@ -32,7 +32,7 @@ class AssetAddDialog extends PureComponent {
     const {
       classes,
       addingAsset,
-      setAddingAssetValue,
+      setAddingAssetValues,
     } = this.props
     const open = addingAsset.get('isOpen')
     const typeId = addingAsset.get('typeId')
@@ -48,14 +48,14 @@ class AssetAddDialog extends PureComponent {
         <DialogContent>
           <AssetTypeSelect
             value={typeId}
-            onChange={event => setAddingAssetValue({
+            onChange={event => setAddingAssetValues({
               typeId: event.target.value})}
           />
           <AssetName
             name={name}
             errorText={errors.get('name')}
             className={classes.attribute}
-            onChange={event => setAddingAssetValue({
+            onChange={event => setAddingAssetValues({
               name: event.target.value})}
           />
         </DialogContent>

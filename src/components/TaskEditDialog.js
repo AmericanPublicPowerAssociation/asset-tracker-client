@@ -1,5 +1,4 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -8,45 +7,35 @@ import Button from '@material-ui/core/Button'
 import TaskName from './TaskName'
 
 
-const useStyles = makeStyles(theme => ({
-  attribute: {
-    margin: `${theme.spacing(3)}px 0 0 0`,
-  },
-}))
-
-
-export default function TaskAddDialog(props) {
-  const classes = useStyles()
+export default function TaskEditDialog(props) {
   const {
-    addTask,
-    addingTask,
-    closeTaskAddDialog,
-    setAddingTaskValue,
+    editTask,
+    editingTask,
+    closeTaskEditDialog,
+    setEditingTaskValues,
   } = props
 
   function onCancel() {
-    closeTaskAddDialog()
+    closeTaskEditDialog()
   }
 
   function onOk() {
-    addTask(addingTask)
+    editTask(editingTask)
   }
 
-  const open = addingTask.get('isOpen')
-  const name = addingTask.get('name')
-  const errors = addingTask.get('errors')
+  const id = editingTask.get('id')
+  const open = editingTask.get('isOpen')
+  const name = editingTask.get('name')
+  const errors = editingTask.get('errors')
+
   return (
-    <Dialog
-      open={open}
-      onClose={onCancel}
-      disableBackdropClick
-    >
-      <DialogTitle>Add Task</DialogTitle>
+    <Dialog open={open} onClose={onCancel} disableBackdropClick>
+      <DialogTitle>{id ? 'Edit': 'Add'} Task</DialogTitle>
       <DialogContent>
         <TaskName
           name={name}
           errorText={errors.get('name')}
-          onChange={event => setAddingTaskValue({
+          onChange={event => setEditingTaskValues({
             name: event.target.value})}
         />
       </DialogContent>

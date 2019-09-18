@@ -4,7 +4,7 @@ import {
   CLOSE_NAVIGATION_DRAWER,
   OPEN_INFORMATION_DRAWER,
   OPEN_NAVIGATION_DRAWER,
-  SET_APP_VALUE,
+  SET_APP_VALUES,
   SET_FOCUSING_ASSET,
   TOGGLE_THEME,
 } from '../constants'
@@ -47,7 +47,7 @@ const app = (state = initialState, action) => {
         withMorningTheme: !state.get('withMorningTheme'),
       })
     }
-    case SET_APP_VALUE: {
+    case SET_APP_VALUES: {
       return state.merge(fromJS(action.payload))
     }
     default: {

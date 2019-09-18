@@ -26,9 +26,9 @@
     "reduce-reducers": "^1.0.4",
     "redux": "^4.0.4",
     "redux-immutable": "^4.0.0",
-    "redux-saga": "^1.0.5",
+    "redux-saga": "^1.1.1",
     "reselect": "^4.0.0",
-    "viewport-mercator-project": "^6.1.1"
+    "viewport-mercator-project": "^6.2.2"
   },
   "scripts": {
     "start": "react-scripts start",
