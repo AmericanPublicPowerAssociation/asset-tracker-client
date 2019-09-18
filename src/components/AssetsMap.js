@@ -4,8 +4,9 @@ import ReactMapGL, { NavigationControl, FlyToInterpolator } from 'react-map-gl'
 import { withStyles } from '@material-ui/core/styles'
 import AssetMapMarker from './AssetMapMarker'
 import SelectedAssetMapMarker from './SelectedAssetMapMarker'
+import MapStyleSwitch from './MapStyleSwitch'
 import {
-  // STREETS_MAP_STYLE,
+  STREETS_MAP_STYLE,
   DARK_MAP_STYLE,
   EDITING_COLOR,
   FOCUSING_COLOR,
@@ -68,8 +69,6 @@ class AssetsMap extends PureComponent {
           e.features &&
           e.features.map(f => f.properties.id))]
     const assetCount = assetIds.length
-    console.log(e)
-    console.log(this.props.mapStyle)
     if (assetCount > 0) {
       setSelectedAsset({ids: assetIds})
       setFocusingAsset({id: assetIds[0]})
@@ -90,13 +89,26 @@ class AssetsMap extends PureComponent {
       setAssetLocation,
       assetById,
       selectedAssetIds,
+      setBaseMapStyleName,
     } = this.props
     const { longitude, latitude, zoom, pitch, bearing, transitionDuration } = mapViewport.toJS()
-    const baseMapStyle = {
-      dark: DARK_MAP_STYLE,
-      // streets: STREETS_MAP_STYLE,
-      satelliteStreets: SATELLITE_STREETS_MAP_STYLE,
-    }[baseMapStyleName]
+    const baseMapStyleTypes = {
+      dark: {
+        style: DARK_MAP_STYLE,
+        nextStyleName: 'streets',
+      },
+      streets: {
+        style: STREETS_MAP_STYLE,
+        nextStyleName: 'satelliteStreets',
+      },
+      satelliteStreets: {
+        style: SATELLITE_STREETS_MAP_STYLE,
+        nextStyleName: 'dark',
+      }
+    }
+    const mapStyleType = baseMapStyleTypes[baseMapStyleName]
+    const baseMapStyle = mapStyleType['style'] 
+    const nextBaseMapStyleName = mapStyleType['nextStyleName']
     return(
       <ReactMapGL
         mapStyle={baseMapStyle.mergeDeep(mapStyle)}
@@ -149,6 +161,10 @@ class AssetsMap extends PureComponent {
         />
         <div className={classes.mapToolbar}>
           <NavigationControl onViewportChange={this.updateViewport} />
+          <MapStyleSwitch
+            curBaseMapStyleName={baseMapStyleName}
+            nextBaseMapStyleName={nextBaseMapStyleName}
+            setBaseMapStyleName={setBaseMapStyleName} />
         </div>
       </ReactMapGL>
     )

@@ -49,6 +49,7 @@ import {
   SET_LOCATING_ASSET,
   SET_SELECTED_ASSET,
   SET_MAP_VIEWPORT,
+  SET_BASE_MAP_STYLE_NAME,
   SET_RELATING_ASSET,
   SET_SORTED_ASSETS,
   SET_TASK,
@@ -204,4 +205,8 @@ export const hideAddingAssetCSVFileErrors = payload => ({
 
 
 export const setMapViewport = payload => ({
-  type: SET_MAP_VIEWPORT, payload})
+  type: SET_MAP_VIEWPORT, payload
+})
+export const setBaseMapStyleName = payload => ({
+  type: SET_BASE_MAP_STYLE_NAME, payload
+})
