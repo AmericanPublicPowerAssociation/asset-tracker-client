@@ -11,7 +11,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 const styles = theme => ({
   root: {
     height: '100%',
-    backgroundColor: '#FAFAFA',
+    backgroundColor: 'lightgrey',
   },
   nameInput: {
     padding: 0,
