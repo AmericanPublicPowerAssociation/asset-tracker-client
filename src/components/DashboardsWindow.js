@@ -151,7 +151,7 @@ export default function DashboardsWindow(props) {
               {logsSummary.get('recentLogs').map((log, index) => {
                 return (
                   <TableRow key={index}>
-                    <TableCell>{log.get('userId')}</TableCell>
+                    <TableCell>{log.get('userId', 'Ethan')}</TableCell>
                     <TableCell>{log.get('event')}</TableCell>
                     <TableCell align='right'>{log.get('timestamp')}</TableCell>
                   </TableRow>

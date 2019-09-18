@@ -1,9 +1,6 @@
 import React, { PureComponent } from 'react'
 import Tooltip from '@material-ui/core/Tooltip';
-import {
-  DARK_MAP_STYLE,
-  SATELLITE_STREETS_MAP_STYLE,
-} from '../constants'
+
 
 const StreetViewIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -43,7 +40,7 @@ class MapStyleSwitch extends PureComponent {
 
   render() {
     const { nextBaseMapStyleName, curBaseMapStyleName } = this.props
-    const toolTipTitle = `Change MapStyle: ${curBaseMapStyleName} -> ${nextBaseMapStyleName}`
+    const toolTipTitle = `Change Map from ${curBaseMapStyleName} to ${nextBaseMapStyleName}`
     return ( 
       <Tooltip title={toolTipTitle} placement="bottom-start">
         <div>

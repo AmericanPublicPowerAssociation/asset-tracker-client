@@ -125,31 +125,29 @@ class AssetsMap extends PureComponent {
         transitionDuration={transitionDuration}
         transitionInterpolator={new FlyToInterpolator() }
         interactiveLayerIds={interactiveLayerIds.toJS()}
-        onClick={this.onClick}>
+        onClick={this.onClick}
+      >
+        {selectedAssetIds.reduce((list, id) => {
+          const curAsset = assetById.get(id)
+          if (curAsset.has('location')) {
+            const curLocation = curAsset.get('location')
+            const curTypeId = curAsset.get('typeId')
+            const curName = curAsset.get('name')
+            list.push(
+              <SelectedAssetMapMarker
+                name={curName}
+                assetId={id}
+                assetType={curTypeId}
+                key={id}
+                assetLocation={curLocation} />)
+          }
+          return list
+        }, [])}
         <AssetMapMarker
           color={FOCUSING_COLOR}
           assetId={focusingAssetId}
           assetLocation={focusingAssetLocation}
         />
-        {
-          selectedAssetIds.reduce( (list, id) => {
-            const curAsset = assetById.get(id)
-            if (curAsset.has('location') &&
-                id !== focusingAssetId) {
-              const curLocation = curAsset.get('location')
-              const curTypeId = curAsset.get('typeId')
-              const curName = curAsset.get('name')
-              list.push(
-                <SelectedAssetMapMarker
-                  name={curName}
-                  assetId={id}
-                  assetType={curTypeId}
-                  key={id}
-                  assetLocation={curLocation} />)
-            }
-            return list
-          }, []) 
-        }
         <AssetMapMarker
           color={EDITING_COLOR}
           draggable

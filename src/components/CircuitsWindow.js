@@ -4,6 +4,9 @@ import Typography from '@material-ui/core/Typography'
 
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    padding: theme.spacing(3),
+  },
 }))
 
 
@@ -11,7 +14,10 @@ export default function CircuitsWindow(props) {
   const classes = useStyles()
 
   return (
-    <Typography variant='h2' align='center'>
+    <Typography
+      className={classes.root}
+      variant='h2'
+    >
       Coming Soon!
     </Typography>
   )

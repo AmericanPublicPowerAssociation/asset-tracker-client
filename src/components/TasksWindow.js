@@ -78,7 +78,7 @@ export default function TasksWindow(props) {
           <TableCell>{task.get('name')}</TableCell>
           <TableCell>{task.get('assetName')}</TableCell>
           <TableCell>{task.get('referenceUri')}</TableCell>
-          <TableCell>{task.get('assignmentUserId')}</TableCell>
+          <TableCell>{task.get('assignmentUserId', 'Ethan')}</TableCell>
           <TableCell align='right'>
             <IconButton
               className={taskStatusClassName}
