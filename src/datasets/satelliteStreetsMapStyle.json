@@ -15,9 +15,9 @@
             "1444855769305.6016": {"name": "Tunnels", "collapsed": true}
         },
         "mapbox:sdk-support": {
-            "js": "0.50.0",
-            "android": "6.7.0",
-            "ios": "4.6.0"
+            "js": "0.54.0",
+            "android": "7.4.0",
+            "ios": "4.11.0"
         },
         "mapbox:trackposition": true
     },
@@ -34,7 +34,7 @@
             "type": "vector"
         }
     },
-    "sprite": "mapbox://sprites/crosscompute/cjs0g4l5z3cdc1fmtx2erjrfz",
+    "sprite": "mapbox://sprites/crosscompute/ck0paq9t30kxw1cp259i4i8re/0y2vnk8n60t1vz01wcpm3bpqa",
     "glyphs": "mapbox://fonts/crosscompute/{fontstack}/{range}.pbf",
     "layers": [
         {
@@ -4090,9 +4090,9 @@
             }
         }
     ],
-    "created": "2019-02-11T14:41:51.488Z",
-    "id": "cjs0g4l5z3cdc1fmtx2erjrfz",
-    "modified": "2019-02-11T14:41:51.488Z",
+    "created": "2019-09-18T13:22:38.644Z",
+    "id": "ck0paq9t30kxw1cp259i4i8re",
+    "modified": "2019-09-18T13:22:38.644Z",
     "owner": "crosscompute",
     "visibility": "private",
     "draft": false
