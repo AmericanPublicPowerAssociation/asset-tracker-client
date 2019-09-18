@@ -63,10 +63,23 @@ class AssetsMap extends PureComponent {
     })
   }
 
+  onClick = e => {
+    const { setFocusingAsset, setSelectedAsset } = this.props
+    const assetIds = [...new Set(
+          e.features &&
+          e.features.map(f => f.properties.id))]
+    const assetCount = assetIds.length
+    if (assetCount > 0) {
+      setSelectedAsset({ids: assetIds})
+      setFocusingAsset({id: assetIds[0]})
+    }
+  }
+
   render() {
     const {
       classes,
       baseMapStyleName,
+      interactiveLayerIds,
       mapStyle,
       mapViewport,
       focusingAssetId,
@@ -110,8 +123,9 @@ class AssetsMap extends PureComponent {
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
         onViewportChange={this.updateViewport}
         transitionDuration={transitionDuration}
-        transitionInterpolator={new FlyToInterpolator()}
-      >
+        transitionInterpolator={new FlyToInterpolator() }
+        interactiveLayerIds={interactiveLayerIds.toJS()}
+        onClick={this.onClick}>
         <AssetMapMarker
           color={FOCUSING_COLOR}
           assetId={focusingAssetId}

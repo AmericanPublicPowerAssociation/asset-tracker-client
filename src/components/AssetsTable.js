@@ -67,18 +67,9 @@ class AssetsTable extends PureComponent {
     const orderByDesc = sortedTable.get('desc')
     const editingAssetId = locatingAssetId || relatingAssetId
     return (
-      <Table>
+      <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell>
-              <TableSortLabel
-                active={'typeid' === curSortColumn}
-                direction={ ('typeid' === curSortColumn && orderByDesc) ? 'asc': 'desc'}
-                onClick={
-                  () => this.onSortClick('typeid', curSortColumn, orderByDesc)}>
-                Type
-              </TableSortLabel>
-            </TableCell>
             <TableCell>
               <TableSortLabel
                 active={'name' === curSortColumn}
@@ -86,6 +77,15 @@ class AssetsTable extends PureComponent {
                 onClick={
                   () => this.onSortClick('name', curSortColumn, orderByDesc)}>
                 Name
+              </TableSortLabel>
+            </TableCell>
+            <TableCell>
+              <TableSortLabel
+                active={'typeid' === curSortColumn}
+                direction={ ('typeid' === curSortColumn && orderByDesc) ? 'asc': 'desc'}
+                onClick={
+                  () => this.onSortClick('typeid', curSortColumn, orderByDesc)}>
+                Type
               </TableSortLabel>
             </TableCell>
           {relatingAssetId &&
@@ -114,9 +114,7 @@ class AssetsTable extends PureComponent {
                 [classes.editing]: editingAssetId && editingAssetId === assetId,
               })}
               hover
-              classes={{
-                hover: classes.hover,
-              }}
+              classes={{ hover: classes.hover }}
               selected={assetId === focusingAssetId}
               key={assetId}
               ref={assetId}
@@ -124,11 +122,11 @@ class AssetsTable extends PureComponent {
                 setFocusingAsset({id: assetId})
               }}
             >
-              <TableCell>
-                {assetTypeName}
-              </TableCell>
               <TableCell component='th' scope='row'>
                 {assetName}
+              </TableCell>
+              <TableCell>
+                {assetTypeName}
               </TableCell>
             {
               relatingAssetId &&

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableHead from '@material-ui/core/TableHead'
@@ -7,14 +6,7 @@ import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
 
 
-const useStyles = makeStyles(theme => ({
-  table: {
-  },
-}))
-
-
 export default function LogsWindow(props) {
-  const classes = useStyles()
   const { logs, refreshLogs } = props
 
   useEffect(() => {
@@ -22,7 +14,7 @@ export default function LogsWindow(props) {
   }, [refreshLogs])
 
   return (
-    <Table className={classes.table}>
+    <Table>
       <TableHead>
         <TableRow>
           <TableCell>User ID</TableCell>

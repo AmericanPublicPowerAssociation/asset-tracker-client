@@ -1,31 +1,31 @@
 import { connect } from 'react-redux'
-import TasksWindow from '../components/TasksWindow'
+import TaskEditDialog from '../components/TaskEditDialog'
 import {
-  refreshTasks,
-  openTaskEditDialog,
+  editTask,
+  closeTaskEditDialog,
   setEditingTaskValues,
 } from '../actions'
 import {
-  getTaskById,
+  getEditingTask,
 } from '../selectors'
 
 
 const mapStateToProps = state => ({
-  taskById: getTaskById(state),
+  editingTask: getEditingTask(state),
 })
 
 
 const mapDispatchToProps = dispatch => ({
-  refreshTasks: payload => {dispatch(
-    refreshTasks(payload))},
-  openTaskEditDialog: payload => {dispatch(
-    openTaskEditDialog(payload))},
+  closeTaskEditDialog: payload => {dispatch(
+    closeTaskEditDialog(payload))},
   setEditingTaskValues: payload => {dispatch(
     setEditingTaskValues(payload))},
+  editTask: payload => {dispatch(
+    editTask(payload))},
 })
 
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(TasksWindow)
+)(TaskEditDialog)

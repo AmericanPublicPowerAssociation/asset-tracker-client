@@ -20,7 +20,7 @@ import relatingAssetKey from './relatingAssetKey'
 import assetFilterKeysByAttribute from './assetFilterKeysByAttribute'
 import assetFilterValueByAttribute from './assetFilterValueByAttribute'
 import addingAsset from './addingAsset'
-import addingTask from './addingTask'
+import editingTask from './editingTask'
 import mapViewport from './mapViewport'
 import baseMapStyleName from './baseMapStyleName'
 import locatingAssetId from './locatingAssetId'
@@ -30,6 +30,7 @@ import logs from './logs'
 import taskById from './taskById'
 import dashboards from './dashboards'
 import {
+  MAP_PADDING,
   RESET_ASSETS_KIT,
   SET_FOCUSING_ASSET,
 } from '../constants'
@@ -48,7 +49,7 @@ const reduceHorizontally = combineReducers({
   relatingAssetId,
   relatingAssetKey,
   addingAsset,
-  addingTask,
+  editingTask,
   assetFilterValueByAttribute,
   assetFilterKeysByAttribute,
   trackingAsset: (state = {}) => state,
@@ -80,7 +81,7 @@ const reduceVertically = (state, action) => {
         zoom,
       } = new WebMercatorViewport(
         mapViewport,
-      ).fitBounds(boundingBox)
+      ).fitBounds(boundingBox, {padding: MAP_PADDING})
       return state.mergeDeep({
         mapViewport: {
           longitude,
@@ -136,7 +137,7 @@ const reduceVertically = (state, action) => {
           zoom,
         } = new WebMercatorViewport(
           mapViewport,
-        ).fitBounds(computeBounds)
+        ).fitBounds(computeBounds, {padding: MAP_PADDING})
         mergingPatch['mapViewport'] = {
           longitude,
           latitude,

@@ -3,26 +3,23 @@ import clsx from 'clsx'
 import { Map } from 'immutable'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import TableCell from '@material-ui/core/TableCell'
-import Chip from '@material-ui/core/Chip'
-import AddIcon from '@material-ui/icons/Add'
 import {
-  VendorName,
   ProductName,
   ProductVersion,
+  VendorName,
 } from 'asset-report-risks'
 import AssetName from './AssetName'
+import AssetTasks from './AssetTasks'
 import AssetLocation from '../containers/AssetLocation'
 import AssetRelationChips from '../containers/AssetRelationChips'
 
 
 const useStyles = makeStyles(theme => ({
-  attribute: {
+  singleSpacing: {
     margin: `${theme.spacing(3)}px 0 0 0`,
+  },
+  doubleSpacing: {
+    margin: `${theme.spacing(6)}px 0 0 0`,
   },
   vanish: {
     display: 'none',
@@ -39,8 +36,8 @@ export default function AssetDetail(props) {
     parentAssets,
     childAssets,
     refreshAssetTasks,
-    openTaskAddDialog,
-    setAddingTaskValue,
+    openTaskEditDialog,
+    setEditingTaskValues,
     taskById,
   } = props
 
@@ -90,113 +87,101 @@ export default function AssetDetail(props) {
         onChange={event => trackChanges({name: event.target.value})}
         onBlur={() => saveChanges({name})}
       />
-    {/*
-      <AssetCircuit />
-    */}
-      <VendorName
-        className={classes.attribute}
-        typeId={typeId}
-        vendorName={vendorName}
-        trackChanges={trackChanges}
-        saveChanges={saveChanges}
-      />
-      <ProductName
-        className={clsx(classes.attribute, {
-          [classes.vanish]: unique,
-        })}
-        typeId={typeId}
-        vendorName={vendorName}
-        productName={productName}
-        trackChanges={trackChanges}
-        saveChanges={saveChanges}
-      />
-      <ProductVersion
-        className={clsx(classes.attribute, {
-          [classes.vanish]: unique,
-        })}
-        typeId={typeId}
-        vendorName={vendorName}
-        productName={productName}
-        productVersion={productVersion}
-        trackChanges={trackChanges}
-        saveChanges={saveChanges}
-      />
+
       <AssetLocation
-        className={clsx(classes.attribute, {
+        className={clsx(classes.doubleSpacing, {
           [classes.vanish]: !locatable,
         })}
       />
-  <>
+
+      <AssetTasks
+        className={classes.doubleSpacing}
+        assetId={id}
+        taskById={taskById}
+        setEditingTaskValues={setEditingTaskValues}
+        openTaskEditDialog={openTaskEditDialog}
+      />
+
+    {/*
+      <AssetCircuit />
+    */}
+
+      <div className={classes.singleSpacing}>
+        <VendorName
+          className={classes.singleSpacing}
+          typeId={typeId}
+          vendorName={vendorName}
+          trackChanges={trackChanges}
+          saveChanges={saveChanges}
+        />
+        <ProductName
+          className={clsx(classes.singleSpacing, {
+            [classes.vanish]: unique,
+          })}
+          typeId={typeId}
+          vendorName={vendorName}
+          productName={productName}
+          trackChanges={trackChanges}
+          saveChanges={saveChanges}
+        />
+        <ProductVersion
+          className={clsx(classes.singleSpacing, {
+            [classes.vanish]: unique,
+          })}
+          typeId={typeId}
+          vendorName={vendorName}
+          productName={productName}
+          productVersion={productVersion}
+          trackChanges={trackChanges}
+          saveChanges={saveChanges}
+        />
+      </div>
+
+      <div className={classes.singleSpacing}>
   {inputTypeByAttribute.entrySeq().map(([attribute, inputType]) => {
     const value = focusingAsset.get(attribute, '')
     return (
-      <TextField
-        value={value}
-        className={classes.attribute}
-        label={attribute}
-        type={inputType}
-        key={attribute}
-        onChange={event => {
-          let v = event.target.value
-          if (inputType === 'number') {
-            v = parseFloat(v)
-          }
-          trackChanges({[attribute]: v})
-        }}
-        onBlur={() => saveChanges({
-          [attribute]: value})}
-      />
+        <TextField
+          fullWidth
+          value={value}
+          className={classes.singleSpacing}
+          label={attribute}
+          type={inputType}
+          key={attribute}
+          onChange={event => {
+            let v = event.target.value
+            if (inputType === 'number') {
+              v = parseFloat(v)
+            }
+            trackChanges({[attribute]: v})
+          }}
+          onBlur={() => saveChanges({
+            [attribute]: value})}
+        />
     )
   })}
-  </>
-      <AssetRelationChips
-        className={classes.attribute}
-        label='Connections'
-        assetKey='connectedIds'
-        relatedAssets={connectedAssets}
-      />
-      <AssetRelationChips
-        className={classes.attribute}
-        label='Parents'
-        assetKey='parentIds'
-        relatedAssets={parentAssets}
-      />
-      <AssetRelationChips
-        className={classes.attribute}
-        label='Children'
-        assetKey='childIds'
-        relatedAssets={childAssets}
-      />
+      </div>
 
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Task</TableCell>
-            <TableCell>Owner</TableCell>
-            <TableCell align='right'>Status</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-      {taskById.entrySeq().map(([id, task]) => {
-        return (
-          <TableRow key={id}>
-            <TableCell>{task.get('name')}</TableCell>
-            <TableCell>{task.get('assignmentUserId')}</TableCell>
-            <TableCell align='right'>{task.get('status')}</TableCell>
-          </TableRow>
-        )
-      })}
-        </TableBody>
-      </Table>
-
-      <Chip
-        label=<AddIcon />
-        color='primary'
-        onClick={() => {
-          setAddingTaskValue({assetId: id})
-          openTaskAddDialog()
-        }}
-      />
+      <div className={classes.singleSpacing}>
+        <AssetRelationChips
+          className={classes.singleSpacing}
+          label='Connections'
+          assetKey='connectedIds'
+          relatedAssets={connectedAssets}
+        />
+        <AssetRelationChips
+          className={classes.singleSpacing}
+          label='Parents'
+          assetKey='parentIds'
+          relatedAssets={parentAssets}
+        />
+        <AssetRelationChips
+          className={classes.singleSpacing}
+          label='Children'
+          assetKey='childIds'
+          relatedAssets={childAssets}
+        />
+      </div>
 
     </>
   )

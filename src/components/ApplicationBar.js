@@ -1,7 +1,7 @@
-import React, { PureComponent } from 'react'
+import React from 'react'
 import { Route } from 'react-router-dom'
 import clsx from 'clsx'
-import { withStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -21,7 +21,7 @@ import {
 } from '../constants'
 
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   appBar: {
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
@@ -63,135 +63,128 @@ const styles = theme => ({
   vanish: {
     display: 'none',
   },
-})
+}))
 
 
-class ApplicationBar extends PureComponent {
+export default function ApplicationBar(props) {
+  const classes = useStyles()
+  const {
+    isUserMember,
+    isNavigationDrawerOpen,
+    isInformationDrawerOpen,
+    focusingAssetId,
+    locatingAsset,
+    relatingAsset,
+    relatingAssetKey,
+    openNavigationDrawer,
+    openAssetAddDialog,
+    openAssetsUploadDialog,
+    downloadAssetsUploadDialog,
+    setFocusingAsset,
+    setLocatingAsset,
+    setRelatingAsset,
+  } = props
 
-  render() {
-    const {
-      classes,
-      isUserMember,
-      isNavigationDrawerOpen,
-      isInformationDrawerOpen,
-      focusingAssetId,
-      locatingAsset,
-      relatingAsset,
-      relatingAssetKey,
-      openNavigationDrawer,
-      openAssetAddDialog,
-      openAssetsUploadDialog,
-      downloadAssetsUploadDialog,
-      setFocusingAsset,
-      setLocatingAsset,
-      setRelatingAsset,
-    } = this.props
+  const isDrawerOpen = isNavigationDrawerOpen || isInformationDrawerOpen
+  const locatingAssetId = locatingAsset.get('id')
+  const relatingAssetId = relatingAsset.get('id')
 
-    const isDrawerOpen = isNavigationDrawerOpen || isInformationDrawerOpen
-    const locatingAssetId = locatingAsset.get('id')
-    const relatingAssetId = relatingAsset.get('id')
+  const editingAssetId = locatingAssetId || relatingAssetId
+  const editingAsset = locatingAssetId ? locatingAsset : relatingAsset
+  const editingAssetName = editingAsset.get('name')
+  const editingAttributeName = locatingAssetId ? 'Location' : {
+    connectedIds: 'Connections',
+    parentIds: 'Parents',
+    childIds: 'Children',
+  }[relatingAssetKey]
 
-    const editingAssetId = locatingAssetId || relatingAssetId
-    const editingAsset = locatingAssetId ? locatingAsset : relatingAsset
-    const editingAssetName = editingAsset.get('name')
-    const editingAttributeName = locatingAssetId ? 'Location' : {
-      connectedIds: 'Connections',
-      parentIds: 'Parents',
-      childIds: 'Children',
-    }[relatingAssetKey]
+  const applicationTitle = editingAssetId ?
+    `Editing ${editingAttributeName} for ${editingAssetName}` :
+    'Asset Tracker'
 
-    const applicationTitle = editingAssetId ?
-      `Editing ${editingAttributeName} for ${editingAssetName}` :
-      'Asset Tracker'
+  const editingAssetOpenButton =
+    editingAssetId &&
+    editingAssetId !== focusingAssetId &&
+    <Tooltip title='Open Editing Asset' enterDelay={TOOLTIP_DELAY}>
+      <IconButton aria-label='Open Editing Asset' color='inherit'
+        onClick={() => setFocusingAsset({id: editingAssetId})}
+      ><EditingOpenIcon /></IconButton>
+    </Tooltip>
 
-    const editingAssetOpenButton =
-      editingAssetId &&
-      editingAssetId !== focusingAssetId &&
-      <Tooltip title='Open Editing Asset' enterDelay={TOOLTIP_DELAY}>
-        <IconButton aria-label='Open Editing Asset' color='inherit'
-          onClick={() => setFocusingAsset({id: editingAssetId})}
-        ><EditingOpenIcon /></IconButton>
-      </Tooltip>
+  const editingAssetSaveButton =
+    editingAssetId &&
+    <Tooltip title='Save Editing Asset' enterDelay={TOOLTIP_DELAY}>
+      <IconButton aria-label='Save Editing Asset' color='inherit'
+        onClick={() => {
+          setFocusingAsset({id: editingAssetId})
+          setLocatingAsset({id: null})
+          setRelatingAsset({id: null, key: null})
+        }}
+      ><EditingSaveIcon /></IconButton>
+    </Tooltip>
 
-    const editingAssetSaveButton =
-      editingAssetId &&
-      <Tooltip title='Save Editing Asset' enterDelay={TOOLTIP_DELAY}>
-        <IconButton aria-label='Save Editing Asset' color='inherit'
-          onClick={() => {
-            setFocusingAsset({id: editingAssetId})
-            setLocatingAsset({id: null})
-            setRelatingAsset({id: null, key: null})
-          }}
-        ><EditingSaveIcon /></IconButton>
-      </Tooltip>
+  const assetAddButton = isUserMember && !editingAssetId &&
+    <Tooltip title='Add Asset' enterDelay={TOOLTIP_DELAY}>
+      <IconButton aria-label='Add Asset' color='inherit'
+        onClick={openAssetAddDialog}
+      ><AddIcon /></IconButton>
+    </Tooltip>
 
-    const assetAddButton = isUserMember && !editingAssetId &&
-      <Tooltip title='Add Asset' enterDelay={TOOLTIP_DELAY}>
-        <IconButton aria-label='Add Asset' color='inherit'
-          onClick={openAssetAddDialog}
-        ><AddIcon /></IconButton>
-      </Tooltip>
+  const uploadAssetsCSV = isUserMember && !editingAssetId &&
+    <Tooltip title='Upload CSV' enterDelay={TOOLTIP_DELAY}>
+      <IconButton aria-label='Upload CSV' color='inherit'
+        onClick={openAssetsUploadDialog}
+      ><UploadIcon /> </IconButton>
+    </Tooltip>
 
-    const uploadAssetsCSV = isUserMember && !editingAssetId &&
-      <Tooltip title='Upload CSV' enterDelay={TOOLTIP_DELAY}>
-        <IconButton aria-label='Upload CSV' color='inherit'
-          onClick={openAssetsUploadDialog}
-        ><UploadIcon /> </IconButton>
-      </Tooltip>
+  const downloadAssetsCSV = isUserMember && !editingAssetId &&
+    <Tooltip title='Download CSV' enterDelay={TOOLTIP_DELAY}>
+      <IconButton aria-label='Download CSV' color='inherit'
+        onClick={downloadAssetsUploadDialog}
+      ><DownloadIcon /> </IconButton>
+    </Tooltip>
 
-    const downloadAssetsCSV = isUserMember && !editingAssetId &&
-      <Tooltip title='Download CSV' enterDelay={TOOLTIP_DELAY}>
-        <IconButton aria-label='Download CSV' color='inherit'
-          onClick={downloadAssetsUploadDialog}
-        ><DownloadIcon /> </IconButton>
-      </Tooltip>
+  const assetButtonGroup =
+    <>
+      {editingAssetOpenButton}
+      {editingAssetSaveButton}
+      {assetAddButton}
+      {uploadAssetsCSV}
+      {downloadAssetsCSV}
+    </>
 
-    const assetButtonGroup =
-      <>
-        {editingAssetOpenButton}
-        {editingAssetSaveButton}
-        {assetAddButton}
-        {uploadAssetsCSV}
-        {downloadAssetsCSV}
-      </>
+  return (
+    <AppBar
+      className={clsx(classes.appBar, {
+        [classes.appBarShift]: isDrawerOpen,
+        [classes.appBarWithNavigation]: isNavigationDrawerOpen,
+        [classes.appBarWithInformation]: isInformationDrawerOpen,
+      })}
+      color={editingAssetId ? 'secondary' : 'default'}
+    >
+      <Toolbar disableGutters>
 
-    return (
-      <AppBar
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: isDrawerOpen,
-          [classes.appBarWithNavigation]: isNavigationDrawerOpen,
-          [classes.appBarWithInformation]: isInformationDrawerOpen,
-        })}
-        color={editingAssetId ? 'secondary' : 'default'}
-      >
-        <Toolbar disableGutters>
+        <Tooltip title='Open Navigation' enterDelay={TOOLTIP_DELAY}>
+          <IconButton aria-label='Open Navigation' color='inherit'
+            className={clsx(classes.leftButton, {
+              [classes.vanish]: isNavigationDrawerOpen,
+            })}
+            onClick={openNavigationDrawer}
+          ><MenuIcon /></IconButton>
+        </Tooltip>
 
-          <Tooltip title='Open Navigation' enterDelay={TOOLTIP_DELAY}>
-            <IconButton aria-label='Open Navigation' color='inherit'
-              className={clsx(classes.leftButton, {
-                [classes.vanish]: isNavigationDrawerOpen,
-              })}
-              onClick={openNavigationDrawer}
-            ><MenuIcon /></IconButton>
-          </Tooltip>
+        <Typography
+          variant='h6'
+          color='inherit'
+          className={classes.grow}
+          noWrap
+        >{applicationTitle}</Typography>
 
-          <Typography
-            variant='h6'
-            color='inherit'
-            className={classes.grow}
-            noWrap
-          >{applicationTitle}</Typography>
+        <Route exact path='/assets' render={() => assetButtonGroup }/>
+        <Route exact path='/maps' render={() => assetButtonGroup }/>
+        <Route exact path='/circuits' render={() => assetButtonGroup }/>
 
-          <Route exact path='/assets' render={() => assetButtonGroup }/>
-          <Route exact path='/maps' render={() => assetButtonGroup }/>
-          <Route exact path='/circuits' render={() => assetButtonGroup }/>
-
-        </Toolbar>
-      </AppBar>
-    )
-  }
-
+      </Toolbar>
+    </AppBar>
+  )
 }
-
-
-export default withStyles(styles)(ApplicationBar)

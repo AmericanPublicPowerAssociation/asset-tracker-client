@@ -35,8 +35,8 @@ export const getRelatingAssetKey = state => state.get(
   'relatingAssetKey')
 export const getAddingAsset = state => state.get(
   'addingAsset')
-export const getAddingTask = state => state.get(
-  'addingTask')
+export const getEditingTask = state => state.get(
+  'editingTask')
 export const getAssetsFilterKeysByAttribute = state => state.get(
   'assetFilterKeysByAttribute')
 export const getAssetsFilterValueByAttribute = state => state.get(
@@ -313,6 +313,13 @@ export const getMapLayers = createSelector([
       }
     })
 })
+
+
+export const getInteractiveLayerIds = createSelector([
+  getMapLayers,  
+], (
+  mapLayers,
+) => mapLayers.map(layer => layer.id))
 
 
 export const getMapStyle = createSelector([
