@@ -147,7 +147,7 @@ class AssetsMap extends PureComponent {
         />
         <div className={classes.mapToolbar}>
           <NavigationControl onViewportChange={this.updateViewport} />
-          <MapStyleSwitch 
+          <MapStyleSwitch
             nextBaseMapStyleName={nextBaseMapStyleName}
             setBaseMapStyleName={setBaseMapStyleName} />
         </div>
