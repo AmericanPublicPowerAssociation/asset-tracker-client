@@ -3,7 +3,7 @@ import AssetAddDialog from '../components/AssetAddDialog'
 import {
   addAsset,
   closeAssetAddDialog,
-  setAddingAssetValue,
+  setAddingAssetValues,
 } from '../actions'
 import {
   getAddingAsset,
@@ -18,8 +18,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   closeAssetAddDialog: payload => {dispatch(
     closeAssetAddDialog(payload))},
-  setAddingAssetValue: payload => {dispatch(
-    setAddingAssetValue(payload))},
+  setAddingAssetValues: payload => {dispatch(
+    setAddingAssetValues(payload))},
   addAsset: payload => {dispatch(
     addAsset(payload))},
 })

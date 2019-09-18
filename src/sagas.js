@@ -9,10 +9,10 @@ import {
   watchRefreshAuth,
 } from 'appa-auth-consumer'
 import {
-  watchSuggestVendorNames,
+  watchRefreshRisks,
   watchSuggestProductNames,
   watchSuggestProductVersions,
-  watchRefreshRisks,
+  watchSuggestVendorNames,
 } from 'asset-report-risks'
 import {
   closeAssetsUploadDialog,
@@ -25,23 +25,23 @@ import {
   resetTasks,
   setAddingAssetCSVFileErrors,
   setAddingAssetErrors,
-  setAddingAssetValue,
-  setAddingTaskErrors,
-  setAddingTaskValue,
+  setAddingAssetValues,
   setAsset,
   setAssetErrors,
   setAssets,
+  setEditingTaskErrors,
+  setEditingTaskValues,
   setFocusingAsset,
   setTask,
   sortAssets,
 } from './actions'
 import {
-  ADD_TASK,
   ADD_ASSET,
   ADD_ASSET_RELATION,
   CHANGE_ASSET,
   DOWNLOAD_ASSETS_CSV,
   DROP_ASSET_RELATION,
+  EDIT_TASK,
   REFRESH_ASSETS_KIT,
   REFRESH_ASSET_TASKS,
   REFRESH_DASHBOARDS,
@@ -138,7 +138,7 @@ function* watchAddAsset() {
     }, {
       on200: function* (asset) {
         yield put(setAsset(asset))
-        yield put(setAddingAssetValue({isOpen: false, errors: Map()}))
+        yield put(setAddingAssetValues({isOpen: false, errors: Map()}))
         yield put(setFocusingAsset({id: asset.get('id')}))
       },
       on400: function* (errors) {
@@ -149,19 +149,22 @@ function* watchAddAsset() {
 }
 
 
-function* watchAddTask() {
-  yield takeEvery(ADD_TASK, function* (action) {
+function* watchEditTask() {
+  yield takeEvery(EDIT_TASK, function* (action) {
     const payload = rinseTask(action.payload)
-    yield fetchSafely('/tasks.json', {
-      method: 'POST',
+    const id = payload.get('id')
+    const url = id ? `/tasks/${id}.json` : '/tasks.json'
+    const method = id ? 'PATCH' : 'POST'
+    yield fetchSafely(url, {
+      method,
       body: JSON.stringify(payload),
     }, {
       on200: function* (task) {
         yield put(setTask(task))
-        yield put(setAddingTaskValue({isOpen: false, errors: Map()}))
+        yield put(setEditingTaskValues({isOpen: false, errors: Map()}))
       },
       on400: function* (errors) {
-        yield put(setAddingTaskErrors(errors))
+        yield put(setEditingTaskErrors(errors))
       },
     })
   })
@@ -264,7 +267,7 @@ export default function* () {
     watchRefreshLogs(),
     watchRefreshTasks(),
     watchAddAsset(),
-    watchAddTask(),
+    watchEditTask(),
     watchUploadAssetsCsv(),
     watchDownloadFileAssets(),
     watchChangeAsset(),

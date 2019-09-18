@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import AssetsFilter from '../components/AssetsFilter'
 import {
   setAssetsFilterKeys,
-  setAssetsFilterValue,
+  setAssetsFilterValues,
   toggleAssetsFilterKey,
 } from '../actions'
 import {
@@ -22,8 +22,8 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
-  setAssetsFilterValue: payload => {dispatch(
-    setAssetsFilterValue(payload))},
+  setAssetsFilterValues: payload => {dispatch(
+    setAssetsFilterValues(payload))},
   setAssetsFilterKeys: payload => {dispatch(
     setAssetsFilterKeys(payload))},
   toggleAssetsFilterKey: payload => {dispatch(

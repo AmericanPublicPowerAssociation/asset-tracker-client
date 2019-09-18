@@ -4,9 +4,9 @@ import { Map } from 'immutable'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import {
-  VendorName,
   ProductName,
   ProductVersion,
+  VendorName,
 } from 'asset-report-risks'
 import AssetName from './AssetName'
 import AssetTasks from './AssetTasks'
@@ -15,11 +15,11 @@ import AssetRelationChips from '../containers/AssetRelationChips'
 
 
 const useStyles = makeStyles(theme => ({
-  leadAttribute: {
-    margin: `${theme.spacing(6)}px 0 0 0`,
-  },
-  nextAttribute: {
+  singleSpacing: {
     margin: `${theme.spacing(3)}px 0 0 0`,
+  },
+  doubleSpacing: {
+    margin: `${theme.spacing(6)}px 0 0 0`,
   },
   vanish: {
     display: 'none',
@@ -36,8 +36,8 @@ export default function AssetDetail(props) {
     parentAssets,
     childAssets,
     refreshAssetTasks,
-    openTaskAddDialog,
-    setAddingTaskValue,
+    openTaskEditDialog,
+    setEditingTaskValues,
     taskById,
   } = props
 
@@ -89,92 +89,99 @@ export default function AssetDetail(props) {
       />
 
       <AssetLocation
-        className={clsx(classes.attribute, {
+        className={clsx(classes.doubleSpacing, {
           [classes.vanish]: !locatable,
         })}
       />
 
       <AssetTasks
-        className={classes.leadAttribute}
+        className={classes.doubleSpacing}
         assetId={id}
         taskById={taskById}
-        setAddingTaskValue={setAddingTaskValue}
-        openTaskAddDialog={openTaskAddDialog}
+        setEditingTaskValues={setEditingTaskValues}
+        openTaskEditDialog={openTaskEditDialog}
       />
 
     {/*
       <AssetCircuit />
     */}
 
-          <VendorName
-            className={classes.leadAttribute}
-            typeId={typeId}
-            vendorName={vendorName}
-            trackChanges={trackChanges}
-            saveChanges={saveChanges}
-          />
-          <ProductName
-            className={clsx(classes.nextAttribute, {
-              [classes.vanish]: unique,
-            })}
-            typeId={typeId}
-            vendorName={vendorName}
-            productName={productName}
-            trackChanges={trackChanges}
-            saveChanges={saveChanges}
-          />
-          <ProductVersion
-            className={clsx(classes.nextAttribute, {
-              [classes.vanish]: unique,
-            })}
-            typeId={typeId}
-            vendorName={vendorName}
-            productName={productName}
-            productVersion={productVersion}
-            trackChanges={trackChanges}
-            saveChanges={saveChanges}
-          />
+      <div className={classes.singleSpacing}>
+        <VendorName
+          className={classes.singleSpacing}
+          typeId={typeId}
+          vendorName={vendorName}
+          trackChanges={trackChanges}
+          saveChanges={saveChanges}
+        />
+        <ProductName
+          className={clsx(classes.singleSpacing, {
+            [classes.vanish]: unique,
+          })}
+          typeId={typeId}
+          vendorName={vendorName}
+          productName={productName}
+          trackChanges={trackChanges}
+          saveChanges={saveChanges}
+        />
+        <ProductVersion
+          className={clsx(classes.singleSpacing, {
+            [classes.vanish]: unique,
+          })}
+          typeId={typeId}
+          vendorName={vendorName}
+          productName={productName}
+          productVersion={productVersion}
+          trackChanges={trackChanges}
+          saveChanges={saveChanges}
+        />
+      </div>
 
-    {inputTypeByAttribute.entrySeq().map(([attribute, inputType]) => {
-      const value = focusingAsset.get(attribute, '')
-      return (
-          <TextField
-            value={value}
-            className={classes.nextAttribute}
-            label={attribute}
-            type={inputType}
-            key={attribute}
-            onChange={event => {
-              let v = event.target.value
-              if (inputType === 'number') {
-                v = parseFloat(v)
-              }
-              trackChanges({[attribute]: v})
-            }}
-            onBlur={() => saveChanges({
-              [attribute]: value})}
-          />
-      )
-    })}
+      <div className={classes.singleSpacing}>
+  {inputTypeByAttribute.entrySeq().map(([attribute, inputType]) => {
+    const value = focusingAsset.get(attribute, '')
+    return (
+        <TextField
+          fullWidth
+          value={value}
+          className={classes.singleSpacing}
+          label={attribute}
+          type={inputType}
+          key={attribute}
+          onChange={event => {
+            let v = event.target.value
+            if (inputType === 'number') {
+              v = parseFloat(v)
+            }
+            trackChanges({[attribute]: v})
+          }}
+          onBlur={() => saveChanges({
+            [attribute]: value})}
+        />
+    )
+  })}
+      </div>
 
-      <AssetRelationChips
-        className={classes.leadAttribute}
-        label='Connections'
-        assetKey='connectedIds'
-        relatedAssets={connectedAssets}
-      />
-      <AssetRelationChips
-        className={classes.nextAttribute}
-        label='Parents'
-        assetKey='parentIds'
-        relatedAssets={parentAssets}
-      />
-      <AssetRelationChips
-        className={classes.nextAttribute}
-        label='Children'
-        assetKey='childIds'
-        relatedAssets={childAssets}
-      />
+      <div className={classes.singleSpacing}>
+        <AssetRelationChips
+          className={classes.singleSpacing}
+          label='Connections'
+          assetKey='connectedIds'
+          relatedAssets={connectedAssets}
+        />
+        <AssetRelationChips
+          className={classes.singleSpacing}
+          label='Parents'
+          assetKey='parentIds'
+          relatedAssets={parentAssets}
+        />
+        <AssetRelationChips
+          className={classes.singleSpacing}
+          label='Children'
+          assetKey='childIds'
+          relatedAssets={childAssets}
+        />
+      </div>
 
     </>
   )
