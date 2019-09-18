@@ -1,16 +1,33 @@
 import React, { useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import FixIcon from '@material-ui/icons/Build'
+import DoneIcon from '@material-ui/icons/Check'
+import IconButton from '@material-ui/core/IconButton'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
-import { TASK_STATUS_BY_ID } from '../constants'
 
 
 const useStyles = makeStyles(theme => ({
   hover: {
     cursor: 'pointer',
+  },
+  taskCancelled: {
+    backgroundColor: 'red',
+    color: 'white',
+  },
+  taskNew: {
+    color: 'black',
+  },
+  taskPending: {
+    backgroundColor: 'yellow',
+    color: 'black',
+  },
+  taskDone: {
+    backgroundColor: 'green',
+    color: 'white',
   },
 }))
 
@@ -41,8 +58,13 @@ export default function TasksWindow(props) {
       </TableHead>
       <TableBody>
     {taskById.entrySeq().map(([id, task]) => {
-      const statusValue = task.get('status')
-      const statusName = TASK_STATUS_BY_ID.get(statusValue)
+      const taskStatus = task.get('status')
+      const taskStatusClassName = {
+        '-100': classes.taskCancelled,
+        '0': classes.taskNew,
+        '50': classes.taskPending,
+        '100': classes.taskDone,
+      }[taskStatus]
       return (
         <TableRow
           key={id}
@@ -57,7 +79,15 @@ export default function TasksWindow(props) {
           <TableCell>{task.get('assetName')}</TableCell>
           <TableCell>{task.get('referenceUri')}</TableCell>
           <TableCell>{task.get('assignmentUserId')}</TableCell>
-          <TableCell align='right'>{statusName}</TableCell>
+          <TableCell align='right'>
+            <IconButton
+              className={taskStatusClassName}
+              size='small'
+              disableRipple
+            >
+              {taskStatus !== 100 ? <FixIcon /> : <DoneIcon />}
+            </IconButton>
+          </TableCell>
         </TableRow>
       )
     })}
