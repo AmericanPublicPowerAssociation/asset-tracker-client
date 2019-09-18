@@ -107,7 +107,7 @@ class AssetsMap extends PureComponent {
       }
     }
     const mapStyleType = baseMapStyleTypes[baseMapStyleName]
-    const baseMapStyle = mapStyleType['style'] 
+    const baseMapStyle = mapStyleType['style']
     const nextBaseMapStyleName = mapStyleType['nextStyleName']
     return(
       <ReactMapGL
