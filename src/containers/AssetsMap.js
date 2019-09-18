@@ -3,6 +3,7 @@ import AssetsMap from '../components/AssetsMap'
 import {
   setAssetLocation,
   setMapViewport,
+  setBaseMapStyleName,
 } from '../actions'
 import {
   getBaseMapStyleName,
@@ -34,6 +35,8 @@ const mapDispatchToProps = dispatch => ({
     setMapViewport(payload))},
   setAssetLocation: payload => {dispatch(
     setAssetLocation(payload))},
+  setBaseMapStyleName: payload =>{dispatch(
+    setBaseMapStyleName(payload))},
 })
 
 
