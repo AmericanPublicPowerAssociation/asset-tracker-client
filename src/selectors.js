@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect'
-import { List, Map, fromJS } from 'immutable'
+import { List, Map, Set, fromJS } from 'immutable'
+import { find_path as findPath } from 'dijkstrajs'
 import {
   FOCUSING_COLOR,
   KEY_PREFIX,
@@ -27,6 +28,8 @@ export const getFocusingAssetId = state => state.get(
   'focusingAssetId')
 export const getFocusingAssetTasks = state => state.get(
   'focusingAssetTasks')
+export const getSelectedAssetIds = state => state.get(
+  'selectedAssetIds')
 export const getRelatingAssetId = state => state.get(
   'relatingAssetId')
 export const getLocatingAssetId = state => state.get(
@@ -113,6 +116,23 @@ export const getFocusingAsset = createSelector([
   focusingAssetId,
   assetById,
 ) => assetById.get(focusingAssetId, Map()))
+
+
+export const getSelectedAssets = createSelector([
+  getSelectedAssetIds,
+  getAssetById,
+], (
+  selectedAssetIds,
+  assetById,
+) => {
+  const assets = {}
+  selectedAssetIds.reduce( (obj, assetId) => {
+    const asset = assetById.get(assetId)
+    obj[assetId] = asset
+    return obj
+  }, assets)
+  return Map(assets)
+})
 
 
 export const getFocusingAssetType = createSelector([
@@ -222,6 +242,25 @@ export const getRelatedAssetTypeIds = createSelector([
   return relatingAssetTypeId ?
     assetTypeById.get(relatingAssetTypeId).get(relatingAssetKey) :
     List()
+})
+
+
+export const getConnectionGraph = createSelector([
+  getAssetById,
+], (
+  assetById,
+) => {
+  const connectionGraph = {}
+  assetById.forEach((asset, id) => {
+    const connectedIds = asset.get('connectedIds', List())
+    if (!connectedIds.size) return
+    const weightByConnectedId = connectedIds.reduce((d, id) => {
+      d[id] = 1
+      return d
+    }, {})
+    connectionGraph[id] = weightByConnectedId
+  })
+  return connectionGraph
 })
 
 

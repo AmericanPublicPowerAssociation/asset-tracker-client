@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import AssetsCircuit from './AssetsCircuit'
+import AssetsCircuit from '../containers/AssetsCircuit'
 import AssetsFilter from '../containers/AssetsFilter'
 import AssetList from '../containers/AssetList'
 
