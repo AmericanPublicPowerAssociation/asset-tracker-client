@@ -76,7 +76,6 @@ export default function AssetsCircuit(props) {
         {'data': {source, target}}
       )
     })
-
     return elements
   }
 
