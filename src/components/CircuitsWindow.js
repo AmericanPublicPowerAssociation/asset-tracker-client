@@ -40,6 +40,9 @@ const useStyles = makeStyles(theme => ({
     flex: 1,
     overflow: 'auto',
   },
+  root: {
+    padding: theme.spacing(3),
+  },
 }))
 
 

@@ -5,6 +5,7 @@ import {
   setSelectedAsset,
   setFocusingAsset,
   setMapViewport,
+  setBaseMapStyleName,
 } from '../actions'
 import {
   getBaseMapStyleName,
@@ -38,6 +39,8 @@ const mapDispatchToProps = dispatch => ({
     setMapViewport(payload))},
   setAssetLocation: payload => {dispatch(
     setAssetLocation(payload))},
+  setBaseMapStyleName: payload =>{dispatch(
+    setBaseMapStyleName(payload))},
   setFocusingAsset: (payload) => {dispatch(
     setFocusingAsset(payload))},
   setSelectedAsset: (payload) => {dispatch(

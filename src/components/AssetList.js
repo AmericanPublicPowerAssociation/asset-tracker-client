@@ -8,7 +8,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import Switch from '@material-ui/core/Switch'
 import {
-  scrollToFocusingAsset,
+  // scrollToFocusingAsset,
 } from '../routines'
 
 
@@ -28,9 +28,11 @@ const styles = theme => ({
 
 class AssetList extends PureComponent {
 
+  /*
   componentDidUpdate() {
     scrollToFocusingAsset(this)
   }
+  */
 
   render() {
     const {

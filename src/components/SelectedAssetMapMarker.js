@@ -51,7 +51,8 @@ class SelectedAssetMapMarker extends PureComponent {
         break
       case 'm':
         Icon = MeterLight
-        offsetLeft = -20
+        offsetLeft = -24
+        offsetTop = -24
         break
       case 't':
         Icon = Transformer

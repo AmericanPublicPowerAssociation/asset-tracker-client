@@ -92,6 +92,7 @@ export default function AssetTasks(props) {
                 assetId,
                 name: '',
                 status: 0,
+                referenceUri: '',
               })
               openTaskEditDialog()
             }}
