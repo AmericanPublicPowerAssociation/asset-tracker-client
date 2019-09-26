@@ -19,16 +19,34 @@ export default function AssetsCircuit(props) {
   
   const onCy = cy => {
     const refreshLayout = debounce(() => {
-          cy.layout({name: 'cose'} ).run()
-        }, 1000)
+      const { focusingAssetId } = props
+      cy.nodes().filter( (ele) => {
+        return ele.data('id') === focusingAssetId
+      }).style('background-color', 'red');
+      
+      cy.nodes().filter( (ele) => {
+        return ele.data('id') !== focusingAssetId
+      }).style('background-color', 'lightgray');
+      cy.layout({name: 'cose'} ).run()
+    }, 1000)
     refreshLayout()
   }
 
   const getElements = () => {
-    const { selectedAssets, connectionGraph } = props
+    const { 
+      selectedAssets, 
+      assetById, 
+      focusingAssetId, 
+      connectionGraph } = props
     const elements = []
-    if (!selectedAssets.size) return []
-    const selectedAssetNoLineIds = selectedAssets.reduce( 
+    let assets = selectedAssets
+    
+    if (focusingAssetId && !selectedAssets.has(focusingAssetId)) {
+      const focusingAsset = assetById.get(focusingAssetId)
+      assets = selectedAssets.set(focusingAssetId, focusingAsset)
+    }
+
+    const selectedAssetNoLineIds = assets.reduce( 
       (assetsNoLineIds, asset, id) => {
         const label = asset.get('name')
         const typeId = asset.get('typeId')
@@ -69,13 +87,14 @@ export default function AssetsCircuit(props) {
         idPair = cmbPairs.next()
       }
     }
-    
+
     Set(idPairs).forEach( (idPair) => {
       const [ source, target ] = idPair
       elements.push(
         {'data': {source, target}}
       )
     })
+
     return elements
   }
 
