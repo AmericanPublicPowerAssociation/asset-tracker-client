@@ -2,7 +2,7 @@ import React from 'react'
 import { find_path as findPath } from 'dijkstrajs'
 import { combination } from 'js-combinatorics'
 import debounce from 'lodash/debounce'
-import { Set } from 'immutable'
+import { Set, fromJS } from 'immutable'
 import { makeStyles } from '@material-ui/core/styles'
 import CytoscapeComponent from 'react-cytoscapejs'
 
@@ -20,10 +20,29 @@ export default function AssetsCircuit(props) {
   const onCy = cy => {
     const refreshLayout = debounce(() => {
       const { focusingAssetId } = props
+      cy.style().fromJson([
+        {
+          selector: 'node',
+          style: {
+            'label': 'data(label)',
+            "text-valign": "center",
+            "text-halign": "center",
+            'font-size': '2px',
+          }
+        },
+        {
+          selector: 'edge',
+          style: {
+            'label': 'data(label)',
+            'edge-text-rotation': 'autorotate',
+            'font-size': '2px',
+          },
+        },
+      ]).update()
       cy.nodes().filter( (ele) => {
         return ele.data('id') === focusingAssetId
       }).style('background-color', 'red');
-      
+       
       cy.nodes().filter( (ele) => {
         return ele.data('id') !== focusingAssetId
       }).style('background-color', 'lightgray');
@@ -68,18 +87,25 @@ export default function AssetsCircuit(props) {
         try{
           const pathAssetIds = findPath(connectionGraph, source, target)
           let pushAsset = true
+          const lineConns = []
           for (let i=0; i < pathAssetIds.length; i++){
-            const assetId = pathAssetIds[i]
-            if ( assetId === target || assetId === source){
+            const curAssetId = pathAssetIds[i]
+            const curAsset = assetById.get(curAssetId)
+            const curType = curAsset.get('typeId')
+            const curName = curAsset.get('name')
+            if ( curAssetId === target || curAssetId === source){
               continue
+            } 
+            if ( curType === 'l') {
+              lineConns.push(curName)
             }
-            if (selectedAssetNoLineIds.includes(assetId)){
+            if (selectedAssetNoLineIds.includes(curAssetId)){
               pushAsset = false
               break
             }
           }
           if (pushAsset){
-           idPairs.push(idPair)
+           idPairs.push(fromJS({idPair, lineConns}))
           }
         }
         catch(error){
@@ -88,10 +114,14 @@ export default function AssetsCircuit(props) {
       }
     }
 
-    Set(idPairs).forEach( (idPair) => {
-      const [ source, target ] = idPair
+    Set(idPairs).forEach( (pair) => {
+      const [ source, target ] = pair.get('idPair')
+      const lineConns = pair.get('lineConns')
+      const label = lineConns.reduce( (str, lineName) => {
+        return `${str} ${lineName} `  
+      }, '')
       elements.push(
-        {'data': {source, target}}
+        {'data': {source, target, label}}
       )
     })
 
