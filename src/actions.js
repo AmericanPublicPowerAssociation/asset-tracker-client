@@ -8,6 +8,7 @@ import {
   CLOSE_NAVIGATION_DRAWER,
   CLOSE_TASK_EDIT_DIALOG,
   DOWNLOAD_ASSETS_CSV,
+  DOWNLOAD_ASSETS_DSS,
   DROP_ASSET_RELATION,
   EDIT_TASK,
   EXCLUDE_ASSET_FILTER_KEY,
@@ -196,6 +197,8 @@ export const uploadAssetsCsv = payload => ({
   payload, type: UPLOAD_ASSETS_CSV})
 export const downloadAssetsUploadDialog = payload => ({
   payload, type: DOWNLOAD_ASSETS_CSV})
+export const downloadDSSAssets = payload => ({
+  payload, type: DOWNLOAD_ASSETS_DSS})
 export const setAssetCSVFile = payload => ({
   payload, type: SET_ASSET_CSV_FILE})
 export const setAddingAssetCSVFileErrors = payload => ({
