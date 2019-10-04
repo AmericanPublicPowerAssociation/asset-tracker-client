@@ -193,14 +193,14 @@ function* watchUploadAssetsCsv() {
 }
 
 
-function* watchDownloadFileAssets() {
+function* watchDownloadAssetsCsv() {
   yield takeEvery(DOWNLOAD_ASSETS_CSV, function (action) {
     window.location = '/assets.csv'
   })
 }
 
 
-function* watchDownloadDSSFileAssets() {
+function* watchDownloadAssetsDss() {
   yield takeEvery(DOWNLOAD_ASSETS_DSS, function (action) {
     window.location = '/assets.dss'
   })
@@ -277,8 +277,8 @@ export default function* () {
     watchAddAsset(),
     watchEditTask(),
     watchUploadAssetsCsv(),
-    watchDownloadFileAssets(),
-    watchDownloadDSSFileAssets(),
+    watchDownloadAssetsCsv(),
+    watchDownloadAssetsDss(),
     watchChangeAsset(),
     watchAddAssetRelation(),
     watchDropAssetRelation(),

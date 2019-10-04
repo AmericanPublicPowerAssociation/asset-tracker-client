@@ -197,7 +197,7 @@ export const uploadAssetsCsv = payload => ({
   payload, type: UPLOAD_ASSETS_CSV})
 export const downloadAssetsUploadDialog = payload => ({
   payload, type: DOWNLOAD_ASSETS_CSV})
-export const downloadDSSAssets = payload => ({
+export const downloadAssetsDss = payload => ({
   payload, type: DOWNLOAD_ASSETS_DSS})
 export const setAssetCSVFile = payload => ({
   payload, type: SET_ASSET_CSV_FILE})
