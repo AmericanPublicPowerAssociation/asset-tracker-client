@@ -48,6 +48,7 @@ import {
   REFRESH_LOGS,
   REFRESH_TASKS,
   UPLOAD_ASSETS_CSV,
+  DOWNLOAD_ASSETS_DSS,
 } from './constants'
 import {
   fetchSafely,
@@ -199,6 +200,13 @@ function* watchDownloadFileAssets() {
 }
 
 
+function* watchDownloadDSSFileAssets() {
+  yield takeEvery(DOWNLOAD_ASSETS_DSS, function (action) {
+    window.location = '/assets.dss'
+  })
+}
+
+
 function* watchChangeAsset() {
   yield takeEvery(CHANGE_ASSET, function* (action) {
     const payload = action.payload
@@ -270,6 +278,7 @@ export default function* () {
     watchEditTask(),
     watchUploadAssetsCsv(),
     watchDownloadFileAssets(),
+    watchDownloadDSSFileAssets(),
     watchChangeAsset(),
     watchAddAssetRelation(),
     watchDropAssetRelation(),
