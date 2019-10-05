@@ -10,6 +10,7 @@ import {
   SET_ADDING_ASSET_VALUES,
   SET_ADDING_CSV_ASSETS_ERRORS,
   SET_ASSET_CSV_FILE,
+  SET_OVERWRITE_ASSETS
 } from '../constants'
 
 
@@ -20,6 +21,7 @@ const initialState = Map({
   name: '',
   errors: Map(),
   uploaderIsOpen: false,
+  overwrite: false,
   uploaderErrors: {
     'open': false,
     'errors': []
@@ -40,6 +42,9 @@ const addingAsset = (state = initialState, action) => {
     }
     case SET_ADDING_ASSET_ERRORS: {
       return state.set('errors', action.payload)
+    }
+    case SET_OVERWRITE_ASSETS: {
+      return state.set('overwrite', action.payload)
     }
     case OPEN_ASSETS_UPLOAD_DIALOG: {
         return state.set('uploaderIsOpen', true)

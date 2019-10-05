@@ -3,6 +3,7 @@ import {
   closeAssetsUploadDialog,
   uploadAssetsCsv,
   setAssetCSVFile,
+  setOverwriteRecords,
 } from '../actions'
 import {
   getAddingAsset,
@@ -27,9 +28,11 @@ const mapDispatchToProps = dispatch => ({
     closeAssetsUploadDialog(payload))},
   onSave: payload => {dispatch(
     uploadAssetsCsv(payload))},
-  setAssetCSVFile: payload => {
-    dispatch(
+  setAssetCSVFile: payload => {dispatch(
     setAssetCSVFile(payload))
+  },
+  setOverwriteRecords: payload => {dispatch(
+    setOverwriteRecords(payload.target.checked))
   },
 })
 
