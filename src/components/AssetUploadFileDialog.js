@@ -5,6 +5,8 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { DropzoneArea } from 'material-ui-dropzone'
 
 
@@ -24,16 +26,22 @@ class AssetAddDialog extends PureComponent {
 
   onOk = () => {
     const { onSave, addingAsset } = this.props;
-      onSave(addingAsset.get('assetCSVFile'))
+      onSave({
+        file: addingAsset.get('assetCSVFile'),
+        overwrite: addingAsset.get('overwrite'),
+      })
   };
 
   render() {
     const {
       addingAsset,
+      setOverwriteRecords,
       uploaderProps,
       setAssetCSVFile
     } = this.props
     const open = addingAsset.get('uploaderIsOpen')
+    const overwriteRecords = addingAsset.get('overwrite')
+    
     return (
       <Dialog
         open={open}
@@ -45,6 +53,9 @@ class AssetAddDialog extends PureComponent {
             <DropzoneArea {...uploaderProps} onChange={setAssetCSVFile}/>
         </DialogContent>
         <DialogActions>
+          <FormControlLabel control={
+            <Checkbox checked={overwriteRecords}  onChange={setOverwriteRecords}  />
+          } label='Overwrite existing records'/>
           <Button onClick={this.onCancel}>Cancel</Button>
           <Button onClick={this.onOk} color='primary'>Ok</Button>
         </DialogActions>

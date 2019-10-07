@@ -174,18 +174,19 @@ function* watchEditTask() {
 
 function* watchUploadAssetsCsv() {
     yield takeEvery(UPLOAD_ASSETS_CSV, function* (action) {
-        var data = new FormData()
-        data.append('file', action.payload);
+        var data = new FormData();
+        data.append('file', action.payload.file);
+        data.append('overwrite', action.payload.overwrite);
         yield fetchSafely('/assets.csv', {
             method: 'PATCH',
             body: data,
         }, {
             on200: function* (asset) {
-              yield put(closeAssetsUploadDialog())
+              yield put(closeAssetsUploadDialog());
               yield put(refreshAssetsKit())
             },
             on400: function* (errors) {
-              yield put(closeAssetsUploadDialog())
+              yield put(closeAssetsUploadDialog());
               yield put(setAddingAssetCSVFileErrors(errors))
             },
         })
@@ -193,14 +194,14 @@ function* watchUploadAssetsCsv() {
 }
 
 
-function* watchDownloadFileAssets() {
+function* watchDownloadAssetsCsv() {
   yield takeEvery(DOWNLOAD_ASSETS_CSV, function (action) {
     window.location = '/assets.csv'
   })
 }
 
 
-function* watchDownloadDSSFileAssets() {
+function* watchDownloadAssetsDss() {
   yield takeEvery(DOWNLOAD_ASSETS_DSS, function (action) {
     window.location = '/assets.dss'
   })
@@ -277,8 +278,8 @@ export default function* () {
     watchAddAsset(),
     watchEditTask(),
     watchUploadAssetsCsv(),
-    watchDownloadFileAssets(),
-    watchDownloadDSSFileAssets(),
+    watchDownloadAssetsCsv(),
+    watchDownloadAssetsDss(),
     watchChangeAsset(),
     watchAddAssetRelation(),
     watchDropAssetRelation(),

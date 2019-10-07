@@ -58,6 +58,7 @@ import {
   TOGGLE_SELECTED_ASSET,
   TOGGLE_THEME,
   UPLOAD_ASSETS_CSV,
+  SET_OVERWRITE_ASSETS,
 } from './constants'
 
 
@@ -197,10 +198,12 @@ export const uploadAssetsCsv = payload => ({
   payload, type: UPLOAD_ASSETS_CSV})
 export const downloadAssetsUploadDialog = payload => ({
   payload, type: DOWNLOAD_ASSETS_CSV})
-export const downloadDSSAssets = payload => ({
+export const downloadAssetsDss = payload => ({
   payload, type: DOWNLOAD_ASSETS_DSS})
 export const setAssetCSVFile = payload => ({
   payload, type: SET_ASSET_CSV_FILE})
+export const setOverwriteRecords = payload => ({
+  payload, type: SET_OVERWRITE_ASSETS})
 export const setAddingAssetCSVFileErrors = payload => ({
   payload, type: SET_ADDING_CSV_ASSETS_ERRORS})
 export const hideAddingAssetCSVFileErrors = payload => ({
