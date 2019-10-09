@@ -8,6 +8,7 @@ import {
 const initialState = Map({
   longitude: 0,
   latitude: 0,
+  reset: true,
   width: MAP_PADDING * 2 + 1,
   height: MAP_PADDING * 2 + 1,
 })
