@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import {
   RisksTable,
 } from 'asset-report-risks'
+import SummaryWindow from '../containers/SummaryWindow'
 
 
 export default function RisksWindow(props) {
@@ -17,10 +18,13 @@ export default function RisksWindow(props) {
   }, [refreshRisks])
 
   return (
-    <RisksTable
-      risks={risks}
-      openTaskEditDialog={openTaskEditDialog}
-      setEditingTaskValues={setEditingTaskValues}
-    />
+    <>
+      <SummaryWindow />
+      <RisksTable
+        risks={risks}
+        openTaskEditDialog={openTaskEditDialog}
+        setEditingTaskValues={setEditingTaskValues}
+      />
+    </>
   )
 }
