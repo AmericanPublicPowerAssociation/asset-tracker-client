@@ -8,7 +8,7 @@ class RadialChart extends Component {
     const aditionalStyle = { options: { ...typeChart, labels: this.props.data.labels, title: this.props.data.title, ...this.props.data.extra}}
     return (
       <>
-        <Chart options={aditionalStyle.options} series={this.props.data.series} type="radialBar" height="380" />
+        <Chart options={aditionalStyle.options} series={this.props.series} type="radialBar" height="380" />
       </>
     )
   }
