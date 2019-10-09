@@ -45,14 +45,12 @@ export default function DashboardsWindow(props) {
   const risksSummary = dashboards.get('risks')
   const logsSummary = dashboards.get('logs')
   var charData = {series: [], categories:[]}
-  const datachar = [];
-  for (const prop in risks) {
-    if(typeof risks[prop] !== 'string'){
-      datachar.push(risks[prop]);
-      charData.categories.push(prop)
-    }
-  }
-  charData.series.push({data: datachar })
+  const dataChart = [
+    dashboards.getIn(['risks','riskCount']),
+    dashboards.getIn(['risks','impactedAssetCount'])
+  ];
+  charData.categories = ['Risks','Impacted Asset']
+  charData.series.push({data: dataChart })
   useEffect(() => {
     refreshDashboards()
   }, [refreshDashboards])

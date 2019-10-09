@@ -56,18 +56,6 @@ export const getTaskById = state => state.get(
   'taskById')
 export const getDashboards = state => state.get(
   'dashboards')
-export const getRisks = state => state.get('dashboards')
-
-export const riskData = createSelector([
-  getRisks
-],(dashboards)=>{
-  const dataState ={}
-  dashboards.map((dashboard,i)=>{
-    dataState[i] = dashboard.toJS()
-  })
-  return dataState.risks
-})
-
 
 export const getValueMatchingAssets = createSelector([
   getAssetById,

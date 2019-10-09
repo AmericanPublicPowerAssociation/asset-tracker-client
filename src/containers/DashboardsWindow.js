@@ -5,13 +5,11 @@ import {
 } from '../actions'
 import {
   getDashboards,
-  riskData
 } from '../selectors'
 
 
 const mapStateToProps = state => ({
   dashboards: getDashboards(state),
-  risks: riskData(state),
 })
 
 
