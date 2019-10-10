@@ -75,6 +75,11 @@ const reduceVertically = (state, action) => {
         return state
       }
       const mapViewport = state.get('mapViewport').toJS()
+      const resetMapViewport = mapViewport['reset']
+      // prevent reset mapviewport
+      if (!resetMapViewport){
+        return state
+      }
       const {
         longitude,
         latitude,
@@ -87,7 +92,8 @@ const reduceVertically = (state, action) => {
           longitude,
           latitude,
           zoom,
-          bounds: action.payload.get('boundingBox')
+          bounds: action.payload.get('boundingBox'),
+          reset: false
         },
       })
     }
