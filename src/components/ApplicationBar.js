@@ -72,6 +72,7 @@ export default function ApplicationBar(props) {
     isUserMember,
     isNavigationDrawerOpen,
     isInformationDrawerOpen,
+    countByAssetTypeId,
     focusingAssetId,
     locatingAsset,
     relatingAsset,
@@ -148,7 +149,13 @@ export default function ApplicationBar(props) {
   const downloadAssetsDSS = isUserMember && !editingAssetId &&
       <Tooltip title='Download DSS Script' enterDelay={TOOLTIP_DELAY}>
         <IconButton aria-label='Download DSS Script' color='inherit'
-                    onClick={downloadDSSAssets}
+                    onClick={() => {
+                      if (!countByAssetTypeId.has('g') &&
+                          !window.confirm("No generator exists, do you want continue downloading the file??")) {
+                        return;
+                      }
+                      downloadDSSAssets()
+                    }}
         ><DownloadIcon /> </IconButton>
       </Tooltip>
 
