@@ -46,13 +46,7 @@ class MapStyleSwitch extends PureComponent {
         <div>
         <button
           onClick={() => {this.onClick(nextBaseMapStyleName)}}
-          style = {{
-            'width': '30px',
-            'borderRadius': '5px',
-            'marginTop': '5px',
-            'background': 'white'
-          }}
-        >
+          style = {this.props.style} >
           <div style={{
             'display': 'flex',
             'justifyContent': 'center'

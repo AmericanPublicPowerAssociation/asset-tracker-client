@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { fromJS } from 'immutable'
-import ReactMapGL, { NavigationControl, FlyToInterpolator } from 'react-map-gl'
+import ReactMapGL, { GeolocateControl, NavigationControl, FlyToInterpolator } from 'react-map-gl'
 import { withStyles } from '@material-ui/core/styles'
 import AssetMapMarker from './AssetMapMarker'
 import SelectedAssetMapMarker from './SelectedAssetMapMarker'
@@ -22,6 +22,13 @@ const styles = theme => ({
     padding: theme.spacing(1),
   },
 })
+
+const buttonStyle = {
+  'width': '30px',
+  'borderRadius': '5px',
+  'marginTop': '5px',
+  'background': 'white'
+}
 
 
 class AssetsMap extends PureComponent {
@@ -159,7 +166,12 @@ class AssetsMap extends PureComponent {
         />
         <div className={classes.mapToolbar}>
           <NavigationControl onViewportChange={this.updateViewport} />
+          <GeolocateControl
+            style={buttonStyle}
+            positionOptions={{enableHighAccuracy: true}}
+            trackUserLocation={true} />
           <MapStyleSwitch
+            style={buttonStyle}
             curBaseMapStyleName={baseMapStyleName}
             nextBaseMapStyleName={nextBaseMapStyleName}
             setBaseMapStyleName={setBaseMapStyleName} />
