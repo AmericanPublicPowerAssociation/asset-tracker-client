@@ -25,6 +25,7 @@ export default function RisksWindow(props) {
   const classes = useStyles()
 
   const {
+    refreshAssetsKit,
     refreshRisks,
     risks,
     openTaskEditDialog,
@@ -34,6 +35,10 @@ export default function RisksWindow(props) {
   useEffect(() => {
     refreshRisks()
   }, [refreshRisks])
+
+  useEffect( () => {
+    refreshAssetsKit()
+  } )
 
   return (
     <Grid container className={classes.grid}>

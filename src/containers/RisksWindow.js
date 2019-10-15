@@ -7,6 +7,7 @@ import {
 import {
   openTaskEditDialog,
   setEditingTaskValues,
+  refreshAssetsKit,
 } from '../actions'
 
 
@@ -22,6 +23,8 @@ const mapDispatchToProps = dispatch => ({
     openTaskEditDialog(payload))},
   setEditingTaskValues: payload => {dispatch(
     setEditingTaskValues(payload))},
+  refreshAssetsKit: payload => {dispatch(
+    refreshAssetsKit(payload))},
 })
 
 
