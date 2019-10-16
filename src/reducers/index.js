@@ -29,13 +29,13 @@ import selectedAssetIds from './selectedAssetIds'
 import logs from './logs'
 import taskById from './taskById'
 import dashboards from './dashboards'
+import { DEFAULT_MAP_W_H} from './mapViewport'
 import {
   MAP_PADDING,
   RESET_ASSETS_KIT,
   SET_FOCUSING_ASSET,
 } from '../constants'
 import { getMapViewport } from '../selectors'
-
 
 
 const reduceHorizontally = combineReducers({
@@ -77,8 +77,16 @@ const reduceVertically = (state, action) => {
       const mapViewport = state.get('mapViewport').toJS()
       const resetMapViewport = mapViewport['reset']
       // prevent reset mapviewport
-      if (!resetMapViewport){
-        return state
+      const mapNotLoaded = (
+        mapViewport['width'] === DEFAULT_MAP_W_H &&
+        mapViewport['height'] === DEFAULT_MAP_W_H
+      )
+      if (!resetMapViewport || mapNotLoaded){
+        return state.mergeDeep({
+          mapViewport: {
+            bounds: action.payload.get('boundingBox'),
+          }
+        })
       }
       const {
         longitude,
@@ -114,20 +122,20 @@ const reduceVertically = (state, action) => {
       const bounds = getMapViewport(state).get('bounds') 
 
       // show focusingAsset and selectedAssets on mapViewport
-      const computeBounds = selectedAssetIds.add(focusingAssetId).reduce( (bounds, currentId) => {
+      const computeBounds = selectedAssetIds.add(focusingAssetId).reduce( (newBounds, currentId) => {
         if (!currentId) {
-          return bounds
+          return newBounds
         }
         const location = assetById.get(currentId).get('location')
         if (location) {
           const curLon= location.get(0)
           const curLat = location.get(1)
-          if (bounds[0][0] > curLon) { bounds[0][0] = curLon }
-          if (bounds[0][1] > curLat) { bounds[0][1] = curLat }
-          if (bounds[1][0] < curLon) { bounds[1][0] = curLon }
-          if (bounds[1][1] < curLat) { bounds[1][1] = curLat }
+          if (newBounds[0][0] > curLon) { newBounds[0][0] = curLon }
+          if (newBounds[0][1] > curLat) { newBounds[0][1] = curLat }
+          if (newBounds[1][0] < curLon) { newBounds[1][0] = curLon }
+          if (newBounds[1][1] < curLat) { newBounds[1][1] = curLat }
         }
-        return bounds
+        return newBounds
       }, [[Infinity, Infinity], [-Infinity, -Infinity]] )
 
       if (computeBounds[0][0] !== computeBounds[1][0] &&

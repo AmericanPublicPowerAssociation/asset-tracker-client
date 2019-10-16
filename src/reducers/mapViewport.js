@@ -4,13 +4,14 @@ import {
   SET_MAP_VIEWPORT,
 } from '../constants'
 
+export const DEFAULT_MAP_W_H = MAP_PADDING * 2 + 1
 
 const initialState = Map({
   longitude: 0,
   latitude: 0,
   reset: true,
-  width: MAP_PADDING * 2 + 1,
-  height: MAP_PADDING * 2 + 1,
+  width: DEFAULT_MAP_W_H,
+  height: DEFAULT_MAP_W_H,
 })
 
 
