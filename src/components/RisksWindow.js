@@ -33,8 +33,9 @@ export default function RisksWindow(props) {
     assetFilterValueByAttribute,
     assetFilterKeysByAttribute,
     assetTypeById,
-    assetCountByAssetTypeId,
+    riskCountByAssetTypeId,
     toggleAssetsFilterKey,
+    visibleRisks,
   } = props
 
   useEffect(() => {
@@ -43,7 +44,7 @@ export default function RisksWindow(props) {
 
   useEffect( () => {
     refreshAssetsKit()
-  } )
+  }, [] )
 
   return (
     <Grid container className={classes.grid}>
@@ -53,13 +54,13 @@ export default function RisksWindow(props) {
             assetFilterValueByAttribute={assetFilterValueByAttribute}
             assetFilterKeysByAttribute={assetFilterKeysByAttribute}
             assetTypeById={assetTypeById}
-            countByAssetTypeId={assetCountByAssetTypeId}
+            countByAssetTypeId={riskCountByAssetTypeId}
             toggleAssetsFilterKey={toggleAssetsFilterKey} />
       </Grid>
       <Grid item className={classes.frame}
         xs={12} sm={7} md={8} lg={9} xl={10} >
         <RisksTable
-          risks={risks}
+          risks={visibleRisks}
           openTaskEditDialog={openTaskEditDialog}
           setEditingTaskValues={setEditingTaskValues} />
       </Grid>
