@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
-import AssetsFilter from '../containers/AssetsFilter'
+import AssetsFilter from '../components/AssetsFilter'
 import {
   RisksTable,
 } from 'asset-report-risks'
@@ -30,6 +30,11 @@ export default function RisksWindow(props) {
     risks,
     openTaskEditDialog,
     setEditingTaskValues,
+    assetFilterValueByAttribute,
+    assetFilterKeysByAttribute,
+    assetTypeById,
+    assetCountByAssetTypeId,
+    toggleAssetsFilterKey,
   } = props
 
   useEffect(() => {
@@ -44,7 +49,12 @@ export default function RisksWindow(props) {
     <Grid container className={classes.grid}>
       <Grid item className={classes.frame}
         xs={12} sm={5} md={4} lg={3} xl={2} >
-        <AssetsFilter />
+        <AssetsFilter 
+            assetFilterValueByAttribute={assetFilterValueByAttribute}
+            assetFilterKeysByAttribute={assetFilterKeysByAttribute}
+            assetTypeById={assetTypeById}
+            countByAssetTypeId={assetCountByAssetTypeId}
+            toggleAssetsFilterKey={toggleAssetsFilterKey} />
       </Grid>
       <Grid item className={classes.frame}
         xs={12} sm={7} md={8} lg={9} xl={10} >

@@ -8,11 +8,24 @@ import {
   openTaskEditDialog,
   setEditingTaskValues,
   refreshAssetsKit,
+  setAssetsFilterKeys,
+  setAssetsFilterValues,
+  toggleAssetsFilterKey,
 } from '../actions'
+import {
+  getAssetsFilterKeysByAttribute,
+  getAssetsFilterValueByAttribute,
+  getAssetTypeById,
+  getAssetCountByAssetTypeId,
+} from '../selectors'
 
 
 const mapStateToProps = state => ({
   risks: getRisks(state),
+  assetFilterValueByAttribute: getAssetsFilterValueByAttribute(state),
+  assetFilterKeysByAttribute: getAssetsFilterKeysByAttribute(state),
+  assetTypeById: getAssetTypeById(state),
+  assetCountByAssetTypeId: getAssetCountByAssetTypeId(state),
 })
 
 
@@ -25,6 +38,12 @@ const mapDispatchToProps = dispatch => ({
     setEditingTaskValues(payload))},
   refreshAssetsKit: payload => {dispatch(
     refreshAssetsKit(payload))},
+  setAssetsFilterValues: payload => {dispatch(
+    setAssetsFilterValues(payload))},
+  setAssetsFilterKeys: payload => {dispatch(
+    setAssetsFilterKeys(payload))},
+  toggleAssetsFilterKey: payload => {dispatch(
+    toggleAssetsFilterKey(payload))},
 })
 
 

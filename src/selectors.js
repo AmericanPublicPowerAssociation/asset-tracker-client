@@ -95,7 +95,7 @@ export const getVisibleAssets = createSelector([
 })
 
 
-export const getCountByAssetTypeId = createSelector([
+export const getAssetCountByAssetTypeId = createSelector([
   getValueMatchingAssets,
 ], (
   valueMatchingAssets,
