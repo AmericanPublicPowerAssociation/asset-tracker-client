@@ -58,6 +58,8 @@ export default function CircuitsWindow(props) {
       assetFilterKeysByAttribute,
       assetTypeById,
       assetCountByAssetTypeId,
+      setAssetsFilterValues,
+      setAssetsFilterKeys,
       toggleAssetsFilterKey,
     } = props
 
@@ -74,6 +76,8 @@ export default function CircuitsWindow(props) {
               assetFilterKeysByAttribute={assetFilterKeysByAttribute}
               assetTypeById={assetTypeById}
               countByAssetTypeId={assetCountByAssetTypeId}
+              setAssetsFilterValues={setAssetsFilterValues}
+              setAssetsFilterKeys={setAssetsFilterKeys}
               toggleAssetsFilterKey={toggleAssetsFilterKey} />
           </div>
           <div className={classes.listPanel}>

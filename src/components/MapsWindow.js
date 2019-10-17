@@ -58,6 +58,8 @@ class MapsWindow extends PureComponent {
       assetFilterKeysByAttribute,
       assetTypeById,
       assetCountByAssetTypeId,
+      setAssetsFilterValues,
+      setAssetsFilterKeys,
       toggleAssetsFilterKey,
     } = this.props
     return (
@@ -73,6 +75,8 @@ class MapsWindow extends PureComponent {
                 assetFilterKeysByAttribute={assetFilterKeysByAttribute}
                 assetTypeById={assetTypeById}
                 countByAssetTypeId={assetCountByAssetTypeId}
+                setAssetsFilterValues={setAssetsFilterValues}
+                setAssetsFilterKeys={setAssetsFilterKeys}
                 toggleAssetsFilterKey={toggleAssetsFilterKey} />
             </div>
             <div className={classes.listPanel}>

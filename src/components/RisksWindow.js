@@ -34,6 +34,8 @@ export default function RisksWindow(props) {
     assetFilterKeysByAttribute,
     assetTypeById,
     riskCountByAssetTypeId,
+    setAssetsFilterValues,
+    setAssetsFilterKeys,
     toggleAssetsFilterKey,
     visibleRisks,
   } = props
@@ -55,6 +57,8 @@ export default function RisksWindow(props) {
             assetFilterKeysByAttribute={assetFilterKeysByAttribute}
             assetTypeById={assetTypeById}
             countByAssetTypeId={riskCountByAssetTypeId}
+            setAssetsFilterValues={setAssetsFilterValues}
+            setAssetsFilterKeys={setAssetsFilterKeys}
             toggleAssetsFilterKey={toggleAssetsFilterKey} />
       </Grid>
       <Grid item className={classes.frame}
