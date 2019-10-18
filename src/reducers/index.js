@@ -9,6 +9,7 @@ import {
   productVersionSuggestions,
   vendorNameSuggestions,
   risks,
+  sortedRisks,
 } from 'asset-report-risks'
 import app from './app'
 import sortedAssetIds from './sortedAssetIds'
@@ -57,6 +58,7 @@ const reduceHorizontally = combineReducers({
   productNameSuggestions,
   productVersionSuggestions,
   risks,
+  sortedRisks,
   mapViewport,
   baseMapStyleName,
   locatingAssetId,

@@ -3,6 +3,7 @@ import RisksWindow from '../components/RisksWindow'
 import {
   getRisks,
   refreshRisks,
+  getSortedRisks,
 } from 'asset-report-risks'
 import {
   openTaskEditDialog,
@@ -28,6 +29,7 @@ const mapStateToProps = state => ({
   assetTypeById: getAssetTypeById(state),
   riskCountByAssetTypeId: getRiskCountByAssetTypeId (state),
   visibleRisks: getVisibleRisks(state),
+  sortedRisks: getSortedRisks(state),
 })
 
 

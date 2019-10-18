@@ -38,10 +38,12 @@ export default function RisksWindow(props) {
     setAssetsFilterKeys,
     toggleAssetsFilterKey,
     visibleRisks,
+    sortedRisks,
   } = props
 
   useEffect(() => {
-    refreshRisks()
+    const { sortKey, order } = sortedRisks.toJS()
+    refreshRisks({sortKey, order})
   }, [refreshRisks])
 
   useEffect( () => {
@@ -65,6 +67,8 @@ export default function RisksWindow(props) {
         xs={12} sm={7} md={8} lg={9} xl={10} >
         <RisksTable
           risks={visibleRisks}
+          sortedRisks={sortedRisks}
+          refreshRisks={refreshRisks}
           openTaskEditDialog={openTaskEditDialog}
           setEditingTaskValues={setEditingTaskValues} />
       </Grid>
