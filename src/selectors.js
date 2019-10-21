@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect'
 import { List, Map, Set, fromJS } from 'immutable'
 import { find_path as findPath } from 'dijkstrajs'
+import { getRisks } from 'asset-report-risks'
 import {
   FOCUSING_COLOR,
   KEY_PREFIX,
@@ -95,7 +96,7 @@ export const getVisibleAssets = createSelector([
 })
 
 
-export const getCountByAssetTypeId = createSelector([
+export const getAssetCountByAssetTypeId = createSelector([
   getValueMatchingAssets,
 ], (
   valueMatchingAssets,
@@ -106,6 +107,68 @@ export const getCountByAssetTypeId = createSelector([
     countByAssetTypeId[primaryAssetTypeId] += 1
     return countByAssetTypeId
   }, new IntegerDefaultDict()))
+})
+
+
+export const getValueMatchingRisksAssetName = createSelector([
+  getAssetsFilterValueByAttribute,
+  getRisks,
+], (
+  assetFilterValueByAttribute,
+  risks,
+) => {
+  const assetNameTerms = splitTerms(assetFilterValueByAttribute.get(
+    'name').toLowerCase())
+  return risks
+    .filter(risk => {
+      const lowercaseAssetName = risk.get('assetName').toLowerCase()
+      return assetNameTerms.every(term => lowercaseAssetName.includes(term))
+    })
+})
+
+
+export const getVisibleRisks = createSelector([
+  getValueMatchingRisksAssetName,
+  getAssetsFilterKeysByAttribute,
+  getAssetById,
+], (
+  valueMatchingRisksAssetName,
+  assetFilterKeysByAttribute,
+  assetById,
+) => {
+  const selectedAssetTypeIds = assetFilterKeysByAttribute.get('typeId')
+  return valueMatchingRisksAssetName
+    .filter(risk => {
+      const assetId = risk.get('assetId')
+      const asset = assetById.get(assetId)
+      if ( !asset ){
+        return false
+      }
+      const primaryAssetTypeId = asset.get('typeId')[0]
+      return selectedAssetTypeIds.has(primaryAssetTypeId)
+    })
+    .slice(0, MAXIMUM_ASSET_LIST_LENGTH)
+})
+
+
+export const getRiskCountByAssetTypeId = createSelector([
+  getValueMatchingRisksAssetName,
+  getAssetById,
+], (
+  valueMatchingRisksAssetName,
+  assetById,
+) => {
+  return Map(valueMatchingRisksAssetName.reduce(
+    (riskCountByAssetTypeId, risk) => {
+      const assetId = risk.get('assetId')
+      const asset = assetById.get(assetId)
+      if (asset) {
+        const primaryAssetTypeId = asset.get('typeId')[0]
+        riskCountByAssetTypeId[primaryAssetTypeId] += 1
+      }
+      return riskCountByAssetTypeId
+    },
+    new IntegerDefaultDict()))
 })
 
 

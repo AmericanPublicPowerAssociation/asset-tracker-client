@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
 import AssetsCircuit from '../containers/AssetsCircuit'
-import AssetsFilter from '../containers/AssetsFilter'
+import AssetsFilter from '../components/AssetsFilter'
 import AssetList from '../containers/AssetList'
 
 
@@ -52,7 +51,17 @@ export default function CircuitsWindow(props) {
   useEffect(() => {
     const { refreshAssetsKit, } = props
     refreshAssetsKit()
-  })
+  }, [])
+
+  const {
+      assetFilterValueByAttribute,
+      assetFilterKeysByAttribute,
+      assetTypeById,
+      assetCountByAssetTypeId,
+      setAssetsFilterValues,
+      setAssetsFilterKeys,
+      toggleAssetsFilterKey,
+    } = props
 
   return (
     <Grid container className={classes.grid}>
@@ -62,7 +71,14 @@ export default function CircuitsWindow(props) {
       <Grid item xs={12} sm={12} md={3} className={classes.tableFrame}>
         <div className={classes.frame}>
           <div className={classes.filterPanel}>
-            <AssetsFilter />
+            <AssetsFilter 
+              assetFilterValueByAttribute={assetFilterValueByAttribute}
+              assetFilterKeysByAttribute={assetFilterKeysByAttribute}
+              assetTypeById={assetTypeById}
+              countByAssetTypeId={assetCountByAssetTypeId}
+              setAssetsFilterValues={setAssetsFilterValues}
+              setAssetsFilterKeys={setAssetsFilterKeys}
+              toggleAssetsFilterKey={toggleAssetsFilterKey} />
           </div>
           <div className={classes.listPanel}>
             <AssetList />
