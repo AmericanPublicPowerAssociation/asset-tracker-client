@@ -43,10 +43,10 @@ class AssetsMap extends PureComponent {
   }
 
   updateViewport = viewport => {
-    const bounds = this.map !== undefined ? fromJS(this.map.getBounds().toArray()) :  undefined
+    const { mapViewport, setMapViewport } = this.props
     const {
-      longitude,
       latitude,
+      longitude,
       zoom,
       pitch,
       bearing,
@@ -54,9 +54,9 @@ class AssetsMap extends PureComponent {
       width,
       height,
     } = viewport
-    const {
-      setMapViewport,
-    } = this.props
+    // first time it loads it will get the bounds that contains all assets
+    const bounds = this.map !== undefined ? fromJS(this.map.getBounds().toArray()) : mapViewport.get('bounds')
+
     setMapViewport({
       longitude,
       latitude,
