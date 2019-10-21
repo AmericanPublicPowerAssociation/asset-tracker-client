@@ -307,6 +307,30 @@ export const getRelatedAssetTypeIds = createSelector([
 })
 
 
+export const getMapBoundBox = createSelector([
+  getMapViewport,
+], (
+  mapViewport,
+) => {
+  return mapViewport.get('bounds')
+})
+
+
+export const getMapBoundBoxMidpoint = createSelector([
+  getMapBoundBox,
+], (
+  mapBoundBox
+) => {
+  const [min, max] = mapBoundBox
+  const midPointLon = max[0] + min[0] / 2
+  const midPointLat = max[1] + max[1] / 2
+  return [midPointLon, midPointLat]
+})
+
+
+export const getSort
+
+
 export const getConnectionGraph = createSelector([
   getAssetById,
 ], (
