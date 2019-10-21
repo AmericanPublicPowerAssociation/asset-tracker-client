@@ -19,7 +19,7 @@ import {
   getFocusingAssetId,
   getLocatingAsset,
   getRelatingAsset,
-  getRelatingAssetKey, getCountByAssetTypeId,
+  getRelatingAssetKey,
 } from '../selectors'
 
 
@@ -31,7 +31,6 @@ const mapStateToProps = state => ({
   locatingAsset: getLocatingAsset(state),
   relatingAsset: getRelatingAsset(state),
   relatingAssetKey: getRelatingAssetKey(state),
-  countByAssetTypeId: getCountByAssetTypeId(state),
 })
 
 

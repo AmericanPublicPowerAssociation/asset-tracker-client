@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import RisksWindow from '../components/RisksWindow'
 import {
-  getRisks,
+  // getRisks,
   refreshRisks,
   getSortedRisks,
 } from 'asset-report-risks'
@@ -23,7 +23,7 @@ import {
 
 
 const mapStateToProps = state => ({
-  risks: getRisks(state),
+  // risks: getRisks(state),
   assetFilterValueByAttribute: getAssetsFilterValueByAttribute(state),
   assetFilterKeysByAttribute: getAssetsFilterKeysByAttribute(state),
   assetTypeById: getAssetTypeById(state),

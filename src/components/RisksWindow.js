@@ -27,7 +27,7 @@ export default function RisksWindow(props) {
   const {
     refreshAssetsKit,
     refreshRisks,
-    risks,
+    // risks,
     openTaskEditDialog,
     setEditingTaskValues,
     assetFilterValueByAttribute,
@@ -44,11 +44,11 @@ export default function RisksWindow(props) {
   useEffect(() => {
     const { sortKey, order } = sortedRisks.toJS()
     refreshRisks({sortKey, order})
-  }, [refreshRisks])
+  }, [sortedRisks, refreshRisks])
 
   useEffect( () => {
     refreshAssetsKit()
-  }, [] )
+  }, [refreshAssetsKit] )
 
   return (
     <Grid container className={classes.grid}>

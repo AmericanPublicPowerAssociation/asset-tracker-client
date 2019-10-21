@@ -47,11 +47,11 @@ const useStyles = makeStyles(theme => ({
 
 export default function CircuitsWindow(props) {
   const classes = useStyles()
+  const { refreshAssetsKit } = props
 
   useEffect(() => {
-    const { refreshAssetsKit, } = props
     refreshAssetsKit()
-  }, [])
+  }, [refreshAssetsKit])
 
   const {
       assetFilterValueByAttribute,

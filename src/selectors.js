@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect'
-import { List, Map, Set, fromJS } from 'immutable'
-import { find_path as findPath } from 'dijkstrajs'
+import { List, Map, fromJS } from 'immutable'
 import { getRisks } from 'asset-report-risks'
 import {
   FOCUSING_COLOR,
