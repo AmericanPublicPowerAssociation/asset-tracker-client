@@ -91,7 +91,6 @@ export const getVisibleAssets = createSelector([
       const primaryAssetTypeId = asset.get('typeId')[0]
       return selectedAssetTypeIds.has(primaryAssetTypeId)
     })
-    .slice(0, MAXIMUM_ASSET_LIST_LENGTH)
 })
 
 
@@ -316,20 +315,65 @@ export const getMapBoundBox = createSelector([
 })
 
 
-export const getMapBoundBoxMidpoint = createSelector([
+export const getMapBoundBoxCenter = createSelector([
   getMapBoundBox,
 ], (
   mapBoundBox
 ) => {
-  const [min, max] = mapBoundBox
-  const midPointLon = max[0] + min[0] / 2
-  const midPointLat = max[1] + max[1] / 2
-  return [midPointLon, midPointLat]
+  if (!mapBoundBox) {
+    return null
+  }
+  const [min, max] = mapBoundBox.toJS()
+  const midPointLon = (max[0] + min[0]) / 2
+  const midPointLat = (max[1] + max[1]) / 2
+  return List([midPointLon, midPointLat])
 })
 
 
-export const getSort
+export const getVisibleAssetsByProximity = createSelector([
+  getMapBoundBoxCenter,
+  getVisibleAssets,
+  getFocusingAsset
+], (
+  mapBoundBoxCenter,
+  visibleAssets,
+  focusingAsset,
+) => {
+  let centerPoint = focusingAsset.get('location')
+  if (!centerPoint) {
+    centerPoint = mapBoundBoxCenter
+  }
+  if (!centerPoint) {
+    return visibleAssets
+  }
+  const assets = visibleAssets
+    .map((asset, key) => {
+      let assetPoint = asset.get('location') 
+      let dist = null
+      if (assetPoint) {
+        dist = Math.sqrt((centerPoint.get(0) - assetPoint.get(0)) ** 2 + (centerPoint.get(1) - assetPoint.get(1)) ** 2);
+      }
+      return asset.merge({distance: dist})
+    })
+    .filter((asset, key) => (
+      asset.get('distance') != null &&
+      !isNaN(asset.get('distance'))
+    ))
 
+  return assets.sort( (assetA, assetB) => {
+    const distA = assetA.get('distance')
+    const distB = assetB.get('distance')
+
+    let comparison = 0
+    if (distA > distB) {
+      comparison = 1
+    }
+    else if (distA < distB) {
+      comparison = -1
+    }
+    return comparison
+  }).slice(0, MAXIMUM_ASSET_LIST_LENGTH)
+})
 
 export const getConnectionGraph = createSelector([
   getAssetById,

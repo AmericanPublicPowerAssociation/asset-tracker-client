@@ -20,6 +20,7 @@ const mapStateToProps = state => ({
   assetFilterKeysByAttribute: getAssetsFilterKeysByAttribute(state),
   assetTypeById: getAssetTypeById(state),
   assetCountByAssetTypeId: getAssetCountByAssetTypeId(state),
+  filterByProximitySwitch: true,
 })
 
 
