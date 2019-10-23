@@ -84,11 +84,9 @@ const reduceVertically = (state, action) => {
         mapViewport['height'] === DEFAULT_MAP_W_H
       )
       if (!resetMapViewport || mapNotLoaded){
-        return state.mergeDeep({
-          mapViewport: {
-            bounds: action.payload.get('boundingBox'),
-          }
-        })
+        return state.setIn(
+          ['mapViewport', 'bounds'],
+          action.payload.get('boundingBox'))
       }
       const {
         longitude,
@@ -105,7 +103,9 @@ const reduceVertically = (state, action) => {
           bounds: action.payload.get('boundingBox'),
           reset: false
         },
-      })
+      }).setIn(
+        ['mapViewport', 'bounds'],
+        action.payload.get('boundingBox'))
     }
     case SET_FOCUSING_ASSET: {
       const mergingPatch = {}

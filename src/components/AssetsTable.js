@@ -13,7 +13,7 @@ import {
   getAssetTypeName,
   scrollToFocusingAsset,
 } from '../routines'
-
+import { MAXIMUM_ASSET_LIST_LENGTH } from '../constants'
 
 const styles = theme => ({
   hover: {
@@ -96,7 +96,9 @@ class AssetsTable extends PureComponent {
           </TableRow>
         </TableHead>
         <TableBody>
-        {visibleAssets.map(asset => {
+        {visibleAssets
+          .slice(0, MAXIMUM_ASSET_LIST_LENGTH)
+          .map(asset => {
           const assetId = asset.get('id')
           const assetName = asset.get('name')
           const assetTypeId = asset.get('typeId')
