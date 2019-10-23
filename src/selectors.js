@@ -1,4 +1,6 @@
 import { createSelector } from 'reselect'
+import { default as Vicenty } from 'geodesy/latlon-ellipsoidal-vincenty.js';
+import LatLon from 'geodesy/latlon-spherical.js';
 import { List, Map, fromJS } from 'immutable'
 import { getRisks } from 'asset-report-risks'
 import {
@@ -324,9 +326,10 @@ export const getMapBoundBoxCenter = createSelector([
     return null
   }
   const [min, max] = mapBoundBox.toJS()
-  const midPointLon = (max[0] + min[0]) / 2
-  const midPointLat = (max[1] + max[1]) / 2
-  return List([midPointLon, midPointLat])
+  const minPoint = new LatLon(min[1], min[0])
+  const maxPoint = new LatLon(max[1], max[0])
+  const midPoint = minPoint.midpointTo(maxPoint)
+  return List([midPoint.lon, midPoint.lat])
 })
 
 
@@ -346,12 +349,14 @@ export const getVisibleAssetsByProximity = createSelector([
   if (!centerPoint) {
     return visibleAssets
   }
+  centerPoint = new Vicenty(centerPoint.get(1), centerPoint.get(0))
   const assets = visibleAssets
     .map((asset, key) => {
       let assetPoint = asset.get('location') 
       let dist = null
       if (assetPoint) {
-        dist = Math.sqrt((centerPoint.get(0) - assetPoint.get(0)) ** 2 + (centerPoint.get(1) - assetPoint.get(1)) ** 2);
+        assetPoint = new Vicenty(assetPoint.get(1), assetPoint.get(0))
+        dist = centerPoint.distanceTo(assetPoint) //meters
       }
       return asset.merge({distance: dist})
     })
