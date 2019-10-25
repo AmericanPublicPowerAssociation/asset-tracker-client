@@ -1,6 +1,4 @@
 import { createSelector } from 'reselect'
-import { default as Vicenty } from 'geodesy/latlon-ellipsoidal-vincenty.js';
-//import { default as SphereKnn} from 'sphere-knn'
 import SphericalMercator from '@mapbox/sphericalmercator'
 import { kdTree } from 'kd-tree-javascript'
 import LatLon from 'geodesy/latlon-spherical.js';
@@ -352,60 +350,6 @@ export const getVisibleAssetsByProximity = createSelector([
   if (!centerPoint) {
     return visibleAssets
   }
-    /*
-  const assets = visibleAssets
-    .map((asset, key) => {
-      let assetPoint = asset.get('location') 
-      let dist = null
-      if (assetPoint) {
-        assetPoint = new Vicenty(assetPoint.get(1), assetPoint.get(0))
-        dist = centerPoint.distanceTo(assetPoint) //meters
-      }
-      return asset.merge({distance: dist})
-    })
-    .filter((asset, key) => (
-      asset.get('distance') != null &&
-      !isNaN(asset.get('distance'))
-    ))
-    return assets.sort( (assetA, assetB) => {
-        const distA = assetA.get('distance')
-        const distB = assetB.get('distance')
-
-        let comparison = 0
-        if (distA > distB) {
-          comparison = 1
-        }
-        else if (distA < distB) {
-          comparison = -1
-        }
-        return comparison
-      }).slice(0, MAXIMUM_ASSET_LIST_LENGTH)
-
-    */
-
-    /*
-  visibleAssets = visibleAssets
-    .filter( (assets) => assets.has('location') )
-    .map( (assets) => {
-      const [lon, lat] = assets.get('location')
-      return assets.mergeDeep({lat, lon})
-    })
-  console.log(visibleAssets.toJS())
-  const KnnLookUp = SphereKnn(visibleAssets.toJS())
-  var points = KnnLookUp(
-    centerPoint.get(1),
-    centerPoint.get(0),
-    MAXIMUM_ASSET_LIST_LENGTH
-  ) 
-  console.log(points)
-  return fromJS(points)
-  */
-    /*
-  const merc = new SphericalMercator()
-  centerPoint = merc().forward([centerPoint.toJS()])
-  visibleAssets.map
-  return visibleAssets*/
-
   const mercator = new SphericalMercator()
   centerPoint = mercator.forward(centerPoint.toJS()) 
   visibleAssets = visibleAssets
@@ -416,18 +360,13 @@ export const getVisibleAssetsByProximity = createSelector([
       return assets.mergeDeep({x, y, lat, lon})
     })
 
-  //console.log(visibleAssets.toJS())
   var distance = function(a, b){
     const dist = Math.pow(a.x - b.x, 2) +  Math.pow(a.y - b.y, 2);
-    //const pointA = new Vicenty(a.lat, a.lon)
-    //const pointB = new Vicenty(b.lat, b.lon)
-    //const dist = pointA.distanceTo(pointB) 
     return dist;
   }
   var kdtree = new kdTree(visibleAssets.toJS(), distance, ["x", "y"])
   var nearest = kdtree.nearest({x: centerPoint[0], y: centerPoint[1]}, MAXIMUM_ASSET_LIST_LENGTH)
-  //var nearest = kdtree.nearest({lon: centerPoint.get(0), lat: centerPoint.get(1)}, MAXIMUM_ASSET_LIST_LENGTH)
-  nearest = nearest.sort( (assetA, assetB) => {
+  return fromJS(nearest = nearest.sort( (assetA, assetB) => {
         const distA = assetA[1]
         const distB = assetB[1]
 
@@ -439,8 +378,7 @@ export const getVisibleAssetsByProximity = createSelector([
           comparison = -1
         }
         return comparison
-  })
-  return fromJS(nearest.map( nearObj => {
+  }).map( nearObj => {
     return nearObj[0]
   }))
 })
