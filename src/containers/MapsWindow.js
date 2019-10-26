@@ -4,11 +4,13 @@ import {
   refreshAssetsKit,
 } from '../actions'
 import {
+  setAssetsFilterProximity,
   setAssetsFilterKeys,
   setAssetsFilterValues,
   toggleAssetsFilterKey,
 } from '../actions'
 import {
+  getAssetsFilterByProximity,
   getAssetsFilterKeysByAttribute,
   getAssetsFilterValueByAttribute,
   getAssetTypeById,
@@ -16,6 +18,7 @@ import {
 } from '../selectors'
 
 const mapStateToProps = state => ({
+  assetFilterByProximity: getAssetsFilterByProximity(state),
   assetFilterValueByAttribute: getAssetsFilterValueByAttribute(state),
   assetFilterKeysByAttribute: getAssetsFilterKeysByAttribute(state),
   assetTypeById: getAssetTypeById(state),
@@ -25,6 +28,8 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
+  setAssetsFilterProximity: payload =>{dispatch(
+    setAssetsFilterProximity(payload))},
   refreshAssetsKit: payload => {dispatch(
     refreshAssetsKit(payload))},
   setAssetsFilterValues: payload => {dispatch(

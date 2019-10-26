@@ -31,12 +31,14 @@ class AssetsFilter extends PureComponent {
     const {
       classes,
       // Get redux variables
+      assetFilterByProximity,
       assetFilterValueByAttribute,
       assetFilterKeysByAttribute,
       assetTypeById,
       countByAssetTypeId,
       toggleAssetsFilterKey,
       filterByProximitySwitch,
+      setAssetsFilterProximity,
     } = this.props
     const name = assetFilterValueByAttribute.get('name')
     const selectedAssetTypeIds = assetFilterKeysByAttribute.get('typeId')
@@ -58,8 +60,12 @@ class AssetsFilter extends PureComponent {
           { filterByProximitySwitch &&
             <ListItem>
               <FormControlLabel 
-                control = { <Switch checked={true} onChange={()=>{}} value="checkedA" />}
-                label="Filter by Proximity"/>
+                control = {
+                  <Switch
+                    checked={assetFilterByProximity}
+                    onChange={()=>{setAssetsFilterProximity(assetFilterByProximity)}}
+                    value="checkedA" />}
+                label="Filter by Proximity" />
             </ListItem>
           }
           <ListItem>

@@ -18,6 +18,7 @@ import assetById from './assetById'
 import focusingAssetId from './focusingAssetId'
 import relatingAssetId from './relatingAssetId'
 import relatingAssetKey from './relatingAssetKey'
+import assetFilterByProximity from './assetFilterByProximity'
 import assetFilterKeysByAttribute from './assetFilterKeysByAttribute'
 import assetFilterValueByAttribute from './assetFilterValueByAttribute'
 import addingAsset from './addingAsset'
@@ -51,6 +52,7 @@ const reduceHorizontally = combineReducers({
   relatingAssetKey,
   addingAsset,
   editingTask,
+  assetFilterByProximity,
   assetFilterValueByAttribute,
   assetFilterKeysByAttribute,
   trackingAsset: (state = {}) => state,

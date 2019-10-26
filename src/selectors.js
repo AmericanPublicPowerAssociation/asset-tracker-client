@@ -43,6 +43,8 @@ export const getAddingAsset = state => state.get(
   'addingAsset')
 export const getEditingTask = state => state.get(
   'editingTask')
+export const getAssetsFilterByProximity = state => state.get(
+  'assetFilterByProximity')
 export const getAssetsFilterKeysByAttribute = state => state.get(
   'assetFilterKeysByAttribute')
 export const getAssetsFilterValueByAttribute = state => state.get(
@@ -337,17 +339,19 @@ export const getMapBoundBoxCenter = createSelector([
 export const getVisibleAssetsByProximity = createSelector([
   getMapBoundBoxCenter,
   getVisibleAssets,
-  getFocusingAsset
+  getFocusingAsset,
+  getAssetsFilterByProximity,
 ], (
   mapBoundBoxCenter,
   visibleAssets,
   focusingAsset,
+  filterByProximity,
 ) => {
   let centerPoint = focusingAsset.get('location')
   if (!centerPoint) {
     centerPoint = mapBoundBoxCenter
   }
-  if (!centerPoint) {
+  if (!centerPoint || !filterByProximity) {
     return visibleAssets
   }
   const mercator = new SphericalMercator()
