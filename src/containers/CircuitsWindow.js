@@ -7,6 +7,7 @@ import {
   setAssetsFilterKeys,
   setAssetsFilterValues,
   toggleAssetsFilterKey,
+  deselectEverything,
 } from '../actions'
 import {
   getAssetsFilterKeysByAttribute,
@@ -33,6 +34,8 @@ const mapDispatchToProps = dispatch => ({
     setAssetsFilterKeys(payload))},
   toggleAssetsFilterKey: payload => {dispatch(
     toggleAssetsFilterKey(payload))}, 
+  deselectEverything: payload => {dispatch(
+    deselectEverything())}
 })
 
 

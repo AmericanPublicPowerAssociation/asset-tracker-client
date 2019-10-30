@@ -37,6 +37,7 @@ class AssetsWindow extends PureComponent {
       setAssetsFilterValues,
       setAssetsFilterKeys,
       toggleAssetsFilterKey,
+      deselectEverything,
     } = this.props
     const { classes } = this.props
     return (
@@ -50,7 +51,8 @@ class AssetsWindow extends PureComponent {
             countByAssetTypeId={assetCountByAssetTypeId}
             setAssetsFilterValues={setAssetsFilterValues}
             setAssetsFilterKeys={setAssetsFilterKeys}
-            toggleAssetsFilterKey={toggleAssetsFilterKey} />
+            toggleAssetsFilterKey={toggleAssetsFilterKey}
+            deselectEverything={deselectEverything}/>
         </Grid>
         <Grid item className={classes.frame}
           xs={12} sm={7} md={8} lg={9} xl={10} >

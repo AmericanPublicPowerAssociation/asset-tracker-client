@@ -7,6 +7,7 @@ import {
   SET_APP_VALUES,
   SET_FOCUSING_ASSET,
   TOGGLE_THEME,
+  DESELECT_EVERYTHING,
 } from '../constants'
 
 
@@ -19,6 +20,7 @@ const initialState = Map({
 
 const app = (state = initialState, action) => {
   switch (action.type) {
+    case DESELECT_EVERYTHING:
     case OPEN_NAVIGATION_DRAWER: {
       return state.merge({
         isNavigationDrawerOpen: true,

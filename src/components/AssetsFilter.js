@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
+import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -15,6 +16,10 @@ const styles = theme => ({
   nameInput: {
     padding: 0,
   },
+  deselectLink: {
+    color: '#f50057',
+    cursor: 'pointer',
+  }
 })
 
 
@@ -34,6 +39,7 @@ class AssetsFilter extends PureComponent {
       assetTypeById,
       countByAssetTypeId,
       toggleAssetsFilterKey,
+      deselectEverything,
     } = this.props
     const name = assetFilterValueByAttribute.get('name')
     const selectedAssetTypeIds = assetFilterKeysByAttribute.get('typeId')
@@ -42,6 +48,20 @@ class AssetsFilter extends PureComponent {
     return (
       <Paper className={classes.root} elevation={0} square>
         <List>
+        { deselectEverything &&
+          <ListItem>
+            <a
+              className={classes.deselectLink}
+              onClick={
+              (e) => {
+                e.preventDefault()
+                deselectEverything()
+              }
+            }>
+              Deselect All
+            </a>
+          </ListItem>
+        }
           <ListItem>
             <InputBase
               value={name}
