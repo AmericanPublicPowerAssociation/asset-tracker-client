@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Circuit from './Circuit'
+import Circuit from '../containers/Circuit'
 import CircuitPalette from './CircuitPalette'
 import '../App.css';
 

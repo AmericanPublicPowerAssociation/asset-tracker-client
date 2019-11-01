@@ -1,6 +1,5 @@
 import React from 'react'
 import * as go from 'gojs'
-import { useSelector } from 'react-redux'
 import { ReactDiagram } from 'gojs-react'
 
 
@@ -23,6 +22,7 @@ function initDiagram() {
   diagram.nodeTemplate = 
     $(go.Node, 'Spot',
       $(go.Shape, 'RoundedRectangle',
+        new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(go.Point.stringify),
         new go.Binding('fill', 'color')),
       $(go.Shape, "Rectangle",
         {desiredSize: new go.Size(6,6)},
@@ -48,19 +48,27 @@ function initDiagram() {
         isPanelMain: true
       })
     )
-
   return diagram
 }
 
 
-function handleModelChange(data) {
-  console.log(data)
-  return
-}
+function Circuit(props) {
+  const { nodes, edges} = props 
+  
+  const handleModelChange = (data) => {
+    const insertedNodeKeys = data.insertedNodeKeys;
+    const modifiedNodeData = data.modifiedNodeData;
+    const removedNodeKeys = data.removedNodeKeys;
+    const insertedLinkKeys = data.insertedLinkKeys;
+    const modifiedLinkData = data.modifiedLinkData;
+    const removedLinkKeys = data.removedLinkKeys;
+    if (insertedNodeKeys) {
+      const {createNewNodes} = props
+      createNewNodes()
+    }
+    console.log(data)
+  }
 
-function Circuit() {
-  const nodes = useSelector(state => state.nodes)
-  const edges = useSelector(state => state.edges)
   return (
     <ReactDiagram 
       initDiagram={initDiagram}

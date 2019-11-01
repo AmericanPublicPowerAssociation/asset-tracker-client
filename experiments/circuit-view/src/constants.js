@@ -1,0 +1,2 @@
+export const CREATE_NEW_NODES = 'CREATE_NEW_NODES'
+export const CREATE_NEW_EDGES = 'CREATE_NEW_EDGES'
