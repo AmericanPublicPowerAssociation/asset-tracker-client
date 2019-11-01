@@ -21,8 +21,8 @@ function initDiagram() {
 
   diagram.nodeTemplate = 
     $(go.Node, 'Spot',
-      $(go.Shape, 'RoundedRectangle',
         new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(go.Point.stringify),
+      $(go.Shape, 'RoundedRectangle',
         new go.Binding('fill', 'color')),
       $(go.Shape, "Rectangle",
         {desiredSize: new go.Size(6,6)},
@@ -31,13 +31,13 @@ function initDiagram() {
         {desiredSize: new go.Size(6,6)},
         {portId: 'out', alignment: go.Spot.Right, fromLinkable:true}),
       $(go.TextBlock,
-        {alignment: new go.Spot(0.5,.5)},
+        {alignment: new go.Spot(0.5,.5), editable: true, margin: 10},
       	new go.Binding('text', 'text').makeTwoWay()),
     )
 
   diagram.linkTemplate = 
     $(go.Link,{
-        routing: go.Link.AvoidsNodes,
+        routing: go.Link.Orthogonal,
         curve: go.Link.JumpOver,
       },
       $(go.Shape, {
@@ -45,7 +45,8 @@ function initDiagram() {
         stroke: "transparent",
         strokeWidth: 8 }),
       $(go.Shape, {
-        isPanelMain: true
+        isPanelMain: true,
+				strokeWidth: 4,
       })
     )
   return diagram
@@ -64,8 +65,12 @@ function Circuit(props) {
     const removedLinkKeys = data.removedLinkKeys;
     if (insertedNodeKeys) {
       const {createNewNodes} = props
-      createNewNodes()
+      createNewNodes(modifiedNodeData)
     }
+		if (modifiedNodeData) {
+			const {modifyNode} = props
+			//modifyNode(modifiedNodeData)
+		}
     console.log(data)
   }
 

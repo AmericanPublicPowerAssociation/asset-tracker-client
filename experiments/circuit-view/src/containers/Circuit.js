@@ -6,9 +6,16 @@ import {
 } from '../actions'
 
 
+const toArray = (immutableObj) => {
+  return immutableObj.reduce( (arr, data) => {
+    arr.push(data.toJS())
+    return arr
+  }, [])
+}
+
 const mapStateToProps = state => ({
-  nodes: state['nodes'],
-  edges: state['edges'],
+  nodes: toArray(state['nodes']),
+  edges: toArray(state['edges']),
 })
 
 
