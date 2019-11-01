@@ -1,5 +1,6 @@
 import React from 'react'
 import * as go from 'gojs'
+import { useSelector } from 'react-redux'
 import { ReactDiagram } from 'gojs-react'
 
 
@@ -36,7 +37,7 @@ function initDiagram() {
 
   diagram.linkTemplate = 
     $(go.Link,{
-        routing: go.Link.Orthogonal,
+        routing: go.Link.AvoidsNodes,
         curve: go.Link.JumpOver,
       },
       $(go.Shape, {
@@ -58,20 +59,14 @@ function handleModelChange(data) {
 }
 
 function Circuit() {
+  const nodes = useSelector(state => state.nodes)
+  const edges = useSelector(state => state.edges)
   return (
     <ReactDiagram 
       initDiagram={initDiagram}
       divClassName="diagram-component"
-      nodeDataArray={[
-				{ key: 0, text: 'Alpha', color: 'lightblue', loc: '0 0' },
-				{ key: 1, text: 'Beta', color: 'orange', loc: '150 0' },
-				{ key: 2, text: 'Gamma', color: 'lightgreen', loc: '0 150' },
-				{ key: 3, text: 'Delta', color: 'pink', loc: '150 150' }
-			]}
-      linkDataArray={[
-        {from: 0, fromPort:"out", to: 1, toPort:"in"},
-        {from: 0, fromPort:"out", to: 2, toPort:"in"},
-      ]}
+      nodeDataArray={nodes}
+      linkDataArray={edges}
 			onModelChange={handleModelChange}/>
   )
 }

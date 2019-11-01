@@ -1,5 +1,6 @@
 const initialState = [
-  {from:0, to:1},
+  {from: 0, fromPort:"out", to: 1, toPort:"in"},
+  {from: 0, fromPort:"out", to: 2, toPort:"in"},
 ]
 
 

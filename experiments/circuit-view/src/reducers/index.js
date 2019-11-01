@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
-import assets from './assets'
+import nodes from './nodes'
 import edges from './edges'
 
 
 const allReducers = combineReducers({
-  assets,
+  nodes,
   edges,
 })
 

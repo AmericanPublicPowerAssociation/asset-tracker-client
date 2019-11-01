@@ -5,7 +5,7 @@ const initialState = [
   { key: 3, text: 'Delta', color: 'pink', loc: '150 150' } 
 ]
 
-const assets = (state = initialState, action) => {
+const nodes = (state = initialState, action) => {
   switch(action.type){
     default:
       return state
@@ -13,4 +13,4 @@ const assets = (state = initialState, action) => {
 }
 
 
-export default assets
+export default nodes
