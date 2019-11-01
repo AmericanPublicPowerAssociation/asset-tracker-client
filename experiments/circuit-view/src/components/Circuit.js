@@ -71,7 +71,6 @@ function Circuit(props) {
 			const {modifyNode} = props
 			//modifyNode(modifiedNodeData)
 		}
-    console.log(data)
   }
 
   return (
