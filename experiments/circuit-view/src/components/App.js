@@ -1,9 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import * as go from 'gojs'
-import { ReactDiagram } from 'gojs-react';
 import Circuit from './Circuit'
 import CircuitPalette from './CircuitPalette'
 import '../App.css';
