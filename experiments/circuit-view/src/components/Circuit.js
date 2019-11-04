@@ -65,12 +65,15 @@ function Circuit(props) {
     const removedLinkKeys = data.removedLinkKeys;
     if (insertedNodeKeys) {
       const {createNewNodes} = props
-      createNewNodes(modifiedNodeData)
+      createNewNodes({modifiedNodeData, insertedNodeKeys})
     }
-		if (modifiedNodeData) {
-			const {modifyNode} = props
-			//modifyNode(modifiedNodeData)
-		}
+    if (removedNodeKeys) {
+      const {deleteNodes} = props
+      deleteNodes({removedNodeKeys})
+    }
+    if (insertedLinkKeys) {
+
+    }
   }
 
   return (

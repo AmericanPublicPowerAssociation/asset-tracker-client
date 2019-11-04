@@ -3,6 +3,7 @@ import Circuit from '../components/Circuit'
 import {
   createNewNodes,
   createNewEdges,
+  deleteNodes,
 } from '../actions'
 
 
@@ -21,7 +22,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   createNewNodes: payload => {dispatch(
-    createNewNodes(payload))}
+    createNewNodes(payload))},
+  deleteNodes: payload => {dispatch(
+    deleteNodes(payload))}
 })
 
 

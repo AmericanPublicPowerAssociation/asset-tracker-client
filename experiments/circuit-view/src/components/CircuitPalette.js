@@ -26,7 +26,8 @@ function CircuitPalette() {
       initPalette={initPalette}
       divClassName="palette-component"
       nodeDataArray={[
-				{ key: 0, text: 'Alpha', color:'yellow' }
+				{ key: 0, text: 'Node A', color:'yellow' },
+        { key: 1, text: 'Node B', color:'pink'}
       ]}/>
   )
 }
