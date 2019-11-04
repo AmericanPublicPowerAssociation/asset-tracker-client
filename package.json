@@ -3,6 +3,7 @@
   "version": "0.0.8",
   "private": true,
   "dependencies": {
+    "@mapbox/sphericalmercator": "^1.1.0",
     "@material-ui/core": "^4.5.1",
     "@material-ui/icons": "^4.5.1",
     "apexcharts": "^3.10.0",
@@ -12,8 +13,10 @@
     "dijkstrajs": "^1.0.1",
     "dotenv": "^8.2.0",
     "downshift": "^3.3.5",
+    "geodesy": "^2.2.0",
     "immutable": "^4.0.0-rc.12",
     "js-combinatorics": "^0.5.4",
+    "kd-tree-javascript": "^1.0.3",
     "lodash": "^4.17.15",
     "material-ui-dropzone": "^2.4.5",
     "react": "^16.9.0",

@@ -1,4 +1,7 @@
 import { createSelector } from 'reselect'
+import SphericalMercator from '@mapbox/sphericalmercator'
+import { kdTree } from 'kd-tree-javascript'
+import LatLon from 'geodesy/latlon-spherical.js';
 import { List, Map, fromJS } from 'immutable'
 import { getRisks } from 'asset-report-risks'
 import {
@@ -40,6 +43,8 @@ export const getAddingAsset = state => state.get(
   'addingAsset')
 export const getEditingTask = state => state.get(
   'editingTask')
+export const getAssetsFilterByProximity = state => state.get(
+  'assetFilterByProximity')
 export const getAssetsFilterKeysByAttribute = state => state.get(
   'assetFilterKeysByAttribute')
 export const getAssetsFilterValueByAttribute = state => state.get(
@@ -91,7 +96,6 @@ export const getVisibleAssets = createSelector([
       const primaryAssetTypeId = asset.get('typeId')[0]
       return selectedAssetTypeIds.has(primaryAssetTypeId)
     })
-    .slice(0, MAXIMUM_ASSET_LIST_LENGTH)
 })
 
 
@@ -306,6 +310,82 @@ export const getRelatedAssetTypeIds = createSelector([
     List()
 })
 
+
+export const getMapBoundBox = createSelector([
+  getMapViewport,
+], (
+  mapViewport,
+) => {
+  return mapViewport.get('bounds')
+})
+
+
+export const getMapBoundBoxCenter = createSelector([
+  getMapBoundBox,
+], (
+  mapBoundBox
+) => {
+  if (!mapBoundBox) {
+    return null
+  }
+  const [min, max] = mapBoundBox.toJS()
+  const minPoint = new LatLon(min[1], min[0])
+  const maxPoint = new LatLon(max[1], max[0])
+  const midPoint = minPoint.midpointTo(maxPoint)
+  return List([midPoint.lon, midPoint.lat])
+})
+
+
+export const getVisibleAssetsByProximity = createSelector([
+  getMapBoundBoxCenter,
+  getVisibleAssets,
+  getFocusingAsset,
+  getAssetsFilterByProximity,
+], (
+  mapBoundBoxCenter,
+  visibleAssets,
+  focusingAsset,
+  filterByProximity,
+) => {
+  let centerPoint = focusingAsset.get('location')
+  if (!centerPoint) {
+    centerPoint = mapBoundBoxCenter
+  }
+  if (!centerPoint || !filterByProximity) {
+    return visibleAssets
+  }
+  const mercator = new SphericalMercator()
+  centerPoint = mercator.forward(centerPoint.toJS()) 
+  visibleAssets = visibleAssets
+    .filter( (assets) => assets.has('location'))
+    .map( (assets) => {
+      const [lon, lat] = assets.get('location')
+      const [x, y] = mercator.forward([lon, lat])
+      return assets.mergeDeep({x, y, lat, lon})
+    })
+
+  var distance = function(a, b){
+    const dist = Math.pow(a.x - b.x, 2) +  Math.pow(a.y - b.y, 2);
+    return dist;
+  }
+  var kdtree = new kdTree(visibleAssets.toJS(), distance, ["x", "y"])
+  var nearest = kdtree.nearest({x: centerPoint[0], y: centerPoint[1]}, MAXIMUM_ASSET_LIST_LENGTH)
+  return fromJS(nearest = nearest.sort( (assetA, assetB) => {
+        const distA = assetA[1]
+        const distB = assetB[1]
+
+        let comparison = 0
+        if (distA > distB) {
+          comparison = 1
+        }
+        else if (distA < distB) {
+          comparison = -1
+        }
+        return comparison
+  }).map( nearObj => {
+    return nearObj[0]
+  }))
+})
 
 export const getConnectionGraph = createSelector([
   getAssetById,

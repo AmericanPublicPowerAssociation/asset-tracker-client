@@ -14,11 +14,13 @@ import {
   getRelatingAssetId,
   getRelatingAssetKey,
   getVisibleAssets,
+  getVisibleAssetsByProximity,
 } from '../selectors'
 
 
 const mapStateToProps = state => ({
-  visibleAssets: getVisibleAssets(state),
+  //visibleAssets: getVisibleAssets(state),
+  visibleAssets: getVisibleAssetsByProximity(state),
   focusingAssetId: getFocusingAssetId(state),
   locatingAssetId: getLocatingAssetId(state),
   relatingAssetId: getRelatingAssetId(state),

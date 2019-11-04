@@ -43,6 +43,7 @@ import {
   SET_ASSET_ERRORS,
   SET_ASSET_FILTER_KEYS,
   SET_ASSET_FILTER_VALUES,
+  SET_ASSET_FILTER_PROXIMITY,
   SET_ASSET_LOCATION,
   SET_EDITING_TASK_ERRORS,
   SET_EDITING_TASK_VALUES,
@@ -147,6 +148,9 @@ export const includeAssetRelation = payload => ({
 export const setAssetsFilterValues = payload => ({
   payload, type: SET_ASSET_FILTER_VALUES})
 
+
+export const setAssetsFilterProximity = payload => ({
+  payload, type: SET_ASSET_FILTER_PROXIMITY})
 
 export const excludeAssetsFilterKey = payload => ({
   payload, type: EXCLUDE_ASSET_FILTER_KEY})

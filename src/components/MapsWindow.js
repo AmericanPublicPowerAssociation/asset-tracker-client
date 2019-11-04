@@ -54,6 +54,7 @@ class MapsWindow extends PureComponent {
   render() {
     const {
       classes,
+      assetFilterByProximity,
       assetFilterValueByAttribute,
       assetFilterKeysByAttribute,
       assetTypeById,
@@ -61,6 +62,8 @@ class MapsWindow extends PureComponent {
       setAssetsFilterValues,
       setAssetsFilterKeys,
       toggleAssetsFilterKey,
+      filterByProximitySwitch,
+      setAssetsFilterProximity,
     } = this.props
     return (
       <Grid container className={classes.grid}>
@@ -71,13 +74,16 @@ class MapsWindow extends PureComponent {
           <div className={classes.frame}>
             <div className={classes.filterPanel}>
               <AssetsFilter 
+                assetFilterByProximity={assetFilterByProximity}
                 assetFilterValueByAttribute={assetFilterValueByAttribute}
                 assetFilterKeysByAttribute={assetFilterKeysByAttribute}
                 assetTypeById={assetTypeById}
                 countByAssetTypeId={assetCountByAssetTypeId}
                 setAssetsFilterValues={setAssetsFilterValues}
                 setAssetsFilterKeys={setAssetsFilterKeys}
-                toggleAssetsFilterKey={toggleAssetsFilterKey} />
+                setAssetsFilterProximity={setAssetsFilterProximity}
+                toggleAssetsFilterKey={toggleAssetsFilterKey}
+                filterByProximitySwitch={filterByProximitySwitch}/>
             </div>
             <div className={classes.listPanel}>
               <AssetList />
