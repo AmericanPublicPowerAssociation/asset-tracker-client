@@ -1,7 +1,8 @@
-import { fromJS, Map } from 'immutable'
+import { fromJS } from 'immutable'
 import {
   CREATE_NEW_NODES,
   DELETE_NODES,
+  UPDATE_NODES,
 } from '../constants'
 
 const initialState = fromJS({
@@ -15,18 +16,28 @@ const nodes = (state = initialState, action) => {
   switch(action.type){
     case CREATE_NEW_NODES: {
       const insertedKeys = action.payload.insertedNodeKeys
-      const modifiedNodeData = action.payload.modifiedNodeData
+      const newNodes = action.payload.modifiedNodeData
         .reduce( (map, data) => {
-          if (insertedKeys.includes(data.key) )
-          data.key = String(data.key)
-          map[data.key] = data
+          if (insertedKeys.includes(data.key)) {
+            data.key = String(data.key)
+            map[data.key] = data
+          }
           return map
         }, {})
-      return state.merge(fromJS(modifiedNodeData))
+      return state.merge(fromJS(newNodes))
     }
     case DELETE_NODES: {
       const removedKeys = action.payload.removedNodeKeys
       return state.deleteAll(removedKeys)
+    }
+    case UPDATE_NODES: {
+      const nodes = action.payload.modifiedNodeData
+        .reduce( (map, data) => {
+          data.key = String(data.key)
+          map[data.key] = data
+          return map
+        }, {})
+      return state.mergeDeep(fromJS(nodes))
     }
     default:
       return state

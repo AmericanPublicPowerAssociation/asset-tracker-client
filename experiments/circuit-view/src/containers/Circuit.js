@@ -4,6 +4,9 @@ import {
   createNewNodes,
   createNewEdges,
   deleteNodes,
+  deleteEdges,
+  updateNodes,
+  updateEdges,
 } from '../actions'
 
 
@@ -24,7 +27,15 @@ const mapDispatchToProps = dispatch => ({
   createNewNodes: payload => {dispatch(
     createNewNodes(payload))},
   deleteNodes: payload => {dispatch(
-    deleteNodes(payload))}
+    deleteNodes(payload))},
+  createNewEdges: payload => {dispatch(
+    createNewEdges(payload))},
+  deleteEdges: payload => {dispatch(
+    deleteEdges(payload))},
+  updateNodes: payload => {dispatch(
+    updateNodes(payload))},
+  updateEdges: payload => {dispatch(
+    updateEdges(payload))},
 })
 
 

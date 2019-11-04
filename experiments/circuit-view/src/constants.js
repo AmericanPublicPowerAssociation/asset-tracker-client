@@ -1,4 +1,7 @@
 export const CREATE_NEW_NODES = 'CREATE_NEW_NODES'
-export const CREATE_NEW_EDGES = 'CREATE_NEW_EDGES'
-
 export const DELETE_NODES = 'DELETE_NODES'
+export const UPDATE_NODES = 'UPDATE_NODES'
+
+export const CREATE_NEW_EDGES = 'CREATE_NEW_EDGES'
+export const DELETE_EDGES = 'DELETE_EDGES'
+export const UPDATE_EDGES = 'UPDATE_EDGES'
