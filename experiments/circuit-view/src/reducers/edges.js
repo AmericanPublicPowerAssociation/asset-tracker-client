@@ -6,8 +6,8 @@ import {
 } from '../constants' 
 
 const initialState = fromJS({
-  '-1': {key: '-1', from: 0, fromPort:"out", to: 1, toPort:"in"},
-  '-2': {key: '-2', from: 0, fromPort:"out", to: 2, toPort:"in"},
+  '-1': {key: '-1', from: '0', fromPort:"out", to: '1', toPort:"in"},
+  '-2': {key: '-2', from: '0', fromPort:"out", to: '2', toPort:"in"},
 })
 
 

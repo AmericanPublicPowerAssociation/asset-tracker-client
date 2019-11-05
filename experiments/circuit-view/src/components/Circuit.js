@@ -13,8 +13,8 @@ function initDiagram() {
         model: $(go.GraphLinksModel,
           {
             linkKeyProperty: 'key',
-            //linkFromPortIdProperty: 'fromPort',
-            //linkToPortIdProperty: 'toPort',
+            linkFromPortIdProperty: 'fromPort',
+            linkToPortIdProperty: 'toPort',
           }),
       })
 
@@ -26,11 +26,11 @@ function initDiagram() {
       $(go.Shape, 'RoundedRectangle',
         new go.Binding('fill', 'color')),
       $(go.Shape, "Rectangle",
-        {desiredSize:new go.Size(6,6)},
-        {portId: 'in', alignment: go.Spot.Left, toLinkable:true, cursor: "pointer"}),
+        {desiredSize:new go.Size(6,6), fromSpot: go.Spot.Right, toSpot: go.Spot.Left, toLinkable: true, cursor: "pointer"},
+        {portId: 'in', alignment: go.Spot.Left}),
       $(go.Shape, "Rectangle",
-        {desiredSize: new go.Size(6,6)},
-        {portId: 'out', alignment: go.Spot.Right, fromLinkable:true, cursor: "pointer"}),
+        {desiredSize:new go.Size(6,6), fromSpot: go.Spot.Right, toSpot: go.Spot.Left, fromLinkable: true, cursor: "pointer"},
+        {portId: 'out', alignment: go.Spot.Right}),
       $(go.TextBlock,
         {alignment: new go.Spot(0.5,.5), editable: true, margin: 10},
       	new go.Binding('text', 'text').makeTwoWay()),
