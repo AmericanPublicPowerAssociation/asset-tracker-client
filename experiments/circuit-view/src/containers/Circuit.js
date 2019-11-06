@@ -7,6 +7,7 @@ import {
   deleteEdges,
   updateNodes,
   updateEdges,
+  setFocusedNode,
 } from '../actions'
 
 
@@ -36,6 +37,8 @@ const mapDispatchToProps = dispatch => ({
     updateNodes(payload))},
   updateEdges: payload => {dispatch(
     updateEdges(payload))},
+  setFocusedNode: payload => {dispatch(
+    setFocusedNode(payload))},
 })
 
 

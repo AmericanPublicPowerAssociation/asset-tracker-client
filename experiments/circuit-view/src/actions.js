@@ -5,6 +5,8 @@ import {
   CREATE_NEW_EDGES,
   DELETE_EDGES,
   UPDATE_EDGES,
+  TOGGLE_PALETTE,
+  SET_FOCUSED_NODE,
 } from './constants'
 
 
@@ -22,3 +24,9 @@ export const deleteEdges = payload => (
   {type: DELETE_EDGES, payload})
 export const updateEdges = payload => (
   {type: UPDATE_EDGES, payload})
+
+export const togglePalette = payload => (
+  {type: TOGGLE_PALETTE, payload})
+
+export const setFocusedNode = payload => (
+  {type: SET_FOCUSED_NODE, payload})

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import * as go from 'gojs'
 import { ReactDiagram } from 'gojs-react'
 
@@ -23,8 +23,15 @@ function initDiagram() {
   diagram.nodeTemplate = 
     $(go.Node, 'Spot',
         new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(go.Point.stringify),
-      $(go.Shape, 'RoundedRectangle',
-        new go.Binding('fill', 'color')),
+      //$(go.Shape, 'RoundedRectangle',
+      //  new go.Binding('fill', 'color')),
+      $(go.Picture,
+        {desiredSize: new go.Size(100,100), source: "images/meter.png"},
+        new go.Binding('source', 'type', (type) => {
+          if (type === 'meter') {
+            return 'images/meter.png'
+          }
+        })),
       $(go.Shape, "Rectangle",
         {desiredSize:new go.Size(6,6), fromSpot: go.Spot.Right, toSpot: go.Spot.Left, toLinkable: true, cursor: "pointer"},
         {portId: 'in', alignment: go.Spot.Left}),
@@ -62,6 +69,7 @@ function initDiagram() {
 
 
 function Circuit(props) {
+  const diagramRef = React.createRef()
   const { nodes, edges} = props 
   
   const handleModelChange = (data) => {
@@ -104,8 +112,25 @@ function Circuit(props) {
     }
   }
 
+  useEffect( ()=> {
+    const { setFocusedNode } = props
+    if(!diagramRef.current) return
+    const diagram = diagramRef.current.getDiagram()
+    if (diagram instanceof go.Diagram) {
+      diagram.addDiagramListener("ObjectDoubleClicked", (e) => {
+        const dataKey = e.subject.part.data.key
+        console.log(dataKey)
+        const nodeObj = diagram.model.findNodeDataForKey(dataKey)
+        if (nodeObj !== null)
+          diagram.model.setDataProperty(nodeObj, "color", "white")
+          setFocusedNode(dataKey)
+      })
+    }
+  }, [])
+
   return (
-    <ReactDiagram 
+    <ReactDiagram
+      ref={diagramRef}
       initDiagram={initDiagram}
       divClassName="diagram-component"
       nodeDataArray={nodes}
