@@ -7,9 +7,9 @@ import {
 
 const initialState = fromJS({
   '0': { key: '0', text: 'Alpha', color: 'lightblue', loc: '0 0', type: 'meter' },
-  '1': { key: '1', text: 'Beta', color: 'orange', loc: '150 0' },
-  '2': { key: '2', text: 'Gamma', color: 'lightgreen', loc: '0 150' },
-  '3': { key: '3', text: 'Delta', color: 'pink', loc: '300 150' } 
+  '1': { key: '1', text: 'Beta', color: 'orange', loc: '150 0', type: 'busbar' },
+  '2': { key: '2', text: 'Gamma', color: 'lightgreen', loc: '0 150', type: 'station' },
+  '3': { key: '3', text: 'Delta', color: 'pink', loc: '300 150', type: 'meter' }
 })
 
 const nodes = (state = initialState, action) => {

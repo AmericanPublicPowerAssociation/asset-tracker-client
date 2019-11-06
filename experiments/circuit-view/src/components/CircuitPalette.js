@@ -9,11 +9,9 @@ function initPalette() {
   palette.nodeTemplate = 
     $(go.Node, 'Auto',
       new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(go.Point.stringify),
-      $(go.Shape, 'RoundedRectangle',
-        new go.Binding('fill', 'color')),
       $(go.TextBlock,
-        {margin:8, editable:true},
-      new go.Binding('text').makeTwoWay())
+        {margin:8, editable:true, stroke: 'black', background: 'yellow'},
+        new go.Binding('text').makeTwoWay())
     )
 
   return palette
@@ -26,8 +24,15 @@ function CircuitPalette() {
       initPalette={initPalette}
       divClassName="palette-component"
       nodeDataArray={[
-				{ key: 0, text: 'Node A', color:'yellow' },
-        { key: 1, text: 'Node B', color:'pink'}
+				{ key: 0, text: 'Meter', type: 'meter' },
+        { key: 1, text: 'Control', type: 'control'},
+        { key: 2, text: 'Generator', type: 'generator'},
+        { key: 3, text: 'Busbar', type: 'busbar'},
+        { key: 4, text: 'Station', type: 'station'},
+        { key: 5, text: 'Storage', type: 'storage'},
+        { key: 6, text: 'Substation', type: 'substation'},
+        { key: 7, text: 'Switch', type: 'switch'},
+        { key: 8, text: 'Transformer', type: 'transformer'},
       ]}/>
   )
 }

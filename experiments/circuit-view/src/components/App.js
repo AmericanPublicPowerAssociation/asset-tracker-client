@@ -2,9 +2,9 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
 import Grid from '@material-ui/core/Grid'
-import TextField from '@material-ui/core/TextField'
 import Circuit from '../containers/Circuit'
 import CircuitPalette from './CircuitPalette'
+import Details from '../containers/Details'
 import '../App.css';
 
 const useStyles = makeStyles(theme => ({
@@ -62,19 +62,8 @@ function App(props) {
           </div>
         </Grid>
         <Grid item xs={3}>
-          <h1>Detail</h1>
-          <TextField
-            label='key'
-            defaultValue="key"
-            margin="normal" />
-          <TextField
-            label='Name'
-            defaultValue="Name"
-            margin="normal" />
-          <TextField
-            label='location'
-            defaultValue="location"
-            margin="normal" />
+          <h1>Node Details</h1>
+          <Details />
         </Grid>
       </Grid>
     </div>

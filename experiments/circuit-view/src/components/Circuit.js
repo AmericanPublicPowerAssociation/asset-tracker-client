@@ -28,18 +28,28 @@ function initDiagram() {
       $(go.Picture,
         {desiredSize: new go.Size(100,100), source: "images/meter.png"},
         new go.Binding('source', 'type', (type) => {
-          if (type === 'meter') {
-            return 'images/meter.png'
-          }
+          type = type.toLowerCase()
+          const path = 'images'
+          let file = 'meter.png'
+          if (type === 'meter') file = 'meter.png'
+          else if (type === 'busbar') file = 'busbar.png'
+          else if (type === 'control') file = 'control.png'
+          else if (type === 'generator') file = 'generator.png'
+          else if (type === 'station') file = 'station.png'
+          else if (type === 'storage') file = 'storage.png'
+          else if (type === 'substation') file = 'storage.png'
+          else if (type === 'switch') file = 'switch.png'
+          else if (type === 'transformer') file = 'transformer.png'
+          return `${path}\\${file}`
         })),
       $(go.Shape, "Rectangle",
-        {desiredSize:new go.Size(6,6), fromSpot: go.Spot.Right, toSpot: go.Spot.Left, toLinkable: true, cursor: "pointer"},
+        {desiredSize:new go.Size(6,6), fromSpot: go.Spot.Right, toSpot: go.Spot.Left, toLinkable: true, cursor: "pointer", fill: 'white'},
         {portId: 'in', alignment: go.Spot.Left}),
       $(go.Shape, "Rectangle",
-        {desiredSize:new go.Size(6,6), fromSpot: go.Spot.Right, toSpot: go.Spot.Left, fromLinkable: true, cursor: "pointer"},
+        {desiredSize:new go.Size(6,6), fromSpot: go.Spot.Right, toSpot: go.Spot.Left, fromLinkable: true, cursor: "pointer", fill: 'white'},
         {portId: 'out', alignment: go.Spot.Right}),
       $(go.TextBlock,
-        {alignment: new go.Spot(0.5,.5), editable: true, margin: 10},
+        {alignment: new go.Spot(.5,1.1), editable: true, margin: 10},
       	new go.Binding('text', 'text').makeTwoWay()),
       { click: function(e, obj) { 
         console.log("Clicked on " + obj.part.data.key) 
@@ -123,7 +133,7 @@ function Circuit(props) {
         const nodeObj = diagram.model.findNodeDataForKey(dataKey)
         if (nodeObj !== null)
           diagram.model.setDataProperty(nodeObj, "color", "white")
-          setFocusedNode(dataKey)
+          setFocusedNode(String(dataKey))
       })
     }
   }, [])
