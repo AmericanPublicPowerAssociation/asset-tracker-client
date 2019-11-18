@@ -19,6 +19,7 @@ const mapStateToProps = state => ({
     showPreviewsInDropzone: true,
     showFileNamesInPreview: true,
     showFileNames: true,
+    dropzoneText: 'Drag and drop a file or click here'
   }
 })
 
