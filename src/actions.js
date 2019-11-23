@@ -2,6 +2,7 @@ import {
   ADD_ASSET,
   ADD_ASSET_RELATION,
   CHANGE_ASSET,
+  UPDATE_SHAPE,
   CLOSE_ASSETS_UPLOAD_DIALOG,
   CLOSE_ASSET_ADD_DIALOG,
   CLOSE_INFORMATION_DRAWER,
@@ -80,7 +81,8 @@ export const addAsset = payload => ({
   payload, type: ADD_ASSET})
 export const changeAsset = payload => ({
   payload, type: CHANGE_ASSET})
-
+export const updateShape = payload => ({
+  payload, type: UPDATE_SHAPE})
 
 export const refreshAssetTasks = payload => ({
   payload, type: REFRESH_ASSET_TASKS})

@@ -12,7 +12,10 @@ import AssetName from './AssetName'
 import AssetTasks from './AssetTasks'
 import AssetLocation from '../containers/AssetLocation'
 import AssetRelationChips from '../containers/AssetRelationChips'
-
+import Button from '@material-ui/core/Button'
+import FormLabel from "@material-ui/core/FormLabel"
+import Link from "@material-ui/core/Link"
+import FormControl from "@material-ui/core/FormControl"
 
 const useStyles = makeStyles(theme => ({
   singleSpacing: {
@@ -39,6 +42,7 @@ export default function AssetDetail(props) {
     openTaskEditDialog,
     setEditingTaskValues,
     taskById,
+    updateShape,
   } = props
 
   function trackChanges(attributes) {
@@ -53,6 +57,13 @@ export default function AssetDetail(props) {
     changeAsset({id, ...attributes})
   }
 
+  function saveShape(event) {
+    let { focusingAsset, changeAsset } = props
+    const id = focusingAsset.get('id')
+    if (event.target.files.length > 0)
+      updateShape({id, file: event.target.files[0]})
+  }
+
   const id = focusingAsset.get('id')
 
   useEffect(() => {
@@ -65,6 +76,7 @@ export default function AssetDetail(props) {
 
   const typeId = focusingAsset.get('typeId')
   const name = focusingAsset.get('name')
+  const shape = focusingAsset.get('shape')
 
   const vendorName = focusingAsset.get('vendorName', null)
   const productName = focusingAsset.get('productName', null)
@@ -181,6 +193,19 @@ export default function AssetDetail(props) {
           assetKey='childIds'
           relatedAssets={childAssets}
         />
+        <FormControl fullWidth className={classes.singleSpacing}>
+          <FormLabel>Load shape</FormLabel>
+          {shape ? <Link href={`/assets/${id}/shape.csv`} >
+            shapefile.csv
+          </Link> : <></>}
+          <div>
+            <Button variant="contained"
+                    containerElement='label' // <-- Just add me!
+                    label='My Label'>
+              <input type="file" onChange={saveShape} />
+            </Button>
+          </div>
+        </FormControl>
       </div>
 
     </>
