@@ -50,6 +50,7 @@ import {
   SET_FOCUSING_ASSET,
   SET_LOCATING_ASSET,
   SET_SELECTED_ASSET,
+  DESELECT_EVERYTHING,
   SET_MAP_VIEWPORT,
   SET_BASE_MAP_STYLE_NAME,
   SET_RELATING_ASSET,
@@ -172,6 +173,10 @@ export const toggleSelectedAsset = payload => ({
   payload, type: TOGGLE_SELECTED_ASSET})
 export const setSelectedAsset = payload => ({
   payload, type: SET_SELECTED_ASSET})
+
+
+export const deselectEverything = payload => ({
+  payload, type: DESELECT_EVERYTHING})
 
 
 export const openAssetAddDialog = payload => ({

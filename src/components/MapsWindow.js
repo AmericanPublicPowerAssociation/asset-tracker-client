@@ -62,6 +62,7 @@ class MapsWindow extends PureComponent {
       setAssetsFilterValues,
       setAssetsFilterKeys,
       toggleAssetsFilterKey,
+      deselectEverything,
       filterByProximitySwitch,
       setAssetsFilterProximity,
     } = this.props
@@ -81,8 +82,9 @@ class MapsWindow extends PureComponent {
                 countByAssetTypeId={assetCountByAssetTypeId}
                 setAssetsFilterValues={setAssetsFilterValues}
                 setAssetsFilterKeys={setAssetsFilterKeys}
-                setAssetsFilterProximity={setAssetsFilterProximity}
                 toggleAssetsFilterKey={toggleAssetsFilterKey}
+                deselectEverything={deselectEverything}
+                setAssetsFilterProximity={setAssetsFilterProximity}
                 filterByProximitySwitch={filterByProximitySwitch}/>
             </div>
             <div className={classes.listPanel}>

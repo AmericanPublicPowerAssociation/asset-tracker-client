@@ -17,6 +17,10 @@ const styles = theme => ({
   nameInput: {
     padding: 0,
   },
+  deselectLink: {
+    color: '#f50057',
+    cursor: 'pointer',
+  }
 })
 
 
@@ -37,6 +41,7 @@ class AssetsFilter extends PureComponent {
       assetTypeById,
       countByAssetTypeId,
       toggleAssetsFilterKey,
+      deselectEverything,
       filterByProximitySwitch,
       setAssetsFilterProximity,
     } = this.props
@@ -47,6 +52,20 @@ class AssetsFilter extends PureComponent {
     return (
       <Paper className={classes.root} elevation={0} square>
         <List>
+        { deselectEverything &&
+          <ListItem>
+            <a
+              className={classes.deselectLink}
+              onClick={
+              (e) => {
+                e.preventDefault()
+                deselectEverything()
+              }
+            }>
+              Deselect All
+            </a>
+          </ListItem>
+        }
           <ListItem>
             <InputBase
               value={name}

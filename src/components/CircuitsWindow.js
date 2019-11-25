@@ -61,6 +61,7 @@ export default function CircuitsWindow(props) {
       setAssetsFilterValues,
       setAssetsFilterKeys,
       toggleAssetsFilterKey,
+      deselectEverything,
     } = props
 
   return (
@@ -78,7 +79,8 @@ export default function CircuitsWindow(props) {
               countByAssetTypeId={assetCountByAssetTypeId}
               setAssetsFilterValues={setAssetsFilterValues}
               setAssetsFilterKeys={setAssetsFilterKeys}
-              toggleAssetsFilterKey={toggleAssetsFilterKey} />
+              toggleAssetsFilterKey={toggleAssetsFilterKey}
+              deselectEverything={deselectEverything}/>
           </div>
           <div className={classes.listPanel}>
             <AssetList />
