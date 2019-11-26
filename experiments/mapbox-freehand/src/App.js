@@ -12,25 +12,11 @@ const MODES = [
 ];
 
 const DEFAULT_VIEWPORT = {
-  width: '100%',
+  width: '80%',
   height: '100vh',
   longitude: -91.874,
   latitude: 42.76,
   zoom: 12
-}
-
-class MyMapController extends MapController {
-  constructor() {
-    super()
-    this.events = ['keydown', 'keyup', ]
-  }
-
-  handleEvent(event) {
-    if (event.type == 'keydown'){
-    console.log(event)
-    }
-    return super.handleEvent(event)
-  }
 }
 
 
@@ -39,27 +25,57 @@ function App(props) {
   const [selectedMode, setSelectedMode] = useState(EditorModes.READ_ONLY)
   const [viewport, setViewport] = useState(DEFAULT_VIEWPORT)
 
+  class MyMapController extends MapController {
+    constructor() {
+      super()
+      this.events = ['keydown', 'keyup', ]
+      this.keyPressed = {}
+    }
+
+    _onKeyDown(event) {
+      super._onKeyDown(event)
+      if (this.keyPressed['Shift']) {
+        if (event.key === 'X')
+          setSelectedMode(EditorModes.READ_ONLY)
+        else if (event.key === 'Q')
+          setSelectedMode(EditorModes.EDITING)
+        else if (event.key === 'A')
+          setSelectedMode(EditorModes.DRAW_POINT)
+        else if (event.key === 'W') 
+          setSelectedMode(EditorModes.DRAW_PATH)
+        else if (event.key === 'S')
+          setSelectedMode(EditorModes.DRAW_POLYGON)
+        else if (event.key === 'E')
+          setSelectedMode(EditorModes.DRAW_RECTANGLE)
+      }
+      else {
+        this.keyPressed[event.key] = true
+      }
+      event.preventDefault()
+    }
+
+    handleEvent(event) {
+      console.log(event.key)
+      if (event.type === 'keyup') {
+        this.keyPressed[event.key] = false
+      }
+      return super.handleEvent(event)
+    }
+  }
+
 	useLayoutEffect( () => {
-		console.log(editorRef.current)	
+    //console.log(editorRef.current)	
 	})
 
   const onViewportChange = (newViewport) => {
     const {width, height, zoom, longitude, latitude} = newViewport
     setViewport( (prevState) => {
-      /*return {
-        ...prevState,
-        width,
-        height,
-        zoom,
-        longitude,
-        latitude
-      }*/
       return newViewport
     })
   }
 
   const onEditorUpdate = (featureObj) => {	
-    console.log(featureObj)
+    //console.log(featureObj)
   }
 
   const renderToolbar = () => {
@@ -81,6 +97,7 @@ function App(props) {
   }
 
   const getFeatureStyle = (featureObj) => {
+    console.log(featureObj)
 		switch (featureObj.state) {
 			case RenderStates.SELECTED:
 			case RenderStates.HOVERED:
@@ -93,7 +110,25 @@ function App(props) {
 					fillOpacity: 0.3,
 					strokeDasharray: '4,2'
 				}
-
+      
+      case RenderStates.INACTIVE: {
+        if (featureObj.feature.geometry.type === 'LineString'){
+          return {
+            stroke: 'rgb(60, 178, 208)',
+            strokeWidth: 2,
+            fill: 'rgb(60, 178, 208)',
+            fillOpacity: 0
+          }
+        }
+        else {
+          return {
+					stroke: 'rgb(60, 178, 208)',
+					strokeWidth: 2,
+					fill: 'rgb(60, 178, 208)',
+					fillOpacity: 0.1
+				  }
+        }
+      }
 			default:
 				return {
 					stroke: 'rgb(60, 178, 208)',
@@ -109,6 +144,8 @@ function App(props) {
 	}
 
   return (
+    <div>
+      <h1>Current Draw Mode: {selectedMode}</h1>
     <ReactMapGL
       longitude={viewport['longitude']}
       latitude={viewport['latitude']}
@@ -120,17 +157,16 @@ function App(props) {
       controller={new MyMapController()}>
       <Editor
         ref={editorRef}
-        style={{width:'100%', height: '100vh'}}
         clickRadius={12}
         mode={selectedMode}
         onSelect={ (e) => { console.log(e)}}
         onUpdate={ (e) => { console.log(e)}}
         featureStyle={getFeatureStyle}
-				editHandleStyle={getEditHandleStyle}
         featureShape='rect'
         editHandleShape='circle'/>
       { renderToolbar() }
     </ReactMapGL>
+    </div>
   )
 }
 
