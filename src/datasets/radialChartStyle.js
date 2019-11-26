@@ -106,7 +106,7 @@ export const radialSemiCircle = {
       endAngle: 120,
       track: {
         background: "#e7e7e7",
-        strokeWidth: '97%',
+        strokeWidth: '98%',
         margin: 5, // margin is in pixels
         shadow: {
           enabled: true,
@@ -134,11 +134,23 @@ export const radialSemiCircle = {
       }
     }
   },
+  fill: {
+    type: 'gradient',
+    gradient: {
+      shade: 'dark',
+      type: 'horizontal',
+      shadeIntensity: 0.5,
+      gradientToColors: ['#d24848'],
+      inverseColors: true,
+      opacityFrom: 1,
+      opacityTo: 1,
+      stops: [0, 100]
+    }
+  },
   colors: ["#1937f0","#f0cc18","#f02f1a"],
   responsive: [{
     breakpoint: 1200,
     options: {
-
       title: {
         align:"center"
       },

@@ -14,6 +14,7 @@ import TableHead from '@material-ui/core/TableHead'
 import TableBody from '@material-ui/core/TableBody'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
+import BarChart from "./BarChart";
 
 
 const useStyles = makeStyles(theme => ({
@@ -37,13 +38,19 @@ const useStyles = makeStyles(theme => ({
 
 export default function DashboardsWindow(props) {
   const classes = useStyles()
-  const { dashboards, refreshDashboards } = props
+  const { dashboards, refreshDashboards, risks } = props
 
   const tasksSummary = dashboards.get('tasks')
   const assetsSummary = dashboards.get('assets')
   const risksSummary = dashboards.get('risks')
   const logsSummary = dashboards.get('logs')
-
+  var charData = {series: [], categories:[]}
+  const dataChart = [
+    dashboards.getIn(['risks','riskCount']),
+    dashboards.getIn(['risks','impactedAssetCount'])
+  ];
+  charData.categories = ['Risks','Impacted Asset']
+  charData.series.push({data: dataChart })
   useEffect(() => {
     refreshDashboards()
   }, [refreshDashboards])
@@ -129,7 +136,15 @@ export default function DashboardsWindow(props) {
       <Grid item xs={6}>
 
       {risksSummary &&
-        <RisksCard to='/risks' values={risksSummary} />
+          <>
+            <Card className={classes.card} padding={4}>
+              <Typography className={classes.title} align='center'>
+                Risks
+              </Typography>
+              <BarChart data={charData} type="column" title="Risks"/>
+            </Card>
+            <RisksCard to='/risks' values={risksSummary} />
+          </>
       }
 
       {logsSummary &&
