@@ -1,0 +1,8 @@
+export const ASSET_POLE = 'ASSET_POLE'
+export const ASSET_LINE = 'ASSET_LINE'
+export const ASSET_METER = 'ASSET_METER'
+export const ASSET_TRANSFORMER = 'ASSET_TRANSFORMER'
+export const ASSET_SWITCH = 'ASSET_SWITCH'
+export const ASSET_CONTROL = 'ASSET_CONTROL'
+export const ASSET_SUBSTATION = 'ASSET_SUBSTATION'
+export const ASSET_OTHER = 'ASSET_OTHER'
