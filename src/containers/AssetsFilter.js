@@ -9,7 +9,7 @@ import {
   getAssetsFilterKeysByAttribute,
   getAssetsFilterValueByAttribute,
   getAssetTypeById,
-  getCountByAssetTypeId,
+  //getCountByAssetTypeId,
 } from '../selectors'
 
 
@@ -17,7 +17,7 @@ const mapStateToProps = state => ({
   assetFilterValueByAttribute: getAssetsFilterValueByAttribute(state),
   assetFilterKeysByAttribute: getAssetsFilterKeysByAttribute(state),
   assetTypeById: getAssetTypeById(state),
-  countByAssetTypeId: getCountByAssetTypeId(state),
+  //countByAssetTypeId: getCountByAssetTypeId(state),
 })
 
 

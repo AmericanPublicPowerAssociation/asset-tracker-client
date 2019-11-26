@@ -1,5 +1,6 @@
 import {
   SET_FOCUSING_ASSET,
+  DESELECT_EVERYTHING,
 } from '../constants'
 
 
@@ -12,7 +13,9 @@ const focusingAssetId = (state = initialState, action) => {
       const {id} = action.payload
       return id
     }
-    
+    case DESELECT_EVERYTHING: {
+      return initialState
+    }
     default: {
       return state
     }

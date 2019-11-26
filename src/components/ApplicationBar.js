@@ -80,6 +80,7 @@ export default function ApplicationBar(props) {
     openAssetAddDialog,
     openAssetsUploadDialog,
     downloadAssetsUploadDialog,
+    downloadDSSAssets,
     setFocusingAsset,
     setLocatingAsset,
     setRelatingAsset,
@@ -144,6 +145,14 @@ export default function ApplicationBar(props) {
       ><DownloadIcon /> </IconButton>
     </Tooltip>
 
+  const downloadAssetsDSS = isUserMember && !editingAssetId &&
+      <Tooltip title='Download DSS Script' enterDelay={TOOLTIP_DELAY}>
+        <IconButton aria-label='Download DSS Script' color='inherit'
+          onClick={() => { downloadDSSAssets() }}
+        ><DownloadIcon /> </IconButton>
+      </Tooltip>
+
+
   const assetButtonGroup =
     <>
       {editingAssetOpenButton}
@@ -151,6 +160,7 @@ export default function ApplicationBar(props) {
       {assetAddButton}
       {uploadAssetsCSV}
       {downloadAssetsCSV}
+      {downloadAssetsDSS}
     </>
 
   return (

@@ -8,6 +8,7 @@ import {
   openNavigationDrawer,
   openAssetsUploadDialog,
   downloadAssetsUploadDialog,
+  downloadAssetsDss,
   setFocusingAsset,
   setLocatingAsset,
   setRelatingAsset,
@@ -42,6 +43,8 @@ const mapDispatchToProps = dispatch => ({
     openAssetsUploadDialog(payload))},
   downloadAssetsUploadDialog: payload => {dispatch(
     downloadAssetsUploadDialog(payload))},
+  downloadDSSAssets: payload => {dispatch(
+    downloadAssetsDss(payload))},
   setFocusingAsset: payload => {dispatch(
     setFocusingAsset(payload))},
   setLocatingAsset: payload => {dispatch(

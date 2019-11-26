@@ -9,6 +9,7 @@ import {
   productVersionSuggestions,
   vendorNameSuggestions,
   risks,
+  sortedRisks,
 } from 'asset-report-risks'
 import app from './app'
 import sortedAssetIds from './sortedAssetIds'
@@ -17,6 +18,7 @@ import assetById from './assetById'
 import focusingAssetId from './focusingAssetId'
 import relatingAssetId from './relatingAssetId'
 import relatingAssetKey from './relatingAssetKey'
+import assetFilterByProximity from './assetFilterByProximity'
 import assetFilterKeysByAttribute from './assetFilterKeysByAttribute'
 import assetFilterValueByAttribute from './assetFilterValueByAttribute'
 import addingAsset from './addingAsset'
@@ -29,13 +31,13 @@ import selectedAssetIds from './selectedAssetIds'
 import logs from './logs'
 import taskById from './taskById'
 import dashboards from './dashboards'
+import { DEFAULT_MAP_W_H} from './mapViewport'
 import {
   MAP_PADDING,
   RESET_ASSETS_KIT,
   SET_FOCUSING_ASSET,
 } from '../constants'
 import { getMapViewport } from '../selectors'
-
 
 
 const reduceHorizontally = combineReducers({
@@ -50,6 +52,7 @@ const reduceHorizontally = combineReducers({
   relatingAssetKey,
   addingAsset,
   editingTask,
+  assetFilterByProximity,
   assetFilterValueByAttribute,
   assetFilterKeysByAttribute,
   trackingAsset: (state = {}) => state,
@@ -57,6 +60,7 @@ const reduceHorizontally = combineReducers({
   productNameSuggestions,
   productVersionSuggestions,
   risks,
+  sortedRisks,
   mapViewport,
   baseMapStyleName,
   locatingAssetId,
@@ -75,6 +79,17 @@ const reduceVertically = (state, action) => {
         return state
       }
       const mapViewport = state.get('mapViewport').toJS()
+      const resetMapViewport = mapViewport['reset']
+      // prevent reset mapviewport
+      const mapNotLoaded = (
+        mapViewport['width'] === DEFAULT_MAP_W_H &&
+        mapViewport['height'] === DEFAULT_MAP_W_H
+      )
+      if (!resetMapViewport || mapNotLoaded){
+        return state.setIn(
+          ['mapViewport', 'bounds'],
+          action.payload.get('boundingBox'))
+      }
       const {
         longitude,
         latitude,
@@ -87,9 +102,12 @@ const reduceVertically = (state, action) => {
           longitude,
           latitude,
           zoom,
-          bounds: action.payload.get('boundingBox')
+          bounds: action.payload.get('boundingBox'),
+          reset: false
         },
-      })
+      }).setIn(
+        ['mapViewport', 'bounds'],
+        action.payload.get('boundingBox'))
     }
     case SET_FOCUSING_ASSET: {
       const mergingPatch = {}
@@ -108,20 +126,20 @@ const reduceVertically = (state, action) => {
       const bounds = getMapViewport(state).get('bounds') 
 
       // show focusingAsset and selectedAssets on mapViewport
-      const computeBounds = selectedAssetIds.add(focusingAssetId).reduce( (bounds, currentId) => {
+      const computeBounds = selectedAssetIds.add(focusingAssetId).reduce( (newBounds, currentId) => {
         if (!currentId) {
-          return bounds
+          return newBounds
         }
         const location = assetById.get(currentId).get('location')
         if (location) {
           const curLon= location.get(0)
           const curLat = location.get(1)
-          if (bounds[0][0] > curLon) { bounds[0][0] = curLon }
-          if (bounds[0][1] > curLat) { bounds[0][1] = curLat }
-          if (bounds[1][0] < curLon) { bounds[1][0] = curLon }
-          if (bounds[1][1] < curLat) { bounds[1][1] = curLat }
+          if (newBounds[0][0] > curLon) { newBounds[0][0] = curLon }
+          if (newBounds[0][1] > curLat) { newBounds[0][1] = curLat }
+          if (newBounds[1][0] < curLon) { newBounds[1][0] = curLon }
+          if (newBounds[1][1] < curLat) { newBounds[1][1] = curLat }
         }
-        return bounds
+        return newBounds
       }, [[Infinity, Infinity], [-Infinity, -Infinity]] )
 
       if (computeBounds[0][0] !== computeBounds[1][0] &&

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import AssetsMap from '../containers/AssetsMap'
-import AssetsFilter from '../containers/AssetsFilter'
+import AssetsFilter from '../components/AssetsFilter'
 import AssetList from '../containers/AssetList'
 
 
@@ -54,6 +54,17 @@ class MapsWindow extends PureComponent {
   render() {
     const {
       classes,
+      assetFilterByProximity,
+      assetFilterValueByAttribute,
+      assetFilterKeysByAttribute,
+      assetTypeById,
+      assetCountByAssetTypeId,
+      setAssetsFilterValues,
+      setAssetsFilterKeys,
+      toggleAssetsFilterKey,
+      deselectEverything,
+      filterByProximitySwitch,
+      setAssetsFilterProximity,
     } = this.props
     return (
       <Grid container className={classes.grid}>
@@ -63,7 +74,18 @@ class MapsWindow extends PureComponent {
         <Grid item xs={12} sm={12} md={3} className={classes.tableFrame}>
           <div className={classes.frame}>
             <div className={classes.filterPanel}>
-              <AssetsFilter />
+              <AssetsFilter 
+                assetFilterByProximity={assetFilterByProximity}
+                assetFilterValueByAttribute={assetFilterValueByAttribute}
+                assetFilterKeysByAttribute={assetFilterKeysByAttribute}
+                assetTypeById={assetTypeById}
+                countByAssetTypeId={assetCountByAssetTypeId}
+                setAssetsFilterValues={setAssetsFilterValues}
+                setAssetsFilterKeys={setAssetsFilterKeys}
+                toggleAssetsFilterKey={toggleAssetsFilterKey}
+                deselectEverything={deselectEverything}
+                setAssetsFilterProximity={setAssetsFilterProximity}
+                filterByProximitySwitch={filterByProximitySwitch}/>
             </div>
             <div className={classes.listPanel}>
               <AssetList />

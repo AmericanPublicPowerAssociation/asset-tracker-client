@@ -8,6 +8,7 @@ import {
   CLOSE_NAVIGATION_DRAWER,
   CLOSE_TASK_EDIT_DIALOG,
   DOWNLOAD_ASSETS_CSV,
+  DOWNLOAD_ASSETS_DSS,
   DROP_ASSET_RELATION,
   EDIT_TASK,
   EXCLUDE_ASSET_FILTER_KEY,
@@ -42,12 +43,14 @@ import {
   SET_ASSET_ERRORS,
   SET_ASSET_FILTER_KEYS,
   SET_ASSET_FILTER_VALUES,
+  SET_ASSET_FILTER_PROXIMITY,
   SET_ASSET_LOCATION,
   SET_EDITING_TASK_ERRORS,
   SET_EDITING_TASK_VALUES,
   SET_FOCUSING_ASSET,
   SET_LOCATING_ASSET,
   SET_SELECTED_ASSET,
+  DESELECT_EVERYTHING,
   SET_MAP_VIEWPORT,
   SET_BASE_MAP_STYLE_NAME,
   SET_RELATING_ASSET,
@@ -57,6 +60,7 @@ import {
   TOGGLE_SELECTED_ASSET,
   TOGGLE_THEME,
   UPLOAD_ASSETS_CSV,
+  SET_OVERWRITE_ASSETS,
 } from './constants'
 
 
@@ -146,6 +150,9 @@ export const setAssetsFilterValues = payload => ({
   payload, type: SET_ASSET_FILTER_VALUES})
 
 
+export const setAssetsFilterProximity = payload => ({
+  payload, type: SET_ASSET_FILTER_PROXIMITY})
+
 export const excludeAssetsFilterKey = payload => ({
   payload, type: EXCLUDE_ASSET_FILTER_KEY})
 export const includeAssetsFilterKey = payload => ({
@@ -166,6 +173,10 @@ export const toggleSelectedAsset = payload => ({
   payload, type: TOGGLE_SELECTED_ASSET})
 export const setSelectedAsset = payload => ({
   payload, type: SET_SELECTED_ASSET})
+
+
+export const deselectEverything = payload => ({
+  payload, type: DESELECT_EVERYTHING})
 
 
 export const openAssetAddDialog = payload => ({
@@ -196,8 +207,12 @@ export const uploadAssetsCsv = payload => ({
   payload, type: UPLOAD_ASSETS_CSV})
 export const downloadAssetsUploadDialog = payload => ({
   payload, type: DOWNLOAD_ASSETS_CSV})
+export const downloadAssetsDss = payload => ({
+  payload, type: DOWNLOAD_ASSETS_DSS})
 export const setAssetCSVFile = payload => ({
   payload, type: SET_ASSET_CSV_FILE})
+export const setOverwriteRecords = payload => ({
+  payload, type: SET_OVERWRITE_ASSETS})
 export const setAddingAssetCSVFileErrors = payload => ({
   payload, type: SET_ADDING_CSV_ASSETS_ERRORS})
 export const hideAddingAssetCSVFileErrors = payload => ({

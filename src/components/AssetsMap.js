@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { fromJS } from 'immutable'
-import ReactMapGL, { NavigationControl, FlyToInterpolator } from 'react-map-gl'
+import ReactMapGL, { GeolocateControl, NavigationControl, FlyToInterpolator } from 'react-map-gl'
 import { withStyles } from '@material-ui/core/styles'
 import AssetMapMarker from './AssetMapMarker'
 import SelectedAssetMapMarker from './SelectedAssetMapMarker'
@@ -23,6 +23,13 @@ const styles = theme => ({
   },
 })
 
+const buttonStyle = {
+  'width': '30px',
+  'borderRadius': '5px',
+  'marginTop': '5px',
+  'background': 'white'
+}
+
 
 class AssetsMap extends PureComponent {
 
@@ -36,10 +43,10 @@ class AssetsMap extends PureComponent {
   }
 
   updateViewport = viewport => {
-    const bounds = this.map !== undefined ? fromJS(this.map.getBounds().toArray()) :  undefined
+    const { mapViewport, setMapViewport } = this.props
     const {
-      longitude,
       latitude,
+      longitude,
       zoom,
       pitch,
       bearing,
@@ -47,9 +54,9 @@ class AssetsMap extends PureComponent {
       width,
       height,
     } = viewport
-    const {
-      setMapViewport,
-    } = this.props
+    // first time it loads it will get the bounds that contains all assets
+    const bounds = this.map !== undefined ? fromJS(this.map.getBounds().toArray()) : mapViewport.get('bounds')
+
     setMapViewport({
       longitude,
       latitude,
@@ -159,7 +166,12 @@ class AssetsMap extends PureComponent {
         />
         <div className={classes.mapToolbar}>
           <NavigationControl onViewportChange={this.updateViewport} />
+          <GeolocateControl
+            style={buttonStyle}
+            positionOptions={{enableHighAccuracy: true}}
+            trackUserLocation={true} />
           <MapStyleSwitch
+            style={buttonStyle}
             curBaseMapStyleName={baseMapStyleName}
             nextBaseMapStyleName={nextBaseMapStyleName}
             setBaseMapStyleName={setBaseMapStyleName} />

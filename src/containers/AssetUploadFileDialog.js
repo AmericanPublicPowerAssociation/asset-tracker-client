@@ -3,6 +3,7 @@ import {
   closeAssetsUploadDialog,
   uploadAssetsCsv,
   setAssetCSVFile,
+  setOverwriteRecords,
 } from '../actions'
 import {
   getAddingAsset,
@@ -18,6 +19,7 @@ const mapStateToProps = state => ({
     showPreviewsInDropzone: true,
     showFileNamesInPreview: true,
     showFileNames: true,
+    dropzoneText: 'Drag and drop a file or click here'
   }
 })
 
@@ -27,9 +29,11 @@ const mapDispatchToProps = dispatch => ({
     closeAssetsUploadDialog(payload))},
   onSave: payload => {dispatch(
     uploadAssetsCsv(payload))},
-  setAssetCSVFile: payload => {
-    dispatch(
+  setAssetCSVFile: payload => {dispatch(
     setAssetCSVFile(payload))
+  },
+  setOverwriteRecords: payload => {dispatch(
+    setOverwriteRecords(payload.target.checked))
   },
 })
 

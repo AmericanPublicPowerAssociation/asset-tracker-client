@@ -5,6 +5,7 @@ import {
   SELECTED_ASSET_TYPE_IDS,
   SET_ASSET_FILTER_KEYS,
   TOGGLE_ASSET_FILTER_KEY,
+  DESELECT_EVERYTHING,
 } from '../constants'
 
 
@@ -44,6 +45,12 @@ const assetFilterKeysByAttribute = (state = initialState, action) => {
             set.add(value))
         })
       })
+    }
+    case DESELECT_EVERYTHING: {
+      return Map({
+        typeId: Set([]),
+      })
+
     }
     default: {
       return state

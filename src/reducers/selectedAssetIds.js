@@ -2,6 +2,7 @@ import { Set } from 'immutable'
 import {
   SET_SELECTED_ASSET,
   TOGGLE_SELECTED_ASSET,
+  DESELECT_EVERYTHING,
 } from '../constants'
 
 
@@ -16,11 +17,13 @@ const selectedAssetIds = (state = initialState, action) => {
         set.delete(value) :
         set.add(value ))
     }
-
     case SET_SELECTED_ASSET: {
       const {ids} = action.payload
       return Set(ids)
     } 
+    case DESELECT_EVERYTHING: {
+      return initialState
+    }
     default: {
       return state
     }

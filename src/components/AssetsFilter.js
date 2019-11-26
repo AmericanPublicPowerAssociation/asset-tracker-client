@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react'
 import { withStyles } from '@material-ui/core/styles'
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch'
 import Paper from '@material-ui/core/Paper'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -15,6 +17,10 @@ const styles = theme => ({
   nameInput: {
     padding: 0,
   },
+  deselectLink: {
+    color: '#f50057',
+    cursor: 'pointer',
+  }
 })
 
 
@@ -29,11 +35,15 @@ class AssetsFilter extends PureComponent {
     const {
       classes,
       // Get redux variables
+      assetFilterByProximity,
       assetFilterValueByAttribute,
       assetFilterKeysByAttribute,
       assetTypeById,
       countByAssetTypeId,
       toggleAssetsFilterKey,
+      deselectEverything,
+      filterByProximitySwitch,
+      setAssetsFilterProximity,
     } = this.props
     const name = assetFilterValueByAttribute.get('name')
     const selectedAssetTypeIds = assetFilterKeysByAttribute.get('typeId')
@@ -42,6 +52,20 @@ class AssetsFilter extends PureComponent {
     return (
       <Paper className={classes.root} elevation={0} square>
         <List>
+        { deselectEverything &&
+          <ListItem>
+            <a
+              className={classes.deselectLink}
+              onClick={
+              (e) => {
+                e.preventDefault()
+                deselectEverything()
+              }
+            }>
+              Deselect All
+            </a>
+          </ListItem>
+        }
           <ListItem>
             <InputBase
               value={name}
@@ -52,6 +76,17 @@ class AssetsFilter extends PureComponent {
           </ListItem>
         {!countByAssetTypeId.isEmpty() &&
         <>
+          { filterByProximitySwitch &&
+            <ListItem>
+              <FormControlLabel 
+                control = {
+                  <Switch
+                    checked={assetFilterByProximity}
+                    onChange={()=>{setAssetsFilterProximity(assetFilterByProximity)}}
+                    value="checkedA" />}
+                label="Filter by Proximity" />
+            </ListItem>
+          }
           <ListItem>
             <ListItemText primary='Filter by Type' />
           </ListItem>
