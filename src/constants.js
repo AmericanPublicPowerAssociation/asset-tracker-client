@@ -24,6 +24,7 @@ export const REFRESH_TASKS = 'REFRESH_TASKS'
 export const REFRESH_ASSET_TASKS = 'REFRESH_ASSET_TASKS'
 export const ADD_ASSET = 'ADD_ASSET'
 export const CHANGE_ASSET = 'CHANGE_ASSET'
+export const UPDATE_SHAPE = 'UPDATE_SHAPE'
 
 export const EDIT_TASK = 'EDIT_TASK'
 export const SET_TASK = 'SET_TASK'

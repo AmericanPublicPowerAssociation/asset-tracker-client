@@ -48,7 +48,7 @@ import {
   REFRESH_LOGS,
   REFRESH_TASKS,
   UPLOAD_ASSETS_CSV,
-  DOWNLOAD_ASSETS_DSS,
+  DOWNLOAD_ASSETS_DSS, UPDATE_SHAPE,
 } from './constants'
 import {
   fetchSafely,
@@ -171,6 +171,25 @@ function* watchEditTask() {
   })
 }
 
+function* watchUpdateShapeFile() {
+  yield takeEvery(UPDATE_SHAPE, function* (action) {
+    var data = new FormData();
+    data.append('file', action.payload.file);
+    yield fetchSafely(`/assets/${action.payload.id}/shape.csv`, {
+      method: 'POST',
+      body: data,
+    }, {
+      on200: function* (asset) {
+        yield put(refreshAssetsKit())
+        alert('Shape file updated')
+      },
+      on400: function* (errors) {
+        alert('The new shape file could not be saved')
+      },
+    })
+  })
+}
+
 
 function* watchUploadAssetsCsv() {
     yield takeEvery(UPLOAD_ASSETS_CSV, function* (action) {
@@ -278,6 +297,7 @@ export default function* () {
     watchAddAsset(),
     watchEditTask(),
     watchUploadAssetsCsv(),
+    watchUpdateShapeFile(),
     watchDownloadAssetsCsv(),
     watchDownloadAssetsDss(),
     watchChangeAsset(),
