@@ -6,14 +6,18 @@ import { StaticMap } from 'react-map-gl'
 import IconButton from '@material-ui/core/IconButton'
 import Tooltip from '@material-ui/core/Tooltip'
 import Paper from '@material-ui/core/Paper'
+
+import RadioGroup from '@material-ui/core/RadioGroup'
+import Radio from '@material-ui/core/Radio'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import CloseIcon from '@material-ui/icons/Close'
+
 import UserIcon from '@material-ui/icons/AccountCircle'
 import SignOutIcon from '@material-ui/icons/LockOpen'
-import LayersIcon from '@material-ui/icons/Layers'
-import FiltersIcon from '@material-ui/icons/FilterList'
 import RowsIcon from '@material-ui/icons/ViewList'
 import DetailsIcon from '@material-ui/icons/Visibility'
 
-const TOOLTIP_DELAY_IN_MILLISECONDS = 500
+const TOOLTIP_DELAY = 500
 
 const useStyles = makeStyles(theme => ({
   usersWindow: {
@@ -33,16 +37,6 @@ const useStyles = makeStyles(theme => ({
     top: theme.spacing(8),
     left: theme.spacing(1),
     width: theme.spacing(20),
-    height: theme.spacing(20),
-    padding: theme.spacing(1),
-    zIndex: 1,
-  },
-  filtersWindow: {
-    position: 'fixed',
-    top: theme.spacing(32),
-    left: theme.spacing(1),
-    width: theme.spacing(20),
-    height: theme.spacing(30),
     padding: theme.spacing(1),
     zIndex: 1,
   },
@@ -50,7 +44,7 @@ const useStyles = makeStyles(theme => ({
     position: 'fixed',
     left: theme.spacing(1),
     bottom: theme.spacing(4),
-    right: theme.spacing(44),
+    right: theme.spacing(34),
     height: theme.spacing(30),
     padding: theme.spacing(1),
     zIndex: 1,
@@ -61,83 +55,110 @@ const useStyles = makeStyles(theme => ({
     bottom: theme.spacing(4),
     right: theme.spacing(1),
     padding: theme.spacing(1),
-    width: theme.spacing(40),
+    width: theme.spacing(30),
     zIndex: 1,
   },
+  closeButton: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    margin: theme.spacing(1),
+    cursor: 'pointer',
+  },
 }))
+
+
+const userName = 'Alex Hofmann'
+const initialGeojson = {
+  type: 'FeatureCollection',
+  features: [],
+}
+const initialViewState = {
+  longitude: -73.897052,
+  latitude: 40.780474,
+  zoom: 15,
+}
 
 
 function App() {
   const classes = useStyles()
 
-  const [geojson, setGeojson] = useState({
-    type: 'FeatureCollection',
-    features: [],
-  }) 
-  const [viewState, setViewState] = useState({
-    longitude: -73.897052,
-    latitude: 40.780474,
-    zoom: 15,
-  })
+  const [withRows, setWithRows] = useState(true)
+  const [withDetails, setWithDetails] = useState(true)
+  // const [geojson, setGeojson] = useState(initialGeojson)
+  // const [viewState, setViewState] = useState(initialViewState)
   // const [drawMode, setDrawMode] = useState('')
 
   const layers = []
   layers.push(new EditableGeoJsonLayer({
     id: 'editable-geojson-layer',
-    data: geojson,
+    data: initialGeojson,
   }))
   return (
     <>
-      <DeckGL viewState={viewState} layers={layers}>
+
+      <DeckGL viewState={initialViewState} layers={layers}>
         <StaticMap mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN} />
       </DeckGL>
+
       <div className={classes.usersWindow}>
-        <IconButton>
-          <UserIcon />
-        </IconButton>
-        <IconButton>
-          <SignOutIcon />
-        </IconButton>
+        <Tooltip title={userName} enterDelay={TOOLTIP_DELAY}>
+          <IconButton>
+            <UserIcon />
+          </IconButton>
+        </Tooltip>
+
+        <Tooltip title='Sign Out' enterDelay={TOOLTIP_DELAY}>
+          <IconButton>
+            <SignOutIcon />
+          </IconButton>
+        </Tooltip>
       </div>
+
       <div className={classes.optionsWindow}>
-        <Tooltip title='Layers' enterDelay={TOOLTIP_DELAY_IN_MILLISECONDS}>
-          <IconButton>
-            <LayersIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title='Filters' enterDelay={TOOLTIP_DELAY_IN_MILLISECONDS}>
-          <IconButton>
-            <FiltersIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title='Rows' enterDelay={TOOLTIP_DELAY_IN_MILLISECONDS}>
-          <IconButton>
+
+      {!withRows &&
+        <Tooltip title='Rows' enterDelay={TOOLTIP_DELAY}>
+          <IconButton onClick={() => setWithRows(true)}>
             <RowsIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title='Details' enterDelay={TOOLTIP_DELAY_IN_MILLISECONDS}>
-          <IconButton>
+      }
+
+      {!withDetails &&
+        <Tooltip title='Details' enterDelay={TOOLTIP_DELAY}>
+          <IconButton onClick={() => setWithDetails(true)}>
             <DetailsIcon />
           </IconButton>
         </Tooltip>
+      }
+
       </div>
-      <Paper className={classes.layersWindow}>
-        Layers
-      </Paper>
-      <Paper className={classes.filtersWindow}>
-        Filters
-      </Paper>
+
+      <div className={classes.layersWindow}>
+        <RadioGroup>
+          <FormControlLabel value="assets" control={<Radio />} label="Assets" />
+          <FormControlLabel value="tasks" control={<Radio />} label="Tasks" />
+          <FormControlLabel value="risks" control={<Radio />} label="Risks" />
+        </RadioGroup>
+      </div>
+
+    {withRows &&
       <Paper className={classes.rowsWindow}>
+        <CloseIcon className={classes.closeButton} onClick={() => setWithRows(false)} />
         Rows
       </Paper>
+    }
+
+    {withDetails &&
       <Paper className={classes.detailsWindow}>
+        <CloseIcon className={classes.closeButton} onClick={() => setWithDetails(false)} />
         Details
       </Paper>
+    }
+
     </>
   )
 }
 
 export default App
-
-/*
-*/
