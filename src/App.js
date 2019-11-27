@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
   rowsWindow: {
     position: 'fixed',
     left: theme.spacing(1),
-    bottom: theme.spacing(4),
+    bottom: theme.spacing(5),
     right: theme.spacing(34),
     height: theme.spacing(30),
     padding: theme.spacing(1),
@@ -52,7 +52,7 @@ const useStyles = makeStyles(theme => ({
   detailsWindow: {
     position: 'fixed',
     top: theme.spacing(8),
-    bottom: theme.spacing(4),
+    bottom: theme.spacing(5),
     right: theme.spacing(1),
     padding: theme.spacing(1),
     width: theme.spacing(30),
