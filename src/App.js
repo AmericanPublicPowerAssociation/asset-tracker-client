@@ -10,12 +10,19 @@ import Paper from '@material-ui/core/Paper'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import Radio from '@material-ui/core/Radio'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import CloseIcon from '@material-ui/icons/Close'
 
+import CloseIcon from '@material-ui/icons/Close'
 import UserIcon from '@material-ui/icons/AccountCircle'
 import SignOutIcon from '@material-ui/icons/LockOpen'
+import FiltersIcon from '@material-ui/icons/FilterList'
 import RowsIcon from '@material-ui/icons/ViewList'
 import DetailsIcon from '@material-ui/icons/Visibility'
+
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
 
 const TOOLTIP_DELAY = 500
 
@@ -40,9 +47,18 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1),
     zIndex: 1,
   },
+  filtersWindow: {
+    position: 'fixed',
+    top: theme.spacing(30),
+    left: theme.spacing(1),
+    bottom: theme.spacing(5),
+    width: theme.spacing(30),
+    padding: theme.spacing(1),
+    zIndex: 1,
+  },
   rowsWindow: {
     position: 'fixed',
-    left: theme.spacing(1),
+    left: theme.spacing(34),
     bottom: theme.spacing(5),
     right: theme.spacing(34),
     height: theme.spacing(30),
@@ -83,6 +99,7 @@ const initialViewState = {
 function App() {
   const classes = useStyles()
 
+  const [withFilters, setWithFilters] = useState(true)
   const [withRows, setWithRows] = useState(true)
   const [withDetails, setWithDetails] = useState(true)
   // const [geojson, setGeojson] = useState(initialGeojson)
@@ -95,9 +112,9 @@ function App() {
     data: initialGeojson,
   }))
   return (
-    <>
+    <div>
 
-      <DeckGL viewState={initialViewState} layers={layers}>
+      <DeckGL initialViewState={initialViewState} controller={true} layers={layers}>
         <StaticMap mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN} />
       </DeckGL>
 
@@ -116,6 +133,14 @@ function App() {
       </div>
 
       <div className={classes.optionsWindow}>
+
+      {!withFilters &&
+        <Tooltip title='Filters' enterDelay={TOOLTIP_DELAY}>
+          <IconButton onClick={() => setWithFilters(true)}>
+            <FiltersIcon />
+          </IconButton>
+        </Tooltip>
+      }
 
       {!withRows &&
         <Tooltip title='Rows' enterDelay={TOOLTIP_DELAY}>
@@ -143,10 +168,37 @@ function App() {
         </RadioGroup>
       </div>
 
+    {withFilters &&
+      <Paper className={classes.filtersWindow}>
+        <CloseIcon className={classes.closeButton} onClick={() => setWithFilters(false)} />
+        Filters
+      </Paper>
+    }
+
     {withRows &&
       <Paper className={classes.rowsWindow}>
+
         <CloseIcon className={classes.closeButton} onClick={() => setWithRows(false)} />
-        Rows
+
+        <div>
+        </div>
+
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>A</TableCell>
+              <TableCell>B</TableCell>
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            <TableRow>
+              <TableCell>a</TableCell>
+              <TableCell>b</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+
       </Paper>
     }
 
@@ -157,7 +209,7 @@ function App() {
       </Paper>
     }
 
-    </>
+    </div>
   )
 }
 
