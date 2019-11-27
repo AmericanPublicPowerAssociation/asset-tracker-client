@@ -3,9 +3,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import DeckGL from '@deck.gl/react'
 import {
   EditableGeoJsonLayer,
-  DrawLineStringMode,
 } from 'nebula.gl'
 import { StaticMap } from 'react-map-gl'
+import Fab from '@material-ui/core/Fab'
 import IconButton from '@material-ui/core/IconButton'
 import Tooltip from '@material-ui/core/Tooltip'
 import Paper from '@material-ui/core/Paper'
@@ -79,6 +79,12 @@ const useStyles = makeStyles(theme => ({
     left: 0,
     padding: theme.spacing(1),
   },
+  sketchButton: {
+    position: 'fixed',
+    top: theme.spacing(1),
+    left: '50%',
+    transform: 'translateX(-50%)',
+  },
   overlaysWindow: {
     position: 'fixed',
     top: theme.spacing(8),
@@ -139,24 +145,29 @@ const initialViewState = {
 function App() {
   const classes = useStyles()
 
-  const [asSketch, setAsSketch] = useState(false)
+  // const [asSketch, setAsSketch] = useState(false)
   const [selectedOverlay, setSelectedOverlay] = useState('Assets')
   const [withFilters, setWithFilters] = useState(true)
   const [withRows, setWithRows] = useState(true)
   const [withDetails, setWithDetails] = useState(true)
+  const [sketch, setSketch] = useState(false)
   // const [geojson, setGeojson] = useState(initialGeojson)
+  const [selectedSketchItemIndexes, setSelectedSketchItemIndexes] = useState([])
   // const [viewState, setViewState] = useState(initialViewState)
-  // const [drawMode, setDrawMode] = useState('')
+  // const [sketchMode, setSketchMode] = useState('')
+
+  const _onEdit = () => {
+    console.log('editing')
+  }
 
   const layers = []
   const selectedFeatureIndexes = []
-  if (asSketch) {
+  if (sketch) {
     layers.push(new EditableGeoJsonLayer({
       id: 'editable-geojson-layer',
       data: initialGeojson,
-      mode: DrawLineStringMode,
-      selectedFeatureIndexes,
-      onEdit: data => console.log(data),
+      selectedFeatureIndexes: selectedSketchItemIndexes,
+      onEdit: _onEdit,
     }))
   }
 
@@ -271,7 +282,8 @@ function App() {
 
       <div className={classes.optionsWindow}>
 
-      {asSketch ?
+      {/*
+      {sketch ?
         <Tooltip title='Stop Sketching' enterDelay={TOOLTIP_DELAY}>
           <IconButton color='secondary' onClick={() => setAsSketch(false)}>
             <StopIcon />
@@ -284,6 +296,7 @@ function App() {
           </IconButton>
         </Tooltip>
       }
+      */}
 
       {!withFilters &&
         <Tooltip title='See Filters' enterDelay={TOOLTIP_DELAY}>
@@ -310,6 +323,27 @@ function App() {
       }
 
       </div>
+      { true &&
+      <div>
+        <Fab
+          className={classes.sketchButton}
+          variant="extended"
+          color='secondary'
+          onClick={ () => {
+            setSketch(!sketch)
+            if (sketch) {
+              setWithFilters(true)
+              setWithRows(true)
+            }
+            else {
+              setWithFilters(false)
+              setWithRows(false)
+            }
+          }} >
+          { sketch ? 'Exit' : 'Sketch'}
+        </Fab>
+      </div>
+      }
 
       <div className={classes.overlaysWindow}>
         {/* TODO: Show counts for what is visible in map after applying filters */}
