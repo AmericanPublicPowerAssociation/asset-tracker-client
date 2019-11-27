@@ -10,6 +10,7 @@
     "deck.gl": "^7.3.6",
     "dotenv": "^8.2.0",
     "immer": "^5.0.0",
+    "nebula.gl": "^0.16.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-map-gl": "^5.1.3",

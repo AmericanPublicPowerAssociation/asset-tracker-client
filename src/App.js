@@ -2,11 +2,16 @@ import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import DeckGL from '@deck.gl/react'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
+import {DrawPointMode, DrawPolygonMode, DrawLineStringMode, ViewMode } from 'nebula.gl'
 import { StaticMap } from 'react-map-gl'
 import IconButton from '@material-ui/core/IconButton'
 import Tooltip from '@material-ui/core/Tooltip'
 import Paper from '@material-ui/core/Paper'
 import Fab from '@material-ui/core/Fab';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
 
 import RadioGroup from '@material-ui/core/RadioGroup'
 import Radio from '@material-ui/core/Radio'
@@ -89,6 +94,13 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1),
     zIndex: 1,
   },
+  assetList: {
+    position: 'fixed',
+    top: theme.spacing(29),
+    left: theme.spacing(1),
+    zIndex: 1,
+    textAlign: 'center',
+  },
   filtersWindow: {
     position: 'fixed',
     top: theme.spacing(29),
@@ -137,6 +149,20 @@ const initialViewState = {
   zoom: 15,
 }
 
+const assetsMode = {
+  'Transformer': 1,
+  'Substation': 2,
+  'Line': 3
+}
+
+const modes = [
+  ViewMode,
+  DrawPointMode,
+  DrawPolygonMode,
+  DrawLineStringMode
+]
+
+const assets = Object.keys(assetsMode)
 
 function App() {
   const classes = useStyles()
@@ -148,20 +174,28 @@ function App() {
   const [sketch, setSketch] = useState(false)
   const [geojson, setGeojson] = useState(initialGeojson)
   const [selectedSketchItemIndexes, setSelectedSketchItemIndexes] = useState([])
+  const [selectedSketchAsset, setSelectedSketchAsset] = useState('')
+  const [sketchMode, setSketchMode] = useState(0)
   // const [viewState, setViewState] = useState(initialViewState)
-  // const [sketchMode, setSketchMode] = useState('')
 
-  const _onEdit = () => {
+  const _onEdit = ({ updatedData, editType, editContext }) => {
     console.log('editing')
+    console.log(updatedData, editType, editContext)
+    if (editType === 'addFeature'){
+      const { featureIndexes } = editContext
+      setSelectedSketchItemIndexes( [...selectedSketchItemIndexes, ...featureIndexes])
+    }
+    setGeojson(updatedData)
   }
 
   const layers = []
   if (sketch) {
     layers.push(new EditableGeoJsonLayer({
       id: 'editable-geojson-layer',
-      data: initialGeojson,
+      data: geojson,
       selectedFeatureIndexes: selectedSketchItemIndexes,
       onEdit: _onEdit,
+      mode: modes[sketchMode]
     }))
   }
 
@@ -276,7 +310,7 @@ function App() {
 
       <div className={classes.optionsWindow}>
 
-      {!withFilters &&
+      {!withFilters && !sketch &&
         <Tooltip title='Filters' enterDelay={TOOLTIP_DELAY}>
           <IconButton onClick={() => setWithFilters(true)}>
             <FiltersIcon />
@@ -284,7 +318,7 @@ function App() {
         </Tooltip>
       }
 
-      {!withRows &&
+      {!withRows && !sketch &&
         <Tooltip title='Rows' enterDelay={TOOLTIP_DELAY}>
           <IconButton onClick={() => setWithRows(true)}>
             <RowsIcon />
@@ -301,7 +335,7 @@ function App() {
       }
 
       </div>
-      { true &&
+
       <div>
         <Fab
           className={classes.sketchButton}
@@ -309,20 +343,33 @@ function App() {
           color='secondary'
           onClick={ () => {
             setSketch(!sketch)
-            if (sketch) {
-              setWithFilters(true)
-              setWithRows(true)
-            }
-            else {
-              setWithFilters(false)
-              setWithRows(false)
-            }
           }} >
           { sketch ? 'Exit' : 'Sketch'}
         </Fab>
       </div>
-      }
 
+      { sketch &&
+        <Paper className={classes.assetList}>
+          <List subheader={<ListSubheader>ASSETS</ListSubheader>}>
+            { assets.map( (asset) => (
+              <ListItem
+                selected={asset === selectedSketchAsset}
+                onClick={() => {
+                  const modeIndex = assetsMode[asset]
+                  setSelectedSketchAsset(asset)
+                  setSketchMode(modeIndex)
+                  if (asset === 'Line')
+                    setSelectedSketchItemIndexes([])
+                }}>
+                <ListItemText primary={asset}/>
+              </ListItem>
+              ))
+            }
+          </List>
+        </Paper>
+      }
+      
+      { sketch ||
       <div className={classes.overlaysWindow}>
         {/* TODO: Show counts for what is visible in map after applying filters */}
         <RadioGroup value={selectedOverlay} onChange={e => setSelectedOverlay(e.target.value)}>
@@ -331,15 +378,16 @@ function App() {
           <FormControlLabel value='Risks' control={<Radio />} label={risksOverlayLabel} />
         </RadioGroup>
       </div>
+      }
 
-    {withFilters &&
+    {withFilters && !sketch &&
       <Paper className={classes.filtersWindow}>
         <CloseIcon className={classes.closeButton} onClick={() => setWithFilters(false)} />
         Filters for {selectedOverlay}
       </Paper>
     }
 
-    {withRows &&
+    {withRows && !sketch &&
       <Paper className={classes.rowsWindow}>
         <CloseIcon className={classes.closeButton} onClick={() => setWithRows(false)} />
         {/* TODO: Show only what is visible in the map */}
