@@ -179,13 +179,18 @@ function App() {
   // const [viewState, setViewState] = useState(initialViewState)
 
   const _onEdit = ({ updatedData, editType, editContext }) => {
-    console.log('editing')
-    console.log(updatedData, editType, editContext)
     if (editType === 'addFeature'){
       const { featureIndexes } = editContext
+
       setSelectedSketchItemIndexes( [...selectedSketchItemIndexes, ...featureIndexes])
     }
     setGeojson(updatedData)
+  }
+
+  const _onLayerClick = (event) => {
+    if (event.index > -1){
+      setSelectedSketchItemIndexes([event.index])
+    }
   }
 
   const layers = []
@@ -195,7 +200,8 @@ function App() {
       data: geojson,
       selectedFeatureIndexes: selectedSketchItemIndexes,
       onEdit: _onEdit,
-      mode: modes[sketchMode]
+      mode: modes[sketchMode],
+      editHandlePointRadiusScale: 2,
     }))
   }
 
@@ -290,7 +296,13 @@ function App() {
   return (
     <div>
 
-      <DeckGL initialViewState={initialViewState} controller={true} layers={layers}>
+      <DeckGL
+        initialViewState={initialViewState}
+        controller={{
+          doubleClickZoom: false
+        }}
+        layers={layers}
+        onClick={_onLayerClick}>
         <StaticMap mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN} />
       </DeckGL>
 
@@ -365,6 +377,17 @@ function App() {
               </ListItem>
               ))
             }
+          </List>
+          <List subheader={<ListSubheader>EDIT MODE</ListSubheader>}>
+            <ListItem
+              selected={ sketchMode === 0}
+              onClick={() => {
+                setSketchMode(0)
+                setSelectedSketchItemIndexes([])
+                setSelectedSketchAsset('')
+              }}>
+              <ListItemText primary="Select"/>
+            </ListItem>
           </List>
         </Paper>
       }
