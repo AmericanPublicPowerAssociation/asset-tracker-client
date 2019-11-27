@@ -6,6 +6,7 @@ import { StaticMap } from 'react-map-gl'
 import IconButton from '@material-ui/core/IconButton'
 import Tooltip from '@material-ui/core/Tooltip'
 import Paper from '@material-ui/core/Paper'
+import Fab from '@material-ui/core/Fab';
 
 import RadioGroup from '@material-ui/core/RadioGroup'
 import Radio from '@material-ui/core/Radio'
@@ -134,6 +135,7 @@ const initialViewState = {
 function App() {
   const classes = useStyles()
 
+  const [sketch, setSketch] = useState(false)
   const [selectedOverlay, setSelectedOverlay] = useState('Assets')
   const [withFilters, setWithFilters] = useState(true)
   const [withRows, setWithRows] = useState(true)
@@ -143,10 +145,12 @@ function App() {
   // const [drawMode, setDrawMode] = useState('')
 
   const layers = []
-  layers.push(new EditableGeoJsonLayer({
-    id: 'editable-geojson-layer',
-    data: initialGeojson,
-  }))
+  if (sketch) {
+    layers.push(new EditableGeoJsonLayer({
+      id: 'editable-geojson-layer',
+      data: initialGeojson,
+    }))
+  }
 
   const visibleAssetCount = ASSETS.length
   const visibleTaskCount = TASKS.length
@@ -282,6 +286,26 @@ function App() {
           </IconButton>
         </Tooltip>
       }
+
+      </div>
+
+      <div>
+        { sketch || 
+        <Fab
+          variant="extended"
+          color='secondary'
+          onClick={ () => setSketch(true)}>
+          Sketch
+        </Fab>
+        }
+        { sketch && 
+        <Fab
+          variant="extended"
+          color='secondary'
+          onClick={ () => setSketch(false)}>
+          Exit
+        </Fab>
+        }
 
       </div>
 
