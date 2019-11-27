@@ -6,18 +6,19 @@ import { StaticMap } from 'react-map-gl'
 import IconButton from '@material-ui/core/IconButton'
 import Tooltip from '@material-ui/core/Tooltip'
 import Paper from '@material-ui/core/Paper'
-import Fab from '@material-ui/core/Fab';
 
 import RadioGroup from '@material-ui/core/RadioGroup'
 import Radio from '@material-ui/core/Radio'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 
+import StopIcon from '@material-ui/icons/Stop'
 import CloseIcon from '@material-ui/icons/Close'
-import UserIcon from '@material-ui/icons/AccountCircle'
+import SeeUserIcon from '@material-ui/icons/AccountCircle'
 import SignOutIcon from '@material-ui/icons/LockOpen'
-import FiltersIcon from '@material-ui/icons/FilterList'
-import RowsIcon from '@material-ui/icons/ViewList'
-import DetailsIcon from '@material-ui/icons/Visibility'
+import SketchAssetsIcon from '@material-ui/icons/Gesture'
+import SeeFiltersIcon from '@material-ui/icons/FilterList'
+import SeeRowsIcon from '@material-ui/icons/ViewList'
+import SeeDetailsIcon from '@material-ui/icons/Visibility'
 
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -135,7 +136,7 @@ const initialViewState = {
 function App() {
   const classes = useStyles()
 
-  const [sketch, setSketch] = useState(false)
+  const [asSketch, setAsSketch] = useState(false)
   const [selectedOverlay, setSelectedOverlay] = useState('Assets')
   const [withFilters, setWithFilters] = useState(true)
   const [withRows, setWithRows] = useState(true)
@@ -145,7 +146,7 @@ function App() {
   // const [drawMode, setDrawMode] = useState('')
 
   const layers = []
-  if (sketch) {
+  if (asSketch) {
     layers.push(new EditableGeoJsonLayer({
       id: 'editable-geojson-layer',
       data: initialGeojson,
@@ -250,7 +251,7 @@ function App() {
       <div className={classes.usersWindow}>
         <Tooltip title={userName} enterDelay={TOOLTIP_DELAY}>
           <IconButton>
-            <UserIcon />
+            <SeeUserIcon />
           </IconButton>
         </Tooltip>
 
@@ -263,49 +264,43 @@ function App() {
 
       <div className={classes.optionsWindow}>
 
+      {asSketch ?
+        <Tooltip title='Stop Sketching' enterDelay={TOOLTIP_DELAY}>
+          <IconButton color='secondary' onClick={() => setAsSketch(false)}>
+            <StopIcon />
+          </IconButton>
+        </Tooltip>
+        :
+        <Tooltip title='Sketch Assets' enterDelay={TOOLTIP_DELAY}>
+          <IconButton color='secondary' onClick={() => setAsSketch(true)}>
+            <SketchAssetsIcon />
+          </IconButton>
+        </Tooltip>
+      }
+
       {!withFilters &&
-        <Tooltip title='Filters' enterDelay={TOOLTIP_DELAY}>
+        <Tooltip title='See Filters' enterDelay={TOOLTIP_DELAY}>
           <IconButton onClick={() => setWithFilters(true)}>
-            <FiltersIcon />
+            <SeeFiltersIcon />
           </IconButton>
         </Tooltip>
       }
 
       {!withRows &&
-        <Tooltip title='Rows' enterDelay={TOOLTIP_DELAY}>
+        <Tooltip title='See Rows' enterDelay={TOOLTIP_DELAY}>
           <IconButton onClick={() => setWithRows(true)}>
-            <RowsIcon />
+            <SeeRowsIcon />
           </IconButton>
         </Tooltip>
       }
 
       {!withDetails &&
-        <Tooltip title='Details' enterDelay={TOOLTIP_DELAY}>
+        <Tooltip title='See Details' enterDelay={TOOLTIP_DELAY}>
           <IconButton onClick={() => setWithDetails(true)}>
-            <DetailsIcon />
+            <SeeDetailsIcon />
           </IconButton>
         </Tooltip>
       }
-
-      </div>
-
-      <div>
-        { sketch || 
-        <Fab
-          variant="extended"
-          color='secondary'
-          onClick={ () => setSketch(true)}>
-          Sketch
-        </Fab>
-        }
-        { sketch && 
-        <Fab
-          variant="extended"
-          color='secondary'
-          onClick={ () => setSketch(false)}>
-          Exit
-        </Fab>
-        }
 
       </div>
 
