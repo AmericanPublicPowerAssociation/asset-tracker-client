@@ -34,29 +34,44 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 
 const TOOLTIP_DELAY = 500
-const ASSETS = [{
-  id: 'akM1',
-  name: 'High Voltage Transformer 1',
-  geometry: {
-    type: 'Point',
-    coordinates: [-73.89756698413085, 40.782009430441526],
+const ASSET_BY_ID = {
+  akM1: {
+    type: 'tp',
+    geometry: {
+      type: 'Point',
+      coordinates: [-73.89756698413085, 40.782009430441526],
+    },
+    name: 'High Voltage Transformer 1',
+    vendor: 'Schneider Electric',
+    product: 'HVT36A',
+    version: '2.0.1',
   },
-  type: 'tp',
-  vendor: 'Schneider Electric',
-  product: 'HVT36A',
-  version: '2.0.1',
-}, {
-  id: 'anZQ',
-  name: 'Meter 1',
-  geometry: {
-    type: 'Point',
-    coordinates: [-73.89679450793457, 40.78119703780428],
+  anZQ: {
+    type: 'm',
+    geometry: {
+      type: 'Point',
+      coordinates: [-73.89679450793457, 40.78119703780428],
+    },
+    name: 'Meter 1',
+    vendor: 'ITRON',
+    product: '6219399',
+    version: '7.9.5',
   },
-  type: 'm',
-  vendor: 'ITRON',
-  product: '6219399',
-  version: '7.9.5',
-}]
+}
+const features = Object.entries(ASSET_BY_ID).map(([assetId, asset]) => ({
+    type: 'Feature',
+    geometry: asset.geometry,
+    properties: {
+      id: assetId,
+      type: asset.type,
+      name: asset.name,
+    },
+}))
+const initialGeojson = {
+  type: 'FeatureCollection',
+  features,
+}
+
 const TASKS = [{
   id: 1,
   name: 'Clean Transformer',
@@ -150,10 +165,12 @@ const useStyles = makeStyles(theme => ({
 
 
 const userName = 'Alex Hofmann'
+/*
 const initialGeojson = {
   type: 'FeatureCollection',
   features: [],
 }
+*/
 const initialViewState = {
   longitude: -73.897052,
   latitude: 40.780474,
@@ -190,13 +207,27 @@ function App() {
   const [sketchMode, setSketchMode] = useState(0)
   // const [viewState, setViewState] = useState(initialViewState)
 
+  // construct geojson from ASSET_BY_ID
+
+
   const _onEdit = ({ updatedData, editType, editContext }) => {
+    console.log(updatedData, editType, editContext)
     if (editType === 'addFeature'){
       const { featureIndexes } = editContext
-
+      
+      featureIndexes.map( (index) => {
+        updatedData.features[index].properties['name'] = Math.random().toString(36).substring(2, 6)
+        updatedData.features[index].properties['type'] = selectedSketchAsset
+      })
       setSelectedSketchItemIndexes( [...selectedSketchItemIndexes, ...featureIndexes])
     }
     setGeojson(updatedData)
+    // update ASSET_BY_ID
+    /*
+		updatedData.features.map( (asset) => {
+      ASSET_BY_ID[]
+    }
+    */
   }
 
   const _onLayerClick = (event) => {
@@ -206,7 +237,7 @@ function App() {
   }
 
   const layers = []
-  const selectedFeatureIndexes = []
+  // const selectedFeatureIndexes = []
   if (sketch) {
     layers.push(new EditableGeoJsonLayer({
       id: 'editable-geojson-layer',
@@ -218,7 +249,7 @@ function App() {
     }))
   }
 
-  const visibleAssetCount = ASSETS.length
+  const visibleAssetCount = Object.keys(ASSET_BY_ID).length
   const visibleTaskCount = TASKS.length
   const visibleRiskCount = RISKS.length
 
@@ -241,13 +272,13 @@ function App() {
             </TableRow>
           </TableHead>
           <TableBody>
-          {ASSETS.map(asset => 
-            <TableRow key={asset.id}>
-              <TableCell>{asset.name}</TableCell>
-              <TableCell>{asset.type}</TableCell>
-              <TableCell>{asset.vendor}</TableCell>
-              <TableCell>{asset.product}</TableCell>
-              <TableCell>{asset.version}</TableCell>
+          {geojson.features.map(feature =>
+            <TableRow key={feature.properties.id}>
+              <TableCell>{feature.properties.name}</TableCell>
+              <TableCell>{feature.properties.type}</TableCell>
+              <TableCell>{feature.properties.vendor}</TableCell>
+              <TableCell>{feature.properties.product}</TableCell>
+              <TableCell>{feature.properties.version}</TableCell>
             </TableRow>
           )}
           </TableBody>
@@ -305,6 +336,13 @@ function App() {
     default:
       break
   }
+
+
+    if (selectedSketchItemIndexes.length) {
+        console.log(selectedSketchItemIndexes)
+        console.log(geojson.features)
+        console.log(geojson.features[selectedSketchItemIndexes[0]])
+    }
 
   return (
     <div>
@@ -451,7 +489,8 @@ function App() {
     {withDetails &&
       <Paper className={classes.detailsWindow}>
         <CloseIcon className={classes.closeButton} onClick={() => setWithDetails(false)} />
-        Details
+          { geojson.features[selectedSketchItemIndexes[0]] ? <p>Asset Name: {geojson.features[selectedSketchItemIndexes[0]].properties.name}</p> : <p>Select Something</p>
+        }
       </Paper>
     }
 
