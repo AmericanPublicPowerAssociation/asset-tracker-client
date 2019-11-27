@@ -75,6 +75,12 @@ const useStyles = makeStyles(theme => ({
     left: 0,
     padding: theme.spacing(1),
   },
+  sketchButton: {
+    position: 'fixed',
+    top: theme.spacing(1),
+    left: '50%',
+    transform: 'translateX(-50%)',
+  },
   overlaysWindow: {
     position: 'fixed',
     top: theme.spacing(8),
@@ -135,20 +141,27 @@ const initialViewState = {
 function App() {
   const classes = useStyles()
 
-  const [sketch, setSketch] = useState(false)
   const [selectedOverlay, setSelectedOverlay] = useState('Assets')
   const [withFilters, setWithFilters] = useState(true)
   const [withRows, setWithRows] = useState(true)
   const [withDetails, setWithDetails] = useState(true)
-  // const [geojson, setGeojson] = useState(initialGeojson)
+  const [sketch, setSketch] = useState(false)
+  const [geojson, setGeojson] = useState(initialGeojson)
+  const [selectedSketchItemIndexes, setSelectedSketchItemIndexes] = useState([])
   // const [viewState, setViewState] = useState(initialViewState)
-  // const [drawMode, setDrawMode] = useState('')
+  // const [sketchMode, setSketchMode] = useState('')
+
+  const _onEdit = () => {
+    console.log('editing')
+  }
 
   const layers = []
   if (sketch) {
     layers.push(new EditableGeoJsonLayer({
       id: 'editable-geojson-layer',
       data: initialGeojson,
+      selectedFeatureIndexes: selectedSketchItemIndexes,
+      onEdit: _onEdit,
     }))
   }
 
@@ -288,26 +301,27 @@ function App() {
       }
 
       </div>
-
+      { true &&
       <div>
-        { sketch || 
         <Fab
+          className={classes.sketchButton}
           variant="extended"
           color='secondary'
-          onClick={ () => setSketch(true)}>
-          Sketch
+          onClick={ () => {
+            setSketch(!sketch)
+            if (sketch) {
+              setWithFilters(true)
+              setWithRows(true)
+            }
+            else {
+              setWithFilters(false)
+              setWithRows(false)
+            }
+          }} >
+          { sketch ? 'Exit' : 'Sketch'}
         </Fab>
-        }
-        { sketch && 
-        <Fab
-          variant="extended"
-          color='secondary'
-          onClick={ () => setSketch(false)}>
-          Exit
-        </Fab>
-        }
-
       </div>
+      }
 
       <div className={classes.overlaysWindow}>
         {/* TODO: Show counts for what is visible in map after applying filters */}
