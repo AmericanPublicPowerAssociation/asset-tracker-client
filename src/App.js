@@ -37,6 +37,10 @@ const TOOLTIP_DELAY = 500
 const ASSETS = [{
   id: 'akM1',
   name: 'High Voltage Transformer 1',
+  geometry: {
+    type: 'Point',
+    coordinates: [-73.89756698413085, 40.782009430441526],
+  },
   type: 'tp',
   vendor: 'Schneider Electric',
   product: 'HVT36A',
@@ -44,6 +48,10 @@ const ASSETS = [{
 }, {
   id: 'anZQ',
   name: 'Meter 1',
+  geometry: {
+    type: 'Point',
+    coordinates: [-73.89679450793457, 40.78119703780428],
+  },
   type: 'm',
   vendor: 'ITRON',
   product: '6219399',
