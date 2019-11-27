@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import DeckGL from '@deck.gl/react'
-import { EditableGeoJsonLayer } from '@nebula.gl/layers'
+import {
+  EditableGeoJsonLayer,
+  DrawLineStringMode,
+} from 'nebula.gl'
 import { StaticMap } from 'react-map-gl'
 import IconButton from '@material-ui/core/IconButton'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -146,10 +149,14 @@ function App() {
   // const [drawMode, setDrawMode] = useState('')
 
   const layers = []
+  const selectedFeatureIndexes = []
   if (asSketch) {
     layers.push(new EditableGeoJsonLayer({
       id: 'editable-geojson-layer',
       data: initialGeojson,
+      mode: DrawLineStringMode,
+      selectedFeatureIndexes,
+      onEdit: data => console.log(data),
     }))
   }
 
@@ -177,7 +184,7 @@ function App() {
           </TableHead>
           <TableBody>
           {ASSETS.map(asset => 
-            <TableRow>
+            <TableRow key={asset.id}>
               <TableCell>{asset.name}</TableCell>
               <TableCell>{asset.type}</TableCell>
               <TableCell>{asset.vendor}</TableCell>
@@ -201,7 +208,7 @@ function App() {
           </TableHead>
           <TableBody>
           {TASKS.map(task =>
-            <TableRow>
+            <TableRow key={task.id}>
               <TableCell>{task.name}</TableCell>
               <TableCell>{{
                 0: 'New',
@@ -226,7 +233,7 @@ function App() {
           </TableHead>
           <TableBody>
           {RISKS.map(risk =>
-            <TableRow>
+            <TableRow key={risk.id}>
               <TableCell>{risk.name}</TableCell>
               <TableCell>{risk.assetId}</TableCell>
               <TableCell>{risk.meterCount}</TableCell>
