@@ -18,11 +18,9 @@ import RadioGroup from '@material-ui/core/RadioGroup'
 import Radio from '@material-ui/core/Radio'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 
-import StopIcon from '@material-ui/icons/Stop'
 import CloseIcon from '@material-ui/icons/Close'
 import SeeUserIcon from '@material-ui/icons/AccountCircle'
 import SignOutIcon from '@material-ui/icons/LockOpen'
-import SketchAssetsIcon from '@material-ui/icons/Gesture'
 import SeeFiltersIcon from '@material-ui/icons/FilterList'
 import SeeRowsIcon from '@material-ui/icons/ViewList'
 import SeeDetailsIcon from '@material-ui/icons/Visibility'
@@ -33,65 +31,15 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 
-const TOOLTIP_DELAY = 500
-const ASSET_BY_ID = {
-  akM1: {
-    type: 'tp',
-    geometry: {
-      type: 'Point',
-      coordinates: [-73.89756698413085, 40.782009430441526],
-    },
-    name: 'High Voltage Transformer 1',
-    vendor: 'Schneider Electric',
-    product: 'HVT36A',
-    version: '2.0.1',
-  },
-  anZQ: {
-    type: 'm',
-    geometry: {
-      type: 'Point',
-      coordinates: [-73.89679450793457, 40.78119703780428],
-    },
-    name: 'Meter 1',
-    vendor: 'ITRON',
-    product: '6219399',
-    version: '7.9.5',
-  },
-}
-const features = Object.entries(ASSET_BY_ID).map(([assetId, asset]) => ({
-    type: 'Feature',
-    geometry: asset.geometry,
-    properties: {
-      id: assetId,
-      type: asset.type,
-      name: asset.name,
-    },
-}))
-const initialGeojson = {
-  type: 'FeatureCollection',
-  features,
-}
+import RisksTable from './RisksTable'
 
-const TASKS = [{
-  id: 1,
-  name: 'Clean Transformer',
-  status: 50,
-}, {
-  id: 2,
-  name: 'Reset Meter',
-  status: 0,
-}]
-const RISKS = [{
-  id: 1,
-  name: 'Open Port',
-  meterCount: 5,
-  assetId: 'anZQ',
-}, {
-  id: 2,
-  name: 'Voltage Too High',
-  meterCount: 2,
-  assetId: 'akM1',
-}]
+import {
+  ASSETS,
+  GEOJSON,
+  RISKS,
+  TASKS,
+  TOOLTIP_DELAY,
+} from '../constants'
 
 const useStyles = makeStyles(theme => ({
   usersWindow: {
@@ -163,14 +111,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-
 const userName = 'Alex Hofmann'
-/*
-const initialGeojson = {
-  type: 'FeatureCollection',
-  features: [],
-}
-*/
 const initialViewState = {
   longitude: -73.897052,
   latitude: 40.780474,
@@ -201,33 +142,25 @@ function App() {
   const [withRows, setWithRows] = useState(true)
   const [withDetails, setWithDetails] = useState(true)
   const [sketch, setSketch] = useState(false)
-  const [geojson, setGeojson] = useState(initialGeojson)
+  const [geojson, setGeojson] = useState(GEOJSON)
   const [selectedSketchItemIndexes, setSelectedSketchItemIndexes] = useState([])
   const [selectedSketchAsset, setSelectedSketchAsset] = useState('')
   const [sketchMode, setSketchMode] = useState(0)
   // const [viewState, setViewState] = useState(initialViewState)
-
-  // construct geojson from ASSET_BY_ID
-
+  console.log(GEOJSON)
 
   const _onEdit = ({ updatedData, editType, editContext }) => {
     console.log(updatedData, editType, editContext)
     if (editType === 'addFeature'){
       const { featureIndexes } = editContext
       
-      featureIndexes.map( (index) => {
+      featureIndexes.forEach( index => {
         updatedData.features[index].properties['name'] = Math.random().toString(36).substring(2, 6)
         updatedData.features[index].properties['type'] = selectedSketchAsset
       })
       setSelectedSketchItemIndexes( [...selectedSketchItemIndexes, ...featureIndexes])
     }
     setGeojson(updatedData)
-    // update ASSET_BY_ID
-    /*
-		updatedData.features.map( (asset) => {
-      ASSET_BY_ID[]
-    }
-    */
   }
 
   const _onLayerClick = (event) => {
@@ -249,7 +182,7 @@ function App() {
     }))
   }
 
-  const visibleAssetCount = Object.keys(ASSET_BY_ID).length
+  const visibleAssetCount = ASSETS.length
   const visibleTaskCount = TASKS.length
   const visibleRiskCount = RISKS.length
 
@@ -311,38 +244,12 @@ function App() {
       break
     }
     case 'Risks': {
-      table = (
-        <Table size='small'>
-          <TableHead>
-            <TableRow>
-              <TableCell>Risk</TableCell>
-              <TableCell>Asset</TableCell>
-              <TableCell>Customers</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-          {RISKS.map(risk =>
-            <TableRow key={risk.id}>
-              <TableCell>{risk.name}</TableCell>
-              <TableCell>{risk.assetId}</TableCell>
-              <TableCell>{risk.meterCount}</TableCell>
-            </TableRow>
-          )}
-          </TableBody>
-        </Table>
-      )
+      table = <RisksTable risks={RISKS} />
       break
     }
     default:
       break
   }
-
-
-    if (selectedSketchItemIndexes.length) {
-        console.log(selectedSketchItemIndexes)
-        console.log(geojson.features)
-        console.log(geojson.features[selectedSketchItemIndexes[0]])
-    }
 
   return (
     <div>
@@ -372,22 +279,6 @@ function App() {
       </div>
 
       <div className={classes.optionsWindow}>
-
-      {/*
-      {sketch ?
-        <Tooltip title='Stop Sketching' enterDelay={TOOLTIP_DELAY}>
-          <IconButton color='secondary' onClick={() => setAsSketch(false)}>
-            <StopIcon />
-          </IconButton>
-        </Tooltip>
-        :
-        <Tooltip title='Sketch Assets' enterDelay={TOOLTIP_DELAY}>
-          <IconButton color='secondary' onClick={() => setAsSketch(true)}>
-            <SketchAssetsIcon />
-          </IconButton>
-        </Tooltip>
-      }
-      */}
 
       {!withFilters && !sketch &&
         <Tooltip title='Filters' enterDelay={TOOLTIP_DELAY}>

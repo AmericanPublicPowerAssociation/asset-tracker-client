@@ -7,16 +7,15 @@ import createSagaMiddleware from 'redux-saga'
 import { config as configureEnvironment } from 'dotenv'
 import reduceState from './reducers'
 import reduceSaga from './sagas'
-import App from './App'
-import * as serviceWorker from './serviceWorker'
+import App from './components/App'
+// import * as serviceWorker from './bits/serviceWorker'
 
 const initialState = {}
 const enhanceStore = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const sagaMiddleware = createSagaMiddleware()
 const store = createStore(reduceState, initialState, enhanceStore(
   applyMiddleware(
-    sagaMiddleware,
-  )))
+    sagaMiddleware)))
 
 configureEnvironment()
 sagaMiddleware.run(reduceSaga)
@@ -27,4 +26,4 @@ ReactDOM.render(
     </Router>
   </Provider>,
   document.getElementById('root'))
-serviceWorker.unregister()
+// serviceWorker.unregister()
