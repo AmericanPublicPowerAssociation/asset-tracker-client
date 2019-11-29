@@ -18,6 +18,7 @@ function App() {
     <div>
       <AssetsMap
         isSketching={isSketching}
+        sketchAssetType={sketchAssetType}
         setAssets={setAssets}
       />
     {/*

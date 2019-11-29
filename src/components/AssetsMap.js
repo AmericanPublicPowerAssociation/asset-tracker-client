@@ -2,25 +2,33 @@ import React, { useState } from 'react'
 import DeckGL from '@deck.gl/react'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
-// import { DrawPolygonMode } from '@nebula.gl/edit-modes'
+import {
+  DrawLineStringMode,
+  DrawPointMode,
+  DrawPolygonMode,
+} from '@nebula.gl/edit-modes'
 import { StaticMap } from 'react-map-gl'
 import { GEOJSON, VIEW_STATE } from '../constants'
 
 function AssetsMap(props) {
   const {
     isSketching,
+    sketchAssetType,
     setAssets,
   } = props
   const [geoJson, setGeoJson] = useState(GEOJSON)
-
   const layers = []
-
   const selectedFeatureIndexes = []
 
   if (isSketching) {
     layers.push(new EditableGeoJsonLayer({
       id: 'editable-geojson-layer',
       data: geoJson,
+      mode: {
+        l: DrawLineStringMode,
+        t: DrawPointMode,
+        s: DrawPolygonMode,
+      }[sketchAssetType],
       selectedFeatureIndexes: selectedFeatureIndexes,
       onEdit: ({editType, editContext, updatedData}) => {
         console.log(editType)

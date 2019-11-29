@@ -1,5 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles'
-import { DrawPointMode, DrawPolygonMode, DrawLineStringMode, ViewMode } from 'nebula.gl'
+import { ViewMode } from 'nebula.gl'
 import Paper from '@material-ui/core/Paper'
 
 import List from '@material-ui/core/List'
@@ -10,12 +9,6 @@ import ListSubheader from '@material-ui/core/ListSubheader'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import Radio from '@material-ui/core/Radio'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-
-import SeeFiltersIcon from '@material-ui/icons/FilterList'
-import SeeRowsIcon from '@material-ui/icons/ViewList'
-import SeeDetailsIcon from '@material-ui/icons/Info'
-
-import CheckIcon from '@material-ui/icons/Check'
 
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -34,12 +27,6 @@ import {
 } from '../constants'
 
 const useStyles = makeStyles(theme => ({
-  optionsWindow: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    padding: theme.spacing(1),
-  },
   overlaysWindow: {
     position: 'fixed',
     top: theme.spacing(8),
@@ -76,30 +63,18 @@ const assetsMode = {
 
 const modes = [
   ViewMode,
-  DrawPointMode,
-  DrawPolygonMode,
-  DrawLineStringMode
 ]
 
 const assets = Object.keys(assetsMode)
 
 function App() {
-  const classes = useStyles()
-
-  const [asSketch, setAsSketch] = useState(false)
   const [selectedOverlay, setSelectedOverlay] = useState('Assets')
-  const [withFilters, setWithFilters] = useState(false)
-  const [withRows, setWithRows] = useState(false)
-  const [withDetails, setWithDetails] = useState(false)
-  const [geojson, setGeojson] = useState(GEOJSON)
   const [selectedSketchItemIndexes, setSelectedSketchItemIndexes] = useState([])
   const [selectedSketchAsset, setSelectedSketchAsset] = useState('')
   const [sketchMode, setSketchMode] = useState(0)
   // const [viewState, setViewState] = useState(initialViewState)
-  console.log(GEOJSON)
 
   const _onEdit = ({ updatedData, editType, editContext }) => {
-    console.log(updatedData, editType, editContext)
     if (editType === 'addFeature'){
       const { featureIndexes } = editContext
       
@@ -122,10 +97,6 @@ function App() {
   // const selectedFeatureIndexes = []
   if (asSketch) {
     layers.push(new EditableGeoJsonLayer({
-      id: 'editable-geojson-layer',
-      data: geojson,
-      selectedFeatureIndexes: selectedSketchItemIndexes,
-      onEdit: _onEdit,
       mode: modes[sketchMode],
       editHandlePointRadiusScale: 2,
     }))
@@ -213,27 +184,9 @@ function App() {
       <div className={classes.optionsWindow}>
 
       {!withFilters && !asSketch &&
-        <Tooltip title='See Filters' enterDelay={TOOLTIP_DELAY}>
-          <IconButton onClick={() => setWithFilters(true)}>
-            <SeeFiltersIcon />
-          </IconButton>
-        </Tooltip>
       }
 
       {!withRows && !asSketch &&
-        <Tooltip title='See Rows' enterDelay={TOOLTIP_DELAY}>
-          <IconButton onClick={() => setWithRows(true)}>
-            <SeeRowsIcon />
-          </IconButton>
-        </Tooltip>
-      }
-
-      {!withDetails &&
-        <Tooltip title='See Details' enterDelay={TOOLTIP_DELAY}>
-          <IconButton onClick={() => setWithDetails(true)}>
-            <SeeDetailsIcon />
-          </IconButton>
-        </Tooltip>
       }
 
       </div>
