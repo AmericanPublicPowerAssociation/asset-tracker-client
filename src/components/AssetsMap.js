@@ -91,7 +91,9 @@ function AssetsMap(props) {
         // console.log(info)
         if (e.picked) {
           setFocusingAssetId(e.object.properties.id)
-          setIsWithDetails(true)
+          if (!isSketching) {
+            setIsWithDetails(true)
+          }
         }
       }}
     >
