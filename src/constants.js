@@ -1,27 +1,36 @@
-export const GEOJSON = {
-  "type": "FeatureCollection",
-  "features": [{
-    "type": "Feature",
-    "geometry": {
-      "type": "Point",
-      "coordinates": [-73.89756698413085, 40.782009430441526]
-    },
-    "properties": {
-      "id": "akM1",
-      "type": "tp"
-    }
-  }, {
-    "type": "Feature",
-    "geometry": {
-      "type": "Point",
-      "coordinates": [-73.89679450793457, 40.78119703780428]
-    },
-    "properties": {
-      "id": "anZQ",
-      "type": "m"
-    }
-  }]
+export const USER_NAME = 'Alex Hofmann'
+
+export const VIEW_STATE = {
+  longitude: -93.25845423170956,
+  latitude: 37.24365675372345, 
+  zoom: 16,
+  pitch: 0,
+  bearing: 0,
 }
+
+export const GEOJSON = {
+  type: 'FeatureCollection',
+  features: [{
+    type: 'Feature',
+    geometry: {
+      type: 'Polygon',
+      coordinates: [
+        [
+          [-93.25845423170956, 37.24365675372345],
+          [-93.25915738478238, 37.24289151054689],
+          [-93.2592196894851, 37.24258682823058],
+          [-93.25766207191862, 37.24256557127883],
+          [-93.25751076049792, 37.24287025368109],
+          [-93.25673640205059, 37.2429056817874],
+          [-93.25669189869153, 37.243678010367425],
+          [-93.25845423170956, 37.24365675372345],
+        ],
+      ],
+    },
+    properties: {},
+  }],
+}
+
 export const ASSETS = [{
   "id": "akM1",
   "type": "tp",
@@ -37,6 +46,7 @@ export const ASSETS = [{
   "product": "6219399",
   "version": "7.9.5"
 }]
+
 export const TASKS = [{
   "id": 1,
   "name": "Clean Transformer",
@@ -46,6 +56,7 @@ export const TASKS = [{
   "name": "Reset Meter",
   "status": 0
 }]
+
 export const RISKS = [{
   "id": 1,
   "assetId": "anZQ",

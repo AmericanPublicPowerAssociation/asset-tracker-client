@@ -1,11 +1,5 @@
-import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import DeckGL from '@deck.gl/react'
-import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import { DrawPointMode, DrawPolygonMode, DrawLineStringMode, ViewMode } from 'nebula.gl'
-import { StaticMap } from 'react-map-gl'
-import IconButton from '@material-ui/core/IconButton'
-import Tooltip from '@material-ui/core/Tooltip'
 import Paper from '@material-ui/core/Paper'
 
 import List from '@material-ui/core/List'
@@ -17,9 +11,6 @@ import RadioGroup from '@material-ui/core/RadioGroup'
 import Radio from '@material-ui/core/Radio'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 
-import CloseIcon from '@material-ui/icons/Close'
-import SeeUserIcon from '@material-ui/icons/AccountCircle'
-import SignOutIcon from '@material-ui/icons/LockOpen'
 import SeeFiltersIcon from '@material-ui/icons/FilterList'
 import SeeRowsIcon from '@material-ui/icons/ViewList'
 import SeeDetailsIcon from '@material-ui/icons/Info'
@@ -43,23 +34,11 @@ import {
 } from '../constants'
 
 const useStyles = makeStyles(theme => ({
-  usersWindow: {
-    position: 'fixed',
-    top: 0,
-    right: 0,
-    padding: theme.spacing(1),
-  },
   optionsWindow: {
     position: 'fixed',
     top: 0,
     left: 0,
     padding: theme.spacing(1),
-  },
-  primaryButton: {
-    position: 'fixed',
-    bottom: theme.spacing(1),
-    left: '50%',
-    transform: 'translateX(-50%)',
   },
   overlaysWindow: {
     position: 'fixed',
@@ -68,13 +47,6 @@ const useStyles = makeStyles(theme => ({
     width: theme.spacing(20),
     padding: theme.spacing(1),
     zIndex: 1,
-  },
-  assetList: {
-    position: 'fixed',
-    top: theme.spacing(29),
-    left: theme.spacing(1),
-    zIndex: 1,
-    textAlign: 'center',
   },
   filtersWindow: {
     position: 'fixed',
@@ -94,31 +66,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1),
     zIndex: 1,
   },
-  detailsWindow: {
-    position: 'fixed',
-    top: theme.spacing(8),
-    bottom: theme.spacing(5),
-    right: theme.spacing(1),
-    padding: theme.spacing(1),
-    width: theme.spacing(30),
-    zIndex: 1,
-  },
-  closeButton: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    margin: theme.spacing(1),
-    cursor: 'pointer',
-  },
 }))
-
-const userName = 'Alex Hofmann'
-
-const initialViewState = {
-  longitude: -73.897052,
-  latitude: 40.780474,
-  zoom: 15,
-}
 
 const assetsMode = {
   'Transformer': 1,
@@ -256,28 +204,11 @@ function App() {
     <div>
 
       <DeckGL
-        initialViewState={initialViewState}
         controller={{
           doubleClickZoom: false
         }}
-        layers={layers}
         onClick={_onLayerClick}>
-        <StaticMap mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN} />
       </DeckGL>
-
-      <div className={classes.usersWindow}>
-        <Tooltip title={userName} enterDelay={TOOLTIP_DELAY}>
-          <IconButton>
-            <SeeUserIcon />
-          </IconButton>
-        </Tooltip>
-
-        <Tooltip title='Sign Out' enterDelay={TOOLTIP_DELAY}>
-          <IconButton>
-            <SignOutIcon />
-          </IconButton>
-        </Tooltip>
-      </div>
 
       <div className={classes.optionsWindow}>
 
@@ -307,32 +238,9 @@ function App() {
 
       </div>
 
-      {/*
-      <Fab
-        className={classes.primaryButton}
-        variant='extended'
-        size='large'
-        color={asSketch ? 'primary' : 'secondary'}
-        onClick={ () => {
-          setAsSketch(!asSketch)
-        }}
-      >
-        {asSketch ? 'Analyze' : 'Sketch'}
-      </Fab>
-      */}
-
-      <Fab
-        className={classes.primaryButton}
-        color={asSketch ? 'primary' : 'secondary'}
-        onClick={ () => {
-          setAsSketch(!asSketch)
-        }}
-      >
-        { asSketch ? <CheckIcon /> : <EditIcon /> }
-      </Fab>
-
       { asSketch &&
         <Paper className={classes.assetList}>
+
           <List subheader={<ListSubheader>ASSETS</ListSubheader>}>
             { assets.map( (asset) => (
               <ListItem
@@ -349,6 +257,7 @@ function App() {
               ))
             }
           </List>
+
           <List subheader={<ListSubheader>EDIT MODE</ListSubheader>}>
             <ListItem
               selected={ sketchMode === 0}
