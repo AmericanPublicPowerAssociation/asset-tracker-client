@@ -53,6 +53,7 @@ function App() {
         isSketching={isSketching}
         sketchingAssetType={sketchingAssetType}
         setSketchingAssetType={setSketchingAssetType}
+        setSelectedFeatureIndexes={setSelectedFeatureIndexes}
       />
       <UsersWindow />
       <OptionsWindow
