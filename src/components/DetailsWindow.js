@@ -2,6 +2,7 @@ import React from 'react'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
 import CloseButton from './CloseButton'
 import './App.css'
 
@@ -18,7 +19,11 @@ const useStyles = makeStyles(theme => ({
 
 function DetailsWindow(props) {
   const classes = useStyles()
-  const { isWithDetails, setIsWithDetails } = props
+  const {
+    isWithDetails,
+    focusingAsset,
+    setIsWithDetails,
+  } = props
   return (
     <Paper
       className={clsx(classes.root, {
@@ -26,6 +31,14 @@ function DetailsWindow(props) {
       })}
     >
       <CloseButton onClick={() => setIsWithDetails(false)} />
+    {focusingAsset ? 
+      <>
+        <Typography>{focusingAsset.name}</Typography>
+        <Typography>{focusingAsset.type}</Typography>
+      </>
+      : 
+      <Typography>Click an asset to see details</Typography>
+    }
     </Paper>
   )
 }

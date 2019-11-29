@@ -10,6 +10,7 @@ const useStyles = makeStyles(theme => ({
     left: '50%',
     bottom: theme.spacing(1),
     transform: 'translateX(-50%)',
+    zIndex: 1,
   },
 }))
 

@@ -19,12 +19,12 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-function SketchToolbar(props) {
+function SketchAssetToolbar(props) {
   const classes = useStyles()
   const {
     isSketching,
-    sketchAssetType,
-    setSketchAssetType,
+    sketchingAssetType,
+    setSketchingAssetType,
   } = props
   return (
     <Paper
@@ -37,34 +37,12 @@ function SketchToolbar(props) {
         <ListItem
           classes={{selected: classes.selected}}
           button
-          selected={sketchAssetType === 'l'}
+          selected={sketchingAssetType === undefined}
           onClick={() => {
-            setSketchAssetType('l')
+            setSketchingAssetType(undefined)
           }}
         >
-          <ListItemText primary='Line' />
-        </ListItem>
-
-        <ListItem
-          classes={{selected: classes.selected}}
-          button
-          selected={sketchAssetType === 't'}
-          onClick={() => {
-            setSketchAssetType('t')
-          }}
-        >
-          <ListItemText primary='Transformer' />
-        </ListItem>
-
-        <ListItem
-          classes={{selected: classes.selected}}
-          button
-          selected={sketchAssetType === 's'}
-          onClick={() => {
-            setSketchAssetType('s')
-          }}
-        >
-          <ListItemText primary='Substation' />
+          <ListItemText primary='Select' />
         </ListItem>
 
       </List>
@@ -72,4 +50,4 @@ function SketchToolbar(props) {
   )
 }
 
-export default SketchToolbar
+export default SketchAssetToolbar

@@ -21,6 +21,7 @@ const useStyles = makeStyles(theme => ({
 function OptionsWindow(props) {
   const classes = useStyles()
   const {
+    isSketching,
     isWithFilters,
     isWithRows,
     isWithDetails,
@@ -31,7 +32,7 @@ function OptionsWindow(props) {
   return (
     <div className={classes.root}>
 
-    {!isWithFilters &&
+    {!isSketching && !isWithFilters &&
       <Tooltip title='See Filters' enterDelay={TOOLTIP_DELAY}>
         <IconButton onClick={() => setIsWithFilters(true)}>
           <SeeFiltersIcon />
@@ -39,7 +40,7 @@ function OptionsWindow(props) {
       </Tooltip>
     }
 
-    {!isWithRows &&
+    {!isSketching && !isWithRows &&
       <Tooltip title='See Rows' enterDelay={TOOLTIP_DELAY}>
         <IconButton onClick={() => setIsWithRows(true)}>
           <SeeRowsIcon />
