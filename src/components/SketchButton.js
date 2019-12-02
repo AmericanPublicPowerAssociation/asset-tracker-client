@@ -8,7 +8,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
     left: '50%',
-    bottom: theme.spacing(1),
+    top: theme.spacing(1),
     transform: 'translateX(-50%)',
     zIndex: 1,
   },
@@ -23,16 +23,16 @@ function SketchButton(props) {
 
   if (isSketching) {
     color = 'primary'
-    icon = <StopSketchingIcon />
+    icon = 'Exit'
   } else {
     color = 'secondary'
-    icon = <StartSketchingIcon />
+    icon = 'Sketch'
   }
 
   return (
     <Fab
       className={classes.root}
-      variant='round'
+      variant='extended'
       size='large'
       color={color}
       onClick={ () => setIsSketching(!isSketching) }

@@ -28,6 +28,11 @@ function App() {
   console.log(assetById)
   console.log(focusingAssetId)
 
+  const _toggleIsSketching = () => {
+    setIsSketching(!isSketching)
+    setSketchingAssetType(undefined)
+  }
+
   return (
     <div>
       <AssetsMap
@@ -42,7 +47,7 @@ function App() {
       />
       <SketchButton
         isSketching={isSketching}
-        setIsSketching={setIsSketching}
+        setIsSketching={_toggleIsSketching}
       />
       <SketchModeToolbar
         isSketching={isSketching}

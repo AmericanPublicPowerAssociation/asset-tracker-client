@@ -5,6 +5,7 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 
+
 function AssetsTable(props) {
   const { assets } = props
   return (

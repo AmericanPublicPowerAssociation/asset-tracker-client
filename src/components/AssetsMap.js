@@ -41,6 +41,7 @@ function AssetsMap(props) {
       data: geoJson,
       mode,
       selectedFeatureIndexes: selectedFeatureIndexes,
+      lineWidthMinPixels: 3,
       // editHandlePointRadiusScale: 2,
       onEdit: ({editType, editContext, updatedData}) => {
         console.log(editType)
