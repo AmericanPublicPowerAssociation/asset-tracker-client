@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import DeckGL from '@deck.gl/react'
+import { MapController} from 'deck.gl';
 import { GeoJsonLayer } from '@deck.gl/layers'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import {
@@ -13,6 +14,7 @@ import {
   ASSET_TYPE_BY_ID,
   GEOJSON,
   VIEW_STATE } from '../constants'
+
 
 function AssetsMap(props) {
   const {
@@ -28,6 +30,23 @@ function AssetsMap(props) {
   const [geoJson, setGeoJson] = useState(GEOJSON)
   const [assetTypeCount, setAssetTypeCount] = useState(1)
   const layers = []
+  
+  class MyController extends MapController {
+    constructor(options={}) {
+      super(options)
+      this.events = ['keyup']
+    }
+
+    handleEvent(event) {
+      if (event.type === 'keyup') {
+        if (event.key === 'Enter'){ 
+          setSelectedFeatureIndexes([])
+        }
+      }
+      else
+        super.handleEvent(event)
+    }
+  }
 
   const mode = sketchingAssetType ? {
     l: DrawLineStringMode,
@@ -42,6 +61,14 @@ function AssetsMap(props) {
       mode,
       selectedFeatureIndexes: selectedFeatureIndexes,
       lineWidthMinPixels: 3,
+      getFillColor: (feature, isSelected, mode) => {
+        if (isSelected) return [0, 0, 0, 90]
+        return [0, 0, 0, 150]
+      },
+      getLineColor: (feature, isSelected, mode) => {
+        if (isSelected) return [245, 0, 87]
+        return [0, 0, 0]
+      },
       // editHandlePointRadiusScale: 2,
       onEdit: ({editType, editContext, updatedData}) => {
         console.log(editType)
@@ -76,30 +103,32 @@ function AssetsMap(props) {
       id: 'geojson-layer',
       data: geoJson,
       pickable: true,
-      getRadius: 10,
+      getRadius: 3,
     }))
   }
 
   return (
-    <DeckGL
-      initialViewState={VIEW_STATE}
-      controller={{
-        // doubleClickZoom: false,
-      }}
-      layers={layers}
-      pickingRadius={10}
-      onClick={e => {
-        // console.log(info)
-        if (e.picked) {
-          setFocusingAssetId(e.object.properties.id)
-          if (!isSketching) {
-            setIsWithDetails(true)
+    <div>
+      <DeckGL
+        initialViewState={VIEW_STATE}
+        controller={MyController}
+        layers={layers}
+        pickingRadius={10}
+        onClick={e => {
+          // console.log(info)
+          if (e.picked) {
+            if (sketchingAssetType === undefined)
+              setSelectedFeatureIndexes([e.index])
+            setFocusingAssetId(e.object.properties.id)
+            if (!isSketching) {
+              setIsWithDetails(true)
+            }
           }
-        }
-      }}
-    >
-      <StaticMap mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN} />
-    </DeckGL>
+        }}
+      >
+        <StaticMap mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN} />
+      </DeckGL>
+    </div>
   )
 }
 

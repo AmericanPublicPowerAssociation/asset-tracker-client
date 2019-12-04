@@ -9,6 +9,7 @@ const useStyles = makeStyles(theme => ({
     right: 0,
     margin: theme.spacing(1),
     cursor: 'pointer',
+    zIndex: 3,
   },
 }))
 

@@ -14,8 +14,11 @@ const useStyles = makeStyles(theme => ({
     left: theme.spacing(1),
     bottom: theme.spacing(5),
     right: theme.spacing(34),
-    height: theme.spacing(30),
     padding: theme.spacing(1),
+    paddingRight: theme.spacing(5),
+  },
+  table: {
+    height: theme.spacing(30),
     overflowY: 'auto',
   },
 }))
@@ -43,9 +46,11 @@ function RowsWindow(props) {
       })}
     >
       <CloseButton onClick={() => setIsWithRows(false)} />
-      {table}
-      {/* TODO: Show only what is visible in the map */}
-      {/* TODO: Implement paging */}
+      <div className={classes.table}>
+        {table}
+        {/* TODO: Show only what is visible in the map */}
+        {/* TODO: Implement paging */}
+      </div>
     </Paper>
   )
 }
