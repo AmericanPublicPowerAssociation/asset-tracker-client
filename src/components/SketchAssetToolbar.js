@@ -6,12 +6,18 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
+import SvgIcon from '@material-ui/core/SvgIcon'
+import Tooltip from '@material-ui/core/Tooltip'
+import { ReactComponent as Transformer } from '../images/assets/transformer-16.svg'
+import { ReactComponent as Substation } from '../images/assets/substation-16.svg'
+import { ReactComponent as Line } from '../images/assets/line-16.svg'
+
 import './App.css'
 
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
-    top: theme.spacing(30),
+    top: theme.spacing(45),
     left: theme.spacing(1),
   },
   selected: {
@@ -41,44 +47,53 @@ function SketchAssetToolbar(props) {
         component='nav'
         subheader={
           <ListSubheader component='div'>
-            {'Add Asset List'.toUpperCase()}
+            {/*'Add Asset List'.toUpperCase()*/}
           </ListSubheader>
         }>
-        <ListItem
-          classes={{selected: classes.selected}}
-          button
-          selected={sketchingAssetType === 'l'}
-          onClick={() => {
-            if (sketchingAssetType === 'l') {
-              setSelectedFeatureIndexes([])
-            }
-            setSketchingAssetType('l')
-          }}
-        >
-          <ListItemText primary='Line' />
-        </ListItem>
+        <Tooltip title="Add Line" placement='right' aria-label="Add Line">
+          <ListItem
+            classes={{selected: classes.selected}}
+            button
+            selected={sketchingAssetType === 'l'}
+            onClick={() => {
+              if (sketchingAssetType === 'l') {
+                setSelectedFeatureIndexes([])
+              }
+              setSketchingAssetType('l')
+            }}
+          >
+            <SvgIcon fontSize='large' viewBox='0 0 17 17' component={Line} />
+            {/*<ListItemText primary='Line' />*/}
+          </ListItem>
+        </Tooltip>
 
-        <ListItem
-          classes={{selected: classes.selected}}
-          button
-          selected={sketchingAssetType === 't'}
-          onClick={() => {
-            setSketchingAssetType('t')
-          }}
-        >
-          <ListItemText primary='Transformer' />
-        </ListItem>
+        <Tooltip title="Add Transformer" placement='right' aria-label="Add Transformer">
+          <ListItem
+            classes={{selected: classes.selected}}
+            button
+            selected={sketchingAssetType === 't'}
+            onClick={() => {
+              setSketchingAssetType('t')
+            }}
+          >
+            <SvgIcon fontSize='large' viewBox='0 0 17 17' component={Transformer} />
+            {/*<ListItemText primary='Transformer' />*/}
+          </ListItem>
+        </Tooltip>
 
-        <ListItem
-          classes={{selected: classes.selected}}
-          button
-          selected={sketchingAssetType === 's'}
-          onClick={() => {
-            setSketchingAssetType('s')
-          }}
-        >
-          <ListItemText primary='Substation' />
-        </ListItem>
+        <Tooltip title="Add Substation" placement='right' aria-label="Add Substation">
+          <ListItem
+            classes={{selected: classes.selected}}
+            button
+            selected={sketchingAssetType === 's'}
+            onClick={() => {
+              setSketchingAssetType('s')
+            }}
+          >
+            <SvgIcon fontSize='large' viewBox='0 0 17 17' component={Substation} />
+            {/*<ListItemText primary='Substation' />*/}
+          </ListItem>
+        </Tooltip>
       </List>
     </Paper>
   )

@@ -67,6 +67,7 @@ function AssetsMap(props) {
     },
   }[sketchingAssetType] : ViewMode
 
+  console.log(geoJson)
   if (isSketching) {
     layers.push(new EditableGeoJsonLayer({
       id: 'editable-geojson-layer',
@@ -82,8 +83,10 @@ function AssetsMap(props) {
         if (isSelected) return [245, 0, 87]
         return [0, 0, 0]
       },
-      getTentativeLineColor: (e) => {
-
+      getTentativeLineColor: (f) => {
+        if (sketchingAssetType === 'l')
+          return
+        return [0x90, 0x90, 0x90, 0xff]
       },
       // editHandlePointRadiusScale: 2,
       onEdit: ({editType, editContext, updatedData}) => {
@@ -91,9 +94,29 @@ function AssetsMap(props) {
         console.log(JSON.stringify(editContext))
         console.log(JSON.stringify(updatedData))
 
+        
+        const { featureIndexes } = editContext
+        const sketchingAssetTypeName = ASSET_TYPE_BY_ID[sketchingAssetType].name
+        if(editType === 'addPosition') {
+          if (sketchingAssetType === 'l') {
+            if(featureIndexes.length == 1) {
+              const curFeatureIndex = featureIndexes[0]
+              const feature = updatedData.features[curFeatureIndex]
+              const coordinates = feature.geometry.coordinates
+              if (coordinates.length > 2){
+                // remove last repeated point when double clicking in line mode
+                const length = coordinates.length
+                const lastCoord = coordinates[length-1]
+                const secondLastCoord = coordinates[length-2]
+                if (lastCoord[0] === secondLastCoord[0] && 
+                    lastCoord[1] === secondLastCoord[1])
+                  feature.geometry.coordinates = coordinates.slice(0, coordinates.length-1)
+              }
+            } 
+          }
+        }
+
         if (editType === 'addFeature') {
-          const { featureIndexes } = editContext
-          const sketchingAssetTypeName = ASSET_TYPE_BY_ID[sketchingAssetType].name
           if (sketchingAssetType === 'l') {
             // Continue sketching line
             setSelectedFeatureIndexes(featureIndexes)

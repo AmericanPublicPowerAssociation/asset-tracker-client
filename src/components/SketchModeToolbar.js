@@ -10,7 +10,7 @@ import './App.css'
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
-    top: theme.spacing(8),
+    top: theme.spacing(15),
     left: theme.spacing(1),
   },
   selected: {

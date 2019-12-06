@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import Fab from '@material-ui/core/Fab';
 import DoneIcon from '@material-ui/icons/Done'
 import ClearIcon from '@material-ui/icons/Clear'
+import Snackbar from '@material-ui/core/Snackbar';
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles( theme => ({
@@ -18,6 +19,10 @@ const useStyles = makeStyles( theme => ({
     color: 'black',
     background: 'rgba(255, 255, 255, .5)',
   },
+	snackbar: {
+    background: 'rgba(255, 255, 255, .9)',
+		color: 'black',
+	},
 }))
 
 export default function FinishDrawing(props){
@@ -48,7 +53,7 @@ export default function FinishDrawing(props){
     //})
   }
   
-  return (
+    /*return (
     <div className={clsx(classes.buttons, {poof})}>
       <Fab className={classes.button} onClick={_onClick}>
         <DoneIcon color='inherit' />
@@ -57,6 +62,16 @@ export default function FinishDrawing(props){
         <ClearIcon />
         </Fab>
       }
+    </div>
+    )
+    */
+
+  return (
+    <div className={clsx({poof})}>
+			<Snackbar 
+				ContentProps={{classes: {root: classes.snackbar}}}
+				open={true}
+				message={<span>Double-Click to finish line</span>} />
     </div>
   )
 } 
