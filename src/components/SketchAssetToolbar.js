@@ -1,18 +1,20 @@
-import React, { useState } from 'react'
+import React from 'react'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
+// import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import Tooltip from '@material-ui/core/Tooltip'
-import { ReactComponent as Transformer } from '../images/assets/transformer-16.svg'
 import { ReactComponent as Substation } from '../images/assets/substation-16.svg'
+import { ReactComponent as Transformer } from '../images/assets/transformer-16.svg'
 import { ReactComponent as Line } from '../images/assets/line-16.svg'
-
-import './App.css'
+import { ReactComponent as Bus } from '../images/assets/busbar-16.svg'
+import {
+  SKETCHING_MODE_ADD,
+} from '../constants'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,18 +31,18 @@ const useStyles = makeStyles(theme => ({
 function SketchAssetToolbar(props) {
   const classes = useStyles()
   const {
-    isAddListOpen,
     isSketching,
+    sketchingMode,
     sketchingAssetType,
     setSketchingAssetType,
     setSelectedFeatureIndexes,
   } = props
-  console.log('a', sketchingAssetType)
-  console.log('s', isSketching)
+  // console.log('a', sketchingAssetType)
+  // console.log('s', isSketching)
   return (
     <Paper
       className={clsx(classes.root, {
-        poof: !isSketching || !isAddListOpen,
+        poof: !isSketching || sketchingMode !== SKETCHING_MODE_ADD,
       })}
     >
       <List 
@@ -50,13 +52,14 @@ function SketchAssetToolbar(props) {
             {/*'Add Asset List'.toUpperCase()*/}
           </ListSubheader>
         }>
+
         <Tooltip title="Add Line" placement='right' aria-label="Add Line">
           <ListItem
             classes={{selected: classes.selected}}
             button
             selected={sketchingAssetType === 'l'}
             onClick={() => {
-              if (sketchingAssetType === 'l') {
+              if (sketchingAssetType !== 'l') {
                 setSelectedFeatureIndexes([])
               }
               setSketchingAssetType('l')
@@ -64,6 +67,19 @@ function SketchAssetToolbar(props) {
           >
             <SvgIcon fontSize='large' viewBox='0 0 17 17' component={Line} />
             {/*<ListItemText primary='Line' />*/}
+          </ListItem>
+        </Tooltip>
+
+        <Tooltip title='Add Bus' placement='right' aria-label='Add Bus'>
+          <ListItem
+            classes={{selected: classes.selected}}
+            button
+            selected={sketchingAssetType === 'b'}
+            onClick={() => {
+              setSketchingAssetType('b')
+            }}
+          >
+            <SvgIcon fontSize='large' viewBox='0 0 17 17' component={Bus} />
           </ListItem>
         </Tooltip>
 

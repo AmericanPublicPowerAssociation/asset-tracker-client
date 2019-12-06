@@ -4,6 +4,9 @@ export const ASSET_TYPE_BY_ID = {
   'l': {
     name: 'Line',
   },
+  'b': {
+    name: 'Bus',
+  },
   't': {
     name: 'Transformer',
   },
@@ -107,3 +110,7 @@ export const RISKS = [{
 
 // Specify tooltip delay in milliseconds
 export const TOOLTIP_DELAY = 500
+
+export const SKETCHING_MODE_SELECT = 'select'
+export const SKETCHING_MODE_ADD = 'add'
+export const SKETCHING_MODE_CONNECT = 'connect'

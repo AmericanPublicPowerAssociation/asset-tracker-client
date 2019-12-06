@@ -5,7 +5,11 @@ import Paper from '@material-ui/core/Paper'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import './App.css'
+import {
+  SKETCHING_MODE_ADD,
+  SKETCHING_MODE_CONNECT,
+  SKETCHING_MODE_SELECT,
+} from '../constants'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -19,13 +23,13 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-function SketchAssetToolbar(props) {
+function SketchModeToolbar(props) {
   const classes = useStyles()
   const {
-    isAddListOpen,
-    setIsAddListOpen,
     isSketching,
-    sketchingAssetType,
+    sketchingMode,
+    focusingAsset,
+    setSketchingMode,
     setSketchingAssetType,
   } = props
   return (
@@ -35,33 +39,45 @@ function SketchAssetToolbar(props) {
       })}
     >
       <List>
+
         <ListItem
           classes={{selected: classes.selected}}
           button
-          selected={sketchingAssetType === undefined && !isAddListOpen}
+          selected={sketchingMode === SKETCHING_MODE_SELECT}
           onClick={() => {
-            setSketchingAssetType(undefined)
-            setIsAddListOpen(false)
+            setSketchingMode(SKETCHING_MODE_SELECT)
           }}
         >
           <ListItemText primary='Select' />
         </ListItem>
+
         <ListItem
           classes={{selected: classes.selected}}
           button
-          selected={false}
+          selected={sketchingMode === SKETCHING_MODE_ADD}
           onClick={() => {
-            setIsAddListOpen(true)
+            setSketchingMode(SKETCHING_MODE_ADD)
+            setSketchingAssetType(undefined)
           }}
         >
           <ListItemText primary='Add' />
         </ListItem>
 
-
+        <ListItem
+          classes={{selected: classes.selected}}
+          button
+          selected={sketchingMode === SKETCHING_MODE_CONNECT}
+          // disabled={!focusingAsset || focusingAsset.type !== 'b'}
+          onClick={() => {
+            setSketchingMode(SKETCHING_MODE_CONNECT)
+          }}
+        >
+          <ListItemText primary='Connect' />
+        </ListItem>
 
       </List>
     </Paper>
   )
 }
 
-export default SketchAssetToolbar
+export default SketchModeToolbar

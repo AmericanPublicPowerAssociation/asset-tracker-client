@@ -9,22 +9,25 @@ import OverlaysWindow from './OverlaysWindow'
 import FiltersWindow from './FiltersWindow'
 import RowsWindow from './RowsWindow'
 import DetailsWindow from './DetailsWindow'
+import HintsWindow from './HintsWindow'
 import { ASSETS, TASKS, RISKS } from '../constants'
 import { getById } from '../macros'
+import './App.css'
 
 function App() {
-  const [isAddListOpen, setIsAddListOpen] = useState(false)
   const [isSketching, setIsSketching] = useState(false)
+
   const [isWithFilters, setIsWithFilters] = useState(false)
   const [isWithRows, setIsWithRows] = useState(false)
-  const [isWithDetails, setIsWithDetails] = useState(false)
+  const [isWithDetails, setIsWithDetails] = useState(true)
+
   const [overlay, setOverlay] = useState('assets')
+  const [sketchingMode, setSketchingMode] = useState('select')
   const [sketchingAssetType, setSketchingAssetType] = useState()
   const [selectedFeatureIndexes, setSelectedFeatureIndexes] = useState([])
   const [focusingAssetId, setFocusingAssetId] = useState()
-  const [assets, setAssets] = useState(ASSETS)
+  const [assetById, setAssetById] = useState(getById(ASSETS, {}))
 
-  const assetById = getById(assets, {})
   console.log('***')
   console.log(assetById)
   console.log(focusingAssetId)
@@ -34,15 +37,18 @@ function App() {
     setSketchingAssetType(undefined)
   }
 
+  const focusingAsset = assetById[focusingAssetId]
+
   return (
     <div>
       <AssetsMap
         isSketching={isSketching}
+        sketchingMode={sketchingMode}
         sketchingAssetType={sketchingAssetType}
         selectedFeatureIndexes={selectedFeatureIndexes}
-        assets={assets}
+        assetById={assetById}
         setIsWithDetails={setIsWithDetails}
-        setAssets={setAssets}
+        setAssetById={setAssetById}
         setSelectedFeatureIndexes={setSelectedFeatureIndexes}
         setFocusingAssetId={setFocusingAssetId}
       />
@@ -51,15 +57,15 @@ function App() {
         setIsSketching={_toggleIsSketching}
       />
       <SketchModeToolbar
-        isAddListOpen={isAddListOpen}
-        setIsAddListOpen={setIsAddListOpen}
         isSketching={isSketching}
-        sketchingAssetType={sketchingAssetType}
+        sketchingMode={sketchingMode}
+        focusingAsset={focusingAsset}
+        setSketchingMode={setSketchingMode}
         setSketchingAssetType={setSketchingAssetType}
       />
       <SketchAssetToolbar
-        isAddListOpen={isAddListOpen}
         isSketching={isSketching}
+        sketchingMode={sketchingMode}
         sketchingAssetType={sketchingAssetType}
         setSketchingAssetType={setSketchingAssetType}
         setSelectedFeatureIndexes={setSelectedFeatureIndexes}
@@ -88,15 +94,22 @@ function App() {
         isSketching={isSketching}
         isWithRows={isWithRows}
         overlay={overlay}
-        assets={assets}
+        assetById={assetById}
         tasks={TASKS}
         risks={RISKS}
         setIsWithRows={setIsWithRows}
       />
       <DetailsWindow
         isWithDetails={isWithDetails}
-        focusingAsset={assetById[focusingAssetId]}
+        focusingAsset={focusingAsset}
+        assetById={assetById}
         setIsWithDetails={setIsWithDetails}
+      />
+
+      <HintsWindow
+        sketchingMode={sketchingMode}
+        sketchingAssetType={sketchingAssetType}
+        selectedFeatureIndexes={selectedFeatureIndexes}
       />
     </div>
   )

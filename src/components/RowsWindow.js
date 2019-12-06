@@ -6,7 +6,6 @@ import CloseButton from './CloseButton'
 import AssetsTable from './AssetsTable'
 import TasksTable from './TasksTable'
 import RisksTable from './RisksTable'
-import './App.css'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,13 +28,13 @@ function RowsWindow(props) {
     isSketching,
     isWithRows,
     overlay,
-    assets,
+    assetById,
     tasks,
     risks,
     setIsWithRows,
   } = props
   const table = {
-    assets: <AssetsTable assets={assets} />,
+    assets: <AssetsTable assets={Object.values(assetById)} />,
     tasks: <TasksTable tasks={tasks} />,
     risks: <RisksTable risks={risks} />,
   }[overlay]
