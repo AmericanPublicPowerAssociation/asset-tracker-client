@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import DeckGL from '@deck.gl/react'
 import { MapController} from 'deck.gl';
 import { GeoJsonLayer } from '@deck.gl/layers'
@@ -10,6 +10,7 @@ import {
   ViewMode,
 } from '@nebula.gl/edit-modes'
 import { StaticMap } from 'react-map-gl'
+import FinishDrawing from './FinishDrawing'
 import {
   ASSET_TYPE_BY_ID,
   GEOJSON,
@@ -27,10 +28,18 @@ function AssetsMap(props) {
     setSelectedFeatureIndexes,
     setFocusingAssetId,
   } = props
+  const deckRef = useRef(null)
   const [geoJson, setGeoJson] = useState(GEOJSON)
   const [assetTypeCount, setAssetTypeCount] = useState(1)
   const layers = []
-  
+  let deckHandleEvent, polygonClickHandle
+
+  if (deckRef && deckRef.current) {
+    deckHandleEvent = deckRef.current.deck.viewManager.controllers['default-view'].handleEvent
+  }
+
+  console.log('s', selectedFeatureIndexes)
+  console.log('g', geoJson)
   class MyController extends MapController {
     constructor(options={}) {
       super(options)
@@ -38,10 +47,8 @@ function AssetsMap(props) {
     }
 
     handleEvent(event) {
-      if (event.type === 'keyup') {
-        if (event.key === 'Enter'){ 
-          setSelectedFeatureIndexes([])
-        }
+      if (event.type === 'doubletap') {
+        setSelectedFeatureIndexes([])
       }
       else
         super.handleEvent(event)
@@ -49,9 +56,17 @@ function AssetsMap(props) {
   }
 
   const mode = sketchingAssetType ? {
-    l: DrawLineStringMode,
-    t: DrawPointMode,
-    s: DrawPolygonMode,
+    l: class myLineMode extends DrawLineStringMode {
+      handleClickAdapter(event, props){
+        return super.handleClickAdapter(event, props)
+      }
+    },
+    t: class MyPointMode extends DrawPointMode{},
+    s: class MyPolygonMode extends DrawPolygonMode{
+      handleClickAdapter(event, props) {
+        return super.handleClickAdapter(event, props)
+      }  
+    },
   }[sketchingAssetType] : ViewMode
 
   if (isSketching) {
@@ -68,6 +83,9 @@ function AssetsMap(props) {
       getLineColor: (feature, isSelected, mode) => {
         if (isSelected) return [245, 0, 87]
         return [0, 0, 0]
+      },
+      getTentativeLineColor: (e) => {
+
       },
       // editHandlePointRadiusScale: 2,
       onEdit: ({editType, editContext, updatedData}) => {
@@ -110,12 +128,12 @@ function AssetsMap(props) {
   return (
     <div>
       <DeckGL
+        ref={deckRef}
         initialViewState={VIEW_STATE}
-        controller={MyController}
+        controller={{type:MyController}}
         layers={layers}
         pickingRadius={10}
         onClick={e => {
-          // console.log(info)
           if (e.picked) {
             if (sketchingAssetType === undefined)
               setSelectedFeatureIndexes([e.index])
@@ -128,6 +146,12 @@ function AssetsMap(props) {
       >
         <StaticMap mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN} />
       </DeckGL>
+      <FinishDrawing
+        deckHandleEvent={deckHandleEvent}
+        sketchingAssetType={sketchingAssetType}
+        selectedFeatureIndexes={selectedFeatureIndexes}
+        setSelectedFeatureIndexes={setSelectedFeatureIndexes} 
+        features={geoJson.features} />
     </div>
   )
 }

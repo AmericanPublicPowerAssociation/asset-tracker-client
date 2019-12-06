@@ -22,6 +22,8 @@ const useStyles = makeStyles(theme => ({
   },
   nested: {
     paddingLeft: theme.spacing(1),
+    maxHeight: 100,
+    overflow: 'auto',
   },
 }))
 
