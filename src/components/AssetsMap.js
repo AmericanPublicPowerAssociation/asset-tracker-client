@@ -54,17 +54,9 @@ function AssetsMap(props) {
   }
 
   const mode = sketchingAssetType ? {
-    l: class myLineMode extends DrawLineStringMode {
-      handleClickAdapter(event, props){
-        return super.handleClickAdapter(event, props)
-      }
-    },
-    t: class MyPointMode extends DrawPointMode{},
-    s: class MyPolygonMode extends DrawPolygonMode{
-      handleClickAdapter(event, props) {
-        return super.handleClickAdapter(event, props)
-      }  
-    },
+    l: DrawLineStringMode,
+    t: DrawPointMode,
+    s: DrawPolygonMode,
   }[sketchingAssetType] : ViewMode
 
   console.log(geoJson)
