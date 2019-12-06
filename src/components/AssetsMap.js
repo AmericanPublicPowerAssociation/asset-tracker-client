@@ -38,8 +38,6 @@ function AssetsMap(props) {
     deckHandleEvent = deckRef.current.deck.viewManager.controllers['default-view'].handleEvent
   }
 
-  console.log('s', selectedFeatureIndexes)
-  console.log('g', geoJson)
   class MyController extends MapController {
     constructor(options={}) {
       super(options)

@@ -22,6 +22,8 @@ const useStyles = makeStyles(theme => ({
 function SketchAssetToolbar(props) {
   const classes = useStyles()
   const {
+    isAddListOpen,
+    setIsAddListOpen,
     isSketching,
     sketchingAssetType,
     setSketchingAssetType,
@@ -33,17 +35,29 @@ function SketchAssetToolbar(props) {
       })}
     >
       <List>
-
         <ListItem
           classes={{selected: classes.selected}}
           button
-          selected={sketchingAssetType === undefined}
+          selected={sketchingAssetType === undefined && !isAddListOpen}
           onClick={() => {
             setSketchingAssetType(undefined)
+            setIsAddListOpen(false)
           }}
         >
           <ListItemText primary='Select' />
         </ListItem>
+        <ListItem
+          classes={{selected: classes.selected}}
+          button
+          selected={false}
+          onClick={() => {
+            setIsAddListOpen(true)
+          }}
+        >
+          <ListItemText primary='Add' />
+        </ListItem>
+
+
 
       </List>
     </Paper>

@@ -13,6 +13,7 @@ import { ASSETS, TASKS, RISKS } from '../constants'
 import { getById } from '../macros'
 
 function App() {
+  const [isAddListOpen, setIsAddListOpen] = useState(false)
   const [isSketching, setIsSketching] = useState(false)
   const [isWithFilters, setIsWithFilters] = useState(false)
   const [isWithRows, setIsWithRows] = useState(false)
@@ -50,11 +51,14 @@ function App() {
         setIsSketching={_toggleIsSketching}
       />
       <SketchModeToolbar
+        isAddListOpen={isAddListOpen}
+        setIsAddListOpen={setIsAddListOpen}
         isSketching={isSketching}
         sketchingAssetType={sketchingAssetType}
         setSketchingAssetType={setSketchingAssetType}
       />
       <SketchAssetToolbar
+        isAddListOpen={isAddListOpen}
         isSketching={isSketching}
         sketchingAssetType={sketchingAssetType}
         setSketchingAssetType={setSketchingAssetType}
