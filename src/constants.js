@@ -114,3 +114,4 @@ export const TOOLTIP_DELAY = 500
 export const SKETCHING_MODE_SELECT = 'select'
 export const SKETCHING_MODE_ADD = 'add'
 export const SKETCHING_MODE_CONNECT = 'connect'
+export const SKETCHING_MODE_EDIT = 'edit'

@@ -1,10 +1,13 @@
 import React from 'react'
+import produce from 'immer'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card'
+import TextField from '@material-ui/core/TextField';
 import CloseButton from './CloseButton'
+import DeleteButton from './DeleteButton'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,16 +24,62 @@ const useStyles = makeStyles(theme => ({
   card: {
     marginTop: theme.spacing(1),
   },
+  form: {
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    width: '100%'
+  }, 
+  input: {
+    width: '100%'
+  }
 }))
 
 function DetailsWindow(props) {
   const classes = useStyles()
   const {
+    geoJson,
+    setGeoJson,
+    selectedFeatureIndexes,
+    setSelectedFeatureIndexes,
+    setFocusingAssetId,
     isWithDetails,
     focusingAsset,
     assetById,
     setIsWithDetails,
+    setAssetById,
   } = props
+
+  const _onChange = (e) => {
+    const field = e.target.name
+    const input = e.target.value
+    const assetId = focusingAsset.id
+    setAssetById(
+      produce( draft => {
+        draft[assetId][field] = input
+      })
+    )
+  }
+
+  const getFields = () => {
+    const fields = []
+    for (let key in focusingAsset) {
+      if (focusingAsset.hasOwnProperty(key)){
+        fields.push(
+          <TextField
+            className={classes.input}
+            name={key}
+            key={focusingAsset.id + "_" + key}
+            label={key}
+            value={focusingAsset[key]}
+            disabled={key === 'id' || key === 'type'}
+            onChange={ _onChange }
+          />
+        ) 
+      }
+    }
+    return fields
+  }
+
   return (
     <Paper
       className={clsx(classes.root, {
@@ -57,6 +106,21 @@ function DetailsWindow(props) {
         )}
       </div>
       }
+      <form noValidate autoComplete="off" className={classes.form}>
+        {
+          getFields()
+        }
+      </form>
+
+      <DeleteButton
+        setFocusingAssetId={setFocusingAssetId}
+        setSelectedFeatureIndexes={setSelectedFeatureIndexes}
+        geoJson={geoJson}
+        setGeoJson={setGeoJson}
+        selectedFeatureIndexes={selectedFeatureIndexes}
+        focusingAsset={focusingAsset}i
+        setAssetById={setAssetById}
+      />
       </>
       : 
       <Typography>

@@ -7,6 +7,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import {
   SKETCHING_MODE_ADD,
+  SKETCHING_MODE_EDIT,
   SKETCHING_MODE_CONNECT,
   SKETCHING_MODE_SELECT,
 } from '../constants'
@@ -54,6 +55,19 @@ function SketchModeToolbar(props) {
         <ListItem
           classes={{selected: classes.selected}}
           button
+          selected={sketchingMode === SKETCHING_MODE_EDIT}
+          // disabled={!focusingAsset || focusingAsset.type !== 'b'}
+          onClick={() => {
+            setSketchingMode(SKETCHING_MODE_EDIT)
+            setSketchingAssetType(undefined)
+          }}
+        >
+          <ListItemText primary='Edit' />
+        </ListItem>
+
+        <ListItem
+          classes={{selected: classes.selected}}
+          button
           selected={sketchingMode === SKETCHING_MODE_ADD}
           onClick={() => {
             setSketchingMode(SKETCHING_MODE_ADD)
@@ -70,6 +84,7 @@ function SketchModeToolbar(props) {
           // disabled={!focusingAsset || focusingAsset.type !== 'b'}
           onClick={() => {
             setSketchingMode(SKETCHING_MODE_CONNECT)
+            setSketchingAssetType(undefined)
           }}
         >
           <ListItemText primary='Connect' />

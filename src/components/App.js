@@ -3,6 +3,7 @@ import AssetsMap from './AssetsMap'
 import SketchButton from './SketchButton'
 import SketchModeToolbar from './SketchModeToolbar'
 import SketchAssetToolbar from './SketchAssetToolbar'
+import SketchEditToolbar from './SketchEditToolbar'
 import UsersWindow from './UsersWindow'
 import OptionsWindow from './OptionsWindow'
 import OverlaysWindow from './OverlaysWindow'
@@ -12,11 +13,15 @@ import DetailsWindow from './DetailsWindow'
 import HintsWindow from './HintsWindow'
 import { ASSETS, TASKS, RISKS } from '../constants'
 import { getById } from '../macros'
+import {
+  GEOJSON,
+} from '../constants'
 import './App.css'
 
 function App() {
   const [isSketching, setIsSketching] = useState(false)
 
+  const [geoJson, setGeoJson] = useState(GEOJSON)
   const [isWithFilters, setIsWithFilters] = useState(false)
   const [isWithRows, setIsWithRows] = useState(false)
   const [isWithDetails, setIsWithDetails] = useState(true)
@@ -24,13 +29,10 @@ function App() {
   const [overlay, setOverlay] = useState('assets')
   const [sketchingMode, setSketchingMode] = useState('select')
   const [sketchingAssetType, setSketchingAssetType] = useState()
+  const [sketchingEditType, setSketchingEditType] = useState()
   const [selectedFeatureIndexes, setSelectedFeatureIndexes] = useState([])
   const [focusingAssetId, setFocusingAssetId] = useState()
   const [assetById, setAssetById] = useState(getById(ASSETS, {}))
-
-  console.log('***')
-  console.log(assetById)
-  console.log(focusingAssetId)
 
   const _toggleIsSketching = () => {
     setIsSketching(!isSketching)
@@ -42,11 +44,14 @@ function App() {
   return (
     <div>
       <AssetsMap
+        geoJson={geoJson}
         isSketching={isSketching}
         sketchingMode={sketchingMode}
         sketchingAssetType={sketchingAssetType}
+        sketchingEditType={sketchingEditType}
         selectedFeatureIndexes={selectedFeatureIndexes}
         assetById={assetById}
+        setGeoJson={setGeoJson}
         setIsWithDetails={setIsWithDetails}
         setAssetById={setAssetById}
         setSelectedFeatureIndexes={setSelectedFeatureIndexes}
@@ -68,6 +73,13 @@ function App() {
         sketchingMode={sketchingMode}
         sketchingAssetType={sketchingAssetType}
         setSketchingAssetType={setSketchingAssetType}
+        setSelectedFeatureIndexes={setSelectedFeatureIndexes}
+      />
+      <SketchEditToolbar
+        isSketching={isSketching}
+        sketchingMode={sketchingMode}
+        sketchingEditType={sketchingEditType}
+        setSketchingEditType={setSketchingEditType}
         setSelectedFeatureIndexes={setSelectedFeatureIndexes}
       />
       <UsersWindow />
@@ -100,13 +112,20 @@ function App() {
         setIsWithRows={setIsWithRows}
       />
       <DetailsWindow
+        geoJson={geoJson}
+        setGeoJson={setGeoJson}
+        selectedFeatureIndexes={selectedFeatureIndexes}
+        setFocusingAssetId={setFocusingAssetId}
+        setSelectedFeatureIndexes={setSelectedFeatureIndexes}
         isWithDetails={isWithDetails}
         focusingAsset={focusingAsset}
         assetById={assetById}
         setIsWithDetails={setIsWithDetails}
+        setAssetById={setAssetById}
       />
 
       <HintsWindow
+        isSketching={isSketching}
         sketchingMode={sketchingMode}
         sketchingAssetType={sketchingAssetType}
         selectedFeatureIndexes={selectedFeatureIndexes}

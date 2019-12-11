@@ -8,14 +8,16 @@ import {
   DrawLineStringMode,
   DrawPointMode,
   DrawPolygonMode,
+  ModifyMode,
+  TranslateMode,
   ViewMode,
 } from '@nebula.gl/edit-modes'
 import { StaticMap } from 'react-map-gl'
-// import FinishDrawing from './FinishDrawing'
+import FinishDrawing from './FinishDrawing'
 import {
   ASSET_TYPE_BY_ID,
-  GEOJSON,
   SKETCHING_MODE_ADD,
+  SKETCHING_MODE_EDIT,
   SKETCHING_MODE_CONNECT,
   SKETCHING_MODE_SELECT,
   VIEW_STATE,
@@ -27,15 +29,17 @@ export default function AssetsMap(props) {
     isSketching,
     sketchingMode,
     sketchingAssetType,
+    sketchingEditType,
     selectedFeatureIndexes,
     assetById,
     // setIsWithDetails,
+    geoJson,
+    setGeoJson,
     setAssetById,
     setSelectedFeatureIndexes,
     setFocusingAssetId,
   } = props
   // const deckRef = useRef(null)
-  const [geoJson, setGeoJson] = useState(GEOJSON)
   const [assetTypeCount, setAssetTypeCount] = useState(1)
   const layers = []
   // let deckHandleEvent
@@ -50,11 +54,15 @@ export default function AssetsMap(props) {
   class MyController extends MapController {
     constructor(options={}) {
       super(options)
-      this.events = ['doubletap']
+      this.events = ['doubletap', 'keyup']
     }
 
     handleEvent(event) {
-      if (event.type === 'doubletap') {
+      if (event.type === 'keyup' && event.key === 'Enter'){
+        setSelectedFeatureIndexes([])
+        setFocusingAssetId(undefined)
+      }
+      else if (event.type === 'doubletap') {
         setSelectedFeatureIndexes([])
         setFocusingAssetId(undefined)
       } else {
@@ -63,17 +71,29 @@ export default function AssetsMap(props) {
     }
   }
 
-  const mode = (
+  let mode = ViewMode
+
+  if (
     sketchingMode === SKETCHING_MODE_ADD &&
     sketchingAssetType 
-  ) ? {
+  ) {
+    mode = {
     l: DrawLineStringMode,
     b: DrawPointMode,
     t: DrawPointMode,
     s: DrawPolygonMode,
-  }[sketchingAssetType] : ViewMode
+    }[sketchingAssetType]
+  }
+  else if (
+    sketchingMode === SKETCHING_MODE_EDIT &&
+    sketchingEditType
+  ) {
+    mode = {
+      'm': ModifyMode,
+      't': TranslateMode,
+    }[sketchingEditType]
+  }
 
-  console.log(geoJson)
 
   if (isSketching) {
     layers.push(new EditableGeoJsonLayer({
@@ -116,7 +136,6 @@ export default function AssetsMap(props) {
         console.log(JSON.stringify(updatedData))
 
         const { featureIndexes } = editContext
-        const sketchingAssetTypeName = ASSET_TYPE_BY_ID[sketchingAssetType].name
         if (editType === 'addPosition') {
           if (sketchingAssetType === 'l') {
             if (featureIndexes.length === 1) {
@@ -137,6 +156,7 @@ export default function AssetsMap(props) {
         }
 
         if (editType === 'addFeature') {
+          const sketchingAssetTypeName = ASSET_TYPE_BY_ID[sketchingAssetType]['name']
           if (sketchingAssetType === 'l') {
             // Continue sketching line
             setSelectedFeatureIndexes(featureIndexes)
@@ -150,7 +170,7 @@ export default function AssetsMap(props) {
           })
           setAssetById(produce(assetById, _ => {
             _[id] = {
-              id,
+              id: id.toString(),
               type: sketchingAssetType,
               name: `${sketchingAssetTypeName} ${assetTypeCount}`,
             }
@@ -176,12 +196,13 @@ export default function AssetsMap(props) {
       <DeckGL
         // ref={deckRef}
         initialViewState={VIEW_STATE}
-        controller={{type:MyController}}
+        controller={{type:MyController, modeConfig:{drawAtFront: true}}}
         layers={layers}
         pickingRadius={10}
         onClick={e => {
           if (e.picked) {
-            if (sketchingMode === SKETCHING_MODE_SELECT) {
+            if (sketchingMode === SKETCHING_MODE_SELECT ||
+                sketchingMode === SKETCHING_MODE_EDIT) {
               setSelectedFeatureIndexes([e.index])
               setFocusingAssetId(e.object.properties.id)
             } else if (sketchingMode === SKETCHING_MODE_CONNECT) {
@@ -235,15 +256,12 @@ export default function AssetsMap(props) {
       >
         <StaticMap mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN} />
       </DeckGL>
-      {/*
       <FinishDrawing
-        // deckHandleEvent={deckHandleEvent}
         sketchingMode={sketchingMode}
         sketchingAssetType={sketchingAssetType}
         selectedFeatureIndexes={selectedFeatureIndexes}
         setSelectedFeatureIndexes={setSelectedFeatureIndexes} 
         features={geoJson.features} />
-      */}
     </div>
   )
 }
