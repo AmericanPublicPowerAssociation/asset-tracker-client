@@ -7,8 +7,8 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import {
   SKETCHING_MODE_ADD,
-  SKETCHING_MODE_EDIT,
   SKETCHING_MODE_CONNECT,
+  SKETCHING_MODE_EDIT,
   SKETCHING_MODE_SELECT,
 } from '../constants'
 
@@ -29,7 +29,6 @@ function SketchModeToolbar(props) {
   const {
     isSketching,
     sketchingMode,
-    focusingAsset,
     setSketchingMode,
     setSketchingAssetType,
   } = props

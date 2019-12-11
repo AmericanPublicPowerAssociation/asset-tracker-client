@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-// import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import OpenWithIcon from '@material-ui/icons/OpenWith';
@@ -26,14 +25,13 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-function SketchEditToolbar(props) {
+export default function SketchEditToolbar(props) {
   const classes = useStyles()
   const {
     isSketching,
     sketchingMode,
     sketchingEditType,
     setSketchingEditType,
-    setSelectedFeatureIndexes,
   } = props
 
   return (
@@ -60,7 +58,6 @@ function SketchEditToolbar(props) {
             }}
           >
             <SvgIcon fontSize='large' component={EditIcon} />
-            {/*<ListItemText primary='Line' />*/}
           </ListItem>
         </Tooltip>
 
@@ -81,5 +78,3 @@ function SketchEditToolbar(props) {
     </Paper>
   )
 }
-
-export default SketchEditToolbar

@@ -11,14 +11,18 @@ import FiltersWindow from './FiltersWindow'
 import RowsWindow from './RowsWindow'
 import DetailsWindow from './DetailsWindow'
 import HintsWindow from './HintsWindow'
-import { ASSETS, TASKS, RISKS } from '../constants'
-import { getById } from '../macros'
 import {
+  ASSETS,
   GEOJSON,
+  TASKS,
+  RISKS,
 } from '../constants'
+import {
+  getById,
+} from '../macros'
 import './App.css'
 
-function App() {
+export default function App() {
   const [isSketching, setIsSketching] = useState(false)
 
   const [geoJson, setGeoJson] = useState(GEOJSON)
@@ -133,5 +137,3 @@ function App() {
     </div>
   )
 }
-
-export default App
