@@ -34,6 +34,7 @@ export default function AssetsMap(props) {
     assetById,
     // setIsWithDetails,
     geoJson,
+    setHistory,
     setGeoJson,
     setAssetById,
     setSelectedFeatureIndexes,
@@ -178,6 +179,15 @@ export default function AssetsMap(props) {
           setFocusingAssetId(id)
         }
 
+        setHistory( 
+          produce( draft => {
+            draft.push({
+              editType,
+              updatedData
+            })
+            draft = draft.slice(0, 10)
+          })
+        )
         setGeoJson(updatedData)
       },
     }))

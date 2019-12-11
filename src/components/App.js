@@ -29,7 +29,7 @@ export default function App() {
   const [isWithFilters, setIsWithFilters] = useState(false)
   const [isWithRows, setIsWithRows] = useState(false)
   const [isWithDetails, setIsWithDetails] = useState(true)
-
+  const [history, setHistory] = useState([])
   const [overlay, setOverlay] = useState('assets')
   const [sketchingMode, setSketchingMode] = useState('select')
   const [sketchingAssetType, setSketchingAssetType] = useState()
@@ -49,6 +49,7 @@ export default function App() {
     <div>
       <AssetsMap
         geoJson={geoJson}
+        setHistory={setHistory}
         isSketching={isSketching}
         sketchingMode={sketchingMode}
         sketchingAssetType={sketchingAssetType}
