@@ -14,6 +14,7 @@ import {
 } from '@nebula.gl/edit-modes'
 import { StaticMap } from 'react-map-gl'
 import FinishDrawing from './FinishDrawing'
+import NavigationBar from './NavigationBar'
 import {
   ASSET_TYPE_BY_ID,
   SKETCHING_MODE_ADD,
@@ -21,6 +22,10 @@ import {
   SKETCHING_MODE_CONNECT,
   SKETCHING_MODE_SELECT,
   VIEW_STATE,
+  DARK_MAP_STYLE,
+  STREETS_MAP_STYLE,
+  SATELLITE_STREETS_MAP_STYLE,
+  BASE_MAP_STYLE_NAME,
 } from '../constants'
 
 
@@ -41,7 +46,9 @@ export default function AssetsMap(props) {
     setFocusingAssetId,
   } = props
   // const deckRef = useRef(null)
+  const [viewport, setViewport] = useState(VIEW_STATE)
   const [assetTypeCount, setAssetTypeCount] = useState(1)
+  const [mapstyle, setMapstyle] = useState(BASE_MAP_STYLE_NAME)
   const layers = []
   // let deckHandleEvent
   // let polygonClickHandle
@@ -51,6 +58,21 @@ export default function AssetsMap(props) {
     deckHandleEvent = deckRef.current.deck.viewManager.controllers['default-view'].handleEvent
   }
   */
+
+  const baseMapStyleTypes = {
+    dark: {
+      style: DARK_MAP_STYLE,
+      nextStyleName: 'streets',
+    },
+    streets: {
+      style: STREETS_MAP_STYLE,
+      nextStyleName: 'satelliteStreets',
+    },
+    satelliteStreets: {
+      style: SATELLITE_STREETS_MAP_STYLE,
+      nextStyleName: 'dark',
+    }
+  }
 
   class MyController extends MapController {
     constructor(options={}) {
@@ -132,10 +154,6 @@ export default function AssetsMap(props) {
       */
       // editHandlePointRadiusScale: 2,
       onEdit: ({editType, editContext, updatedData}) => {
-        console.log(editType)
-        console.log(JSON.stringify(editContext))
-        console.log(JSON.stringify(updatedData))
-
         const { featureIndexes } = editContext
         if (editType === 'addPosition') {
           if (sketchingAssetType === 'l') {
@@ -201,11 +219,22 @@ export default function AssetsMap(props) {
     }))
   }
 
+  const onViewStateChange = ({viewState}) => {
+    const {
+      latitude,
+      longitude,
+      zoom,
+      bearing,
+      pitch } = viewState
+    setViewport({latitude, longitude, zoom})
+  }
+
   return (
     <div>
       <DeckGL
         // ref={deckRef}
-        initialViewState={VIEW_STATE}
+        viewState={viewport}
+        onViewStateChange={onViewStateChange}
         controller={{type:MyController, modeConfig:{drawAtFront: true}}}
         layers={layers}
         pickingRadius={10}
@@ -250,7 +279,6 @@ export default function AssetsMap(props) {
                     asset2.electricalConnections[assetId] = true
 
                   }))
-                  console.log(assetById)
                   setSelectedFeatureIndexes([])
                 }
 
@@ -264,7 +292,16 @@ export default function AssetsMap(props) {
           }
         }}
       >
-        <StaticMap mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN} />
+          <StaticMap
+            {...viewport}
+            mapStyle={baseMapStyleTypes[mapstyle]['style']}
+            mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}>
+            <NavigationBar
+              setViewport={setViewport}
+              setMapstyle={setMapstyle}
+              mapstyle={mapstyle}
+              nextMapstyle={baseMapStyleTypes[mapstyle]['nextStyleName']}/>
+        </StaticMap>
       </DeckGL>
       <FinishDrawing
         sketchingMode={sketchingMode}

@@ -12,7 +12,7 @@ import {
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
-    top: 0,
+    top: theme.spacing(4),
     left: 0,
     padding: theme.spacing(1),
   },
