@@ -101,7 +101,12 @@ export default function AssetsMap(props) {
     sketchingAssetType 
   ) {
     mode = {
-    l: DrawLineStringMode,
+    l: class MyLine extends DrawLineStringMode {
+      handleClickAdapter(event, props) {
+        const output = super.handleClickAdapter(event, props)
+        return output
+      }
+    },
     b: DrawPointMode,
     t: DrawPointMode,
     s: DrawPolygonMode,
@@ -228,6 +233,8 @@ export default function AssetsMap(props) {
       pitch } = viewState
     setViewport({latitude, longitude, zoom})
   }
+
+  console.log(geoJson)
 
   return (
     <div>
