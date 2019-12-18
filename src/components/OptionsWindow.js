@@ -79,7 +79,10 @@ function OptionsWindow(props) {
 
     {!isWithDetails &&
       <Tooltip title='See Details' enterDelay={TOOLTIP_DELAY}>
-        <IconButton onClick={() => setIsWithDetails(true)}>
+        <IconButton
+          color='primary'
+          classes={color}
+          onClick={() => setIsWithDetails(true)}>
           <SeeDetailsIcon />
         </IconButton>
       </Tooltip>
