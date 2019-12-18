@@ -33,6 +33,8 @@ export const VIEW_STATE = {
   zoom: 16,
   pitch: 0,
   bearing: 0,
+  width: window.innerWidth,
+  height: window.innerHeight,
 }
 
 export const GEOJSON = {

@@ -5,6 +5,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 import SeeFiltersIcon from '@material-ui/icons/FilterList'
 import SeeRowsIcon from '@material-ui/icons/ViewList'
 import SeeDetailsIcon from '@material-ui/icons/Info'
+import MapstyleToggle from './MapstyleToggle'
 import {
   TOOLTIP_DELAY,
 } from '../constants'
@@ -12,10 +13,15 @@ import {
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
-    top: theme.spacing(4),
-    left: 0,
-    padding: theme.spacing(1),
+    top: theme.spacing(1),
+    left: theme.spacing(1),
   },
+  dark: {
+    color: 'white'
+  },
+  light: {
+    color: 'black'
+  }
 }))
 
 function OptionsWindow(props) {
@@ -25,16 +31,36 @@ function OptionsWindow(props) {
     isWithFilters,
     isWithRows,
     isWithDetails,
+    mapStyle,
+    nextMapStyle,
     setIsWithFilters,
     setIsWithRows,
     setIsWithDetails,
+    setMapStyle,
   } = props
+
+  const color = {
+    colorPrimary: (
+      mapStyle === 'streets' ?
+      classes.light :
+      classes.dark
+    )
+  }
+
   return (
     <div className={classes.root}>
+      <MapstyleToggle
+        classes={color}
+        mapStyle={mapStyle}
+        nextMapStyle={nextMapStyle}
+        setMapStyle={setMapStyle} />
 
     {!isSketching && !isWithFilters &&
       <Tooltip title='See Filters' enterDelay={TOOLTIP_DELAY}>
-        <IconButton onClick={() => setIsWithFilters(true)}>
+        <IconButton
+          color='primary'
+          classes={color}
+          onClick={() => setIsWithFilters(true)}>
           <SeeFiltersIcon />
         </IconButton>
       </Tooltip>
@@ -42,7 +68,10 @@ function OptionsWindow(props) {
 
     {!isSketching && !isWithRows &&
       <Tooltip title='See Rows' enterDelay={TOOLTIP_DELAY}>
-        <IconButton onClick={() => setIsWithRows(true)}>
+        <IconButton
+          color='primary'
+          classes={color}
+          onClick={() => setIsWithRows(true)}>
           <SeeRowsIcon />
         </IconButton>
       </Tooltip>

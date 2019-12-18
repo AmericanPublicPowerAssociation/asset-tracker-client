@@ -22,10 +22,6 @@ import {
   SKETCHING_MODE_CONNECT,
   SKETCHING_MODE_SELECT,
   VIEW_STATE,
-  DARK_MAP_STYLE,
-  STREETS_MAP_STYLE,
-  SATELLITE_STREETS_MAP_STYLE,
-  BASE_MAP_STYLE_NAME,
 } from '../constants'
 
 
@@ -44,11 +40,11 @@ export default function AssetsMap(props) {
     setAssetById,
     setSelectedFeatureIndexes,
     setFocusingAssetId,
+    mapStyle,
   } = props
   // const deckRef = useRef(null)
   const [viewport, setViewport] = useState(VIEW_STATE)
   const [assetTypeCount, setAssetTypeCount] = useState(1)
-  const [mapstyle, setMapstyle] = useState(BASE_MAP_STYLE_NAME)
   const layers = []
   // let deckHandleEvent
   // let polygonClickHandle
@@ -59,20 +55,6 @@ export default function AssetsMap(props) {
   }
   */
 
-  const baseMapStyleTypes = {
-    dark: {
-      style: DARK_MAP_STYLE,
-      nextStyleName: 'streets',
-    },
-    streets: {
-      style: STREETS_MAP_STYLE,
-      nextStyleName: 'satelliteStreets',
-    },
-    satelliteStreets: {
-      style: SATELLITE_STREETS_MAP_STYLE,
-      nextStyleName: 'dark',
-    }
-  }
 
   class MyController extends MapController {
     constructor(options={}) {
@@ -101,15 +83,16 @@ export default function AssetsMap(props) {
     sketchingAssetType 
   ) {
     mode = {
-    l: class MyLine extends DrawLineStringMode {
-      handleClickAdapter(event, props) {
-        const output = super.handleClickAdapter(event, props)
-        return output
-      }
-    },
-    b: DrawPointMode,
-    t: DrawPointMode,
-    s: DrawPolygonMode,
+      l: class MyLine extends DrawLineStringMode {
+        handleClickAdapter(event, props) {
+          const output = super.handleClickAdapter(event, props)
+          return output
+        }
+      },
+        //l: DrawLineStringMode,
+      b: DrawPointMode,
+      t: DrawPointMode,
+      s: DrawPolygonMode,
     }[sketchingAssetType]
   }
   else if (
@@ -224,25 +207,25 @@ export default function AssetsMap(props) {
     }))
   }
 
-  const onViewStateChange = ({viewState}) => {
+  const _onViewStateChange = ({viewState}) => {
     const {
       latitude,
       longitude,
       zoom,
       bearing,
-      pitch } = viewState
-    setViewport({latitude, longitude, zoom})
+      pitch,
+      width,
+      height} = viewState
+    setViewport({latitude, longitude, zoom, bearing, pitch, width, height})
   }
-
-  console.log(geoJson)
 
   return (
     <div>
       <DeckGL
         // ref={deckRef}
         viewState={viewport}
-        onViewStateChange={onViewStateChange}
-        controller={{type:MyController, modeConfig:{drawAtFront: true}}}
+        onViewStateChange={_onViewStateChange}
+        controller={{type:MyController}}
         layers={layers}
         pickingRadius={10}
         onClick={e => {
@@ -301,14 +284,9 @@ export default function AssetsMap(props) {
       >
           <StaticMap
             {...viewport}
-            mapStyle={baseMapStyleTypes[mapstyle]['style']}
+            mapStyle={mapStyle}
             mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}>
-            <NavigationBar
-              setViewport={setViewport}
-              setMapstyle={setMapstyle}
-              mapstyle={mapstyle}
-              nextMapstyle={baseMapStyleTypes[mapstyle]['nextStyleName']}/>
-        </StaticMap>
+          </StaticMap>
       </DeckGL>
       <FinishDrawing
         sketchingMode={sketchingMode}

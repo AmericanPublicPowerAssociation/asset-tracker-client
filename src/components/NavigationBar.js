@@ -47,15 +47,16 @@ export default function NavigationBar(props) {
   return (
     <div className={classes.bar}>
       <NavigationControl className={classes.navigation} onViewportChange={onViewportChange} />
-      <GeolocateControl
+      { false && <GeolocateControl
         className={classes.buttonStyle}
         positionOptions={{enableHighAccuracy: true}}
         trackUserLocation={true} />
-        <MapstyleToggle
-          setMapstyle={setMapstyle}
-          mapstyle={mapstyle}
-          setViewport={setViewport}
-          nextMapstyle={nextMapstyle}/>
+      }
+      <MapstyleToggle
+        setMapstyle={setMapstyle}
+        mapstyle={mapstyle}
+        setViewport={setViewport}
+        nextMapstyle={nextMapstyle}/>
     </div>
   )
 }

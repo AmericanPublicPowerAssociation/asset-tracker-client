@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { makeStyles } from '@material-ui/core/styles';
 import AssetsMap from './AssetsMap'
 import SketchButton from './SketchButton'
 import SketchModeToolbar from './SketchModeToolbar'
@@ -16,11 +17,38 @@ import {
   GEOJSON,
   TASKS,
   RISKS,
+  DARK_MAP_STYLE,
+  STREETS_MAP_STYLE,
+  SATELLITE_STREETS_MAP_STYLE,
+  BASE_MAP_STYLE_NAME,
 } from '../constants'
 import {
   getById,
 } from '../macros'
 import './App.css'
+
+const useStyles = makeStyles( theme => ({
+  text: {
+    color: 'white'
+  },
+}))
+
+
+const baseMapStyleTypes = {
+  dark: {
+    style: DARK_MAP_STYLE,
+    nextStyleName: 'streets',
+  },
+  streets: {
+    style: STREETS_MAP_STYLE,
+    nextStyleName: 'satelliteStreets',
+  },
+  satelliteStreets: {
+    style: SATELLITE_STREETS_MAP_STYLE,
+    nextStyleName: 'dark',
+  }
+}
+
 
 export default function App() {
   const [isSketching, setIsSketching] = useState(false)
@@ -37,6 +65,9 @@ export default function App() {
   const [selectedFeatureIndexes, setSelectedFeatureIndexes] = useState([])
   const [focusingAssetId, setFocusingAssetId] = useState()
   const [assetById, setAssetById] = useState(getById(ASSETS, {}))
+  const [mapStyle, setMapStyle] = useState(BASE_MAP_STYLE_NAME)
+
+  const classes = useStyles()
 
   const _toggleIsSketching = () => {
     setIsSketching(!isSketching)
@@ -61,6 +92,7 @@ export default function App() {
         setAssetById={setAssetById}
         setSelectedFeatureIndexes={setSelectedFeatureIndexes}
         setFocusingAssetId={setFocusingAssetId}
+        mapStyle={baseMapStyleTypes[mapStyle]['style']}
       />
       <SketchButton
         isSketching={isSketching}
@@ -93,14 +125,18 @@ export default function App() {
         isWithFilters={isWithFilters}
         isWithRows={isWithRows}
         isWithDetails={isWithDetails}
+        mapStyle={mapStyle}
+        nextMapStyle={baseMapStyleTypes[mapStyle]['nextStyleName']}
         setIsWithFilters={setIsWithFilters}
         setIsWithRows={setIsWithRows}
         setIsWithDetails={setIsWithDetails}
+        setMapStyle={setMapStyle}
       />
       <OverlaysWindow
         isSketching={isSketching}
         overlay={overlay}
         setOverlay={setOverlay}
+        mapStyle={mapStyle}
       />
       <FiltersWindow
         isSketching={isSketching}
