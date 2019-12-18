@@ -10,19 +10,19 @@ export const BASE_MAP_STYLE_NAME = 'dark'
 export const USER_NAME = 'Alex Hofmann'
 
 export const ASSET_TYPE_BY_ID = {
-  'l': {
+  l: {
     name: 'Line',
   },
-  'b': {
+  b: {
     name: 'Bus',
   },
-  't': {
+  t: {
     name: 'Transformer',
   },
-  's':{
+  s: {
     name: 'Substation',
   },
-  'S':{
+  S: {
     name: 'Station',
   },
 }
@@ -41,64 +41,236 @@ export const GEOJSON = {
   type: 'FeatureCollection',
   features: [{
     type: 'Feature',
+    properties: {
+      id: 1,
+      type: 's',
+    },
     geometry: {
       type: 'Polygon',
+      coordinates: [[
+        [-93.26308908888744, 37.24319981451458],
+        [-93.26318564841199, 37.24167951084914],
+        [-93.26111498305252, 37.24163680524727],
+        [-93.261018423528,   37.243216896403936],
+        [-93.26308908888744, 37.24319981451458],
+      ]],
+    }
+  }, {
+    type: 'Feature',
+    properties: {
+      id: 2,
+      type: 't',
+    },
+    geometry: {
+      type: 'Point',
+      coordinates: [-93.26205912062574, 37.24260194594523],
+    },
+  }, {
+    type: 'Feature',
+    properties: {
+      id: 3,
+      type: 't',
+    },
+    geometry: {
+      type: 'Point',
+      coordinates: [-93.25442018935136, 37.246342816986676],
+    },
+  }, {
+    type: 'Feature',
+    properties: {
+      id: 4,
+      type: 't',
+    },
+    geometry: {
+      type: 'Point',
+      coordinates: [-93.25678494706636, 37.24378659706648],
+    },
+  }, {
+    type: 'Feature',
+    properties: {
+      id: 5,
+      type: 'l',
+    },
+    geometry: {
+      type: 'LineString',
       coordinates: [
-        [
-          [-93.25845423170956, 37.24365675372345],
-          [-93.25915738478238, 37.24289151054689],
-          [-93.2592196894851, 37.24258682823058],
-          [-93.25766207191862, 37.24256557127883],
-          [-93.25751076049792, 37.24287025368109],
-          [-93.25673640205059, 37.2429056817874],
-          [-93.25669189869153, 37.243678010367425],
-          [-93.25845423170956, 37.24365675372345],
-        ],
+        [-93.26205912062574, 37.24278181001797],
+        [-93.2608574909871,  37.243473124280854],
+        [-93.2608145756428,  37.24542896837055],
+        [-93.2564050240223,  37.245480212511424],
       ],
     },
+  }, {
+    type: 'Feature',
     properties: {
-      id: 'aaaa',
+      id: 6,
+      type: 'l',
+    },
+    geometry: {
+      type: 'LineString',
+      coordinates: [
+        [-93.2564050240223,  37.245480212511424],
+        [-93.25442018935138, 37.24652268105942],
+      ],
     },
   }, {
     type: 'Feature',
-    geometry: {
-      type: 'Point',
-      coordinates: [-93.26257410475657, 37.24696200718064],
-    },
     properties: {
-      id: 'akM1',
+      id: 7,
+      type: 'l',
     },
-  }, {
-    type: 'Feature',
     geometry: {
-      type: 'Point',
-      coordinates: [-93.26504173705031, 37.24615065347818],
+      type: 'LineString',
+      coordinates: [
+        [-93.25642648169446, 37.24548875319819],
+        [-93.25678494706636, 37.24396646113922],
+      ],
     },
-    properties: {
-      id: 'anZQ',
-    },
-  }],
+  }]
 }
 
 export const ASSETS = [{
-  id: 'aaaa',
-  type: 'S',
-  name: 'Power Plant A',
-  vendor: 'General Electric',
+  id: 1,
+  type: 's',
+  name: 'Substation A',
 }, {
-  id: 'akM1',
+  id: 2,
   type: 't',
-  name: 'Transformer A',
-  vendor: 'Schneider Electric',
-  product: 'HVT36A',
-  version: '2.0.1',
+  name: 'Substation Transformer 1',
+  attributes: {
+    phaseCount: 3,
+    windingCount: 2,
+    winding1Winding2PercentReactance: 8 / 1000,
+    vendor: 'Schneider Electric',
+    product: 'HVT36A',
+    version: '2.0.1',
+  },
+  busByIndex: {
+    0: {
+      id: 'Ai',
+      attributes: {
+        connectionType: 'delta',
+        baseVoltage: 115,
+        baseVoltageUnit: 'kV',
+        power: 5000,
+        powerUnit: 'kVA',
+        powerPercentResistance: 0.5 / 1000,
+      },
+    },
+    1: {
+      id: 'Ao',
+      attributes: {
+        connectionType: 'wye',
+        baseVoltage: 4.16,
+        baseVoltageUnit: 'kV',
+        power: 5000,
+        powerUnit: 'kVA',
+        powerPercentResistance: 0.5 / 1000,
+      },
+    },
+  },
 }, {
-  id: 'anZQ',
+  id: 3,
   type: 'm',
-  name: 'Meter A',
-  vendor: 'ITRON',
-  product: '6219399',
-  version: '7.9.5',
+  name: 'Industrial Meter 1',
+  vendor: 'Schneider Electric',
+  product: 'SCH-MV10',
+  version: '10.5.7',
+  attributes: {
+    'phaseCount': 3,
+    'loadModel': 1,
+  },
+  busByIndex: {
+    0: {
+      id: 'L2o',
+      attributes: {
+      },
+    },
+  },
+}, {
+  id: 4,
+  type: 'm',
+  name: 'Industrial Meter 2',
+  vendor: 'Schneider Electric',
+  product: 'SCH-MV10',
+  version: '10.5.7',
+  attributes: {
+    'phaseCount': 3,
+    'loadModel': 5,
+  },
+  busByIndex: {
+    0: {
+      id: 'L3o',
+      attributes: {
+      },
+    },
+  },
+}, {
+  id: 5,
+  type: 'l',
+  name: 'Line 1',
+  attributes: {
+    'phaseCount': 3,
+    'lineType': 'mtx601',
+    'lineLength': 2000,
+    'lengthUnit': 'ft',
+  },
+  busByIndex: {
+    0: {
+      id: 'Ao',
+      attributes: {
+      },
+    },
+    3: {
+      id: 'L1o',
+      attributes: {
+      },
+    },
+  },
+}, {
+  id: 6,
+  type: 'l',
+  name: 'Line 2',
+  attributes: {
+    'phaseCount': 3,
+    'lineType': 'mtx602',
+    'lineLength': 500,
+    'lengthUnit': 'ft',
+  },
+  busByIndex: {
+    0: {
+      id: 'L1o',
+      attributes: {
+      },
+    },
+    1: {
+      id: 'L2o',
+      attributes: {
+      },
+    },
+  },
+}, {
+  id: 7,
+  type: 'l',
+  name: 'Line 3',
+  attributes: {
+    'phaseCount': 3,
+    'lineType': 'mtx602',
+    'lineLength': 500,
+    'lengthUnit': 'ft',
+  },
+  busByIndex: {
+    0: {
+      id: 'L1o',
+      attributes: {
+      },
+    },
+    1: {
+      id: 'L3o',
+      attributes: {
+      },
+    },
+  },
 }]
 
 export const TASKS = [{
@@ -109,14 +281,14 @@ export const TASKS = [{
 
 export const RISKS = [{
   id: 1,
-  assetId: 'anZQ',
+  assetId: 4,
   name: 'Open Port',
-  meterCount: 5
+  meterCount: 5,
 }, {
   id: 2,
-  assetId: 'akM1',
+  assetId: 5,
   name: 'Voltage Too High',
-  meterCount: 2
+  meterCount: 2,
 }]
 
 // Specify tooltip delay in milliseconds

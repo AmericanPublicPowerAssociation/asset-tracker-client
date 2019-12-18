@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.7.0",
     "@material-ui/icons": "^4.5.1",
+    "@turf/transform-translate": "^5.1.5",
     "clsx": "^1.0.4",
     "deck.gl": "^7.3.6",
     "dotenv": "^8.2.0",

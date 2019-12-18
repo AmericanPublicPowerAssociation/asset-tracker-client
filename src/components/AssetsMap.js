@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import DeckGL from '@deck.gl/react'
 import produce from 'immer'
-import { MapController} from 'deck.gl';
+import DeckGL from '@deck.gl/react'
+import { MapController} from 'deck.gl'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import {
@@ -13,6 +13,7 @@ import {
   ViewMode,
 } from '@nebula.gl/edit-modes'
 import { StaticMap } from 'react-map-gl'
+import translateFeature from '@turf/transform-translate'
 import FinishDrawing from './FinishDrawing'
 import NavigationBar from './NavigationBar'
 import {
@@ -89,7 +90,6 @@ export default function AssetsMap(props) {
           return output
         }
       },
-        //l: DrawLineStringMode,
       b: DrawPointMode,
       t: DrawPointMode,
       s: DrawPolygonMode,
@@ -100,8 +100,8 @@ export default function AssetsMap(props) {
     sketchingEditType
   ) {
     mode = {
-      'm': ModifyMode,
-      't': TranslateMode,
+      m: ModifyMode,
+      t: TranslateMode,
     }[sketchingEditType]
   }
 
@@ -113,7 +113,7 @@ export default function AssetsMap(props) {
       mode,
       selectedFeatureIndexes: selectedFeatureIndexes,
       lineWidthMinPixels: 3,
-      getRadius: 7,
+      getRadius: 10,
       getLineWidth: 5,
       getFillColor: (feature, isSelected, mode) => {
         if (isSelected) {
@@ -202,8 +202,10 @@ export default function AssetsMap(props) {
       id: 'geojson-layer',
       data: geoJson,
       pickable: true,
-      getRadius: 7,
+      getRadius: 10,
       getLineWidth: 5,
+      getFillColor: [0, 0, 0, 150],
+      getLineColor: [0, 0, 0],
     }))
   }
 
@@ -218,6 +220,87 @@ export default function AssetsMap(props) {
       height} = viewState
     setViewport({latitude, longitude, zoom, bearing, pitch, width, height})
   }
+
+  // const busFeatureById = {}
+  const busFeatures = []
+  const temporaryFeatures = geoJson.features
+  for (let i = 0; i < temporaryFeatures.length; i++) {
+    const f = temporaryFeatures[i]
+    const geometry = f.geometry
+    const geometryType = geometry.type
+    const geometryCoordinates = geometry.coordinates
+    const assetId = f.properties.id
+    const asset = assetById[assetId]
+    const busByIndex = asset.busByIndex
+
+    if (!busByIndex) {
+      continue
+    }
+
+    const busEntries = Object.entries(busByIndex)
+    const busIndices = Object.keys(busByIndex)
+    const busCount = busEntries.length
+
+    switch(geometryType) {
+      case 'Point': {
+        const busAngleIncrement = 360 / busCount
+
+        for (let i = 0; i < busCount; i++) {
+          const busIndex = busIndices[i]
+          const bus = busByIndex[busIndex]
+          const busId = bus.id
+          const busAngle = busAngleIncrement * i
+
+          busFeatures.push({
+            type: 'Feature',
+            properties: {
+              id: busId,
+            },
+            geometry: translateFeature(f, 0.02, busAngle).geometry,
+          })
+        }
+        break
+      }
+      case 'LineString': {
+        for (let i = 0; i < busCount; i++) {
+          const busIndex = busIndices[i]
+          const bus = busByIndex[busIndex]
+          const busId = bus.id
+          const geometryXY = geometryCoordinates[busIndex]
+          busFeatures.push({
+            type: 'Feature',
+            properties: {
+              id: busId,
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: geometryXY,
+            },
+          })
+        }
+        break
+      }
+      case 'Polygon': {
+        break
+      }
+      default: {
+        break
+      }
+    }
+  }
+
+  layers.push(new GeoJsonLayer({
+    id: 'bus-geojson-layer',
+    data: {
+      type: 'FeatureCollection',
+      features: busFeatures,
+    },
+    pickable: true,
+    getRadius: 5,
+    getFillColor: [63, 81, 181],
+    getLineColor: [0, 255, 255],
+    getLineWidth: 2,
+  }))
 
   return (
     <div>
