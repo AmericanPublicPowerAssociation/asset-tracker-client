@@ -6,6 +6,7 @@ import SeeFiltersIcon from '@material-ui/icons/FilterList'
 import SeeRowsIcon from '@material-ui/icons/ViewList'
 import SeeDetailsIcon from '@material-ui/icons/Info'
 import MapstyleToggle from './MapstyleToggle'
+import MapEditHistory from './MapEditHistory'
 import {
   TOOLTIP_DELAY,
 } from '../constants'
@@ -17,11 +18,17 @@ const useStyles = makeStyles(theme => ({
     left: theme.spacing(1),
   },
   dark: {
-    color: 'white'
+    color: 'white',
+    "&:disabled": {
+      color: "grey"
+    }
   },
   light: {
-    color: 'black'
-  }
+    color: 'black',
+    "&:disabled": {
+      color: "grey"
+    }
+  },
 }))
 
 function OptionsWindow(props) {
@@ -31,12 +38,16 @@ function OptionsWindow(props) {
     isWithFilters,
     isWithRows,
     isWithDetails,
+    history,
+    historyIndex,
     mapStyle,
     nextMapStyle,
     setIsWithFilters,
     setIsWithRows,
     setIsWithDetails,
     setMapStyle,
+    setHistory,
+    undo
   } = props
 
   const color = {
@@ -44,7 +55,7 @@ function OptionsWindow(props) {
       mapStyle === 'streets' ?
       classes.light :
       classes.dark
-    )
+    ),
   }
 
   return (
@@ -54,6 +65,16 @@ function OptionsWindow(props) {
         mapStyle={mapStyle}
         nextMapStyle={nextMapStyle}
         setMapStyle={setMapStyle} />
+
+    {
+      isSketching &&
+      <MapEditHistory
+        classes={color}
+        history={history}
+        historyIndex={historyIndex}
+        undo={undo}
+        setHistory={setHistory} />
+    }
 
     {!isSketching && !isWithFilters &&
       <Tooltip title='See Filters' enterDelay={TOOLTIP_DELAY}>

@@ -15,7 +15,6 @@ import {
 import { StaticMap } from 'react-map-gl'
 import translateFeature from '@turf/transform-translate'
 import FinishDrawing from './FinishDrawing'
-import NavigationBar from './NavigationBar'
 import {
   ASSET_TYPE_BY_ID,
   SKETCHING_MODE_ADD,
@@ -42,6 +41,9 @@ export default function AssetsMap(props) {
     setSelectedFeatureIndexes,
     setFocusingAssetId,
     mapStyle,
+    history,
+    historyIndex,
+    setHistoryIndex,
   } = props
   // const deckRef = useRef(null)
   const [viewport, setViewport] = useState(VIEW_STATE)
@@ -55,7 +57,6 @@ export default function AssetsMap(props) {
     deckHandleEvent = deckRef.current.deck.viewManager.controllers['default-view'].handleEvent
   }
   */
-
 
   class MyController extends MapController {
     constructor(options={}) {
@@ -143,6 +144,17 @@ export default function AssetsMap(props) {
       // editHandlePointRadiusScale: 2,
       onEdit: ({editType, editContext, updatedData}) => {
         const { featureIndexes } = editContext
+        setHistory( 
+          produce( history, draft => {
+            draft[historyIndex+1] = {
+              editType,
+              geoJson,
+              assetById,
+            }
+          })
+        )
+        setHistoryIndex(historyIndex+1)
+        let newAssetById 
         if (editType === 'addPosition') {
           if (sketchingAssetType === 'l') {
             if (featureIndexes.length === 1) {
@@ -175,25 +187,17 @@ export default function AssetsMap(props) {
             p['type'] = sketchingAssetType
             setAssetTypeCount(assetTypeCount + 1)
           })
-          setAssetById(produce(assetById, _ => {
+          newAssetById = produce(assetById, _ => {
             _[id] = {
               id: id.toString(),
               type: sketchingAssetType,
               name: `${sketchingAssetTypeName} ${assetTypeCount}`,
             }
-          }))
+          })
+          setAssetById(newAssetById)
           setFocusingAssetId(id)
         }
 
-        setHistory( 
-          produce( draft => {
-            draft.push({
-              editType,
-              updatedData
-            })
-            draft = draft.slice(0, 10)
-          })
-        )
         setGeoJson(updatedData)
       },
     }))

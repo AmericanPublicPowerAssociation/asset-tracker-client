@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles';
 import AssetsMap from './AssetsMap'
 import SketchButton from './SketchButton'
 import SketchModeToolbar from './SketchModeToolbar'
@@ -27,13 +26,6 @@ import {
 } from '../macros'
 import './App.css'
 
-const useStyles = makeStyles( theme => ({
-  text: {
-    color: 'white'
-  },
-}))
-
-
 const baseMapStyleTypes = {
   dark: {
     style: DARK_MAP_STYLE,
@@ -58,6 +50,7 @@ export default function App() {
   const [isWithRows, setIsWithRows] = useState(false)
   const [isWithDetails, setIsWithDetails] = useState(true)
   const [history, setHistory] = useState([])
+  const [historyIndex, setHistoryIndex] = useState(-1)
   const [overlay, setOverlay] = useState('assets')
   const [sketchingMode, setSketchingMode] = useState('select')
   const [sketchingAssetType, setSketchingAssetType] = useState()
@@ -67,19 +60,31 @@ export default function App() {
   const [assetById, setAssetById] = useState(getById(ASSETS, {}))
   const [mapStyle, setMapStyle] = useState(BASE_MAP_STYLE_NAME)
 
-  const classes = useStyles()
-
   const _toggleIsSketching = () => {
     setIsSketching(!isSketching)
     setSketchingAssetType(undefined)
+    setHistory([])
   }
 
-  const focusingAsset = assetById[focusingAssetId]
+  const _undo = () => {
+    const {
+      geoJson,
+      assetById,
+    } = history[historyIndex]
+    setGeoJson(geoJson)
+    setHistoryIndex(historyIndex-1)
+    setAssetById(assetById)
+    setFocusingAssetId(undefined)
+  }
+
+  const focusingAsset = focusingAssetId ? assetById[focusingAssetId] : undefined
 
   return (
     <div>
       <AssetsMap
         geoJson={geoJson}
+        historyIndex={historyIndex}
+        setHistoryIndex={setHistoryIndex}
         setHistory={setHistory}
         isSketching={isSketching}
         sketchingMode={sketchingMode}
@@ -93,6 +98,7 @@ export default function App() {
         setSelectedFeatureIndexes={setSelectedFeatureIndexes}
         setFocusingAssetId={setFocusingAssetId}
         mapStyle={baseMapStyleTypes[mapStyle]['style']}
+        history={history}
       />
       <SketchButton
         isSketching={isSketching}
@@ -126,11 +132,16 @@ export default function App() {
         isWithRows={isWithRows}
         isWithDetails={isWithDetails}
         mapStyle={mapStyle}
+        history={history}
+        historyIndex={historyIndex}
         nextMapStyle={baseMapStyleTypes[mapStyle]['nextStyleName']}
         setIsWithFilters={setIsWithFilters}
         setIsWithRows={setIsWithRows}
         setIsWithDetails={setIsWithDetails}
         setMapStyle={setMapStyle}
+        setHistoryIndex={setHistoryIndex}
+        setHistory={setHistory}
+        undo={_undo}
       />
       <OverlaysWindow
         isSketching={isSketching}
