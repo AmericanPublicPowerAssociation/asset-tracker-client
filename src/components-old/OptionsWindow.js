@@ -51,7 +51,6 @@ function OptionsWindow(props) {
   }
 
   return (
-    <div className={classes.root}>
       <MapstyleToggle
         classes={color}
         mapStyle={mapStyle}
@@ -101,7 +100,6 @@ function OptionsWindow(props) {
       </Tooltip>
     }
 
-    </div>
   )
 }
 

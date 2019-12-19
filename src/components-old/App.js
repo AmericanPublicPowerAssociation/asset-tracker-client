@@ -16,31 +16,11 @@ import {
   GEOJSON,
   TASKS,
   RISKS,
-  DARK_MAP_STYLE,
-  STREETS_MAP_STYLE,
-  SATELLITE_STREETS_MAP_STYLE,
   BASE_MAP_STYLE_NAME,
 } from '../constants'
 import {
   getById,
 } from '../macros'
-import './App.css'
-
-const baseMapStyleTypes = {
-  dark: {
-    style: DARK_MAP_STYLE,
-    nextStyleName: 'streets',
-  },
-  streets: {
-    style: STREETS_MAP_STYLE,
-    nextStyleName: 'satelliteStreets',
-  },
-  satelliteStreets: {
-    style: SATELLITE_STREETS_MAP_STYLE,
-    nextStyleName: 'dark',
-  }
-}
-
 
 export default function App() {
   const [isSketching, setIsSketching] = useState(false)
@@ -97,7 +77,6 @@ export default function App() {
         setAssetById={setAssetById}
         setSelectedFeatureIndexes={setSelectedFeatureIndexes}
         setFocusingAssetId={setFocusingAssetId}
-        mapStyle={baseMapStyleTypes[mapStyle]['style']}
         history={history}
       />
       <SketchButton
@@ -134,7 +113,6 @@ export default function App() {
         mapStyle={mapStyle}
         history={history}
         historyIndex={historyIndex}
-        nextMapStyle={baseMapStyleTypes[mapStyle]['nextStyleName']}
         setIsWithFilters={setIsWithFilters}
         setIsWithRows={setIsWithRows}
         setIsWithDetails={setIsWithDetails}
