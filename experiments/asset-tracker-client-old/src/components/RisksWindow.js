@@ -5,6 +5,7 @@ import AssetsFilter from '../components/AssetsFilter'
 import {
   RisksTable,
 } from 'asset-report-risks'
+import SummaryWindow from '../containers/SummaryWindow'
 
 
 const useStyles = makeStyles(theme => ({

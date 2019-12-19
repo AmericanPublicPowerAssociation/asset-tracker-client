@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import AssetDetail from '../components/AssetDetail'
 import {
   changeAsset,
+  updateShape,
   mergeAsset,
   openTaskEditDialog,
   refreshAssetTasks,
@@ -34,6 +35,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   changeAsset: payload => {dispatch(
     changeAsset(payload))},
+  updateShape: payload => {dispatch(
+    updateShape(payload))},
   mergeAsset: payload => {dispatch(
     mergeAsset(payload))},
   refreshAssetTasks: payload => {dispatch(
@@ -42,6 +45,7 @@ const mapDispatchToProps = dispatch => ({
     openTaskEditDialog(payload))},
   setEditingTaskValues: payload => {dispatch(
     setEditingTaskValues(payload))},
+
 })
 
 

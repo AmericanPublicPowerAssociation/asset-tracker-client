@@ -1,102 +1,155 @@
-import React, { PureComponent } from 'react'
-import { Grid } from '@material-ui/core'
+import React, { useEffect } from 'react'
+import { Grid, LinearProgress, Typography, Box, Paper } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles';
 import RadialChart from './RadialChart';
-import BarChart from './BarChart';
 
-
-class SummaryWindow extends PureComponent {
-  render() {
-    const chart1 = {
-      labels: ['On Target', 'Vulnerable', 'Off Target'],
-      series: [17, 5, 2],
-      title: {
-        text:"Lorem Ipsum",
-        style: {
-          fontSize: '18px'
-        }
-      }
+const useStyles = makeStyles(theme => ({
+  root:{
+    padding: theme.spacing(2)
+  },
+  progress: {
+    margin: theme.spacing(2),
+  },
+  paper: {
+    minHeight:120,
+    width: '100%',
+    padding: theme.spacing(2),
+    borderLeft: '10px solid #d24848',
+    color:'#333',
+    background: 'linear-gradient(to bottom, #eeeeee 0%,#cccccc 100%)',
+    textShadow: '2px 2px 5px rgba(0,0,0,.2)',
+    Typography:{
+      color: '#333',
     }
-   
-    const chart2 = {
-      series: [73],
-      labels: ['Lorem Ipsum'],
+  },
+ 
+}));
+
+
+
+export default function SummaryWindow(props) {
+    const classes = useStyles();
+    const {dashboards, refreshDashboards} = props
+    const assetPercent = dashboards.getIn(['risks','impactedAssetPercent'])
+    const meterPercent = dashboards.getIn(['risks','downstreamMeterPercent'])
+    const riskCount = dashboards.getIn(['risks','riskCount'])
+    const assetCount = dashboards.getIn(['risks','impactedAssetCount'])
+    const meterCount = dashboards.getIn(['risks','downstreamMeterCount'])
+    const threatScore = dashboards.getIn(['risks','aggregatedThreatScore'])
+    const threatDescription = dashboards.getIn(['risks','greatestThreatDescription'])
+    useEffect(() => {
+      refreshDashboards()
+    }, [refreshDashboards])
+    const chart1 = {
+      labels: ['Asset Percent'],
       extra:{
         stroke:{
           dashArray: 4,
         }
       },
       title: {
-        text:"Number of devices safe under your territory",
-        align: 'right',
+        text:"Asset Percent",
+        align: 'center',
         style: {
           fontSize: '18px'
         }
       }
     }
-
-    const chart3 = {
-      series: [{
-        name: 'Update Available',
-        data: [1]
-      }, {
-        name: 'Missconections',
-        data: [0]
-      }, {
-        name: 'Hacked',
-        data: [3]
-      }],
-    }
-
-    const chart4 = {
-      series: [{
-        name: 'On Target',
-        data: [4]
-      }, {
-        name: 'Vulnerable',
-        data: [1]
-      }, {
-        name: 'Off Target',
-        data: [1]
-      }],
-    }
-
-    const chart5 = {
-      series: [{
-        name: 'On Target',
-        data: [1]
-      }, {
-        name: 'Vulnerable',
-        data: [0]
-      }, {
-        name: 'Off Target',
-        data: [0]
-      }],
+    const chart2 = {
+      labels: ['Stream Meter'],
+      extra:{
+        stroke:{
+          dashArray: 4,
+        }
+      },
+      title: {
+        text:"Stream Meter",
+        align: 'center',
+        style: {
+          fontSize: '18px'
+        }
+      }
     }
     
     return (
       <>
-        <Grid container spacing={8}>
-          <Grid item xs={12} md={6} lg={6}>
-            <RadialChart data={chart1} type={1} title="Lorem Ipsum"/>
+        <Grid container spacing={5} className={classes.root} >
+          <Grid item xs={12} md={3} lg={3}>
+            <Box color="text.primary">
+              <Paper className={classes.paper} align="center">
+                <Typography variant='h3'>
+                  {riskCount}
+                </Typography>
+                <Typography variant='h6' color='inherit'>
+                  Risks Count
+                </Typography>
+              </Paper>
+            </Box>
+          </Grid>
+          <Grid item xs={12} md={3} lg={3}>
+            <Box color="text.primary">
+              <Paper className={classes.paper} align="center"> 
+                  <Typography variant='h3'>
+                    {meterCount}
+                  </Typography>
+                  <Typography variant='h6' color='inherit'>
+                    Meter Count
+                  </Typography>
+              </Paper>
+            </Box>     
+          </Grid>
+          <Grid item xs={12} md={3} lg={3}>
+            <Box color="text.primary">
+              <Paper className={classes.paper} align="center"> 
+                  <Typography variant='h3'>
+                    {assetCount}
+                  </Typography>
+                  <Typography variant='h6' color='inherit'>
+                    Impacted Asset
+                  </Typography>
+              </Paper>
+            </Box>  
+          </Grid>
+          <Grid item xs={12} md={3} lg={3}>
+            <Box color="text.primary">
+              <Paper className={classes.paper} align="center"> 
+                  <Typography variant='h3'>
+                    {threatScore}
+                  </Typography>
+                  <Typography variant='h6' color='inherit'>
+                    Threat Score
+                  </Typography>
+              </Paper>
+            </Box>  
+          </Grid>
+          <Grid xs={12} md={12} lg={12} item>
+            <Box color="text.primary">
+              <Paper className={classes.paper}> 
+                  <Typography variant='h6'>
+                    Threat Description
+                  </Typography>
+                  <Typography variant='body1' align="justify">
+                    {threatDescription}
+                  </Typography>
+              </Paper>
+            </Box>  
           </Grid>
           <Grid item xs={12} md={6} lg={6}>
-            <RadialChart data={chart2} type={2}/>
+            { assetPercent!=null ?
+                (<RadialChart data={chart1} series={[assetPercent]} type={2}/>)
+              :
+                ( <LinearProgress color="secondary" />)
+            }
           </Grid>
-          <Grid item xs={12} md={4} lg={4}>
-            <BarChart data={chart3} />
+          <Grid xs={12} md={6} lg={6} item>
+            { meterPercent!=null ?
+                (<RadialChart data={chart2} series={[meterPercent]} type={2}/>)
+              :
+                ( <LinearProgress color="secondary" />)
+            }
           </Grid>
-          <Grid item xs={12} md={4} lg={4}>
-            <BarChart data={chart4} />
-          </Grid>
-          <Grid item xs={12} md={4} lg={4}>
-            <BarChart data={chart5} />
-          </Grid>
+          
         </Grid>
       </>
     )
   }
-
-}
-
-
-export default SummaryWindow

@@ -6,7 +6,7 @@
     "@material-ui/core": "^4.5.2",
     "@material-ui/icons": "^4.5.1",
     "gojs": "^2.1.0-beta1",
-    "gojs-react": "^1.0.0",
+    "gojs-react": "^1.0.4",
     "immutable": "^4.0.0-rc.12",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",

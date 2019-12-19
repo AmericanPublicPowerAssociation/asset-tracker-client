@@ -62,7 +62,6 @@ export const getTaskById = state => state.get(
 export const getDashboards = state => state.get(
   'dashboards')
 
-
 export const getValueMatchingAssets = createSelector([
   getAssetById,
   getAssetsFilterValueByAttribute,

@@ -93,3 +93,37 @@ export const barChartStyle = {
       },
     }
   }
+export const barChartColumnStyle= {
+  options: {
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        endingShape: 'rounded',
+        columnWidth: '45%', 
+        distributed: true
+      }
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: function (val, opts) {
+        return `${val}`
+      },
+      offsetY: 30,
+      style: {
+        fontSize: '12px',
+        colors: ["#304758"]
+      }
+    },
+    colors:['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0', '#546E7A', '#26a69a', '#D10CE8'],
+    grid: {
+      row: {
+        colors: ['#fff', '#f2f2f2']
+      }
+    },
+    chart: {
+      toolbar: {
+        show: false,
+      }
+    }
+  }    
+}
