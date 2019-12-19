@@ -67,7 +67,7 @@ function OptionsWindow(props) {
         setMapStyle={setMapStyle} />
 
     {
-      isSketching &&
+      isSketching && false &&
       <MapEditHistory
         classes={color}
         history={history}

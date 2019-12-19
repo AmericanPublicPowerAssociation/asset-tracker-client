@@ -14,7 +14,6 @@ import {
 } from '@nebula.gl/edit-modes'
 import { StaticMap } from 'react-map-gl'
 import translateFeature from '@turf/transform-translate'
-import FinishDrawing from './FinishDrawing'
 import {
   ASSET_TYPE_BY_ID,
   SKETCHING_MODE_ADD,
@@ -375,12 +374,6 @@ export default function AssetsMap(props) {
             mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}>
           </StaticMap>
       </DeckGL>
-      <FinishDrawing
-        sketchingMode={sketchingMode}
-        sketchingAssetType={sketchingAssetType}
-        selectedFeatureIndexes={selectedFeatureIndexes}
-        setSelectedFeatureIndexes={setSelectedFeatureIndexes} 
-        features={geoJson.features} />
     </div>
   )
 }

@@ -11,6 +11,7 @@ import FiltersWindow from './FiltersWindow'
 import RowsWindow from './RowsWindow'
 import DetailsWindow from './DetailsWindow'
 import HintsWindow from './HintsWindow'
+import CenterBottomWindow from './CenterBottomWindow'
 import {
   ASSETS,
   GEOJSON,
@@ -100,6 +101,17 @@ export default function App() {
         mapStyle={baseMapStyleTypes[mapStyle]['style']}
         history={history}
       />
+      <CenterBottomWindow
+        sketchingMode={sketchingMode}
+        sketchingAssetType={sketchingAssetType}
+        selectedFeatureIndexes={selectedFeatureIndexes}
+        setSelectedFeatureIndexes={setSelectedFeatureIndexes} 
+        features={geoJson.features}
+        historyIndex={historyIndex}
+        isSketching={isSketching}
+        undo={_undo}
+      />
+
       <SketchButton
         isSketching={isSketching}
         setIsSketching={_toggleIsSketching}
