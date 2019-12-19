@@ -1,11 +1,4 @@
-import darkMapStyle from './datasets/darkMapStyle.json'
-import streetsMapStyle from './datasets/streetsMapStyle.json'
-import satelliteStreetsMapStyle from './datasets/satelliteStreetsMapStyle.json'
-
-export const DARK_MAP_STYLE = darkMapStyle
-export const STREETS_MAP_STYLE = streetsMapStyle
-export const SATELLITE_STREETS_MAP_STYLE = satelliteStreetsMapStyle
-export const BASE_MAP_STYLE_NAME = 'dark'
+export * from './mapConstants'
 
 export const USER_NAME = 'Alex Hofmann'
 
@@ -25,16 +18,6 @@ export const ASSET_TYPE_BY_ID = {
   S: {
     name: 'Station',
   },
-}
-
-export const VIEW_STATE = {
-  longitude: -93.25845423170956,
-  latitude: 37.24365675372345, 
-  zoom: 16,
-  pitch: 0,
-  bearing: 0,
-  width: window.innerWidth,
-  height: window.innerHeight,
 }
 
 export const GEOJSON = {

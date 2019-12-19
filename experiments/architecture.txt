@@ -38,6 +38,3 @@ POST /assets/<asset-id>.json
 GET /reports
 GET /reports/<report-id>
 GET /reports/<report-id>.zip
-
-material-ui
-_ reactstrap

@@ -219,9 +219,6 @@ export const hideAddingAssetCSVFileErrors = payload => ({
   payload, type: HIDE_ADDING_CSV_ASSETS_ERRORS})
 
 
-export const setMapViewport = payload => ({
-  type: SET_MAP_VIEWPORT, payload
-})
 export const setBaseMapStyleName = payload => ({
   type: SET_BASE_MAP_STYLE_NAME, payload
 })
