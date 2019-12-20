@@ -17,7 +17,7 @@ import {
 import {
   getAssetsGeoJson,
   getBusesGeoJson,
-  getIsMapStyleBright,
+  getColors,
   getMapStyleName,
   getMapViewState,
 } from '../selectors'
@@ -32,11 +32,11 @@ export default function AssetsMap(props) {
   const mapViewState = useSelector(getMapViewState)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
   const busesGeoJson = useSelector(getBusesGeoJson)
-  const isMapStyleBright = useSelector(getIsMapStyleBright) 
+  const colors = useSelector(getColors)
 
   const mapLayers = []
-  mapLayers.push(getAssetsMapLayer(assetsGeoJson, isMapStyleBright))
-  mapLayers.push(getBusesMapLayer(busesGeoJson, isMapStyleBright))
+  mapLayers.push(getAssetsMapLayer(assetsGeoJson, colors))
+  mapLayers.push(getBusesMapLayer(busesGeoJson, colors))
 
   return (
     <div>
@@ -58,11 +58,9 @@ export default function AssetsMap(props) {
 
 function getAssetsMapLayer(
   assetsGeoJson,
-  isMapStyleBright,
+  colors,
 ) {
-  const color = isMapStyleBright ?
-    [0, 0, 0, 127] :
-    [255, 255, 255, 127]
+  const color = colors.feature
   return new EditableGeoJsonLayer({
     id: 'assets-geojson-layer',
     data: assetsGeoJson,
@@ -77,9 +75,9 @@ function getAssetsMapLayer(
 
 function getBusesMapLayer(
   busesGeoJson,
-  isMapStyleBright,
+  colors,
 ) {
-  const color = [255, 255, 0, 255]
+  const color = colors.bus
   return new GeoJsonLayer({
     id: 'buses-geojson-layer',
     data: busesGeoJson,

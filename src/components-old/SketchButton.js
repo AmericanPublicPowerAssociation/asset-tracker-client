@@ -1,8 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
-import StartSketchingIcon from '@material-ui/icons/Edit'
-import StopSketchingIcon from '@material-ui/icons/Check'
 
 const useStyles = makeStyles(theme => ({
   root: {

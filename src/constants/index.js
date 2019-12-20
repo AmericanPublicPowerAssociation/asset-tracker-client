@@ -1,4 +1,5 @@
 export * from './mapConstants'
+export * from './colorConstants'
 export * from './assetConstants'
 export * from './taskConstants'
 export * from './riskConstants'
