@@ -9,7 +9,6 @@ import {
   TranslateMode,
   ViewMode,
 } from '@nebula.gl/edit-modes'
-import translateFeature from '@turf/transform-translate'
 import FinishDrawing from './FinishDrawing'
 import {
   ASSET_TYPE_BY_ID,
@@ -18,7 +17,6 @@ import {
   SKETCHING_MODE_CONNECT,
   SKETCHING_MODE_SELECT,
 } from '../constants'
-
 
 export default function AssetsMap(props) {
   const {
@@ -175,44 +173,9 @@ export default function AssetsMap(props) {
     }))
   }
 
-  // const busFeatureById = {}
-  for (let i = 0; i < temporaryFeatures.length; i++) {
-    if (!busByIndex) {
-      continue
-    }
-
-    switch(geometryType) {
-      case 'Point': {
-        const busAngleIncrement = 360 / busCount
-
-        for (let i = 0; i < busCount; i++) {
-          const busIndex = busIndices[i]
-          const bus = busByIndex[busIndex]
-          const busId = bus.id
-          const busAngle = busAngleIncrement * i
-
-          busFeatures.push({
-            type: 'Feature',
-            properties: {
-              id: busId,
-            },
-            geometry: translateFeature(f, 0.02, busAngle).geometry,
-          })
-        }
-        break
-      }
-    }
-  }
-
-  layers.push(new GeoJsonLayer({
-    getFillColor: [63, 81, 181],
-    getLineColor: [0, 255, 255],
-  }))
-
   return (
     <div>
       <DeckGL
-        // ref={deckRef}
         controller={{type:MyController}}
         pickingRadius={10}
         onClick={e => {

@@ -1,0 +1,11 @@
+[{
+  "id": 1,
+  "assetId": 4,
+  "name": "Open Port",
+  "meterCount": 5
+}, {
+  "id": 2,
+  "assetId": 5,
+  "name": "Voltage Too High",
+  "meterCount": 2
+}]

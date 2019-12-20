@@ -11,5 +11,11 @@ export const MAP_STYLE_NAMES = ['dark', 'street', 'satellite']
 export const MAP_STYLE_COUNT = MAP_STYLE_NAMES.length
 export const BRIGHT_MAP_STYLE_NAMES = ['street']
 
+export const POINT_RADIUS_IN_METERS = 10
+export const LINE_WIDTH_IN_METERS = 5
+export const BUS_RADIUS_IN_METERS = 5
+export const BUS_DISTANCE_IN_METERS = 15
+export const BUS_DISTANCE_IN_KILOMETERS = BUS_DISTANCE_IN_METERS / 1000
+
 export const TOGGLE_MAP_STYLE = 'TOGGLE_MAP_STYLE'
 export const SET_MAP_VIEW_STATE = 'SET_MAP_VIEW_STATE'

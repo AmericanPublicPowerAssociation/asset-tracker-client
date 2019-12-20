@@ -8,7 +8,10 @@ import {
   ViewMode,
 } from '@nebula.gl/edit-modes'
 import {
+  BUS_RADIUS_IN_METERS,
+  LINE_WIDTH_IN_METERS,
   MAP_STYLE_BY_NAME,
+  POINT_RADIUS_IN_METERS,
   SET_MAP_VIEW_STATE,
 } from '../constants'
 import {
@@ -64,8 +67,8 @@ function getAssetsMapLayer(
     id: 'assets-geojson-layer',
     data: assetsGeoJson,
     pickable: true,
-    getRadius: 10,
-    getLineWidth: 5,
+    getRadius: POINT_RADIUS_IN_METERS,
+    getLineWidth: LINE_WIDTH_IN_METERS,
     getFillColor: color,
     getLineColor: color,
     mode: ViewMode,
@@ -81,7 +84,7 @@ function getBusesMapLayer(
     id: 'buses-geojson-layer',
     data: busesGeoJson,
     pickable: true,
-    getRadius: 5,
+    getRadius: BUS_RADIUS_IN_METERS,
     getLineWidth: 0,
     getFillColor: color,
   })
