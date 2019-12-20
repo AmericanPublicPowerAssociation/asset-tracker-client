@@ -1,9 +1,15 @@
 import { combineReducers } from 'redux'
 import reduceReducers from 'reduce-reducers'
+import mapStyleName from './mapStyleName'
 import mapViewState from './mapViewState'
+import assetsGeoJson from './assetsGeoJson'
+import assetById from './assetById'
 
 const reduceHorizontally = combineReducers({
+  mapStyleName,
   mapViewState,
+  assetsGeoJson,
+  assetById,
 })
 
 const reduceVertically = (state, action) => {

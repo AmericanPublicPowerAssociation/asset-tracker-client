@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import produce from 'immer'
 import { MapController} from 'deck.gl'
-import { GeoJsonLayer } from '@deck.gl/layers'
-import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import {
   DrawLineStringMode,
   DrawPointMode,
@@ -19,7 +17,6 @@ import {
   SKETCHING_MODE_EDIT,
   SKETCHING_MODE_CONNECT,
   SKETCHING_MODE_SELECT,
-  VIEW_STATE,
 } from '../constants'
 
 
@@ -42,11 +39,8 @@ export default function AssetsMap(props) {
     historyIndex,
     setHistoryIndex,
   } = props
-  const [viewport, setViewport] = useState(VIEW_STATE)
   const [assetTypeCount, setAssetTypeCount] = useState(1)
   const layers = []
-  // let deckHandleEvent
-  // let polygonClickHandle
 
   class MyController extends MapController {
     constructor(options={}) {
@@ -126,11 +120,6 @@ export default function AssetsMap(props) {
         */
         return [0x90, 0x90, 0x90, 0xff]
       },
-      /*
-      updateTriggers: {
-        getFillColor: [sketchingMode],
-      },
-      */
       // editHandlePointRadiusScale: 2,
       onEdit: ({editType, editContext, updatedData}) => {
         const { featureIndexes } = editContext
@@ -193,26 +182,8 @@ export default function AssetsMap(props) {
     }))
   } else {
     layers.push(new GeoJsonLayer({
-      id: 'geojson-layer',
-      data: geoJson,
       pickable: true,
-      getRadius: 10,
-      getLineWidth: 5,
-      getFillColor: [0, 0, 0, 150],
-      getLineColor: [0, 0, 0],
     }))
-  }
-
-  const _onViewStateChange = ({viewState}) => {
-    const {
-      latitude,
-      longitude,
-      zoom,
-      bearing,
-      pitch,
-      width,
-      height} = viewState
-    setViewport({latitude, longitude, zoom, bearing, pitch, width, height})
   }
 
   // const busFeatureById = {}
@@ -301,7 +272,6 @@ export default function AssetsMap(props) {
       <DeckGL
         // ref={deckRef}
         controller={{type:MyController}}
-        layers={layers}
         pickingRadius={10}
         onClick={e => {
           if (e.picked) {

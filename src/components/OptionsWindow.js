@@ -1,12 +1,15 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
 import MapIcon from '@material-ui/icons/Map'
 import {
-  BRIGHT_MAP_STYLE_NAMES,
-  NEXT_MAP_STYLE_NAME_BY_MAP_STYLE_NAME,
+  TOGGLE_MAP_STYLE,
 } from '../constants'
+import {
+  getIsMapStyleBright,
+} from '../selectors'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -16,23 +19,18 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function OptionsWindow(props) {
+export default function OptionsWindow() {
   const classes = useStyles()
-  const {
-    mapStyleName,
-    setMapStyleName,
-  } = props
+  const dispatch = useDispatch()
+  const isMapStyleBright = useSelector(getIsMapStyleBright) 
   // Determine button color
-  const isMapStyleBright = BRIGHT_MAP_STYLE_NAMES.includes(mapStyleName)
   const buttonColor = isMapStyleBright ? 'black' : 'white'
-  // Determine next map style
-  const nextMapStyleName = NEXT_MAP_STYLE_NAME_BY_MAP_STYLE_NAME[mapStyleName]
   return (
     <div className={classes.root}>
       <Tooltip title='Toggle Map Style'>
         <IconButton
           className={buttonColor}
-          onClick={() => setMapStyleName(nextMapStyleName)}
+          onClick={() => dispatch({type: TOGGLE_MAP_STYLE})}
         >
           <MapIcon />
         </IconButton>
