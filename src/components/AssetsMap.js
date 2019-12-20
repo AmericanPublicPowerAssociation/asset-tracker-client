@@ -5,6 +5,9 @@ import DeckGL from '@deck.gl/react'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import {
+  ViewMode,
+} from '@nebula.gl/edit-modes'
+import {
   MAP_STYLE_BY_NAME,
   SET_MAP_VIEW_STATE,
 } from '../constants'
@@ -50,7 +53,10 @@ export default function AssetsMap(props) {
   )
 }
 
-function getAssetsMapLayer(assetsGeoJson, isMapStyleBright) {
+function getAssetsMapLayer(
+  assetsGeoJson,
+  isMapStyleBright,
+) {
   const color = isMapStyleBright ?
     [0, 0, 0, 127] :
     [255, 255, 255, 127]
@@ -62,18 +68,21 @@ function getAssetsMapLayer(assetsGeoJson, isMapStyleBright) {
     getLineWidth: 5,
     getFillColor: color,
     getLineColor: color,
+    mode: ViewMode,
   })
 }
 
-function getBusesMapLayer(busesGeoJson, isMapStyleBright) {
-  const color = [0, 255, 255, 127]
+function getBusesMapLayer(
+  busesGeoJson,
+  isMapStyleBright,
+) {
+  const color = [255, 255, 0, 255]
   return new GeoJsonLayer({
     id: 'buses-geojson-layer',
     data: busesGeoJson,
     pickable: true,
     getRadius: 5,
-    getLineWidth: 2,
+    getLineWidth: 0,
     getFillColor: color,
-    getLineColor: color,
   })
 }

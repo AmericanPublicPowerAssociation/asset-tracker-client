@@ -2,20 +2,22 @@ import {
   getById,
 } from '../macros'
 
+export const LINE_ASSET_TYPE_ID = 'l'
+export const TRANSFORMER_ASSET_TYPE_ID = 't'
+export const SUBSTATION_ASSET_TYPE_ID = 's'
+export const STATION_ASSET_TYPE_ID = 'S'
+
 export const ASSET_TYPE_BY_ID = {
-  l: {
+  [LINE_ASSET_TYPE_ID]: {
     name: 'Line',
   },
-  b: {
-    name: 'Bus',
-  },
-  t: {
+  [TRANSFORMER_ASSET_TYPE_ID]: {
     name: 'Transformer',
   },
-  s: {
+  [SUBSTATION_ASSET_TYPE_ID]: {
     name: 'Substation',
   },
-  S: {
+  [STATION_ASSET_TYPE_ID]: {
     name: 'Station',
   },
 }
@@ -98,7 +100,7 @@ export const ASSETS_GEOJSON = {
     geometry: {
       type: 'LineString',
       coordinates: [
-        [-93.25642648169446, 37.24548875319819],
+        [-93.2564050240223,  37.245480212511424],
         [-93.25678494706636, 37.24396646113922],
       ],
     },
@@ -107,11 +109,11 @@ export const ASSETS_GEOJSON = {
 
 export const ASSETS = [{
   id: 1,
-  type: 's',
+  typeId: 's',
   name: 'Substation A',
 }, {
   id: 2,
-  type: 't',
+  typeId: 't',
   name: 'Substation Transformer 1',
   attributes: {
     phaseCount: 3,
@@ -147,7 +149,7 @@ export const ASSETS = [{
   },
 }, {
   id: 3,
-  type: 'm',
+  typeId: 'm',
   name: 'Industrial Meter 1',
   vendor: 'Schneider Electric',
   product: 'SCH-MV10',
@@ -165,7 +167,7 @@ export const ASSETS = [{
   },
 }, {
   id: 4,
-  type: 'm',
+  typeId: 'm',
   name: 'Industrial Meter 2',
   vendor: 'Schneider Electric',
   product: 'SCH-MV10',
@@ -183,7 +185,7 @@ export const ASSETS = [{
   },
 }, {
   id: 5,
-  type: 'l',
+  typeId: 'l',
   name: 'Line 1',
   attributes: {
     'phaseCount': 3,
@@ -197,7 +199,7 @@ export const ASSETS = [{
       attributes: {
       },
     },
-    3: {
+    1: {
       id: 'L1o',
       attributes: {
       },
@@ -205,7 +207,7 @@ export const ASSETS = [{
   },
 }, {
   id: 6,
-  type: 'l',
+  typeId: 'l',
   name: 'Line 2',
   attributes: {
     'phaseCount': 3,
@@ -227,7 +229,7 @@ export const ASSETS = [{
   },
 }, {
   id: 7,
-  type: 'l',
+  typeId: 'l',
   name: 'Line 3',
   attributes: {
     'phaseCount': 3,
