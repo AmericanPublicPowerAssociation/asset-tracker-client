@@ -1,20 +1,10 @@
 import produce from 'immer'
 import {
+  MAP_VIEW_STATE,
   SET_MAP_VIEW_STATE,
 } from '../constants'
 
-const initialState = {
-  // longitude: 0,
-  // latitude: 0,
-  // zoom: 0,
-  longitude: -93.25845423170956,
-  latitude: 37.24365675372345, 
-  zoom: 16,
-  pitch: 0,
-  bearing: 0,
-  width: window.innerWidth,
-  height: window.innerHeight,
-}
+const initialState = MAP_VIEW_STATE
 
 const mapViewState = produce((draft, action) => {
   switch (action.type) {

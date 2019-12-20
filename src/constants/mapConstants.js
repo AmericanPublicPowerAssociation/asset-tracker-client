@@ -2,6 +2,19 @@ import DARK_MAP_STYLE from '../datasets/mapStyles/monochromeDark.json'
 import STREET_MAP_STYLE from '../datasets/mapStyles/streets.json'
 import SATELLITE_MAP_STYLE from '../datasets/mapStyles/satelliteStreets.json'
 
+export const MAP_VIEW_STATE = {
+  // longitude: 0,
+  // latitude: 0,
+  // zoom: 0,
+  longitude: -93.258,
+  latitude: 37.244,
+  zoom: 16,
+  pitch: 0,
+  bearing: 0,
+  width: window.innerWidth,
+  height: window.innerHeight,
+}
+
 export const MAP_STYLE_BY_NAME = {
   dark: DARK_MAP_STYLE,
   street: STREET_MAP_STYLE,

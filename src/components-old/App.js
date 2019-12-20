@@ -4,7 +4,6 @@ import SketchButton from './SketchButton'
 import SketchModeToolbar from './SketchModeToolbar'
 import SketchAssetToolbar from './SketchAssetToolbar'
 import SketchEditToolbar from './SketchEditToolbar'
-import UsersWindow from './UsersWindow'
 import OptionsWindow from './OptionsWindow'
 import OverlaysWindow from './OverlaysWindow'
 import FiltersWindow from './FiltersWindow'
@@ -104,7 +103,6 @@ export default function App() {
         setSketchingEditType={setSketchingEditType}
         setSelectedFeatureIndexes={setSelectedFeatureIndexes}
       />
-      <UsersWindow />
       <OptionsWindow
         isSketching={isSketching}
         isWithFilters={isWithFilters}
