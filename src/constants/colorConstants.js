@@ -4,17 +4,20 @@ const SOLID_YELLOW = [255, 255, 0, 255]
 
 export const COLORS_BY_MAP_STYLE_NAME = {
   dark: {
-    button: 'white',
+    active: 'white',
+    inactive: 'gray',
     feature: TRANSPARENT_WHITE,
     bus: SOLID_YELLOW,
   },
   street: {
-    button: 'black',
+    active: 'black',
+    inactive: 'gray',
     feature: TRANSPARENT_BLACK,
     bus: SOLID_YELLOW,
   },
   satellite: {
-    button: 'white',
+    active: 'white',
+    inactive: 'gray',
     feature: TRANSPARENT_WHITE,
     bus: SOLID_YELLOW,
   },

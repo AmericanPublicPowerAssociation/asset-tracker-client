@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
-import ToggleMapStyleIcon from '@material-ui/icons/Map'
+import ToggleStylesIcon from '@material-ui/icons/Map'
+import ToggleDetailsIcon from '@material-ui/icons/Receipt'
 import {
   TOGGLE_MAP_STYLE,
 } from '../constants'
@@ -19,20 +20,34 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function OptionsWindow() {
+export default function OptionsWindow(props) {
   const classes = useStyles()
   const dispatch = useDispatch()
+  const {
+    isWithDetails,
+    setIsWithDetails,
+  } = props
   const colors = useSelector(getColors)
-  const buttonColor = colors.button
+  const activeColor = colors.active
+  const inactiveColor = colors.inactive
   return (
     <div className={classes.root}>
 
-      <Tooltip title='Toggle Map Style'>
+      <Tooltip title='Toggle Styles'>
         <IconButton
-          className={buttonColor}
+          className={activeColor}
           onClick={() => dispatch({type: TOGGLE_MAP_STYLE})}
         >
-          <ToggleMapStyleIcon />
+          <ToggleStylesIcon />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip title='Toggle Details'>
+        <IconButton
+          className={isWithDetails ? activeColor : inactiveColor}
+          onClick={() => setIsWithDetails(!isWithDetails)}
+        >
+          <ToggleDetailsIcon />
         </IconButton>
       </Tooltip>
 

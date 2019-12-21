@@ -224,11 +224,6 @@ export default function AssetsMap(props) {
 
               }
             }
-            /*
-            if (!isSketching) {
-              setIsWithDetails(true)
-            }
-            */
           }
         }}
       >

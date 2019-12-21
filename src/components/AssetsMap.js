@@ -26,7 +26,7 @@ const {
   REACT_APP_MAPBOX_TOKEN,
 } = process.env
 
-export default function AssetsMap(props) {
+export default function AssetsMap() {
   const dispatch = useDispatch()
   const mapStyleName = useSelector(getMapStyleName)
   const mapViewState = useSelector(getMapViewState)

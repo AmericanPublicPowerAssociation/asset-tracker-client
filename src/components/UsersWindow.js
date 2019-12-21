@@ -23,13 +23,13 @@ const useStyles = makeStyles(theme => ({
 export default function UsersWindow() {
   const classes = useStyles()
   const colors = useSelector(getColors)
-  const buttonColor = colors.button
+  const activeColor = colors.active
   return (
     <div className={classes.root}>
 
       <Tooltip title={USER_NAME}>
         <IconButton
-          className={buttonColor}
+          className={activeColor}
         >
           <SeeUserIcon />
         </IconButton>
@@ -37,7 +37,7 @@ export default function UsersWindow() {
 
       <Tooltip title='Sign Out'>
         <IconButton
-          className={buttonColor}
+          className={activeColor}
         >
           <SignOutIcon />
         </IconButton>

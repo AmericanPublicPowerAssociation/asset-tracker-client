@@ -1,5 +1,8 @@
 import { createSelector } from 'reselect'
 import {
+  getAssetById,
+} from './assetSelectors'
+import {
   BRIGHT_MAP_STYLE_NAMES,
 } from '../constants'
 import {
@@ -9,7 +12,6 @@ import {
 export const getMapStyleName = state => state.mapStyleName
 export const getMapViewState = state => state.mapViewState
 export const getAssetsGeoJson = state => state.assetsGeoJson
-export const getAssetById = state => state.assetById
 
 export const getIsMapStyleBright = createSelector([
   getMapStyleName,

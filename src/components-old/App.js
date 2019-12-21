@@ -61,7 +61,6 @@ export default function App() {
   return (
     <div>
       <AssetsMap
-        geoJson={geoJson}
         historyIndex={historyIndex}
         setHistoryIndex={setHistoryIndex}
         setHistory={setHistory}
@@ -72,7 +71,6 @@ export default function App() {
         selectedFeatureIndexes={selectedFeatureIndexes}
         assetById={assetById}
         setGeoJson={setGeoJson}
-        setIsWithDetails={setIsWithDetails}
         setAssetById={setAssetById}
         setSelectedFeatureIndexes={setSelectedFeatureIndexes}
         setFocusingAssetId={setFocusingAssetId}

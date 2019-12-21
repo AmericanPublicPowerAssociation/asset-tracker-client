@@ -1,23 +1,8 @@
-import React from 'react'
-import produce from 'immer'
-import clsx from 'clsx'
-import { makeStyles } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card'
-import TextField from '@material-ui/core/TextField';
-import CloseButton from './CloseButton'
+import TextField from '@material-ui/core/TextField'
 import DeleteButton from './DeleteButton'
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    position: 'fixed',
-    top: theme.spacing(8),
-    // bottom: theme.spacing(5),
-    right: theme.spacing(1),
-    width: theme.spacing(30),
-    padding: theme.spacing(1),
-  },
   section: {
     marginTop: theme.spacing(1),
   },
@@ -35,17 +20,14 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function DetailsWindow(props) {
-  const classes = useStyles()
   const {
     geoJson,
     setGeoJson,
     selectedFeatureIndexes,
     setSelectedFeatureIndexes,
     setFocusingAssetId,
-    isWithDetails,
     focusingAsset,
     assetById,
-    setIsWithDetails,
     setAssetById,
   } = props
 
@@ -80,13 +62,6 @@ function DetailsWindow(props) {
     return fields
   }
 
-  return (
-    <Paper
-      className={clsx(classes.root, {
-        poof: !isWithDetails,
-      })}
-    >
-      <CloseButton onClick={() => setIsWithDetails(false)} />
     {focusingAsset ? 
       <>
         <Typography>{focusingAsset.name}</Typography>
@@ -121,14 +96,3 @@ function DetailsWindow(props) {
         focusingAsset={focusingAsset}i
         setAssetById={setAssetById}
       />
-      </>
-      : 
-      <Typography>
-        Select an asset to see details
-      </Typography>
-    }
-    </Paper>
-  )
-}
-
-export default DetailsWindow
