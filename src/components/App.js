@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import AssetsMap from './AssetsMap'
 import SketchButton from './SketchButton'
 import SketchModeToolbar from './SketchModeToolbar'
@@ -20,7 +20,7 @@ import {
   DARK_MAP_STYLE,
   STREETS_MAP_STYLE,
   SATELLITE_STREETS_MAP_STYLE,
-  BASE_MAP_STYLE_NAME,
+  BASE_MAP_STYLE_NAME, SPEC,
 } from '../constants'
 import {
   getById,
@@ -59,7 +59,18 @@ export default function App() {
   const [selectedFeatureIndexes, setSelectedFeatureIndexes] = useState([])
   const [focusingAssetId, setFocusingAssetId] = useState()
   const [assetById, setAssetById] = useState(getById(ASSETS, {}))
+  const [spec, setSpec] = useState({})
   const [mapStyle, setMapStyle] = useState(BASE_MAP_STYLE_NAME)
+
+  useEffect(() => {
+    fetch('/assets.json').then(async (res) => {
+      let data = await res.json()
+      console.log(data)
+      setSpec(data.spec);
+      setAssetById(getById(data.assets, {}));
+    });
+
+  }, [])
 
   const _toggleIsSketching = () => {
     setIsSketching(!isSketching)
@@ -93,6 +104,7 @@ export default function App() {
         sketchingEditType={sketchingEditType}
         selectedFeatureIndexes={selectedFeatureIndexes}
         assetById={assetById}
+        spec={spec}
         setGeoJson={setGeoJson}
         setIsWithDetails={setIsWithDetails}
         setAssetById={setAssetById}

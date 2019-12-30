@@ -32,6 +32,7 @@ export default function AssetsMap(props) {
     sketchingEditType,
     selectedFeatureIndexes,
     assetById,
+    spec,
     // setIsWithDetails,
     geoJson,
     setHistory,
@@ -234,6 +235,10 @@ export default function AssetsMap(props) {
     const geometryCoordinates = geometry.coordinates
     const assetId = f.properties.id
     const asset = assetById[assetId]
+    if (!asset) {
+      continue
+    }
+
     const busByIndex = asset.busByIndex
 
     if (!busByIndex) {

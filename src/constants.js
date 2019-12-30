@@ -88,7 +88,7 @@ export const GEOJSON = {
   }, {
     type: 'Feature',
     properties: {
-      id: 5,
+      id: "632-645",
       type: 'l',
     },
     geometry: {
@@ -103,7 +103,7 @@ export const GEOJSON = {
   }, {
     type: 'Feature',
     properties: {
-      id: 6,
+      id: "632-633",
       type: 'l',
     },
     geometry: {
@@ -116,7 +116,7 @@ export const GEOJSON = {
   }, {
     type: 'Feature',
     properties: {
-      id: 7,
+      id: "645-646",
       type: 'l',
     },
     geometry: {
