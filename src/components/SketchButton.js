@@ -24,7 +24,7 @@ export default function SketchButton(props) {
   const iconColor = isViewing ? 'black' : 'white'
 
   function handleClick() {
-    setSketchMode(isViewing ? 'edit' : 'view')
+    setSketchMode(isViewing ? 'sketch' : 'view')
   }
 
   return (

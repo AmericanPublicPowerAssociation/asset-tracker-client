@@ -10,3 +10,7 @@
 .gray {
   color: gray !important;
 }
+.selected {
+  color: white !important;
+  background-color: #ff4081 !important;
+}
