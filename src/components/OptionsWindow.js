@@ -1,56 +1,61 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { makeStyles } from '@material-ui/core/styles'
-import Tooltip from '@material-ui/core/Tooltip'
-import IconButton from '@material-ui/core/IconButton'
-import ToggleStylesIcon from '@material-ui/icons/Map'
-import ToggleDetailsIcon from '@material-ui/icons/Receipt'
-import {
-  TOGGLE_MAP_STYLE,
-} from '../constants'
-import {
-  getColors,
-} from '../selectors'
+import SeeFiltersIcon from '@material-ui/icons/FilterList'
+import SeeRowsIcon from '@material-ui/icons/ViewList'
+import MapEditHistory from './MapEditHistory'
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-  },
-}))
-
-export default function OptionsWindow(props) {
-  const classes = useStyles()
-  const dispatch = useDispatch()
   const {
+    isSketching,
+    isWithFilters,
+    isWithRows,
     isWithDetails,
+    history,
+    historyIndex,
+    mapStyle,
+    nextMapStyle,
+    setIsWithFilters,
+    setIsWithRows,
     setIsWithDetails,
+    setMapStyle,
+    setHistory,
+    undo
   } = props
-  const colors = useSelector(getColors)
-  const activeColor = colors.active
-  const inactiveColor = colors.inactive
+
+  const color = {
+    colorPrimary: (
+      mapStyle === 'streets' ?
+      classes.light :
+      classes.dark
+    ),
+  }
+
   return (
-    <div className={classes.root}>
+    {
+      isSketching &&
+      <MapEditHistory
+        classes={color}
+        history={history}
+        historyIndex={historyIndex}
+        undo={undo}
+        setHistory={setHistory} />
+    }
 
-      <Tooltip title='Toggle Styles'>
+    {!isSketching && !isWithFilters &&
+      <Tooltip title='See Filters' enterDelay={TOOLTIP_DELAY}>
         <IconButton
-          className={activeColor}
-          onClick={() => dispatch({type: TOGGLE_MAP_STYLE})}
-        >
-          <ToggleStylesIcon />
+          color='primary'
+          classes={color}
+          onClick={() => setIsWithFilters(true)}>
+          <SeeFiltersIcon />
         </IconButton>
       </Tooltip>
+    }
 
-      <Tooltip title='Toggle Details'>
+    {!isSketching && !isWithRows &&
+      <Tooltip title='See Rows' enterDelay={TOOLTIP_DELAY}>
         <IconButton
-          className={isWithDetails ? activeColor : inactiveColor}
-          onClick={() => setIsWithDetails(!isWithDetails)}
-        >
-          <ToggleDetailsIcon />
+          color='primary'
+          classes={color}
+          onClick={() => setIsWithRows(true)}>
+          <SeeRowsIcon />
         </IconButton>
       </Tooltip>
-
-    </div>
-  )
-}
+    }

@@ -1,51 +1,98 @@
-import React from 'react'
-import clsx from 'clsx'
-import { useSelector } from 'react-redux'
-import { makeStyles } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
-import {
-  getFocusingAsset,
-} from '../selectors'
+import Card from '@material-ui/core/Card'
+import TextField from '@material-ui/core/TextField'
+import DeleteButton from './DeleteButton'
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    position: 'fixed',
-    top: theme.spacing(6),
-    right: theme.spacing(1),
-    maxWidth: theme.spacing(32),
-    padding: theme.spacing(1),
+  section: {
+    marginTop: theme.spacing(1),
   },
+  card: {
+    marginTop: theme.spacing(1),
+  },
+  form: {
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    width: '100%'
+  }, 
+  input: {
+    width: '100%'
+  }
 }))
 
-export default function DetailsWindow(props) {
-  const classes = useStyles()
+function DetailsWindow(props) {
   const {
-    isWithDetails,
+    geoJson,
+    setGeoJson,
+    selectedFeatureIndexes,
+    setSelectedFeatureIndexes,
+    setFocusingAssetId,
+    focusingAsset,
+    assetById,
+    setAssetById,
   } = props
-  const focusingAsset = useSelector(getFocusingAsset)
-  const detailsPanel = focusingAsset ?
-    AssetDetailsPanel(focusingAsset) :
-    EmptyDetailsPanel()
-  return (
-    <Paper className={clsx(classes.root, {poof: !isWithDetails})}>
-      {detailsPanel}
-    </Paper>
-  )
-}
 
-function AssetDetailsPanel(asset) {
-  return (
-    <Typography>
-      {asset.id}
-    </Typography>
-  )
-}
+  const _onChange = (e) => {
+    const field = e.target.name
+    const input = e.target.value
+    const assetId = focusingAsset.id
+    setAssetById(
+      produce( draft => {
+        draft[assetId][field] = input
+      })
+    )
+  }
 
-function EmptyDetailsPanel() {
-  return (
-    <Typography>
-      Select an asset to see its details
-    </Typography>
-  )
-}
+  const getFields = () => {
+    const fields = []
+    for (let key in focusingAsset) {
+      if (focusingAsset.hasOwnProperty(key)){
+        fields.push(
+          <TextField
+            className={classes.input}
+            name={key}
+            key={focusingAsset.id + "_" + key}
+            label={key}
+            value={focusingAsset[key]}
+            disabled={key === 'id' || key === 'type'}
+            onChange={ _onChange }
+          />
+        ) 
+      }
+    }
+    return fields
+  }
+
+    {focusingAsset ? 
+      <>
+        <Typography>{focusingAsset.name}</Typography>
+        {/* <Typography>{focusingAsset.type}</Typography> */}
+      {focusingAsset.electricalConnections &&
+      <div className={classes.section}>
+          <Typography><i>Electrical Connections</i></Typography>
+
+        {Object.keys(focusingAsset.electricalConnections).map(k => {
+          const connectedAsset = assetById[k]
+          return (
+            <Card className={classes.card}>
+              {connectedAsset.name}
+            </Card>
+          )
+        }
+        )}
+      </div>
+      }
+      <form noValidate autoComplete="off" className={classes.form}>
+        {
+          getFields()
+        }
+      </form>
+
+      <DeleteButton
+        setFocusingAssetId={setFocusingAssetId}
+        setSelectedFeatureIndexes={setSelectedFeatureIndexes}
+        geoJson={geoJson}
+        setGeoJson={setGeoJson}
+        selectedFeatureIndexes={selectedFeatureIndexes}
+        focusingAsset={focusingAsset}i
+        setAssetById={setAssetById}
+      />
