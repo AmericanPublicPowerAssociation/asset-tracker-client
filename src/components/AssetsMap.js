@@ -1,341 +1,124 @@
-import React, { useState } from 'react'
-import produce from 'immer'
-import { MapController} from 'deck.gl'
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { StaticMap } from 'react-map-gl'
+import DeckGL from '@deck.gl/react'
+import { GeoJsonLayer } from '@deck.gl/layers'
+import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import {
-  DrawLineStringMode,
-  DrawPointMode,
-  DrawPolygonMode,
-  ModifyMode,
-  TranslateMode,
   ViewMode,
 } from '@nebula.gl/edit-modes'
-import FinishDrawing from './FinishDrawing'
-import { StaticMap } from 'react-map-gl'
-import translateFeature from '@turf/transform-translate'
 import {
-  ASSET_TYPE_BY_ID,
-  SKETCHING_MODE_ADD,
-  SKETCHING_MODE_EDIT,
-  SKETCHING_MODE_CONNECT,
-  SKETCHING_MODE_SELECT,
+  setFocusingAssetId,
+  setMapViewState,
+} from '../actions'
+import {
+  BUS_RADIUS_IN_METERS,
+  LINE_WIDTH_IN_METERS,
+  MAP_STYLE_BY_NAME,
+  PICKING_RADIUS_IN_PIXELS,
+  POINT_RADIUS_IN_METERS,
 } from '../constants'
+import {
+  getAssetsGeoJson,
+  getBusesGeoJson,
+  getColors,
+  getMapStyleName,
+  getMapViewState,
+} from '../selectors'
 
-export default function AssetsMap(props) {
-  const {
-    isSketching,
-    sketchingMode,
-    sketchingAssetType,
-    sketchingEditType,
-    selectedFeatureIndexes,
-    assetById,
-    spec,
-    // setIsWithDetails,
-    geoJson,
-    setHistory,
-    setGeoJson,
-    setAssetById,
-    setSelectedFeatureIndexes,
-    setFocusingAssetId,
-    mapStyle,
-    history,
-    historyIndex,
-    setHistoryIndex,
-  } = props
-  const [assetTypeCount, setAssetTypeCount] = useState(1)
-  const layers = []
+const {
+  REACT_APP_MAPBOX_TOKEN,
+} = process.env
 
-  class MyController extends MapController {
-    constructor(options={}) {
-      super(options)
-      this.events = ['doubletap', 'keyup']
+const ASSETS_MAP_LAYER_ID = 'assets-geojson-layer'
+const BUSES_MAP_LAYER_ID = 'buses-geojson-layer'
+
+export default function AssetsMap() {
+  const dispatch = useDispatch()
+  const mapStyleName = useSelector(getMapStyleName)
+  const mapViewState = useSelector(getMapViewState)
+  const assetsGeoJson = useSelector(getAssetsGeoJson)
+  const busesGeoJson = useSelector(getBusesGeoJson)
+  const colors = useSelector(getColors)
+
+  const mapLayers = []
+  mapLayers.push(getAssetsMapLayer(assetsGeoJson, colors))
+  mapLayers.push(getBusesMapLayer(busesGeoJson, colors))
+
+  function handleViewStateChange({viewState}) {
+    dispatch(setMapViewState(viewState))
+  }
+
+  function handleClick(info, event) {
+    if (!info.picked) {
+      return
     }
 
-    handleEvent(event) {
-      if (event.type === 'keyup' && event.key === 'Enter'){
-        setSelectedFeatureIndexes([])
-        setFocusingAssetId(undefined)
-      }
-      else if (event.type === 'doubletap') {
-        setSelectedFeatureIndexes([])
-        setFocusingAssetId(undefined)
-      } else {
-        super.handleEvent(event)
-      }
-    }
-  }
+    const mapLayerId = info.layer.id
+    const objectId = info.object.properties.id
+    let assetId = null
 
-  let mode = ViewMode
-
-  if (
-    sketchingMode === SKETCHING_MODE_ADD &&
-    sketchingAssetType 
-  ) {
-    mode = {
-      l: class MyLine extends DrawLineStringMode {
-        handleClickAdapter(event, props) {
-          const output = super.handleClickAdapter(event, props)
-          return output
-        }
-      },
-      b: DrawPointMode,
-      t: DrawPointMode,
-      s: DrawPolygonMode,
-    }[sketchingAssetType]
-  }
-  else if (
-    sketchingMode === SKETCHING_MODE_EDIT &&
-    sketchingEditType
-  ) {
-    mode = {
-      m: ModifyMode,
-      t: TranslateMode,
-    }[sketchingEditType]
-  }
-
-
-  if (isSketching) {
-    layers.push(new EditableGeoJsonLayer({
-      mode,
-      selectedFeatureIndexes: selectedFeatureIndexes,
-      lineWidthMinPixels: 3,
-      getRadius: 10,
-      getLineWidth: 5,
-      getFillColor: (feature, isSelected, mode) => {
-        if (isSelected) {
-          return [0, 0, 0, 90]
-        }
-        return [0, 0, 0, 150]
-      },
-      getLineColor: (feature, isSelected, mode) => {
-        if (isSelected) {
-          return [245, 0, 87]
-        }
-        return [0, 0, 0]
-      },
-      getTentativeLineColor: (f) => {
-        return [0x90, 0x90, 0x90, 0xff]
-      },
-      // editHandlePointRadiusScale: 2,
-      onEdit: ({editType, editContext, updatedData}) => {
-        const { featureIndexes } = editContext
-        setHistory( 
-          produce( history, draft => {
-            draft[historyIndex+1] = {
-              editType,
-              geoJson,
-              assetById,
-            }
-          })
-        )
-        setHistoryIndex(historyIndex+1)
-        let newAssetById 
-        if (editType === 'addPosition') {
-          if (sketchingAssetType === 'l') {
-            if (featureIndexes.length === 1) {
-              const curFeatureIndex = featureIndexes[0]
-              const feature = updatedData.features[curFeatureIndex]
-              const coordinates = feature.geometry.coordinates
-              if (coordinates.length > 2){
-                // remove last repeated point when double clicking in line mode
-                const length = coordinates.length
-                const lastCoord = coordinates[length-1]
-                const secondLastCoord = coordinates[length-2]
-                if (lastCoord[0] === secondLastCoord[0] && 
-                    lastCoord[1] === secondLastCoord[1])
-                  feature.geometry.coordinates = coordinates.slice(0, coordinates.length-1)
-              }
-            } 
-          }
-        }
-
-        if (editType === 'addFeature') {
-          const sketchingAssetTypeName = ASSET_TYPE_BY_ID[sketchingAssetType]['name']
-          if (sketchingAssetType === 'l') {
-            // Continue sketching line
-            setSelectedFeatureIndexes(featureIndexes)
-          }
-          const id = assetTypeCount
-          featureIndexes.forEach(i => {
-            const p = updatedData.features[i].properties
-            p['id'] = id
-            p['type'] = sketchingAssetType
-            setAssetTypeCount(assetTypeCount + 1)
-          })
-          newAssetById = produce(assetById, _ => {
-            _[id] = {
-              id: id.toString(),
-              type: sketchingAssetType,
-              name: `${sketchingAssetTypeName} ${assetTypeCount}`,
-            }
-          })
-          setAssetById(newAssetById)
-          setFocusingAssetId(id)
-        }
-
-        setGeoJson(updatedData)
-      },
-    }))
-  }
-
-  const _onViewStateChange = ({viewState}) => {
-    const {
-      latitude,
-      longitude,
-      zoom,
-      bearing,
-      pitch,
-      width,
-      height} = viewState
-    setViewport({latitude, longitude, zoom, bearing, pitch, width, height})
-  }
-
-  // const busFeatureById = {}
-  const busFeatures = []
-  const temporaryFeatures = geoJson.features
-  for (let i = 0; i < temporaryFeatures.length; i++) {
-    const f = temporaryFeatures[i]
-    const geometry = f.geometry
-    const geometryType = geometry.type
-    const geometryCoordinates = geometry.coordinates
-    const assetId = f.properties.id
-    const asset = assetById[assetId]
-    if (!asset) {
-      continue
-    }
-
-    const busByIndex = asset.busByIndex
-
-    if (!busByIndex) {
-      continue
-    }
-
-    const busEntries = Object.entries(busByIndex)
-    const busIndices = Object.keys(busByIndex)
-    const busCount = busEntries.length
-
-    switch(geometryType) {
-      case 'Point': {
-        const busAngleIncrement = 360 / busCount
-
-        for (let i = 0; i < busCount; i++) {
-          const busIndex = busIndices[i]
-          const bus = busByIndex[busIndex]
-          const busId = bus.id
-          const busAngle = busAngleIncrement * i
-
-          busFeatures.push({
-            type: 'Feature',
-            properties: {
-              id: busId,
-            },
-            geometry: translateFeature(f, 0.02, busAngle).geometry,
-          })
-        }
+    switch(mapLayerId) {
+      case ASSETS_MAP_LAYER_ID: {
+        assetId = objectId
+        console.log('clicked assetId =', assetId)
         break
       }
-      case 'LineString': {
-        for (let i = 0; i < busCount; i++) {
-          const busIndex = busIndices[i]
-          const bus = busByIndex[busIndex]
-          const busId = bus.id
-          const geometryXY = geometryCoordinates[busIndex]
-          busFeatures.push({
-            type: 'Feature',
-            properties: {
-              id: busId,
-            },
-            geometry: {
-              type: 'Point',
-              coordinates: geometryXY,
-            },
-          })
-        }
-        break
-      }
-      case 'Polygon': {
+      case BUSES_MAP_LAYER_ID: {
+        const busId = objectId
+        console.log('clicked busId =', busId)
         break
       }
       default: {
-        break
       }
     }
+
+    dispatch(setFocusingAssetId(assetId))
   }
 
-  layers.push(new GeoJsonLayer({
-    id: 'bus-geojson-layer',
-    data: {
-      type: 'FeatureCollection',
-      features: busFeatures,
-    },
-    pickable: true,
-    getRadius: 5,
-    getFillColor: [63, 81, 181],
-    getLineColor: [0, 255, 255],
-    getLineWidth: 2,
-  }))
-
->>>>>>> big-picture-sketch
   return (
+    <div>
       <DeckGL
-        controller={{type:MyController}}
-        pickingRadius={10}
-        onClick={e => {
-          if (e.picked) {
-            if (sketchingMode === SKETCHING_MODE_SELECT ||
-                sketchingMode === SKETCHING_MODE_EDIT) {
-              setSelectedFeatureIndexes([e.index])
-
-            } else if (sketchingMode === SKETCHING_MODE_CONNECT) {
-
-              const selectedAssetId = e.object.properties.id
-              const selectedAsset = assetById[selectedAssetId]
-              const selectedAssetType = selectedAsset.type
-
-              if (selectedFeatureIndexes.length === 0) {
-                if (selectedAssetType !== 'b' && selectedAssetType !== 's' && selectedAssetType !== 'S') {
-                  setSelectedFeatureIndexes([e.index])
-                  setFocusingAssetId(e.object.properties.id)
-                }
-              } else {
-                const assetId = geoJson.features[selectedFeatureIndexes[0]].properties.id
-                // const asset = assetById[assetId]
-
-                if (assetId === selectedAssetId) {
-                  return
-                }
-
-                if (selectedAsset.type === 'b') {
-                  setAssetById(produce(assetById, _ => {
-                    const asset1 = _[assetId]
-                    if (!asset1.electricalConnections) {
-                      asset1.electricalConnections = {}
-                    }
-                    // asset.electricalConnections[selectedAssetId] = {}
-                    asset1.electricalConnections[selectedAssetId] = true
-
-                    const asset2 = _[selectedAssetId] 
-                    if (!asset2.electricalConnections) {
-                      asset2.electricalConnections = {}
-                    }
-                    // asset2.electricalConnections[selectedAssetId] = {}
-                    asset2.electricalConnections[assetId] = true
-
-                  }))
-                  setSelectedFeatureIndexes([])
-                }
-
-              }
-            }
-          }
-        }}
+        controller={true}
+        pickingRadius={PICKING_RADIUS_IN_PIXELS}
+        layers={mapLayers}
+        viewState={mapViewState}
+        onViewStateChange={handleViewStateChange}
+        onClick={handleClick}
       >
+        <StaticMap
+          key='static-map'
+          mapStyle={MAP_STYLE_BY_NAME[mapStyleName]}
+          mapboxApiAccessToken={REACT_APP_MAPBOX_TOKEN}
+        />
       </DeckGL>
-      <FinishDrawing
-        sketchingMode={sketchingMode}
-        sketchingAssetType={sketchingAssetType}
-        selectedFeatureIndexes={selectedFeatureIndexes}
-        setSelectedFeatureIndexes={setSelectedFeatureIndexes} 
-        features={geoJson.features} />
     </div>
   )
+}
+
+function getAssetsMapLayer(assetsGeoJson, colors) {
+  const color = colors.asset
+  return new EditableGeoJsonLayer({
+    id: ASSETS_MAP_LAYER_ID,
+    data: assetsGeoJson,
+    pickable: true,
+    stroked: false,
+    mode: ViewMode,
+    getRadius: POINT_RADIUS_IN_METERS,
+    getLineWidth: LINE_WIDTH_IN_METERS,
+    getFillColor: color,
+    getLineColor: color,
+  })
+}
+
+function getBusesMapLayer(busesGeoJson, colors) {
+  const color = colors.bus
+  return new GeoJsonLayer({
+    id: BUSES_MAP_LAYER_ID,
+    data: busesGeoJson,
+    pickable: true,
+    stroked: false,
+    getRadius: BUS_RADIUS_IN_METERS,
+    getFillColor: color,
+  })
 }
