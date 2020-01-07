@@ -25,7 +25,7 @@ export default function DetailsWindow(props) {
   } = props
   const focusingAsset = useSelector(getFocusingAsset)
   const detailsPanel = focusingAsset ?
-    AssetDetailsPanel() :
+    AssetDetailsPanel(focusingAsset) :
     EmptyDetailsPanel()
   return (
     <Paper className={clsx(classes.root, {poof: !isWithDetails})}>
@@ -34,16 +34,18 @@ export default function DetailsWindow(props) {
   )
 }
 
-function EmptyDetailsPanel() {
+function AssetDetailsPanel(asset) {
   return (
     <Typography>
-      Select an asset to see details
+      {asset.id}
     </Typography>
   )
 }
 
-function AssetDetailsPanel(props) {
+function EmptyDetailsPanel() {
   return (
-    'hey'
+    <Typography>
+      Select an asset to see its details
+    </Typography>
   )
 }

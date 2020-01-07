@@ -174,7 +174,6 @@ export default function AssetsMap(props) {
   }
 
   return (
-    <div>
       <DeckGL
         controller={{type:MyController}}
         pickingRadius={10}
@@ -183,8 +182,9 @@ export default function AssetsMap(props) {
             if (sketchingMode === SKETCHING_MODE_SELECT ||
                 sketchingMode === SKETCHING_MODE_EDIT) {
               setSelectedFeatureIndexes([e.index])
-              setFocusingAssetId(e.object.properties.id)
+
             } else if (sketchingMode === SKETCHING_MODE_CONNECT) {
+
               const selectedAssetId = e.object.properties.id
               const selectedAsset = assetById[selectedAssetId]
               const selectedAssetType = selectedAsset.type
@@ -234,6 +234,5 @@ export default function AssetsMap(props) {
         selectedFeatureIndexes={selectedFeatureIndexes}
         setSelectedFeatureIndexes={setSelectedFeatureIndexes} 
         features={geoJson.features} />
-    </div>
   )
 }

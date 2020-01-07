@@ -1,13 +1,13 @@
 import {
-  SET_FOCUSING_ASSET,
+  SET_FOCUSING_ASSET_ID,
 } from '../constants'
 
-const initialState = undefined
+const initialState = null
 
 const focusingAssetId = (state = initialState, action) => {
   switch(action.type) {
-    case SET_FOCUSING_ASSET: {
-      const { id } = action.payload
+    case SET_FOCUSING_ASSET_ID: {
+      const id = action.payload
       return id
     }
     default: {

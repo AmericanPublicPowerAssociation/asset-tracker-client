@@ -8,11 +8,15 @@ import {
   ViewMode,
 } from '@nebula.gl/edit-modes'
 import {
+  setFocusingAssetId,
+  setMapViewState,
+} from '../actions'
+import {
   BUS_RADIUS_IN_METERS,
   LINE_WIDTH_IN_METERS,
   MAP_STYLE_BY_NAME,
+  PICKING_RADIUS_IN_PIXELS,
   POINT_RADIUS_IN_METERS,
-  SET_MAP_VIEW_STATE,
 } from '../constants'
 import {
   getAssetsGeoJson,
@@ -26,6 +30,9 @@ const {
   REACT_APP_MAPBOX_TOKEN,
 } = process.env
 
+const ASSETS_MAP_LAYER_ID = 'assets-geojson-layer'
+const BUSES_MAP_LAYER_ID = 'buses-geojson-layer'
+
 export default function AssetsMap() {
   const dispatch = useDispatch()
   const mapStyleName = useSelector(getMapStyleName)
@@ -38,16 +45,49 @@ export default function AssetsMap() {
   mapLayers.push(getAssetsMapLayer(assetsGeoJson, colors))
   mapLayers.push(getBusesMapLayer(busesGeoJson, colors))
 
+  function handleViewStateChange({viewState}) {
+    dispatch(setMapViewState(viewState))
+  }
+
+  function handleClick(info, event) {
+    if (!info.picked) {
+      return
+    }
+
+    const mapLayerId = info.layer.id
+    const objectId = info.object.properties.id
+    let assetId = null
+
+    switch(mapLayerId) {
+      case ASSETS_MAP_LAYER_ID: {
+        assetId = objectId
+        console.log('clicked assetId =', assetId)
+        break
+      }
+      case BUSES_MAP_LAYER_ID: {
+        const busId = objectId
+        console.log('clicked busId =', busId)
+        break
+      }
+      default: {
+      }
+    }
+
+    dispatch(setFocusingAssetId(assetId))
+  }
+
   return (
     <div>
       <DeckGL
         controller={true}
+        pickingRadius={PICKING_RADIUS_IN_PIXELS}
         layers={mapLayers}
         viewState={mapViewState}
-        onViewStateChange={({viewState}) => dispatch({
-          type: SET_MAP_VIEW_STATE, payload: viewState})}
+        onViewStateChange={handleViewStateChange}
+        onClick={handleClick}
       >
         <StaticMap
+          key='static-map'
           mapStyle={MAP_STYLE_BY_NAME[mapStyleName]}
           mapboxApiAccessToken={REACT_APP_MAPBOX_TOKEN}
         />
@@ -56,34 +96,29 @@ export default function AssetsMap() {
   )
 }
 
-function getAssetsMapLayer(
-  assetsGeoJson,
-  colors,
-) {
-  const color = colors.feature
+function getAssetsMapLayer(assetsGeoJson, colors) {
+  const color = colors.asset
   return new EditableGeoJsonLayer({
-    id: 'assets-geojson-layer',
+    id: ASSETS_MAP_LAYER_ID,
     data: assetsGeoJson,
     pickable: true,
+    stroked: false,
+    mode: ViewMode,
     getRadius: POINT_RADIUS_IN_METERS,
     getLineWidth: LINE_WIDTH_IN_METERS,
     getFillColor: color,
     getLineColor: color,
-    mode: ViewMode,
   })
 }
 
-function getBusesMapLayer(
-  busesGeoJson,
-  colors,
-) {
+function getBusesMapLayer(busesGeoJson, colors) {
   const color = colors.bus
   return new GeoJsonLayer({
-    id: 'buses-geojson-layer',
+    id: BUSES_MAP_LAYER_ID,
     data: busesGeoJson,
     pickable: true,
+    stroked: false,
     getRadius: BUS_RADIUS_IN_METERS,
-    getLineWidth: 0,
     getFillColor: color,
   })
 }
