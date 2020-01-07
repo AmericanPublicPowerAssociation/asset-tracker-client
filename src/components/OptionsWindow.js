@@ -29,7 +29,7 @@ import MapEditHistory from './MapEditHistory'
 
   return (
     {
-      isSketching &&
+      isSketching && false &&
       <MapEditHistory
         classes={color}
         history={history}

@@ -10,6 +10,8 @@ import {
   ViewMode,
 } from '@nebula.gl/edit-modes'
 import FinishDrawing from './FinishDrawing'
+import { StaticMap } from 'react-map-gl'
+import translateFeature from '@turf/transform-translate'
 import {
   ASSET_TYPE_BY_ID,
   SKETCHING_MODE_ADD,
@@ -26,6 +28,8 @@ export default function AssetsMap(props) {
     sketchingEditType,
     selectedFeatureIndexes,
     assetById,
+    spec,
+    // setIsWithDetails,
     geoJson,
     setHistory,
     setGeoJson,
@@ -173,6 +177,104 @@ export default function AssetsMap(props) {
     }))
   }
 
+  const _onViewStateChange = ({viewState}) => {
+    const {
+      latitude,
+      longitude,
+      zoom,
+      bearing,
+      pitch,
+      width,
+      height} = viewState
+    setViewport({latitude, longitude, zoom, bearing, pitch, width, height})
+  }
+
+  // const busFeatureById = {}
+  const busFeatures = []
+  const temporaryFeatures = geoJson.features
+  for (let i = 0; i < temporaryFeatures.length; i++) {
+    const f = temporaryFeatures[i]
+    const geometry = f.geometry
+    const geometryType = geometry.type
+    const geometryCoordinates = geometry.coordinates
+    const assetId = f.properties.id
+    const asset = assetById[assetId]
+    if (!asset) {
+      continue
+    }
+
+    const busByIndex = asset.busByIndex
+
+    if (!busByIndex) {
+      continue
+    }
+
+    const busEntries = Object.entries(busByIndex)
+    const busIndices = Object.keys(busByIndex)
+    const busCount = busEntries.length
+
+    switch(geometryType) {
+      case 'Point': {
+        const busAngleIncrement = 360 / busCount
+
+        for (let i = 0; i < busCount; i++) {
+          const busIndex = busIndices[i]
+          const bus = busByIndex[busIndex]
+          const busId = bus.id
+          const busAngle = busAngleIncrement * i
+
+          busFeatures.push({
+            type: 'Feature',
+            properties: {
+              id: busId,
+            },
+            geometry: translateFeature(f, 0.02, busAngle).geometry,
+          })
+        }
+        break
+      }
+      case 'LineString': {
+        for (let i = 0; i < busCount; i++) {
+          const busIndex = busIndices[i]
+          const bus = busByIndex[busIndex]
+          const busId = bus.id
+          const geometryXY = geometryCoordinates[busIndex]
+          busFeatures.push({
+            type: 'Feature',
+            properties: {
+              id: busId,
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: geometryXY,
+            },
+          })
+        }
+        break
+      }
+      case 'Polygon': {
+        break
+      }
+      default: {
+        break
+      }
+    }
+  }
+
+  layers.push(new GeoJsonLayer({
+    id: 'bus-geojson-layer',
+    data: {
+      type: 'FeatureCollection',
+      features: busFeatures,
+    },
+    pickable: true,
+    getRadius: 5,
+    getFillColor: [63, 81, 181],
+    getLineColor: [0, 255, 255],
+    getLineWidth: 2,
+  }))
+
+>>>>>>> big-picture-sketch
   return (
       <DeckGL
         controller={{type:MyController}}
@@ -234,5 +336,6 @@ export default function AssetsMap(props) {
         selectedFeatureIndexes={selectedFeatureIndexes}
         setSelectedFeatureIndexes={setSelectedFeatureIndexes} 
         features={geoJson.features} />
+    </div>
   )
 }

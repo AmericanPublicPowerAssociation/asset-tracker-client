@@ -1,6 +1,11 @@
 import Card from '@material-ui/core/Card'
-import TextField from '@material-ui/core/TextField'
+import TextField from '@material-ui/core/TextField';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import CloseButton from './CloseButton'
 import DeleteButton from './DeleteButton'
+import {ExpansionPanel} from "@material-ui/core";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 
 const useStyles = makeStyles(theme => ({
   section: {
@@ -16,6 +21,18 @@ const useStyles = makeStyles(theme => ({
   }, 
   input: {
     width: '100%'
+  },
+  mimic: {
+    border: 'none',
+    boxShadow: 'none',
+  },
+  noPadding: {
+    padding: 0
+  },
+  vertical: {
+    display: 'flex',
+    flexDirection: 'column',
+    padding: 0
   }
 }))
 
@@ -46,17 +63,117 @@ function DetailsWindow(props) {
     const fields = []
     for (let key in focusingAsset) {
       if (focusingAsset.hasOwnProperty(key)){
-        fields.push(
-          <TextField
-            className={classes.input}
-            name={key}
-            key={focusingAsset.id + "_" + key}
-            label={key}
-            value={focusingAsset[key]}
-            disabled={key === 'id' || key === 'type'}
-            onChange={ _onChange }
-          />
-        ) 
+        if (key == 'attributes') {
+          fields.push(
+            <ExpansionPanel className={classes.mimic}>
+              <ExpansionPanelSummary
+                className={classes.noPadding}
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header">
+                <Typography>Attributes</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails className={classes.vertical}>
+                {
+                  Object.keys(focusingAsset.attributes).map((key) => <TextField
+                    className={classes.input}
+                    name={key}
+                    key={focusingAsset.id + "_attribute " + key}
+                    label={key}
+                    value={focusingAsset.attributes[key]}
+                    disabled={key === 'id' || key === 'type'}
+                  />)
+                }
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+            )
+        } else if (key == 'busByIndex') {
+          fields.push(
+            <ExpansionPanel className={classes.mimic}>
+              <ExpansionPanelSummary
+                className={classes.noPadding}
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls='panel-buses-content'
+                id='panel-buses-header'>
+                <Typography>Buses</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails className={classes.vertical}>
+              { Object.keys(focusingAsset.busByIndex).map((key) => <>
+                  <ExpansionPanel className={classes.mimic}>
+                    <ExpansionPanelSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls={`panel${key}-content`}
+                      id={`panel${key}-header`}>
+                      <Typography>Bus {key}</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails className={classes.vertical}>
+                      {
+                        Object.keys(focusingAsset.busByIndex[key].attributes).map((key) => <TextField
+                          className={classes.input}
+                          name={key}
+                          key={focusingAsset.id + "_attribute " + key}
+                          label={key}
+                          value={focusingAsset.attributes[key]}
+                          disabled={key === 'id' || key === 'type'}
+                        />) || []
+                      }
+                    </ExpansionPanelDetails>
+                  </ExpansionPanel>
+                </>
+              )}
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          )
+        } else if (key == 'electricalConnections') {
+          fields.push(
+            <ExpansionPanel className={classes.mimic}>
+              <ExpansionPanelSummary
+                className={classes.noPadding}
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls='panel-buses-content'
+                id='panel-buses-header'>
+                <Typography>Electrical Connections</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails className={classes.vertical}>
+                { focusingAsset.electricalConnections.map((conn) => <>
+                    <ExpansionPanel className={classes.mimic}>
+                      <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls={`panel${conn.asset_id + conn.bus_id}-content`}
+                        id={`panel${conn.asset_id + conn.bus_id}-header`}>
+                        <Typography>Element {conn.asset_id} - Bus {conn.bus_id}</Typography>
+                      </ExpansionPanelSummary>
+                      <ExpansionPanelDetails className={classes.vertical}>
+                        {
+                          Object.keys(conn.attributes).map((key) => <TextField
+                            className={classes.input}
+                            name={key}
+                            key={focusingAsset.id + "_attribute " + key}
+                            label={key}
+                            value={JSON.stringify(conn.attributes[key])}
+                            disabled={key === 'id' || key === 'type'}
+                          />) || []
+                        }
+                      </ExpansionPanelDetails>
+                    </ExpansionPanel>
+                  </>
+                )}
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          )
+        } else {
+          fields.push(
+            <TextField
+              className={classes.input}
+              name={key}
+              key={focusingAsset.id + "_" + key}
+              label={key}
+              value={focusingAsset[key]}
+              disabled={key === 'id' || key === 'type'}
+              onChange={ _onChange }
+            />
+          )
+        }
       }
     }
     return fields
@@ -66,21 +183,7 @@ function DetailsWindow(props) {
       <>
         <Typography>{focusingAsset.name}</Typography>
         {/* <Typography>{focusingAsset.type}</Typography> */}
-      {focusingAsset.electricalConnections &&
-      <div className={classes.section}>
-          <Typography><i>Electrical Connections</i></Typography>
-
-        {Object.keys(focusingAsset.electricalConnections).map(k => {
-          const connectedAsset = assetById[k]
-          return (
-            <Card className={classes.card}>
-              {connectedAsset.name}
-            </Card>
-          )
-        }
-        )}
-      </div>
-      }
+      
       <form noValidate autoComplete="off" className={classes.form}>
         {
           getFields()

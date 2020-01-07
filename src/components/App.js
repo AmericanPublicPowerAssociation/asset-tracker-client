@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import AssetsMap from './AssetsMap'
 import SketchButton from './SketchButton'
 import SketchModeToolbar from './SketchModeToolbar'
@@ -10,12 +10,17 @@ import FiltersWindow from './FiltersWindow'
 import RowsWindow from './RowsWindow'
 import DetailsWindow from './DetailsWindow'
 import HintsWindow from './HintsWindow'
+import CenterBottomWindow from './CenterBottomWindow'
 import {
   ASSETS,
   GEOJSON,
   TASKS,
   RISKS,
   BASE_MAP_STYLE_NAME,
+  DARK_MAP_STYLE,
+  STREETS_MAP_STYLE,
+  SATELLITE_STREETS_MAP_STYLE,
+  BASE_MAP_STYLE_NAME, SPEC,
 } from '../constants'
 import {
   getById,
@@ -35,7 +40,18 @@ export default function App() {
   const [selectedFeatureIndexes, setSelectedFeatureIndexes] = useState([])
   const [focusingAssetId, setFocusingAssetId] = useState()
   const [assetById, setAssetById] = useState(getById(ASSETS, {}))
+  const [spec, setSpec] = useState({})
   const [mapStyle, setMapStyle] = useState(BASE_MAP_STYLE_NAME)
+
+  useEffect(() => {
+    fetch('/assets.json').then(async (res) => {
+      let data = await res.json()
+      console.log(data)
+      setSpec(data.spec);
+      setAssetById(getById(data.assets, {}));
+    });
+
+  }, [])
 
   const _toggleIsSketching = () => {
     setIsSketching(!isSketching)
@@ -68,12 +84,24 @@ export default function App() {
         sketchingEditType={sketchingEditType}
         selectedFeatureIndexes={selectedFeatureIndexes}
         assetById={assetById}
+        spec={spec}
         setGeoJson={setGeoJson}
         setAssetById={setAssetById}
         setSelectedFeatureIndexes={setSelectedFeatureIndexes}
         setFocusingAssetId={setFocusingAssetId}
         history={history}
       />
+      <CenterBottomWindow
+        sketchingMode={sketchingMode}
+        sketchingAssetType={sketchingAssetType}
+        selectedFeatureIndexes={selectedFeatureIndexes}
+        setSelectedFeatureIndexes={setSelectedFeatureIndexes} 
+        features={geoJson.features}
+        historyIndex={historyIndex}
+        isSketching={isSketching}
+        undo={_undo}
+      />
+
       <SketchButton
         isSketching={isSketching}
         setIsSketching={_toggleIsSketching}

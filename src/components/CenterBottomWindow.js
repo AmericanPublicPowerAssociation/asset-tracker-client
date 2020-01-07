@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import Fab from '@material-ui/core/Fab';
 import DoneIcon from '@material-ui/icons/Done'
 import ClearIcon from '@material-ui/icons/Clear'
+import HistoryIcon from '@material-ui/icons/History'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles( theme => ({
@@ -12,6 +13,7 @@ const useStyles = makeStyles( theme => ({
     bottom: theme.spacing(4),
     transform: 'translateX(-50%)',
     zIndex: 1,
+    display: 'flex'
   },
   button: {
     margin: theme.spacing(1),
@@ -20,12 +22,15 @@ const useStyles = makeStyles( theme => ({
   },
 }))
 
-export default function FinishDrawing(props){
+export default function CenterBottomWindow(props){
   const {
     sketchingAssetType,
     selectedFeatureIndexes,
     setSelectedFeatureIndexes,
-    features
+    features,
+    historyIndex,
+    isSketching,
+    undo,
   } = props
   const classes = useStyles()
   let poof = true
@@ -43,14 +48,23 @@ export default function FinishDrawing(props){
   }
 
   return (
-    <div className={clsx(classes.buttons, {poof})}>
-      <Fab className={classes.button} onClick={_onClick}>
-        <DoneIcon color='inherit' />
-      </Fab>
-      { false && <Fab className={classes.button}>
-        <ClearIcon />
+    <div className={clsx(classes.buttons, {poof: true})}>
+      <div className={clsx({poof})}>
+        <Fab className={classes.button} onClick={_onClick}>
+          <DoneIcon color='inherit' />
         </Fab>
-      }
+        { false && <Fab className={classes.button}>
+          <ClearIcon />
+          </Fab>
+        }
+      </div>
+        <div className={clsx({poof: !isSketching || historyIndex < 0})}>
+        <Fab
+          className={classes.button}
+          onClick={ () => undo() }>
+          <HistoryIcon />
+        </Fab>
+      </div>
     </div>
   )
 }

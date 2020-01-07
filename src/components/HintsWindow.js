@@ -11,8 +11,9 @@ const useStyles = makeStyles( theme => ({
     textAlign: 'center',
   },
 	snackbar: {
-    background: 'purple',
+    background: '#ff4081',
 		color: 'white',
+    fontSize: '1.1rem',
 	},
   topCenter: {
     left: '50%',
@@ -64,7 +65,7 @@ export default function HintsWindow(props){
         classes={{anchorOriginTopCenter: classes.topCenter, root: classes.root}}
         ContentProps={{classes: {root: classes.snackbar}}}
 				open={open}
-				message={message} />
+        message={message} />
     </div>
   )
 } 
