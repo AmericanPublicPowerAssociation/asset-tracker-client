@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import AssetsMap from './AssetsMap'
 import SketchButton from './SketchButton'
 import SketchModeToolbar from './SketchModeToolbar'
+import SketchAddToolbar from './SketchAddToolbar'
+import SketchEditToolbar from './SketchEditToolbar'
 import UsersWindow from './UsersWindow'
 import OptionsWindow from './OptionsWindow'
 import DetailsWindow from './DetailsWindow'
@@ -24,6 +26,14 @@ export default function App() {
         setSketchMode={setSketchMode}
       />
       <SketchModeToolbar
+        sketchMode={sketchMode}
+        setSketchMode={setSketchMode}
+      />
+      <SketchAddToolbar
+        sketchMode={sketchMode}
+        setSketchMode={setSketchMode}
+      />
+      <SketchEditToolbar
         sketchMode={sketchMode}
         setSketchMode={setSketchMode}
       />

@@ -4,8 +4,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
+import Tooltip from '@material-ui/core/Tooltip'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import AddIcon from '@material-ui/icons/Add'
+import EditIcon from '@material-ui/icons/Edit'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,14 +31,29 @@ export default function SketchModeToolbar(props) {
       })}
     >
       <List>
-        <ListItem
-          button
-          classes={{selected: 'selected'}}
-          selected={sketchMode.startsWith('add')}
-          onClick={() => setSketchMode('add')}
-        >
-          <SvgIcon fontSize='large' component={AddIcon} />
-        </ListItem>
+
+        <Tooltip title='Add' aria-label='Add' placement='right'>
+          <ListItem
+            button
+            classes={{selected: 'selected'}}
+            selected={sketchMode.startsWith('add')}
+            onClick={() => setSketchMode('add')}
+          >
+            <SvgIcon fontSize='large' component={AddIcon} />
+          </ListItem>
+        </Tooltip>
+
+        <Tooltip title='Edit' aria-label='Edit' placement='right'>
+          <ListItem
+            button
+            classes={{selected: 'selected'}}
+            selected={sketchMode.startsWith('edit')}
+            onClick={() => setSketchMode('edit')}
+          >
+            <SvgIcon fontSize='large' component={EditIcon} />
+          </ListItem>
+        </Tooltip>
+
       </List>
     </Paper>
   )
