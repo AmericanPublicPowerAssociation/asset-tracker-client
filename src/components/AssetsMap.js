@@ -42,7 +42,7 @@ export default function AssetsMap() {
   const busesGeoJson = useSelector(getBusesGeoJson)
   const colors = useSelector(getColors)
 
-  const mapLayers = []
+ const mapLayers = []
   mapLayers.push(getAssetsMapLayer(assetsGeoJson, colors))
   mapLayers.push(getBusesMapLayer(busesGeoJson, colors))
 
@@ -104,7 +104,11 @@ function getAssetsMapLayer(assetsGeoJson, colors) {
     data: assetsGeoJson,
     pickable: true,
     stroked: false,
-    mode: ViewMode,
+    //mode: ViewMode,
+    mode: DrawPointMode,
+    onEdit: function({editType, editContext, updatedData}){
+      console.log(editType, editContext, updatedData)
+    },
     getRadius: POINT_RADIUS_IN_METERS,
     getLineWidth: LINE_WIDTH_IN_METERS,
     getFillColor: color,
