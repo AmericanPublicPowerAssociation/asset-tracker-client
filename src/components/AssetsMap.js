@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
 import { GeoJsonLayer } from '@deck.gl/layers'
-import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import {
-  ViewMode,
   DrawPointMode,
-} from '@nebula.gl/edit-modes'
+  DrawPolygonMode,
+  EditableGeoJsonLayer,
+  TranslateMode,
+  ViewMode,
+} from 'nebula.gl'
 import {
   setFocusingAssetId,
   setMapViewState,
@@ -42,9 +44,19 @@ export default function AssetsMap() {
   const busesGeoJson = useSelector(getBusesGeoJson)
   const colors = useSelector(getColors)
 
- const mapLayers = []
-  mapLayers.push(getAssetsMapLayer(assetsGeoJson, colors))
-  mapLayers.push(getBusesMapLayer(busesGeoJson, colors))
+  const mapLayers = []
+
+  const selectedFeatureIndexes = []
+
+  mapLayers.push(new EditableGeoJsonLayer({
+    id: 'geojson-layer',
+    data: assetsGeoJson,
+    mode: DrawPolygonMode,
+    selectedFeatureIndexes,
+    onEdit: () => console.log('whee'),
+  }))
+  // mapLayers.push(getAssetsMapLayer(assetsGeoJson, colors))
+  // mapLayers.push(getBusesMapLayer(busesGeoJson, colors))
 
   function handleViewStateChange({viewState}) {
     dispatch(setMapViewState(viewState))
@@ -85,7 +97,7 @@ export default function AssetsMap() {
         layers={mapLayers}
         viewState={mapViewState}
         onViewStateChange={handleViewStateChange}
-        onClick={handleClick}
+        // onClick={handleClick}
       >
         <StaticMap
           key='static-map'
@@ -99,20 +111,24 @@ export default function AssetsMap() {
 
 function getAssetsMapLayer(assetsGeoJson, colors) {
   const color = colors.asset
+  console.log('MAPPP')
+
   return new EditableGeoJsonLayer({
     id: ASSETS_MAP_LAYER_ID,
     data: assetsGeoJson,
-    pickable: true,
-    stroked: false,
-    //mode: ViewMode,
-    mode: DrawPointMode,
-    onEdit: function({editType, editContext, updatedData}){
+    // pickable: true,
+    // stroked: false,
+    // mode: ViewMode,
+    // mode: DrawPointMode,
+    mode: DrawPolygonMode,
+    onEdit: function({editType, editContext, updatedData}) {
+      console.log('HEEYY')
       console.log(editType, editContext, updatedData)
     },
-    getRadius: POINT_RADIUS_IN_METERS,
-    getLineWidth: LINE_WIDTH_IN_METERS,
-    getFillColor: color,
-    getLineColor: color,
+    // getRadius: POINT_RADIUS_IN_METERS,
+    // getLineWidth: LINE_WIDTH_IN_METERS,
+    // getFillColor: color,
+    // getLineColor: color,
   })
 }
 
