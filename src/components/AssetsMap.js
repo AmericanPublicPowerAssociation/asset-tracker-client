@@ -4,6 +4,7 @@ import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import {
+  DrawLineStringMode,
   DrawPointMode,
   DrawPolygonMode,
   EditableGeoJsonLayer,
@@ -15,6 +16,9 @@ import {
   setMapViewState,
 } from '../actions'
 import {
+  ADD_LINE,
+  ADD_TRANSFORMER,
+  ADD_SUBSTATION,
   BUS_RADIUS_IN_METERS,
   LINE_WIDTH_IN_METERS,
   MAP_STYLE_BY_NAME,
@@ -112,13 +116,23 @@ function getAssetsMapLayer(sketchMode, assetsGeoJson, selectedFeatureIndexes, co
   const color = colors.asset
   console.log('MAPPP')
   console.log(assetsGeoJson)
-
+  let currentMode = ViewMode
+  if (sketchMode === ADD_LINE) {
+    currentMode = DrawLineStringMode
+  }
+  else if (sketchMode === ADD_TRANSFORMER) {
+    currentMode = DrawPointMode
+  }
+  else if (sketchMode === ADD_SUBSTATION) {
+    currentMode = DrawPolygonMode
+  }
   return new EditableGeoJsonLayer({
     id: ASSETS_MAP_LAYER_ID,
     data: assetsGeoJson,
     pickable: true,
     stroked: false,
     selectedFeatureIndexes,
+    mode: currentMode,
     // mode: ViewMode,
     // mode: DrawPointMode,
     // mode: sketchMode,

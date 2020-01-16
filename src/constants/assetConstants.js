@@ -28,4 +28,5 @@ export const ASSETS_GEOJSON = assetsGeoJson
 export const ASSETS = assets
 export const ASSET_BY_ID = getById(ASSETS, {})
 
+export const SET_ASSETS_GEOJSON = 'SET_ASSETS_GEOJSON'
 export const SET_FOCUSING_ASSET_ID = 'SET_FOCUSING_ASSET_ID'
