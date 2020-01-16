@@ -6,6 +6,7 @@ import { GeoJsonLayer } from '@deck.gl/layers'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import {
   ViewMode,
+  DrawPointMode,
 } from '@nebula.gl/edit-modes'
 import {
   setFocusingAssetId,
