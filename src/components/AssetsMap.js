@@ -48,15 +48,9 @@ export default function AssetsMap() {
 
   const selectedFeatureIndexes = []
 
-  mapLayers.push(new EditableGeoJsonLayer({
-    id: 'geojson-layer',
-    data: assetsGeoJson,
-    mode: DrawPolygonMode,
-    selectedFeatureIndexes,
-    onEdit: () => console.log('whee'),
-  }))
-  // mapLayers.push(getAssetsMapLayer(assetsGeoJson, colors))
-  // mapLayers.push(getBusesMapLayer(busesGeoJson, colors))
+  mapLayers.push(getAssetsMapLayer(
+    assetsGeoJson, selectedFeatureIndexes, colors))
+  mapLayers.push(getBusesMapLayer(busesGeoJson, colors))
 
   function handleViewStateChange({viewState}) {
     dispatch(setMapViewState(viewState))
@@ -71,6 +65,7 @@ export default function AssetsMap() {
     const objectId = info.object.properties.id
     let assetId = null
 
+    console.log('info', info)
     switch(mapLayerId) {
       case ASSETS_MAP_LAYER_ID: {
         assetId = objectId
@@ -109,15 +104,17 @@ export default function AssetsMap() {
   )
 }
 
-function getAssetsMapLayer(assetsGeoJson, colors) {
+function getAssetsMapLayer(assetsGeoJson, selectedFeatureIndexes, colors) {
   const color = colors.asset
   console.log('MAPPP')
+  console.log(assetsGeoJson)
 
   return new EditableGeoJsonLayer({
     id: ASSETS_MAP_LAYER_ID,
     data: assetsGeoJson,
-    // pickable: true,
-    // stroked: false,
+    pickable: true,
+    stroked: false,
+    selectedFeatureIndexes,
     // mode: ViewMode,
     // mode: DrawPointMode,
     mode: DrawPolygonMode,
@@ -125,10 +122,10 @@ function getAssetsMapLayer(assetsGeoJson, colors) {
       console.log('HEEYY')
       console.log(editType, editContext, updatedData)
     },
-    // getRadius: POINT_RADIUS_IN_METERS,
-    // getLineWidth: LINE_WIDTH_IN_METERS,
-    // getFillColor: color,
-    // getLineColor: color,
+    getRadius: POINT_RADIUS_IN_METERS,
+    getLineWidth: LINE_WIDTH_IN_METERS,
+    getFillColor: () => color,
+    getLineColor: () => color,
   })
 }
 
