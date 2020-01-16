@@ -36,7 +36,11 @@ const {
 const ASSETS_MAP_LAYER_ID = 'assets-geojson-layer'
 const BUSES_MAP_LAYER_ID = 'buses-geojson-layer'
 
-export default function AssetsMap() {
+export default function AssetsMap(props) {
+  const {
+    sketchMode,
+    setSketchMode,
+  } = props
   const dispatch = useDispatch()
   const mapStyleName = useSelector(getMapStyleName)
   const mapViewState = useSelector(getMapViewState)
@@ -47,9 +51,9 @@ export default function AssetsMap() {
   const mapLayers = []
 
   const selectedFeatureIndexes = []
-
+  console.log(sketchMode)
   mapLayers.push(getAssetsMapLayer(
-    assetsGeoJson, selectedFeatureIndexes, colors))
+    sketchMode, assetsGeoJson, selectedFeatureIndexes, colors))
   mapLayers.push(getBusesMapLayer(busesGeoJson, colors))
 
   function handleViewStateChange({viewState}) {
@@ -104,7 +108,7 @@ export default function AssetsMap() {
   )
 }
 
-function getAssetsMapLayer(assetsGeoJson, selectedFeatureIndexes, colors) {
+function getAssetsMapLayer(sketchMode, assetsGeoJson, selectedFeatureIndexes, colors) {
   const color = colors.asset
   console.log('MAPPP')
   console.log(assetsGeoJson)
@@ -117,7 +121,7 @@ function getAssetsMapLayer(assetsGeoJson, selectedFeatureIndexes, colors) {
     selectedFeatureIndexes,
     // mode: ViewMode,
     // mode: DrawPointMode,
-    mode: DrawPolygonMode,
+    // mode: sketchMode,
     onEdit: function({editType, editContext, updatedData}) {
       console.log('HEEYY')
       console.log(editType, editContext, updatedData)
