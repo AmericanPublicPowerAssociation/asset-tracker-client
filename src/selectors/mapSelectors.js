@@ -29,6 +29,9 @@ export const getBusesGeoJson = createSelector([
   assetById,
 ) => {
   const assetFeatures = assetsGeoJson.features
+  console.log(assetFeatures)
+  console.log(assetsGeoJson)
+  console.log(assetById)
   const busFeatures = getBusFeatures(assetFeatures, assetById)
   return {
     type: 'FeatureCollection',

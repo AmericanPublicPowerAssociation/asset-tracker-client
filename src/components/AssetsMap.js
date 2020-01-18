@@ -12,8 +12,10 @@ import {
   ViewMode,
 } from 'nebula.gl'
 import {
+  addToAssetById,
   setFocusingAssetId,
   setMapViewState,
+  setAssetsGeojson,
 } from '../actions'
 import {
   ADD_LINE,
@@ -43,7 +45,6 @@ const BUSES_MAP_LAYER_ID = 'buses-geojson-layer'
 export default function AssetsMap(props) {
   const {
     sketchMode,
-    setSketchMode,
   } = props
   const dispatch = useDispatch()
   const mapStyleName = useSelector(getMapStyleName)
@@ -55,9 +56,8 @@ export default function AssetsMap(props) {
   const mapLayers = []
 
   const selectedFeatureIndexes = []
-  console.log(sketchMode)
   mapLayers.push(getAssetsMapLayer(
-    sketchMode, assetsGeoJson, selectedFeatureIndexes, colors))
+    dispatch, sketchMode, assetsGeoJson, selectedFeatureIndexes, colors))
   mapLayers.push(getBusesMapLayer(busesGeoJson, colors))
 
   function handleViewStateChange({viewState}) {
@@ -73,7 +73,6 @@ export default function AssetsMap(props) {
     const objectId = info.object.properties.id
     let assetId = null
 
-    console.log('info', info)
     switch(mapLayerId) {
       case ASSETS_MAP_LAYER_ID: {
         assetId = objectId
@@ -112,20 +111,24 @@ export default function AssetsMap(props) {
   )
 }
 
-function getAssetsMapLayer(sketchMode, assetsGeoJson, selectedFeatureIndexes, colors) {
+function getAssetsMapLayer(dispatch, sketchMode, assetsGeoJson, selectedFeatureIndexes, colors) {
   const color = colors.asset
-  console.log('MAPPP')
-  console.log(assetsGeoJson)
+
   let currentMode = ViewMode
+  let type
   if (sketchMode === ADD_LINE) {
     currentMode = DrawLineStringMode
+    type = 'line'
   }
   else if (sketchMode === ADD_TRANSFORMER) {
     currentMode = DrawPointMode
+    type = 'transformer'
   }
   else if (sketchMode === ADD_SUBSTATION) {
     currentMode = DrawPolygonMode
+    type = 'substation'
   }
+
   return new EditableGeoJsonLayer({
     id: ASSETS_MAP_LAYER_ID,
     data: assetsGeoJson,
@@ -133,12 +136,20 @@ function getAssetsMapLayer(sketchMode, assetsGeoJson, selectedFeatureIndexes, co
     stroked: false,
     selectedFeatureIndexes,
     mode: currentMode,
-    // mode: ViewMode,
-    // mode: DrawPointMode,
-    // mode: sketchMode,
     onEdit: function({editType, editContext, updatedData}) {
-      console.log('HEEYY')
       console.log(editType, editContext, updatedData)
+      const { featureIndexes } = editContext
+      if (editType === 'addFeature') {
+        const _id = Date.now().toString()
+        const name = `${type} ${_id}`
+        featureIndexes.forEach( index => {
+          const p = updatedData.features[index].properties
+          p['id'] = _id
+          p['type'] = currentMode
+        })
+        dispatch(addToAssetById({type, name, _id}))
+      }
+      dispatch(setAssetsGeojson(updatedData))
     },
     getRadius: POINT_RADIUS_IN_METERS,
     getLineWidth: LINE_WIDTH_IN_METERS,
