@@ -62,15 +62,18 @@ export default function App() {
   const [spec, setSpec] = useState({})
   const [mapStyle, setMapStyle] = useState(BASE_MAP_STYLE_NAME)
 
+  /*
   useEffect(() => {
-    fetch('/assets.json').then(async (res) => {
+     fetch('/assets.json').then(async (res) => {
       let data = await res.json()
-      console.log(data)
-      setSpec(data.spec);
+      // request spect and sync with local
+      // console.log(data)
+      // setSpec(data.spec);
+      // Update assets from the server
       setAssetById(getById(data.assets, {}));
     });
-
   }, [])
+ */
 
   const _toggleIsSketching = () => {
     setIsSketching(!isSketching)

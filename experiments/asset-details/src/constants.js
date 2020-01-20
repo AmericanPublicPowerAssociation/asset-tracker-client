@@ -88,7 +88,7 @@ export const GEOJSON = {
   }, {
     type: 'Feature',
     properties: {
-      id: "632-645",
+      id: 5,
       type: 'l',
     },
     geometry: {
@@ -103,7 +103,7 @@ export const GEOJSON = {
   }, {
     type: 'Feature',
     properties: {
-      id: "632-633",
+      id: 6,
       type: 'l',
     },
     geometry: {
@@ -116,7 +116,7 @@ export const GEOJSON = {
   }, {
     type: 'Feature',
     properties: {
-      id: "645-646",
+      id: 7,
       type: 'l',
     },
     geometry: {
@@ -169,6 +169,10 @@ export const ASSETS = [{
       },
     },
   },
+  electricalConnections: [
+    {asset_id: 2, bus_id: 0, attributes: {busNodes: [2, 3]}},
+    {asset_id: 2, bus_id: 1, attributes: {busNodes: [2, 3]}}
+  ]
 }, {
   id: 3,
   type: 'm',
@@ -187,6 +191,9 @@ export const ASSETS = [{
       },
     },
   },
+  electricalConnections: [
+    {asset_id: 3, bus_id: 0, attributes: {busNodes: [2, 3]}}
+  ]
 }, {
   id: 4,
   type: 'm',
@@ -205,6 +212,9 @@ export const ASSETS = [{
       },
     },
   },
+  electricalConnections: [
+    {asset_id: 4, bus_id: 0, attributes: {busNodes: [2, 3]}},
+  ]
 }, {
   id: 5,
   type: 'l',
@@ -227,6 +237,10 @@ export const ASSETS = [{
       },
     },
   },
+  electricalConnections: [
+    {asset_id: 5, bus_id: 0, attributes: {busNodes: [2, 3]}},
+    {asset_id: 6, bus_id: 3, attributes: {busNodes: [2, 3]}}
+  ]
 }, {
   id: 6,
   type: 'l',
@@ -249,6 +263,10 @@ export const ASSETS = [{
       },
     },
   },
+  electricalConnections: [
+    {asset_id: "632-633", bus_id: 0, attributes: {busNodes: [1, 2, 3]}},
+    {asset_id: "632-633", bus_id: 1, attributes: {busNodes: [1, 2, 3]}}
+  ]
 }, {
   id: 7,
   type: 'l',
@@ -271,6 +289,10 @@ export const ASSETS = [{
       },
     },
   },
+  electricalConnections: [
+    {asset_id: "645-646", bus_id: 0, attributes: {busNodes: [2, 3]}},
+    {asset_id: "645-646", bus_id: 1, attributes: {busNodes: [2, 3]}}
+  ]
 }]
 
 export const TASKS = [{
