@@ -150,7 +150,7 @@ function DetailsWindow(props) {
               <Collapse in={buses[key]} timeout="auto" unmountOnExit>
                 { focusingAsset.electricalConnections.filter(conn => conn.bus_id == key).map((conn, index) =>
                   <List component="div" disablePadding>
-                    <ListItem button onClick={() => handleConnectionsClick(key + index)}>
+                    <ListItem button className={classes.noGutters}  onClick={() => handleConnectionsClick(key + index)}>
                         <InboxIcon className={classes.iconInner} />
                       <ListItemText primaryTypographyProps={{className:classes.connection}} primary={"Connected " + conn.asset_id} />
                       {open ? <ExpandLess /> : <ExpandMore />}
@@ -164,7 +164,7 @@ function DetailsWindow(props) {
                             if (re.test(key)) return true;
                             return false;
                           }).map((key) => {
-                            return <ListItem>
+                            return <ListItem className={classes.noGutters}>
                               <Typography><label className={classes.emph}>{key}: </label> {JSON.stringify(conn.attributes[key])}</Typography>
                             </ListItem>
                           }) || []
