@@ -16,7 +16,9 @@ const assetById = produce((draft, action) => {
         type,
         name,
       }
+      break
     }
+    default: break
   }
 }, initialState)
 

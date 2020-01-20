@@ -13,6 +13,7 @@ import {
 } from 'nebula.gl'
 import {
   addToAssetById,
+  setSelectedFeatureIndexes,
   setFocusingAssetId,
   setMapViewState,
   setAssetsGeojson,
@@ -33,6 +34,7 @@ import {
   getColors,
   getMapStyleName,
   getMapViewState,
+  getSelectedFeatureIndexes,
 } from '../selectors'
 
 const {
@@ -55,7 +57,7 @@ export default function AssetsMap(props) {
 
   const mapLayers = []
 
-  const selectedFeatureIndexes = []
+  const selectedFeatureIndexes = useSelector(getSelectedFeatureIndexes)
   mapLayers.push(getAssetsMapLayer(
     dispatch, sketchMode, assetsGeoJson, selectedFeatureIndexes, colors))
   mapLayers.push(getBusesMapLayer(busesGeoJson, colors))
@@ -140,6 +142,9 @@ function getAssetsMapLayer(dispatch, sketchMode, assetsGeoJson, selectedFeatureI
       console.log(editType, editContext, updatedData)
       const { featureIndexes } = editContext
       if (editType === 'addFeature') {
+        if (type === 'line') {
+          dispatch(setSelectedFeatureIndexes(featureIndexes))
+        }
         const _id = Date.now().toString()
         const name = `${type} ${_id}`
         featureIndexes.forEach( index => {
@@ -148,6 +153,7 @@ function getAssetsMapLayer(dispatch, sketchMode, assetsGeoJson, selectedFeatureI
           p['type'] = currentMode
         })
         dispatch(addToAssetById({type, name, _id}))
+        dispatch(setFocusingAssetId(_id))
       }
       dispatch(setAssetsGeojson(updatedData))
     },
