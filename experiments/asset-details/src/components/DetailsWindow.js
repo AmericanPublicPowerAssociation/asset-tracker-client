@@ -133,6 +133,7 @@ function DetailsWindow(props) {
 
   const getFields = () => {
     const fields = []
+    console.log(focusingAsset)
     for (let key in focusingAsset) {
       if (focusingAsset.hasOwnProperty(key)){
         if (key === 'attributes') {
@@ -147,7 +148,7 @@ function DetailsWindow(props) {
                 {open ? <ExpandLess /> : <ExpandMore />}
               </ListItem>
               <Collapse in={buses[key]} timeout="auto" unmountOnExit>
-                { focusingAsset.electricalConnections.filter(conn => conn.bus_id === key).map((conn, index) =>
+                { focusingAsset.electricalConnections.filter(conn => conn.bus_id == key).map((conn, index) =>
                   <List component="div" disablePadding>
                     <ListItem button onClick={() => handleConnectionsClick(key + index)}>
                         <InboxIcon className={classes.iconInner} />
