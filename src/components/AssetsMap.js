@@ -17,6 +17,7 @@ import {
   setFocusingAssetId,
   setMapViewState,
   setAssetsGeojson,
+  setSketchAssetType,
 } from '../actions'
 import {
   ADD_LINE,
@@ -27,6 +28,9 @@ import {
   MAP_STYLE_BY_NAME,
   PICKING_RADIUS_IN_PIXELS,
   POINT_RADIUS_IN_METERS,
+  LINE_ASSET_TYPE_ID,
+  TRANSFORMER_ASSET_TYPE_ID,
+  SUBSTATION_ASSET_TYPE_ID,
 } from '../constants'
 import {
   getAssetsGeoJson,
@@ -138,19 +142,20 @@ function getAssetsMapLayer(dispatch, sketchMode, assetsGeoJson, selectedFeatureI
   const color = colors.asset
 
   let currentMode = ViewMode
-  let type
+  let type = null
   if (sketchMode === ADD_LINE) {
     currentMode = DrawLineStringMode
-    type = 'line'
+    type = LINE_ASSET_TYPE_ID
   }
   else if (sketchMode === ADD_TRANSFORMER) {
     currentMode = DrawPointMode
-    type = 'transformer'
+    type = TRANSFORMER_ASSET_TYPE_ID
   }
   else if (sketchMode === ADD_SUBSTATION) {
     currentMode = DrawPolygonMode
-    type = 'substation'
+    type = TRANSFORMER_ASSET_TYPE_ID
   }
+  dispatch(setSketchAssetType(type))
 
   return new EditableGeoJsonLayer({
     id: ASSETS_MAP_LAYER_ID,
@@ -163,7 +168,7 @@ function getAssetsMapLayer(dispatch, sketchMode, assetsGeoJson, selectedFeatureI
       console.log(editType, editContext, updatedData)
       const { featureIndexes } = editContext
       if (editType === 'addFeature') {
-        if (type === 'line') {
+        if (type === LINE_ASSET_TYPE_ID) {
           dispatch(setSelectedFeatureIndexes(featureIndexes))
         }
         const _id = Date.now().toString()
