@@ -1,14 +1,14 @@
 .poof {
   display: none;
 }
-.white {
-  color: white !important;
-}
 .black {
   color: black !important;
 }
 .gray {
   color: gray !important;
+}
+.white {
+  color: white !important;
 }
 .selected {
   color: white !important;

@@ -35,7 +35,7 @@ export default function SketchModeToolbar(props) {
         <Tooltip title='Add' aria-label='Add' placement='right'>
           <ListItem
             button
-            classes={{selected: 'selected'}}
+            classes={{ selected: 'selected' }}
             selected={sketchMode.startsWith('add')}
             onClick={() => setSketchMode('add')}
           >
@@ -46,7 +46,7 @@ export default function SketchModeToolbar(props) {
         <Tooltip title='Edit' aria-label='Edit' placement='right'>
           <ListItem
             button
-            classes={{selected: 'selected'}}
+            classes={{ selected: 'selected' }}
             selected={sketchMode.startsWith('edit')}
             onClick={() => setSketchMode('edit')}
           >

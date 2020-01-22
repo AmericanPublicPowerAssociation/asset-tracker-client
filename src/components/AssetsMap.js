@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
@@ -51,16 +51,37 @@ export default function AssetsMap(props) {
   const dispatch = useDispatch()
   const mapStyleName = useSelector(getMapStyleName)
   const mapViewState = useSelector(getMapViewState)
-  const assetsGeoJson = useSelector(getAssetsGeoJson)
-  const busesGeoJson = useSelector(getBusesGeoJson)
+  // const assetsGeoJson = useSelector(getAssetsGeoJson)
+  // const busesGeoJson = useSelector(getBusesGeoJson)
   const colors = useSelector(getColors)
 
-  const mapLayers = []
+  const [geoJson, setGeoJson] = useState({type: 'FeatureCollection', features: []})
+  const [selectedFeatureIndexes, setSelectedFeatureIndexes] = useState([])
+  console.log(selectedFeatureIndexes)
 
+  const mapLayers = []
+  mapLayers.push(new EditableGeoJsonLayer({
+    id: 'x',
+    data: geoJson,
+    mode: DrawLineStringMode,
+    selectedFeatureIndexes,
+    onEdit: function({editType, editContext, updatedData}) {
+      const { featureIndexes } = editContext
+      console.log(editType, featureIndexes)
+      if (editType === 'addFeature') {
+        setSelectedFeatureIndexes(featureIndexes)
+      }
+      setGeoJson(updatedData)
+      // dispatch(setAssetsGeojson(updatedData))
+    },
+  }))
+
+  /*
   const selectedFeatureIndexes = useSelector(getSelectedFeatureIndexes)
   mapLayers.push(getAssetsMapLayer(
     dispatch, sketchMode, assetsGeoJson, selectedFeatureIndexes, colors))
   mapLayers.push(getBusesMapLayer(busesGeoJson, colors))
+  */
 
   function handleViewStateChange({viewState}) {
     dispatch(setMapViewState(viewState))
