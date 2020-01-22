@@ -1,4 +1,5 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
@@ -16,7 +17,16 @@ import {
   ADD_LINE,
   ADD_TRANSFORMER,
   ADD_SUBSTATION,
+  LINE_ASSET_TYPE_ID,
+  TRANSFORMER_ASSET_TYPE_ID,
+  SUBSTATION_ASSET_TYPE_ID,
 } from '../constants'
+import {
+  setSelectedFeatureIndexes,
+} from '../actions'
+import {
+  getSketchAssetType,
+} from '../selectors'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,11 +38,24 @@ const useStyles = makeStyles(theme => ({
 
 export default function SketchAddToolbar(props) {
   const classes = useStyles()
+
+  const dispatch = useDispatch()
+  const sketchAssetType = useSelector(getSketchAssetType)
   const {
     sketchMode,
     setSketchMode,
   } = props
   const isAdding = sketchMode.startsWith('add')
+
+  const _onClick = (sketchMode) => {
+    console.log(sketchAssetType)
+    if (sketchAssetType === LINE_ASSET_TYPE_ID) {
+      dispatch(setSelectedFeatureIndexes([]))
+    }
+    setSketchMode(sketchMode)
+  }
+
+
   return (
     <Paper
       className={clsx(classes.root, {
@@ -46,15 +69,7 @@ export default function SketchAddToolbar(props) {
             button
             classes={{selected: 'selected'}}
             selected={sketchMode === ADD_LINE}
-            onClick={() => {
-            /*
-              if (sketchingAssetType !== 'l') {
-                // restart line if coming from another asset type?
-                setSelectedFeatureIndexes([])
-              }
-            */
-              setSketchMode(ADD_LINE)
-            }}
+            onClick={() => _onClick(ADD_LINE)}
           >
             <SvgIcon fontSize='large' viewBox='0 0 16 16' component={LineIcon} />
           </ListItem>
@@ -65,7 +80,7 @@ export default function SketchAddToolbar(props) {
             button
             classes={{selected: 'selected'}}
             selected={sketchMode === ADD_TRANSFORMER}
-            onClick={() => setSketchMode(ADD_TRANSFORMER)}
+            onClick={() => _onClick(ADD_TRANSFORMER)}
           >
             <SvgIcon fontSize='large' viewBox='0 0 16 16' component={TransformerIcon} />
           </ListItem>
@@ -76,7 +91,7 @@ export default function SketchAddToolbar(props) {
             button
             classes={{selected: 'selected'}}
             selected={sketchMode === ADD_SUBSTATION}
-            onClick={() => setSketchMode(ADD_SUBSTATION)}
+            onClick={() => _onClick(ADD_SUBSTATION)}
           >
             <SvgIcon fontSize='large' viewBox='0 0 16 16' component={SubstationIcon} />
           </ListItem>
