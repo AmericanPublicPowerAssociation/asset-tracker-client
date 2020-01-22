@@ -16,7 +16,7 @@ import {
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
-    top: theme.spacing(22),
+    top: theme.spacing(28),
     left: theme.spacing(1),
   },
 }))

@@ -106,8 +106,6 @@ export default function AssetsMap(props) {
       }
     }
 
-    console.log('info', info)
-    console.log('objectId', objectId)
     dispatch(setFocusingAssetId(assetId))
   }
 
