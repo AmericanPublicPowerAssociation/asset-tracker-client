@@ -28,6 +28,11 @@ export default function SketchEditToolbar(props) {
     setSketchMode,
   } = props
   const isEditing = sketchMode.startsWith('edit')
+
+  const _onClick = (newSketchMode) => {
+    setSketchMode(newSketchMode)
+  }
+
   return (
     <Paper
       className={clsx(classes.root, {
@@ -41,9 +46,7 @@ export default function SketchEditToolbar(props) {
             button
             classes={{selected: 'selected'}}
             selected={sketchMode === EDIT_MODIFY}
-            onClick={() => {
-              setSketchMode(EDIT_MODIFY)
-            }}
+            onClick={() => _onClick(EDIT_MODIFY)}
           >
             <SvgIcon fontSize='large' component={ModifyIcon} />
           </ListItem>
@@ -54,9 +57,7 @@ export default function SketchEditToolbar(props) {
             button
             classes={{selected: 'selected'}}
             selected={sketchMode === EDIT_TRANSLATE}
-            onClick={() => {
-              setSketchMode(EDIT_TRANSLATE)
-            }}
+            onClick={() => _onClick(EDIT_TRANSLATE)}
           >
             <SvgIcon fontSize='large' component={TranslateIcon} />
           </ListItem>

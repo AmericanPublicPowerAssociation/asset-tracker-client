@@ -5,6 +5,7 @@ import {
 } from '../constants'
 
 export function setFocusingAssetId(id) {
+  console.log(id)
   return {
     type: SET_FOCUSING_ASSET_ID,
     payload: id,

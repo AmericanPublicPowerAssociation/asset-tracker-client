@@ -7,6 +7,7 @@ import {
   DrawLineStringMode,
   DrawPointMode,
   DrawPolygonMode,
+  ModifyMode,
   EditableGeoJsonLayer,
   TranslateMode,
   ViewMode,
@@ -31,6 +32,9 @@ import {
   LINE_ASSET_TYPE_ID,
   TRANSFORMER_ASSET_TYPE_ID,
   SUBSTATION_ASSET_TYPE_ID,
+  SELECT_GEOMETRY,
+  EDIT_TRANSLATE,
+  EDIT_MODIFY,
 } from '../constants'
 import {
   getAssetsGeoJson,
@@ -71,8 +75,16 @@ export default function AssetsMap(props) {
   }
 
   function handleClick(info, event) {
-    if (!info.picked) {
-      return
+    if (!info.picked ||
+        sketchMode === ADD_LINE ||
+        sketchMode === ADD_TRANSFORMER ||
+        sketchMode === ADD_SUBSTATION)
+        return
+
+    if (sketchMode === SELECT_GEOMETRY ||
+        sketchMode === EDIT_TRANSLATE ||
+        sketchMode === EDIT_MODIFY) {
+      dispatch(setSelectedFeatureIndexes([info.index]))
     }
 
     const mapLayerId = info.layer.id
@@ -94,6 +106,8 @@ export default function AssetsMap(props) {
       }
     }
 
+    console.log('info', info)
+    console.log('objectId', objectId)
     dispatch(setFocusingAssetId(assetId))
   }
 
@@ -105,7 +119,7 @@ export default function AssetsMap(props) {
         layers={mapLayers}
         viewState={mapViewState}
         onViewStateChange={handleViewStateChange}
-        // onClick={handleClick}
+        onClick={handleClick}
       >
         <StaticMap
           key='static-map'
@@ -133,6 +147,12 @@ function getAssetsMapLayer(dispatch, sketchMode, assetsGeoJson, selectedFeatureI
   else if (sketchMode === ADD_SUBSTATION) {
     currentMode = DrawPolygonMode
     type = TRANSFORMER_ASSET_TYPE_ID
+  }
+  else if (sketchMode === EDIT_MODIFY) {
+    currentMode = ModifyMode
+  }
+  else if (sketchMode === EDIT_TRANSLATE) {
+    currentMode = TranslateMode
   }
   dispatch(setSketchAssetType(type))
 

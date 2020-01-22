@@ -47,12 +47,11 @@ export default function SketchAddToolbar(props) {
   } = props
   const isAdding = sketchMode.startsWith('add')
 
-  const _onClick = (sketchMode) => {
-    console.log(sketchAssetType)
-    if (sketchAssetType === LINE_ASSET_TYPE_ID) {
+  const _onClick = (newSketchMode) => {
+    if (sketchAssetType !== LINE_ASSET_TYPE_ID) {
       dispatch(setSelectedFeatureIndexes([]))
     }
-    setSketchMode(sketchMode)
+    setSketchMode(newSketchMode)
   }
 
 
