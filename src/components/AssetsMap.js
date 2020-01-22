@@ -81,7 +81,8 @@ export default function AssetsMap(props) {
         sketchMode === ADD_SUBSTATION)
         return
 
-    if (sketchMode === SELECT_GEOMETRY ||
+    if (sketchMode === 'view' ||
+        sketchMode === SELECT_GEOMETRY ||
         sketchMode === EDIT_TRANSLATE ||
         sketchMode === EDIT_MODIFY) {
       dispatch(setSelectedFeatureIndexes([info.index]))
@@ -109,6 +110,9 @@ export default function AssetsMap(props) {
     dispatch(setFocusingAssetId(assetId))
   }
 
+  console.log('colors', colors)
+  console.log('testing')
+
   return (
     <div>
       <DeckGL
@@ -130,8 +134,6 @@ export default function AssetsMap(props) {
 }
 
 function getAssetsMapLayer(dispatch, sketchMode, assetsGeoJson, selectedFeatureIndexes, colors) {
-  const color = colors.asset
-
   let currentMode = ViewMode
   let type = null
   if (sketchMode === ADD_LINE) {
@@ -144,7 +146,7 @@ function getAssetsMapLayer(dispatch, sketchMode, assetsGeoJson, selectedFeatureI
   }
   else if (sketchMode === ADD_SUBSTATION) {
     currentMode = DrawPolygonMode
-    type = TRANSFORMER_ASSET_TYPE_ID
+    type = SUBSTATION_ASSET_TYPE_ID
   }
   else if (sketchMode === EDIT_MODIFY) {
     currentMode = ModifyMode
@@ -182,8 +184,18 @@ function getAssetsMapLayer(dispatch, sketchMode, assetsGeoJson, selectedFeatureI
     },
     getRadius: POINT_RADIUS_IN_METERS,
     getLineWidth: LINE_WIDTH_IN_METERS,
-    getFillColor: () => color,
-    getLineColor: () => color,
+    getFillColor: (feature, isSelected) => {
+      if (isSelected)
+        return colors.isSelectedFill
+      else
+        return colors.asset
+    },
+    getLineColor: (feature, isSelected) => {
+      if(isSelected)
+        return colors.isSelectedLine
+      else
+        return colors.asset
+    },
   })
 }
 
