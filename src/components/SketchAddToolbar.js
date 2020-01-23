@@ -1,5 +1,4 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
@@ -8,25 +7,19 @@ import ListItem from '@material-ui/core/ListItem'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import Tooltip from '@material-ui/core/Tooltip'
 import {
-  ReactComponent as LineIcon} from '../images/assets/line-16.svg'
-import {
-  ReactComponent as TransformerIcon} from '../images/assets/transformer-16.svg'
-import {
-  ReactComponent as SubstationIcon } from '../images/assets/substation-16.svg'
-import {
   ADD_LINE,
   ADD_TRANSFORMER,
   ADD_SUBSTATION,
-  LINE_ASSET_TYPE_ID,
-  TRANSFORMER_ASSET_TYPE_ID,
-  SUBSTATION_ASSET_TYPE_ID,
 } from '../constants'
 import {
-  setSelectedFeatureIndexes,
-} from '../actions'
+  ReactComponent as LineIcon
+} from '../images/assets/line-16.svg'
 import {
-  getSketchAssetType,
-} from '../selectors'
+  ReactComponent as TransformerIcon
+} from '../images/assets/transformer-16.svg'
+import {
+  ReactComponent as SubstationIcon
+} from '../images/assets/substation-16.svg'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,63 +30,78 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function SketchAddToolbar(props) {
-  const classes = useStyles()
-
-  const dispatch = useDispatch()
-  const sketchAssetType = useSelector(getSketchAssetType)
   const {
     sketchMode,
     setSketchMode,
+    setSelectedAssetIndexes,
   } = props
+  const classes = useStyles()
   const isAdding = sketchMode.startsWith('add')
-
-  const _onClick = (sketchMode) => {
-    console.log(sketchAssetType)
-    if (sketchAssetType === LINE_ASSET_TYPE_ID) {
-      dispatch(setSelectedFeatureIndexes([]))
-    }
-    setSketchMode(sketchMode)
-  }
-
-
   return (
-    <Paper
-      className={clsx(classes.root, {
-        poof: !isAdding,
-      })}
-    >
+    <Paper className={clsx(classes.root, {poof: !isAdding})}>
       <List>
 
-        <Tooltip title='Add Line' aria-label='Add Line' placement='right'>
+        <Tooltip
+          title='Add Line'
+          aria-label='Add Line'
+          placement='right'
+        >
           <ListItem
             button
             classes={{selected: 'selected'}}
             selected={sketchMode === ADD_LINE}
-            onClick={() => _onClick(ADD_LINE)}
+            onClick={() => {
+              setSelectedAssetIndexes([])  // Start new line
+              setSketchMode(ADD_LINE)
+            }}
           >
-            <SvgIcon fontSize='large' viewBox='0 0 16 16' component={LineIcon} />
+            <SvgIcon
+              fontSize='large'
+              viewBox='0 0 16 16'
+              component={LineIcon}
+            />
           </ListItem>
         </Tooltip>
 
-        <Tooltip title='Add Transformer' aria-label='Add Transformer' placement='right'>
+        <Tooltip
+          title='Add Transformer'
+          aria-label='Add Transformer'
+          placement='right'
+        >
           <ListItem
             button
             classes={{selected: 'selected'}}
             selected={sketchMode === ADD_TRANSFORMER}
-            onClick={() => _onClick(ADD_TRANSFORMER)}
+            onClick={() => {
+              setSketchMode(ADD_TRANSFORMER)
+            }}
           >
-            <SvgIcon fontSize='large' viewBox='0 0 16 16' component={TransformerIcon} />
+            <SvgIcon
+              fontSize='large'
+              viewBox='0 0 16 16'
+              component={TransformerIcon}
+            />
           </ListItem>
         </Tooltip>
 
-        <Tooltip title='Add Substation' aria-label='Add Substation' placement='right'>
+        <Tooltip
+          title='Add Substation'
+          aria-label='Add Substation'
+          placement='right'
+        >
           <ListItem
             button
             classes={{selected: 'selected'}}
             selected={sketchMode === ADD_SUBSTATION}
-            onClick={() => _onClick(ADD_SUBSTATION)}
+            onClick={() => {
+              setSketchMode(ADD_SUBSTATION)
+            }}
           >
-            <SvgIcon fontSize='large' viewBox='0 0 16 16' component={SubstationIcon} />
+            <SvgIcon
+              fontSize='large'
+              viewBox='0 0 16 16'
+              component={SubstationIcon}
+            />
           </ListItem>
         </Tooltip>
 
@@ -102,4 +110,3 @@ export default function SketchAddToolbar(props) {
     </Paper>
   )
 }
-

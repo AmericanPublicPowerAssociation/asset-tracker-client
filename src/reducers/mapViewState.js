@@ -27,8 +27,7 @@ const mapViewState = produce((draft, action) => {
       draft.height = height
       break
     }
-    default: {
-    }
+    default: { }
   }
 }, initialState)
 

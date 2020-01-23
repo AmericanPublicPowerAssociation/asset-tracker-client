@@ -15,11 +15,14 @@ import './App.css'
 
 export default function App() {
   const [sketchMode, setSketchMode] = useState(SKETCH_MODE)
+  const [selectedAssetIndexes, setSelectedAssetIndexes] = useState([])
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
   return (
     <div>
       <AssetsMap
         sketchMode={sketchMode}
+        selectedAssetIndexes={selectedAssetIndexes}
+        setSelectedAssetIndexes={setSelectedAssetIndexes}
       />
       <SketchButton
         sketchMode={sketchMode}
@@ -32,6 +35,7 @@ export default function App() {
       <SketchAddToolbar
         sketchMode={sketchMode}
         setSketchMode={setSketchMode}
+        setSelectedAssetIndexes={setSelectedAssetIndexes}
       />
       <SketchEditToolbar
         sketchMode={sketchMode}

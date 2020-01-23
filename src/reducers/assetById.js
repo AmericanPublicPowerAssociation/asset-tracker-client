@@ -10,7 +10,7 @@ const assetById = produce((draft, action) => {
   switch(action.type) {
     case ADD_ASSET_TO_ASSET_BY_ID: {
       const {_id, type, name} = action.payload
-      const busByIndex = []
+      // const busByIndex = []
       draft[_id] = {
         id: _id.toString(),
         type,
@@ -18,7 +18,7 @@ const assetById = produce((draft, action) => {
       }
       break
     }
-    default: break
+    default: { }
   }
 }, initialState)
 
