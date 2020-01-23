@@ -27,8 +27,6 @@ import {
 } from '../macros'
 
 export default function App() {
-  const [geoJson, setGeoJson] = useState(GEOJSON)
-  const [isWithFilters, setIsWithFilters] = useState(false)
   const [isWithRows, setIsWithRows] = useState(false)
   const [isWithDetails, setIsWithDetails] = useState(true)
   const [history, setHistory] = useState([])

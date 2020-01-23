@@ -5,7 +5,9 @@ import DeckGL from '@deck.gl/react'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import { EditableGeoJsonLayer } from 'nebula.gl'
 import {
+  setAsset,
   setAssetsGeojson,
+  setFocusingAssetId,
   setMapViewState,
 } from '../actions'
 import {
@@ -17,7 +19,10 @@ import {
   POINT_RADIUS_IN_METERS,
 } from '../constants'
 import {
+  getAssetName,
+  getAssetTypeId,
   getMapMode,
+  getRandomAssetId,
 } from '../routines'
 import {
   getAssetsColor,
@@ -56,16 +61,38 @@ export default function AssetsMap(props) {
     dispatch(setMapViewState(viewState))
   }
 
+  function handleClick(info, event) {
+    if (!info.picked) return
+    const { assetId, busId } = info.object.properties
+    dispatch(setFocusingAssetId(assetId))
+  }
+
   function handleEditAssetsGeoJson({editType, editContext, updatedData}) {
+    console.log('handleEditAssetsGeoJson', editType, editContext, updatedData)
+    // If a feature is being added for the first time,
     if (editType === 'addFeature') {
+      const features = updatedData.features
+      const { featureIndexes } = editContext
+      // Add an asset corresponding to the feature
+      const assetId = getRandomAssetId()
+      const assetTypeId = getAssetTypeId(sketchMode)
+      const assetName = getAssetName(assetTypeId, assetId)
+      const asset = {id: assetId, typeId: assetTypeId, name: assetName}
+      dispatch(setAsset(asset))
+      // Store assetId in feature
+      for (let i = 0; i < featureIndexes.length; i++) {
+        const featureIndex = featureIndexes[i]
+        const feature = features[featureIndex]
+        feature.properties.assetId = assetId
+      }
+      // If the new feature is a line,
       if (sketchMode === ADD_LINE) {
-        const { featureIndexes } = editContext
-        // Continue drawing with the same line
+        // Have subsequent clicks extend the same line
         setSelectedAssetIndexes(featureIndexes)
       }
+      dispatch(setFocusingAssetId(assetId))  // Show details for the new asset
     }
-    // Update geojson for assets
-    dispatch(setAssetsGeojson(updatedData))
+    dispatch(setAssetsGeojson(updatedData))  // Update geojson for assets
   }
 
   mapLayers.push(new EditableGeoJsonLayer({
@@ -98,6 +125,7 @@ export default function AssetsMap(props) {
       viewState={mapViewState}
       pickingRadius={PICKING_RADIUS_IN_PIXELS}
       onViewStateChange={handleViewStateChange}
+      onClick={handleClick}
     >
       <StaticMap
         mapStyle={MAP_STYLE_BY_NAME[mapStyleName]}
