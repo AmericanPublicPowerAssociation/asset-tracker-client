@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
+import SeeRowsIcon from '@material-ui/icons/ViewList'
 import ToggleStylesIcon from '@material-ui/icons/Map'
 import ToggleDetailsIcon from '@material-ui/icons/Receipt'
 import {
@@ -10,7 +11,11 @@ import {
 } from '../constants'
 import {
   getColors,
+  getIsWithRows,
 } from '../selectors'
+import {
+  setIsWithRows,
+} from '../actions'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,10 +29,12 @@ export default function OptionsWindow(props) {
   const classes = useStyles()
   const dispatch = useDispatch()
   const {
+    sketchMode,
     isWithDetails,
     setIsWithDetails,
   } = props
   const colors = useSelector(getColors)
+  const isWithRows = useSelector(getIsWithRows)
   const activeColor = colors.active
   const inactiveColor = colors.inactive
   return (
@@ -50,6 +57,17 @@ export default function OptionsWindow(props) {
           <ToggleDetailsIcon />
         </IconButton>
       </Tooltip>
+
+      { sketchMode === 'view' &&
+        <Tooltip title='Toggle Table'>
+          <IconButton
+            className={isWithRows ? activeColor : inactiveColor}
+            onClick={() => dispatch(setIsWithRows())}
+          >
+            <SeeRowsIcon />
+          </IconButton>
+        </Tooltip>
+      }
 
     </div>
   )

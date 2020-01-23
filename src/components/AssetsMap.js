@@ -110,8 +110,6 @@ export default function AssetsMap(props) {
     dispatch(setFocusingAssetId(assetId))
   }
 
-  console.log('colors', colors)
-  console.log('testing')
 
   return (
     <div>
