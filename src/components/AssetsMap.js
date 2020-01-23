@@ -25,6 +25,7 @@ import {
   getRandomAssetId,
 } from '../routines'
 import {
+  getAssetIdByBusId,
   getAssetsColor,
   getAssetsGeoJson,
   getBusesColor,
@@ -49,6 +50,7 @@ export default function AssetsMap(props) {
   const dispatch = useDispatch()
   const mapStyleName = useSelector(getMapStyleName)
   const mapViewState = useSelector(getMapViewState)
+  const assetIdByBusId = useSelector(getAssetIdByBusId)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
   const assetsColor = useSelector(getAssetsColor)
   const busesGeoJson = useSelector(getBusesGeoJson)
@@ -63,7 +65,26 @@ export default function AssetsMap(props) {
 
   function handleClick(info, event) {
     if (!info.picked) return
-    const { assetId, busId } = info.object.properties
+    const mapLayerId = info.layer.id
+    const objectId = info.object.properties.id
+    let assetId = null
+    let busId = null
+
+    switch(mapLayerId) {
+      case ASSETS_MAP_LAYER_ID: {
+        assetId = objectId
+        break
+      }
+      case BUSES_MAP_LAYER_ID: {
+        busId = objectId
+        assetId = assetIdByBusId[busId]
+        break
+      }
+      default: { }
+    }
+
+    console.log('assetId =', assetId)
+    console.log('busId =', busId)
     dispatch(setFocusingAssetId(assetId))
   }
 
@@ -83,7 +104,7 @@ export default function AssetsMap(props) {
       for (let i = 0; i < featureIndexes.length; i++) {
         const featureIndex = featureIndexes[i]
         const feature = features[featureIndex]
-        feature.properties.assetId = assetId
+        feature.properties.id = assetId
       }
       // If the new feature is a line,
       if (sketchMode === ADD_LINE) {
