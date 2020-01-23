@@ -24,11 +24,11 @@ export const getIsMapStyleBright = createSelector([
 })
 
 export const getBusesGeoJson = createSelector([
-  getAssetsGeoJson,
   getAssetById,
+  getAssetsGeoJson,
 ], (
-  assetsGeoJson,
   assetById,
+  assetsGeoJson,
 ) => {
   const assetFeatures = assetsGeoJson.features
   const busFeatures = getBusFeatures(assetFeatures, assetById)

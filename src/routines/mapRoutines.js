@@ -22,8 +22,8 @@ export function getMapMode(sketchMode) {
 }
 
 export function getBusFeatures(assetFeatures, assetById) {
+  const busIds = []
   const busFeatures = []
-  const assetIdByBusId = {}
 
   for (let i = 0; i < assetFeatures.length; i++) {
     const assetFeature = assetFeatures[i]
@@ -33,7 +33,7 @@ export function getBusFeatures(assetFeatures, assetById) {
     }[assetFeature.geometry.type]
     if (!getBusFeaturesForGeometry) continue
 
-    const { assetId } = assetFeature.properties
+    const assetId = assetFeature.properties.id
     if (!assetId) continue
 
     const asset = assetById[assetId]
@@ -41,31 +41,21 @@ export function getBusFeatures(assetFeatures, assetById) {
     if (!connections) continue
 
     busFeatures.push(...getBusFeaturesForGeometry(
-      assetFeature, connections, assetIdByBusId))
-  }
-
-  for (let i = 0; i < busFeatures.length; i++) {
-    const busProperties = busFeatures[i].properties
-    const busId = busProperties.busId
-    busProperties.assetId = assetIdByBusId[busId]
+      assetFeature, connections, busIds))
   }
 
   return busFeatures
 }
 
-function getBusFeaturesForPoint(assetFeature, connections, assetIdByBusId) {
+function getBusFeaturesForPoint(assetFeature, connections, busIds) {
+  const busFeatures = []
   const busCount = connections.length
   const busAngleIncrement = 360 / busCount
-  const { assetId } = assetFeature.properties
-
-  const busFeatures = []
 
   for (let i = 0; i < busCount; i++) {
     const connection = connections[i]
     const busId = connection.busId
-    const hasBusFeature = busId in assetIdByBusId
-    assetIdByBusId[busId] = assetId  // Have buses belong to point assets
-    if (hasBusFeature) continue
+    if (busIds.includes(busId)) continue
 
     const busAngle = busAngleIncrement * i
     const busGeometry = translateFeature(
@@ -73,44 +63,40 @@ function getBusFeaturesForPoint(assetFeature, connections, assetIdByBusId) {
       BUS_DISTANCE_IN_KILOMETERS,
       busAngle,
     ).geometry
-
     busFeatures.push({
       type: 'Feature',
-      properties: {busId},
+      properties: {id: busId},
       geometry: busGeometry,
     })
+    busIds.push(busId)
   }
 
   return busFeatures
 }
 
-function getBusFeaturesForLine(assetFeature, connections, assetIdByBusId) {
+function getBusFeaturesForLine(assetFeature, connections, busIds) {
+  const busFeatures = []
   const assetXYs = assetFeature.geometry.coordinates
-  const { assetId } = assetFeature.properties
-
   const busCount = connections.length
   const busXYs = [
     assetXYs[0],
     assetXYs[assetXYs.length - 1],
   ]
 
-  const busFeatures = []
-
   for (let i = 0; i < busCount; i++) {
     const connection = connections[i]
     const busId = connection.busId
-    const hasBusFeature = busId in assetIdByBusId
-    if (hasBusFeature) continue
-    assetIdByBusId[busId] = assetId
+    if (busIds.includes(busId)) continue
 
     busFeatures.push({
       type: 'Feature',
-      properties: {busId},
+      properties: {id: busId},
       geometry: {
         type: 'Point',
         coordinates: busXYs[i],
       }
     })
+    busIds.push(busId)
   }
 
   return busFeatures
