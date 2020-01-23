@@ -14,30 +14,27 @@
     "product": "HVT36A",
     "version": "2.0.1"
   },
-  "busByIndex": { 
-    "0": {
-      "id": "Ai",
-      "attributes": {
-        "connectionType": "delta",
-        "baseVoltage": 115,
-        "baseVoltageUnit": "kV",
-        "power": 5000,
-        "powerUnit": "kVA",
-        "powerPercentResistance": 0.0005
-      }
-    },
-    "1": {
-      "id": "Ao",
-      "attributes": {
-        "connectionType": "wye",
-        "baseVoltage": 4.16,
-        "baseVoltageUnit": "kV",
-        "power": 5000,
-        "powerUnit": "kVA",
-        "powerPercentResistance": 0.0005
-      }
+  "connections": [{
+    "busId": "Ai",
+    "attributes": {
+      "connectionType": "delta",
+      "baseVoltage": 115,
+      "baseVoltageUnit": "kV",
+      "power": 5000,
+      "powerUnit": "kVA",
+      "powerPercentResistance": 0.0005
     }
-  }
+  }, {
+    "busId": "Ao",
+    "attributes": {
+      "connectionType": "wye",
+      "baseVoltage": 4.16,
+      "baseVoltageUnit": "kV",
+      "power": 5000,
+      "powerUnit": "kVA",
+      "powerPercentResistance": 0.0005
+    }
+  }]
 }, {
   "id": "3",
   "typeId": "m",
@@ -49,12 +46,9 @@
     "phaseCount": 3,
     "loadModel": 1
   },
-  "busByIndex": {
-    "0": {
-      "id": "L2o",
-      "attributes": {}
-    }
-  }
+  "connections": [{
+    "busId": "L2o"
+  }]
 }, {
   "id": "5",
   "typeId": "l",
@@ -65,16 +59,11 @@
     "lineLength": 2000,
     "lengthUnit": "ft"
   },
-  "busByIndex": {
-    "0": {
-      "id": "Ao",
-      "attributes": {}
-    },
-    "1": {
-      "id": "L1o",
-      "attributes": {}
-    }
-  }
+  "connections": [{
+    "busId": "Ao"
+  }, {
+    "busId": "L1o"
+  }]
 }, {
   "id": 6,
   "typeId": "l",
@@ -85,14 +74,9 @@
     "lineLength": 500,
     "lengthUnit": "ft"
   },
-  "busByIndex": {
-    "0": {
-      "id": "L1o",
-      "attributes": {}
-    },
-    "1": {
-      "id": "L2o",
-      "attributes": {}
-    }
-  }
+  "connections": [{
+    "busId": "L1o"
+  }, {
+    "busId": "L2o"
+  }]
 }]

@@ -37,7 +37,7 @@ export default function DetailsWindow(props) {
 function AssetDetailsPanel(asset) {
   return (
     <Typography>
-      {asset.id}
+      {asset.name}
     </Typography>
   )
 }

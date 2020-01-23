@@ -4,10 +4,12 @@ import {
   getById,
 } from '../macros'
 
+export const MINIMUM_ASSET_ID_LENGTH = 16
+export const ABBREVIATED_ASSET_ID_LENGTH = 7
+
 export const LINE_ASSET_TYPE_ID = 'l'
 export const TRANSFORMER_ASSET_TYPE_ID = 't'
 export const SUBSTATION_ASSET_TYPE_ID = 's'
-export const STATION_ASSET_TYPE_ID = 'S'
 
 export const ASSET_TYPE_BY_ID = {
   [LINE_ASSET_TYPE_ID]: {
@@ -19,16 +21,12 @@ export const ASSET_TYPE_BY_ID = {
   [SUBSTATION_ASSET_TYPE_ID]: {
     name: 'Substation',
   },
-  [STATION_ASSET_TYPE_ID]: {
-    name: 'Station',
-  },
 }
 
 export const ASSETS_GEOJSON = assetsGeoJson
 export const ASSETS = assets
 export const ASSET_BY_ID = getById(ASSETS, {})
 
-export const ADD_ASSET_TO_ASSET_BY_ID = 'ADD_ASSET_TO_ASSET_BY_ID'
-
 export const SET_ASSETS_GEOJSON = 'SET_ASSETS_GEOJSON'
+export const SET_ASSET = 'SET_ASSET'
 export const SET_FOCUSING_ASSET_ID = 'SET_FOCUSING_ASSET_ID'
