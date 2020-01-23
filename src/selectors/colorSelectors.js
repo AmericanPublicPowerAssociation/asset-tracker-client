@@ -13,3 +13,19 @@ export const getColors = createSelector([
 ) => {
   return COLORS_BY_MAP_STYLE_NAME[mapStyleName]
 })
+
+export const getAssetsColor = createSelector([
+  getColors,
+], (
+  colors,
+) => {
+  return colors.assets
+})
+
+export const getBusesColor = createSelector([
+  getColors,
+], (
+  colors,
+) => {
+  return colors.buses
+})

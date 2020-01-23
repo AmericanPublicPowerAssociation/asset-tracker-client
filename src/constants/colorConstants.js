@@ -6,19 +6,19 @@ export const COLORS_BY_MAP_STYLE_NAME = {
   dark: {
     active: 'white',
     inactive: 'gray',
-    asset: TRANSPARENT_WHITE,
-    bus: SOLID_CYAN,
+    assets: TRANSPARENT_WHITE,
+    buses: SOLID_CYAN,
   },
   street: {
     active: 'black',
     inactive: 'gray',
-    asset: TRANSPARENT_BLACK,
-    bus: SOLID_CYAN,
+    assets: TRANSPARENT_BLACK,
+    buses: SOLID_CYAN,
   },
   satellite: {
     active: 'white',
     inactive: 'gray',
-    asset: TRANSPARENT_WHITE,
-    bus: SOLID_CYAN,
+    assets: TRANSPARENT_WHITE,
+    buses: SOLID_CYAN,
   },
 }
