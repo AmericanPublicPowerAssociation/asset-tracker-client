@@ -24,6 +24,12 @@ export const ASSET_TYPE_BY_ID = {
   },
 }
 
+export const ASSET_TABLE_COLUMN_NAMES = [
+  'id',
+  'typeId',
+  'name'
+]
+
 export const ASSETS_GEOJSON = assetsGeoJson
 export const ASSETS = assets
 export const ASSET_BY_ID = getById(ASSETS, {})

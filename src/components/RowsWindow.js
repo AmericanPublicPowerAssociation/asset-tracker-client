@@ -1,9 +1,14 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import CloseButton from './CloseButton'
+import MyTable from './MyTable'
+import {
+  getAssetById,
+  getAssetTableData
+} from '../selectors'
 // import AssetsTable from './AssetsTable'
 // import TasksTable from './TasksTable'
 // import RisksTable from './RisksTable'
@@ -35,12 +40,15 @@ export default function RowsWindow(props) {
   //  tasks: <TasksTable tasks={tasks} />,
   //  risks: <RisksTable risks={risks} />,
   //}[overlay]
+
+  const tableProps = useSelector(getAssetTableData)
+
   return (
     <Paper
       className={classes.root}>
       <CloseButton onClick={() => dispatch(setIsWithRows())} />
       <div className={classes.table}>
-        {/*table*/}
+        <MyTable {...tableProps} />
         {/* TODO: Show only what is visible in the map */}
         {/* TODO: Implement paging */}
       </div>

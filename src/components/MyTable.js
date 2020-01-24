@@ -15,7 +15,7 @@ function MyTable(props) {
         <TableRow>
           { head.map( header => { 
             const key = `table-${name}-${header}`
-            return <TableCell key={key}>{header}</TableCell>
+            return <TableCell key={key}>{header.toUpperCase()}</TableCell>
           })}
         </TableRow>
       </TableHead>
@@ -24,7 +24,7 @@ function MyTable(props) {
         <TableRow key={asset.id}>
           { head.map(header => {
             const key = `table-${name}-${header}-${asset.id}`
-            return <TableCell>{asset[header]}</TableCell>
+            return <TableCell key={key}>{asset[header]}</TableCell>
           })}
         </TableRow>
       )}
