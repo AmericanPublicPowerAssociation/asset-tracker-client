@@ -1,1 +1,3 @@
+export const MINIMUM_BUS_ID_LENGTH = 32
+
 export const SET_FOCUSING_BUS_ID = 'SET_FOCUSING_BUS_ID'

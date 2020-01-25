@@ -6,40 +6,36 @@ import {
   ASSET_TYPE_BY_ID,
   LINE_ASSET_TYPE_ID,
   MINIMUM_ASSET_ID_LENGTH,
+  MINIMUM_BUS_ID_LENGTH,
   SUBSTATION_ASSET_TYPE_ID,
   TRANSFORMER_ASSET_TYPE_ID,
 } from '../constants'
 import {
-  getRandomString,
+  getRandomId,
 } from '../macros'
 
 export function makeAsset(sketchMode, lineBusId) {
-  const assetId = getRandomAssetId()
+  const assetId = getRandomId(MINIMUM_ASSET_ID_LENGTH)
   const assetTypeId = getAssetTypeId(sketchMode)
   const assetName = getAssetName(assetTypeId, assetId)
   const asset = {id: assetId, typeId: assetTypeId, name: assetName}
 
   switch(assetTypeId) {
     case LINE_ASSET_TYPE_ID: {
-      const connections = []
-      // If the first endpoint is a bus,
-      if (lineBusId) {
-        // Add a connection
-        connections.push({busId: lineBusId})
-      }
-      asset.connections = connections
+      const busId = lineBusId || getRandomId(MINIMUM_BUS_ID_LENGTH)
+      asset.connections = [{busId}]
+      break
+    }
+    case TRANSFORMER_ASSET_TYPE_ID: {
+      asset.connections = [
+        {busId: getRandomId(MINIMUM_BUS_ID_LENGTH)},
+        {busId: getRandomId(MINIMUM_BUS_ID_LENGTH)}]
       break
     }
     default: { }
   }
 
   return asset
-}
-
-export function getRandomAssetId() {
-  const monotonicallyIncreasingNumber = Date.now()
-  const randomString = getRandomString(MINIMUM_ASSET_ID_LENGTH)
-  return randomString + monotonicallyIncreasingNumber
 }
 
 export function getAssetTypeId(sketchMode) {
