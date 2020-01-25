@@ -33,7 +33,7 @@ export default function SketchAddToolbar(props) {
   const {
     sketchMode,
     setSketchMode,
-    setSelectedAssetIndexes,
+    onSketchModeAddLine,
   } = props
   const classes = useStyles()
   const isAdding = sketchMode.startsWith('add')
@@ -51,8 +51,8 @@ export default function SketchAddToolbar(props) {
             classes={{selected: 'selected'}}
             selected={sketchMode === ADD_LINE}
             onClick={() => {
-              setSelectedAssetIndexes([])  // Start new line
               setSketchMode(ADD_LINE)
+              onSketchModeAddLine()
             }}
           >
             <SvgIcon

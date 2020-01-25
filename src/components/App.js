@@ -15,14 +15,24 @@ import './App.css'
 
 export default function App() {
   const [sketchMode, setSketchMode] = useState(SKETCH_MODE)
-  const [selectedAssetIndexes, setSelectedAssetIndexes] = useState([])
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
+  const [selectedAssetIndexes, setSelectedAssetIndexes] = useState([])
+  const [lineBusId, setLineBusId] = useState(null)
+
+  function startNewLine() {
+    setLineBusId(null)
+    setSelectedAssetIndexes([])
+  }
+
   return (
     <div>
       <AssetsMap
         sketchMode={sketchMode}
         selectedAssetIndexes={selectedAssetIndexes}
+        lineBusId={lineBusId}
         setSelectedAssetIndexes={setSelectedAssetIndexes}
+        setLineBusId={setLineBusId}
+        onAddLineEnd={startNewLine}
       />
       <SketchButton
         sketchMode={sketchMode}
@@ -35,7 +45,7 @@ export default function App() {
       <SketchAddToolbar
         sketchMode={sketchMode}
         setSketchMode={setSketchMode}
-        setSelectedAssetIndexes={setSelectedAssetIndexes}
+        onSketchModeAddLine={startNewLine}
       />
       <SketchEditToolbar
         sketchMode={sketchMode}
