@@ -1,4 +1,5 @@
 import {
+  ADD_ASSET_CONNECTION,
   SET_ASSET,
   SET_ASSETS_GEOJSON,
   SET_FOCUSING_ASSET_ID,
@@ -14,4 +15,8 @@ export function setAsset(asset) {
 
 export function setFocusingAssetId(id) {
   return {type: SET_FOCUSING_ASSET_ID, payload: id}
+}
+
+export function addAssetConnection(assetId, busId) {
+  return {type: ADD_ASSET_CONNECTION, payload: {assetId, busId}}
 }

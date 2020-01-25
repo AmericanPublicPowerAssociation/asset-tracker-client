@@ -13,6 +13,29 @@ import {
   getRandomString,
 } from '../macros'
 
+export function makeAsset(sketchMode, lineBusId) {
+  const assetId = getRandomAssetId()
+  const assetTypeId = getAssetTypeId(sketchMode)
+  const assetName = getAssetName(assetTypeId, assetId)
+  const asset = {id: assetId, typeId: assetTypeId, name: assetName}
+
+  switch(assetTypeId) {
+    case LINE_ASSET_TYPE_ID: {
+      const connections = []
+      // If the first endpoint is a bus,
+      if (lineBusId) {
+        // Add a connection
+        connections.push({busId: lineBusId})
+      }
+      asset.connections = connections
+      break
+    }
+    default: { }
+  }
+
+  return asset
+}
+
 export function getRandomAssetId() {
   const monotonicallyIncreasingNumber = Date.now()
   const randomString = getRandomString(MINIMUM_ASSET_ID_LENGTH)

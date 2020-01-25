@@ -5,6 +5,7 @@ import mapViewState from './mapViewState'
 import assetsGeoJson from './assetsGeoJson'
 import assetById from './assetById'
 import focusingAssetId from './focusingAssetId'
+import focusingBusId from './focusingBusId'
 
 const reduceHorizontally = combineReducers({
   mapStyleName,
@@ -12,6 +13,7 @@ const reduceHorizontally = combineReducers({
   assetsGeoJson,
   assetById,
   focusingAssetId,
+  focusingBusId,
 })
 
 const reduceVertically = (state, action) => {
