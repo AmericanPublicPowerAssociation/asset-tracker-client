@@ -7,7 +7,7 @@ import assetById from './assetById'
 import focusingAssetId from './focusingAssetId'
 import selectedFeatureIndexes from './selectedFeatureIndexes'
 import sketchAssetType from './sketchAssetType'
-import rowsWindow from './rowsWindow'
+import app from './app'
 
 const reduceHorizontally = combineReducers({
   mapStyleName,
@@ -17,7 +17,7 @@ const reduceHorizontally = combineReducers({
   focusingAssetId,
   selectedFeatureIndexes,
   sketchAssetType,
-  rowsWindow,
+  app,
 })
 
 const reduceVertically = (state, action) => {

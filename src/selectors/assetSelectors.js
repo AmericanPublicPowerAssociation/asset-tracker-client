@@ -30,5 +30,4 @@ export const getAssetTableData = createSelector([
     head: ASSET_TABLE_COLUMN_NAMES,
     name: 'asset',
   }
-}
-)
+})

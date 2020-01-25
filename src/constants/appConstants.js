@@ -10,3 +10,9 @@ export const EDIT_TRANSLATE = 'edit > translate'
 export const SELECT_GEOMETRY = 'select geometry'
 
 export const IS_WITH_DETAILS = true
+export const IS_WITH_ROWS = true
+export const IS_FULL_SCREEN_DATA_DIALOG = false
+
+export const SET_IS_WITH_ROWS = 'SET_IS_WITH_ROWS'
+export const SET_WINDOW_SIZE = 'SET_WINDOW_SIZE'
+export const SET_IS_FULL_SCREEN_DATA_DIALOG = 'SET_IS_FULL_SCREEN_DATA_DIALOG'
