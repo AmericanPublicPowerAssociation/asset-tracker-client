@@ -1,5 +1,5 @@
 {
-  "name": "asset-tracker-client",
+  "name": "asset-tracker",
   "version": "0.4.2",
   "private": true,
   "dependencies": {
