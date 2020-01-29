@@ -5,6 +5,11 @@ import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import {
+  ProductName,
+  ProductVersion,
+  VendorName,
+} from 'asset-report-risks'
+import {
   getFocusingAsset,
 } from '../selectors'
 
@@ -36,9 +41,11 @@ export default function DetailsWindow(props) {
 
 function AssetDetailsPanel(asset) {
   return (
-    <Typography>
-      {asset.id}
-    </Typography>
+    <>
+      <Typography>
+        {asset.id}
+      </Typography>
+    </>
   )
 }
 
