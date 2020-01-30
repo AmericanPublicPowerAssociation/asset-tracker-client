@@ -4,6 +4,7 @@ import {
   getById,
 } from '../macros'
 
+
 export const LINE_ASSET_TYPE_ID = 'l'
 export const TRANSFORMER_ASSET_TYPE_ID = 't'
 export const SUBSTATION_ASSET_TYPE_ID = 's'

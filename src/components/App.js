@@ -75,6 +75,7 @@ export default function App() {
         setIsWithDetails={setIsWithDetails}
       />
       <DetailsWindow
+        setIsWithDetails={setIsWithDetails}
         isWithDetails={isWithDetails}
       />
 
