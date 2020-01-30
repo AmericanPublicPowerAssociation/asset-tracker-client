@@ -41,16 +41,13 @@ import {
   mergeAsset,
   changeAsset,
 } from '../actions'
-import {
-  ASSET_TYPE_BY_ID,
-} from '../constants'
 
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
     top: theme.spacing(8),
     right: theme.spacing(1),
-    maxWidth: theme.spacing(35),
+    width: theme.spacing(35),
     padding: theme.spacing(1),
   },
   section: {
