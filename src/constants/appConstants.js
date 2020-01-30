@@ -1,3 +1,4 @@
+export const LOG_ERROR = 'LOG_ERROR'
 export const SKETCH_MODE = 'view'
 
 export const ADD_LINE = 'add > line'
