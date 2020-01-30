@@ -15,6 +15,9 @@ import {
 import {
   CHANGE_ASSET
 } from '../constants'
+import {
+  setAssets,
+} from '../actions'
 
 
 function* watchChangeAsset() {
@@ -27,7 +30,7 @@ function* watchChangeAsset() {
       body: JSON.stringify(payload),
     }, {
       on200: function* (assets) {
-        //yield put(setAssets(assets))
+        yield put(setAssets(assets))
       },
       on400: function* (errors) {
         //yield put(setAssetErrors({id, errors}))

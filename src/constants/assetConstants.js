@@ -41,3 +41,4 @@ export const SET_FOCUSING_ASSET_ID = 'SET_FOCUSING_ASSET_ID'
 
 export const MERGE_ASSET = 'MERGE_ASSET'
 export const CHANGE_ASSET = 'CHANGE_ASSET'
+export const SET_ASSETS = 'SET_ASSETS'

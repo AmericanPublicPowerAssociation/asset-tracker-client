@@ -2,6 +2,7 @@ import {
   ADD_ASSET_TO_ASSET_BY_ID,
   SET_FOCUSING_ASSET_ID,
   SET_ASSETS_GEOJSON,
+  SET_ASSETS,
   MERGE_ASSET,
   CHANGE_ASSET,
 } from '../constants'
@@ -10,6 +11,14 @@ export function setFocusingAssetId(id) {
   return {
     type: SET_FOCUSING_ASSET_ID,
     payload: id,
+  }
+}
+
+
+export function setAssets(assets) {
+  return {
+    type: SET_ASSETS,
+    payload: assets,
   }
 }
 
