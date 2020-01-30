@@ -3,17 +3,18 @@ import {
   put,
   takeEvery,
 } from 'redux-saga/effects'
+import  {
+  watchRefreshRisks,
+  watchSuggestProductNames,
+  watchSuggestProductVersions,
+  watchSuggestVendorNames,
+} from 'asset-report-risks'
 import {
   fetchSafely,
 } from '../macros'
 import {
   CHANGE_ASSET
 } from '../constants'
-
-
-export default function* () {
-  yield all([])
-}
 
 
 function* watchChangeAsset() {
@@ -33,4 +34,14 @@ function* watchChangeAsset() {
       },
     })
   })
+}
+
+
+export default function* () {
+  yield all([
+    watchChangeAsset(),
+    watchSuggestVendorNames(),
+    watchSuggestProductNames(),
+    watchSuggestProductVersions(),
+  ])
 }

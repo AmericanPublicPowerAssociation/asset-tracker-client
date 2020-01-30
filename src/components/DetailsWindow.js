@@ -47,7 +47,10 @@ export default function DetailsWindow(props) {
 function AssetDetailsPanel(asset, dispatch) {
   const id = asset.id || null
   const typeId = asset.typeId
-  const vendorName = asset.vendorName || null
+  const vendorName = asset['vendorName'] || null
+  const productName = asset['productName'] || null
+  const productVersion = asset['productVersion'] || null
+  const unique = asset['unique'] || null
 
   const _trackChanges = (attributes) => {
     dispatch(mergeAsset({id, ...attributes}))
@@ -66,6 +69,24 @@ function AssetDetailsPanel(asset, dispatch) {
       <VendorName
         typeId={typeId}
         vendorName={vendorName}
+        trackChanges={_trackChanges}
+        saveChanges={_saveChanges}
+      />
+      <ProductName
+        className={clsx({
+          
+        })}
+        type={typeId}
+        vendorName={vendorName}
+        productName={productName}
+        trackChanges={_trackChanges}
+        saveChanges={_saveChanges}
+      />
+      <ProductVersion
+        typeId={typeId}
+        vendorName={vendorName}
+        productName={productName}
+        productVersion={productVersion}
         trackChanges={_trackChanges}
         saveChanges={_saveChanges}
       />

@@ -2,6 +2,8 @@ import { combineReducers } from 'redux'
 import reduceReducers from 'reduce-reducers'
 import {
   vendorNameSuggestions,
+  productNameSuggestions,
+  productVersionSuggestions,
 } from 'asset-report-risks'
 import mapStyleName from './mapStyleName'
 import mapViewState from './mapViewState'
@@ -22,6 +24,8 @@ const reduceHorizontally = combineReducers({
   sketchAssetType,
   app,
   vendorNameSuggestions,
+  productNameSuggestions,
+  productVersionSuggestions,
 })
 
 const reduceVertically = (state, action) => {
