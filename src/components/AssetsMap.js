@@ -24,6 +24,7 @@ import {
   ADD_LINE,
   ADD_TRANSFORMER,
   ADD_SUBSTATION,
+  ADD_METER,
   BUS_RADIUS_IN_METERS,
   LINE_WIDTH_IN_METERS,
   MAP_STYLE_BY_NAME,
@@ -32,6 +33,7 @@ import {
   LINE_ASSET_TYPE_ID,
   TRANSFORMER_ASSET_TYPE_ID,
   SUBSTATION_ASSET_TYPE_ID,
+  METER_ASSET_TYPE_ID,
   SELECT_GEOMETRY,
   EDIT_TRANSLATE,
   EDIT_MODIFY,
@@ -78,7 +80,8 @@ export default function AssetsMap(props) {
     if (!info.picked ||
         sketchMode === ADD_LINE ||
         sketchMode === ADD_TRANSFORMER ||
-        sketchMode === ADD_SUBSTATION)
+        sketchMode === ADD_SUBSTATION ||
+        sketchMode === ADD_METER)
         return
 
     if (sketchMode === 'view' ||
@@ -145,6 +148,10 @@ function getAssetsMapLayer(dispatch, sketchMode, assetsGeoJson, selectedFeatureI
   else if (sketchMode === ADD_SUBSTATION) {
     currentMode = DrawPolygonMode
     type = SUBSTATION_ASSET_TYPE_ID
+  }
+  else if (sketchMode === ADD_METER){
+    currentMode = DrawPointMode
+    type = METER_ASSET_TYPE_ID
   }
   else if (sketchMode === EDIT_MODIFY) {
     currentMode = ModifyMode

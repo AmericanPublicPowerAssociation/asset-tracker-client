@@ -14,12 +14,16 @@ import {
 import {
   ReactComponent as SubstationIcon } from '../images/assets/substation-16.svg'
 import {
+  ReactComponent as MeterIcon } from '../images/assets/meter-light-16.svg'
+import {
   ADD_LINE,
   ADD_TRANSFORMER,
   ADD_SUBSTATION,
+  ADD_METER,
   LINE_ASSET_TYPE_ID,
   TRANSFORMER_ASSET_TYPE_ID,
   SUBSTATION_ASSET_TYPE_ID,
+  METER_ASSET_TYPE_ID,
 } from '../constants'
 import {
   setSelectedFeatureIndexes,
@@ -71,6 +75,17 @@ export default function SketchAddToolbar(props) {
             onClick={() => _onClick(ADD_LINE)}
           >
             <SvgIcon fontSize='large' viewBox='0 0 16 16' component={LineIcon} />
+          </ListItem>
+        </Tooltip>
+
+        <Tooltip title='Add Meter' aria-label='Add Meter' placement='right'>
+          <ListItem
+            button
+            classes={{selected: 'selected'}}
+            selected={sketchMode === ADD_METER}
+            onClick={() => _onClick(ADD_METER)}
+          >
+            <SvgIcon fontSize='large' viewBox='0 0 16 16' component={MeterIcon} />
           </ListItem>
         </Tooltip>
 

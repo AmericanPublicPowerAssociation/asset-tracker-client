@@ -8,6 +8,7 @@ export const LINE_ASSET_TYPE_ID = 'l'
 export const TRANSFORMER_ASSET_TYPE_ID = 't'
 export const SUBSTATION_ASSET_TYPE_ID = 's'
 export const STATION_ASSET_TYPE_ID = 'S'
+export const METER_ASSET_TYPE_ID = 'm'
 
 export const ASSET_TYPE_BY_ID = {
   [LINE_ASSET_TYPE_ID]: {
@@ -21,6 +22,9 @@ export const ASSET_TYPE_BY_ID = {
   },
   [STATION_ASSET_TYPE_ID]: {
     name: 'Station',
+  },
+  [METER_ASSET_TYPE_ID]: {
+    name: 'Meter',
   },
 }
 
