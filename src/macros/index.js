@@ -1,2 +1,3 @@
-export * from './iterableMacros'
-export * from './randomMacros'
+export * from './iterable'
+export * from './random'
+export * from './web'
