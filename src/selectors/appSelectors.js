@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect'
 
 export const getApp = state => state.app
+export const getMapStyleName = state => state.mapStyleName
 
 export const getIsWithRows = createSelector([
   getApp,
@@ -24,4 +25,13 @@ export const getIsFullScreenDataDialog = createSelector([
   app,
 ) => {
   return app.isFullScreenDataDialog
+})
+
+
+export const getOverlay = createSelector([
+  getApp,
+], (
+  app,
+) => {
+  return app.overlay
 })

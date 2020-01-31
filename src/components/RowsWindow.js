@@ -7,7 +7,8 @@ import CloseButton from './CloseButton'
 import MyTable from './MyTable'
 import {
   getAssetById,
-  getAssetTableData
+  getAssetTableData,
+  getOverlay,
 } from '../selectors'
 // import AssetsTable from './AssetsTable'
 // import TasksTable from './TasksTable'
@@ -35,6 +36,7 @@ const useStyles = makeStyles(theme => ({
 export default function RowsWindow(props) {
   const classes = useStyles()
   const dispatch = useDispatch()
+  const overlay = useSelector(getOverlay)
   // const table = {
   //  assets: <AssetsTable assets={Object.values(assetById)} />,
   //  tasks: <TasksTable tasks={tasks} />,

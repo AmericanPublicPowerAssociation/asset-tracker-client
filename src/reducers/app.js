@@ -5,6 +5,7 @@ import {
   SET_IS_FULL_SCREEN_DATA_DIALOG,
   SET_IS_WITH_ROWS,
   SET_WINDOW_SIZE,
+  SET_OVERLAY,
 } from '../constants'
 
 const initialState = {
@@ -14,6 +15,7 @@ const initialState = {
     innerHeight: 0,
   },
   isFullScreenDataDialog: IS_FULL_SCREEN_DATA_DIALOG,
+  overlay: 'assets',
 }
 
 const app = produce((draft, action) => {
@@ -28,6 +30,10 @@ const app = produce((draft, action) => {
     }
     case SET_WINDOW_SIZE: {
       draft.windowSize = action.payload
+      break
+    }
+    case SET_OVERLAY: {
+      draft.overlay = action.payload
       break
     }
     default: {}

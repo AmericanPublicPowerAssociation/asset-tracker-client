@@ -3,6 +3,7 @@ import {
   SET_WINDOW_SIZE,
   SET_IS_FULL_SCREEN_DATA_DIALOG,
   LOG_ERROR,
+  SET_OVERLAY,
 } from '../constants'
 
 export function setIsWithRows() {
@@ -21,6 +22,13 @@ export function setWindowSize(newWindow) {
 export function setIsFullScreenDataDialog() {
   return {
     type: SET_IS_FULL_SCREEN_DATA_DIALOG
+  }
+}
+
+export function setOverlay(newOverlay){
+  return {
+    type: SET_OVERLAY,
+    payload: newOverlay,
   }
 }
 

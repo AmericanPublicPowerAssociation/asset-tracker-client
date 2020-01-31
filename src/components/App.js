@@ -10,6 +10,7 @@ import OptionsWindow from './OptionsWindow'
 import DetailsWindow from './DetailsWindow'
 import RowsWindow from './RowsWindow'
 import DataDialog from './DataDialog'
+import OverlaysWindow from './OverlaysWindow'
 import {
   IS_WITH_DETAILS,
   IS_WITH_ROWS,
@@ -73,6 +74,9 @@ export default function App() {
         sketchMode={sketchMode}
         isWithDetails={isWithDetails}
         setIsWithDetails={setIsWithDetails}
+      />
+      <OverlaysWindow
+        sketchMode={sketchMode}
       />
       <DetailsWindow
         setIsWithDetails={setIsWithDetails}
