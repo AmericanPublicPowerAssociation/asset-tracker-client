@@ -65,29 +65,6 @@ export default function AssetsMap(props) {
     dispatch(setMapViewState(viewState))
   }
 
-  /*
-  function handleMapClick(info, event) {
-    const objectProperties = info.object.properties
-    const objectId = objectProperties.id
-    if (!objectId) return
-
-    switch(info.layer.id) {
-      case ASSETS_MAP_LAYER_ID: {
-        selectedAssetId = objectId
-        break
-      }
-      case BUSES_MAP_LAYER_ID: {
-        break
-      }
-      default: { }
-    }
-
-    console.log('assetId =', selectedAssetId, 'busId =', selectedBusId)
-    // dispatch(setFocusingBusId(selectedBusId))
-    dispatch(setFocusingAssetId(selectedAssetId))
-  }
-  */
-
   function handleAssetsGeoJsonClick(info, event) {
     const assetId = info.object.properties.id
     assetId && dispatch(setFocusingAssetId(assetId))
@@ -179,7 +156,6 @@ export default function AssetsMap(props) {
       viewState={mapViewState}
       pickingRadius={PICKING_RADIUS_IN_PIXELS}
       onViewStateChange={handleViewStateChange}
-    // onClick={handleMapClick}
     >
       <StaticMap
         mapStyle={MAP_STYLE_BY_NAME[mapStyleName]}

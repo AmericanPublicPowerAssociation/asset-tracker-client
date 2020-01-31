@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import AssetsMap from './AssetsMap'
 import SketchButton from './SketchButton'
 import SketchModeToolbar from './SketchModeToolbar'
@@ -7,13 +8,17 @@ import SketchEditToolbar from './SketchEditToolbar'
 import UsersWindow from './UsersWindow'
 import OptionsWindow from './OptionsWindow'
 import DetailsWindow from './DetailsWindow'
+import './App.css'
+import {
+  refreshAssetsKit,
+} from '../actions'
 import {
   IS_WITH_DETAILS,
   SKETCH_MODE,
 } from '../constants'
-import './App.css'
 
 export default function App() {
+  const dispatch = useDispatch()
   const [sketchMode, setSketchMode] = useState(SKETCH_MODE)
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
   const [selectedAssetIndexes, setSelectedAssetIndexes] = useState([])
@@ -23,6 +28,10 @@ export default function App() {
     setLineBusId(null)
     setSelectedAssetIndexes([])
   }
+
+  useEffect(() => {
+    dispatch(refreshAssetsKit())
+  }, [dispatch])
 
   return (
     <div>

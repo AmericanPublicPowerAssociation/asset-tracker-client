@@ -1,15 +1,15 @@
 [{
   "id": "1",
-  "typeId": "s",
+  "typeCode": "s",
   "name": "Substation A"
 }, {
   "id": "2",
-  "typeId": "t",
+  "typeCode": "t",
   "name": "Substation Transformer 1",
   "attributes": { 
-    "vendor": "Schneider Electric",
-    "product": "HVT36A",
-    "version": "2.0.1",
+    "vendorName": "Schneider Electric",
+    "productName": "HVT36A",
+    "productVersion": "2.0.1",
     "phaseCount": 3,
     "windingCount": 2,
     "winding1Winding2PercentReactance": 0.008
@@ -37,12 +37,12 @@
   }]
 }, {
   "id": "3",
-  "typeId": "m",
+  "typeCode": "m",
   "name": "Industrial Meter 1",
   "attributes": { 
-    "vendor": "Schneider Electric",
-    "product": "SCH-MV10",
-    "version": "10.5.7",
+    "vendorName": "Schneider Electric",
+    "productName": "SCH-MV10",
+    "productVersion": "10.5.7",
     "phaseCount": 3,
     "loadModel": 1
   },
@@ -51,7 +51,7 @@
   }]
 }, {
   "id": "5",
-  "typeId": "l",
+  "typeCode": "l",
   "name": "Line 1",
   "attributes": {
     "phaseCount": 3,

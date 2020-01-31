@@ -3,8 +3,5 @@ import {
 } from '../constants'
 
 export function setMapViewState(viewState) {
-  return {
-    type: SET_MAP_VIEW_STATE,
-    payload: viewState,
-  }
+  return {type: SET_MAP_VIEW_STATE, payload: viewState}
 }
