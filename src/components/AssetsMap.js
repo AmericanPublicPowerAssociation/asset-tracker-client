@@ -7,6 +7,7 @@ import {
   DrawLineStringMode,
   DrawPointMode,
   DrawPolygonMode,
+  ModifyMode,
   EditableGeoJsonLayer,
   TranslateMode,
   ViewMode,
@@ -23,6 +24,7 @@ import {
   ADD_LINE,
   ADD_TRANSFORMER,
   ADD_SUBSTATION,
+  ADD_METER,
   BUS_RADIUS_IN_METERS,
   LINE_WIDTH_IN_METERS,
   MAP_STYLE_BY_NAME,
@@ -31,6 +33,10 @@ import {
   LINE_ASSET_TYPE_ID,
   TRANSFORMER_ASSET_TYPE_ID,
   SUBSTATION_ASSET_TYPE_ID,
+  METER_ASSET_TYPE_ID,
+  SELECT_GEOMETRY,
+  EDIT_TRANSLATE,
+  EDIT_MODIFY,
 } from '../constants'
 import {
   getAssetsGeoJson,
@@ -92,8 +98,18 @@ export default function AssetsMap(props) {
   }
 
   function handleClick(info, event) {
-    if (!info.picked) {
-      return
+    if (!info.picked ||
+        sketchMode === ADD_LINE ||
+        sketchMode === ADD_TRANSFORMER ||
+        sketchMode === ADD_SUBSTATION ||
+        sketchMode === ADD_METER)
+        return
+
+    if (sketchMode === 'view' ||
+        sketchMode === SELECT_GEOMETRY ||
+        sketchMode === EDIT_TRANSLATE ||
+        sketchMode === EDIT_MODIFY) {
+      dispatch(setSelectedFeatureIndexes([info.index]))
     }
 
     const mapLayerId = info.layer.id
@@ -118,6 +134,7 @@ export default function AssetsMap(props) {
     dispatch(setFocusingAssetId(assetId))
   }
 
+
   return (
     <div>
       <DeckGL
@@ -126,7 +143,7 @@ export default function AssetsMap(props) {
         layers={mapLayers}
         viewState={mapViewState}
         onViewStateChange={handleViewStateChange}
-        // onClick={handleClick}
+        onClick={handleClick}
       >
         <StaticMap
           key='static-map'
@@ -139,8 +156,6 @@ export default function AssetsMap(props) {
 }
 
 function getAssetsMapLayer(dispatch, sketchMode, assetsGeoJson, selectedFeatureIndexes, colors) {
-  const color = colors.asset
-
   let currentMode = ViewMode
   let type = null
   if (sketchMode === ADD_LINE) {
@@ -153,7 +168,17 @@ function getAssetsMapLayer(dispatch, sketchMode, assetsGeoJson, selectedFeatureI
   }
   else if (sketchMode === ADD_SUBSTATION) {
     currentMode = DrawPolygonMode
-    type = TRANSFORMER_ASSET_TYPE_ID
+    type = SUBSTATION_ASSET_TYPE_ID
+  }
+  else if (sketchMode === ADD_METER){
+    currentMode = DrawPointMode
+    type = METER_ASSET_TYPE_ID
+  }
+  else if (sketchMode === EDIT_MODIFY) {
+    currentMode = ModifyMode
+  }
+  else if (sketchMode === EDIT_TRANSLATE) {
+    currentMode = TranslateMode
   }
   dispatch(setSketchAssetType(type))
 
@@ -185,8 +210,18 @@ function getAssetsMapLayer(dispatch, sketchMode, assetsGeoJson, selectedFeatureI
     },
     getRadius: POINT_RADIUS_IN_METERS,
     getLineWidth: LINE_WIDTH_IN_METERS,
-    getFillColor: () => color,
-    getLineColor: () => color,
+    getFillColor: (feature, isSelected) => {
+      if (isSelected)
+        return colors.isSelectedFill
+      else
+        return colors.asset
+    },
+    getLineColor: (feature, isSelected) => {
+      if(isSelected)
+        return colors.isSelectedLine
+      else
+        return colors.asset
+    },
   })
 }
 

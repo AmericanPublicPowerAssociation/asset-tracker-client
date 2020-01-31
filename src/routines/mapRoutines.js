@@ -7,7 +7,6 @@ export function getBusFeatures(assetFeatures, assetById) {
   const busIds = []
   const busFeatures = []
 
-  console.log('testing', assetFeatures, assetById)
   for (let i = 0; i < assetFeatures.length; i++) {
     let newFeatures = []
     const assetFeature = assetFeatures[i]
