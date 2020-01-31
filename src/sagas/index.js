@@ -3,6 +3,12 @@ import {
   put,
   takeLatest,
 } from 'redux-saga/effects'
+import  {
+  // watchRefreshRisks,
+  // watchSuggestProductNames,
+  // watchSuggestProductVersions,
+  // watchSuggestVendorNames,
+} from 'asset-report-risks'
 import {
   setAssets,
 } from '../actions'
@@ -12,7 +18,6 @@ import {
 import {
   fetchSafely,
 } from '../macros'
-
 
 function* watchRefreshAssetsKit() {
   yield takeLatest(REFRESH_ASSETS_KIT, function* (action) {
@@ -26,9 +31,11 @@ function* watchRefreshAssetsKit() {
   })
 }
 
-
 export default function* () {
   yield all([
     watchRefreshAssetsKit(),
+    // watchSuggestVendorNames(),
+    // watchSuggestProductNames(),
+    // watchSuggestProductVersions(),
   ])
 }

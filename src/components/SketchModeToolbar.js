@@ -31,7 +31,6 @@ export default function SketchModeToolbar(props) {
       })}
     >
       <List>
-
         <Tooltip title='Add' aria-label='Add' placement='right'>
           <ListItem
             button
@@ -53,7 +52,6 @@ export default function SketchModeToolbar(props) {
             <SvgIcon fontSize='large' component={EditIcon} />
           </ListItem>
         </Tooltip>
-
       </List>
     </Paper>
   )

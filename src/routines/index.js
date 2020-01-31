@@ -1,3 +1,3 @@
-export * from './mapRoutines'
-export * from './assetRoutines'
-export * from './busRoutines'
+export * from './map'
+export * from './asset'
+export * from './bus'

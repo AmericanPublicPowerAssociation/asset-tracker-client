@@ -7,9 +7,10 @@ import ListItem from '@material-ui/core/ListItem'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import Tooltip from '@material-ui/core/Tooltip'
 import {
-  ADD_LINE,
-  ADD_TRANSFORMER,
-  ADD_SUBSTATION,
+  SKETCH_MODE_ADD_LINE,
+  SKETCH_MODE_ADD_METER,
+  SKETCH_MODE_ADD_SUBSTATION,
+  SKETCH_MODE_ADD_TRANSFORMER,
 } from '../constants'
 import {
   ReactComponent as LineIcon
@@ -20,11 +21,15 @@ import {
 import {
   ReactComponent as SubstationIcon
 } from '../images/assets/substation-16.svg'
+import {
+  ReactComponent as MeterIcon
+} from '../images/assets/meter-light-16.svg'
 
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
-    top: theme.spacing(22),
+    top: theme.spacing(34),
+    // top: theme.spacing(22),
     left: theme.spacing(1),
   },
 }))
@@ -40,7 +45,6 @@ export default function SketchAddToolbar(props) {
   return (
     <Paper className={clsx(classes.root, {poof: !isAdding})}>
       <List>
-
         <Tooltip
           title='Add Line'
           aria-label='Add Line'
@@ -49,9 +53,9 @@ export default function SketchAddToolbar(props) {
           <ListItem
             button
             classes={{selected: 'selected'}}
-            selected={sketchMode === ADD_LINE}
+            selected={sketchMode === SKETCH_MODE_ADD_LINE}
             onClick={() => {
-              setSketchMode(ADD_LINE)
+              setSketchMode(SKETCH_MODE_ADD_LINE)
               onSketchModeAddLine()
             }}
           >
@@ -64,6 +68,23 @@ export default function SketchAddToolbar(props) {
         </Tooltip>
 
         <Tooltip
+          title='Add Meter'
+          aria-label='Add Meter'
+          placement='right'
+        >
+          <ListItem
+            button
+            classes={{selected: 'selected'}}
+            selected={sketchMode === SKETCH_MODE_ADD_METER}
+            onClick={() => {
+              setSketchMode(SKETCH_MODE_ADD_METER)
+            }}
+          >
+            <SvgIcon fontSize='large' viewBox='0 0 16 16' component={MeterIcon} />
+          </ListItem>
+        </Tooltip>
+
+        <Tooltip
           title='Add Transformer'
           aria-label='Add Transformer'
           placement='right'
@@ -71,9 +92,9 @@ export default function SketchAddToolbar(props) {
           <ListItem
             button
             classes={{selected: 'selected'}}
-            selected={sketchMode === ADD_TRANSFORMER}
+            selected={sketchMode === SKETCH_MODE_ADD_TRANSFORMER}
             onClick={() => {
-              setSketchMode(ADD_TRANSFORMER)
+              setSketchMode(SKETCH_MODE_ADD_TRANSFORMER)
             }}
           >
             <SvgIcon
@@ -92,9 +113,9 @@ export default function SketchAddToolbar(props) {
           <ListItem
             button
             classes={{selected: 'selected'}}
-            selected={sketchMode === ADD_SUBSTATION}
+            selected={sketchMode === SKETCH_MODE_ADD_SUBSTATION}
             onClick={() => {
-              setSketchMode(ADD_SUBSTATION)
+              setSketchMode(SKETCH_MODE_ADD_SUBSTATION)
             }}
           >
             <SvgIcon
@@ -104,9 +125,7 @@ export default function SketchAddToolbar(props) {
             />
           </ListItem>
         </Tooltip>
-
       </List>
-
     </Paper>
   )
 }

@@ -1,5 +1,6 @@
 import {
   ADD_ASSET_CONNECTION,
+  MERGE_ASSET,
   REFRESH_ASSETS_KIT,
   SET_ASSET,
   SET_ASSETS,
@@ -29,4 +30,8 @@ export function addAssetConnection(assetId, busId) {
 
 export function refreshAssetsKit() {
   return {type: REFRESH_ASSETS_KIT}
+}
+
+export function mergeAsset(asset) {
+  return {type: MERGE_ASSET, payload}
 }

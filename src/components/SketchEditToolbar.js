@@ -9,14 +9,15 @@ import Tooltip from '@material-ui/core/Tooltip'
 import ModifyIcon from '@material-ui/icons/Edit'
 import TranslateIcon from '@material-ui/icons/OpenWith'
 import {
-  EDIT_MODIFY,
-  EDIT_TRANSLATE,
+  SKETCH_MODE_EDIT_MODIFY,
+  SKETCH_MODE_EDIT_TRANSLATE,
 } from '../constants'
 
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
-    top: theme.spacing(22),
+    top: theme.spacing(34),
+    // top: theme.spacing(22),
     left: theme.spacing(1),
   },
 }))
@@ -40,9 +41,9 @@ export default function SketchEditToolbar(props) {
           <ListItem
             button
             classes={{selected: 'selected'}}
-            selected={sketchMode === EDIT_MODIFY}
+            selected={sketchMode === SKETCH_MODE_EDIT_MODIFY}
             onClick={() => {
-              setSketchMode(EDIT_MODIFY)
+              setSketchMode(SKETCH_MODE_EDIT_MODIFY)
             }}
           >
             <SvgIcon fontSize='large' component={ModifyIcon} />
@@ -53,9 +54,9 @@ export default function SketchEditToolbar(props) {
           <ListItem
             button
             classes={{selected: 'selected'}}
-            selected={sketchMode === EDIT_TRANSLATE}
+            selected={sketchMode === SKETCH_MODE_EDIT_TRANSLATE}
             onClick={() => {
-              setSketchMode(EDIT_TRANSLATE)
+              setSketchMode(SKETCH_MODE_EDIT_TRANSLATE)
             }}
           >
             <SvgIcon fontSize='large' component={TranslateIcon} />

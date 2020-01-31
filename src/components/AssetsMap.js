@@ -3,22 +3,24 @@ import { useDispatch, useSelector } from 'react-redux'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
 import { GeoJsonLayer } from '@deck.gl/layers'
-import { EditableGeoJsonLayer } from 'nebula.gl'
 import {
+  EditableGeoJsonLayer,
   addAssetConnection,
   setAsset,
   setAssetsGeojson,
+} from 'nebula.gl'
+import {
   setFocusingAssetId,
   // setFocusingBusId,
   setMapViewState,
 } from '../actions'
 import {
-  ADD_LINE,
   BUS_RADIUS_IN_METERS,
   LINE_WIDTH_IN_METERS,
   MAP_STYLE_BY_NAME,
   PICKING_RADIUS_IN_PIXELS,
   POINT_RADIUS_IN_METERS,
+  SKETCH_MODE_ADD_LINE,
 } from '../constants'
 import {
   getMapMode,
@@ -70,6 +72,24 @@ export default function AssetsMap(props) {
     assetId && dispatch(setFocusingAssetId(assetId))
   }
 
+  /*
+  function handleClick(info, event) {
+    if (!info.picked ||
+        sketchMode === ADD_LINE ||
+        sketchMode === ADD_TRANSFORMER ||
+        sketchMode === ADD_SUBSTATION ||
+        sketchMode === ADD_METER)
+        return
+
+    if (sketchMode === 'view' ||
+        sketchMode === SELECT_GEOMETRY ||
+        sketchMode === EDIT_TRANSLATE ||
+        sketchMode === EDIT_MODIFY) {
+      dispatch(setSelectedFeatureIndexes([info.index]))
+    }
+  }
+  */
+
   function handleAssetsGeoJsonEdit({editType, editContext, updatedData}) {
     console.log('handleAssetsGeoJsonEdit', editType, editContext, updatedData)
     // If a feature is being added for the first time,
@@ -87,7 +107,7 @@ export default function AssetsMap(props) {
         feature.properties.id = assetId
       }
       // If the new feature is a line,
-      if (sketchMode === ADD_LINE) {
+      if (sketchMode === SKETCH_MODE_ADD_LINE) {
         // Have subsequent clicks extend the same line
         setSelectedAssetIndexes(featureIndexes)
       }
@@ -100,7 +120,7 @@ export default function AssetsMap(props) {
     const busId = info.object.properties.id
     const assetId = assetIdByBusId[busId]
 
-    if (sketchMode === ADD_LINE) {
+    if (sketchMode === SKETCH_MODE_ADD_LINE) {
       // If we already started the line,
       if (selectedAssetIndexes.length) {
         // Save the connection
@@ -124,13 +144,19 @@ export default function AssetsMap(props) {
     mode: mapMode,
     pickable: true,
     stroked: false,
-    autoHighlight: sketchMode !== ADD_LINE,
+    autoHighlight: sketchMode !== SKETCH_MODE_ADD_LINE,
     highlightColor: colors.assetHighlight,
     selectedFeatureIndexes: selectedAssetIndexes,
     getRadius: POINT_RADIUS_IN_METERS,
     getLineWidth: LINE_WIDTH_IN_METERS,
-    getFillColor: colors.asset,
-    getLineColor: colors.asset,
+    // getFillColor: colors.asset,
+    getFillColor: (feature, isSelected) => {
+      return isSelected ? colors.assetSelect : colors.asset
+    },
+    // getLineColor: colors.asset,
+    getLineColor: (feature, isSelected) => {
+      return isSelected ? colors.assetSelect : colors.asset
+    },
     // onHover: (info, event) => console.log(info, event),
     onClick: handleAssetsGeoJsonClick,
     onEdit: handleAssetsGeoJsonEdit,
@@ -164,7 +190,6 @@ export default function AssetsMap(props) {
     </DeckGL>
   )
 }
-
 
 /*
 *    and we clicked on a bus
