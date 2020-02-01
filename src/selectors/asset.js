@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect'
 import {
   // ASSET_TABLE_COLUMN_NAMES,
-  LINE_ASSET_TYPE_CODE,
+  ASSET_TYPE_CODE_LINE,
 } from '../constants'
 
 export const getAssetById = state => state.assetById
@@ -19,7 +19,7 @@ export const getAssetIdByBusId = createSelector([
     for (const connection of assetConnections) {
       const busId = connection.busId
 
-      if (busId in assetIdByBusId && asset.typeCode === LINE_ASSET_TYPE_CODE) {
+      if (busId in assetIdByBusId && asset.typeCode === ASSET_TYPE_CODE_LINE) {
         // Have buses belong to point assets if possible
         continue
       }

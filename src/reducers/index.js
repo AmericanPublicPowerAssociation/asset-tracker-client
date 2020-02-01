@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux'
 import reduceReducers from 'reduce-reducers'
+/*
 import {
   productNameSuggestions,
   productVersionSuggestions,
   vendorNameSuggestions,
 } from 'asset-report-risks'
+*/
 import mapStyleName from './mapStyleName'
 import mapViewState from './mapViewState'
 import assetsGeoJson from './assetsGeoJson'
@@ -19,9 +21,9 @@ const reduceHorizontally = combineReducers({
   assetById,
   focusingAssetId,
   focusingBusId,
-  vendorNameSuggestions,
-  productNameSuggestions,
-  productVersionSuggestions,
+  // vendorNameSuggestions,
+  // productNameSuggestions,
+  // productVersionSuggestions,
 })
 
 const reduceVertically = (state, action) => {

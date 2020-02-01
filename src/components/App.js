@@ -10,15 +10,14 @@ import OptionsWindow from './OptionsWindow'
 // import OverlaysWindow from './OverlaysWindow'
 import DetailsWindow from './DetailsWindow'
 // import TableWindow from './TableWindow'
-import DataDialog from './DataDialog'
+// import TablesDialog from './TablesDialog'
 import './App.css'
 import {
   refreshAssetsKit,
 } from '../actions'
 import {
-  IS_WITH_DATA,
   IS_WITH_DETAILS,
-  IS_WITH_TABLE,
+  IS_WITH_TABLES,
   SKETCH_MODE,
 } from '../constants'
 
@@ -26,8 +25,7 @@ export default function App() {
   const dispatch = useDispatch()
   const [sketchMode, setSketchMode] = useState(SKETCH_MODE)
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
-  const [isWithTable, setIsWithTable] = useState(IS_WITH_TABLE)
-  const [isWithData, setIsWithData] = useState(IS_WITH_DATA)
+  const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
   const [selectedAssetIndexes, setSelectedAssetIndexes] = useState([])
   const [lineBusId, setLineBusId] = useState(null)
 
@@ -71,11 +69,9 @@ export default function App() {
       <OptionsWindow
         sketchMode={sketchMode}
         isWithDetails={isWithDetails}
-        isWithTable={isWithTable}
-        isWithData={isWithData}
+        isWithTables={isWithTables}
         setIsWithDetails={setIsWithDetails}
-        setIsWithTable={setIsWithTable}
-        setIsWithData={setIsWithData}
+        setIsWithTables={setIsWithTables}
       />
       {/*
       <OverlaysWindow
@@ -86,12 +82,15 @@ export default function App() {
         isWithDetails={isWithDetails}
       />
       {/*
-      <TableWindow />
-      */}
-      <DataDialog
-        isWithData={isWithData}
-        setIsWithData={isWithData}
+      <TableWindow
+        isWithTables={isWithTables}
+        setIsWithTables={isWithTables}
       />
+      <TablesDialog
+        isWithTables={isWithTables}
+        setIsWithTables={isWithTables}
+      />
+      */}
     </div>
   )
 }

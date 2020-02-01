@@ -26,7 +26,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction='up' ref={ref} {...props} />
 })
 
-export default function DataDialog(props) {
+export default function TablesDialog(props) {
   const {
     isWithData,
     setIsWithData,

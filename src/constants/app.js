@@ -11,5 +11,4 @@ export const SKETCH_MODE_EDIT_TRANSLATE = 'edit > translate'
 export const SKETCH_MODE = SKETCH_MODE_VIEW
 
 export const IS_WITH_DETAILS = true
-export const IS_WITH_ROWS = false
-export const SHOW_DATA_DIALOG = false
+export const IS_WITH_TABLES = false

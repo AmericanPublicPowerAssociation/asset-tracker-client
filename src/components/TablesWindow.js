@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function TableWindow(props) {
+export default function TablesWindow(props) {
   const classes = useStyles()
   // const dispatch = useDispatch()
   // const overlay = useSelector(getOverlay)

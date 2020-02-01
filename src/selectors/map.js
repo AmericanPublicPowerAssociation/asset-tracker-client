@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect'
 import {
   getAssetById,
-} from './assetSelectors'
+} from './asset'
 import {
   BRIGHT_MAP_STYLE_NAMES,
 } from '../constants'

@@ -75,10 +75,10 @@ export default function AssetsMap(props) {
   /*
   function handleClick(info, event) {
     if (!info.picked ||
-        sketchMode === ADD_LINE ||
-        sketchMode === ADD_TRANSFORMER ||
-        sketchMode === ADD_SUBSTATION ||
-        sketchMode === ADD_METER)
+        sketchMode === SKETCH_MODE_ADD_LINE ||
+        sketchMode === SKETCH_MODE_ADD_TRANSFORMER ||
+        sketchMode === SKETCH_MODE_ADD_SUBSTATION ||
+        sketchMode === SKETCH_MODE_ADD_METER)
         return
 
     if (sketchMode === 'view' ||

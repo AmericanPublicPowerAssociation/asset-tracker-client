@@ -6,17 +6,17 @@ import {
   ViewMode,
 } from 'nebula.gl'
 import {
-  ADD_LINE,
-  ADD_TRANSFORMER,
-  ADD_SUBSTATION,
   BUS_DISTANCE_IN_KILOMETERS,
+  SKETCH_MODE_ADD_LINE,
+  SKETCH_MODE_ADD_SUBSTATION,
+  SKETCH_MODE_ADD_TRANSFORMER,
 } from '../constants'
 
 export function getMapMode(sketchMode) {
   const mapMode = {
-    [ADD_LINE]: DrawLineStringMode,
-    [ADD_TRANSFORMER]: DrawPointMode,
-    [ADD_SUBSTATION]: DrawPolygonMode,
+    [SKETCH_MODE_ADD_LINE]: DrawLineStringMode,
+    [SKETCH_MODE_ADD_TRANSFORMER]: DrawPointMode,
+    [SKETCH_MODE_ADD_SUBSTATION]: DrawPolygonMode,
   }[sketchMode]
   return mapMode || ViewMode
 }

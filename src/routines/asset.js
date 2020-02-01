@@ -1,15 +1,16 @@
 import {
   ABBREVIATED_ASSET_ID_LENGTH,
+  ASSET_TYPE_BY_CODE,
+  ASSET_TYPE_CODE_LINE,
+  ASSET_TYPE_CODE_METER,
+  ASSET_TYPE_CODE_SUBSTATION,
+  ASSET_TYPE_CODE_TRANSFORMER,
+  MINIMUM_ASSET_ID_LENGTH,
+  MINIMUM_BUS_ID_LENGTH,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_ADD_METER,
   SKETCH_MODE_ADD_SUBSTATION,
   SKETCH_MODE_ADD_TRANSFORMER,
-  ASSET_TYPE_BY_CODE,
-  LINE_ASSET_TYPE_CODE,
-  MINIMUM_ASSET_ID_LENGTH,
-  MINIMUM_BUS_ID_LENGTH,
-  SUBSTATION_ASSET_TYPE_CODE,
-  TRANSFORMER_ASSET_TYPE_CODE,
 } from '../constants'
 import {
   getRandomId,
@@ -22,15 +23,21 @@ export function makeAsset(sketchMode, lineBusId) {
   const asset = {id: assetId, typeCode: assetTypeCode, name: assetName}
 
   switch(assetTypeCode) {
-    case LINE_ASSET_TYPE_CODE: {
+    case ASSET_TYPE_CODE_LINE: {
       const busId = lineBusId || getRandomId(MINIMUM_BUS_ID_LENGTH)
       asset.connections = [{busId}]
       break
     }
-    case TRANSFORMER_ASSET_TYPE_CODE: {
+    case ASSET_TYPE_CODE_TRANSFORMER: {
       asset.connections = [
         {busId: getRandomId(MINIMUM_BUS_ID_LENGTH)},
         {busId: getRandomId(MINIMUM_BUS_ID_LENGTH)}]
+      break
+    }
+    case ASSET_TYPE_CODE_METER: {
+      asset.connections = [
+        {busId: getRandomId(MINIMUM_BUS_ID_LENGTH)},
+      ]
       break
     }
     default: { }
@@ -41,9 +48,10 @@ export function makeAsset(sketchMode, lineBusId) {
 
 export function getAssetTypeCode(sketchMode) {
   return {
-    [ADD_LINE]: LINE_ASSET_TYPE_CODE,
-    [ADD_TRANSFORMER]: TRANSFORMER_ASSET_TYPE_CODE,
-    [ADD_SUBSTATION]: SUBSTATION_ASSET_TYPE_CODE,
+    [SKETCH_MODE_ADD_LINE]: ASSET_TYPE_CODE_LINE,
+    [SKETCH_MODE_ADD_TRANSFORMER]: ASSET_TYPE_CODE_TRANSFORMER,
+    [SKETCH_MODE_ADD_SUBSTATION]: ASSET_TYPE_CODE_SUBSTATION,
+    [SKETCH_MODE_ADD_METER]: ASSET_TYPE_CODE_METER,
   }[sketchMode]
 }
 

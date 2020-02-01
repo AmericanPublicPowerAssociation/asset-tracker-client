@@ -4,7 +4,7 @@ import {
 } from '../constants'
 import {
   getMapStyleName,
-} from './mapSelectors'
+} from './map'
 
 export const getColors = createSelector([
   getMapStyleName,

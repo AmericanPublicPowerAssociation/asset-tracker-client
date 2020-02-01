@@ -33,5 +33,5 @@ export function refreshAssetsKit() {
 }
 
 export function mergeAsset(asset) {
-  return {type: MERGE_ASSET, payload}
+  return {type: MERGE_ASSET, payload: asset}
 }

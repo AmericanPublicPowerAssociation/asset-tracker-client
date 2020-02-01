@@ -3,12 +3,14 @@ import {
   put,
   takeLatest,
 } from 'redux-saga/effects'
+/*
 import  {
-  // watchRefreshRisks,
-  // watchSuggestProductNames,
-  // watchSuggestProductVersions,
-  // watchSuggestVendorNames,
+  watchRefreshRisks,
+  watchSuggestProductNames,
+  watchSuggestProductVersions,
+  watchSuggestVendorNames,
 } from 'asset-report-risks'
+*/
 import {
   setAssets,
 } from '../actions'
