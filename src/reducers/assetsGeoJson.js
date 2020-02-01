@@ -3,6 +3,7 @@ import {
   SET_ASSETS_GEOJSON,
 } from '../constants'
 
+// const initialState = {type: 'FeatureCollection', features: []}
 const initialState = ASSETS_GEOJSON
 
 const assetsGeoJson = (state = initialState, action) => {

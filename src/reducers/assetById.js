@@ -7,6 +7,7 @@ import {
   SET_ASSETS,
 } from '../constants'
 
+// const initialState = {}
 const initialState = ASSET_BY_ID
 
 const assetById = produce((draft, action) => {

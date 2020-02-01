@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+// import useMediaQuery from '@material-ui/core/useMediaQuery'
 import AssetsMap from './AssetsMap'
 import SketchButton from './SketchButton'
 import SketchModeToolbar from './SketchModeToolbar'
@@ -28,6 +29,7 @@ export default function App() {
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
   const [selectedAssetIndexes, setSelectedAssetIndexes] = useState([])
   const [lineBusId, setLineBusId] = useState(null)
+  // const isScreenXS = useMediaQuery('(max-width:600px)')
 
   function startNewLine() {
     setLineBusId(null)
@@ -67,7 +69,6 @@ export default function App() {
       />
       <UsersWindow />
       <OptionsWindow
-        sketchMode={sketchMode}
         isWithDetails={isWithDetails}
         isWithTables={isWithTables}
         setIsWithDetails={setIsWithDetails}
@@ -82,14 +83,16 @@ export default function App() {
         isWithDetails={isWithDetails}
       />
       {/*
-      <TableWindow
-        isWithTables={isWithTables}
-        setIsWithTables={isWithTables}
-      />
-      <TablesDialog
-        isWithTables={isWithTables}
-        setIsWithTables={isWithTables}
-      />
+      {isScreenXS ?
+        <TablesDialog
+          isWithTables={isWithTables}
+          setIsWithTables={isWithTables}
+        /> :
+        <TableWindow
+          isWithTables={isWithTables}
+          setIsWithTables={isWithTables}
+        />
+      }
       */}
     </div>
   )

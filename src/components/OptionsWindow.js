@@ -1,12 +1,11 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { makeStyles } from '@material-ui/core/styles'
 import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
 import StylesIcon from '@material-ui/icons/Map'
 import DetailsIcon from '@material-ui/icons/Receipt'
-import TableIcon from '@material-ui/icons/ViewList'
+// import TableIcon from '@material-ui/icons/ViewList'
 import {
   TOGGLE_MAP_STYLE,
 } from '../constants'
@@ -26,22 +25,17 @@ export default function OptionsWindow(props) {
   const classes = useStyles()
   const dispatch = useDispatch()
   const {
-    sketchMode,
     isWithDetails,
-    isWithTable,
-    isWithData,
+    // isWithTables,
     setIsWithDetails,
-    setIsWithTable,
-    setIsWithData,
+    // setIsWithTables,
   } = props
   const colors = useSelector(getColors)
   // const isFullScreenDataDialog = useSelector(getIsFullScreenDataDialog)
   const activeColor = colors.active
   const inactiveColor = colors.inactive
-  const isScreenXS = useMediaQuery('(max-width:600px)')
   return (
     <div className={classes.root}>
-
       <Tooltip title='Toggle Styles'>
         <IconButton
           className={activeColor}
@@ -51,39 +45,25 @@ export default function OptionsWindow(props) {
         </IconButton>
       </Tooltip>
 
-      {!isScreenXS &&
-        <Tooltip title='Toggle Details'>
-          <IconButton
-            className={isWithDetails ? activeColor : inactiveColor}
-            onClick={() => setIsWithDetails(!isWithDetails)}
-          >
-            <DetailsIcon />
-          </IconButton>
-        </Tooltip>
-      }
+      <Tooltip title='Toggle Details'>
+        <IconButton
+          className={isWithDetails ? activeColor : inactiveColor}
+          onClick={() => setIsWithDetails(!isWithDetails)}
+        >
+          <DetailsIcon />
+        </IconButton>
+      </Tooltip>
 
-      {!isScreenXS && sketchMode === 'view' &&
-        <Tooltip title='Toggle Table'>
-          <IconButton
-            className={isWithTable ? activeColor : inactiveColor}
-            onClick={() => setIsWithTable(!isWithTable)}
-          >
-            <TableIcon />
-          </IconButton>
-        </Tooltip>
-      }
-
-      {isScreenXS &&
-        <Tooltip title='View Data'>
-          <IconButton
-            className={isWithData ? activeColor : inactiveColor}
-            onClick={() => setIsWithData(true)}
-          >
-            <TableIcon />
-          </IconButton>
-        </Tooltip>
-      }
-
+    {/*
+      <Tooltip title='Toggle Tables'>
+        <IconButton
+          className={isWithTables ? activeColor : inactiveColor}
+          onClick={() => setIsWithTables(!isWithTables)}
+        >
+          <TableIcon />
+        </IconButton>
+      </Tooltip>
+    */}
     </div>
   )
 }
