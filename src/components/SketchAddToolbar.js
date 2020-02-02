@@ -28,8 +28,8 @@ import {
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
-    top: theme.spacing(34),
-    // top: theme.spacing(22),
+    // top: theme.spacing(34),
+    top: theme.spacing(22),
     left: theme.spacing(1),
   },
 }))
@@ -80,7 +80,11 @@ export default function SketchAddToolbar(props) {
               setSketchMode(SKETCH_MODE_ADD_METER)
             }}
           >
-            <SvgIcon fontSize='large' viewBox='0 0 16 16' component={MeterIcon} />
+            <SvgIcon
+              fontSize='large'
+              viewBox='0 0 16 16'
+              component={MeterIcon}
+            />
           </ListItem>
         </Tooltip>
 

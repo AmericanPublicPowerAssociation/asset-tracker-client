@@ -3,15 +3,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
 import { GeoJsonLayer } from '@deck.gl/layers'
+import { EditableGeoJsonLayer } from 'nebula.gl'
 import {
-  EditableGeoJsonLayer,
+  // setFocusingBusId,
   addAssetConnection,
   setAsset,
   setAssetsGeojson,
-} from 'nebula.gl'
-import {
   setFocusingAssetId,
-  // setFocusingBusId,
   setMapViewState,
 } from '../actions'
 import {
