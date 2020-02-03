@@ -68,25 +68,10 @@ export default function AssetsMap(props) {
   function handleAssetsGeoJsonClick(info, event) {
     const assetId = info.object.properties.id
     assetId && dispatch(setFocusingAssetId(assetId))
+    if (sketchMode.startsWith('add')) return
+    const featureIndex = info.index
+    setSelectedAssetIndexes([featureIndex])
   }
-
-  /*
-  function handleClick(info, event) {
-    if (!info.picked ||
-        sketchMode === SKETCH_MODE_ADD_LINE ||
-        sketchMode === SKETCH_MODE_ADD_TRANSFORMER ||
-        sketchMode === SKETCH_MODE_ADD_SUBSTATION ||
-        sketchMode === SKETCH_MODE_ADD_METER)
-        return
-
-    if (sketchMode === 'view' ||
-        sketchMode === SELECT_GEOMETRY ||
-        sketchMode === EDIT_TRANSLATE ||
-        sketchMode === EDIT_MODIFY) {
-      dispatch(setSelectedFeatureIndexes([info.index]))
-    }
-  }
-  */
 
   function handleAssetsGeoJsonEdit({editType, editContext, updatedData}) {
     console.log('handleAssetsGeoJsonEdit', editType, editContext, updatedData)

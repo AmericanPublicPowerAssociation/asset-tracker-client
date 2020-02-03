@@ -7,7 +7,7 @@ import ListItem from '@material-ui/core/ListItem'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import Tooltip from '@material-ui/core/Tooltip'
 import ModifyIcon from '@material-ui/icons/Edit'
-import TranslateIcon from '@material-ui/icons/OpenWith'
+import MoveIcon from '@material-ui/icons/OpenWith'
 import {
   SKETCH_MODE_EDIT_MODIFY,
   SKETCH_MODE_EDIT_TRANSLATE,
@@ -16,8 +16,8 @@ import {
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
-    top: theme.spacing(34),
-    // top: theme.spacing(22),
+    // top: theme.spacing(34),
+    top: theme.spacing(22),
     left: theme.spacing(1),
   },
 }))
@@ -36,7 +36,6 @@ export default function SketchEditToolbar(props) {
       })}
     >
       <List>
-
         <Tooltip title='Modify' aria-label='Modify' placement='right'>
           <ListItem
             button
@@ -50,7 +49,7 @@ export default function SketchEditToolbar(props) {
           </ListItem>
         </Tooltip>
 
-        <Tooltip title='Move' aria-label='Move Asset' placement='right'>
+        <Tooltip title='Move' aria-label='Move' placement='right'>
           <ListItem
             button
             classes={{selected: 'selected'}}
@@ -59,12 +58,10 @@ export default function SketchEditToolbar(props) {
               setSketchMode(SKETCH_MODE_EDIT_TRANSLATE)
             }}
           >
-            <SvgIcon fontSize='large' component={TranslateIcon} />
+            <SvgIcon fontSize='large' component={MoveIcon} />
           </ListItem>
         </Tooltip>
-
       </List>
     </Paper>
-
   )
 }
