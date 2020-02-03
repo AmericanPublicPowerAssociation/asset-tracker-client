@@ -1,5 +1,4 @@
-import React from 'react'
-// import React, { useState } from 'react'
+import React, { useState } from 'react'
 import clsx from 'clsx'
 import { useSelector } from 'react-redux'
 // import { useSelector, useDispatch } from 'react-redux'
@@ -11,14 +10,21 @@ import ExpandLess from '@material-ui/icons/ExpandLess'
 import InboxIcon from '@material-ui/icons/MoveToInbox'
 import Divider from '@material-ui/core/Divider'
 import StarBorder from '@material-ui/icons/StarBorder'
-import Collapse from '@material-ui/core/Collapse'
+*/
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-*/
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import Collapse from '@material-ui/core/Collapse'
+import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
+import TextField from '@material-ui/core/TextField'
+import AssetTypeSvgIcon from './AssetTypeSvgIcon'
+import {
+  ASSET_TYPE_BY_CODE,
+  SKETCH_MODE_VIEW,
+} from '../constants'
 /*
-import SvgIcon from '@material-ui/core/SvgIcon'
 import {
   LINE_ASSET_TYPE_ID,
   TRANSFORMER_ASSET_TYPE_ID,
@@ -50,6 +56,9 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1),
   },
   /*
+  icon: {
+    margin: theme.spacing(1),
+  },
   section: {
     marginTop: theme.spacing(1),
   },
@@ -76,10 +85,6 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     padding: 0,
   },
-  noGutters: {
-    paddingLeft: 0,
-    paddingRight: 0,
-  },
   icon: {
     fontSize: '3.6em',
   },
@@ -103,34 +108,51 @@ export default function DetailsWindow(props) {
   const classes = useStyles()
   const {
     isWithDetails,
+    sketchMode,
   } = props
   const focusingAsset = useSelector(getFocusingAsset)
   const detailsPanel = focusingAsset ?
     <AssetDetailsPanel
       asset={focusingAsset}
+      sketchMode={sketchMode}
     /> :
     <EmptyDetailsPanel />
   return (
-    <Paper className={clsx(classes.root, {poof: !isWithDetails})}>
+    <Paper className={clsx(classes.root, {
+      poof: !isWithDetails,
+    })}>
       {detailsPanel}
     </Paper>
   )
 }
 
 function AssetDetailsPanel(props) {
+  const classes = useStyles()
   const {
     asset,
+    sketchMode,
   } = props
+  const [
+    isWithExpandedDetails, setIsWithExpandedDetails,
+  ] = useState(true)
+  const [
+    isWithExpandedConnections, setIsWithExpandedConnections,
+  ] = useState(false)
+  const assetName = asset.name
+  const assetNameComponent = sketchMode === SKETCH_MODE_VIEW ?
+    <ListItemText primary={assetName} /> :
+    <TextField value={assetName} variant='outlined' />
+  const assetTypeCode = asset.typeCode
+  const assetType = ASSET_TYPE_BY_CODE[assetTypeCode]
+  const assetTypeName = assetType.name
+
   // const classes = useStyles()
   // const dispatch = useDispatch()
-  // const [detailsExpand, setDetailsExpand] = useState(true)
   // const [busDetailsExpand, setBusDetailsExpand] = useState({})
   // const [connDetailsExpand, setConnDetailsExpand] = useState({})
   // const [filter, setFilter] = useState('')
 
   // const id = asset.id || null
-  // const assetName = asset.name
-  // const typeCode = asset.typeCode
   // const vendorName = asset['vendorName'] || null
   // const productName = asset['productName'] || null
   // const productVersion = asset['productVersion'] || null
@@ -148,10 +170,6 @@ function AssetDetailsPanel(props) {
   /*
   function trackChanges(attributes) {
     dispatch(mergeAsset({id, ...attributes}))
-  }
-  
-  const _saveChanges = (attributes) => {
-    dispatch(changeAsset({id, ...attributes}))
   }
 
   const _handleDetailsExpand = () => {
@@ -191,7 +209,6 @@ function AssetDetailsPanel(props) {
             <List component='nav'>
               <ListItem
                 button
-                className={classes.noGutters}
                 onClick={ () => _handleBusesExpand(key) }
               >
                 <ListItemText
@@ -265,35 +282,44 @@ function AssetDetailsPanel(props) {
   */
 
   return (
-    <Typography>
-      {asset.name}
-    </Typography>
+    <List
+      disablePadding
+    >
+      <ListItem
+        disableGutters
+      >
+        <Tooltip title={assetTypeName} placement='left'>
+          <ListItemIcon>
+            <AssetTypeSvgIcon
+              assetTypeCode={assetTypeCode}
+            />
+          </ListItemIcon>
+        </Tooltip>
+
+        {assetNameComponent}
+      </ListItem>
+      <Collapse
+        in={isWithExpandedDetails}
+        // timeout='auto'
+      >
+      </Collapse>
+    </List>
   )
 }
 
 /*
     {/*
-    <>
-    // <List component='nav'>
-      <List>
         <ListItem
-          button
-          className={classes.noGutters}
           onClick={_handleDetailsExpand}>
-          { getIcon() }
           <ListItemText
-            primaryTypographyProps={{ className: classes.title }}
-            primary={assetName} />
+            primaryTypographyProps={{ className: classes.title }} />
           {detailsExpand ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
         <Collapse
-          in={detailsExpand}
-          timeout='auto'
           // unmountOnExit
         >
           { getFields() }
         </Collapse>
-      </List>
 
       <Divider />
 

@@ -1,6 +1,18 @@
 import assetsGeoJson from '../datasets/assets/example1GeoJson.json'
 import assets from '../datasets/assets/example1.json'
 import {
+  ReactComponent as LineIcon
+} from '../images/assets/line-16.svg'
+import {
+  ReactComponent as TransformerIcon
+} from '../images/assets/transformer-16.svg'
+import {
+  ReactComponent as SubstationIcon
+} from '../images/assets/substation-16.svg'
+import {
+  ReactComponent as MeterIcon
+} from '../images/assets/meter-light-16.svg'
+import {
   getById,
 } from '../macros'
 
@@ -15,15 +27,19 @@ export const ASSET_TYPE_CODE_METER = 'm'
 export const ASSET_TYPE_BY_CODE = {
   [ASSET_TYPE_CODE_LINE]: {
     name: 'Line',
+    icon: LineIcon,
   },
   [ASSET_TYPE_CODE_METER]: {
     name: 'Meter',
+    icon: MeterIcon,
   },
   [ASSET_TYPE_CODE_TRANSFORMER]: {
     name: 'Transformer',
+    icon: TransformerIcon,
   },
   [ASSET_TYPE_CODE_SUBSTATION]: {
     name: 'Substation',
+    icon: SubstationIcon,
   },
 }
 

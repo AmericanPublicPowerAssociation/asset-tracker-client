@@ -81,6 +81,7 @@ export default function App() {
       */}
       <DetailsWindow
         isWithDetails={isWithDetails}
+        sketchMode={sketchMode}
       />
       {/*
       {isScreenXS ?
