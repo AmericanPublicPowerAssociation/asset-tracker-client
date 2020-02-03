@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 /*
-import CloseButton from './CloseButton'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import InboxIcon from '@material-ui/icons/MoveToInbox'
@@ -20,18 +19,6 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Typography from '@material-ui/core/Typography'
 /*
 import SvgIcon from '@material-ui/core/SvgIcon'
-import {
-  ReactComponent as LineIcon
-} from '../images/assets/line-16.svg'
-import {
-  ReactComponent as TransformerIcon
-} from '../images/assets/transformer-16.svg'
-import {
-  ReactComponent as SubstationIcon
-} from '../images/assets/substation-16.svg'
-import {
-  ReactComponent as MeterIcon
-} from '../images/assets/meter-light-16.svg'
 import {
   LINE_ASSET_TYPE_ID,
   TRANSFORMER_ASSET_TYPE_ID,
@@ -62,6 +49,7 @@ const useStyles = makeStyles(theme => ({
     // width: theme.spacing(35),
     padding: theme.spacing(1),
   },
+  /*
   section: {
     marginTop: theme.spacing(1),
   },
@@ -108,6 +96,7 @@ const useStyles = makeStyles(theme => ({
     fontStyle: 'italic',
     fontWeight: 400,
   },
+  */
 }))
 
 export default function DetailsWindow(props) {
@@ -272,27 +261,6 @@ function AssetDetailsPanel(props) {
       }
     }
     return fields
-  }
-
-  const getIcon = () => {
-    let icon = null
-    if (typeId === METER_ASSET_TYPE_ID)
-      icon = MeterIcon
-    else if (typeId === LINE_ASSET_TYPE_ID)
-      icon = LineIcon
-    else if (typeId === TRANSFORMER_ASSET_TYPE_ID)
-      icon = TransformerIcon
-    else if (typeId === SUBSTATION_ASSET_TYPE_ID)
-      icon = SubstationIcon
-    else
-      return <StarBorder className={classes.icon}/>
-    return (
-      <SvgIcon
-        component={icon}
-        fontSize='large'
-        viewBox='0 0 16 16'
-        classes={{fontSizeLarge: classes.icon}} />
-    )
   }
   */
 

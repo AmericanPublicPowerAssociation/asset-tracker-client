@@ -4,26 +4,18 @@ import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-import SvgIcon from '@material-ui/core/SvgIcon'
 import Tooltip from '@material-ui/core/Tooltip'
+import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import {
+  ASSET_TYPE_CODE_LINE,
+  ASSET_TYPE_CODE_METER,
+  ASSET_TYPE_CODE_SUBSTATION,
+  ASSET_TYPE_CODE_TRANSFORMER,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_ADD_METER,
   SKETCH_MODE_ADD_SUBSTATION,
   SKETCH_MODE_ADD_TRANSFORMER,
 } from '../constants'
-import {
-  ReactComponent as LineIcon
-} from '../images/assets/line-16.svg'
-import {
-  ReactComponent as TransformerIcon
-} from '../images/assets/transformer-16.svg'
-import {
-  ReactComponent as SubstationIcon
-} from '../images/assets/substation-16.svg'
-import {
-  ReactComponent as MeterIcon
-} from '../images/assets/meter-light-16.svg'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -59,10 +51,8 @@ export default function SketchAddToolbar(props) {
               onSketchModeAddLine()
             }}
           >
-            <SvgIcon
-              fontSize='large'
-              viewBox='0 0 16 16'
-              component={LineIcon}
+            <AssetTypeSvgIcon
+              assetTypeCode={ASSET_TYPE_CODE_LINE}
             />
           </ListItem>
         </Tooltip>
@@ -80,10 +70,8 @@ export default function SketchAddToolbar(props) {
               setSketchMode(SKETCH_MODE_ADD_METER)
             }}
           >
-            <SvgIcon
-              fontSize='large'
-              viewBox='0 0 16 16'
-              component={MeterIcon}
+            <AssetTypeSvgIcon
+              assetTypeCode={ASSET_TYPE_CODE_METER}
             />
           </ListItem>
         </Tooltip>
@@ -101,10 +89,8 @@ export default function SketchAddToolbar(props) {
               setSketchMode(SKETCH_MODE_ADD_TRANSFORMER)
             }}
           >
-            <SvgIcon
-              fontSize='large'
-              viewBox='0 0 16 16'
-              component={TransformerIcon}
+            <AssetTypeSvgIcon
+              assetTypeCode={ASSET_TYPE_CODE_TRANSFORMER}
             />
           </ListItem>
         </Tooltip>
@@ -122,10 +108,8 @@ export default function SketchAddToolbar(props) {
               setSketchMode(SKETCH_MODE_ADD_SUBSTATION)
             }}
           >
-            <SvgIcon
-              fontSize='large'
-              viewBox='0 0 16 16'
-              component={SubstationIcon}
+            <AssetTypeSvgIcon
+              assetTypeCode={ASSET_TYPE_CODE_SUBSTATION}
             />
           </ListItem>
         </Tooltip>

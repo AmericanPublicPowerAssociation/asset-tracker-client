@@ -13,6 +13,18 @@ import {
   SKETCH_MODE_ADD_TRANSFORMER,
 } from '../constants'
 import {
+  ReactComponent as LineIcon
+} from '../images/assets/line-16.svg'
+import {
+  ReactComponent as TransformerIcon
+} from '../images/assets/transformer-16.svg'
+import {
+  ReactComponent as SubstationIcon
+} from '../images/assets/substation-16.svg'
+import {
+  ReactComponent as MeterIcon
+} from '../images/assets/meter-light-16.svg'
+import {
   getRandomId,
 } from '../macros'
 
@@ -60,4 +72,13 @@ export function getAssetName(assetTypeCode, assetId) {
   const abbreviatedAssetId = assetId.substring(
     0, ABBREVIATED_ASSET_ID_LENGTH)
   return `${assetType.name} ${abbreviatedAssetId}`
+}
+
+export function getAssetTypeIcon(assetTypeCode) {
+  return {
+    [ASSET_TYPE_CODE_LINE]: LineIcon,
+    [ASSET_TYPE_CODE_METER]: MeterIcon,
+    [ASSET_TYPE_CODE_TRANSFORMER]: TransformerIcon,
+    [ASSET_TYPE_CODE_SUBSTATION]: SubstationIcon,
+  }[assetTypeCode]
 }
