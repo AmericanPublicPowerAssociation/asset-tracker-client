@@ -68,13 +68,12 @@ export default function AssetsMap(props) {
   function handleAssetsGeoJsonClick(info, event) {
     const assetId = info.object.properties.id
     assetId && dispatch(setFocusingAssetId(assetId))
-    if (sketchMode.startsWith('add')) return
+    if (sketchMode.startsWith('add') || info.isGuide) return
     const featureIndex = info.index
     setSelectedAssetIndexes([featureIndex])
   }
 
   function handleAssetsGeoJsonEdit({editType, editContext, updatedData}) {
-    console.log('handleAssetsGeoJsonEdit', editType, editContext, updatedData)
     // If a feature is being added for the first time,
     if (editType === 'addFeature') {
       const features = updatedData.features
