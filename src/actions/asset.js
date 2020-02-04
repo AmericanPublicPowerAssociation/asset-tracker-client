@@ -6,6 +6,7 @@ import {
   SET_ASSETS,
   SET_ASSETS_GEOJSON,
   SET_FOCUSING_ASSET_ID,
+  SET_CONNECTION_ATTRIBUTE,
 } from '../constants'
 
 export function setAssetsGeojson(geojson) {
@@ -22,6 +23,10 @@ export function setAssets(assets) {
 
 export function setFocusingAssetId(id) {
   return {type: SET_FOCUSING_ASSET_ID, payload: id}
+}
+
+export function setAssetConnectionAttribute(assetId, connIndex, key, val){
+  return {type: SET_CONNECTION_ATTRIBUTE, payload: {assetId, connIndex, key, val}}
 }
 
 export function addAssetConnection(assetId, busId) {

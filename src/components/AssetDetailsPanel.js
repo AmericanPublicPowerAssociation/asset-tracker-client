@@ -1,22 +1,13 @@
-
 import React, { useState } from 'react'
 import clsx from 'clsx'
-import { useSelector, useDispatch } from 'react-redux'
-import { makeStyles } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper'
+import { useDispatch } from 'react-redux'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 import ExpandLess from '@material-ui/icons/ExpandLess'
-/*
-import InboxIcon from '@material-ui/icons/MoveToInbox'
-import Divider from '@material-ui/core/Divider'
-import StarBorder from '@material-ui/icons/StarBorder'
-*/
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar'
-import Avatar from '@material-ui/core/Avatar'
-import ListItemText from '@material-ui/core/ListItemText'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import InputBase from '@material-ui/core/InputBase'
 import Collapse from '@material-ui/core/Collapse'
 import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
@@ -44,8 +35,8 @@ import {
   getFocusingAsset,
 } from '../selectors'
 import {
-  // mergeAsset,
-  // changeAsset,
+  mergeAsset,
+  changeAsset,
 } from '../actions'
 
 
@@ -57,26 +48,24 @@ export default function AssetDetailsPanel(props) {
   const [
     isWithExpandedDetails, setIsWithExpandedDetails,
   ] = useState(true)
-  const [
-    isWithExpandedConnections, setIsWithExpandedConnections,
-  ] = useState(false)
   const assetName = asset.name
+  const assetId = asset.id
   const assetTypeCode = asset.typeCode
   const assetType = ASSET_TYPE_BY_CODE[assetTypeCode]
   const assetTypeName = assetType.name
   const assetNameComponent = sketchMode === SKETCH_MODE_VIEW ?
     <ListItemText
-      primary={assetName}
-      secondary={`Id: ${asset.id}`} /> :
+      primary={
+        <InputBase
+          defaultValue={assetName}
+          onClick={ (e) => e.stopPropagation()} />
+      }
+      secondary={`Id: ${assetId}`} /> :
     <TextField value={assetName} variant='outlined' />
   const dispatch = useDispatch()
 
   function trackChanges(attributes) {
-    //    dispatch(mergeAsset({id, ...attributes}))
-  }
-
-  function getConnections() {
-
+    dispatch(mergeAsset({assetId, ...attributes}))
   }
 
   const arrowComponent = (
@@ -96,17 +85,43 @@ export default function AssetDetailsPanel(props) {
         disableGutters
       >
         <Tooltip title={assetTypeName} placement='left'>
-          <ListItemAvatar>
-            <Avatar>
-              <AssetTypeSvgIcon
-                assetTypeCode={assetTypeCode}
-              />
-            </Avatar>
-          </ListItemAvatar>
+          <ListItemIcon>
+            <AssetTypeSvgIcon
+              assetTypeCode={assetTypeCode}
+            />
+          </ListItemIcon>
         </Tooltip>
         {assetNameComponent}
         {arrowComponent}
       </ListItem>
+      {
+        /*
+      <VendorName
+        typeId={assetTypeCode}
+        vendorName={""}
+        trackChanges={trackChanges}
+      // saveChanges={_saveChanges}
+      />
+      <ProductName
+        className={clsx({
+          
+        })}
+        type={assetTypeCode}
+        vendorName={""}
+        productName={""}
+        trackChanges={trackChanges}
+      // saveChanges={_saveChanges}
+      />
+      <ProductVersion
+        typeId={assetTypeCode}
+        vendorName={""}
+        productName={""}
+        productVersion={""}
+        trackChanges={trackChanges}
+      // saveChanges={_saveChanges}
+      />
+          */
+      }
       <Collapse
         in={isWithExpandedDetails}
         // timeout='auto'
@@ -116,30 +131,3 @@ export default function AssetDetailsPanel(props) {
     </List>
   )
 }
-/*
-      <VendorName
-        typeId={typeId}
-        vendorName={vendorName}
-        trackChanges={_trackChanges}
-      // saveChanges={_saveChanges}
-      />
-      <ProductName
-        className={clsx({
-          
-        })}
-        type={typeId}
-        vendorName={vendorName}
-        productName={productName}
-        trackChanges={_trackChanges}
-      // saveChanges={_saveChanges}
-      />
-      <ProductVersion
-        typeId={typeId}
-        vendorName={vendorName}
-        productName={productName}
-        productVersion={productVersion}
-        trackChanges={_trackChanges}
-      // saveChanges={_saveChanges}
-      />
-    </>
-*/

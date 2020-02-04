@@ -1,6 +1,7 @@
 import produce from 'immer'
 import {
   ADD_ASSET_CONNECTION,
+  SET_CONNECTION_ATTRIBUTE,
   ASSET_BY_ID,
   MERGE_ASSET,
   SET_ASSET,
@@ -30,6 +31,17 @@ const assetById = produce((draft, action) => {
       break
     }
     case SET_ASSETS: {
+      break
+    }
+    case SET_CONNECTION_ATTRIBUTE: {
+      const {
+        assetId,
+        connIndex,
+        key,
+        val
+      } = action.payload
+      const conn = draft[assetId]["connections"]
+      conn[connIndex].attributes[key] = val
       break
     }
     default: { }
