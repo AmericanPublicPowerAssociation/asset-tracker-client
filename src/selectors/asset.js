@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 import {
-  // ASSET_TABLE_COLUMN_NAMES,
+  ASSET_TABLE_COLUMN_NAMES,
   ASSET_TYPE_CODE_LINE,
 } from '../constants'
 
@@ -41,7 +41,6 @@ export const getFocusingAsset = createSelector([
   return assetById[focusingAssetId]
 })
 
-/*
 export const getAssetTableData = createSelector([
   getAssetById,
 ],
@@ -58,4 +57,3 @@ export const getAssetTableData = createSelector([
     name: 'asset',
   }
 })
-*/
