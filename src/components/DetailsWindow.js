@@ -26,12 +26,6 @@ import {
 } from '../constants'
 /*
 import {
-  LINE_ASSET_TYPE_ID,
-  TRANSFORMER_ASSET_TYPE_ID,
-  SUBSTATION_ASSET_TYPE_ID,
-  METER_ASSET_TYPE_ID,
-} from '../constants'
-import {
   ProductName,
   ProductVersion,
   VendorName,
@@ -42,7 +36,6 @@ import {
 } from '../selectors'
 import {
   // mergeAsset,
-  // changeAsset,
 } from '../actions'
 
 const useStyles = makeStyles(theme => ({
@@ -56,9 +49,6 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1),
   },
   /*
-  icon: {
-    margin: theme.spacing(1),
-  },
   section: {
     marginTop: theme.spacing(1),
   },
@@ -133,10 +123,12 @@ function AssetDetailsPanel(props) {
     sketchMode,
   } = props
   const [
-    isWithExpandedDetails, setIsWithExpandedDetails,
+    isWithExpandedDetails,
+    setIsWithExpandedDetails,
   ] = useState(true)
   const [
-    isWithExpandedConnections, setIsWithExpandedConnections,
+    isWithExpandedConnections,
+    setIsWithExpandedConnections,
   ] = useState(false)
   const assetName = asset.name
   const assetNameComponent = sketchMode === SKETCH_MODE_VIEW ?
@@ -288,7 +280,10 @@ function AssetDetailsPanel(props) {
       <ListItem
         disableGutters
       >
-        <Tooltip title={assetTypeName} placement='left'>
+        <Tooltip
+          title={assetTypeName}
+          placement='left'
+        >
           <ListItemIcon>
             <AssetTypeSvgIcon
               assetTypeCode={assetTypeCode}
@@ -298,6 +293,7 @@ function AssetDetailsPanel(props) {
 
         {assetNameComponent}
       </ListItem>
+
       <Collapse
         in={isWithExpandedDetails}
         // timeout='auto'
