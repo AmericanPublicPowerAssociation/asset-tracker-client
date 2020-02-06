@@ -35,12 +35,14 @@ import {
   getFocusingAsset,
 } from '../selectors'
 import {
-  mergeAsset,
-  changeAsset,
+  setAssetAttribute,
+  // mergeAsset,
+  // changeAsset,
 } from '../actions'
 
 
 export default function AssetDetailsPanel(props) {
+  const dispatch = useDispatch()
   const {
     asset,
     sketchMode,
@@ -53,20 +55,34 @@ export default function AssetDetailsPanel(props) {
   const assetTypeCode = asset.typeCode
   const assetType = ASSET_TYPE_BY_CODE[assetTypeCode]
   const assetTypeName = assetType.name
-  const assetNameComponent = sketchMode === SKETCH_MODE_VIEW ?
-    <ListItemText
-      primary={
-        <InputBase
-          defaultValue={assetName}
-          onClick={ (e) => e.stopPropagation()} />
-      }
-      secondary={`Id: ${assetId}`} /> :
-    <TextField value={assetName} variant='outlined' />
-  const dispatch = useDispatch()
+  const disableInput = sketchMode === SKETCH_MODE_VIEW
 
+  const handleTextFieldChange = (e, key) => {
+    const val = e.target.value
+    dispatch(setAssetAttribute(assetId, key, val))
+  }
+
+  const assetNameComponent = (disableInput ?
+    <Tooltip title={assetName} placement="bottom">
+      <ListItemText
+        primary={
+          <Typography variant="h5" noWrap={true}>
+            {assetName}
+          </Typography>
+        }
+      />
+    </Tooltip> :
+    <TextField
+      onChange={(e) =>handleTextFieldChange(e, 'name')}
+      value={assetName}
+      variant='outlined'
+    />
+  )
+  /*
   function trackChanges(attributes) {
     dispatch(mergeAsset({assetId, ...attributes}))
   }
+  */
 
   const arrowComponent = (
     isWithExpandedDetails ?
@@ -80,9 +96,11 @@ export default function AssetDetailsPanel(props) {
       disablePadding
     >
       <ListItem
-        component="div"
-        onClick={ () => setIsWithExpandedDetails(!isWithExpandedDetails)}
         disableGutters
+        component="div"
+        onClick={
+          () => setIsWithExpandedDetails(!isWithExpandedDetails)
+        }
       >
         <Tooltip title={assetTypeName} placement='left'>
           <ListItemIcon>
@@ -126,7 +144,7 @@ export default function AssetDetailsPanel(props) {
         in={isWithExpandedDetails}
         // timeout='auto'
       >
-        <AssetConnectionList asset={asset}/>
+        <AssetConnectionList asset={asset} disableInput={disableInput} />
       </Collapse>
     </List>
   )

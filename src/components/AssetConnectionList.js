@@ -15,7 +15,8 @@ import {
 
 export default function AssetConnectionList(props) {
   const {
-    asset
+    asset,
+    disableInput,
   } = props
   const connections = asset['connections'] || []
   const assetId = asset.id
@@ -29,6 +30,7 @@ export default function AssetConnectionList(props) {
           connection={conn}
           connectionIndex={index}
           assetId={assetId}
+          disableInput={disableInput}
         />
       ))} 
     </List>
@@ -46,6 +48,7 @@ function AssetConnectionItem(props) {
     itemKey,
     connectionIndex,
     assetId,
+    disableInput,
   } = props
   const {
     busId,
@@ -66,31 +69,47 @@ function AssetConnectionItem(props) {
     )
   }
 
+  const getKeyLabel = (key) => {
+    return key.replace( /([A-Z])/g, " $1" ).toLowerCase()
+  }
+
   return (
     <>
       <ListItem
         key={`${itemKey}-li`}
         disableGutters
         onClick={ () => setIsWithExpandConnect(!isWithExpandConnect)}>
-        <ListItemText primary={`Bus ${busId}`}/>
+        <ListItemText primary={`Bus ${connectionIndex}`}/>
         { arrowComponent } 
       </ListItem>
       <Collapse key={`${itemKey}-collapse`} in={isWithExpandConnect}>
         {
           !attributes ?
-          <Typography>Attributes are not available</Typography> :
+          <Typography display="block" align="center" variant="caption">
+            Attributes are not available
+          </Typography> :
           <List>
+            <ListItem>
+              <TextField
+                label="id"
+                size="small"
+                value={busId}
+                variant="outlined"
+                disabled
+              />
+            </ListItem>
             {
               Object.keys(attributes).map( key => (
                 <ListItem
                   key={`${itemKey}-atttributes-${key}`}
                 >
                   <TextField
-                    label={key}
+                    label={getKeyLabel(key)}
                     size="small"
                     value={attributes[key]}
                     variant="outlined" 
                     onChange={ (e) => _onChange(e, key)}
+                    disabled={disableInput}
                   />
                 </ListItem>
               ))
