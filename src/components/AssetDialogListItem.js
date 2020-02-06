@@ -1,42 +1,19 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
 import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import {
   ASSET_TYPE_BY_CODE
 } from '../constants'
-import {
-  getAssetById
-}from '../selectors' 
 
 
-export default function AssetList(props) {
-  const assetById = useSelector(getAssetById)
-  return (
-    <List>
-      {
-        Object.keys(assetById).map( assetKey => (
-          <AssetListItem 
-            key={`asset-list-${assetKey}`}
-            asset={assetById[assetKey]} />
-        ))
-      } 
-    </List>
-  )
-}
-
-
-function AssetListItem(props) {
+export default function AssetDialogListItem(props) {
   const {
-    asset
+    asset,
+    handleShowDetailsDialog,
   } = props
   const {
     typeCode,
@@ -44,6 +21,8 @@ function AssetListItem(props) {
     id
   } = asset
   const assetTypeName = ASSET_TYPE_BY_CODE[typeCode].name
+  const numOfConnections = asset['connections'] ? asset['connections'].length : 0
+
   return (
     <>
       <ListItem>
@@ -73,13 +52,17 @@ function AssetListItem(props) {
                 spacing={1}
               >
                 <Grid item xs>
-                  Name: {name}
+                  {name}
+                </Grid>
+                <Grid>
+                  {numOfConnections}
+                  {numOfConnections === 1 ? " connection" : " connections"}
                 </Grid>
                 <Grid item xs>
-                  Id: {id}
-                </Grid>
-                <Grid item xs>
-                  <Button color="secondary">
+                  <Button
+                    color="secondary"
+                    onClick={() => handleShowDetailsDialog(id)}
+                  >
                     View details
                   </Button>
                 </Grid>

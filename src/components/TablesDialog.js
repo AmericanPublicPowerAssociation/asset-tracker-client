@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { fade, makeStyles } from '@material-ui/core/styles'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab' 
 import SearchIcon from '@material-ui/icons/Search'
-import Container from '@material-ui/core/Container'
-import Paper from '@material-ui/core/Paper'
 import Dialog from '@material-ui/core/Dialog'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -12,18 +10,47 @@ import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import CloseIcon from '@material-ui/icons/Close'
 import Slide from '@material-ui/core/Slide'
-import AssetList from './AssetList'
+import InputBase from '@material-ui/core/InputBase'
+import AssetDialogList from './AssetDialogList'
 import TaskList from './TaskList'
 import RiskList from './RiskList'
 
 const useStyles = makeStyles(theme => ({
-  appBar: {
-    // position: 'relative',
-  },
   offset: theme.mixins.toolbar,
-  title: {
-    // marginLeft: theme.spacing(2),
-    // flex: 1,
+  search: {
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.common.white, 0.25),
+    },
+    marginLeft: "10px",
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(1),
+      width: 'auto',
+    },
+  },
+  searchIcon: {
+    width: theme.spacing(7),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputInput: {
+    padding: theme.spacing(1, 1, 1, 7),
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    color: "white",
+    [theme.breakpoints.up('sm')]: {
+      width: 120,
+      '&:focus': {
+        width: 200,
+      },
+    },
   },
 }))
 
@@ -37,6 +64,7 @@ export default function TablesDialog(props) {
     setIsWithTables,
   } = props
   const [displayTableIndex, setDisplayTableIndex] = useState(0)
+  const [searchString, setSearchString] = useState("")
 
   const classes = useStyles()
 
@@ -51,11 +79,16 @@ export default function TablesDialog(props) {
 
   const getTableComponent = () => {
     if (displayTableIndex === 0)
-      return <AssetList />
+      return <AssetDialogList searchString={searchString}/>
     else if (displayTableIndex === 1)
       return <TaskList /> 
     else if (displayTableIndex === 2)
       return <RiskList />
+  }
+
+  const onChangeSearchValue = (e) => {
+    const newValue = e.target.value
+    setSearchString(newValue)
   }
 
   return (
@@ -63,7 +96,6 @@ export default function TablesDialog(props) {
       fullScreen
       open={isWithTables}
       TransitionComponent={Transition}
-      onClose={handleClose}
     >
       <AppBar position="relative" color="secondary">
         <Toolbar>
@@ -73,6 +105,21 @@ export default function TablesDialog(props) {
           <Typography variant='h6' className={classes.title}>
             Tables
           </Typography>
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
+            </div>
+            <InputBase
+              placeholder="Search…"
+              value={searchString}
+              onChange={onChangeSearchValue}
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{ 'aria-label': 'search' }}
+            />
+          </div>
         </Toolbar>
       </AppBar>
       <Tabs
@@ -88,7 +135,7 @@ export default function TablesDialog(props) {
       </Tabs>
       <div>
         { getTableComponent() }
-    </div>
+      </div>
     </Dialog>
   )
 }
