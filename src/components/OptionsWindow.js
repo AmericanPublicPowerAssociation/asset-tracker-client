@@ -5,7 +5,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
 import StylesIcon from '@material-ui/icons/Map'
 import DetailsIcon from '@material-ui/icons/Receipt'
-// import TableIcon from '@material-ui/icons/ViewList'
+import TableIcon from '@material-ui/icons/ViewList'
 import {
   TOGGLE_MAP_STYLE,
 } from '../constants'
@@ -26,9 +26,9 @@ export default function OptionsWindow(props) {
   const dispatch = useDispatch()
   const {
     isWithDetails,
-    // isWithTables,
+    isWithTables,
     setIsWithDetails,
-    // setIsWithTables,
+    setIsWithTables,
   } = props
   const colors = useSelector(getColors)
   // const isFullScreenDataDialog = useSelector(getIsFullScreenDataDialog)
@@ -54,7 +54,7 @@ export default function OptionsWindow(props) {
         </IconButton>
       </Tooltip>
 
-    {/*
+    {
       <Tooltip title='Toggle Tables'>
         <IconButton
           className={isWithTables ? activeColor : inactiveColor}
@@ -63,7 +63,7 @@ export default function OptionsWindow(props) {
           <TableIcon />
         </IconButton>
       </Tooltip>
-    */}
+    }
     </div>
   )
 }

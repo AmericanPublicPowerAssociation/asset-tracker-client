@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-// import useMediaQuery from '@material-ui/core/useMediaQuery'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 import AssetsMap from './AssetsMap'
 import SketchButton from './SketchButton'
 import SketchModeToolbar from './SketchModeToolbar'
@@ -10,8 +10,8 @@ import UsersWindow from './UsersWindow'
 import OptionsWindow from './OptionsWindow'
 // import OverlaysWindow from './OverlaysWindow'
 import DetailsWindow from './DetailsWindow'
-// import TableWindow from './TableWindow'
-// import TablesDialog from './TablesDialog'
+import TablesWindow from './TablesWindow'
+import TablesDialog from './TablesDialog'
 import './App.css'
 import {
   refreshAssetsKit,
@@ -29,7 +29,7 @@ export default function App() {
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
   const [selectedAssetIndexes, setSelectedAssetIndexes] = useState([])
   const [lineBusId, setLineBusId] = useState(null)
-  // const isScreenXS = useMediaQuery('(max-width:600px)')
+  const isScreenXS = useMediaQuery('(max-width:600px)')
 
   function startNewLine() {
     setLineBusId(null)
@@ -83,18 +83,18 @@ export default function App() {
         isWithDetails={isWithDetails}
         sketchMode={sketchMode}
       />
-      {/*
-      {isScreenXS ?
+      { isScreenXS && isWithTables && 
         <TablesDialog
           isWithTables={isWithTables}
-          setIsWithTables={isWithTables}
-        /> :
-        <TableWindow
+          setIsWithTables={setIsWithTables}
+        /> 
+      }
+      { !isScreenXS && isWithTables && 
+        <TablesWindow
           isWithTables={isWithTables}
-          setIsWithTables={isWithTables}
+          setIsWithTables={setIsWithTables}
         />
       }
-      */}
     </div>
   )
 }
