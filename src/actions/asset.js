@@ -1,6 +1,7 @@
 import {
   ADD_ASSET_CONNECTION,
   REFRESH_ASSETS,
+  SAVE_ASSETS,
   SET_ASSET,
   SET_ASSETS,
   SET_ASSETS_GEOJSON,
@@ -10,6 +11,10 @@ import {
   SET_FOCUSING_ASSET_ID,
   UPDATE_ASSETS,
 } from '../constants'
+
+export function saveAssets() {
+  return {type: SAVE_ASSETS}
+}
 
 export function refreshAssets() {
   return {type: REFRESH_ASSETS}

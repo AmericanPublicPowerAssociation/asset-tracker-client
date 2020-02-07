@@ -52,6 +52,7 @@ export const ASSET_TABLE_COLUMN_NAMES = [
 // export const ASSETS_GEOJSON = assetsGeoJson
 // export const ASSETS = assets
 // export const ASSET_BY_ID = getById(ASSETS, {})
+export const SAVE_ASSETS = 'SAVE_ASSETS'
 
 export const REFRESH_ASSETS = 'REFRESH_ASSETS'
 export const UPDATE_ASSETS = 'UPDATE_ASSETS'
