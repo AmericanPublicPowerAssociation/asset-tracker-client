@@ -8,10 +8,21 @@ import {
   SET_ASSET_CONNECTION_ATTRIBUTE,
   SET_ASSET_VALUE,
   SET_FOCUSING_ASSET_ID,
+  UPDATE_ASSETS,
 } from '../constants'
 
 export function refreshAssets() {
   return {type: REFRESH_ASSETS}
+}
+
+export function updateAssets(assets, assetsGeoJson) {
+  return {
+    type: UPDATE_ASSETS,
+    payload: {
+      assets,
+      assetsGeoJson,
+    }
+  }
 }
 
 export function setAssets(assets) {
@@ -58,7 +69,7 @@ export function setAssetConnectionAttribute(
   }
 }
 
-export function setAssetsGeojson(geojson) {
+export function setAssetsGeoJson(geojson) {
   return {
     type: SET_ASSETS_GEOJSON,
     payload: geojson,

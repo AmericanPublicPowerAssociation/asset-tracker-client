@@ -5,7 +5,7 @@ import {
 } from 'redux-saga/effects'
 import {
   setAssets,
-  setAssetsGeojson,
+  setAssetsGeoJson,
 } from '../actions'
 import {
   REFRESH_ASSETS,
@@ -22,7 +22,7 @@ export function* watchRefreshAssets() {
       on200: function* (payload) {
         const { assets, assetsGeoJson } = payload
         yield put(setAssets(assets))
-        yield put(setAssetsGeojson(assetsGeoJson))
+        yield put(setAssetsGeoJson(assetsGeoJson))
       },
     })
   })
@@ -30,5 +30,17 @@ export function* watchRefreshAssets() {
 
 export function* watchUpdateAssets() {
   yield takeEvery(UPDATE_ASSETS, function* (action) {
+    const url = '/assets.json'
+    const payload = action.payload
+    yield fetchSafely(url, {
+      method: 'PATCH',
+      body: JSON.stringify(payload),
+    }, {
+      on200: function* (payload) {
+        const { assets, assetsGeoJson } = payload
+        yield put(setAssets(assets))
+        yield put(setAssetsGeoJson(assetsGeoJson))
+      }
+    })
   })
 }
