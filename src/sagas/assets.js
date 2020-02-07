@@ -1,4 +1,5 @@
 import {
+  all,
   put,
   takeEvery,
   takeLatest,
@@ -19,11 +20,7 @@ export function* watchRefreshAssets() {
   yield takeLatest(REFRESH_ASSETS, function* (action) {
     const url = '/assets.json'
     yield fetchSafely(url, {}, {
-      on200: function* (payload) {
-        const { assets, assetsGeoJson } = payload
-        yield put(setAssets(assets))
-        yield put(setAssetsGeoJson(assetsGeoJson))
-      },
+      on200: resetAssets,
     })
   })
 }
@@ -36,11 +33,15 @@ export function* watchUpdateAssets() {
       method: 'PATCH',
       body: JSON.stringify(payload),
     }, {
-      on200: function* (payload) {
-        const { assets, assetsGeoJson } = payload
-        yield put(setAssets(assets))
-        yield put(setAssetsGeoJson(assetsGeoJson))
-      }
+      on200: resetAssets,
     })
   })
+}
+
+function* resetAssets(payload) {
+  const { assets, assetsGeoJson } = payload
+  yield all([
+    put(setAssets(assets)),
+    put(setAssetsGeoJson(assetsGeoJson)),
+  ])
 }
