@@ -22,8 +22,8 @@ import {
   VendorName,
 } from 'asset-report-risks'
 import {
-  updateAsset,
-  setAssetAttributes,
+  setAssetValue,
+  setAssetAttribute,
 } from '../actions'
 
 export default function AssetDetailsPanel(props) {
@@ -40,9 +40,9 @@ export default function AssetDetailsPanel(props) {
   const assetTypeCode = asset.typeCode
   const assetType = ASSET_TYPE_BY_CODE[assetTypeCode]
   const assetTypeName = assetType.name
-  let vendorName = ""
-  let productName = ""
-  let productVersion = ""
+  let vendorName = ''
+  let productName = ''
+  let productVersion = ''
   if (asset['attributes']){
     vendorName = asset.attributes['vendorName']
     productName = asset.attributes['productName']
@@ -52,14 +52,14 @@ export default function AssetDetailsPanel(props) {
 
   const handleTextFieldChange = (e, key) => {
     const val = e.target.value
-    dispatch(updateAsset(assetId, key, val))
+    dispatch(setAssetValue(assetId, key, val))
   }
 
   const assetNameComponent = (disableInput ?
-    <Tooltip title={assetName} placement="bottom">
+    <Tooltip title={assetName} placement='bottom'>
       <ListItemText
         primary={
-          <Typography variant="h5">
+          <Typography variant='h5'>
             {assetName}
           </Typography>
         }
@@ -72,12 +72,8 @@ export default function AssetDetailsPanel(props) {
     />
   )
 
-  function trackChanges(attributes) {
-    dispatch(setAssetAttributes(assetId, attributes))
-  }
-
-  function saveChanges(attributes){
-    dispatch(setAssetAttributes(assetId, attributes))
+  function trackChange(attribute, value) {
+    dispatch(setAssetAttribute(assetId, attribute, value))
   }
 
   const arrowComponent = (
@@ -89,12 +85,12 @@ export default function AssetDetailsPanel(props) {
   return (
     <div>
     <List
-      component="div"
+      component='div'
       disablePadding
     >
       <ListItem
         disableGutters
-        component="div"
+        component='div'
         onClick={
           () => setIsWithExpandedDetails(!isWithExpandedDetails)
         }
@@ -118,16 +114,14 @@ export default function AssetDetailsPanel(props) {
         disableTextInput={disableInput}
         typeId={assetTypeCode}
         vendorName={vendorName}
-        trackChanges={trackChanges}
-        saveChanges={saveChanges}
+        trackChange={trackChange}
       />
       <ProductName
         disableTextInput={disableInput}
         type={assetTypeCode}
         vendorName={vendorName}
         productName={productName}
-        trackChanges={trackChanges}
-        saveChanges={saveChanges}
+        trackChange={trackChange}
       />
       <ProductVersion
         disableTextInput={disableInput}
@@ -135,10 +129,12 @@ export default function AssetDetailsPanel(props) {
         vendorName={vendorName}
         productName={productName}
         productVersion={productVersion}
-        trackChanges={trackChanges}
-        saveChanges={saveChanges}
+        trackChange={trackChange}
       />
-      <AssetConnectionList asset={asset} disableInput={disableInput} />
+      <AssetConnectionList
+        asset={asset}
+        disableInput={disableInput}
+      />
     </Collapse>
     </div>
   )

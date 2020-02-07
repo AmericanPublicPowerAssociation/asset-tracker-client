@@ -2,9 +2,12 @@ import {
   SET_ASSETS_GEOJSON,
 } from '../constants'
 
-const initialState = {type: 'FeatureCollection', features: []}
+const initialState = {
+  type: 'FeatureCollection',
+  features: [],
+}
 
-const assetsGeoJson = (state = initialState, action) => {
+const assetsGeoJson = (state=initialState, action) => {
   switch(action.type) {
     case SET_ASSETS_GEOJSON: {
       const geojson = action.payload

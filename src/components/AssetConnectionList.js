@@ -62,15 +62,14 @@ function AssetConnectionItem(props) {
     <ExpandMore />
   )
 
-  const _onChange = (e, key) => {
-    const val = e.target.value
-    dispatch(
-      setAssetConnectionAttribute(assetId, connectionIndex, key, val)
+  const handleChange = (e, key) => {
+    const value = e.target.value
+    dispatch(setAssetConnectionAttribute(assetId, connectionIndex, key, value)
     )
   }
 
   const getKeyLabel = (key) => {
-    return key.replace( /([A-Z])/g, " $1" ).toLowerCase()
+    return key.replace( /([A-Z])/g, ' $1' ).toLowerCase()
   }
 
   return (
@@ -85,7 +84,7 @@ function AssetConnectionItem(props) {
       <Collapse key={`${itemKey}-collapse`} in={isWithExpandConnect}>
         {
           !attributes ?
-          <Typography display="block" align="center" variant="caption">
+          <Typography display='block' align='center' variant='caption'>
             Attributes are not available
           </Typography> :
           <List>
@@ -99,7 +98,7 @@ function AssetConnectionItem(props) {
                     fullWidth
                     label={getKeyLabel(key)}
                     value={attributes[key]}
-                    onChange={ (e) => _onChange(e, key)}
+                    onChange={ (e) => handleChange(e, key)}
                     disabled={disableInput}
                   />
                 </ListItem>

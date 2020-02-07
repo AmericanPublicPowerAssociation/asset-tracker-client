@@ -6,7 +6,7 @@ import {
 
 const initialState = MAP_STYLE_NAMES[0]
 
-const mapStyleName = (state = initialState, action) => {
+const mapStyleName = (state=initialState, action) => {
   switch(action.type) {
     case TOGGLE_MAP_STYLE: {
       const mapStyleIndex = MAP_STYLE_NAMES.indexOf(state)
