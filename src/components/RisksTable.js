@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { makeStyles } from '@material-ui/core/styles'
-import Grid from '@material-ui/core/Grid'
+// import { makeStyles } from '@material-ui/core/styles'
 import {
   RisksTable as Risks,
 	refreshRisks,
 	getSortedRisks,
   getRisks,
 } from 'asset-report-risks'
-
 
 export default function RisksTable(props) {
 	const dispatch = useDispatch()
@@ -19,7 +17,10 @@ export default function RisksTable(props) {
   useEffect(() => {
     const { sortKey, order } = sortedRisks.toJS()
     dispatch(refreshRisks({sortKey, order}))
-  }, [sortedRisks, refreshRisks])
+  }, [
+    dispatch,
+    sortedRisks,
+  ])
 
   return (
 		<Risks

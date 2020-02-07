@@ -51,7 +51,7 @@ function AssetConnectionItem(props) {
     disableInput,
   } = props
   const {
-    busId,
+    // busId,
     attributes,
   } = connection
 

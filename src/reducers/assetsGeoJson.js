@@ -1,10 +1,8 @@
 import {
-  ASSETS_GEOJSON,
   SET_ASSETS_GEOJSON,
 } from '../constants'
 
-// const initialState = {type: 'FeatureCollection', features: []}
-const initialState = ASSETS_GEOJSON
+const initialState = {type: 'FeatureCollection', features: []}
 
 const assetsGeoJson = (state = initialState, action) => {
   switch(action.type) {

@@ -1,17 +1,15 @@
 import produce from 'immer'
 import {
+  // MERGE_ASSET,
   ADD_ASSET_CONNECTION,
-  UPDATE_ASSET,
-  SET_ASSET_ATTRIBUTES,
-  SET_ASSET_CONNECTION_ATTRIBUTE,
-  ASSET_BY_ID,
-  MERGE_ASSET,
   SET_ASSET,
   SET_ASSETS,
+  SET_ASSET_ATTRIBUTES,
+  SET_ASSET_CONNECTION_ATTRIBUTE,
+  UPDATE_ASSET,
 } from '../constants'
 
-// const initialState = {}
-const initialState = ASSET_BY_ID
+const initialState = {}
 
 const assetById = produce((draft, action) => {
   switch(action.type) {

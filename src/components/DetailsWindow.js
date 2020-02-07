@@ -9,15 +9,14 @@ import {
   getFocusingAsset,
 } from '../selectors'
 
-
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
     top: theme.spacing(6),
     right: theme.spacing(1),
     padding: theme.spacing(1),
-    width: theme.spacing(32),
-    //bottom: theme.spacing(40),
+    maxWidth: theme.spacing(32),
+    // bottom: theme.spacing(5),
     maxHeight: '60vh',
     overflowY: 'auto',
   },
@@ -37,14 +36,11 @@ export default function DetailsWindow(props) {
     /> :
     <EmptyDetailsPanel />
   return (
-    <Paper className={clsx(classes.root, {
-      poof: !isWithDetails,
-    })}>
+    <Paper className={clsx(classes.root, {poof: !isWithDetails})}>
       {detailsPanel}
     </Paper>
   )
 }
-
 
 function EmptyDetailsPanel() {
   return (

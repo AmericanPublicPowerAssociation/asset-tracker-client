@@ -1,6 +1,6 @@
 import {
   ADD_ASSET_CONNECTION,
-  REFRESH_ASSETS_KIT,
+  REFRESH_ASSETS,
   SET_ASSET,
   SET_ASSETS,
   SET_ASSETS_GEOJSON,
@@ -47,8 +47,8 @@ export function addAssetConnection(assetId, busId) {
   return {type: ADD_ASSET_CONNECTION, payload: {assetId, busId}}
 }
 
-export function refreshAssetsKit() {
-  return {type: REFRESH_ASSETS_KIT}
+export function refreshAssets() {
+  return {type: REFRESH_ASSETS}
 }
 
 export function setAssetAttributes(assetId, attributes) {

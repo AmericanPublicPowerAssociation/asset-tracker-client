@@ -1,6 +1,4 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 // import MyTable from './MyTable'

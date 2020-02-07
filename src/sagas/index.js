@@ -1,7 +1,5 @@
 import {
   all,
-  put,
-  takeLatest,
 } from 'redux-saga/effects'
 import  {
   watchRefreshRisks,
@@ -10,33 +8,15 @@ import  {
   watchSuggestVendorNames,
 } from 'asset-report-risks'
 import {
-  setAssets,
-} from '../actions'
-import {
-  REFRESH_ASSETS_KIT,
-} from '../constants'
-import {
-  fetchSafely,
-} from '../macros'
-
-
-function* watchRefreshAssetsKit() {
-  yield takeLatest(REFRESH_ASSETS_KIT, function* (action) {
-    const url = '/assetsKit.json'
-    yield fetchSafely(url, {}, {
-      on200: function* (assetsKit) {
-        const { assets } = assetsKit
-        yield put(setAssets(assets))
-      },
-    })
-  })
-}
-
+  watchRefreshAssets,
+  watchUpdateAssets,
+} from './assets'
 
 export default function* () {
   yield all([
-    watchRefreshAssetsKit(),
+    watchRefreshAssets(),
     watchRefreshRisks(),
+    watchUpdateAssets(),
     watchSuggestVendorNames(),
     watchSuggestProductNames(),
     watchSuggestProductVersions(),

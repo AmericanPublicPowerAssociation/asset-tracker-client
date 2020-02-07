@@ -53,8 +53,8 @@ export const ASSETS_GEOJSON = assetsGeoJson
 export const ASSETS = assets
 export const ASSET_BY_ID = getById(ASSETS, {})
 
-export const REFRESH_ASSETS_KIT = 'REFRESH_ASSETS_KIT'
-export const CHANGE_ASSET = 'CHANGE_ASSET'
+export const REFRESH_ASSETS = 'REFRESH_ASSETS'
+export const UPDATE_ASSETS = 'UPDATE_ASSETS'
 
 export const SET_ASSETS_GEOJSON = 'SET_ASSETS_GEOJSON'
 export const SET_ASSET = 'SET_ASSET'

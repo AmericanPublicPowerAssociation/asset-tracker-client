@@ -14,7 +14,7 @@ import TablesWindow from './TablesWindow'
 import TablesDialog from './TablesDialog'
 import './App.css'
 import {
-  refreshAssetsKit,
+  refreshAssets,
 } from '../actions'
 import {
   IS_WITH_DETAILS,
@@ -37,7 +37,7 @@ export default function App() {
   }
 
   useEffect(() => {
-    dispatch(refreshAssetsKit())
+    dispatch(refreshAssets())
   }, [dispatch])
 
   return (

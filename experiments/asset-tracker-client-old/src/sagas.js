@@ -290,7 +290,6 @@ function* watchDropAssetRelation() {
 export default function* () {
   yield all([
     watchRefreshAuth(),
-    watchRefreshAssetsKit(),
     watchRefreshAssetTasks(),
     watchRefreshLogs(),
     watchRefreshTasks(),
@@ -303,9 +302,6 @@ export default function* () {
     watchChangeAsset(),
     watchAddAssetRelation(),
     watchDropAssetRelation(),
-    watchSuggestVendorNames(),
-    watchSuggestProductNames(),
-    watchSuggestProductVersions(),
     watchRefreshRisks(),
     watchRefreshDashboards(),
   ])

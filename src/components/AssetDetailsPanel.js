@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import clsx from 'clsx'
 import { useDispatch } from 'react-redux'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 import ExpandLess from '@material-ui/icons/ExpandLess'
@@ -7,7 +6,6 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import InputBase from '@material-ui/core/InputBase'
 import Collapse from '@material-ui/core/Collapse'
 import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
@@ -24,14 +22,9 @@ import {
   VendorName,
 } from 'asset-report-risks'
 import {
-  getFocusingAsset,
-} from '../selectors'
-import {
   updateAsset,
   setAssetAttributes,
-  saveChanges,
 } from '../actions'
-
 
 export default function AssetDetailsPanel(props) {
   const dispatch = useDispatch()
