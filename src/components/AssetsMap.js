@@ -8,7 +8,7 @@ import {
   // setFocusingBusId,
   addAssetConnection,
   setAsset,
-  setAssetsGeojson,
+  setAssetsGeoJson,
   setFocusingAssetId,
   setMapViewState,
 } from '../actions'
@@ -95,7 +95,7 @@ export default function AssetsMap(props) {
       }
       dispatch(setFocusingAssetId(assetId))  // Show details for the new asset
     }
-    dispatch(setAssetsGeojson(updatedData))  // Update geojson for assets
+    dispatch(setAssetsGeoJson(updatedData))  // Update geojson for assets
   }
 
   function handleBusesGeoJsonClick(info, event) {
