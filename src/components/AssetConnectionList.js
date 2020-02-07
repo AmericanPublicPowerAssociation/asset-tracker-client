@@ -89,25 +89,16 @@ function AssetConnectionItem(props) {
             Attributes are not available
           </Typography> :
           <List>
-            <ListItem>
-              <TextField
-                label="id"
-                size="small"
-                value={busId}
-                variant="outlined"
-                disabled
-              />
-            </ListItem>
             {
               Object.keys(attributes).map( key => (
                 <ListItem
+                  disableGutters
                   key={`${itemKey}-atttributes-${key}`}
                 >
                   <TextField
+                    fullWidth
                     label={getKeyLabel(key)}
-                    size="small"
                     value={attributes[key]}
-                    variant="outlined" 
                     onChange={ (e) => _onChange(e, key)}
                     disabled={disableInput}
                   />

@@ -1,12 +1,12 @@
 import {
   ADD_ASSET_CONNECTION,
-  MERGE_ASSET,
   REFRESH_ASSETS_KIT,
   SET_ASSET,
   SET_ASSETS,
   SET_ASSETS_GEOJSON,
   SET_FOCUSING_ASSET_ID,
-  SET_ASSET_ATTRIBUTE,
+  UPDATE_ASSET,
+  SET_ASSET_ATTRIBUTES,
   SET_ASSET_CONNECTION_ATTRIBUTE,
 } from '../constants'
 
@@ -26,10 +26,13 @@ export function setFocusingAssetId(id) {
   return {type: SET_FOCUSING_ASSET_ID, payload: id}
 }
 
-export function setAssetAttribute(assetId, key, val){
+export function updateAsset(assetId, key, val){
   return {
-    type: SET_ASSET_ATTRIBUTE,
-    payload: {assetId, key, val}
+    type: UPDATE_ASSET,
+    payload: {
+      assetId,
+      data: {[key]: val}
+    }
   }
 }
 
@@ -48,6 +51,6 @@ export function refreshAssetsKit() {
   return {type: REFRESH_ASSETS_KIT}
 }
 
-export function mergeAsset(asset) {
-  return {type: MERGE_ASSET, payload: asset}
+export function setAssetAttributes(assetId, attributes) {
+  return {type: SET_ASSET_ATTRIBUTES, payload: {assetId, attributes}}
 }

@@ -18,26 +18,18 @@ import {
   ASSET_TYPE_BY_CODE,
   SKETCH_MODE_VIEW,
 } from '../constants'
-/*
-import {
-  LINE_ASSET_TYPE_ID,
-  TRANSFORMER_ASSET_TYPE_ID,
-  SUBSTATION_ASSET_TYPE_ID,
-  METER_ASSET_TYPE_ID,
-} from '../constants'
 import {
   ProductName,
   ProductVersion,
   VendorName,
 } from 'asset-report-risks'
-*/
 import {
   getFocusingAsset,
 } from '../selectors'
 import {
-  setAssetAttribute,
-  // mergeAsset,
-  // changeAsset,
+  updateAsset,
+  setAssetAttributes,
+  saveChanges,
 } from '../actions'
 
 
@@ -55,18 +47,26 @@ export default function AssetDetailsPanel(props) {
   const assetTypeCode = asset.typeCode
   const assetType = ASSET_TYPE_BY_CODE[assetTypeCode]
   const assetTypeName = assetType.name
+  let vendorName = ""
+  let productName = ""
+  let productVersion = ""
+  if (asset['attributes']){
+    vendorName = asset.attributes['vendorName']
+    productName = asset.attributes['productName']
+    productVersion = asset.attributes['productVersion']
+  }
   const disableInput = sketchMode === SKETCH_MODE_VIEW
 
   const handleTextFieldChange = (e, key) => {
     const val = e.target.value
-    dispatch(setAssetAttribute(assetId, key, val))
+    dispatch(updateAsset(assetId, key, val))
   }
 
   const assetNameComponent = (disableInput ?
     <Tooltip title={assetName} placement="bottom">
       <ListItemText
         primary={
-          <Typography variant="h5" noWrap={true}>
+          <Typography variant="h5">
             {assetName}
           </Typography>
         }
@@ -78,11 +78,14 @@ export default function AssetDetailsPanel(props) {
       variant='outlined'
     />
   )
-  /*
+
   function trackChanges(attributes) {
-    dispatch(mergeAsset({assetId, ...attributes}))
+    dispatch(setAssetAttributes(assetId, attributes))
   }
-  */
+
+  function saveChanges(attributes){
+    dispatch(setAssetAttributes(assetId, attributes))
+  }
 
   const arrowComponent = (
     isWithExpandedDetails ?
@@ -91,6 +94,7 @@ export default function AssetDetailsPanel(props) {
   )
 
   return (
+    <div>
     <List
       component="div"
       disablePadding
@@ -112,40 +116,37 @@ export default function AssetDetailsPanel(props) {
         {assetNameComponent}
         {arrowComponent}
       </ListItem>
-      {
-        /*
+    </List>
+    <Collapse
+      in={isWithExpandedDetails}
+      // timeout='auto'
+    >
       <VendorName
+        disableTextInput={disableInput}
         typeId={assetTypeCode}
-        vendorName={""}
+        vendorName={vendorName}
         trackChanges={trackChanges}
-      // saveChanges={_saveChanges}
+        saveChanges={saveChanges}
       />
       <ProductName
-        className={clsx({
-          
-        })}
+        disableTextInput={disableInput}
         type={assetTypeCode}
-        vendorName={""}
-        productName={""}
+        vendorName={vendorName}
+        productName={productName}
         trackChanges={trackChanges}
-      // saveChanges={_saveChanges}
+        saveChanges={saveChanges}
       />
       <ProductVersion
+        disableTextInput={disableInput}
         typeId={assetTypeCode}
-        vendorName={""}
-        productName={""}
-        productVersion={""}
+        vendorName={vendorName}
+        productName={productName}
+        productVersion={productVersion}
         trackChanges={trackChanges}
-      // saveChanges={_saveChanges}
+        saveChanges={saveChanges}
       />
-          */
-      }
-      <Collapse
-        in={isWithExpandedDetails}
-        // timeout='auto'
-      >
-        <AssetConnectionList asset={asset} disableInput={disableInput} />
-      </Collapse>
-    </List>
+      <AssetConnectionList asset={asset} disableInput={disableInput} />
+    </Collapse>
+    </div>
   )
 }
