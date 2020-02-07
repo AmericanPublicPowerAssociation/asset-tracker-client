@@ -43,10 +43,10 @@ export default function AssetDetailsPanel(props) {
   let vendorName = ''
   let productName = ''
   let productVersion = ''
-  if (asset['attributes']){
-    vendorName = asset.attributes['vendorName']
-    productName = asset.attributes['productName']
-    productVersion = asset.attributes['productVersion']
+  if (asset['attributes']) {
+    vendorName = asset.attributes['vendorName'] || ''
+    productName = asset.attributes['productName'] || ''
+    productVersion = asset.attributes['productVersion'] || ''
   }
   const disableInput = sketchMode === SKETCH_MODE_VIEW
 
@@ -115,6 +115,7 @@ export default function AssetDetailsPanel(props) {
         typeId={assetTypeCode}
         vendorName={vendorName}
         trackChange={trackChange}
+        saveChange={() => {}}
       />
       <ProductName
         disableTextInput={disableInput}
@@ -122,6 +123,7 @@ export default function AssetDetailsPanel(props) {
         vendorName={vendorName}
         productName={productName}
         trackChange={trackChange}
+        saveChange={() => {}}
       />
       <ProductVersion
         disableTextInput={disableInput}
@@ -130,6 +132,7 @@ export default function AssetDetailsPanel(props) {
         productName={productName}
         productVersion={productVersion}
         trackChange={trackChange}
+        saveChange={() => {}}
       />
       <AssetConnectionList
         asset={asset}

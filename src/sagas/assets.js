@@ -5,6 +5,7 @@ import {
 } from 'redux-saga/effects'
 import {
   setAssets,
+  setAssetsGeojson,
 } from '../actions'
 import {
   REFRESH_ASSETS,
@@ -19,8 +20,9 @@ export function* watchRefreshAssets() {
     const url = '/assets.json'
     yield fetchSafely(url, {}, {
       on200: function* (payload) {
-        const { assets } = payload
+        const { assets, assetsGeoJson } = payload
         yield put(setAssets(assets))
+        yield put(setAssetsGeojson(assetsGeoJson))
       },
     })
   })

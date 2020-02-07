@@ -36,7 +36,11 @@ const assetById = (state = initialState, action) => {
     case SET_ASSET_ATTRIBUTE: {
       const { assetId, key, value } = action.payload
       return produce(state, draft => {
-        const attributes = draft[assetId].attributes
+        const asset = draft[assetId]
+        let attributes = asset.attributes
+        if (attributes === undefined) {
+          attributes = asset.attributes = {}
+        }
         attributes[key] = value
       })
     }
@@ -50,8 +54,10 @@ const assetById = (state = initialState, action) => {
     case SET_ASSET_CONNECTION_ATTRIBUTE: {
       const { assetId, connectionIndex, key, value } = action.payload
       return produce(state, draft => {
-        const connections = draft[assetId].connections
-        connections[connectionIndex].attributes[key] = value
+        const asset = draft[assetId]
+        const connections = asset.connections
+        const attributes = connections[connectionIndex].attributes
+        attributes[key] = value
       })
     }
     default: {
