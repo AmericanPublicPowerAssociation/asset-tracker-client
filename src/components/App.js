@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import AssetsMap from './AssetsMap'
 import SketchButton from './SketchButton'
@@ -15,12 +15,17 @@ import TablesDialog from './TablesDialog'
 import './App.css'
 import {
   refreshAssets,
+  updateAssets,
 } from '../actions'
 import {
   IS_WITH_DETAILS,
   IS_WITH_TABLES,
   SKETCH_MODE,
 } from '../constants'
+import {
+  getAssetById,
+  getAssetsGeoJson,
+} from '../selectors'
 
 export default function App() {
   const dispatch = useDispatch()
@@ -30,12 +35,19 @@ export default function App() {
   const [selectedAssetIndexes, setSelectedAssetIndexes] = useState([])
   const [lineBusId, setLineBusId] = useState(null)
   const isScreenXS = useMediaQuery('(max-width:600px)')
+  const assetById = useSelector(getAssetById)
+  const assetsGeoJson = useSelector(getAssetsGeoJson)
 
   function startNewLine() {
     setLineBusId(null)
     setSelectedAssetIndexes([])
   }
 
+  function saveAssets() {
+    const assets = Object.values(assetById)
+    dispatch(updateAssets(assets, assetsGeoJson)) 
+  }
+  
   useEffect(() => {
     dispatch(refreshAssets())
   }, [dispatch])
@@ -53,6 +65,7 @@ export default function App() {
       <SketchButton
         sketchMode={sketchMode}
         setSketchMode={setSketchMode}
+        saveAssets={saveAssets}
       />
       <SketchModeToolbar
         sketchMode={sketchMode}

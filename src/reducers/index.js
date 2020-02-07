@@ -7,6 +7,7 @@ import {
   productVersionSuggestions,
   vendorNameSuggestions,
 } from 'asset-report-risks'
+
 import mapStyleName from './mapStyleName'
 import mapViewState from './mapViewState'
 import assetsGeoJson from './assetsGeoJson'
