@@ -1,6 +1,6 @@
 import React from 'react'
-// import { useDispatch, useSelector } from 'react-redux'
-// import clsx from 'clsx'
+import { useDispatch, useSelector } from 'react-redux'
+import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 // import MyTable from './MyTable'
@@ -11,7 +11,7 @@ import {
 } from '../selectors'
 // import AssetsTable from './AssetsTable'
 // import TasksTable from './TasksTable'
-// import RisksTable from './RisksTable'
+import RisksTable from './RisksTable'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -47,6 +47,7 @@ export default function TablesWindow(props) {
         {/* <MyTable {...tableProps} /> */}
         {/* TODO: Show only what is visible in the map */}
         {/* TODO: Implement paging */}
+        <RisksTable />
       </div>
     </Paper>
   )

@@ -17,8 +17,9 @@ const useStyles = makeStyles(theme => ({
     right: theme.spacing(1),
     padding: theme.spacing(1),
     width: theme.spacing(32),
-    maxHeight: "70vh",
-    overflowY: "auto",
+    //bottom: theme.spacing(40),
+    maxHeight: '60vh',
+    overflowY: 'auto',
   },
 }))
 
