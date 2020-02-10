@@ -1,4 +1,5 @@
 import {
+  SET_ASSETS,
   SET_ASSETS_GEOJSON,
 } from '../constants'
 
@@ -9,9 +10,13 @@ const initialState = {
 
 const assetsGeoJson = (state=initialState, action) => {
   switch(action.type) {
+    case SET_ASSETS: {
+      const { assetsGeoJson } = action.payload
+      return assetsGeoJson
+    }
     case SET_ASSETS_GEOJSON: {
-      const geojson = action.payload
-      return geojson
+      const assetsGeoJson = action.payload
+      return assetsGeoJson
     }
     default: {
       return state

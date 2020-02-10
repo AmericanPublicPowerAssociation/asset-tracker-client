@@ -16,7 +16,7 @@ const initialState = {}
 const assetById = (state = initialState, action) => {
   switch(action.type) {
     case SET_ASSETS: {
-      const assets = action.payload
+      const { assets } = action.payload
       return getById(assets, {})
     }
     case SET_ASSET: {

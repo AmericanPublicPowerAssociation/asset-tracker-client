@@ -1,12 +1,10 @@
 import {
-  all,
   put,
   takeEvery,
   takeLatest,
 } from 'redux-saga/effects'
 import {
   setAssets,
-  setAssetsGeoJson,
 } from '../actions'
 import {
   REFRESH_ASSETS,
@@ -39,9 +37,5 @@ export function* watchUpdateAssets() {
 }
 
 function* resetAssets(payload) {
-  const { assets, assetsGeoJson } = payload
-  yield all([
-    put(setAssets(assets)),
-    put(setAssetsGeoJson(assetsGeoJson)),
-  ])
+  yield put(setAssets(payload))
 }

@@ -17,8 +17,8 @@ export function getBusFeatures(assetFeatures, assetById) {
 
     const assetId = assetFeature.properties.id
     if (!assetId) continue
-
     const asset = assetById[assetId]
+    if (!asset) continue
     const connections = asset.connections
     if (!connections) continue
 
