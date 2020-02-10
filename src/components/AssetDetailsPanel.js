@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { makeStyles } from '@material-ui/core/styles'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import List from '@material-ui/core/List'
@@ -26,7 +27,20 @@ import {
   setAssetAttribute,
 } from '../actions'
 
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    overflowY: 'hidden',
+    height: '100%',
+  },
+  collapseInfo: {
+    overflowY: 'auto',
+    height: '100%',
+  },
+}))
+
 export default function AssetDetailsPanel(props) {
+  const classes = useStyles()
   const dispatch = useDispatch()
   const {
     asset,
@@ -83,62 +97,64 @@ export default function AssetDetailsPanel(props) {
   )
 
   return (
-    <div>
-    <List
-      component='div'
-      disablePadding
-    >
-      <ListItem
-        disableGutters
+    <div className={classes.root}>
+      <List
         component='div'
-        onClick={
-          () => setIsWithExpandedDetails(!isWithExpandedDetails)
-        }
+        disablePadding
       >
-        <Tooltip title={assetTypeName} placement='left'>
-          <ListItemIcon>
-            <AssetTypeSvgIcon
-              assetTypeCode={assetTypeCode}
-            />
-          </ListItemIcon>
-        </Tooltip>
-        {assetNameComponent}
-        {arrowComponent}
-      </ListItem>
-    </List>
-    <Collapse
-      in={isWithExpandedDetails}
-      // timeout='auto'
-    >
-      <VendorName
-        disableTextInput={disableInput}
-        typeId={assetTypeCode}
-        vendorName={vendorName}
-        trackChange={trackChange}
-        saveChange={() => {}}
-      />
-      <ProductName
-        disableTextInput={disableInput}
-        type={assetTypeCode}
-        vendorName={vendorName}
-        productName={productName}
-        trackChange={trackChange}
-        saveChange={() => {}}
-      />
-      <ProductVersion
-        disableTextInput={disableInput}
-        typeId={assetTypeCode}
-        vendorName={vendorName}
-        productName={productName}
-        productVersion={productVersion}
-        trackChange={trackChange}
-        saveChange={() => {}}
-      />
-      <AssetConnectionList
-        asset={asset}
-        disableInput={disableInput}
-      />
-    </Collapse>
+        <ListItem
+          disableGutters
+          component='div'
+          onClick={
+            () => setIsWithExpandedDetails(!isWithExpandedDetails)
+          }
+        >
+          <Tooltip title={assetTypeName} placement='left'>
+            <ListItemIcon>
+              <AssetTypeSvgIcon
+                assetTypeCode={assetTypeCode}
+              />
+            </ListItemIcon>
+          </Tooltip>
+          {assetNameComponent}
+          {arrowComponent}
+        </ListItem>
+      </List>
+      <div className={classes.collapseInfo}>
+        <Collapse
+          in={isWithExpandedDetails}
+          // timeout='auto'
+        >
+          <VendorName
+            disableTextInput={disableInput}
+            typeId={assetTypeCode}
+            vendorName={vendorName}
+            trackChange={trackChange}
+            saveChange={() => {}}
+          />
+          <ProductName
+            disableTextInput={disableInput}
+            type={assetTypeCode}
+            vendorName={vendorName}
+            productName={productName}
+            trackChange={trackChange}
+            saveChange={() => {}}
+          />
+          <ProductVersion
+            disableTextInput={disableInput}
+            typeId={assetTypeCode}
+            vendorName={vendorName}
+            productName={productName}
+            productVersion={productVersion}
+            trackChange={trackChange}
+            saveChange={() => {}}
+          />
+          <AssetConnectionList
+            asset={asset}
+            disableInput={disableInput}
+          />
+        </Collapse>
+      </div>
     </div>
   )
 }

@@ -15,10 +15,9 @@ const useStyles = makeStyles(theme => ({
     top: theme.spacing(6),
     right: theme.spacing(1),
     padding: theme.spacing(1),
-    maxWidth: theme.spacing(32),
-    // bottom: theme.spacing(5),
-    maxHeight: '60vh',
-    overflowY: 'auto',
+    width: theme.spacing(32),
+    bottom: theme.spacing(5),
+    overflowY: 'hidden',
   },
 }))
 
