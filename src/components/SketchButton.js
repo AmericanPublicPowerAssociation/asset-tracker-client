@@ -4,6 +4,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
 import SketchIcon from '@material-ui/icons/Edit'
 import SaveIcon from '@material-ui/icons/Save'
+import {
+  OVERLAY_MODE_ASSETS,
+  SKETCH_MODE_VIEW,
+} from '../constants'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,23 +21,26 @@ const useStyles = makeStyles(theme => ({
 export default function SketchButton(props) {
   const classes = useStyles()
   const {
+    overlayMode,
     sketchMode,
     setSketchMode,
     saveAssets,
   } = props
-  const isViewing = sketchMode === 'view'
+  const isViewing = sketchMode === SKETCH_MODE_VIEW
   const iconColor = isViewing ? 'black' : 'white'
 
   function handleClick() {
     if (!isViewing) {
       saveAssets()
     }
-    setSketchMode(isViewing ? 'sketch' : 'view')
+    setSketchMode(isViewing ? 'sketch' : SKETCH_MODE_VIEW)
   }
 
   return (
     <Fab
-      className={clsx(classes.root, iconColor)}
+      className={clsx(classes.root, {
+        poof: overlayMode !== OVERLAY_MODE_ASSETS,
+      }, iconColor)}
       size='small'
       color='secondary'
       onClick={handleClick}

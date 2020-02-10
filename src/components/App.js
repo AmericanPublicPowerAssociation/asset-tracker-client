@@ -8,7 +8,7 @@ import SketchAddToolbar from './SketchAddToolbar'
 import SketchEditToolbar from './SketchEditToolbar'
 import UsersWindow from './UsersWindow'
 import OptionsWindow from './OptionsWindow'
-// import OverlaysWindow from './OverlaysWindow'
+import OverlaysWindow from './OverlaysWindow'
 import DetailsWindow from './DetailsWindow'
 import TablesWindow from './TablesWindow'
 import TablesDialog from './TablesDialog'
@@ -20,6 +20,7 @@ import {
 import {
   IS_WITH_DETAILS,
   IS_WITH_TABLES,
+  OVERLAY_MODE,
   SKETCH_MODE,
 } from '../constants'
 import {
@@ -30,6 +31,7 @@ import {
 export default function App() {
   const dispatch = useDispatch()
   const [sketchMode, setSketchMode] = useState(SKETCH_MODE)
+  const [overlayMode, setOverlayMode] = useState(OVERLAY_MODE)
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
   const [selectedAssetIndexes, setSelectedAssetIndexes] = useState([])
@@ -63,6 +65,7 @@ export default function App() {
         onAddLineEnd={startNewLine}
       />
       <SketchButton
+        overlayMode={overlayMode}
         sketchMode={sketchMode}
         setSketchMode={setSketchMode}
         saveAssets={saveAssets}
@@ -87,11 +90,11 @@ export default function App() {
         setIsWithDetails={setIsWithDetails}
         setIsWithTables={setIsWithTables}
       />
-      {/*
       <OverlaysWindow
         sketchMode={sketchMode}
+        overlayMode={overlayMode}
+        setOverlayMode={setOverlayMode}
       />
-      */}
       <DetailsWindow
         isWithDetails={isWithDetails}
         sketchMode={sketchMode}

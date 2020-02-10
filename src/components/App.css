@@ -1,5 +1,5 @@
 .poof {
-  display: none;
+  display: none !important;
 }
 .black {
   color: black !important;

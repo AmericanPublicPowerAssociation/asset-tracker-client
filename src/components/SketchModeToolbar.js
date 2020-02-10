@@ -8,6 +8,9 @@ import Tooltip from '@material-ui/core/Tooltip'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import AddIcon from '@material-ui/icons/Add'
 import EditIcon from '@material-ui/icons/Edit'
+import {
+  SKETCH_MODE_VIEW,
+} from '../constants'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,7 +26,7 @@ export default function SketchModeToolbar(props) {
     sketchMode,
     setSketchMode,
   } = props
-  const isViewing = sketchMode === 'view'
+  const isViewing = sketchMode === SKETCH_MODE_VIEW
   return (
     <Paper
       className={clsx(classes.root, {
