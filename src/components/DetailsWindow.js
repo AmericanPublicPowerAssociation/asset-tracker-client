@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
     top: theme.spacing(6),
     right: theme.spacing(1),
     padding: theme.spacing(1),
-    width: theme.spacing(32),
+    width: theme.spacing(30),
     bottom: theme.spacing(5),
     overflowY: 'hidden',
   },
