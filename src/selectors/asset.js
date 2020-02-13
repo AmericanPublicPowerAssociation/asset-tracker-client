@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 import {
-  ASSET_TABLE_COLUMN_NAMES,
+  ASSET_TYPE_BY_CODE,
   ASSET_TYPE_CODE_LINE,
 } from '../constants'
 
@@ -47,10 +47,25 @@ export const getAssetTableData = createSelector([
   (
   assetById
 ) => {
-  const data = []
-  Object.keys(assetById).forEach(function(key, idx) {
-    data.push(assetById[key])
+  const ASSET_TABLE_COLUMN_NAMES = [
+    'id',
+    'type',
+    'name',
+    'vendorName',
+  ]
+
+  const data = Object.values(assetById).map(
+    asset => {
+      const assetType = asset['typeCode']
+      const attributes = asset['attributes']
+      const vendorName = attributes ? attributes['vendorName'] : ""
+      return {
+        ...asset,
+        vendorName,
+        type: ASSET_TYPE_BY_CODE[assetType]['name'],
+      }
   })
+
   return {
     data,
     head: ASSET_TABLE_COLUMN_NAMES,

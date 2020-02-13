@@ -105,10 +105,13 @@ export default function App() {
           setIsWithTables={setIsWithTables}
         /> 
       }
-      { !isScreenXS && isWithTables && 
+      { !isScreenXS &&
+        isWithTables &&
         <TablesWindow
           isWithTables={isWithTables}
           setIsWithTables={setIsWithTables}
+          overlayMode={overlayMode}
+          setSelectedAssetIndexes={setSelectedAssetIndexes}
         />
       }
     </div>
