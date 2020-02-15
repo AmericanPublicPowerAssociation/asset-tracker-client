@@ -27,7 +27,6 @@ import {
   setAssetAttribute,
 } from '../actions'
 
-
 const useStyles = makeStyles(theme => ({
   root: {
     overflowY: 'hidden',

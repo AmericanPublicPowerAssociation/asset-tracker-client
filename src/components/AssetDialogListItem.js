@@ -31,14 +31,14 @@ export default function AssetDialogListItem(props) {
               <Grid
                 item
                 container
-                direction="column"
-                alignItems="center"
+                direction='column'
+                alignItems='center'
               >
                 <Grid item>
                   <AssetTypeSvgIcon assetTypeCode={typeCode} />
                 </Grid>
                 <Grid item>
-                  <Typography color="textSecondary" overflow="hidden">
+                  <Typography color='textSecondary' overflow='hidden'>
                     {assetTypeName}
                   </Typography>
                 </Grid>
@@ -48,7 +48,7 @@ export default function AssetDialogListItem(props) {
               <Grid
                 item
                 container
-                direction="column"
+                direction='column'
                 spacing={1}
               >
                 <Grid item xs>
@@ -56,11 +56,11 @@ export default function AssetDialogListItem(props) {
                 </Grid>
                 <Grid>
                   {numOfConnections}
-                  {numOfConnections === 1 ? " connection" : " connections"}
+                  {numOfConnections === 1 ? ' connection' : ' connections'}
                 </Grid>
                 <Grid item xs>
                   <Button
-                    color="secondary"
+                    color='secondary'
                     onClick={() => handleShowDetailsDialog(id)}
                   >
                     View details
@@ -70,7 +70,7 @@ export default function AssetDialogListItem(props) {
             </Grid>
           </Grid>
       </ListItem>
-      <Divider variant="middle" component="li" />
+      <Divider variant='middle' component='li' />
     </>
   )
 }
