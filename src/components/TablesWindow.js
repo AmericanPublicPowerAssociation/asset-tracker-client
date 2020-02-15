@@ -1,14 +1,8 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
-// import MyTable from './MyTable'
-import {
-  // getAssetById,
-  // getAssetTableData,
-  // getOverlay,
-} from '../selectors'
-// import AssetsTable from './AssetsTable'
-// import TasksTable from './TasksTable'
+import AssetsTable from './AssetsTable'
+import TasksTable from './TasksTable'
 import RisksTable from './RisksTable'
 
 const useStyles = makeStyles(theme => ({
@@ -28,15 +22,17 @@ const useStyles = makeStyles(theme => ({
 
 export default function TablesWindow(props) {
   const classes = useStyles()
-  // const dispatch = useDispatch()
-  // const overlay = useSelector(getOverlay)
-  // const table = {
-  //  assets: <AssetsTable assets={Object.values(assetById)} />,
-  //  tasks: <TasksTable tasks={tasks} />,
-  //  risks: <RisksTable risks={risks} />,
-  //}[overlay]
-
-  // const tableProps = useSelector(getAssetTableData)
+  const {
+    overlayMode,
+    setSelectedAssetIndexes,
+  } =  props
+  const table = {
+    assets: <AssetsTable
+      setSelectedAssetIndexes={setSelectedAssetIndexes}
+    />,
+    tasks: <TasksTable />,
+    risks: <RisksTable />,
+  }[overlayMode]
 
   return (
     <Paper
@@ -45,7 +41,7 @@ export default function TablesWindow(props) {
         {/* <MyTable {...tableProps} /> */}
         {/* TODO: Show only what is visible in the map */}
         {/* TODO: Implement paging */}
-        <RisksTable />
+        { table }
       </div>
     </Paper>
   )
