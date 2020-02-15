@@ -1,7 +1,6 @@
 import React from 'react'
 import produce from 'immer'
 import clsx from 'clsx'
-import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import CloseButton from './CloseButton'
@@ -17,7 +16,6 @@ import StarBorder from '@material-ui/icons/StarBorder';
 import EditIcon from '@material-ui/icons/Edit';
 import {TextField} from "@material-ui/core";
 import Link from '@material-ui/core/Link';
-
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -220,13 +218,5 @@ function DetailsWindow(props) {
 
         <TextField className={classes.input} id="filter" type="text" label='Filter connection attributes' onChange={handleFilter}/>
       </>
-      : 
-      <Typography>
-        Select an asset to see details
-      </Typography>
     }
     </Paper>
-  )
-}
-
-export default DetailsWindow
