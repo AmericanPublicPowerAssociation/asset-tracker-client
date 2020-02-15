@@ -49,6 +49,7 @@ export default function AssetDetailsPanel(props) {
     productVersion = asset.attributes['productVersion'] || ''
   }
 
+  const isEditing = sketchMode !== SKETCH_MODE_VIEW
   const disableInput = sketchMode === SKETCH_MODE_VIEW
 
   function trackChange(attribute, value) {
@@ -66,10 +67,7 @@ export default function AssetDetailsPanel(props) {
           </Tooltip>
 
           <ListItemText>
-            <AssetName
-              asset={asset}
-              isEditing={sketchMode !== SKETCH_MODE_VIEW}
-            />
+            <AssetName asset={asset} isEditing={isEditing} />
           </ListItemText>
         </ListItem>
       </List>

@@ -12,7 +12,6 @@ import {
   setAssetConnectionAttribute
 } from '../actions'
 
-
 export default function AssetConnectionList(props) {
   const {
     asset,
