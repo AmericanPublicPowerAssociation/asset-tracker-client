@@ -58,6 +58,8 @@ export default function AssetDetailsPanel(props) {
   */
 
   const isEditing = sketchMode !== SKETCH_MODE_VIEW
+  const attributeFields = getAttributeFields(
+    assetTypeAttributes, asset, isEditing)
 
   return (
     <>
@@ -79,18 +81,7 @@ export default function AssetDetailsPanel(props) {
           isOpen={isAttributesListOpen}
           setIsOpen={setIsAttributesListOpen}
         >
-        {assetTypeAttributes.map(([attributeKey, attributeType]) => {
-          const attributeValue = asset.attributes[attributeKey]
-          return (
-            <TextField
-              key={attributeKey}
-              label={attributeKey}
-              value={attributeValue}
-              variant='filled'
-              disabled={!isEditing}
-            />
-          )
-        })}
+          {attributeFields}
         </CollapsibleList>
 
         <CollapsibleList
@@ -152,3 +143,19 @@ import {
       />
 
  */
+
+function getAttributeFields(assetTypeAttributes, asset, isEditing) {
+
+  return assetTypeAttributes.map(([attributeKey, attributeType]) => {
+    const attributeValue = asset.attributes[attributeKey]
+    return (
+      <TextField
+        key={attributeKey}
+        label={attributeKey}
+        value={attributeValue}
+        variant='filled'
+        disabled={!isEditing}
+      />
+    )
+  })
+}

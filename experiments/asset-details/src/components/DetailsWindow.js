@@ -4,8 +4,6 @@ import clsx from 'clsx'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import InboxIcon from '@material-ui/icons/MoveToInbox';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
 import {TextField} from "@material-ui/core";
 import Link from '@material-ui/core/Link';
 
@@ -121,7 +119,6 @@ function DetailsWindow(props) {
 
                 <ListItemText primaryTypographyProps={{className:classes.title}} primary={"Bus " + key} />
 
-                {open ? <ExpandLess /> : <ExpandMore />}
               </ListItem>
 
               <Collapse in={buses[key]} timeout="auto" unmountOnExit>
