@@ -1,6 +1,6 @@
-export function getById(items, d) {
+export function getByKey(items, key) {
   return items.reduce((itemById, item) => {
-    itemById[item['id']] = item
+    itemById[item[key]] = item
     return itemById
-  }, d)
+  }, {})
 }

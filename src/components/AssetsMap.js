@@ -21,10 +21,12 @@ import {
   SKETCH_MODE_ADD_LINE,
 } from '../constants'
 import {
+  getAssetTypeCode,
   getMapMode,
   makeAsset,
 } from '../routines'
 import {
+  getAssetTypeByCode,
   getAssetIdByBusId,
   getAssetsGeoJson,
   getBusesGeoJson,
@@ -51,6 +53,7 @@ export default function AssetsMap(props) {
   const dispatch = useDispatch()
   const mapStyleName = useSelector(getMapStyleName)
   const mapViewState = useSelector(getMapViewState)
+  const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetIdByBusId = useSelector(getAssetIdByBusId)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
   const busesGeoJson = useSelector(getBusesGeoJson)
@@ -79,7 +82,9 @@ export default function AssetsMap(props) {
       const features = updatedData.features
       const { featureIndexes } = editContext
       // Add an asset corresponding to the feature
-      const asset = makeAsset(sketchMode, lineBusId)
+      const assetTypeCode = getAssetTypeCode(sketchMode)
+      const assetType = assetTypeByCode[assetTypeCode]
+      const asset = makeAsset(assetType, lineBusId)
       dispatch(setAsset(asset))
       // Store assetId in feature
       const assetId = asset.id

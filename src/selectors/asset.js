@@ -1,9 +1,9 @@
 import { createSelector } from 'reselect'
 import {
-  ASSET_TYPE_BY_CODE,
   ASSET_TYPE_CODE_LINE,
 } from '../constants'
 
+export const getAssetTypeByCode = state => state.assetTypeByCode
 export const getAssetById = state => state.assetById
 export const getFocusingAssetId = state => state.focusingAssetId
 
@@ -39,36 +39,4 @@ export const getFocusingAsset = createSelector([
   assetById,
 ) => {
   return assetById[focusingAssetId]
-})
-
-export const getAssetTableData = createSelector([
-  getAssetById,
-],
-  (
-  assetById
-) => {
-  const ASSET_TABLE_COLUMN_NAMES = [
-    'id',
-    'type',
-    'name',
-    'vendorName',
-  ]
-
-  const data = Object.values(assetById).map(
-    asset => {
-      const assetType = asset['typeCode']
-      const attributes = asset['attributes']
-      const vendorName = attributes ? attributes['vendorName'] : ""
-      return {
-        ...asset,
-        vendorName,
-        type: ASSET_TYPE_BY_CODE[assetType]['name'],
-      }
-  })
-
-  return {
-    data,
-    head: ASSET_TABLE_COLUMN_NAMES,
-    name: 'asset',
-  }
 })

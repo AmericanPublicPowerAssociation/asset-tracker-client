@@ -1,26 +1,22 @@
-import React from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
+// import { useDispatch } from 'react-redux'
 // import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Tooltip from '@material-ui/core/Tooltip'
+import TextField from '@material-ui/core/TextField'
 import AssetName from './AssetName'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
-import AssetConnectionList from './AssetConnectionList'
+import CollapsibleList from './CollapsibleList'
 import {
-  ProductName,
-  ProductVersion,
-  VendorName,
-} from 'asset-report-risks'
-import {
-  setAssetAttribute,
-} from '../actions'
-import {
-  ASSET_TYPE_BY_CODE,
   SKETCH_MODE_VIEW,
 } from '../constants'
+import {
+  getAssetTypeByCode,
+} from '../selectors'
 
 /*
 const useStyles = makeStyles(theme => ({
@@ -33,13 +29,24 @@ export default function AssetDetailsPanel(props) {
     sketchMode,
   } = props
   // const classes = useStyles()
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
+  const assetTypeByCode = useSelector(getAssetTypeByCode)
+  const [
+    isAttributesListOpen,
+    setIsAttributesListOpen,
+  ] = useState(false)
+  const [
+    isConnectionsListOpen,
+    setIsConnectionsListOpen,
+  ] = useState(true)
 
-  const assetId = asset.id
+  // const assetId = asset.id
   const assetTypeCode = asset.typeCode
-  const assetType = ASSET_TYPE_BY_CODE[assetTypeCode]
+  const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
+  const assetTypeAttributes = assetType.assetAttributes || {}
 
+  /*
   let vendorName = ''
   let productName = ''
   let productVersion = ''
@@ -48,13 +55,9 @@ export default function AssetDetailsPanel(props) {
     productName = asset.attributes['productName'] || ''
     productVersion = asset.attributes['productVersion'] || ''
   }
+  */
 
   const isEditing = sketchMode !== SKETCH_MODE_VIEW
-  const disableInput = sketchMode === SKETCH_MODE_VIEW
-
-  function trackChange(attribute, value) {
-    dispatch(setAssetAttribute(assetId, attribute, value))
-  }
 
   return (
     <>
@@ -70,7 +73,54 @@ export default function AssetDetailsPanel(props) {
             <AssetName asset={asset} isEditing={isEditing} />
           </ListItemText>
         </ListItem>
+
+        <CollapsibleList
+          title='Attributes'
+          isOpen={isAttributesListOpen}
+          setIsOpen={setIsAttributesListOpen}
+        >
+        {assetTypeAttributes.map(([attributeKey, attributeType]) => {
+          const attributeValue = asset.attributes[attributeKey]
+          return (
+            <TextField
+              key={attributeKey}
+              label={attributeKey}
+              value={attributeValue}
+              variant='filled'
+              disabled={!isEditing}
+            />
+          )
+        })}
+        </CollapsibleList>
+
+        <CollapsibleList
+          title='Connections'
+          isOpen={isConnectionsListOpen}
+          setIsOpen={setIsConnectionsListOpen}
+        >
+          Whee
+        </CollapsibleList>
       </List>
+    </>
+  )
+}
+
+/*
+
+import AssetConnectionList from './AssetConnectionList'
+import {
+  ProductName,
+  ProductVersion,
+  VendorName,
+} from 'asset-report-risks'
+import {
+  setAssetAttribute,
+} from '../actions'
+  const disableInput = sketchMode === SKETCH_MODE_VIEW
+
+  function trackChange(attribute, value) {
+    dispatch(setAssetAttribute(assetId, attribute, value))
+  }
 
       <VendorName
         disableTextInput={disableInput}
@@ -100,6 +150,5 @@ export default function AssetDetailsPanel(props) {
         asset={asset}
         disableInput={disableInput}
       />
-    </>
-  )
-}
+
+ */

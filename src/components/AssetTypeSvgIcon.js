@@ -1,15 +1,14 @@
 import React from 'react'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import {
-  ASSET_TYPE_BY_CODE,
+  ASSET_TYPE_ICON_BY_CODE,
 } from '../constants'
 
 export default function AssetTypeSvgIcon(props) {
   const {
     assetTypeCode,
   } = props
-  const assetType = ASSET_TYPE_BY_CODE[assetTypeCode]
-  const assetTypeIcon = assetType.icon
+  const assetTypeIcon = ASSET_TYPE_ICON_BY_CODE[assetTypeCode]
   return (
     <SvgIcon
       fontSize='large'

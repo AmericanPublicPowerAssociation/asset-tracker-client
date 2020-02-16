@@ -36,7 +36,6 @@ export default function AssetConnectionList(props) {
   )
 }
 
-
 function AssetConnectionItem(props) {
   const [
     isWithExpandConnect,
@@ -80,12 +79,14 @@ function AssetConnectionItem(props) {
         <ListItemText primary={`Bus ${connectionIndex}`}/>
         { arrowComponent } 
       </ListItem>
+
       <Collapse key={`${itemKey}-collapse`} in={isWithExpandConnect}>
         {
           !attributes ?
           <Typography display='block' align='center' variant='caption'>
             Attributes are not available
           </Typography> :
+
           <List>
             {
               Object.keys(attributes).map( key => (
