@@ -47,11 +47,6 @@ function AssetConnectionItem(props) {
   } = connection
 
   const dispatch = useDispatch()
-  const arrowComponent = (
-    isWithExpandConnect ?
-    <ExpandLess /> :
-    <ExpandMore />
-  )
 
   const handleChange = (e, key) => {
     const value = e.target.value

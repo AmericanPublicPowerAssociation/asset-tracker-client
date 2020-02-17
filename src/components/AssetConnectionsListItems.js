@@ -6,20 +6,19 @@ export default function AssetConnectionsListItems(props) {
   const {
     asset,
   } = props
-  const [isOpenByBusId, setIsOpenByBusId] = useState({})
+  const [isOpenByConnectionIndex, setIsOpenByConnectionIndex] = useState({})
   const connections = asset.connections || []
 
   return connections.map((connection, connectionIndex) => {
     const connectionName = `Bus ${connectionIndex + 1}`
-    const busId = connection.busId
-    const isOpen = isOpenByBusId[busId]
+    const isOpen = isOpenByConnectionIndex[connectionIndex]
 
     function setIsOpen(value) {
-      const state = isOpenByBusId
+      const state = isOpenByConnectionIndex
       const nextState = produce(state, draft => {
-        draft[busId] = value
+        draft[connectionIndex] = value
       })
-      setIsOpenByBusId(nextState)
+      setIsOpenByConnectionIndex(nextState)
     }
 
     return (
