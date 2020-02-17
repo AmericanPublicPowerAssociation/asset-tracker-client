@@ -31,35 +31,16 @@ export default function AssetDetailsPanel(props) {
   // const classes = useStyles()
   // const dispatch = useDispatch()
   const assetTypeByCode = useSelector(getAssetTypeByCode)
-  const [
-    isAttributesListOpen,
-    setIsAttributesListOpen,
-  ] = useState(false)
-  const [
-    isConnectionsListOpen,
-    setIsConnectionsListOpen,
-  ] = useState(true)
+  const [isConnectionsListOpen, setIsConnectionsListOpen] = useState(true)
 
   // const assetId = asset.id
   const assetTypeCode = asset.typeCode
   const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
-  const assetTypeAttributes = assetType.assetAttributes || {}
-
-  /*
-  let vendorName = ''
-  let productName = ''
-  let productVersion = ''
-  if (asset['attributes']) {
-    vendorName = asset.attributes['vendorName'] || ''
-    productName = asset.attributes['productName'] || ''
-    productVersion = asset.attributes['productVersion'] || ''
-  }
-  */
+  const assetTypeAttributes = assetType.assetAttributes || []
 
   const isEditing = sketchMode !== SKETCH_MODE_VIEW
-  const attributeFields = getAttributeFields(
-    assetTypeAttributes, asset, isEditing)
+  const assetAttributes = isEditing ?
 
   return (
     <>
@@ -76,13 +57,8 @@ export default function AssetDetailsPanel(props) {
           </ListItemText>
         </ListItem>
 
-        <CollapsibleList
-          title='Attributes'
-          isOpen={isAttributesListOpen}
-          setIsOpen={setIsAttributesListOpen}
-        >
-          {attributeFields}
-        </CollapsibleList>
+        <AssetAttributesList
+        />
 
         <CollapsibleList
           title='Connections'
@@ -97,6 +73,16 @@ export default function AssetDetailsPanel(props) {
 }
 
 /*
+ *
+
+  let vendorName = ''
+  let productName = ''
+  let productVersion = ''
+  if (asset['attributes']) {
+    vendorName = asset.attributes['vendorName'] || ''
+    productName = asset.attributes['productName'] || ''
+    productVersion = asset.attributes['productVersion'] || ''
+  }
 
 import AssetConnectionList from './AssetConnectionList'
 import {
@@ -147,9 +133,12 @@ import {
 function getAttributeFields(assetTypeAttributes, asset, isEditing) {
 
   return assetTypeAttributes.map(([attributeKey, attributeType]) => {
-    const attributeValue = asset.attributes[attributeKey]
+    const attributeByKey = asset.attributes || {}
+    const attributeValue = attributeByKey[attributeKey]
     return (
       <TextField
+        // className={clsx({poof: !attributeValue})}
+        fullWidth
         key={attributeKey}
         label={attributeKey}
         value={attributeValue}
@@ -158,4 +147,5 @@ function getAttributeFields(assetTypeAttributes, asset, isEditing) {
       />
     )
   })
+
 }
