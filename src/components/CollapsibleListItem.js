@@ -5,7 +5,7 @@ import Collapse from '@material-ui/core/Collapse'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 
-export default function CollapsibleList(props) {
+export default function CollapsibleListItem(props) {
   const {
     title,
     isOpen,

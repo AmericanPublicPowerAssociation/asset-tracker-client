@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import produce from 'immer'
 import { MapController} from 'deck.gl'
 import {
   DrawLineStringMode,
@@ -77,9 +76,6 @@ export default function AssetsMap(props) {
           return output
         }
       },
-      b: DrawPointMode,
-      t: DrawPointMode,
-      s: DrawPolygonMode,
     }[sketchingAssetType]
   }
   else if (
@@ -177,104 +173,6 @@ export default function AssetsMap(props) {
     }))
   }
 
-  const _onViewStateChange = ({viewState}) => {
-    const {
-      latitude,
-      longitude,
-      zoom,
-      bearing,
-      pitch,
-      width,
-      height} = viewState
-    setViewport({latitude, longitude, zoom, bearing, pitch, width, height})
-  }
-
-  // const busFeatureById = {}
-  const busFeatures = []
-  const temporaryFeatures = geoJson.features
-  for (let i = 0; i < temporaryFeatures.length; i++) {
-    const f = temporaryFeatures[i]
-    const geometry = f.geometry
-    const geometryType = geometry.type
-    const geometryCoordinates = geometry.coordinates
-    const assetId = f.properties.id
-    const asset = assetById[assetId]
-    if (!asset) {
-      continue
-    }
-
-    const busByIndex = asset.busByIndex
-
-    if (!busByIndex) {
-      continue
-    }
-
-    const busEntries = Object.entries(busByIndex)
-    const busIndices = Object.keys(busByIndex)
-    const busCount = busEntries.length
-
-    switch(geometryType) {
-      case 'Point': {
-        const busAngleIncrement = 360 / busCount
-
-        for (let i = 0; i < busCount; i++) {
-          const busIndex = busIndices[i]
-          const bus = busByIndex[busIndex]
-          const busId = bus.id
-          const busAngle = busAngleIncrement * i
-
-          busFeatures.push({
-            type: 'Feature',
-            properties: {
-              id: busId,
-            },
-            geometry: translateFeature(f, 0.02, busAngle).geometry,
-          })
-        }
-        break
-      }
-      case 'LineString': {
-        for (let i = 0; i < busCount; i++) {
-          const busIndex = busIndices[i]
-          const bus = busByIndex[busIndex]
-          const busId = bus.id
-          const geometryXY = geometryCoordinates[busIndex]
-          busFeatures.push({
-            type: 'Feature',
-            properties: {
-              id: busId,
-            },
-            geometry: {
-              type: 'Point',
-              coordinates: geometryXY,
-            },
-          })
-        }
-        break
-      }
-      case 'Polygon': {
-        break
-      }
-      default: {
-        break
-      }
-    }
-  }
-
-  layers.push(new GeoJsonLayer({
-    id: 'bus-geojson-layer',
-    data: {
-      type: 'FeatureCollection',
-      features: busFeatures,
-    },
-    pickable: true,
-    getRadius: 5,
-    getFillColor: [63, 81, 181],
-    getLineColor: [0, 255, 255],
-    getLineWidth: 2,
-  }))
-
->>>>>>> big-picture-sketch
   return (
       <DeckGL
         controller={{type:MyController}}
@@ -330,12 +228,10 @@ export default function AssetsMap(props) {
         }}
       >
       </DeckGL>
+
       <FinishDrawing
         sketchingMode={sketchingMode}
         sketchingAssetType={sketchingAssetType}
         selectedFeatureIndexes={selectedFeatureIndexes}
         setSelectedFeatureIndexes={setSelectedFeatureIndexes} 
         features={geoJson.features} />
-    </div>
-  )
-}

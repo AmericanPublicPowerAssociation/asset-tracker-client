@@ -1,10 +1,13 @@
-import React from 'react'
-import CollapsibleList from './CollapsibleList'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
+import CollapsibleListItem from './CollapsibleListItem'
+import {
+  getAssetTypeByCode,
+} from '../selectors'
 
-export default function AssetAttributesList(props) {
+export default function AssetAttributesListItem(props) {
   const {
     asset,
-    isEditing,
   } = props
   const [isOpen, setIsOpen] = useState(false)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
@@ -12,6 +15,23 @@ export default function AssetAttributesList(props) {
   const assetTypeCode = asset.typeCode
   const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
+
+  return (
+    <CollapsibleListItem
+      title={assetTypeName}
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+    >
+      Asset Attributes
+    </CollapsibleListItem>
+  )
+}
+
+/*
+export default function AssetAttributesList(props) {
+  const {
+    isEditing,
+  } = props
 
   let assetTypeAttributes = assetType.assetAttributes || []
   if (!isEditing) {
@@ -35,3 +55,4 @@ export default function AssetAttributesList(props) {
 
   )
 }
+*/

@@ -82,7 +82,6 @@ function DetailsWindow(props) {
 
   const [assetOpen, setAssetOpen] = React.useState(true);
   const [open, setOpen] = React.useState(true);
-  const [buses, setBusesOpen] = React.useState({});
   const [connections, setConnectionOpen] = React.useState({})
   const [filter, setFilter] = React.useState('');
 

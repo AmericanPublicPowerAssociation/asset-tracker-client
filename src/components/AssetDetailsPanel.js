@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
 // import { useDispatch } from 'react-redux'
 // import { makeStyles } from '@material-ui/core/styles'
@@ -7,10 +7,10 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Tooltip from '@material-ui/core/Tooltip'
-import TextField from '@material-ui/core/TextField'
-import AssetName from './AssetName'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
-import CollapsibleList from './CollapsibleList'
+import AssetName from './AssetName'
+import AssetAttributesListItem from './AssetAttributesListItem'
+import AssetConnectionsListItems from './AssetConnectionsListItems'
 import {
   SKETCH_MODE_VIEW,
 } from '../constants'
@@ -31,50 +31,37 @@ export default function AssetDetailsPanel(props) {
   // const classes = useStyles()
   // const dispatch = useDispatch()
   const assetTypeByCode = useSelector(getAssetTypeByCode)
-  const [isConnectionsListOpen, setIsConnectionsListOpen] = useState(true)
 
   // const assetId = asset.id
   const assetTypeCode = asset.typeCode
   const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
-  const assetTypeAttributes = assetType.assetAttributes || []
 
   const isEditing = sketchMode !== SKETCH_MODE_VIEW
-  const assetAttributes = isEditing ?
+  // const assetAttributes = isEditing ?
 
   return (
-    <>
-      <List component='div' disablePadding>
-        <ListItem component='div' disableGutters>
-          <Tooltip title={assetTypeName} placement='left'>
-            <ListItemIcon>
-              <AssetTypeSvgIcon assetTypeCode={assetTypeCode} />
-            </ListItemIcon>
-          </Tooltip>
+    <List component='div' disablePadding>
+      <ListItem component='div' disableGutters>
+        <Tooltip title={assetTypeName} placement='left'>
+          <ListItemIcon>
+            <AssetTypeSvgIcon assetTypeCode={assetTypeCode} />
+          </ListItemIcon>
+        </Tooltip>
 
-          <ListItemText>
-            <AssetName asset={asset} isEditing={isEditing} />
-          </ListItemText>
-        </ListItem>
+        <ListItemText>
+          <AssetName asset={asset} isEditing={isEditing} />
+        </ListItemText>
+      </ListItem>
 
-        <AssetAttributesList
-        />
+      <AssetAttributesListItem asset={asset} />
 
-        <CollapsibleList
-          title='Connections'
-          isOpen={isConnectionsListOpen}
-          setIsOpen={setIsConnectionsListOpen}
-        >
-          Whee
-        </CollapsibleList>
-      </List>
-    </>
+      <AssetConnectionsListItems asset={asset} />
+    </List>
   )
 }
 
 /*
- *
-
   let vendorName = ''
   let productName = ''
   let productVersion = ''
@@ -84,7 +71,6 @@ export default function AssetDetailsPanel(props) {
     productVersion = asset.attributes['productVersion'] || ''
   }
 
-import AssetConnectionList from './AssetConnectionList'
 import {
   ProductName,
   ProductVersion,
@@ -128,7 +114,6 @@ import {
         disableInput={disableInput}
       />
 
- */
 
 function getAttributeFields(assetTypeAttributes, asset, isEditing) {
 
@@ -149,3 +134,4 @@ function getAttributeFields(assetTypeAttributes, asset, isEditing) {
   })
 
 }
+*/

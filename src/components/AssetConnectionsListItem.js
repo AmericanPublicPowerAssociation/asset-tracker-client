@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+/*
 import { useDispatch } from 'react-redux'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -17,11 +17,9 @@ export default function AssetConnectionList(props) {
     asset,
     disableInput,
   } = props
-  const connections = asset['connections'] || []
   const assetId = asset.id
 
   return (
-    <List disablePadding>
       { connections.map( (conn, index) => (
         <AssetConnectionItem
           key={`asset-connection-item-${assetId}-${conn.busId}`}
@@ -32,15 +30,10 @@ export default function AssetConnectionList(props) {
           disableInput={disableInput}
         />
       ))} 
-    </List>
   )
 }
 
 function AssetConnectionItem(props) {
-  const [
-    isWithExpandConnect,
-    setIsWithExpandConnect
-  ] = useState(false)
   const {
     connection,
     itemKey,
@@ -110,3 +103,4 @@ function AssetConnectionItem(props) {
     </>
   )
 }
+*/
