@@ -7,6 +7,14 @@ import {
 export const getAssetById = state => state.assetById
 export const getFocusingAssetId = state => state.focusingAssetId
 
+export const getAssetByIdLength = createSelector([
+  getAssetById,
+], (
+  assetById,
+) => {
+  return Object.keys(assetById).length
+})
+
 export const getAssetIdByBusId = createSelector([
   getAssetById,
 ], (
@@ -48,7 +56,6 @@ export const getAssetTableData = createSelector([
   assetById
 ) => {
   const ASSET_TABLE_COLUMN_NAMES = [
-    'id',
     'type',
     'name',
     'vendorName',

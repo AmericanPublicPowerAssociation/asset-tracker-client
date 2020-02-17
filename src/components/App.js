@@ -12,7 +12,9 @@ import OverlaysWindow from './OverlaysWindow'
 import DetailsWindow from './DetailsWindow'
 import TablesWindow from './TablesWindow'
 import TablesDialog from './TablesDialog'
-import './App.css'
+import {
+  refreshRisks,
+} from 'asset-report-risks'
 import {
   refreshAssets,
   updateAssets,
@@ -27,6 +29,8 @@ import {
   getAssetById,
   getAssetsGeoJson,
 } from '../selectors'
+import './App.css'
+
 
 export default function App() {
   const dispatch = useDispatch()
@@ -52,6 +56,7 @@ export default function App() {
   
   useEffect(() => {
     dispatch(refreshAssets())
+    dispatch(refreshRisks())
   }, [dispatch])
 
   return (

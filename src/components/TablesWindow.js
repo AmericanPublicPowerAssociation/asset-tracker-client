@@ -12,10 +12,10 @@ const useStyles = makeStyles(theme => ({
     bottom: theme.spacing(5),
     right: theme.spacing(34),
     padding: theme.spacing(1),
-    paddingRight: theme.spacing(5),
+    overflow: 'hidden',
   },
   table: {
-    height: theme.spacing(30),
+    height: theme.spacing(34),
     overflowY: 'auto',
   },
 }))

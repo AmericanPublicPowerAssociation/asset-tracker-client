@@ -13,6 +13,7 @@ import {
   getAssetsGeoJson,
 } from '../selectors'
 
+
 export default function AssetsTable(props) {
   const dispatch = useDispatch()
   const {

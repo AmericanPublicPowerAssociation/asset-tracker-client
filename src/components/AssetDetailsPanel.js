@@ -15,6 +15,7 @@ import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import AssetConnectionList from './AssetConnectionList'
 import {
   ASSET_TYPE_BY_CODE,
+  ASSET_TYPE_CODE_SUBSTATION,
   SKETCH_MODE_VIEW,
 } from '../constants'
 import {
@@ -125,30 +126,37 @@ export default function AssetDetailsPanel(props) {
           in={isWithExpandedDetails}
           // timeout='auto'
         >
-          <VendorName
-            disableTextInput={disableInput}
-            typeId={assetTypeCode}
-            vendorName={vendorName}
-            trackChange={trackChange}
-            saveChange={() => {}}
-          />
-          <ProductName
-            disableTextInput={disableInput}
-            type={assetTypeCode}
-            vendorName={vendorName}
-            productName={productName}
-            trackChange={trackChange}
-            saveChange={() => {}}
-          />
-          <ProductVersion
-            disableTextInput={disableInput}
-            typeId={assetTypeCode}
-            vendorName={vendorName}
-            productName={productName}
-            productVersion={productVersion}
-            trackChange={trackChange}
-            saveChange={() => {}}
-          />
+          {
+          assetTypeCode !== ASSET_TYPE_CODE_SUBSTATION &&
+          (
+          <>
+            <VendorName
+              disableTextInput={disableInput}
+              typeId={assetTypeCode}
+              vendorName={vendorName}
+              trackChange={trackChange}
+              saveChange={() => {}}
+            />
+            <ProductName
+              disableTextInput={disableInput}
+              type={assetTypeCode}
+              vendorName={vendorName}
+              productName={productName}
+              trackChange={trackChange}
+              saveChange={() => {}}
+            />
+            <ProductVersion
+              disableTextInput={disableInput}
+              typeId={assetTypeCode}
+              vendorName={vendorName}
+              productName={productName}
+              productVersion={productVersion}
+              trackChange={trackChange}
+              saveChange={() => {}}
+            />
+          </>
+          )
+          }
           <AssetConnectionList
             asset={asset}
             disableInput={disableInput}
