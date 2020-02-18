@@ -26,12 +26,14 @@ export default function DetailsWindow(props) {
   const {
     isWithDetails,
     sketchMode,
+    overlayMode
   } = props
   const focusingAsset = useSelector(getFocusingAsset)
   const detailsPanel = focusingAsset ?
     <AssetDetailsPanel
       asset={focusingAsset}
       sketchMode={sketchMode}
+      overlayMode={overlayMode} 
     /> :
     <EmptyDetailsPanel />
   return (

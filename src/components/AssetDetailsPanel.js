@@ -13,6 +13,8 @@ import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import AssetConnectionList from './AssetConnectionList'
+import TaskConnectionList from './TaskConnectionList'
+
 import {
   ASSET_TYPE_BY_CODE,
   SKETCH_MODE_VIEW,
@@ -44,6 +46,7 @@ export default function AssetDetailsPanel(props) {
   const {
     asset,
     sketchMode,
+    overlayMode,
   } = props
   const [
     isWithExpandedDetails, setIsWithExpandedDetails,
@@ -95,36 +98,13 @@ export default function AssetDetailsPanel(props) {
     <ExpandMore />
   )
 
-  return (
-    <div className={classes.root}>
-      <List
-        component='div'
-        disablePadding
+  const details = (
+    <div className={classes.collapseInfo}>
+      <Collapse
+        in={isWithExpandedDetails}
+        // timeout='auto'
       >
-        <ListItem
-          disableGutters
-          component='div'
-          onClick={
-            () => setIsWithExpandedDetails(!isWithExpandedDetails)
-          }
-        >
-          <Tooltip title={assetTypeName} placement='left'>
-            <ListItemIcon>
-              <AssetTypeSvgIcon
-                assetTypeCode={assetTypeCode}
-              />
-            </ListItemIcon>
-          </Tooltip>
-          {assetNameComponent}
-          {arrowComponent}
-        </ListItem>
-      </List>
-      <div className={classes.collapseInfo}>
-        <Collapse
-          in={isWithExpandedDetails}
-          // timeout='auto'
-        >
-          <VendorName
+      <VendorName
             disableTextInput={disableInput}
             typeId={assetTypeCode}
             vendorName={vendorName}
@@ -153,7 +133,42 @@ export default function AssetDetailsPanel(props) {
             disableInput={disableInput}
           />
         </Collapse>
-      </div>
+   </div>)
+
+  const tasks =  (
+      <TaskConnectionList
+        asset={asset}
+        disableInput={disableInput}
+      />
+  )
+    
+  const content = (overlayMode === 'tasks' ? tasks : details)
+
+  return (
+    <div className={classes.root}>
+      <List
+        component='div'
+        disablePadding
+      >
+        <ListItem
+          disableGutters
+          component='div'
+          onClick={
+            () => setIsWithExpandedDetails(!isWithExpandedDetails)
+          }
+        >
+          <Tooltip title={assetTypeName} placement='left'>
+            <ListItemIcon>
+              <AssetTypeSvgIcon
+                assetTypeCode={assetTypeCode}
+              />
+            </ListItemIcon>
+          </Tooltip>
+          {assetNameComponent}
+          {arrowComponent}
+        </ListItem>
+      </List>
+     {content}	  
     </div>
   )
 }

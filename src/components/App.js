@@ -102,6 +102,7 @@ export default function App() {
       <DetailsWindow
         isWithDetails={isWithDetails}
         sketchMode={sketchMode}
+        overlayMode={overlayMode}
       />
       { isScreenXS && isWithTables && 
         <TablesDialog
