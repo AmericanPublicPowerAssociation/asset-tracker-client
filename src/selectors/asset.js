@@ -7,6 +7,14 @@ export const getAssetTypeByCode = state => state.assetTypeByCode
 export const getAssetById = state => state.assetById
 export const getFocusingAssetId = state => state.focusingAssetId
 
+export const getAssetByIdLength = createSelector([
+  getAssetById,
+], (
+  assetById,
+) => {
+  return Object.keys(assetById).length
+})
+
 export const getAssetIdByBusId = createSelector([
   getAssetById,
 ], (
