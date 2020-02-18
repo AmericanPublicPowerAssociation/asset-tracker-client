@@ -70,46 +70,6 @@ function SketchAssetToolbar(props) {
           </ListItem>
         </Tooltip>
 
-        <Tooltip title='Add Bus' placement='right' aria-label='Add Bus'>
-          <ListItem
-            classes={{selected: classes.selected}}
-            button
-            selected={sketchingAssetType === 'b'}
-            onClick={() => {
-              setSketchingAssetType('b')
-            }}
-          >
-            <SvgIcon fontSize='large' viewBox='0 0 17 17' component={Bus} />
-          </ListItem>
-        </Tooltip>
-
-        <Tooltip title="Add Transformer" placement='right' aria-label="Add Transformer">
-          <ListItem
-            classes={{selected: classes.selected}}
-            button
-            selected={sketchingAssetType === 't'}
-            onClick={() => {
-              setSketchingAssetType('t')
-            }}
-          >
-            <SvgIcon fontSize='large' viewBox='0 0 17 17' component={Transformer} />
-            {/*<ListItemText primary='Transformer' />*/}
-          </ListItem>
-        </Tooltip>
-
-        <Tooltip title="Add Substation" placement='right' aria-label="Add Substation">
-          <ListItem
-            classes={{selected: classes.selected}}
-            button
-            selected={sketchingAssetType === 's'}
-            onClick={() => {
-              setSketchingAssetType('s')
-            }}
-          >
-            <SvgIcon fontSize='large' viewBox='0 0 17 17' component={Substation} />
-            {/*<ListItemText primary='Substation' />*/}
-          </ListItem>
-        </Tooltip>
       </List>
     </Paper>
   )

@@ -9,18 +9,42 @@ import {
   setFocusingAssetId,
 } from '../actions' 
 import {
-  getAssetTableData,
+  getAssetById,
+  getAssetTypeByCode,
   getAssetsGeoJson,
 } from '../selectors'
 
+const ASSET_TABLE_COLUMN_NAMES = [
+  'id',
+  'type',
+  'name',
+  'vendorName',
+]
 
 export default function AssetsTable(props) {
   const dispatch = useDispatch()
   const {
     setSelectedAssetIndexes,
   } = props
-  const { head, data, name } = useSelector(getAssetTableData)
+  const assetTypeByCode = useSelector(getAssetTypeByCode)
+  const assetById = useSelector(getAssetById)
   const { features } = useSelector(getAssetsGeoJson)
+
+  const data = Object.values(assetById).map(
+    asset => {
+      const assetType = asset['typeCode']
+      const attributes = asset['attributes']
+      const vendorName = attributes ? attributes['vendorName'] : ''
+      return {
+        ...asset,
+        vendorName,
+        type: assetTypeByCode[assetType]['name'],
+      }
+  })
+
+  const head = ASSET_TABLE_COLUMN_NAMES
+
+  const name = 'asset'
 
   const clickCallBack = (id) => {
     const selectedIndex = features.reduce(

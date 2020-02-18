@@ -8,7 +8,7 @@ import {
   SET_ASSET_VALUE,
 } from '../constants'
 import {
-  getById,
+  getByKey,
 } from '../macros'
 
 const initialState = {}
@@ -17,7 +17,7 @@ const assetById = (state = initialState, action) => {
   switch(action.type) {
     case SET_ASSETS: {
       const { assets } = action.payload
-      return getById(assets, {})
+      return getByKey(assets, 'id')
     }
     case SET_ASSET: {
       const asset = action.payload

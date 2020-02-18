@@ -11,45 +11,11 @@ import RowsWindow from './RowsWindow'
 import DetailsWindow from './DetailsWindow'
 import HintsWindow from './HintsWindow'
 import CenterBottomWindow from './CenterBottomWindow'
-import {
-  ASSETS,
-  GEOJSON,
-  TASKS,
-  RISKS,
-  BASE_MAP_STYLE_NAME,
-  DARK_MAP_STYLE,
-  STREETS_MAP_STYLE,
-  SATELLITE_STREETS_MAP_STYLE,
-  BASE_MAP_STYLE_NAME, SPEC,
-} from '../constants'
-import {
-  getById,
-} from '../macros'
 
 export default function App() {
-  const [isWithRows, setIsWithRows] = useState(false)
-  const [isWithDetails, setIsWithDetails] = useState(true)
   const [history, setHistory] = useState([])
   const [historyIndex, setHistoryIndex] = useState(-1)
-  const [overlay, setOverlay] = useState('assets')
-  const [sketchingMode, setSketchingMode] = useState('select')
-  const [sketchingAssetType, setSketchingAssetType] = useState()
-  const [sketchingEditType, setSketchingEditType] = useState()
-  const [selectedFeatureIndexes, setSelectedFeatureIndexes] = useState([])
-  const [focusingAssetId, setFocusingAssetId] = useState()
-  const [assetById, setAssetById] = useState(getById(ASSETS, {}))
   const [spec, setSpec] = useState({})
-  const [mapStyle, setMapStyle] = useState(BASE_MAP_STYLE_NAME)
-
-  useEffect(() => {
-    fetch('/assets.json').then(async (res) => {
-      let data = await res.json()
-      console.log(data)
-      setSpec(data.spec);
-      setAssetById(getById(data.assets, {}));
-    });
-
-  }, [])
 
   const _toggleIsSketching = () => {
     setIsSketching(!isSketching)

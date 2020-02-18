@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import ListItem from '@material-ui/core/ListItem'
 import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
@@ -6,9 +7,8 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import {
-  ASSET_TYPE_BY_CODE
-} from '../constants'
-
+  getAssetTypeByCode,
+} from '../selectors'
 
 export default function AssetDialogListItem(props) {
   const {
@@ -20,7 +20,9 @@ export default function AssetDialogListItem(props) {
     name,
     id
   } = asset
-  const assetTypeName = ASSET_TYPE_BY_CODE[typeCode].name
+  const assetTypeByCode = useSelector(getAssetTypeByCode)
+
+  const assetTypeName = assetTypeByCode[typeCode].name
   const numOfConnections = asset['connections'] ? asset['connections'].length : 0
 
   return (
@@ -31,14 +33,14 @@ export default function AssetDialogListItem(props) {
               <Grid
                 item
                 container
-                direction="column"
-                alignItems="center"
+                direction='column'
+                alignItems='center'
               >
                 <Grid item>
                   <AssetTypeSvgIcon assetTypeCode={typeCode} />
                 </Grid>
                 <Grid item>
-                  <Typography color="textSecondary" overflow="hidden">
+                  <Typography color='textSecondary' overflow='hidden'>
                     {assetTypeName}
                   </Typography>
                 </Grid>
@@ -48,7 +50,7 @@ export default function AssetDialogListItem(props) {
               <Grid
                 item
                 container
-                direction="column"
+                direction='column'
                 spacing={1}
               >
                 <Grid item xs>
@@ -56,11 +58,11 @@ export default function AssetDialogListItem(props) {
                 </Grid>
                 <Grid>
                   {numOfConnections}
-                  {numOfConnections === 1 ? " connection" : " connections"}
+                  {numOfConnections === 1 ? ' connection' : ' connections'}
                 </Grid>
                 <Grid item xs>
                   <Button
-                    color="secondary"
+                    color='secondary'
                     onClick={() => handleShowDetailsDialog(id)}
                   >
                     View details
@@ -70,7 +72,7 @@ export default function AssetDialogListItem(props) {
             </Grid>
           </Grid>
       </ListItem>
-      <Divider variant="middle" component="li" />
+      <Divider variant='middle' component='li' />
     </>
   )
 }

@@ -1,6 +1,5 @@
 import {
   ABBREVIATED_ASSET_ID_LENGTH,
-  ASSET_TYPE_BY_CODE,
   ASSET_TYPE_CODE_LINE,
   ASSET_TYPE_CODE_METER,
   ASSET_TYPE_CODE_SUBSTATION,
@@ -16,10 +15,10 @@ import {
   getRandomId,
 } from '../macros'
 
-export function makeAsset(sketchMode, lineBusId) {
+export function makeAsset(assetType, lineBusId) {
+  const assetTypeCode = assetType.code
   const assetId = getRandomId(MINIMUM_ASSET_ID_LENGTH)
-  const assetTypeCode = getAssetTypeCode(sketchMode)
-  const assetName = getAssetName(assetTypeCode, assetId)
+  const assetName = getAssetName(assetType, assetId)
   const asset = {id: assetId, typeCode: assetTypeCode, name: assetName}
 
   switch(assetTypeCode) {
@@ -40,7 +39,8 @@ export function makeAsset(sketchMode, lineBusId) {
       ]
       break
     }
-    default: { }
+    default: {
+    }
   }
 
   return asset
@@ -55,8 +55,7 @@ export function getAssetTypeCode(sketchMode) {
   }[sketchMode]
 }
 
-export function getAssetName(assetTypeCode, assetId) {
-  const assetType = ASSET_TYPE_BY_CODE[assetTypeCode]
+export function getAssetName(assetType, assetId) {
   const abbreviatedAssetId = assetId.substring(
     0, ABBREVIATED_ASSET_ID_LENGTH)
   return `${assetType.name} ${abbreviatedAssetId}`

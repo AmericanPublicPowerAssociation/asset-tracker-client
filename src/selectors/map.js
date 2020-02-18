@@ -12,8 +12,6 @@ import {
 export const getMapStyleName = state => state.mapStyleName
 export const getMapViewState = state => state.mapViewState
 export const getAssetsGeoJson = state => state.assetsGeoJson
-export const getSelectedFeatureIndexes = state => state.selectedFeatureIndexes
-export const getSketchAssetType = state => state.sketchAssetType
 
 export const getIsMapStyleBright = createSelector([
   getMapStyleName,
