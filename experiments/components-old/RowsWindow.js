@@ -44,7 +44,6 @@ function RowsWindow(props) {
         poof: isSketching || !isWithRows,
       })}
     >
-      <CloseButton onClick={() => setIsWithRows(false)} />
       <div className={classes.table}>
         {table}
         {/* TODO: Show only what is visible in the map */}
