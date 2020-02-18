@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 }))
 */
 
-export default function AssetDetailsPanel(props) {
+export default function AssetAttributesPanel(props) {
   const {
     asset,
     sketchMode,
@@ -44,7 +44,7 @@ export default function AssetDetailsPanel(props) {
   const assetTypeCode = asset.typeCode
   const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
-  const assetTypeAttributes = assetType.assetAttributes || {}
+  const assetTypeAttributes = assetType.assetAttributes || []
 
   /*
   let vendorName = ''
