@@ -80,7 +80,8 @@ export default function AssetAttributesPanel(props) {
           setIsOpen={setIsAttributesListOpen}
         >
         {assetTypeAttributes.map(([attributeKey, attributeType]) => {
-          const attributeValue = asset.attributes[attributeKey]
+          const assetAttributes = asset['attributes']
+          const attributeValue = assetAttributes ? assetAttributes[attributeKey] : ''
           return (
             <TextField
               key={attributeKey}

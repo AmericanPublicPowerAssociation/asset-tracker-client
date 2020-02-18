@@ -15,10 +15,8 @@ import {
 } from '../selectors'
 
 const ASSET_TABLE_COLUMN_NAMES = [
-  'id',
   'type',
   'name',
-  'vendorName',
 ]
 
 export default function AssetsTable(props) {
@@ -67,12 +65,12 @@ export default function AssetsTable(props) {
   }
   
   return (
-    <Table stickyHeader aria-label='sticky table' size='small'>
+    <Table>
       <TableHead>
         <TableRow>
           { head.map( header => { 
             const key = `table-${name}-${header}`
-            return <TableCell key={key}>{getHeaderLabel(header)}</TableCell>
+            return <TableCell key={key} align='center'>{getHeaderLabel(header)}</TableCell>
           })}
         </TableRow>
       </TableHead>
@@ -84,6 +82,7 @@ export default function AssetsTable(props) {
             const key = `table-${name}-${header}-${asset.id}`
             return (
               <TableCell
+                align='center'
                 key={key}
                 onClick={ () => clickCallBack(asset.id)}
               >
