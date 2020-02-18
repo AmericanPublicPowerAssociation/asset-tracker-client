@@ -13,8 +13,9 @@ import DetailsWindow from './DetailsWindow'
 import TablesWindow from './TablesWindow'
 import TablesDialog from './TablesDialog'
 import DownloadManager from './DownloadManager'
-
-import './App.css'
+import {
+  refreshRisks,
+} from 'asset-report-risks'
 import {
   refreshAssets,
   updateAssets,
@@ -29,6 +30,8 @@ import {
   getAssetById,
   getAssetsGeoJson,
 } from '../selectors'
+import './App.css'
+
 
 export default function App() {
   const dispatch = useDispatch()
@@ -55,6 +58,7 @@ export default function App() {
   
   useEffect(() => {
     dispatch(refreshAssets())
+    dispatch(refreshRisks())
   }, [dispatch])
 
   return (
@@ -101,6 +105,7 @@ export default function App() {
 	  <DownloadManager open={downloader} onOk={(element) => {window.location = `/assets.dss?source=${element}`; setDownloader(false)}}  onCancel={() => {setDownloader(false)}}  onClose={()=> {setDownloader(false)}} />
       <DetailsWindow
         isWithDetails={isWithDetails}
+        overlayMode={overlayMode}
         sketchMode={sketchMode}
       />
       { isScreenXS && isWithTables && 

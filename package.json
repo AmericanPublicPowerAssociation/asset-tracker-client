@@ -26,6 +26,10 @@
     "reselect": "^4.0.0",
     "yarn": "^1.21.1"
   },
+  "resolutions": {
+    "@turf/difference": "6.0.1",
+    "react-dev-utils": "10.1.0"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

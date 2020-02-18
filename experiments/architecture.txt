@@ -32,9 +32,4 @@ GET /assets.csv
 GET /assets.zip
 
 GET /assets/<asset-id>.json
-GET /assets/<asset-id>.msg
 POST /assets/<asset-id>.json
-
-GET /reports
-GET /reports/<report-id>
-GET /reports/<report-id>.zip

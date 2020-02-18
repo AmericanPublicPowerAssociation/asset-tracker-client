@@ -9,17 +9,40 @@ import {
   setFocusingAssetId,
 } from '../actions' 
 import {
-  getAssetTableData,
+  getAssetById,
+  getAssetTypeByCode,
   getAssetsGeoJson,
 } from '../selectors'
+
+const ASSET_TABLE_COLUMN_NAMES = [
+  'type',
+  'name',
+]
 
 export default function AssetsTable(props) {
   const dispatch = useDispatch()
   const {
     setSelectedAssetIndexes,
   } = props
-  const { head, data, name } = useSelector(getAssetTableData)
+  const assetTypeByCode = useSelector(getAssetTypeByCode)
+  const assetById = useSelector(getAssetById)
   const { features } = useSelector(getAssetsGeoJson)
+
+  const data = Object.values(assetById).map(
+    asset => {
+      const assetType = asset['typeCode']
+      const attributes = asset['attributes']
+      const vendorName = attributes ? attributes['vendorName'] : ''
+      return {
+        ...asset,
+        vendorName,
+        type: assetTypeByCode[assetType]['name'],
+      }
+  })
+
+  const head = ASSET_TABLE_COLUMN_NAMES
+
+  const name = 'asset'
 
   const clickCallBack = (id) => {
     const selectedIndex = features.reduce(
@@ -42,12 +65,12 @@ export default function AssetsTable(props) {
   }
   
   return (
-    <Table stickyHeader aria-label='sticky table' size='small'>
+    <Table>
       <TableHead>
         <TableRow>
           { head.map( header => { 
             const key = `table-${name}-${header}`
-            return <TableCell key={key}>{getHeaderLabel(header)}</TableCell>
+            return <TableCell key={key} align='center'>{getHeaderLabel(header)}</TableCell>
           })}
         </TableRow>
       </TableHead>
@@ -59,6 +82,7 @@ export default function AssetsTable(props) {
             const key = `table-${name}-${header}-${asset.id}`
             return (
               <TableCell
+                align='center'
                 key={key}
                 onClick={ () => clickCallBack(asset.id)}
               >

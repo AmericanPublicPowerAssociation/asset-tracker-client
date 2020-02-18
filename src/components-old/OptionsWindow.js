@@ -19,16 +19,6 @@ import MapEditHistory from './MapEditHistory'
     undo
   } = props
 
-  const color = {
-    colorPrimary: (
-      mapStyle === 'streets' ?
-      classes.light :
-      classes.dark
-    ),
-  }
-
-  return (
-    {
       isSketching && false &&
       <MapEditHistory
         classes={color}
@@ -36,26 +26,3 @@ import MapEditHistory from './MapEditHistory'
         historyIndex={historyIndex}
         undo={undo}
         setHistory={setHistory} />
-    }
-
-    {!isSketching && !isWithFilters &&
-      <Tooltip title='See Filters' enterDelay={TOOLTIP_DELAY}>
-        <IconButton
-          color='primary'
-          classes={color}
-          onClick={() => setIsWithFilters(true)}>
-          <SeeFiltersIcon />
-        </IconButton>
-      </Tooltip>
-    }
-
-    {!isSketching && !isWithRows &&
-      <Tooltip title='See Rows' enterDelay={TOOLTIP_DELAY}>
-        <IconButton
-          color='primary'
-          classes={color}
-          onClick={() => setIsWithRows(true)}>
-          <SeeRowsIcon />
-        </IconButton>
-      </Tooltip>
-    }
