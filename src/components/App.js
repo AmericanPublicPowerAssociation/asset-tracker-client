@@ -12,6 +12,7 @@ import OverlaysWindow from './OverlaysWindow'
 import DetailsWindow from './DetailsWindow'
 import TablesWindow from './TablesWindow'
 import TablesDialog from './TablesDialog'
+import DownloadManager from './DownloadManager'
 import {
   refreshRisks,
 } from 'asset-report-risks'
@@ -43,7 +44,8 @@ export default function App() {
   const isScreenXS = useMediaQuery('(max-width:600px)')
   const assetById = useSelector(getAssetById)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
-
+  const [downloader, setDownloader] = useState(false)
+    
   function startNewLine() {
     setLineBusId(null)
     setSelectedAssetIndexes([])
@@ -88,7 +90,7 @@ export default function App() {
         sketchMode={sketchMode}
         setSketchMode={setSketchMode}
       />
-      <UsersWindow />
+      <UsersWindow onDownloader={() => {setDownloader(true)}} />
       <OptionsWindow
         isWithDetails={isWithDetails}
         isWithTables={isWithTables}
@@ -99,7 +101,8 @@ export default function App() {
         sketchMode={sketchMode}
         overlayMode={overlayMode}
         setOverlayMode={setOverlayMode}
-      />
+	/>
+	  <DownloadManager open={downloader} onOk={(element) => {window.location = `/assets.dss?source=${element}`; setDownloader(false)}}  onCancel={() => {setDownloader(false)}}  onClose={()=> {setDownloader(false)}} />
       <DetailsWindow
         isWithDetails={isWithDetails}
         overlayMode={overlayMode}
