@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 }))
 */
 
-export default function AssetDetailsPanel(props) {
+export default function AssetAttributesPanel(props) {
   const {
     asset,
     sketchMode,
@@ -38,7 +38,6 @@ export default function AssetDetailsPanel(props) {
   const assetTypeName = assetType.name
 
   const isEditing = sketchMode !== SKETCH_MODE_VIEW
-  // const assetAttributes = isEditing ?
 
   return (
     <List component='div' disablePadding>
@@ -54,9 +53,9 @@ export default function AssetDetailsPanel(props) {
         </ListItemText>
       </ListItem>
 
-      <AssetAttributesListItem asset={asset} />
+      <AssetAttributesListItem asset={asset} isEditing={isEditing} />
 
-      <AssetConnectionsListItems asset={asset} />
+      <AssetConnectionsListItems asset={asset} isEditing={isEditing} />
     </List>
   )
 }
@@ -79,59 +78,37 @@ import {
 import {
   setAssetAttribute,
 } from '../actions'
-  const disableInput = sketchMode === SKETCH_MODE_VIEW
 
   function trackChange(attribute, value) {
     dispatch(setAssetAttribute(assetId, attribute, value))
   }
 
-      <VendorName
-        disableTextInput={disableInput}
-        typeId={assetTypeCode}
-        vendorName={vendorName}
-        trackChange={trackChange}
-        saveChange={() => {}}
-      />
-      <ProductName
-        disableTextInput={disableInput}
-        type={assetTypeCode}
-        vendorName={vendorName}
-        productName={productName}
-        trackChange={trackChange}
-        saveChange={() => {}}
-      />
-      <ProductVersion
-        disableTextInput={disableInput}
-        typeId={assetTypeCode}
-        vendorName={vendorName}
-        productName={productName}
-        productVersion={productVersion}
-        trackChange={trackChange}
-        saveChange={() => {}}
-      />
-      <AssetConnectionList
-        asset={asset}
-        disableInput={disableInput}
-      />
-
-
-function getAttributeFields(assetTypeAttributes, asset, isEditing) {
-
-  return assetTypeAttributes.map(([attributeKey, attributeType]) => {
-    const attributeByKey = asset.attributes || {}
-    const attributeValue = attributeByKey[attributeKey]
-    return (
-      <TextField
-        // className={clsx({poof: !attributeValue})}
-        fullWidth
-        key={attributeKey}
-        label={attributeKey}
-        value={attributeValue}
-        variant='filled'
-        disabled={!isEditing}
-      />
-    )
-  })
-
-}
+  <VendorName
+    disableTextInput={disableInput}
+    typeId={assetTypeCode}
+    vendorName={vendorName}
+    trackChange={trackChange}
+    saveChange={() => {}}
+  />
+  <ProductName
+    disableTextInput={disableInput}
+    type={assetTypeCode}
+    vendorName={vendorName}
+    productName={productName}
+    trackChange={trackChange}
+    saveChange={() => {}}
+  />
+  <ProductVersion
+    disableTextInput={disableInput}
+    typeId={assetTypeCode}
+    vendorName={vendorName}
+    productName={productName}
+    productVersion={productVersion}
+    trackChange={trackChange}
+    saveChange={() => {}}
+  />
+  <AssetConnectionList
+    asset={asset}
+    disableInput={disableInput}
+  />
 */
