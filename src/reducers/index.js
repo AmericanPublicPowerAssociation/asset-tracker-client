@@ -13,6 +13,7 @@ import mapViewState from './mapViewState'
 import assetTypeByCode from './assetTypeByCode'
 import assetsGeoJson from './assetsGeoJson'
 import assetById from './assetById'
+import deletedAssetIds from './deletedAssetIds'
 import focusingAssetId from './focusingAssetId'
 import focusingBusId from './focusingBusId'
 
@@ -22,6 +23,7 @@ const reduceHorizontally = combineReducers({
   assetTypeByCode,
   assetsGeoJson,
   assetById,
+  deletedAssetIds,
   focusingAssetId,
   focusingBusId,
   vendorNameSuggestions,

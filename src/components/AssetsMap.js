@@ -6,6 +6,7 @@ import { GeoJsonLayer } from '@deck.gl/layers'
 import { EditableGeoJsonLayer } from 'nebula.gl'
 import {
   // setFocusingBusId,
+  deleteAsset,
   setAsset,
   setAssetsGeoJson,
   setFocusingAssetId,
@@ -19,6 +20,7 @@ import {
   POINT_RADIUS_IN_METERS,
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_LINE,
+  SKETCH_MODE_EDIT_DELETE,
 } from '../constants'
 import {
   getAssetTypeCode,
@@ -70,6 +72,11 @@ export default function AssetsMap(props) {
 
   function handleAssetsGeoJsonClick(info, event) {
     const assetId = info.object.properties.id
+    if (assetId && sketchMode.startsWith(SKETCH_MODE_EDIT_DELETE)) {
+      dispatch(deleteAsset(assetId))
+      setSelectedAssetIndexes([])
+      return
+    }
     assetId && dispatch(setFocusingAssetId(assetId))
     if (sketchMode.startsWith(SKETCH_MODE_ADD) || info.isGuide) return
     const featureIndex = info.index
