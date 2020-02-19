@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import CollapsibleListItem from './CollapsibleListItem'
-import AttributeTextFields from './AttributeTextFields'
+import AttributeFields from './AttributeFields'
 import {
   isNotNull,
 } from '../macros'
@@ -18,6 +18,7 @@ export default function AssetAttributesListItem(props) {
   } = props
   const [isOpen, setIsOpen] = useState(false)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
+  const assetId = asset.id
   const assetTypeCode = asset.typeCode
   const attributeValueByKey = asset.attributes || {}
   const assetType = assetTypeByCode[assetTypeCode]
@@ -36,7 +37,9 @@ export default function AssetAttributesListItem(props) {
       isOpen={isOpen}
       setIsOpen={setIsOpen}
     >
-      <AttributeTextFields
+      <AttributeFields
+        assetId={assetId}
+        assetTypeCode={assetTypeCode}
         attributeKeyTypes={attributeKeyTypes}
         attributeValueByKey={attributeValueByKey}
         isEditing={isEditing}

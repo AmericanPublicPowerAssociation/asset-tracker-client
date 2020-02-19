@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import AttributeTextFields from './AttributeTextFields'
+import AttributeFields from './AttributeFields'
 import {
   isNotNull,
 } from '../macros'
@@ -26,7 +26,7 @@ export default function BusAttributesListItem(props) {
   }
 
   return (
-    <AttributeTextFields
+    <AttributeFields
       attributeKeyTypes={attributeKeyTypes}
       attributeValueByKey={attributeValueByKey}
       isEditing={isEditing}

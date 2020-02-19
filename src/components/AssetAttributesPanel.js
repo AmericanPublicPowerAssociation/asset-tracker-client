@@ -1,7 +1,5 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-// import { useDispatch } from 'react-redux'
-// import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
@@ -18,21 +16,13 @@ import {
   getAssetTypeByCode,
 } from '../selectors'
 
-/*
-const useStyles = makeStyles(theme => ({
-}))
-*/
-
 export default function AssetAttributesPanel(props) {
   const {
     asset,
     sketchMode,
   } = props
-  // const classes = useStyles()
-  // const dispatch = useDispatch()
   const assetTypeByCode = useSelector(getAssetTypeByCode)
 
-  // const assetId = asset.id
   const assetTypeCode = asset.typeCode
   const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
@@ -59,52 +49,3 @@ export default function AssetAttributesPanel(props) {
     </List>
   )
 }
-
-/*
-  let vendorName = ''
-  let productName = ''
-  let productVersion = ''
-  if (asset['attributes']) {
-    vendorName = asset.attributes['vendorName'] || ''
-    productName = asset.attributes['productName'] || ''
-    productVersion = asset.attributes['productVersion'] || ''
-  }
-
-import {
-  ProductName,
-  ProductVersion,
-  VendorName,
-} from 'asset-report-risks'
-import {
-  setAssetAttribute,
-} from '../actions'
-
-  function trackChange(attribute, value) {
-    dispatch(setAssetAttribute(assetId, attribute, value))
-  }
-
-  <VendorName
-    disableTextInput={disableInput}
-    typeId={assetTypeCode}
-    vendorName={vendorName}
-    trackChange={trackChange}
-    saveChange={() => {}}
-  />
-  <ProductName
-    disableTextInput={disableInput}
-    type={assetTypeCode}
-    vendorName={vendorName}
-    productName={productName}
-    trackChange={trackChange}
-    saveChange={() => {}}
-  />
-  <ProductVersion
-    disableTextInput={disableInput}
-    typeId={assetTypeCode}
-    vendorName={vendorName}
-    productName={productName}
-    productVersion={productVersion}
-    trackChange={trackChange}
-    saveChange={() => {}}
-  />
-*/
