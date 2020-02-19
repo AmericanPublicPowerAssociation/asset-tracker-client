@@ -33,7 +33,7 @@ export default function DownloadManager(props) {
     onOk
   } = props;
 
-  const [powerId, setPowerId] = useState(null)
+  const [powerId, setPowerId] = useState('')
   // const { head, data, name } = useSelector(getAssetTableData)
   const assetById = useSelector(getAssetById)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
