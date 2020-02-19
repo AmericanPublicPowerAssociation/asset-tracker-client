@@ -17,15 +17,24 @@ import {
   refreshRisks,
 } from 'asset-report-risks'
 import {
+  addAssetConnection,
   refreshAssets,
   updateAssets,
 } from '../actions'
 import {
   IS_WITH_DETAILS,
   IS_WITH_TABLES,
+  MINIMUM_BUS_ID_LENGTH,
   OVERLAY_MODE,
   SKETCH_MODE,
+  SKETCH_MODE_ADD_LINE,
 } from '../constants'
+import {
+  getRandomId,
+} from '../macros'
+import {
+  getSelectedAssetId,
+} from '../routines'
 import {
   getAssetById,
   getAssetsGeoJson,
@@ -45,10 +54,19 @@ export default function App() {
   const isScreenXS = useMediaQuery('(max-width:600px)')
   const assetById = useSelector(getAssetById)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
-    
-  function startNewLine() {
+
+  function changeSketchMode(newSketchMode, busId) {
+    if (sketchMode === SKETCH_MODE_ADD_LINE) {
+      const lineAssetId = getSelectedAssetId(selectedAssetIndexes, assetsGeoJson)
+      if (lineAssetId) {
+        dispatch(addAssetConnection(
+          lineAssetId,
+          busId || getRandomId(MINIMUM_BUS_ID_LENGTH)))
+      }
+    }
     setLineBusId(null)
     setSelectedAssetIndexes([])
+    setSketchMode(newSketchMode)
   }
 
   function saveAssets() {
@@ -67,29 +85,27 @@ export default function App() {
         sketchMode={sketchMode}
         selectedAssetIndexes={selectedAssetIndexes}
         lineBusId={lineBusId}
-        setSketchMode={setSketchMode}
+        changeSketchMode={changeSketchMode}
         setSelectedAssetIndexes={setSelectedAssetIndexes}
         setLineBusId={setLineBusId}
-        onAddLineEnd={startNewLine}
       />
       <SketchButton
         overlayMode={overlayMode}
         sketchMode={sketchMode}
-        setSketchMode={setSketchMode}
+        changeSketchMode={changeSketchMode}
         saveAssets={saveAssets}
       />
       <SketchModeToolbar
         sketchMode={sketchMode}
-        setSketchMode={setSketchMode}
+        changeSketchMode={changeSketchMode}
       />
       <SketchAddToolbar
         sketchMode={sketchMode}
-        setSketchMode={setSketchMode}
-        onSketchModeAddLine={startNewLine}
+        changeSketchMode={changeSketchMode}
       />
       <SketchEditToolbar
         sketchMode={sketchMode}
-        setSketchMode={setSketchMode}
+        changeSketchMode={changeSketchMode}
       />
       <ActionsWindow
         showImportExport={() => setIsImportExportOpen(true)}

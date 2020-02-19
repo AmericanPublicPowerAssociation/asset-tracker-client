@@ -16,7 +16,6 @@ import {
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
-    // top: theme.spacing(34),
     top: theme.spacing(22),
     left: theme.spacing(1),
   },
@@ -26,7 +25,7 @@ export default function SketchEditToolbar(props) {
   const classes = useStyles()
   const {
     sketchMode,
-    setSketchMode,
+    changeSketchMode,
   } = props
   const isEditing = sketchMode.startsWith('edit')
   return (
@@ -41,9 +40,7 @@ export default function SketchEditToolbar(props) {
             button
             classes={{selected: 'selected'}}
             selected={sketchMode === SKETCH_MODE_EDIT_MODIFY}
-            onClick={() => {
-              setSketchMode(SKETCH_MODE_EDIT_MODIFY)
-            }}
+            onClick={() => changeSketchMode(SKETCH_MODE_EDIT_MODIFY)}
           >
             <SvgIcon fontSize='large' component={ModifyIcon} />
           </ListItem>
@@ -54,9 +51,7 @@ export default function SketchEditToolbar(props) {
             button
             classes={{selected: 'selected'}}
             selected={sketchMode === SKETCH_MODE_EDIT_TRANSLATE}
-            onClick={() => {
-              setSketchMode(SKETCH_MODE_EDIT_TRANSLATE)
-            }}
+            onClick={() => changeSketchMode(SKETCH_MODE_EDIT_TRANSLATE)}
           >
             <SvgIcon fontSize='large' component={MoveIcon} />
           </ListItem>

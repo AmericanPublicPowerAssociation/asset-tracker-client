@@ -23,7 +23,7 @@ export default function SketchButton(props) {
   const {
     overlayMode,
     sketchMode,
-    setSketchMode,
+    changeSketchMode,
     saveAssets,
   } = props
   const isViewing = sketchMode === SKETCH_MODE_VIEW
@@ -33,7 +33,7 @@ export default function SketchButton(props) {
     if (!isViewing) {
       saveAssets()
     }
-    setSketchMode(isViewing ? 'sketch' : SKETCH_MODE_VIEW)
+    changeSketchMode(isViewing ? 'sketch' : SKETCH_MODE_VIEW)
   }
 
   return (

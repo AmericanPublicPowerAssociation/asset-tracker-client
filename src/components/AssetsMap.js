@@ -6,7 +6,6 @@ import { GeoJsonLayer } from '@deck.gl/layers'
 import { EditableGeoJsonLayer } from 'nebula.gl'
 import {
   // setFocusingBusId,
-  addAssetConnection,
   setAsset,
   setAssetsGeoJson,
   setFocusingAssetId,
@@ -47,10 +46,9 @@ export default function AssetsMap(props) {
     sketchMode,
     selectedAssetIndexes,
     lineBusId,
-    setSketchMode,
+    changeSketchMode,
     setSelectedAssetIndexes,
     setLineBusId,
-    onAddLineEnd,
   } = props
   const dispatch = useDispatch()
   const mapStyleName = useSelector(getMapStyleName)
@@ -100,7 +98,7 @@ export default function AssetsMap(props) {
         // Have subsequent clicks extend the same line
         setSelectedAssetIndexes(featureIndexes)
       } else {
-        setSketchMode(SKETCH_MODE_ADD)
+        changeSketchMode(SKETCH_MODE_ADD)
       }
       dispatch(setFocusingAssetId(assetId))  // Show details for the new asset
     }
@@ -112,17 +110,11 @@ export default function AssetsMap(props) {
     const assetId = assetIdByBusId[busId]
 
     if (sketchMode === SKETCH_MODE_ADD_LINE) {
-      // If we already started the line,
+      setLineBusId(busId)
+      // If we already started a line,
       if (selectedAssetIndexes.length) {
-        // Save the connection
-        const lineFeature = assetsGeoJson.features[selectedAssetIndexes[0]]
-        const lineAssetId = lineFeature.properties.id
-        dispatch(addAssetConnection(lineAssetId, busId))
         // End the line
-        onAddLineEnd()
-        setSketchMode(SKETCH_MODE_ADD)
-      } else {
-        setLineBusId(busId)
+        changeSketchMode(SKETCH_MODE_ADD, busId)
       }
     }
 

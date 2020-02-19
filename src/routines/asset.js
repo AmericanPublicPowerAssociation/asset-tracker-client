@@ -65,3 +65,9 @@ export function getAssetName(assetType, assetId) {
 export function getAttributeLabel(attributeKey) {
   return expandCamelCase(attributeKey).replace('percent', '%')
 }
+
+export function getSelectedAssetId(selectedAssetIndexes, assetsGeoJson) {
+  const selectedAssetIndex = selectedAssetIndexes[0]
+  const feature = assetsGeoJson.features[selectedAssetIndex]
+  return feature && feature.properties.id
+}
