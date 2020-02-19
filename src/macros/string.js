@@ -9,3 +9,7 @@ export function getEnding(count) {
 export function getCountDescription(count, description) {
   return `${count} ${description}${getEnding(count)}`
 }
+
+export function expandCamelCase(text) {
+  return text.replace(/([A-Z])/g, ' $1').toLowerCase()
+}

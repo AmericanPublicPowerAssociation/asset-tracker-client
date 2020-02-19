@@ -1,5 +1,8 @@
 import React from 'react'
 import TextField from '@material-ui/core/TextField'
+import {
+  getAttributeLabel,
+} from '../routines'
 
 export default function AttributeTextFields(props) {
   const {
@@ -15,7 +18,7 @@ export default function AttributeTextFields(props) {
       fullWidth
       variant='filled'
       key={attributeKey}
-      label={attributeKey}
+      label={getAttributeLabel(attributeKey)}
       value={attributeValueByKey[attributeKey]}
       disabled={!isEditing}
     />

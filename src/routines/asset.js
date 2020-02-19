@@ -12,6 +12,7 @@ import {
   SKETCH_MODE_ADD_TRANSFORMER,
 } from '../constants'
 import {
+  expandCamelCase,
   getRandomId,
 } from '../macros'
 
@@ -59,4 +60,8 @@ export function getAssetName(assetType, assetId) {
   const abbreviatedAssetId = assetId.substring(
     0, ABBREVIATED_ASSET_ID_LENGTH)
   return `${assetType.name} ${abbreviatedAssetId}`
+}
+
+export function getAttributeLabel(attributeKey) {
+  return expandCamelCase(attributeKey).replace('percent', '%')
 }
