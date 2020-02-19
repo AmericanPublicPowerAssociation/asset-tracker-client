@@ -19,14 +19,14 @@ export default function BusConnectionsList(props) {
   const assetById = useSelector(getAssetById)
   return (
     <List component='div' disablePadding>
-    {connectedAssetIds.map(connectedAssetId => {
+    {connectedAssetIds.map((connectedAssetId, connectedAssetIdIndex) => {
       const connectedAsset = assetById[connectedAssetId]
       const connectedAssetTypeCode = connectedAsset.typeCode
       const connectedAssetType = assetTypeByCode[connectedAssetTypeCode]
       const connectedAssetTypeName = connectedAssetType.name
       const connectedAssetName = connectedAsset.name
       return (
-        <ListItem component='div' disableGutters>
+        <ListItem disableGutters component='div' key={connectedAssetIdIndex}>
           <Tooltip title={connectedAssetTypeName} placement='left'>
             <ListItemIcon>
               <AssetTypeSvgIcon assetTypeCode={connectedAssetTypeCode} />

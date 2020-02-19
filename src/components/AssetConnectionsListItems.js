@@ -44,6 +44,7 @@ export default function AssetConnectionsListItems(props) {
 
     return connectedAssetCount > 0 ?
       <CollapsibleListItem
+        key={connectionIndex}
         title={title}
         description={description}
         isOpen={isOpen}
@@ -56,7 +57,11 @@ export default function AssetConnectionsListItems(props) {
         />
         <BusConnectionsList connectedAssetIds={connectedAssetIds} />
       </CollapsibleListItem> :
-      <ListItem disableGutters component='div'>
+      <ListItem
+        disableGutters
+        component='div'
+        key={connectionIndex}
+      >
         <ListItemText primary={title} secondary={description} />
       </ListItem>
   })

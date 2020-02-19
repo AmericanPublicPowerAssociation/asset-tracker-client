@@ -11,7 +11,7 @@ import {
 export default function AssetDialogList({searchString}) {
   const assetById = useSelector(getAssetById)
   const [showDetails, setShowDetails] = useState(false)
-  const [showAssetId, setShowAssetID] = useState("")
+  const [showAssetId, setShowAssetID] = useState('')
 
   const handleShowDetailsDialog = (assetId) => {
     setShowAssetID(assetId)
@@ -19,7 +19,7 @@ export default function AssetDialogList({searchString}) {
   }
   
   const handleCloseDetailsDialog = () => {
-    setShowAssetID("")
+    setShowAssetID('')
     setShowDetails(false)
   }
 
@@ -27,10 +27,9 @@ export default function AssetDialogList({searchString}) {
     <List>
       {
         Object.keys(assetById).filter( (id) => {
-            const asset = assetById[id]
-            return asset.name.includes(searchString)
-          })
-          .map( assetKey => (
+          const asset = assetById[id]
+          return asset.name.includes(searchString)
+        }).map(assetKey => (
           <AssetDialogListItem 
             key={`asset-list-${assetKey}`}
             asset={assetById[assetKey]}

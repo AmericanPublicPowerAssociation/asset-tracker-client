@@ -24,8 +24,9 @@ export default function AttributeFields(props) {
   return attributeKeyTypes.map(([
     attributeKey,
     attributeType,
-  ]) => (
+  ], attributeKeyTypeIndex) => (
     <AttributeField
+      key={attributeKeyTypeIndex}
       assetId={assetId}
       assetTypeCode={assetTypeCode}
       attributeType={attributeType}
