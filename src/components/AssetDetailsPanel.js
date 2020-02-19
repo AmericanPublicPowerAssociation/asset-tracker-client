@@ -17,6 +17,7 @@ import TaskConnectionList from './TaskConnectionList'
 
 import {
   ASSET_TYPE_BY_CODE,
+  ASSET_TYPE_CODE_SUBSTATION,
   SKETCH_MODE_VIEW,
 } from '../constants'
 import {
@@ -28,6 +29,7 @@ import {
   setAssetValue,
   setAssetAttribute,
 } from '../actions'
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -104,30 +106,60 @@ export default function AssetDetailsPanel(props) {
         in={isWithExpandedDetails}
         // timeout='auto'
       >
-      <VendorName
-            disableTextInput={disableInput}
-            typeId={assetTypeCode}
-            vendorName={vendorName}
-            trackChange={trackChange}
-            saveChange={() => {}}
-          />
-          <ProductName
-            disableTextInput={disableInput}
-            type={assetTypeCode}
-            vendorName={vendorName}
-            productName={productName}
-            trackChange={trackChange}
-            saveChange={() => {}}
-          />
-          <ProductVersion
-            disableTextInput={disableInput}
-            typeId={assetTypeCode}
-            vendorName={vendorName}
-            productName={productName}
-            productVersion={productVersion}
-            trackChange={trackChange}
-            saveChange={() => {}}
-          />
+        <ListItem
+          disableGutters
+          component='div'
+          onClick={
+            () => setIsWithExpandedDetails(!isWithExpandedDetails)
+          }
+        >
+          <Tooltip title={assetTypeName} placement='left'>
+            <ListItemIcon>
+              <AssetTypeSvgIcon
+                assetTypeCode={assetTypeCode}
+              />
+            </ListItemIcon>
+          </Tooltip>
+          {assetNameComponent}
+          {arrowComponent}
+        </ListItem>
+      </List>
+      <div className={classes.collapseInfo}>
+        <Collapse
+          in={isWithExpandedDetails}
+          // timeout='auto'
+        >
+          {
+          assetTypeCode !== ASSET_TYPE_CODE_SUBSTATION &&
+          (
+          <>
+            <VendorName
+              disableTextInput={disableInput}
+              typeId={assetTypeCode}
+              vendorName={vendorName}
+              trackChange={trackChange}
+              saveChange={() => {}}
+            />
+            <ProductName
+              disableTextInput={disableInput}
+              type={assetTypeCode}
+              vendorName={vendorName}
+              productName={productName}
+              trackChange={trackChange}
+              saveChange={() => {}}
+            />
+            <ProductVersion
+              disableTextInput={disableInput}
+              typeId={assetTypeCode}
+              vendorName={vendorName}
+              productName={productName}
+              productVersion={productVersion}
+              trackChange={trackChange}
+              saveChange={() => {}}
+            />
+          </>
+          )
+          }
           <AssetConnectionList
             asset={asset}
             disableInput={disableInput}

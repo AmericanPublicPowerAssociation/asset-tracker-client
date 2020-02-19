@@ -6,6 +6,9 @@ import RadioGroup from '@material-ui/core/RadioGroup'
 import Radio from '@material-ui/core/Radio'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import {
+  getRisks,
+} from 'asset-report-risks'
+import {
   OVERLAY_MODE_ASSETS,
   OVERLAY_MODE_RISKS,
   OVERLAY_MODE_TASKS,
@@ -13,6 +16,7 @@ import {
 } from '../constants'
 import {
   getColors,
+  getAssetByIdLength,
 } from '../selectors'
 
 const useStyles = makeStyles(theme => ({
@@ -32,14 +36,15 @@ export default function OverlaysWindow(props) {
   } = props
 
   const colors = useSelector(getColors)
+	const visibleRisks = useSelector(getRisks)
 
   const isViewing = sketchMode === SKETCH_MODE_VIEW
 
   const radioColor = colors.active
 
-  const visibleAssetCount = 10
+  const visibleAssetCount = useSelector(getAssetByIdLength)
   const visibleTaskCount = 5
-  const visibleRiskCount = 2
+  const visibleRiskCount = visibleRisks.length
 
   const assetsOverlayLabel = `Assets (${visibleAssetCount})`
   const tasksOverlayLabel = `Tasks (${visibleTaskCount})`

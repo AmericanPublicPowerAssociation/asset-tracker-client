@@ -11,7 +11,8 @@ import Input from '@material-ui/core/Input'
 import Typography from "@material-ui/core/Typography"
 
 import {
-  getAssetTableData,
+  getAssetById,
+  getAssetTypeByCode,
 } from '../selectors'
 
 
@@ -23,12 +24,24 @@ const DownloadManager = (props) => {
 	onOk
     } = props;
 
-    const { data } = useSelector(getAssetTableData)
-    const [powerId, setPowerId] = useState('')
-
-    if (data !== null && data !== undefined && data.length > 0 && powerId === '') {
-	setPowerId(data[0].id)
-    }
+  const [powerId, setPowerId] = useState(null)
+  // const { head, data, name } = useSelector(getAssetTableData)
+  const assetById = useSelector(getAssetById)
+  const assetTypeByCode = useSelector(getAssetTypeByCode)
+  const data = Object.values(assetById).map(
+    asset => {
+      const assetType = asset['typeCode']
+      const attributes = asset['attributes']
+      const vendorName = attributes ? attributes['vendorName'] : ''
+      return {
+        ...asset,
+        vendorName,
+        type: assetTypeByCode[assetType]['name'],
+      }
+  })
+  if (data !== null && data !== undefined && data.length > 0 && powerId === '') {
+    setPowerId(data[0].id)
+  }
     
 	
     return (<Dialog

@@ -12,8 +12,8 @@ import CloseIcon from '@material-ui/icons/Close'
 import Slide from '@material-ui/core/Slide'
 import InputBase from '@material-ui/core/InputBase'
 import AssetDialogList from './AssetDialogList'
-import TaskList from './TaskList'
-import RiskList from './RiskList'
+import TasksList from './TasksList'
+import RisksList from './RisksList'
 
 const useStyles = makeStyles(theme => ({
   offset: theme.mixins.toolbar,
@@ -81,9 +81,9 @@ export default function TablesDialog(props) {
     if (displayTableIndex === 0)
       return <AssetDialogList searchString={searchString}/>
     else if (displayTableIndex === 1)
-      return <TaskList /> 
+      return <TasksList />
     else if (displayTableIndex === 2)
-      return <RiskList />
+      return <RisksList />
   }
 
   const onChangeSearchValue = (e) => {
