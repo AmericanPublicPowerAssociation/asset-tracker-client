@@ -3,9 +3,7 @@ import { useDispatch } from 'react-redux'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import TextField from '@material-ui/core/TextField'
 import Collapse from '@material-ui/core/Collapse'
-import Typography from '@material-ui/core/Typography'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import Chip from '@material-ui/core/Chip'
@@ -14,19 +12,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
-import Select from '@material-ui/core/Select'
 import NativeSelect from '@material-ui/core/NativeSelect'
-import FormGroup from '@material-ui/core/FormGroup'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Switch from '@material-ui/core/Switch'
-import Button from '@material-ui/core/Button'
-import CloudUploadIcon from '@material-ui/icons/CloudUpload'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogTitle from '@material-ui/core/DialogTitle'
 import {
-  setAssetConnectionAttribute,
   setTaskPriority,
   setTaskStatus
 } from '../actions'
@@ -50,7 +37,6 @@ export default function TasksList(props) {
   const classes = useStyles()
   const {
     asset,
-    disableInput,
     tasks
   } = props
   const assetId = asset.id
@@ -77,7 +63,6 @@ function TaskItem(props) {
   ] = useState(false)
   const {
     itemKey,
-    assetId,
     task
   } = props
   const {
@@ -104,14 +89,6 @@ function TaskItem(props) {
     <ExpandLess /> :
     <ExpandMore />
   )
-
-  const handleChange = (e, key) => {
-      const value = e.target.value
-  }
-
-  const getKeyLabel = (key) => {
-    return key.replace( /([A-Z])/g, ' $1' ).toLowerCase()
-  }
 
   const priorityColor  = {
     1: 'default',

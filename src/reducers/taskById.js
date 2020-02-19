@@ -1,4 +1,3 @@
-import produce from 'immer'
 import {
   SET_TASKS,
 } from '../constants'
