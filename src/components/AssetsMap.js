@@ -18,6 +18,7 @@ import {
   MAP_STYLE_BY_NAME,
   PICKING_RADIUS_IN_PIXELS,
   POINT_RADIUS_IN_METERS,
+  SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_LINE,
 } from '../constants'
 import {
@@ -46,6 +47,7 @@ export default function AssetsMap(props) {
     sketchMode,
     selectedAssetIndexes,
     lineBusId,
+    setSketchMode,
     setSelectedAssetIndexes,
     setLineBusId,
     onAddLineEnd,
@@ -71,7 +73,7 @@ export default function AssetsMap(props) {
   function handleAssetsGeoJsonClick(info, event) {
     const assetId = info.object.properties.id
     assetId && dispatch(setFocusingAssetId(assetId))
-    if (sketchMode.startsWith('add') || info.isGuide) return
+    if (sketchMode.startsWith(SKETCH_MODE_ADD) || info.isGuide) return
     const featureIndex = info.index
     setSelectedAssetIndexes([featureIndex])
   }
@@ -97,6 +99,8 @@ export default function AssetsMap(props) {
       if (sketchMode === SKETCH_MODE_ADD_LINE) {
         // Have subsequent clicks extend the same line
         setSelectedAssetIndexes(featureIndexes)
+      } else {
+        setSketchMode(SKETCH_MODE_ADD)
       }
       dispatch(setFocusingAssetId(assetId))  // Show details for the new asset
     }
@@ -116,6 +120,7 @@ export default function AssetsMap(props) {
         dispatch(addAssetConnection(lineAssetId, busId))
         // End the line
         onAddLineEnd()
+        setSketchMode(SKETCH_MODE_ADD)
       } else {
         setLineBusId(busId)
       }
@@ -136,15 +141,12 @@ export default function AssetsMap(props) {
     selectedFeatureIndexes: selectedAssetIndexes,
     getRadius: POINT_RADIUS_IN_METERS,
     getLineWidth: LINE_WIDTH_IN_METERS,
-    // getFillColor: colors.asset,
     getFillColor: (feature, isSelected) => {
       return isSelected ? colors.assetSelect : colors.asset
     },
-    // getLineColor: colors.asset,
     getLineColor: (feature, isSelected) => {
       return isSelected ? colors.assetSelect : colors.asset
     },
-    // onHover: (info, event) => console.log(info, event),
     onClick: handleAssetsGeoJsonClick,
     onEdit: handleAssetsGeoJsonEdit,
   }))
@@ -158,7 +160,6 @@ export default function AssetsMap(props) {
     highlightColor: colors.busHighlight,
     getRadius: BUS_RADIUS_IN_METERS,
     getFillColor: colors.bus,
-    // onHover: (info, event) => console.log(info, event),
     onClick: handleBusesGeoJsonClick,
   }))
 

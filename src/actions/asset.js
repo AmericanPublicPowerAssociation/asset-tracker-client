@@ -27,10 +27,7 @@ export function refreshAssets() {
 export function updateAssets(assets, assetsGeoJson) {
   return {
     type: UPDATE_ASSETS,
-    payload: {
-      assets,
-      assetsGeoJson,
-    }
+    payload: {assets, assetsGeoJson},
   }
 }
 

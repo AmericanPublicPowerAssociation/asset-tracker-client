@@ -16,7 +16,7 @@ export default function RisksTable(props) {
   useEffect(() => {
     const { sortKey, order } = sortedRisks
     dispatch(refreshRisks({sortKey, order}))
-  }, [])
+  }, [dispatch, sortedRisks])
 
   return (
 		<Risks

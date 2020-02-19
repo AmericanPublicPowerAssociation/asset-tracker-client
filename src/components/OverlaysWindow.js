@@ -67,11 +67,10 @@ export default function OverlaysWindow(props) {
     }, radioColor)}>
 
     {/* TODO: Show counts for what is visible in map after applying filters */}
-
-    <RadioGroup
-      value={overlayMode}
-      onChange={handleChange}
-    >
+      <RadioGroup
+        value={overlayMode}
+        onChange={handleChange}
+      >
         <FormControlLabel
           value={OVERLAY_MODE_ASSETS}
           label={assetsOverlayLabel}
@@ -88,7 +87,6 @@ export default function OverlaysWindow(props) {
           control={RadioControl}
         />
       </RadioGroup>
-
     </div>
   )
 }

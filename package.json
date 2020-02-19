@@ -9,7 +9,7 @@
     "clsx": "^1.0.4",
     "deck.gl": "^8.0.12",
     "asset-report-risks": "file:../asset-report-risks/client",
-    "downshift": "^3.3.5",
+    "downshift": "^5.0.3",
     "immutable": "^4.0.0-rc.12",
     "dotenv": "^8.2.0",
     "immer": "^5.3.2",

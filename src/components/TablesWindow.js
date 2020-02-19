@@ -9,14 +9,11 @@ const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
     left: theme.spacing(1),
+    right: theme.spacing(1),
+    height: '33%',
     bottom: theme.spacing(5),
-    right: theme.spacing(34),
     padding: theme.spacing(1),
-    overflow: 'hidden',
-  },
-  table: {
-    height: theme.spacing(34),
-    overflowY: 'auto',
+    overflow: 'auto',
   },
 }))
 
@@ -26,6 +23,7 @@ export default function TablesWindow(props) {
     overlayMode,
     setSelectedAssetIndexes,
   } =  props
+
   const table = {
     assets: <AssetsTable
       setSelectedAssetIndexes={setSelectedAssetIndexes}
@@ -35,14 +33,11 @@ export default function TablesWindow(props) {
   }[overlayMode]
 
   return (
-    <Paper
-      className={classes.root}>
-      <div className={classes.table}>
-        {/* <MyTable {...tableProps} /> */}
-        {/* TODO: Show only what is visible in the map */}
-        {/* TODO: Implement paging */}
-        { table }
-      </div>
+    <Paper className={classes.root}>
+      {/* <MyTable {...tableProps} /> */}
+      {/* TODO: Show only what is visible in the map */}
+      {/* TODO: Implement paging */}
+      { table }
     </Paper>
   )
 }

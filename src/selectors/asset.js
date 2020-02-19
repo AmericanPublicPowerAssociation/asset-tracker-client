@@ -41,6 +41,25 @@ export const getAssetIdByBusId = createSelector([
   return assetIdByBusId
 })
 
+export const getAssetIdsByBusId = createSelector([
+  getAssetById,
+], (
+  assetById,
+) => {
+  const assetIdsByBusId = {}
+
+  for (const [assetId, asset] of Object.entries(assetById)) {
+    const assetConnections = asset.connections || []
+    for (const connection of assetConnections) {
+      const busId = connection.busId
+      const assetIds = assetIdsByBusId[busId] || []
+      assetIdsByBusId[busId] = [...assetIds, assetId]
+    }
+  }
+
+  return assetIdsByBusId
+})
+
 export const getFocusingAsset = createSelector([
   getFocusingAssetId,
   getAssetById,

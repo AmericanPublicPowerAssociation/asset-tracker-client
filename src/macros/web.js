@@ -6,7 +6,6 @@ import {
   logError,
 } from '../actions'
 
-
 export function* fetchSafely(url, options, callbacks) {
   const response = yield call(fetch, url, options)
   const status = response.status
