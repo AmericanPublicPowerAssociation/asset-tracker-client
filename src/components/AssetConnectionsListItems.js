@@ -1,12 +1,17 @@
 import React, { useState } from 'react'
 import produce from 'immer'
+import List from '@material-ui/core/List'
 import CollapsibleListItem from './CollapsibleListItem'
+import BusAttributesListItem from './BusAttributesListItem'
+import BusConnectionsListItems from './BusConnectionsListItems'
 
 export default function AssetConnectionsListItems(props) {
   const {
     asset,
+    isEditing,
   } = props
   const [isOpenByConnectionIndex, setIsOpenByConnectionIndex] = useState({})
+  const assetId = asset.id
   const connections = asset.connections || []
 
   return connections.map((connection, connectionIndex) => {
@@ -27,7 +32,17 @@ export default function AssetConnectionsListItems(props) {
         isOpen={isOpen}
         setIsOpen={setIsOpen}
       >
-        Bus Details
+        <BusAttributesListItem
+          assetTypeCode={asset.typeCode}
+          connection={connection}
+          isEditing={isEditing}
+        />
+        <List component='div' disablePadding>
+          <BusConnectionsListItems
+            assetId={assetId}
+            busId={connection.busId}
+          />
+        </List>
       </CollapsibleListItem>
     )
   })

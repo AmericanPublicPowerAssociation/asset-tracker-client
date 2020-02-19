@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import TextField from '@material-ui/core/TextField'
 import CollapsibleListItem from './CollapsibleListItem'
+import AttributeTextFields from './AttributeTextFields'
 import {
   isNotNull,
 } from '../macros'
@@ -23,29 +23,24 @@ export default function AssetAttributesListItem(props) {
   const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
 
-  let assetTypeAttributes = assetType.assetAttributes || []
+  let attributeKeyTypes = assetType.assetAttributes || []
   if (!isEditing) {
-    assetTypeAttributes = assetTypeAttributes.filter(([
+    attributeKeyTypes = attributeKeyTypes.filter(([
       attributeKey, attributeType,
     ]) => isNotNull(attributeValueByKey[attributeKey]))
   }
 
-  return (assetTypeAttributes.length > 0 ?
+  return (attributeKeyTypes.length > 0 ?
     <CollapsibleListItem
       title={assetTypeName}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
     >
-    {assetTypeAttributes.map(([attributeKey, attributeType]) => (
-      <TextField
-        fullWidth
-        variant='filled'
-        key={attributeKey}
-        label={attributeKey}
-        value={attributeValueByKey[attributeKey]}
-        disabled={!isEditing}
+      <AttributeTextFields
+        attributeKeyTypes={attributeKeyTypes}
+        attributeValueByKey={attributeValueByKey}
+        isEditing={isEditing}
       />
-    ))}
     </CollapsibleListItem> :
     <ListItem disableGutters component='div'>
       <ListItemText primary={assetTypeName} />

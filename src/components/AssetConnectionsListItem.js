@@ -1,37 +1,7 @@
 /*
-import { useDispatch } from 'react-redux'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
-import TextField from '@material-ui/core/TextField'
-import Collapse from '@material-ui/core/Collapse'
-import Typography from '@material-ui/core/Typography'
-import ExpandMore from '@material-ui/icons/ExpandMore'
-import ExpandLess from '@material-ui/icons/ExpandLess'
 import {
   setAssetConnectionAttribute
 } from '../actions'
-
-export default function AssetConnectionList(props) {
-  const {
-    asset,
-    disableInput,
-  } = props
-  const assetId = asset.id
-
-  return (
-      { connections.map( (conn, index) => (
-        <AssetConnectionItem
-          key={`asset-connection-item-${assetId}-${conn.busId}`}
-          itemKey={`asset-connection-item-${assetId}`}
-          connection={conn}
-          connectionIndex={index}
-          assetId={assetId}
-          disableInput={disableInput}
-        />
-      ))} 
-  )
-}
 
 function AssetConnectionItem(props) {
   const {
@@ -46,8 +16,6 @@ function AssetConnectionItem(props) {
     attributes,
   } = connection
 
-  const dispatch = useDispatch()
-
   const handleChange = (e, key) => {
     const value = e.target.value
     dispatch(setAssetConnectionAttribute(assetId, connectionIndex, key, value)
@@ -58,44 +26,16 @@ function AssetConnectionItem(props) {
     return key.replace( /([A-Z])/g, ' $1' ).toLowerCase()
   }
 
-  return (
-    <>
-      <ListItem
-        key={`${itemKey}-li`}
-        disableGutters
-        onClick={ () => setIsWithExpandConnect(!isWithExpandConnect)}>
-        <ListItemText primary={`Bus ${connectionIndex}`}/>
-        { arrowComponent } 
-      </ListItem>
+  !attributes ?
+  <Typography display='block' align='center' variant='caption'>
+    Attributes are not available
+  </Typography> :
 
-      <Collapse key={`${itemKey}-collapse`} in={isWithExpandConnect}>
-        {
-          !attributes ?
-          <Typography display='block' align='center' variant='caption'>
-            Attributes are not available
-          </Typography> :
-
-          <List>
-            {
-              Object.keys(attributes).map( key => (
-                <ListItem
-                  disableGutters
-                  key={`${itemKey}-atttributes-${key}`}
-                >
-                  <TextField
-                    fullWidth
-                    label={getKeyLabel(key)}
-                    value={attributes[key]}
-                    onChange={ (e) => handleChange(e, key)}
-                    disabled={disableInput}
-                  />
-                </ListItem>
-              ))
-            }
-          </List>
-        }
-      </Collapse>
-    </>
-  )
-}
+  <TextField
+    fullWidth
+    label={getKeyLabel(key)}
+    value={attributes[key]}
+    onChange={ (e) => handleChange(e, key)}
+    disabled={disableInput}
+  />
 */
