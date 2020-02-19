@@ -136,15 +136,12 @@ export default function AssetsMap(props) {
     selectedFeatureIndexes: selectedAssetIndexes,
     getRadius: POINT_RADIUS_IN_METERS,
     getLineWidth: LINE_WIDTH_IN_METERS,
-    // getFillColor: colors.asset,
     getFillColor: (feature, isSelected) => {
       return isSelected ? colors.assetSelect : colors.asset
     },
-    // getLineColor: colors.asset,
     getLineColor: (feature, isSelected) => {
       return isSelected ? colors.assetSelect : colors.asset
     },
-    // onHover: (info, event) => console.log(info, event),
     onClick: handleAssetsGeoJsonClick,
     onEdit: handleAssetsGeoJsonEdit,
   }))
@@ -158,7 +155,6 @@ export default function AssetsMap(props) {
     highlightColor: colors.busHighlight,
     getRadius: BUS_RADIUS_IN_METERS,
     getFillColor: colors.bus,
-    // onHover: (info, event) => console.log(info, event),
     onClick: handleBusesGeoJsonClick,
   }))
 

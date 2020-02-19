@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
     position: 'fixed',
     left: theme.spacing(1),
     right: theme.spacing(1),
-    height: theme.spacing(36),
+    height: '33%',
     bottom: theme.spacing(5),
     padding: theme.spacing(1),
     overflow: 'auto',
