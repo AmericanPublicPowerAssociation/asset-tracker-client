@@ -14,3 +14,6 @@
   color: white !important;
   background-color: #ff4081 !important;
 }
+.capitalized {
+  text-transform: capitalize;
+}

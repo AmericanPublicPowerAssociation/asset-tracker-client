@@ -3,11 +3,6 @@ import clsx from 'clsx'
 import { Map } from 'immutable'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
-import {
-  ProductName,
-  ProductVersion,
-  VendorName,
-} from 'asset-report-risks'
 import AssetName from './AssetName'
 import AssetTasks from './AssetTasks'
 import AssetLocation from '../containers/AssetLocation'

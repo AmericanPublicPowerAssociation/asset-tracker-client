@@ -21,10 +21,11 @@ const useStyles = makeStyles(theme => ({
     position: 'fixed',
     top: theme.spacing(6),
     right: theme.spacing(1),
-    width: theme.spacing(30),
+    width: theme.spacing(32),
     bottom: theme.spacing(5),
     padding: theme.spacing(1),
     overflowY: 'auto',
+    overflowX: 'hidden',
   },
 }))
 

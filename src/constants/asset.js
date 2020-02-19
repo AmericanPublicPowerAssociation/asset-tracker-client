@@ -9,7 +9,7 @@ import {
 } from '../images/assets/substation-16.svg'
 import {
   ReactComponent as MeterIcon
-} from '../images/assets/meter-light-16.svg'
+} from '../images/assets/meter-white-16.svg'
 
 export const MINIMUM_ASSET_ID_LENGTH = 16
 export const ABBREVIATED_ASSET_ID_LENGTH = 7

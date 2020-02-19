@@ -1,17 +1,3 @@
-import React, { useState, useEffect } from 'react'
-import AssetsMap from './AssetsMap'
-import SketchButton from './SketchButton'
-import SketchModeToolbar from './SketchModeToolbar'
-import SketchAssetToolbar from './SketchAssetToolbar'
-import SketchEditToolbar from './SketchEditToolbar'
-import OptionsWindow from './OptionsWindow'
-import OverlaysWindow from './OverlaysWindow'
-import FiltersWindow from './FiltersWindow'
-import RowsWindow from './RowsWindow'
-import DetailsWindow from './DetailsWindow'
-import HintsWindow from './HintsWindow'
-import CenterBottomWindow from './CenterBottomWindow'
-
 export default function App() {
   const [history, setHistory] = useState([])
   const [historyIndex, setHistoryIndex] = useState(-1)
