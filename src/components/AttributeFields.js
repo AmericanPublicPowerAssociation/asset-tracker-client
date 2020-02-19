@@ -56,6 +56,7 @@ function AttributeField(props) {
       typeCode={assetTypeCode}
       vendorName={attributeValueByKey.vendorName || null}
       disabled={!isEditing}
+      TextFieldProps={{ fullWidth: true, variant: 'filled' }}
       trackChange={trackChange}
     />
   } else if (attributeType === 'productName') {
@@ -64,6 +65,7 @@ function AttributeField(props) {
       vendorName={attributeValueByKey.vendorName || null}
       productName={attributeValueByKey.productName || null}
       disabled={!isEditing}
+      TextFieldProps={{ fullWidth: true, variant: 'filled' }}
       trackChange={trackChange}
     />
   } else if (attributeType === 'productVersion') {
@@ -73,6 +75,7 @@ function AttributeField(props) {
       productName={attributeValueByKey.productName || null}
       productVersion={attributeValueByKey.productVersion || null}
       disabled={!isEditing}
+      TextFieldProps={{ fullWidth: true, variant: 'filled' }}
       trackChange={trackChange}
     />
   } else {
@@ -83,6 +86,7 @@ function AttributeField(props) {
       label={getAttributeLabel(attributeKey)}
       value={attributeValueByKey[attributeKey]}
       disabled={!isEditing}
+      InputLabelProps={{ classes: { root: 'capitalized' } }}
       onChange={e => trackChange(attributeKey, e.target.value)}
     />
   }
