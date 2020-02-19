@@ -10,6 +10,8 @@ import {
   SET_ASSET_VALUE,
   SET_FOCUSING_ASSET_ID,
   UPDATE_ASSETS,
+  REFRESH_TASKS,
+  SET_TASKS
 } from '../constants'
 
 export function saveAssets() {
@@ -85,5 +87,18 @@ export function setFocusingAssetId(id) {
   return {
     type: SET_FOCUSING_ASSET_ID,
     payload: id,
+  }
+}
+
+export function refreshTasks() {
+  return {
+    type: REFRESH_TASKS
+  }
+}
+
+export function setTasks(assets) {
+  return {
+    type: SET_TASKS,
+    payload: assets
   }
 }

@@ -5,10 +5,12 @@ import {
 } from 'redux-saga/effects'
 import {
   setAssets,
+  setTasks,
 } from '../actions'
 import {
   REFRESH_ASSETS,
   UPDATE_ASSETS,
+  REFRESH_TASKS
 } from '../constants'
 import {
   fetchSafely,
@@ -36,6 +38,19 @@ export function* watchUpdateAssets() {
   })
 }
 
-function* resetAssets(payload) {
+export function* watchAssetTasks() {
+  yield takeLatest(REFRESH_TASKS, function* (action) {
+    const url = '/tasks.json'
+    yield fetchSafely(url, {}, {
+      on200: resetTasks,
+    })
+  })
+}
+
+export function* resetTasks(payload) {
+  yield put(setTasks(payload))
+}
+
+export function* resetAssets(payload) {
   yield put(setAssets(payload))
 }

@@ -6,6 +6,8 @@ import {
 export const getAssetTypeByCode = state => state.assetTypeByCode
 export const getAssetById = state => state.assetById
 export const getFocusingAssetId = state => state.focusingAssetId
+export const getTaskById = state => state.taskById
+
 
 export const getAssetByIdLength = createSelector([
   getAssetById,
@@ -48,3 +50,12 @@ export const getFocusingAsset = createSelector([
 ) => {
   return assetById[focusingAssetId]
 })
+
+
+export const getTasksForFocusedAsset = createSelector([
+  getFocusingAssetId,
+  getTaskById
+], (
+  focusingAssetId,
+  taskById,
+) => Object.keys(taskById).filter((task) => task.assetId === focusingAssetId))

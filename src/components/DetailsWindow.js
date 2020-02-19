@@ -14,6 +14,7 @@ import {
 } from '../constants'
 import {
   getFocusingAsset,
+  getTasksForFocusedAsset,
 } from '../selectors'
 
 const useStyles = makeStyles(theme => ({
@@ -34,10 +35,10 @@ export default function DetailsWindow(props) {
     isWithDetails,
     overlayMode,
     sketchMode,
-    overlayMode
   } = props
   const focusingAsset = useSelector(getFocusingAsset)
-
+  const tasksForFocusingAsset = useSelector(getTasksForFocusedAsset)
+  
   const DetailsPanel = {
     [OVERLAY_MODE_ASSETS]: AssetAttributesPanel,
     [OVERLAY_MODE_TASKS]: AssetTasksPanel,
@@ -47,6 +48,7 @@ export default function DetailsWindow(props) {
   const detailsPanel = focusingAsset ?
     <DetailsPanel
       asset={focusingAsset}
+      tasks={tasksForFocusingAsset}
       sketchMode={sketchMode}
       overlayMode={overlayMode} 
     /> : <EmptyDetailsPanel />

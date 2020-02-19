@@ -6,6 +6,7 @@ import {
   SET_ASSET_ATTRIBUTE,
   SET_ASSET_CONNECTION_ATTRIBUTE,
   SET_ASSET_VALUE,
+  SET_TASKS,
 } from '../constants'
 import {
   getByKey,
@@ -18,6 +19,10 @@ const assetById = (state = initialState, action) => {
     case SET_ASSETS: {
       const { assets } = action.payload
       return getByKey(assets, 'id')
+    }
+    case SET_TASKS: {
+      const { tasks } = action.payload
+      return getByKey(tasks, 'id')
     }
     case SET_ASSET: {
       const asset = action.payload
