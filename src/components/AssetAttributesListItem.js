@@ -30,7 +30,7 @@ export default function AssetAttributesListItem(props) {
     ]) => isNotNull(attributeValueByKey[attributeKey]))
   }
 
-  return (attributeKeyTypes.length > 0 ?
+  return attributeKeyTypes.length > 0 ?
     <CollapsibleListItem
       title={assetTypeName}
       isOpen={isOpen}
@@ -45,5 +45,4 @@ export default function AssetAttributesListItem(props) {
     <ListItem disableGutters component='div'>
       <ListItemText primary={assetTypeName} />
     </ListItem>
-  )
 }

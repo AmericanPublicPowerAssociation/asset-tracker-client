@@ -1,9 +1,18 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
 import produce from 'immer'
-import List from '@material-ui/core/List'
 import CollapsibleListItem from './CollapsibleListItem'
 import BusAttributesListItem from './BusAttributesListItem'
-import BusConnectionsListItems from './BusConnectionsListItems'
+import BusConnectionsList from './BusConnectionsList'
+import {
+  getCountDescription,
+  getLetter,
+} from '../macros'
+import {
+  getAssetIdsByBusId,
+} from '../selectors'
 
 export default function AssetConnectionsListItems(props) {
   const {
@@ -11,11 +20,18 @@ export default function AssetConnectionsListItems(props) {
     isEditing,
   } = props
   const [isOpenByConnectionIndex, setIsOpenByConnectionIndex] = useState({})
+  const assetIdsByBusId = useSelector(getAssetIdsByBusId)
   const assetId = asset.id
+  const assetTypeCode = asset.typeCode
   const connections = asset.connections || []
 
   return connections.map((connection, connectionIndex) => {
-    const connectionName = `Bus ${connectionIndex + 1}`
+    const busId = connection.busId
+    const connectedAssetIds = assetIdsByBusId[busId].filter(
+      connectedAssetId => connectedAssetId !== assetId)
+    const connectedAssetCount = connectedAssetIds.length
+    const title = `Bus ${getLetter(connectionIndex)}`
+    const description = getCountDescription(connectedAssetCount, 'connection')
     const isOpen = isOpenByConnectionIndex[connectionIndex]
 
     function setIsOpen(value) {
@@ -26,24 +42,22 @@ export default function AssetConnectionsListItems(props) {
       setIsOpenByConnectionIndex(nextState)
     }
 
-    return (
+    return connectedAssetCount > 0 ?
       <CollapsibleListItem
-        title={connectionName}
+        title={title}
+        description={description}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
       >
         <BusAttributesListItem
-          assetTypeCode={asset.typeCode}
+          assetTypeCode={assetTypeCode}
           connection={connection}
           isEditing={isEditing}
         />
-        <List component='div' disablePadding>
-          <BusConnectionsListItems
-            assetId={assetId}
-            busId={connection.busId}
-          />
-        </List>
-      </CollapsibleListItem>
-    )
+        <BusConnectionsList connectedAssetIds={connectedAssetIds} />
+      </CollapsibleListItem> :
+      <ListItem disableGutters component='div'>
+        <ListItemText primary={title} secondary={description} />
+      </ListItem>
   })
 }

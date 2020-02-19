@@ -8,6 +8,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore'
 export default function CollapsibleListItem(props) {
   const {
     title,
+    description,
     isOpen,
     children,
     setIsOpen,
@@ -25,7 +26,7 @@ export default function CollapsibleListItem(props) {
         component='div'
         onClick={handleClick}
       >
-        <ListItemText primary={title} />
+        <ListItemText primary={title} secondary={description} />
         {isOpen ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
 

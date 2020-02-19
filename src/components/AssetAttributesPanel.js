@@ -107,8 +107,4 @@ import {
     trackChange={trackChange}
     saveChange={() => {}}
   />
-  <AssetConnectionList
-    asset={asset}
-    disableInput={disableInput}
-  />
 */
