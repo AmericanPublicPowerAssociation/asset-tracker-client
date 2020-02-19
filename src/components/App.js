@@ -67,6 +67,7 @@ export default function App() {
         sketchMode={sketchMode}
         selectedAssetIndexes={selectedAssetIndexes}
         lineBusId={lineBusId}
+        setSketchMode={setSketchMode}
         setSelectedAssetIndexes={setSelectedAssetIndexes}
         setLineBusId={setLineBusId}
         onAddLineEnd={startNewLine}

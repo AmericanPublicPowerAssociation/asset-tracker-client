@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     position: 'fixed',
     top: theme.spacing(6),
     right: theme.spacing(1),
-    // bottom: theme.spacing(5),
+    bottom: theme.spacing(5),
     width: theme.spacing(32),
     padding: theme.spacing(1),
     overflowY: 'auto',

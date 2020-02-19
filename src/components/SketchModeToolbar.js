@@ -9,6 +9,8 @@ import SvgIcon from '@material-ui/core/SvgIcon'
 import AddIcon from '@material-ui/icons/Add'
 import EditIcon from '@material-ui/icons/Edit'
 import {
+  SKETCH_MODE_ADD,
+  SKETCH_MODE_EDIT,
   SKETCH_MODE_VIEW,
 } from '../constants'
 
@@ -38,8 +40,8 @@ export default function SketchModeToolbar(props) {
           <ListItem
             button
             classes={{ selected: 'selected' }}
-            selected={sketchMode.startsWith('add')}
-            onClick={() => setSketchMode('add')}
+            selected={sketchMode.startsWith(SKETCH_MODE_ADD)}
+            onClick={() => setSketchMode(SKETCH_MODE_ADD)}
           >
             <SvgIcon fontSize='large' component={AddIcon} />
           </ListItem>
@@ -49,8 +51,8 @@ export default function SketchModeToolbar(props) {
           <ListItem
             button
             classes={{ selected: 'selected' }}
-            selected={sketchMode.startsWith('edit')}
-            onClick={() => setSketchMode('edit')}
+            selected={sketchMode.startsWith(SKETCH_MODE_EDIT)}
+            onClick={() => setSketchMode(SKETCH_MODE_EDIT)}
           >
             <SvgIcon fontSize='large' component={EditIcon} />
           </ListItem>
