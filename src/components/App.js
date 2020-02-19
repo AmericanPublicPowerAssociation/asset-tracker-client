@@ -6,7 +6,7 @@ import SketchButton from './SketchButton'
 import SketchModeToolbar from './SketchModeToolbar'
 import SketchAddToolbar from './SketchAddToolbar'
 import SketchEditToolbar from './SketchEditToolbar'
-import UsersWindow from './UsersWindow'
+import ActionsWindow from './ActionsWindow'
 import OptionsWindow from './OptionsWindow'
 import OverlaysWindow from './OverlaysWindow'
 import DetailsWindow from './DetailsWindow'
@@ -39,12 +39,12 @@ export default function App() {
   const [overlayMode, setOverlayMode] = useState(OVERLAY_MODE)
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
+  const [isImportExportOpen, setIsImportExportOpen] = useState(false)
   const [selectedAssetIndexes, setSelectedAssetIndexes] = useState([])
   const [lineBusId, setLineBusId] = useState(null)
   const isScreenXS = useMediaQuery('(max-width:600px)')
   const assetById = useSelector(getAssetById)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
-  const [downloader, setDownloader] = useState(false)
     
   function startNewLine() {
     setLineBusId(null)
@@ -90,7 +90,9 @@ export default function App() {
         sketchMode={sketchMode}
         setSketchMode={setSketchMode}
       />
-      <UsersWindow onDownloader={() => {setDownloader(true)}} />
+      <ActionsWindow
+        showImportExport={() => setIsImportExportOpen(true)}
+      />
       <OptionsWindow
         isWithDetails={isWithDetails}
         isWithTables={isWithTables}
@@ -101,10 +103,19 @@ export default function App() {
         sketchMode={sketchMode}
         overlayMode={overlayMode}
         setOverlayMode={setOverlayMode}
-	/>
-	  <DownloadManager open={downloader} onOk={(element) => {window.location = `/assets.dss?source=${element}`; setDownloader(false)}}  onCancel={() => {setDownloader(false)}}  onClose={()=> {setDownloader(false)}} />
+      />
+      <DownloadManager
+        open={isImportExportOpen}
+        onOk={element => {
+          window.location = `/assets.dss?source=${element}`
+          setIsImportExportOpen(false)}
+        }
+        onCancel={() => {setIsImportExportOpen(false)}}
+        onClose={()=> {setIsImportExportOpen(false)}}
+      />
       <DetailsWindow
         isWithDetails={isWithDetails}
+        isWithTables={isWithTables}
         overlayMode={overlayMode}
         sketchMode={sketchMode}
       />

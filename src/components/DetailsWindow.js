@@ -21,11 +21,14 @@ const useStyles = makeStyles(theme => ({
     position: 'fixed',
     top: theme.spacing(6),
     right: theme.spacing(1),
-    width: theme.spacing(32),
     bottom: theme.spacing(5),
+    width: theme.spacing(32),
     padding: theme.spacing(1),
     overflowY: 'auto',
     overflowX: 'hidden',
+  },
+  withTables: {
+    bottom: theme.spacing(44),
   },
 }))
 
@@ -33,6 +36,7 @@ export default function DetailsWindow(props) {
   const classes = useStyles()
   const {
     isWithDetails,
+    isWithTables,
     overlayMode,
     sketchMode,
   } = props
@@ -50,7 +54,10 @@ export default function DetailsWindow(props) {
       sketchMode={sketchMode}
     /> : <EmptyDetailsPanel />
   return (
-    <Paper className={clsx(classes.root, {poof: !isWithDetails})}>
+    <Paper className={clsx(classes.root, {
+      poof: !isWithDetails,
+      [classes.withTables]: isWithTables,
+    })}>
       {detailsPanel}
     </Paper>
   )
