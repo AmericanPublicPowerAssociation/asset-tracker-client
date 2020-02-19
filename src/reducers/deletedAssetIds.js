@@ -5,16 +5,19 @@ import {
 
 const initialState = [] 
 
-const mapViewState = produce((draft, action) => {
+const deletedAssetIds = (state = initialState, action) => {
   switch (action.type) {
     case DELETE_ASSET: {
-      const assetId = action.payload
-      const next = draft.length
-      draft[next] = assetId
-      break
+      return produce(state, draft => {
+        const assetId = action.payload
+        const next = draft.length
+        draft[next] = assetId
+      })
     }
-    default: { }
+    default: {
+      return state
+    }
   }
-}, initialState)
+}
 
-export default mapViewState
+export default deletedAssetIds
