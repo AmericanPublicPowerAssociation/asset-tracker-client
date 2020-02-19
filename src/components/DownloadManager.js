@@ -25,13 +25,13 @@ import {
 } from '../selectors'
 
 
-const DownloadManager = (props) => {
-    const {
-	open,
-	onClose,
-	onCancel,
-	onOk
-    } = props;
+export default function DownloadManager(props) {
+  const {
+    open,
+    onClose,
+    onCancel,
+    onOk
+  } = props;
 
   const [powerId, setPowerId] = useState(null)
   // const { head, data, name } = useSelector(getAssetTableData)
@@ -73,5 +73,3 @@ const DownloadManager = (props) => {
         </DialogActions>
 	    </Dialog>)
 }
-
-export default DownloadManager;

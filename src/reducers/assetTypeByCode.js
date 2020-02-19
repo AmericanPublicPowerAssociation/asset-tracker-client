@@ -11,6 +11,9 @@ const assetTypeByCode = (state = initialState, action) => {
   switch(action.type) {
     case SET_ASSETS: {
       const { assetTypes } = action.payload
+      if (!assetTypes) {
+        return state
+      }
       return getByKey(assetTypes, 'code')
     }
     default: {
