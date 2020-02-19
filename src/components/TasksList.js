@@ -26,7 +26,9 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import {
-  setAssetConnectionAttribute
+  setAssetConnectionAttribute,
+  setTaskPriority,
+  setTaskStatus
 } from '../actions'
 
 
@@ -36,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     minWidth: 120,
   },
   scroll: {
-    height: '50vh',
+    height: '70%',
     overflowY: 'auto',
   }
 }));
@@ -68,6 +70,7 @@ export default function TasksList(props) {
 
 
 function TaskItem(props) {
+  const dispatch = useDispatch()
   const [
     isWithExpandConnect,
     setIsWithExpandConnect
@@ -78,19 +81,24 @@ function TaskItem(props) {
     task
   } = props
   const {
-    // busId,
+      id,
       name,
       status,
       priority
   } = task
 
+
+  
   const classes = useStyles();  
   // To emulate update on the backend
     
-  const [localPriority, setPriority] = useState(priority)
-  const [localStatus, setStatus] = useState(status)
+  const setPriority = (priority) => dispatch(setTaskPriority(id,
+                                                             parseInt(priority),
+                                                             status))
+  const setStatus = (status) => dispatch(setTaskStatus(id,
+                                                       parseInt(status),
+                                                       priority))
     
-  const dispatch = useDispatch()
   const arrowComponent = (
     isWithExpandConnect ?
     <ExpandLess /> :
@@ -106,12 +114,18 @@ function TaskItem(props) {
   }
 
   const priorityColor  = {
-      'low': 'default',
-      'medium': 'primary',
-      'high': 'secondary',
-  }[localPriority] || 'default'
+    1: 'default',
+    10:  'primary',
+    100:  'secondary',
+  }[priority.toString()] || 'default'
 
-    console.log(priorityColor)  
+  const statusLabel = {
+    '-1': 'Cancelled',
+    '0': 'New',
+    '10': 'Pending',
+    '100': 'Done'
+  }[status.toString()];
+  
   return (
     <>
       <ListItem
@@ -120,29 +134,29 @@ function TaskItem(props) {
         onClick={ () => setIsWithExpandConnect(!isWithExpandConnect)}>
 	<Radio
           checked={true }
-          value={localPriority}
+          value={priority}
       color={priorityColor}
           name="priorityIndicator"
           inputProps={{ 'aria-label': 'A' }}
         />
-	<ListItemText primary={`Task ${name}`}/>
-	  { localStatus && <Chip label={localStatus} /> }
-        { arrowComponent } 
+	   <ListItemText primary={name}/>
+	   { statusLabel && <Chip label={statusLabel} /> }
+       { arrowComponent } 
       </ListItem>
       <Collapse key={`${itemKey}-collapse`} in={isWithExpandConnect}>
         <FormControl className={classes.formControl}>
         <InputLabel htmlFor={`status-${itemKey}`}>Priority</InputLabel>
         <NativeSelect
-          value={localPriority}
+          value={priority}
           onChange={ (e) => setPriority(e.target.value)}
           inputProps={{
             name: 'priority',
               id: `priority-${itemKey}`,
           }}
         >
-          <option value='low'>Low</option>
-          <option value='medium'>Medium</option>
-	  <option value='high'>High</option>          
+      <option value={1}>Low</option>
+      <option value={10}>Normal</option>
+	  <option value={100}>High</option>          
         </NativeSelect>
         <FormHelperText>Select the priority for the task</FormHelperText>
 	</FormControl>
@@ -150,17 +164,17 @@ function TaskItem(props) {
      <FormControl className={classes.formControl}>
         <InputLabel htmlFor={`status-${itemKey}`}>Status</InputLabel>
         <NativeSelect
-          value={localStatus}
+          value={status}
           onChange={ (e) => setStatus(e.target.value)}
           inputProps={{
             name: 'status',
-              id: `status-${itemKey}`,
+            id: `status-${itemKey}`,
           }}
         >
-          <option value="" />
-          <option value='active'>Active</option>
-          <option value='done'>Done</option>
-          <option value='archive'>Archive</option>
+      <option value={0}>New</option>
+      <option value={10}>Pending</option>
+      <option value={100}>Done</option>
+      <option value={-1}>Cancelled</option>
         </NativeSelect>
         <FormHelperText>Select the status for the task</FormHelperText>
       </FormControl>

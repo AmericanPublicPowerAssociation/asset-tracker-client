@@ -58,4 +58,7 @@ export const getTasksForFocusedAsset = createSelector([
 ], (
   focusingAssetId,
   taskById,
-) => Object.keys(taskById).filter((task) => task.assetId === focusingAssetId))
+) => {
+  const keys = Object.keys(taskById).filter((key) => taskById[key].assetId === focusingAssetId)
+  return keys.map((key) => taskById[key])
+})

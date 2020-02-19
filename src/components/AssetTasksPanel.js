@@ -30,11 +30,13 @@ import Tooltip from '@material-ui/core/Tooltip'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import {
-  setAssetConnectionAttribute
+  setAssetConnectionAttribute,
+  addAssetTask
 } from '../actions'
 
 import {
   ASSET_TYPE_ICON_BY_CODE,
+  TASK_ARCHIVE_STATUS
 } from '../constants'
 
 
@@ -58,7 +60,7 @@ const useStyles = makeStyles(theme => ({
 
 
 export default function AssetTasksPanel(props) {
-
+  const dispatch = useDispatch()
   const classes = useStyles()
   const {
     asset,
@@ -72,14 +74,29 @@ export default function AssetTasksPanel(props) {
   const assetType = ASSET_TYPE_ICON_BY_CODE[assetTypeCode]
   const assetTypeName = assetType.name
   
-
     
   const [archived, setArchived] = useState(false);
   const [query, setQuery] = useState('')
   const [name, setName]  = useState('')
+  const [description, setDescription] = useState('')
   const [status, setStatus]  = useState('new')
   const [priority, setPriority] = useState('')
   const [dialog, setDialog] = useState(false)	   
+  
+  
+  const addTask = () => {
+    setDialog(false)
+    dispatch(addAssetTask(assetId, name, description, status, priority))
+    setName('')
+    setDescription('')
+    setPriority('')
+    setStatus('')
+  }
+  
+  const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
+    task => !archived ? task.status !== TASK_ARCHIVE_STATUS : task.status === TASK_ARCHIVE_STATUS
+  )
+    
 
   const assetNameComponent = (<ListItem
           disableGutters
@@ -117,7 +134,7 @@ export default function AssetTasksPanel(props) {
 	        <Switch checked={archived} onChange={ () => setArchived(!archived) } value="archived" />} label="Show archived tasks"
       />
 	    </FormGroup>
-        <TasksList asset={asset} tasks={tasks} disableInput={disableInput}/>
+        <TasksList asset={asset} tasks={partialTasks} disableInput={disableInput}/>
 
       <Button
         className={classes.bottomAction}
@@ -174,7 +191,7 @@ export default function AssetTasksPanel(props) {
           <Button onClick={() => {setDialog(false)}}  color="primary">
             Cancel
           </Button>
-          <Button onClick={() => {setDialog(false)}}  color="primary">
+          <Button onClick={addTask}  color="primary">
             Create
           </Button>
         </DialogActions>

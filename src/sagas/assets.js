@@ -6,11 +6,14 @@ import {
 import {
   setAssets,
   setTasks,
+  refreshTasks
 } from '../actions'
 import {
   REFRESH_ASSETS,
   UPDATE_ASSETS,
-  REFRESH_TASKS
+  REFRESH_TASKS,
+  ADD_TASK,
+  UPDATE_TASK
 } from '../constants'
 import {
   fetchSafely,
@@ -45,6 +48,37 @@ export function* watchAssetTasks() {
       on200: resetTasks,
     })
   })
+}
+
+export function* watchAddTask() {
+  yield takeEvery(ADD_TASK, function* (action) {
+    const url = '/tasks.json'
+    const payload = action.payload
+
+    yield fetchSafely(url, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }, {
+      on200: updateTasks,
+    })
+  })
+}
+
+export function* watchUpdateTask() {
+  yield takeEvery(UPDATE_TASK, function* (action) {
+    const url = `/tasks/${action.payload.task_id}.json`
+    const payload = action.payload
+    yield fetchSafely(url, {
+      method: 'PATCH',
+      body: JSON.stringify(payload),
+    }, {
+      on200: updateTasks,
+    })
+  })
+}
+
+export function* updateTasks() {
+  yield put(refreshTasks())
 }
 
 export function* resetTasks(payload) {

@@ -11,7 +11,9 @@ import {
   SET_FOCUSING_ASSET_ID,
   UPDATE_ASSETS,
   REFRESH_TASKS,
-  SET_TASKS
+  SET_TASKS,
+  ADD_TASK,
+  UPDATE_TASK,
 } from '../constants'
 
 export function saveAssets() {
@@ -100,5 +102,26 @@ export function setTasks(assets) {
   return {
     type: SET_TASKS,
     payload: assets
+  }
+}
+
+export function addAssetTask(assetId, name, description) {
+  return {
+    type: ADD_TASK,
+    payload: {assetId, name, description},
+  }
+}
+
+export function setTaskStatus(task_id, status, priority) {
+  return {
+    type: UPDATE_TASK,
+    payload: {task_id, status, priority},
+  }
+}
+
+export function setTaskPriority(task_id, priority, status) {
+  return {
+    type: UPDATE_TASK,
+    payload: {task_id, priority, status},
   }
 }

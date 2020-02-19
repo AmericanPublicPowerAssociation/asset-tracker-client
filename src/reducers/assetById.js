@@ -20,10 +20,6 @@ const assetById = (state = initialState, action) => {
       const { assets } = action.payload
       return getByKey(assets, 'id')
     }
-    case SET_TASKS: {
-      const { tasks } = action.payload
-      return getByKey(tasks, 'id')
-    }
     case SET_ASSET: {
       const asset = action.payload
       const assetId = asset.id
