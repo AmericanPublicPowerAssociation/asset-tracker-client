@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import AssetsMap from './AssetsMap'
-import SketchButton from './SketchButton'
+import SketchButtons from './SketchButtons'
 import SketchModeToolbar from './SketchModeToolbar'
 import SketchAddToolbar from './SketchAddToolbar'
 import SketchEditToolbar from './SketchEditToolbar'
@@ -89,7 +89,7 @@ export default function App() {
         setSelectedAssetIndexes={setSelectedAssetIndexes}
         setLineBusId={setLineBusId}
       />
-      <SketchButton
+      <SketchButtons
         overlayMode={overlayMode}
         sketchMode={sketchMode}
         changeSketchMode={changeSketchMode}
