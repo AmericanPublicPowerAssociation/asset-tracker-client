@@ -7,6 +7,7 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import {
   setFocusingAssetId,
+  setSelectedBusIndexes,
 } from '../actions' 
 import {
   getAssetById,
@@ -56,6 +57,7 @@ export default function AssetsTable(props) {
     )
     dispatch(setFocusingAssetId(id))
     setSelectedAssetIndexes([selectedIndex])
+    dispatch(setSelectedBusIndexes([]))
   }
 
   const getHeaderLabel = header => {

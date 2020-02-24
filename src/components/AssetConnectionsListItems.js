@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import produce from 'immer'
@@ -7,11 +7,15 @@ import CollapsibleListItem from './CollapsibleListItem'
 import BusAttributesListItem from './BusAttributesListItem'
 import BusConnectionsList from './BusConnectionsList'
 import {
+  setSelectedBusIndexes,
+} from '../actions'
+import {
   getCountDescription,
   getLetter,
 } from '../macros'
 import {
   getAssetIdsByBusId,
+  getBusesGeoJson,
 } from '../selectors'
 
 export default function AssetConnectionsListItems(props) {
@@ -24,6 +28,8 @@ export default function AssetConnectionsListItems(props) {
   const assetId = asset.id
   const assetTypeCode = asset.typeCode
   const connections = asset.connections || []
+  const dispatch = useDispatch()
+  const busesGeoJson = useSelector(getBusesGeoJson)
 
   return connections.map((connection, connectionIndex) => {
     const busId = connection.busId
@@ -42,6 +48,16 @@ export default function AssetConnectionsListItems(props) {
       setIsOpenByConnectionIndex(nextState)
     }
 
+    function onClick() {
+      const features = busesGeoJson.features
+      let index = null
+      for (index=0; index < features.length; index++)
+        if(features[index].properties.id === busId)
+            break
+      if (index)
+        dispatch(setSelectedBusIndexes([index]))
+    }
+
     return connectedAssetCount > 0 ?
       <CollapsibleListItem
         key={connectionIndex}
@@ -49,6 +65,7 @@ export default function AssetConnectionsListItems(props) {
         description={description}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
+        onClick={onClick}
       >
         <BusAttributesListItem
           assetTypeCode={assetTypeCode}

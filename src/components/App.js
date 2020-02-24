@@ -38,6 +38,7 @@ import {
 import {
   getAssetById,
   getAssetsGeoJson,
+  getSelectedBusIndexes,
 } from '../selectors'
 import './App.css'
 
@@ -54,6 +55,7 @@ export default function App() {
   const isScreenXS = useMediaQuery('(max-width:600px)')
   const assetById = useSelector(getAssetById)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
+  const selectedBusIndexes = useSelector(getSelectedBusIndexes)
 
   function changeSketchMode(newSketchMode, busId) {
     if (sketchMode === SKETCH_MODE_ADD_LINE) {
@@ -88,6 +90,7 @@ export default function App() {
         changeSketchMode={changeSketchMode}
         setSelectedAssetIndexes={setSelectedAssetIndexes}
         setLineBusId={setLineBusId}
+        selectedBusIndexes={selectedBusIndexes}
       />
       <SketchButton
         overlayMode={overlayMode}

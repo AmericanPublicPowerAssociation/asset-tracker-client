@@ -12,10 +12,13 @@ export default function CollapsibleListItem(props) {
     isOpen,
     children,
     setIsOpen,
+    onClick,
   } = props
 
   function handleClick() {
     setIsOpen(!isOpen)
+    if (onClick)
+      onClick()
   }
 
   return (
