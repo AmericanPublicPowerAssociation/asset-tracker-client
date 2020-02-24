@@ -9,7 +9,6 @@ import {
   setAssetsGeoJson,
   setFocusingAssetId,
   setMapViewState,
-  setSelectedBusIndexes,
 } from '../actions'
 import {
   BUS_RADIUS_IN_METERS,
@@ -50,6 +49,7 @@ export default function AssetsMap(props) {
     setSelectedAssetIndexes,
     setLineBusId,
     selectedBusIndexes,
+    setSelectedBusIndexes,
   } = props
   const dispatch = useDispatch()
   const mapStyleName = useSelector(getMapStyleName)
@@ -75,7 +75,7 @@ export default function AssetsMap(props) {
     if (sketchMode.startsWith(SKETCH_MODE_ADD) || info.isGuide) return
     const featureIndex = info.index
     setSelectedAssetIndexes([featureIndex])
-    dispatch(setSelectedBusIndexes([]))
+    setSelectedBusIndexes([])
   }
 
   function handleAssetsGeoJsonEdit({editType, editContext, updatedData}) {
@@ -155,7 +155,6 @@ export default function AssetsMap(props) {
     highlightColor: colors.busHighlight,
     selectedFeatureIndexes: selectedBusIndexes,
     getRadius: BUS_RADIUS_IN_METERS,
-    //getFillColor: colors.bus,
     getFillColor: (feature, isSelected) => {
       return isSelected ? colors.assetSelect : colors.bus
     },

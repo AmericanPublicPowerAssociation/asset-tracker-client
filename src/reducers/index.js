@@ -15,7 +15,6 @@ import assetsGeoJson from './assetsGeoJson'
 import assetById from './assetById'
 import focusingAssetId from './focusingAssetId'
 import focusingBusId from './focusingBusId'
-import selectedBusIndexes from './selectedBusIndexes'
 
 const reduceHorizontally = combineReducers({
   mapStyleName,
@@ -30,7 +29,6 @@ const reduceHorizontally = combineReducers({
   productVersionSuggestions,
   sortedRisks,
   risks,
-  selectedBusIndexes,
 })
 
 const reduceVertically = (state, action) => {

@@ -38,7 +38,6 @@ import {
 import {
   getAssetById,
   getAssetsGeoJson,
-  getSelectedBusIndexes,
 } from '../selectors'
 import './App.css'
 
@@ -51,11 +50,11 @@ export default function App() {
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
   const [isImportExportOpen, setIsImportExportOpen] = useState(false)
   const [selectedAssetIndexes, setSelectedAssetIndexes] = useState([])
+  const [selectedBusIndexes, setSelectedBusIndexes] = useState([])
   const [lineBusId, setLineBusId] = useState(null)
   const isScreenXS = useMediaQuery('(max-width:600px)')
   const assetById = useSelector(getAssetById)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
-  const selectedBusIndexes = useSelector(getSelectedBusIndexes)
 
   function changeSketchMode(newSketchMode, busId) {
     if (sketchMode === SKETCH_MODE_ADD_LINE) {
@@ -68,6 +67,7 @@ export default function App() {
     }
     setLineBusId(null)
     setSelectedAssetIndexes([])
+    setSelectedBusIndexes([])
     setSketchMode(newSketchMode)
   }
 
@@ -91,6 +91,7 @@ export default function App() {
         setSelectedAssetIndexes={setSelectedAssetIndexes}
         setLineBusId={setLineBusId}
         selectedBusIndexes={selectedBusIndexes}
+        setSelectedBusIndexes={setSelectedBusIndexes}
       />
       <SketchButton
         overlayMode={overlayMode}
@@ -138,6 +139,7 @@ export default function App() {
         isWithTables={isWithTables}
         overlayMode={overlayMode}
         sketchMode={sketchMode}
+        setSelectedBusIndexes={setSelectedBusIndexes}
       />
       { isScreenXS && isWithTables && 
         <TablesDialog
@@ -152,6 +154,7 @@ export default function App() {
           setIsWithTables={setIsWithTables}
           overlayMode={overlayMode}
           setSelectedAssetIndexes={setSelectedAssetIndexes}
+          setSelectedBusIndexes={setSelectedBusIndexes}
         />
       }
     </div>
