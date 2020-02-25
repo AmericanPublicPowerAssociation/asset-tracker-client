@@ -13,6 +13,7 @@ import DetailsWindow from './DetailsWindow'
 import TablesWindow from './TablesWindow'
 import TablesDialog from './TablesDialog'
 import DownloadManager from './DownloadManager'
+import DeleteAssetDialog from './DeleteAssetDialog'
 import {
   refreshRisks,
 } from 'asset-report-risks'
@@ -44,6 +45,7 @@ import './App.css'
 
 export default function App() {
   const dispatch = useDispatch()
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [sketchMode, setSketchMode] = useState(SKETCH_MODE)
   const [overlayMode, setOverlayMode] = useState(OVERLAY_MODE)
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
@@ -88,6 +90,7 @@ export default function App() {
         changeSketchMode={changeSketchMode}
         setSelectedAssetIndexes={setSelectedAssetIndexes}
         setLineBusId={setLineBusId}
+        openDeleteAssetDialog={ () => setDeleteDialogOpen(true) }
       />
       <SketchButton
         overlayMode={overlayMode}
@@ -148,6 +151,15 @@ export default function App() {
           isWithTables={isWithTables}
           setIsWithTables={setIsWithTables}
           overlayMode={overlayMode}
+          setSelectedAssetIndexes={setSelectedAssetIndexes}
+        />
+      }
+
+      {
+        deleteDialogOpen &&
+        <DeleteAssetDialog
+          openDialog={deleteDialogOpen}
+          onClose={ () => setDeleteDialogOpen(false)}
           setSelectedAssetIndexes={setSelectedAssetIndexes}
         />
       }
