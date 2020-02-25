@@ -17,8 +17,7 @@ export default function CollapsibleListItem(props) {
 
   function handleClick() {
     setIsOpen(!isOpen)
-    if (onClick)
-      onClick()
+    if (onClick) onClick()
   }
 
   return (
