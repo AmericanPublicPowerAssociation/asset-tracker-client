@@ -64,6 +64,7 @@ export default function AssetConnectionsListItems(props) {
         onClick={onClickOrFocus}
       >
         <BusAttributesListItem
+          assetId={assetId}
           assetTypeCode={assetTypeCode}
           connection={connection}
           isEditing={isEditing}

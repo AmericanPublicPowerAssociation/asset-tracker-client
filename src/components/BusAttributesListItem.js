@@ -10,6 +10,7 @@ import {
 
 export default function BusAttributesListItem(props) {
   const {
+    assetId,
     assetTypeCode,
     connection,
     isEditing,
@@ -28,6 +29,7 @@ export default function BusAttributesListItem(props) {
 
   return (
     <AttributeFields
+      assetId={assetId}
       attributeKeyTypes={attributeKeyTypes}
       attributeValueByKey={attributeValueByKey}
       isEditing={isEditing}
