@@ -47,11 +47,8 @@ export default function AssetConnectionsListItems(props) {
 
     function onClick() {
       const features = busesGeoJson.features
-      let index = null
-      for (index=0; index < features.length; index++)
-        if(features[index].properties.id === busId)
-            break
-      if (index)
+      const index = features.findIndex( feature => feature.properties.id === busId)
+      if (index > -1)
         setSelectedBusIndexes([index])
       else
         setSelectedBusIndexes([])
