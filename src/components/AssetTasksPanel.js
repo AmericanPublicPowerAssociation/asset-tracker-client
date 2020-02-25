@@ -23,13 +23,14 @@ import Tooltip from '@material-ui/core/Tooltip'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import {
-  addAssetTask
+  addAssetTask, addAssetTaskComment, updateTaskComments
 } from '../actions'
 
 import {
   ASSET_TYPE_ICON_BY_CODE,
   TASK_ARCHIVE_STATUS
 } from '../constants'
+import TaskComments, {CommentForm} from "./TaskComments";
 
 
 const useStyles = makeStyles(theme => ({
@@ -65,8 +66,8 @@ export default function AssetTasksPanel(props) {
   const assetTypeCode = asset.typeCode
   const assetType = ASSET_TYPE_ICON_BY_CODE[assetTypeCode]
   const assetTypeName = assetType.name
-  
-    
+
+  const [showComments, setShowComments] = useState(null)
   const [archived, setArchived] = useState(false);
   const [query, setQuery] = useState('')
   const [name, setName]  = useState('')
@@ -113,28 +114,35 @@ export default function AssetTasksPanel(props) {
     </Tooltip>
   </ListItem>)
 
+  const triggerComments = (task) => {
+    dispatch(updateTaskComments(task.id))
+    setShowComments(task)
+  }
+
+  const listTasks = (<>
+    <FormGroup row>
+      <TextField id="search" label="Search task" value={query}
+                 onChange={(e) => setQuery(e.target.value) } />
+      <FormControlLabel control={
+        <Switch checked={archived} onChange={ () => setArchived(!archived) } value="archived" />}
+                        label="Show archived tasks" />
+    </FormGroup>
+    <TasksList showComments={triggerComments} asset={asset} tasks={partialTasks} disableInput={disableInput}/>
+
+    <Button className={classes.bottomAction} startIcon={<CloudUploadIcon />} onClick={() => setDialog(true)}>
+      Add taks
+    </Button>
+  </>)
+
+  const listComments = showComments ? <>
+      <TaskComments asset={asset} task={showComments} />
+      <CommentForm onSubmit={(comment) => { dispatch(addAssetTaskComment(showComments.id, comment)) }} />
+    </> : <></>
     
     return (
 	    <>
-            {assetNameComponent}
-          <FormGroup row>
-	  
-		  <TextField id="search" label="Search task" value={query}
-		    onChange={(e) => setQuery(e.target.value) } />
-              <FormControlLabel
-        control={
-	        <Switch checked={archived} onChange={ () => setArchived(!archived) } value="archived" />} label="Show archived tasks"
-      />
-	    </FormGroup>
-        <TasksList asset={asset} tasks={partialTasks} disableInput={disableInput}/>
-
-      <Button
-        className={classes.bottomAction}
-      startIcon={<CloudUploadIcon />}
-      onClick={() => setDialog(true)}
-      >
-        Add taks
-      </Button>
+        {assetNameComponent}
+        { showComments === null ? listTasks : listComments }
 
 	  <Dialog open={dialog} onClose={() => setDialog(false)} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add task</DialogTitle>

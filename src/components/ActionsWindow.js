@@ -12,7 +12,7 @@ import {
 import {
   getColors,
 } from '../selectors'
-
+import Typography from "@material-ui/core/Typography";
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',

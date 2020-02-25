@@ -16,6 +16,7 @@ import assetById from './assetById'
 import focusingAssetId from './focusingAssetId'
 import focusingBusId from './focusingBusId'
 import taskById from './taskById'
+import taskComments from "./taskComments";
 
 const reduceHorizontally = combineReducers({
   mapStyleName,
@@ -26,6 +27,7 @@ const reduceHorizontally = combineReducers({
   taskById,
   focusingAssetId,
   focusingBusId,
+  taskComments,
   vendorNameSuggestions,
   productNameSuggestions,
   productVersionSuggestions,

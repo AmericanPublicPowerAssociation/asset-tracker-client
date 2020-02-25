@@ -17,6 +17,8 @@ import {
   setTaskPriority,
   setTaskStatus
 } from '../actions'
+import Button from "@material-ui/core/Button";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 
 
 const useStyles = makeStyles(theme => ({
@@ -37,7 +39,8 @@ export default function TasksList(props) {
   const classes = useStyles()
   const {
     asset,
-    tasks
+    tasks,
+    showComments
   } = props
   const assetId = asset.id
 
@@ -48,6 +51,7 @@ export default function TasksList(props) {
           itemKey={`task-item-${assetId}`}
           assetId={assetId}
           task={task}
+          showComments={showComments}
         />
       ))}
     </List>
@@ -63,7 +67,8 @@ function TaskItem(props) {
   ] = useState(false)
   const {
     itemKey,
-    task
+    task,
+    showComments,
   } = props
   const {
       id,
@@ -155,6 +160,9 @@ function TaskItem(props) {
         </NativeSelect>
         <FormHelperText>Select the status for the task</FormHelperText>
       </FormControl>
+        <Button startIcon={<CloudUploadIcon />} onClick={() => showComments(task)}>
+          Show Comments
+        </Button>
       </Collapse>
     </>
   )
