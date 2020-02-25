@@ -64,7 +64,7 @@ const assetById = (state = initialState, action) => {
     case DELETE_ASSET: {
       const assetId = action.payload
       return produce(state, draft => {
-        delete draft[assetId]
+        draft[assetId]['deleted'] = true
       })
     }
     default: {
