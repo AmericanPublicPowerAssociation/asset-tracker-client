@@ -45,7 +45,7 @@ export default function AssetConnectionsListItems(props) {
       setIsOpenByConnectionIndex(nextState)
     }
 
-    function onClick() {
+    function onClickOrFocus() {
       const features = busesGeoJson.features
       const index = features.findIndex( feature => feature.properties.id === busId)
       if (index > -1)
@@ -61,12 +61,13 @@ export default function AssetConnectionsListItems(props) {
         description={description}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        onClick={onClick}
+        onClick={onClickOrFocus}
       >
         <BusAttributesListItem
           assetTypeCode={assetTypeCode}
           connection={connection}
           isEditing={isEditing}
+          onFocus={onClickOrFocus}
         />
         <BusConnectionsList connectedAssetIds={connectedAssetIds} />
       </CollapsibleListItem> :

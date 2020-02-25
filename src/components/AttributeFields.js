@@ -20,6 +20,7 @@ export default function AttributeFields(props) {
     attributeKeyTypes,
     attributeValueByKey,
     isEditing,
+    onFocus,
   } = props
   return attributeKeyTypes.map(([
     attributeKey,
@@ -33,6 +34,7 @@ export default function AttributeFields(props) {
       attributeKey={attributeKey}
       attributeValueByKey={attributeValueByKey}
       isEditing={isEditing}
+      onFocus={onFocus}
     />
   ))
 }
@@ -45,11 +47,18 @@ function AttributeField(props) {
     attributeKey,
     attributeValueByKey,
     isEditing,
+    onFocus,
   } = props
   const dispatch = useDispatch()
 
   function trackChange(attributeKey, attributeValue) {
     dispatch(setAssetAttribute(assetId, attributeKey, attributeValue))
+  }
+
+  function handleOnFocus(e) {
+    if (onFocus) {
+      onFocus(e)
+    }
   }
 
   if (attributeType === 'vendorName') {
@@ -88,7 +97,9 @@ function AttributeField(props) {
       value={attributeValueByKey[attributeKey]}
       disabled={!isEditing}
       InputLabelProps={{ classes: { root: 'capitalized' } }}
+      InputProps={{ inputProps: { onFocus: handleOnFocus } }}
       onChange={e => trackChange(attributeKey, e.target.value)}
+      onFocus={handleOnFocus}
     />
   }
 }
