@@ -41,14 +41,14 @@ export default function SketchButtons(props) {
   const isViewing = sketchMode === SKETCH_MODE_VIEW
   const iconColor = isViewing ? 'black' : 'white'
 
-  function handleClick() {
+  function handleConfirm() {
     if (!isViewing) {
       saveAssets()
     }
     changeSketchMode(isViewing ? 'sketch' : SKETCH_MODE_VIEW)
   }
 
-  function handleClickOnCancel() {
+  function handleCancel() {
     changeSketchMode(SKETCH_MODE_VIEW)
     dispatch(refreshAssets())
     dispatch(refreshRisks())
@@ -62,7 +62,7 @@ export default function SketchButtons(props) {
         className={clsx(iconColor)}
         size='small'
         color='secondary'
-        onClick={handleClick}
+        onClick={handleConfirm}
       >
         {isViewing ? <SketchIcon /> : <SaveIcon />}
       </Fab>
@@ -72,7 +72,7 @@ export default function SketchButtons(props) {
         })}
         size='small' 
         color='primary'
-        onClick={handleClickOnCancel}
+        onClick={handleCancel}
       >
         <CloseIcon />
       </Fab>
