@@ -18,9 +18,10 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import TasksList from './TasksList'
+import TasksList, {TaskOverview} from './TasksList'
 import Tooltip from '@material-ui/core/Tooltip'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
+import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import {
   addAssetTask, addAssetTaskComment, updateTaskComments
@@ -31,6 +32,8 @@ import {
   TASK_ARCHIVE_STATUS
 } from '../constants'
 import TaskComments, {CommentForm} from "./TaskComments";
+import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+import Link from "@material-ui/core/Link";
 
 
 const useStyles = makeStyles(theme => ({
@@ -135,8 +138,15 @@ export default function AssetTasksPanel(props) {
   </>)
 
   const listComments = showComments ? <>
-      <TaskComments asset={asset} task={showComments} />
-      <CommentForm onSubmit={(comment) => { dispatch(addAssetTaskComment(showComments.id, comment)) }} />
+    <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
+      <Link color="inherit" href="#" onClick={() => { setShowComments(null) }}>
+        Tasks
+      </Link>
+      <Typography color="textPrimary">{showComments.id}</Typography>
+    </Breadcrumbs>
+    <TaskOverview task={showComments} />
+    <CommentForm onSubmit={(comment) => { dispatch(addAssetTaskComment(showComments.id, comment)) }} />
+    <TaskComments asset={asset} task={showComments} />
     </> : <></>
     
     return (

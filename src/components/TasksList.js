@@ -13,12 +13,26 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
 import NativeSelect from '@material-ui/core/NativeSelect'
+import Button from "@material-ui/core/Button"
+import MessageIcon from '@material-ui/icons/Message'
 import {
   setTaskPriority,
   setTaskStatus
 } from '../actions'
-import Button from "@material-ui/core/Button";
-import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+
+
+const getPriorityColor  = (priority) => ({
+  1: 'default',
+  10:  'primary',
+  100:  'secondary',
+}[priority] || 'default')
+
+const getStatusLabel = (status) => ({
+  '-1': 'Cancelled',
+  '0': 'New',
+  '10': 'Pending',
+  '100': 'Done'
+}[status])
 
 
 const useStyles = makeStyles(theme => ({
@@ -29,6 +43,32 @@ const useStyles = makeStyles(theme => ({
   scroll: {
     height: '70%',
     overflowY: 'auto',
+  },
+  spaceBetween: {
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'space-between'
+  },
+  alignStart: {
+    display: 'flex',
+    alignItems: 'start',
+    width: '100%'
+  },
+  actions: {
+    display: 'flex',
+    alignItems: "center",
+    justifyContent: 'space-between'
+  },
+  fullWidth: {
+    width: '100%'
+  },
+  status: {
+    fontSize: '0.7em',
+    height: '25px'
+  },
+  showComments: {
+    fontSize: '0.7em',
+    padding: 0
   }
 }));
 
@@ -95,18 +135,8 @@ function TaskItem(props) {
     <ExpandMore />
   )
 
-  const priorityColor  = {
-    1: 'default',
-    10:  'primary',
-    100:  'secondary',
-  }[priority.toString()] || 'default'
-
-  const statusLabel = {
-    '-1': 'Cancelled',
-    '0': 'New',
-    '10': 'Pending',
-    '100': 'Done'
-  }[status.toString()];
+  const priorityColor  = getPriorityColor(priority.toString())
+  const statusLabel = getStatusLabel(status.toString())
   
   return (
     <>
@@ -114,17 +144,32 @@ function TaskItem(props) {
         key={`${itemKey}-li`}
         disableGutters
         onClick={ () => setIsWithExpandConnect(!isWithExpandConnect)}>
-	<Radio
-          checked={true }
-          value={priority}
-      color={priorityColor}
-          name="priorityIndicator"
-          inputProps={{ 'aria-label': 'A' }}
-        />
-	   <ListItemText primary={name}/>
-	   { statusLabel && <Chip label={statusLabel} /> }
-       { arrowComponent } 
+        <div className={classes.spaceBetween}>
+          <div className={classes.alignStart}>
+          <Radio
+            checked={true}
+            value={priority}
+            color={priorityColor}
+            name="priorityIndicator"
+            inputProps={{ 'aria-label': 'A' }}
+            style={{paddingLeft: 0}}
+          />
+          <div className={classes.fullWidth}>
+            <ListItemText primary={name}/>
+            <div className={classes.actions}>
+            { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
+
+            <Button className={classes.showComments}
+                    startIcon={<MessageIcon/>}
+                    onClick={() => showComments(task)}>Comments
+            </Button>
+            </div>
+          </div>
+          </div>
+          { arrowComponent }
+        </div>
       </ListItem>
+
       <Collapse key={`${itemKey}-collapse`} in={isWithExpandConnect}>
         <FormControl className={classes.formControl}>
         <InputLabel htmlFor={`status-${itemKey}`}>Priority</InputLabel>
@@ -160,10 +205,40 @@ function TaskItem(props) {
         </NativeSelect>
         <FormHelperText>Select the status for the task</FormHelperText>
       </FormControl>
-        <Button startIcon={<CloudUploadIcon />} onClick={() => showComments(task)}>
-          Show Comments
-        </Button>
       </Collapse>
+
     </>
+  )
+}
+
+
+export const TaskOverview = (props) => {
+  const {
+    id,
+    name,
+    status,
+    priority
+  } = props.task
+
+  const classes = useStyles()
+  
+  const priorityColor  = getPriorityColor(priority.toString())
+  const statusLabel = getStatusLabel(status.toString())
+
+  return (
+    <div style={{display: 'flex', alignItems: 'start'}}>
+      <Radio
+        checked={true}
+        value={priority}
+        color={priorityColor}
+        name="priorityIndicator"
+        inputProps={{ 'aria-label': 'A' }}
+        style={{paddingLeft: 0}}
+      />
+      <div>
+      <ListItemText primary={name}/>
+      { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
+      </div>
+    </div>
   )
 }

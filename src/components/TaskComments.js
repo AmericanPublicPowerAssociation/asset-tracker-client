@@ -4,22 +4,38 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import { makeStyles } from '@material-ui/core/styles'
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
 import SendIcon from "@material-ui/icons/Send";
 import {getCurrentTaskComments, getFocusingAsset} from "../selectors";
+import Identicon from 'react-identicons';
+import Typography from "@material-ui/core/Typography";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import Input from "@material-ui/core/Input";
 
 
 const useStyles = makeStyles(theme => ({
   bottomAction: {
-    width: '95%',
-    position: 'absolute',
-    bottom: 0,
-    marging: 0,
+    margin: '15px 0 15px 0',
+    display: 'flex'
   },
   scroll: {
-    height: '50vh',
+    maxHeight: '60%',
     overflowY: 'auto',
+  },
+  noPadding: {
+    padding: 0
+  },
+  centerElements: {
+    display: 'flex',
+    alignItems: 'center'
+  },
+  marginComment: {
+    marginLeft: '20px'
+  },
+  timestamp: {
+    fontSize: '0.6em',
+    color: '#333333',
+    display: 'block'
   }
 }));
 
@@ -34,8 +50,10 @@ export default function TaskComments(props) {
 
   const comments = useSelector(getCurrentTaskComments)
 
-  return (<List disablePadding className={classes.scroll}>
-      { comments.map( (comment, index) => (
+  return (
+    <>
+    <List disablePadding className={classes.scroll}>
+      { comments.reverse().map( (comment, index) => (
         <CommentItem
           key={`task-comment-${assetId}-${comment.id}`}
           itemKey={`task-comment-${comment.id}`}
@@ -45,21 +63,25 @@ export default function TaskComments(props) {
         />
       ))}
     </List>
+    </>
   )
 }
 
 
 function CommentItem(props) {
-  const dispatch = useDispatch()
   const {
     comment,
     itemKey
   } = props
   const {
-      id,
-      text,
+    // id,
+    text,
+    creationUserId,
+    // modificationTimestamp,
+    // creationTimestamp
   } = comment
 
+  const timestamp = (new Date()).toDateString();
   
   const classes = useStyles();
 
@@ -68,9 +90,17 @@ function CommentItem(props) {
       <ListItem
         key={`${itemKey}-li`}
         disableGutters
+        className={classes.noPadding}
         >
-        <ListItemText>
-          {text}
+        <ListItemText >
+          <div className={classes.centerElements}>
+            <Identicon bg='#FFFFFF' string={`${creationUserId}`} size={30}/>
+            <div className={classes.marginComment}>
+              <Typography component='p'>{text}
+                <Typography component='label' className={classes.timestamp}>{timestamp}</Typography>
+              </Typography>
+            </div>
+          </div>
         </ListItemText>
       </ListItem>
     </>
@@ -91,10 +121,18 @@ export function CommentForm(props) {
   }
 
   return (<div className={classes.bottomAction}>
-    <TextField id="new_comment" label="New Comment" value={comment}
-               onChange={(e) => setComment(e.target.value) } />
-    <Button  startIcon={<SendIcon />} onClick={onClick}>
-
-    </Button>
+    <Input id="new_comment" type={'text'} label="New Comment" value={comment} autoComplete={false}
+           onChange={(e) => setComment(e.target.value) }
+           endAdornment={
+             <InputAdornment position="end">
+              <IconButton
+                aria-label="Send comment"
+                onClick={onClick}
+                onMouseDown={onClick}>
+                <SendIcon />
+              </IconButton>
+             </InputAdornment>
+           }
+    />
   </div>)
 }
