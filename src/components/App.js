@@ -19,6 +19,7 @@ import {
 import {
   addAssetConnection,
   refreshAssets,
+  setFocusingBusId,
   updateAssets,
 } from '../actions'
 import {
@@ -69,6 +70,7 @@ export default function App() {
     setSelectedAssetIndexes([])
     setSelectedBusIndexes([])
     setSketchMode(newSketchMode)
+    dispatch(setFocusingBusId(null))
   }
 
   function saveAssets() {

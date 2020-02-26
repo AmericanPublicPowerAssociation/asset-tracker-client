@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import produce from 'immer'
@@ -7,15 +7,20 @@ import CollapsibleListItem from './CollapsibleListItem'
 import BusAttributesListItem from './BusAttributesListItem'
 import BusConnectionsList from './BusConnectionsList'
 import {
+  setFocusingBusId,
+} from '../actions'
+import {
   getCountDescription,
   getLetter,
 } from '../macros'
 import {
   getAssetIdsByBusId,
   getBusesGeoJson,
+  getFocusingBusId,
 } from '../selectors'
 
 export default function AssetConnectionsListItems(props) {
+  const dispatch = useDispatch()
   const {
     asset,
     isEditing,
@@ -27,6 +32,7 @@ export default function AssetConnectionsListItems(props) {
   const assetTypeCode = asset.typeCode
   const connections = asset.connections || []
   const busesGeoJson = useSelector(getBusesGeoJson)
+  const focusingBusId = useSelector(getFocusingBusId)
 
   return connections.map((connection, connectionIndex) => {
     const busId = connection.busId
@@ -48,8 +54,10 @@ export default function AssetConnectionsListItems(props) {
     function onClickOrFocus() {
       const features = busesGeoJson.features
       const index = features.findIndex( feature => feature.properties.id === busId)
-      if (index > -1)
+      if (index > -1) {
         setSelectedBusIndexes([index])
+        dispatch(setFocusingBusId(busId))
+      }
       else
         setSelectedBusIndexes([])
     }
@@ -62,6 +70,7 @@ export default function AssetConnectionsListItems(props) {
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         onClick={onClickOrFocus}
+        highlight={ focusingBusId === busId }
       >
         <BusAttributesListItem
           assetId={assetId}

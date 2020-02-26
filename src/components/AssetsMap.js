@@ -4,7 +4,7 @@ import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
 import { EditableGeoJsonLayer } from 'nebula.gl'
 import {
-  // setFocusingBusId,
+  setFocusingBusId,
   setAsset,
   setAssetsGeoJson,
   setFocusingAssetId,
@@ -72,6 +72,7 @@ export default function AssetsMap(props) {
   function handleAssetsGeoJsonClick(info, event) {
     const assetId = info.object.properties.id
     assetId && dispatch(setFocusingAssetId(assetId))
+    assetId && dispatch(setFocusingBusId(null))
     if (sketchMode.startsWith(SKETCH_MODE_ADD) || info.isGuide) return
     const featureIndex = info.index
     setSelectedAssetIndexes([featureIndex])
@@ -119,6 +120,13 @@ export default function AssetsMap(props) {
         changeSketchMode(SKETCH_MODE_ADD, busId)
       }
     }
+    else {
+      if (info.picked) {
+        const busIndex = info.index
+        setSelectedBusIndexes([busIndex])
+        dispatch(setFocusingBusId(busId))
+      }
+    }
 
     // busId && dispatch(setFocusingBusId(busId))
     assetId && dispatch(setFocusingAssetId(assetId))
@@ -156,7 +164,7 @@ export default function AssetsMap(props) {
     selectedFeatureIndexes: selectedBusIndexes,
     getRadius: BUS_RADIUS_IN_METERS,
     getFillColor: (feature, isSelected) => {
-      return isSelected ? colors.assetSelect : colors.bus
+      return isSelected ? colors.busSelect : colors.bus
     },
     onClick: handleBusesGeoJsonClick,
   }))

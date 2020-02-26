@@ -7,6 +7,7 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import {
   setFocusingAssetId,
+  setFocusingBusId,
 } from '../actions' 
 import {
   getAssetById,
@@ -56,6 +57,7 @@ export default function AssetsTable(props) {
       null
     )
     dispatch(setFocusingAssetId(id))
+    dispatch(setFocusingBusId(null))
     setSelectedAssetIndexes([selectedIndex])
     setSelectedBusIndexes([])
   }
