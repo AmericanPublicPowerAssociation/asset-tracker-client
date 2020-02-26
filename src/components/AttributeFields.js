@@ -56,7 +56,7 @@ function AttributeField(props) {
   }
 
   function handleOnFocus(e) {
-    if (onFocus) onFocus(e)
+    onFocus && onFocus(e)
   }
 
   if (attributeType === 'vendorName') {

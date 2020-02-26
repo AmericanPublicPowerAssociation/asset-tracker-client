@@ -37,7 +37,7 @@ const assetById = (state = initialState, action) => {
       const { assetId, key, value } = action.payload
       return produce(state, draft => {
         const asset = draft[assetId]
-        let attributes = asset['attributes']
+        let attributes = asset.attributes
         if (attributes === undefined) {
           attributes = asset.attributes = {}
         }
