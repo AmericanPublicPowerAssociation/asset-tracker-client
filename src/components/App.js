@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import AssetsMap from './AssetsMap'
-import SketchButton from './SketchButton'
+import SketchButtons from './SketchButtons'
 import SketchModeToolbar from './SketchModeToolbar'
 import SketchAddToolbar from './SketchAddToolbar'
 import SketchEditToolbar from './SketchEditToolbar'
@@ -13,6 +13,7 @@ import DetailsWindow from './DetailsWindow'
 import TablesWindow from './TablesWindow'
 import TablesDialog from './TablesDialog'
 import DownloadManager from './DownloadManager'
+import DeleteAssetDialog from './DeleteAssetDialog'
 import {
   refreshRisks,
 } from 'asset-report-risks'
@@ -45,6 +46,7 @@ import './App.css'
 
 export default function App() {
   const dispatch = useDispatch()
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [sketchMode, setSketchMode] = useState(SKETCH_MODE)
   const [overlayMode, setOverlayMode] = useState(OVERLAY_MODE)
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
@@ -94,8 +96,9 @@ export default function App() {
         setLineBusId={setLineBusId}
         selectedBusIndexes={selectedBusIndexes}
         setSelectedBusIndexes={setSelectedBusIndexes}
+        openDeleteAssetDialog={ () => setDeleteDialogOpen(true) }
       />
-      <SketchButton
+      <SketchButtons
         overlayMode={overlayMode}
         sketchMode={sketchMode}
         changeSketchMode={changeSketchMode}
@@ -157,6 +160,15 @@ export default function App() {
           overlayMode={overlayMode}
           setSelectedAssetIndexes={setSelectedAssetIndexes}
           setSelectedBusIndexes={setSelectedBusIndexes}
+        />
+      }
+
+      {
+        deleteDialogOpen &&
+        <DeleteAssetDialog
+          openDialog={deleteDialogOpen}
+          onClose={ () => setDeleteDialogOpen(false)}
+          setSelectedAssetIndexes={setSelectedAssetIndexes}
         />
       }
     </div>

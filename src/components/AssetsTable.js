@@ -1,4 +1,5 @@
 import React from 'react'
+import clsx from 'clsx'
 import { useDispatch, useSelector } from 'react-redux'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -46,7 +47,8 @@ export default function AssetsTable(props) {
 
   const name = 'asset'
 
-  const clickCallBack = (id) => {
+  function onClick(id, is_deleted) {
+    if (is_deleted) return
     const selectedIndex = features.reduce(
       (selectedIndex, feature, index) => {
         const featureId = feature.properties.id
@@ -62,7 +64,7 @@ export default function AssetsTable(props) {
     setSelectedBusIndexes([])
   }
 
-  const getHeaderLabel = header => {
+  function getHeaderLabel(header) {
     const result = header.replace( /([A-Z])/g, " $1" );
     var headerLabel = result.charAt(0).toUpperCase() + result.slice(1);
     return headerLabel
@@ -80,21 +82,27 @@ export default function AssetsTable(props) {
       </TableHead>
 
       <TableBody>
-      {data.map(asset =>
-        <TableRow key={asset.id}>
-          { head.map(header => {
-            const key = `table-${name}-${header}-${asset.id}`
-            return (
-              <TableCell
-                align='center'
-                key={key}
-                onClick={ () => clickCallBack(asset.id)}
-              >
-                {asset[header]}
-              </TableCell>
-            )
-          })}
-        </TableRow>
+      {data.map(asset => {
+        const is_deleted = asset['deleted']
+        return (
+          <TableRow key={asset.id}>
+            { head.map(header => {
+              const key = `table-${name}-${header}-${asset.id}`
+              return (
+                <TableCell
+                  align='center'
+                  key={key}
+                  onClick={ () => onClick(asset.id, is_deleted)}
+                  className={clsx({
+                    'tcell-strikethrough': is_deleted
+                  })}
+                >
+                  {asset[header]}
+                </TableCell>
+              )
+            })}
+          </TableRow>
+        )}
       )}
       </TableBody>
     </Table>

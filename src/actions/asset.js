@@ -1,5 +1,6 @@
 import {
   ADD_ASSET_CONNECTION,
+  DELETE_ASSET,
   REFRESH_ASSETS,
   SAVE_ASSETS,
   SET_ASSET,
@@ -38,6 +39,13 @@ export function setAsset(asset) {
   return {
     type: SET_ASSET,
     payload: asset,
+  }
+}
+
+export function deleteAsset(assetId){
+  return {
+    type: DELETE_ASSET,
+    payload: assetId
   }
 }
 
