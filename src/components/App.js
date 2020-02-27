@@ -73,7 +73,7 @@ export default function App() {
     const assets = Object.values(assetById)
     dispatch(updateAssets(assets, assetsGeoJson)) 
   }
-  
+
   useEffect(() => {
     dispatch(refreshAssets())
     dispatch(refreshRisks())
@@ -88,6 +88,7 @@ export default function App() {
         changeSketchMode={changeSketchMode}
         setSelectedAssetIndexes={setSelectedAssetIndexes}
         setLineBusId={setLineBusId}
+        setSketchMode={setSketchMode}
       />
       <SketchButton
         overlayMode={overlayMode}

@@ -2,6 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
+import { MapController } from 'deck.gl'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import { EditableGeoJsonLayer } from 'nebula.gl'
 import {
@@ -49,6 +50,7 @@ export default function AssetsMap(props) {
     changeSketchMode,
     setSelectedAssetIndexes,
     setLineBusId,
+    setSketchMode,
   } = props
   const dispatch = useDispatch()
   const mapStyleName = useSelector(getMapStyleName)
@@ -62,6 +64,23 @@ export default function AssetsMap(props) {
   // const focusingBusId = useSelector(getFocusingBusId)
   const mapLayers = []
   const mapMode = getMapMode(sketchMode)
+
+  class Controller extends MapController {
+    constructor(options={}) {
+      super(options)
+      this.events = ['doubletap']
+    }
+
+    handleEvent(event) {
+      if (event.type === 'doubletap') {
+        setSketchMode(SKETCH_MODE_ADD)
+      }
+      else {
+        super.handleEvent(event)
+      }
+    }
+  }
+
 
   function handleViewStateChange({viewState}) {
     // Update the map viewport
@@ -157,7 +176,7 @@ export default function AssetsMap(props) {
 
   return (
     <DeckGL
-      controller={true}
+      controller={{type: Controller}}
       layers={mapLayers}
       viewState={mapViewState}
       pickingRadius={PICKING_RADIUS_IN_PIXELS}
