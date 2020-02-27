@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
@@ -50,6 +50,7 @@ export default function AssetsMap(props) {
     setSelectedAssetIndexes,
     setLineBusId,
   } = props
+  const deckGL = useRef()  // !!!
   const dispatch = useDispatch()
   const mapStyleName = useSelector(getMapStyleName)
   const mapViewState = useSelector(getMapViewState)
@@ -76,31 +77,48 @@ export default function AssetsMap(props) {
     setSelectedAssetIndexes([featureIndex])
   }
 
-  function handleAssetsGeoJsonEdit({editType, editContext, updatedData}) {
-    // If a feature is being added for the first time,
-    if (editType === 'addFeature') {
-      const features = updatedData.features
-      const { featureIndexes } = editContext
-      // Add an asset corresponding to the feature
-      const assetTypeCode = getAssetTypeCode(sketchMode)
-      const assetType = assetTypeByCode[assetTypeCode]
-      const asset = makeAsset(assetType, lineBusId)
-      dispatch(setAsset(asset))
-      // Store assetId in feature
-      const assetId = asset.id
-      for (let i = 0; i < featureIndexes.length; i++) {
-        const featureIndex = featureIndexes[i]
-        const feature = features[featureIndex]
-        feature.properties.id = assetId
+  function handleAssetsGeoJsonEdit({editType, editContext, updatedData}, xxx) {
+    // console.log(editContext, xxx)
+    switch(editType) {
+      // If a feature is being added for the first time,
+      case 'addFeature': {
+        const features = updatedData.features
+        const { featureIndexes } = editContext
+        // Add an asset corresponding to the feature
+        const assetTypeCode = getAssetTypeCode(sketchMode)
+        const assetType = assetTypeByCode[assetTypeCode]
+        const asset = makeAsset(assetType, lineBusId)
+        dispatch(setAsset(asset))
+        // Store assetId in feature
+        const assetId = asset.id
+        for (let i = 0; i < featureIndexes.length; i++) {
+          const featureIndex = featureIndexes[i]
+          const feature = features[featureIndex]
+          feature.properties.id = assetId
+        }
+        // If the new feature is a line,
+        if (sketchMode === SKETCH_MODE_ADD_LINE) {
+          // Have subsequent clicks extend the same line
+          setSelectedAssetIndexes(featureIndexes)
+        } else {
+          changeSketchMode(SKETCH_MODE_ADD)
+        }
+        dispatch(setFocusingAssetId(assetId))  // Show details for the new asset
+        break
       }
-      // If the new feature is a line,
-      if (sketchMode === SKETCH_MODE_ADD_LINE) {
-        // Have subsequent clicks extend the same line
-        setSelectedAssetIndexes(featureIndexes)
-      } else {
-        changeSketchMode(SKETCH_MODE_ADD)
+      case 'movePosition': {
+        // console.log('movePosition', editContext.position)
+        break
       }
-      dispatch(setFocusingAssetId(assetId))  // Show details for the new asset
+      case 'finishMovePosition': {
+        // console.log('finishMovePosition', editContext.position)
+        // const { position } = editContext
+        // console.log(deckGL.current.pickObject, position)
+        // const info = deckGL.current.pickObject({x: position[1], y: position[0]})
+        // console.log(info)
+        break
+      }
+      default: {}
     }
     dispatch(setAssetsGeoJson(updatedData))  // Update geojson for assets
   }
@@ -157,11 +175,14 @@ export default function AssetsMap(props) {
 
   return (
     <DeckGL
+      ref={deckGL}  // !!!
       controller={true}
       layers={mapLayers}
       viewState={mapViewState}
       pickingRadius={PICKING_RADIUS_IN_PIXELS}
       onViewStateChange={handleViewStateChange}
+      onHover={(e, i) => console.log(e, i)}
+      // onClick={(e, i) => console.log(e, i)}
     >
       <StaticMap
         mapStyle={MAP_STYLE_BY_NAME[mapStyleName]}
