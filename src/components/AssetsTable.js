@@ -77,14 +77,15 @@ export default function AssetsTable(props) {
 
       <TableBody>
       {data.map(asset =>
-        <TableRow key={asset.id}>
+        <TableRow key={asset.id}
+          onClick={ () => clickCallBack(asset.id)}
+        >
           { head.map(header => {
             const key = `table-${name}-${header}-${asset.id}`
             return (
               <TableCell
                 align='center'
                 key={key}
-                onClick={ () => clickCallBack(asset.id)}
               >
                 {asset[header]}
               </TableCell>

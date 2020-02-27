@@ -29,7 +29,9 @@ export default function TablesWindow(props) {
       setSelectedAssetIndexes={setSelectedAssetIndexes}
     />,
     tasks: <TasksTable />,
-    risks: <RisksTable />,
+    risks: <RisksTable 
+      setSelectedAssetIndexes={setSelectedAssetIndexes}
+    />,
   }[overlayMode]
 
   return (
