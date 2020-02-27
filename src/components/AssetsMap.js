@@ -2,10 +2,10 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
-import { GeoJsonLayer } from '@deck.gl/layers'
 import { EditableGeoJsonLayer } from 'nebula.gl'
 import {
-  // setFocusingBusId,
+  setFocusingBusId,
+  deleteAsset,
   setAsset,
   setAssetsGeoJson,
   setFocusingAssetId,
@@ -19,6 +19,8 @@ import {
   POINT_RADIUS_IN_METERS,
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_LINE,
+  SKETCH_MODE_EDIT,
+  SKETCH_MODE_EDIT_DELETE,
 } from '../constants'
 import {
   getAssetTypeCode,
@@ -32,7 +34,7 @@ import {
   getAssetsGeoJson,
   getBusesGeoJson,
   getColors,
-  // getFocusingAssetId,
+  getFocusingAssetId,
   // getFocusingBusId,
   getMapStyleName,
   getMapViewState,
@@ -50,6 +52,9 @@ export default function AssetsMap(props) {
     changeSketchMode,
     setSelectedAssetIndexes,
     setLineBusId,
+    selectedBusIndexes,
+    setSelectedBusIndexes,
+    openDeleteAssetDialog,
   } = props
   const dispatch = useDispatch()
   const mapStyleName = useSelector(getMapStyleName)
@@ -59,7 +64,7 @@ export default function AssetsMap(props) {
   const assetsGeoJson = useSelector(getAssetsGeoJson)
   const busesGeoJson = useSelector(getBusesGeoJson)
   const colors = useSelector(getColors)
-  // const focusingAssetId = useSelector(getFocusingAssetId)
+  const focusingAssetId = useSelector(getFocusingAssetId)
   // const focusingBusId = useSelector(getFocusingBusId)
   const mapLayers = []
   const mapMode = getMapMode(sketchMode)
@@ -71,10 +76,17 @@ export default function AssetsMap(props) {
 
   function handleAssetsGeoJsonClick(info, event) {
     const assetId = info.object.properties.id
+    if (assetId && sketchMode.startsWith(SKETCH_MODE_EDIT_DELETE)) {
+      dispatch(deleteAsset(assetId))
+      setSelectedAssetIndexes([])
+      return
+    }
     assetId && dispatch(setFocusingAssetId(assetId))
+    assetId && dispatch(setFocusingBusId(null))
     if (sketchMode.startsWith(SKETCH_MODE_ADD) || info.isGuide) return
     const featureIndex = info.index
     setSelectedAssetIndexes([featureIndex])
+    setSelectedBusIndexes([])
   }
 
   function handleAssetsGeoJsonEdit({editType, editContext, updatedData}) {
@@ -136,6 +148,13 @@ export default function AssetsMap(props) {
         changeSketchMode(SKETCH_MODE_ADD, busId)
       }
     }
+    else {
+      if (info.picked) {
+        const busIndex = info.index
+        setSelectedBusIndexes([busIndex])
+        dispatch(setFocusingBusId(busId))
+      }
+    }
 
     // busId && dispatch(setFocusingBusId(busId))
     assetId && dispatch(setFocusingAssetId(assetId))
@@ -162,18 +181,21 @@ export default function AssetsMap(props) {
     onEdit: handleAssetsGeoJsonEdit,
   }))
 
-  mapLayers.push(new GeoJsonLayer({
+  mapLayers.push(new EditableGeoJsonLayer({
     id: 'buses-geojson-layer',
     data: busesGeoJson,
+    mode: getMapMode(),
     pickable: true,
     stroked: false,
     autoHighlight: true,
     highlightColor: colors.busHighlight,
+    selectedFeatureIndexes: selectedBusIndexes,
     getRadius: BUS_RADIUS_IN_METERS,
-    getFillColor: colors.bus,
+    getFillColor: (feature, isSelected) => {
+      return isSelected ? colors.busSelect : colors.bus
+    },
     onClick: handleBusesGeoJsonClick,
   }))
-
 
   function onDoubleClick(e) {
     if (sketchMode === SKETCH_MODE_ADD_LINE)
@@ -185,6 +207,13 @@ export default function AssetsMap(props) {
     if (e.key === 'Enter') {
       if (sketchMode === SKETCH_MODE_ADD_LINE) {
         changeSketchMode(SKETCH_MODE_ADD)
+      }
+    }
+    else if (e.key === 'Delete') {
+      if (focusingAssetId &&
+          sketchMode.startsWith(SKETCH_MODE_EDIT)
+        ) {
+        openDeleteAssetDialog()
       }
     }
   }

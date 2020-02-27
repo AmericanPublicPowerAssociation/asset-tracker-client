@@ -10,9 +10,11 @@ import {
 
 export default function BusAttributesListItem(props) {
   const {
+    assetId,
     assetTypeCode,
     connection,
     isEditing,
+    onFocus,
   } = props
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetType = assetTypeByCode[assetTypeCode]
@@ -27,9 +29,11 @@ export default function BusAttributesListItem(props) {
 
   return (
     <AttributeFields
+      assetId={assetId}
       attributeKeyTypes={attributeKeyTypes}
       attributeValueByKey={attributeValueByKey}
       isEditing={isEditing}
+      onFocus={onFocus}
     />
   )
 }
