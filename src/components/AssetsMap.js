@@ -6,6 +6,7 @@ import { GeoJsonLayer } from '@deck.gl/layers'
 import { EditableGeoJsonLayer } from 'nebula.gl'
 import {
   // setFocusingBusId,
+  deleteAsset,
   setAsset,
   setAssetsGeoJson,
   setFocusingAssetId,
@@ -19,6 +20,8 @@ import {
   POINT_RADIUS_IN_METERS,
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_LINE,
+  SKETCH_MODE_EDIT,
+  SKETCH_MODE_EDIT_DELETE,
 } from '../constants'
 import {
   getAssetTypeCode,
@@ -31,7 +34,7 @@ import {
   getAssetsGeoJson,
   getBusesGeoJson,
   getColors,
-  // getFocusingAssetId,
+  getFocusingAssetId,
   // getFocusingBusId,
   getMapStyleName,
   getMapViewState,
@@ -49,6 +52,7 @@ export default function AssetsMap(props) {
     changeSketchMode,
     setSelectedAssetIndexes,
     setLineBusId,
+    openDeleteAssetDialog,
   } = props
   const dispatch = useDispatch()
   const mapStyleName = useSelector(getMapStyleName)
@@ -58,7 +62,7 @@ export default function AssetsMap(props) {
   const assetsGeoJson = useSelector(getAssetsGeoJson)
   const busesGeoJson = useSelector(getBusesGeoJson)
   const colors = useSelector(getColors)
-  // const focusingAssetId = useSelector(getFocusingAssetId)
+  const focusingAssetId = useSelector(getFocusingAssetId)
   // const focusingBusId = useSelector(getFocusingBusId)
   const mapLayers = []
   const mapMode = getMapMode(sketchMode)
@@ -70,6 +74,11 @@ export default function AssetsMap(props) {
 
   function handleAssetsGeoJsonClick(info, event) {
     const assetId = info.object.properties.id
+    if (assetId && sketchMode.startsWith(SKETCH_MODE_EDIT_DELETE)) {
+      dispatch(deleteAsset(assetId))
+      setSelectedAssetIndexes([])
+      return
+    }
     assetId && dispatch(setFocusingAssetId(assetId))
     if (sketchMode.startsWith(SKETCH_MODE_ADD) || info.isGuide) return
     const featureIndex = info.index
@@ -155,19 +164,32 @@ export default function AssetsMap(props) {
     onClick: handleBusesGeoJsonClick,
   }))
 
+  function onKeyUp(e) {
+    e.preventDefault()
+    if (e.key === 'Delete') {
+      if (focusingAssetId &&
+          sketchMode.startsWith(SKETCH_MODE_EDIT)
+        ) {
+        openDeleteAssetDialog()
+      }
+    }
+  }
+
   return (
-    <DeckGL
-      controller={true}
-      layers={mapLayers}
-      viewState={mapViewState}
-      pickingRadius={PICKING_RADIUS_IN_PIXELS}
-      onViewStateChange={handleViewStateChange}
-    >
-      <StaticMap
-        mapStyle={MAP_STYLE_BY_NAME[mapStyleName]}
-        mapboxApiAccessToken={REACT_APP_MAPBOX_TOKEN}
-      />
-    </DeckGL>
+    <div onKeyUp={onKeyUp}>
+      <DeckGL
+        controller={true}
+        layers={mapLayers}
+        viewState={mapViewState}
+        pickingRadius={PICKING_RADIUS_IN_PIXELS}
+        onViewStateChange={handleViewStateChange}
+      >
+        <StaticMap
+          mapStyle={MAP_STYLE_BY_NAME[mapStyleName]}
+          mapboxApiAccessToken={REACT_APP_MAPBOX_TOKEN}
+        />
+      </DeckGL>
+    </div>
   )
 }
 

@@ -11,6 +11,7 @@ import {
   getLetter,
 } from '../macros'
 import {
+  getAssetById,
   getAssetIdsByBusId,
 } from '../selectors'
 
@@ -21,6 +22,7 @@ export default function AssetConnectionsListItems(props) {
   } = props
   const [isOpenByConnectionIndex, setIsOpenByConnectionIndex] = useState({})
   const assetIdsByBusId = useSelector(getAssetIdsByBusId)
+  const assetById = useSelector(getAssetById)
   const assetId = asset.id
   const assetTypeCode = asset.typeCode
   const connections = asset.connections || []
@@ -28,7 +30,9 @@ export default function AssetConnectionsListItems(props) {
   return connections.map((connection, connectionIndex) => {
     const busId = connection.busId
     const connectedAssetIds = assetIdsByBusId[busId].filter(
-      connectedAssetId => connectedAssetId !== assetId)
+      connectedAssetId => connectedAssetId !== assetId).filter(
+      connectedAssetId => assetById[connectedAssetId].deleted !== true)
+
     const connectedAssetCount = connectedAssetIds.length
     const title = `Bus ${getLetter(connectionIndex)}`
     const description = getCountDescription(connectedAssetCount, 'connection')

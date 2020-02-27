@@ -1,6 +1,7 @@
 import produce from 'immer'
 import {
   ADD_ASSET_CONNECTION,
+  DELETE_ASSET,
   SET_ASSET,
   SET_ASSETS,
   SET_ASSET_ATTRIBUTE,
@@ -58,6 +59,12 @@ const assetById = (state = initialState, action) => {
         const connections = asset.connections
         const attributes = connections[connectionIndex].attributes
         attributes[key] = value
+      })
+    }
+    case DELETE_ASSET: {
+      const assetId = action.payload
+      return produce(state, draft => {
+        draft[assetId]['deleted'] = true
       })
     }
     default: {
