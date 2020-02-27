@@ -180,8 +180,17 @@ export default function AssetsMap(props) {
       changeSketchMode(SKETCH_MODE_ADD)
   }
 
+  function onKeyUp(e) {
+    e.preventDefault()
+    if (e.key === 'Enter') {
+      if (sketchMode === SKETCH_MODE_ADD_LINE) {
+        changeSketchMode(SKETCH_MODE_ADD)
+      }
+    }
+  }
+
   return (
-    <div onDoubleClick={onDoubleClick}>
+    <div onKeyUp={onKeyUp} onDoubleClick={onDoubleClick}>
       <DeckGL
         controller={true}
         layers={mapLayers}
