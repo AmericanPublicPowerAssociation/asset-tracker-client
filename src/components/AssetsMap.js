@@ -2,7 +2,6 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
-import { MapController } from 'deck.gl'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import { EditableGeoJsonLayer } from 'nebula.gl'
 import {
@@ -25,6 +24,7 @@ import {
   getAssetTypeCode,
   getMapMode,
   makeAsset,
+  removeRearDuplicateCoordinatesInLine,
 } from '../routines'
 import {
   getAssetTypeByCode,
@@ -50,7 +50,6 @@ export default function AssetsMap(props) {
     changeSketchMode,
     setSelectedAssetIndexes,
     setLineBusId,
-    setSketchMode,
   } = props
   const dispatch = useDispatch()
   const mapStyleName = useSelector(getMapStyleName)
@@ -64,23 +63,6 @@ export default function AssetsMap(props) {
   // const focusingBusId = useSelector(getFocusingBusId)
   const mapLayers = []
   const mapMode = getMapMode(sketchMode)
-
-  class Controller extends MapController {
-    constructor(options={}) {
-      super(options)
-      this.events = ['doubletap']
-    }
-
-    handleEvent(event) {
-      if (event.type === 'doubletap') {
-        setSketchMode(SKETCH_MODE_ADD)
-      }
-      else {
-        super.handleEvent(event)
-      }
-    }
-  }
-
 
   function handleViewStateChange({viewState}) {
     // Update the map viewport
@@ -120,6 +102,24 @@ export default function AssetsMap(props) {
         changeSketchMode(SKETCH_MODE_ADD)
       }
       dispatch(setFocusingAssetId(assetId))  // Show details for the new asset
+    }
+    else if (editType === 'addPosition') {
+      // adding points to line
+      if (sketchMode === SKETCH_MODE_ADD_LINE) {
+        const features = updatedData.features
+        const { featureIndexes } = editContext
+        if (featureIndexes.length === 1){
+          const featureIndex = featureIndexes[0]
+          const lineFeature = features[featureIndex]
+          const lineCoordinates = lineFeature.geometry.coordinates
+          if (lineCoordinates.length > 2) {
+            // remove duplicate coordinates when double clicking to finish line
+            const newCoordinates = removeRearDuplicateCoordinatesInLine(lineCoordinates)
+            lineFeature.geometry.coordinates = newCoordinates
+          }
+
+        }
+      }
     }
     dispatch(setAssetsGeoJson(updatedData))  // Update geojson for assets
   }
@@ -174,19 +174,27 @@ export default function AssetsMap(props) {
     onClick: handleBusesGeoJsonClick,
   }))
 
+
+  function onDoubleClick(e) {
+    if (sketchMode === SKETCH_MODE_ADD_LINE)
+      changeSketchMode(SKETCH_MODE_ADD)
+  }
+
   return (
-    <DeckGL
-      controller={{type: Controller}}
-      layers={mapLayers}
-      viewState={mapViewState}
-      pickingRadius={PICKING_RADIUS_IN_PIXELS}
-      onViewStateChange={handleViewStateChange}
-    >
-      <StaticMap
-        mapStyle={MAP_STYLE_BY_NAME[mapStyleName]}
-        mapboxApiAccessToken={REACT_APP_MAPBOX_TOKEN}
-      />
-    </DeckGL>
+    <div onDoubleClick={onDoubleClick}>
+      <DeckGL
+        controller={true}
+        layers={mapLayers}
+        viewState={mapViewState}
+        pickingRadius={PICKING_RADIUS_IN_PIXELS}
+        onViewStateChange={handleViewStateChange}
+      >
+        <StaticMap
+          mapStyle={MAP_STYLE_BY_NAME[mapStyleName]}
+          mapboxApiAccessToken={REACT_APP_MAPBOX_TOKEN}
+        />
+      </DeckGL>
+    </div>
   )
 }
 

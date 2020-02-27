@@ -26,3 +26,22 @@ export function getMapMode(sketchMode) {
   }[sketchMode]
   return mapMode || ViewMode
 }
+
+export function removeRearDuplicateCoordinatesInLine(coordinates) {
+  let duplicate = true
+  while(duplicate) {
+    const coord1 = coordinates.pop()
+    const coord2 = coordinates.pop()
+    const [lon1, lat1] = coord1
+    const [lon2, lat2] = coord2
+    if (lon1 === lon2 && lat1 === lat2){
+      coordinates.push(coord1)
+    }
+    else {
+      coordinates.push(coord2)
+      coordinates.push(coord1)
+      duplicate = false
+    }
+  }
+  return coordinates
+}
