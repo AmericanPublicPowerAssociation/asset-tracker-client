@@ -20,6 +20,7 @@ import {
 import {
   addAssetConnection,
   refreshAssets,
+  setFocusingBusId,
   updateAssets,
 } from '../actions'
 import {
@@ -52,6 +53,7 @@ export default function App() {
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
   const [isImportExportOpen, setIsImportExportOpen] = useState(false)
   const [selectedAssetIndexes, setSelectedAssetIndexes] = useState([])
+  const [selectedBusIndexes, setSelectedBusIndexes] = useState([])
   const [lineBusId, setLineBusId] = useState(null)
   const isScreenXS = useMediaQuery('(max-width:600px)')
   const assetById = useSelector(getAssetById)
@@ -68,7 +70,9 @@ export default function App() {
     }
     setLineBusId(null)
     setSelectedAssetIndexes([])
+    setSelectedBusIndexes([])
     setSketchMode(newSketchMode)
+    dispatch(setFocusingBusId(null))
   }
 
   function saveAssets() {
@@ -90,6 +94,8 @@ export default function App() {
         changeSketchMode={changeSketchMode}
         setSelectedAssetIndexes={setSelectedAssetIndexes}
         setLineBusId={setLineBusId}
+        selectedBusIndexes={selectedBusIndexes}
+        setSelectedBusIndexes={setSelectedBusIndexes}
         openDeleteAssetDialog={ () => setDeleteDialogOpen(true) }
       />
       <SketchButtons
@@ -138,6 +144,7 @@ export default function App() {
         isWithTables={isWithTables}
         overlayMode={overlayMode}
         sketchMode={sketchMode}
+        setSelectedBusIndexes={setSelectedBusIndexes}
       />
       { isScreenXS && isWithTables && 
         <TablesDialog
@@ -152,6 +159,7 @@ export default function App() {
           setIsWithTables={setIsWithTables}
           overlayMode={overlayMode}
           setSelectedAssetIndexes={setSelectedAssetIndexes}
+          setSelectedBusIndexes={setSelectedBusIndexes}
         />
       }
 
