@@ -88,7 +88,6 @@ export default function App() {
         changeSketchMode={changeSketchMode}
         setSelectedAssetIndexes={setSelectedAssetIndexes}
         setLineBusId={setLineBusId}
-        setSketchMode={setSketchMode}
       />
       <SketchButton
         overlayMode={overlayMode}
