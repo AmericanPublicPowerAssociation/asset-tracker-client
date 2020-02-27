@@ -26,6 +26,7 @@ import {
   getAssetTypeCode,
   getMapMode,
   makeAsset,
+  removeRearDuplicateCoordinatesInLine,
 } from '../routines'
 import {
   getAssetTypeByCode,
@@ -114,6 +115,24 @@ export default function AssetsMap(props) {
       }
       dispatch(setFocusingAssetId(assetId))  // Show details for the new asset
     }
+    else if (editType === 'addPosition') {
+      // adding points to line
+      if (sketchMode === SKETCH_MODE_ADD_LINE) {
+        const features = updatedData.features
+        const { featureIndexes } = editContext
+        if (featureIndexes.length === 1){
+          const featureIndex = featureIndexes[0]
+          const lineFeature = features[featureIndex]
+          const lineCoordinates = lineFeature.geometry.coordinates
+          if (lineCoordinates.length > 2) {
+            // remove duplicate coordinates when double clicking to finish line
+            const newCoordinates = removeRearDuplicateCoordinatesInLine(lineCoordinates)
+            lineFeature.geometry.coordinates = newCoordinates
+          }
+
+        }
+      }
+    }
     dispatch(setAssetsGeoJson(updatedData))  // Update geojson for assets
   }
 
@@ -178,9 +197,19 @@ export default function AssetsMap(props) {
     onClick: handleBusesGeoJsonClick,
   }))
 
+  function onDoubleClick(e) {
+    if (sketchMode === SKETCH_MODE_ADD_LINE)
+      changeSketchMode(SKETCH_MODE_ADD)
+  }
+
   function onKeyUp(e) {
     e.preventDefault()
-    if (e.key === 'Delete') {
+    if (e.key === 'Enter') {
+      if (sketchMode === SKETCH_MODE_ADD_LINE) {
+        changeSketchMode(SKETCH_MODE_ADD)
+      }
+    }
+    else if (e.key === 'Delete') {
       if (focusingAssetId &&
           sketchMode.startsWith(SKETCH_MODE_EDIT)
         ) {
@@ -190,7 +219,7 @@ export default function AssetsMap(props) {
   }
 
   return (
-    <div onKeyUp={onKeyUp}>
+    <div onKeyUp={onKeyUp} onDoubleClick={onDoubleClick}>
       <DeckGL
         controller={true}
         layers={mapLayers}
