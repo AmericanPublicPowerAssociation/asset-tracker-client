@@ -27,6 +27,12 @@ const useStyles = makeStyles(theme => ({
       margin: theme.spacing(1),
     },
   },
+  cancelFab: {
+    background: 'white',
+    '&:hover': {
+      background: 'white',
+    },
+  },
 }))
 
 export default function SketchButtons(props) {
@@ -67,14 +73,13 @@ export default function SketchButtons(props) {
         {isViewing ? <SketchIcon /> : <SaveIcon />}
       </Fab>
       <Fab
-        className={clsx(iconColor, {
+        className={clsx(classes.cancelFab, {
           poof: isViewing,
         })}
         size='small' 
-        color='primary'
         onClick={handleCancel}
       >
-        <CloseIcon />
+        <CloseIcon style={{color: 'blue'}}/>
       </Fab>
     </div>
   )
