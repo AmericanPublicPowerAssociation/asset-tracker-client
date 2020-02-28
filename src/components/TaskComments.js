@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import {useSelector} from 'react-redux'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import { makeStyles } from '@material-ui/core/styles'
 import SendIcon from "@material-ui/icons/Send";
-import {getCurrentTaskComments, getFocusingAsset} from "../selectors";
+import {getCurrentTaskComments} from "../selectors";
 import Identicon from 'react-identicons';
 import Typography from "@material-ui/core/Typography";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -52,8 +52,8 @@ export default function TaskComments(props) {
 
   return (
     <>
-    <List disablePadding className={classes.scroll}>
-      { comments.reverse().map( (comment, index) => (
+    <List disablePadding className={props.classes || classes.scroll}>
+      { comments.map((comment, index) => (
         <CommentItem
           key={`task-comment-${assetId}-${comment.id}`}
           itemKey={`task-comment-${comment.id}`}
@@ -121,8 +121,9 @@ export function CommentForm(props) {
   }
 
   return (<div className={classes.bottomAction}>
-    <Input id="new_comment" type={'text'} label="New Comment" value={comment} autoComplete={false}
+    <Input id="new_comment" type={'text'} label="New Comment" value={comment} autoComplete=''
            onChange={(e) => setComment(e.target.value) }
+           fullWidth={true}
            endAdornment={
              <InputAdornment position="end">
               <IconButton

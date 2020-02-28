@@ -121,7 +121,6 @@ export default function App() {
         isWithTables={isWithTables}
         overlayMode={overlayMode}
         sketchMode={sketchMode}
-        overlayMode={overlayMode}
       />
       { isScreenXS && isWithTables && 
         <TablesDialog

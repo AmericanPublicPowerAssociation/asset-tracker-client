@@ -1,24 +1,34 @@
-import React, { useState } from 'react'
+import React  from 'react'
 import { useDispatch } from 'react-redux'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import Collapse from '@material-ui/core/Collapse'
-import ExpandMore from '@material-ui/icons/ExpandMore'
-import ExpandLess from '@material-ui/icons/ExpandLess'
+import CloseIcon from '@material-ui/icons/Close';
 import Chip from '@material-ui/core/Chip'
-import Radio from '@material-ui/core/Radio'
 import { makeStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
 import NativeSelect from '@material-ui/core/NativeSelect'
 import Button from "@material-ui/core/Button"
-import MessageIcon from '@material-ui/icons/Message'
 import {
+  addAssetTaskComment,
   setTaskPriority,
   setTaskStatus
 } from '../actions'
+import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
+import Dialog from "@material-ui/core/Dialog";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Slide from "@material-ui/core/Slide";
+import FiberManualRecordRoundedIcon from '@material-ui/icons/FiberManualRecordRounded';
+import TaskComments, {CommentForm} from "./TaskComments";
+import Container from "@material-ui/core/Container";
+import EditIcon from '@material-ui/icons/Edit';
+import {ASSET_TYPE_ICON_BY_CODE} from "../constants";
+import {AssetName} from "./AssetTasksPanel";
 
 
 const getPriorityColor  = (priority) => ({
@@ -69,6 +79,29 @@ const useStyles = makeStyles(theme => ({
   showComments: {
     fontSize: '0.7em',
     padding: 0
+  },
+  appBar: {
+    position: 'relative',
+  },
+  title: {
+    marginLeft: theme.spacing(2),
+    flex: 1,
+  },
+  listComments: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '75vh',
+    marginTop: '25px',
+    overflowY: 'auto'
+  },
+  label: {
+    color: 'rgba(0, 0, 0, 0.54)',
+    padding: '0',
+    fontSize: '1rem',
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontWeight: '400',
+    lineHeight: '1',
+    letterSpacing: '0.00938em',
   }
 }));
 
@@ -80,7 +113,8 @@ export default function TasksList(props) {
   const {
     asset,
     tasks,
-    showComments
+    showComments,
+    showDetails
   } = props
   const assetId = asset.id
 
@@ -91,6 +125,7 @@ export default function TasksList(props) {
           itemKey={`task-item-${assetId}`}
           assetId={assetId}
           task={task}
+          showDetails={showDetails}
           showComments={showComments}
         />
       ))}
@@ -100,121 +135,60 @@ export default function TasksList(props) {
 
 
 function TaskItem(props) {
-  const dispatch = useDispatch()
-  const [
-    isWithExpandConnect,
-    setIsWithExpandConnect
-  ] = useState(false)
   const {
     itemKey,
     task,
     showComments,
+    showDetails
   } = props
   const {
-      id,
       name,
       status,
-      priority
+      priority,
+      commentCount
   } = task
 
-
-  
-  const classes = useStyles();  
+  const classes = useStyles();
   // To emulate update on the backend
-    
-  const setPriority = (priority) => dispatch(setTaskPriority(id,
-                                                             parseInt(priority),
-                                                             status))
-  const setStatus = (status) => dispatch(setTaskStatus(id,
-                                                       parseInt(status),
-                                                       priority))
-    
-  const arrowComponent = (
-    isWithExpandConnect ?
-    <ExpandLess /> :
-    <ExpandMore />
-  )
 
   const priorityColor  = getPriorityColor(priority.toString())
   const statusLabel = getStatusLabel(status.toString())
-  
+  const PriorityIndicator = Priority(priorityColor, priority)
   return (
     <>
       <ListItem
         key={`${itemKey}-li`}
         disableGutters
-        onClick={ () => setIsWithExpandConnect(!isWithExpandConnect)}>
+        onClick={ () => showDetails(task) }>
         <div className={classes.spaceBetween}>
           <div className={classes.alignStart}>
-          <Radio
-            checked={true}
-            value={priority}
-            color={priorityColor}
-            name="priorityIndicator"
-            inputProps={{ 'aria-label': 'A' }}
-            style={{paddingLeft: 0}}
-          />
+          {PriorityIndicator}
           <div className={classes.fullWidth}>
             <ListItemText primary={name}/>
             <div className={classes.actions}>
             { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
 
             <Button className={classes.showComments}
-                    startIcon={<MessageIcon/>}
-                    onClick={() => showComments(task)}>Comments
+                    onClick={() => showComments(task)}> {commentCount} Comments
             </Button>
             </div>
           </div>
           </div>
-          { arrowComponent }
         </div>
       </ListItem>
 
-      <Collapse key={`${itemKey}-collapse`} in={isWithExpandConnect}>
-        <FormControl className={classes.formControl}>
-        <InputLabel htmlFor={`status-${itemKey}`}>Priority</InputLabel>
-        <NativeSelect
-          value={priority}
-          onChange={ (e) => setPriority(e.target.value)}
-          inputProps={{
-            name: 'priority',
-              id: `priority-${itemKey}`,
-          }}
-        >
-      <option value={1}>Low</option>
-      <option value={10}>Normal</option>
-	  <option value={100}>High</option>          
-        </NativeSelect>
-        <FormHelperText>Select the priority for the task</FormHelperText>
-	</FormControl>
-
-     <FormControl className={classes.formControl}>
-        <InputLabel htmlFor={`status-${itemKey}`}>Status</InputLabel>
-        <NativeSelect
-          value={status}
-          onChange={ (e) => setStatus(e.target.value)}
-          inputProps={{
-            name: 'status',
-            id: `status-${itemKey}`,
-          }}
-        >
-      <option value={0}>New</option>
-      <option value={10}>Pending</option>
-      <option value={100}>Done</option>
-      <option value={-1}>Cancelled</option>
-        </NativeSelect>
-        <FormHelperText>Select the status for the task</FormHelperText>
-      </FormControl>
-      </Collapse>
 
     </>
   )
 }
 
 
+const Priority = (priorityColor, priority) => (
+  <FiberManualRecordRoundedIcon style={{fontSize: '0.8rem', marginTop: '9px'}} color={priorityColor} />
+)
+
 export const TaskOverview = (props) => {
   const {
-    id,
     name,
     status,
     priority
@@ -227,18 +201,113 @@ export const TaskOverview = (props) => {
 
   return (
     <div style={{display: 'flex', alignItems: 'start'}}>
-      <Radio
-        checked={true}
-        value={priority}
-        color={priorityColor}
-        name="priorityIndicator"
-        inputProps={{ 'aria-label': 'A' }}
-        style={{paddingLeft: 0}}
-      />
+      <Priority priorityColor={priorityColor} priority={priority} />
       <div>
       <ListItemText primary={name}/>
       { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
       </div>
     </div>
   )
+}
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+export const TaskFullscreen = (props) => {
+  const dispatch = useDispatch()
+  const classes = useStyles()
+
+  const {
+    open,
+    handleClose,
+    task,
+    asset,
+  } = props;
+
+  const {
+    id,
+    status,
+    priority
+  } = task
+
+  const assetName = asset.name
+  const assetTypeCode = asset.typeCode
+  const assetType = ASSET_TYPE_ICON_BY_CODE[assetTypeCode]
+  const assetTypeName = assetType.name
+
+
+  const setPriority = (priority) => dispatch(setTaskPriority(id, parseInt(priority), status))
+  const setStatus = (status) => dispatch(setTaskStatus(id, parseInt(status), priority))
+
+  const priorityColor  = getPriorityColor((priority || '').toString())
+
+  return (
+    <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+      <AppBar color={priorityColor} className={classes.appBar}>
+
+        <Container>
+        <Toolbar style={{padding: 0}}>
+          <Typography style={{margin: 0}} variant="h6" className={classes.title}>
+             {task.name} ({task.id})
+            <IconButton edge={false} color="inherit" onClick={handleClose} aria-label="close">
+              <EditIcon />
+            </IconButton>
+          </Typography>
+          <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
+            <CloseIcon />
+          </IconButton>
+        </Toolbar>
+        </Container>
+      </AppBar>
+
+      <Container style={{maxHeight: '75vh'}}>
+        <Grid container>
+          <Grid item xs={12} md={9}>
+            <TaskComments asset={asset} task={task} classes={classes.listComments} />
+            <CommentForm onSubmit={(comment) => { dispatch(addAssetTaskComment(task.id, comment)) }} />
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <div style={{ paddingTop: '25px', paddingLeft: '35px' }}>
+              <AssetName assetTypeName={assetTypeName} assetTypeCode={assetTypeCode} assetName={assetName} />
+              <FormControl className={classes.formControl}>
+                <InputLabel htmlFor={`priority`}>Priority</InputLabel>
+                <NativeSelect
+                  value={priority}
+                  onChange={ (e) => setPriority(e.target.value)}
+                  inputProps={{
+                    name: 'priority',
+                    id: `priority`,
+                  }}
+                >
+                  <option value={1}>Low</option>
+                  <option value={10}>Normal</option>
+                  <option value={100}>High</option>
+                </NativeSelect>
+                <FormHelperText>Select the priority for the task</FormHelperText>
+              </FormControl>
+
+              <FormControl className={classes.formControl}>
+                <InputLabel htmlFor={`status`}>Status</InputLabel>
+                <NativeSelect
+                  value={status}
+                  onChange={ (e) => setStatus(e.target.value)}
+                  inputProps={{
+                    name: 'status',
+                    id: `status`,
+                  }}
+                >
+                  <option value={0}>New</option>
+                  <option value={10}>Pending</option>
+                  <option value={100}>Done</option>
+                  <option value={-1}>Cancelled</option>
+                </NativeSelect>
+                <FormHelperText>Select the status for the task</FormHelperText>
+              </FormControl>
+            </div>
+          </Grid>
+        </Grid>
+      </Container>
+
+    </Dialog>);
 }

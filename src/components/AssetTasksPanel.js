@@ -18,7 +18,7 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import TasksList, {TaskOverview} from './TasksList'
+import TasksList, {TaskFullscreen, TaskOverview} from './TasksList'
 import Tooltip from '@material-ui/core/Tooltip'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
@@ -55,6 +55,36 @@ const useStyles = makeStyles(theme => ({
 
 
 
+export const AssetName = (props) => {
+  const {
+    assetTypeName,
+    assetTypeCode,
+    assetName,
+  } = props
+
+  return (<ListItem
+    disableGutters
+    component='div'
+  >
+    <Tooltip title={assetTypeName} placement='left'>
+      <ListItemIcon>
+        <AssetTypeSvgIcon
+          assetTypeCode={assetTypeCode}
+        />
+      </ListItemIcon>
+    </Tooltip>
+    <Tooltip title={assetName} placement='bottom'>
+      <ListItemText
+        primary={
+          <Typography variant='h5' style={{fontSize: '1rem'}}>
+            {assetName}
+          </Typography>
+        }
+      />
+    </Tooltip>
+  </ListItem>)
+}
+
 export default function AssetTasksPanel(props) {
   const dispatch = useDispatch()
   const classes = useStyles()
@@ -78,7 +108,7 @@ export default function AssetTasksPanel(props) {
   const [status, setStatus]  = useState('new')
   const [priority, setPriority] = useState('')
   const [dialog, setDialog] = useState(false)	   
-  
+  const [taskDetails, setTaskDetails] = useState(false)
   
   const addTask = () => {
     setDialog(false)
@@ -88,38 +118,23 @@ export default function AssetTasksPanel(props) {
     setPriority('')
     setStatus('')
   }
-  
+
   const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
     task => !archived ? task.status !== TASK_ARCHIVE_STATUS : task.status === TASK_ARCHIVE_STATUS
   )
-    
 
-  const assetNameComponent = (<ListItem
-          disableGutters
-          component='div'
-          >
-        
-   <Tooltip title={assetTypeName} placement='left'>
-    <ListItemIcon>
-      <AssetTypeSvgIcon
-        assetTypeCode={assetTypeCode}
-      />
-    </ListItemIcon>
-    </Tooltip>
-    <Tooltip title={assetName} placement='bottom'>
-      <ListItemText
-        primary={
-                <Typography variant='h5' style={{fontSize: '1rem'}}>
-            {assetName}
-          </Typography>
-        }
-      />
-    </Tooltip>
-  </ListItem>)
+  const assetNameComponent = AssetName({
+    assetName, assetTypeCode, assetTypeName
+  })
 
   const triggerComments = (task) => {
     dispatch(updateTaskComments(task.id))
     setShowComments(task)
+  }
+
+  const handleDisplayDetails = (task) => {
+    dispatch(updateTaskComments(task.id))
+    setTaskDetails(task)
   }
 
   const listTasks = (<>
@@ -130,7 +145,7 @@ export default function AssetTasksPanel(props) {
         <Switch checked={archived} onChange={ () => setArchived(!archived) } value="archived" />}
                         label="Show archived tasks" />
     </FormGroup>
-    <TasksList showComments={triggerComments} asset={asset} tasks={partialTasks} disableInput={disableInput}/>
+    <TasksList showDetails={handleDisplayDetails} showComments={triggerComments} asset={asset} tasks={partialTasks} disableInput={disableInput}/>
 
     <Button className={classes.bottomAction} startIcon={<CloudUploadIcon />} onClick={() => setDialog(true)}>
       Add taks
@@ -148,7 +163,16 @@ export default function AssetTasksPanel(props) {
     <CommentForm onSubmit={(comment) => { dispatch(addAssetTaskComment(showComments.id, comment)) }} />
     <TaskComments asset={asset} task={showComments} />
     </> : <></>
-    
+
+  const getTaskById = () => {
+      if (taskDetails) {
+        for (let i = 0; i < tasks.length; i++) {
+          if (tasks[i].id === taskDetails.id) return tasks[i];
+        }
+      }
+      return {}
+  };
+
     return (
 	    <>
         {assetNameComponent}
@@ -173,7 +197,7 @@ export default function AssetTasksPanel(props) {
         >
           <option value='low'>Low</option>
           <option value='medium'>Medium</option>
-	  <option value='high'>High</option>          
+	  <option value='high'>High</option>
         </NativeSelect>
         <FormHelperText>Select the priority for the task</FormHelperText>
 	</FormControl>
@@ -206,6 +230,9 @@ export default function AssetTasksPanel(props) {
           </Button>
         </DialogActions>
 	  </Dialog>
+       <TaskFullscreen open={taskDetails !== false} asset={asset} task={getTaskById()}
+                        handleClose={ () => setTaskDetails(false)}
+                        />
 	  </>
   )
 }

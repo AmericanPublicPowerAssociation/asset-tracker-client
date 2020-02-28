@@ -80,7 +80,6 @@ export function* watchUpdateTask() {
 
 export function* watchRefreshAssetComments() {
   yield takeLatest(REFRESH_ASSET_COMMENTS, function* (action) {
-    console.log(action)
     const task_id = action.payload.task_id;
 
     const url = `/tasks/${task_id}/comments.json`
