@@ -24,6 +24,7 @@ import {
   CustomEditableGeoJsonLayer,
   getAssetTypeCode,
   getMapMode,
+  getSelectedAssetId,
   makeAsset,
 } from '../routines'
 import {
@@ -111,14 +112,6 @@ export default function AssetsMap(props) {
         dispatch(setFocusingAssetId(assetId))  // Show details for the new asset
         break
       }
-      case 'movePosition': {
-        console.log('movePosition', editContext.position)
-        break
-      }
-      case 'finishMovePosition': {
-        console.log('finishMovePosition', editContext.position)
-        break
-      }
       default: {}
     }
     dispatch(setAssetsGeoJson(updatedData))  // Update geojson for assets
@@ -133,8 +126,23 @@ export default function AssetsMap(props) {
       radius: pickingRadius,
       depth: pickingDepth,
     })
+    const lineAssetId = getSelectedAssetId(selectedAssetIndexes, assetsGeoJson)
+    console.log(lineAssetId)
+    // if we are at a mid vertex, then split the line
+    // remove old connections into recycle bin lookup
 
-    console.log('pickingInfo', pickingInfo)
+    if (pickingInfo) {
+      console.log('BUS')
+      // add bus from lookup or make new
+    } else {
+      console.log('NO BUS')
+    }
+
+    // if we have no bus, then move connections into recycle bin
+    // if we have a bus, then remove old connections, add this connection
+    // if we are at a mid vertex, then split line
+
+    console.log('pickingInfo', event, pickingInfo)
   }
 
   function handleBusesGeoJsonClick(info, event) {
@@ -197,8 +205,6 @@ export default function AssetsMap(props) {
       pickingRadius={pickingRadius}
       pickingDepth={pickingDepth}
       onViewStateChange={handleViewStateChange}
-      // onHover={(e, i) => console.log(e, i)}
-      // onClick={(e, i) => console.log(e, i)}
     >
       <StaticMap
         mapStyle={MAP_STYLE_BY_NAME[mapStyleName]}

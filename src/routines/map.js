@@ -22,6 +22,13 @@ export class CustomEditableGeoJsonLayer extends EditableGeoJsonLayer {
     modeProps.onInterpret = props.onInterpret
     return modeProps
   }
+
+  onDoubleClick(event) {
+    const mode = this.getActiveMode()
+    const modeProps = this.getModeProps(this.props)
+    const handleOnDoubleClick = mode.handleOnDoubleClick
+    handleOnDoubleClick && handleOnDoubleClick(event, modeProps)
+  }
 }
 
 export class CustomModifyMode extends ModifyMode {
