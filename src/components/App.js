@@ -88,6 +88,7 @@ export default function App() {
   return (
     <div>
       <AssetsMap
+        assetById={assetById}
         sketchMode={sketchMode}
         selectedAssetIndexes={selectedAssetIndexes}
         lineBusId={lineBusId}
