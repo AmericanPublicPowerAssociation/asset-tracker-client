@@ -21,20 +21,23 @@ import {
   SKETCH_MODE_ADD_LINE,
 } from '../constants'
 import {
+  getByKey,
+} from '../macros'
+import {
   CustomEditableGeoJsonLayer,
   getAssetTypeCode,
   getMapMode,
-  getSelectedAssetId,
   makeAsset,
+  getPickedEditHandle,
 } from '../routines'
 import {
-  getAssetTypeByCode,
+  // getFocusingAssetId,
+  // getFocusingBusId,
   getAssetIdByBusId,
+  getAssetTypeByCode,
   getAssetsGeoJson,
   getBusesGeoJson,
   getColors,
-  // getFocusingAssetId,
-  // getFocusingBusId,
   getMapStyleName,
   getMapViewState,
 } from '../selectors'
@@ -48,6 +51,7 @@ const BUSES_GEOJSON_LAYER_ID = 'buses-geojson-layer'
 
 export default function AssetsMap(props) {
   const {
+    assetById,
     sketchMode,
     selectedAssetIndexes,
     lineBusId,
@@ -118,31 +122,71 @@ export default function AssetsMap(props) {
   }
 
   function handleAssetsGeoJsonInterpret(event) {
+    // Find nearest bus
     const screenCoords = event.screenCoords
-    const pickingInfo = deckGL.current.pickObject({
+    const busInfos = deckGL.current.pickMultipleObjects({
       x: screenCoords[0],
       y: screenCoords[1],
       layerIds: [BUSES_GEOJSON_LAYER_ID],
       radius: pickingRadius,
       depth: pickingDepth,
     })
-    const lineAssetId = getSelectedAssetId(selectedAssetIndexes, assetsGeoJson)
-    console.log(lineAssetId)
+    // Determine whether the user modified a middle vertex
+    const vertex = getPickedEditHandle(event.picks)
+    if (!vertex) {
+      return
+    }
+    const vertexProperties = vertex.properties
+    const vertexIndex = vertexProperties.positionIndexes[0]
+    const featureIndex = vertexProperties.featureIndex
+    const feature = assetsGeoJson.features[featureIndex]
+    const featureVertexCount = feature.geometry.coordinates.length
+    const isMiddleVertex = vertexIndex !== 0 &&
+      vertexIndex !== featureVertexCount - 1
+    console.log('isMiddleVertex =', isMiddleVertex)
+
+    // const busCount = busInfos.length
     // if we are at a mid vertex, then split the line
     // remove old connections into recycle bin lookup
-
-    if (pickingInfo) {
-      console.log('BUS')
-      // add bus from lookup or make new
-    } else {
-      console.log('NO BUS')
-    }
+    // if there are multiple buses, choose the bus that is associated with another asset
+    // if there are no buses, make a new bus
 
     // if we have no bus, then move connections into recycle bin
     // if we have a bus, then remove old connections, add this connection
-    // if we are at a mid vertex, then split line
+    const vertexAssetId = feature.properties.id
+    const vertexAsset = assetById[vertexAssetId]
+    const vertexAssetConnections = vertexAsset.connections || []
+    const connectionByBusId = getByKey(vertexAssetConnections, 'busId')
+    console.log(connectionByBusId)
 
-    console.log('pickingInfo', event, pickingInfo)
+    // Find a bus that belongs to another asset
+    const theirBusId = busInfos.find(busInfo => {
+      const busId = busInfo.object.properties.id
+      const busAssetId = assetIdByBusId[busId]
+      return busAssetId !== vertexAssetId ? busId : null
+    })
+    if (theirBusId) {
+      console.log('SET CONNECTION TO THEIR BUS')
+      return
+    }
+
+    // Find a bus that belongs to this asset
+    const ourBusId = busInfos.find(busInfo => {
+      const busId = busInfo.object.properties.id
+      const busAssetId = assetIdByBusId[busId]
+      return busAssetId === vertexAssetId ? busId : null
+    })
+    if (ourBusId) {
+      console.log('KEEP OUR BUS')
+      return
+    }
+
+    // Make a new bus
+    console.log('MAKE A NEW BUS')
+
+    // If we cannot find such a bus, then make a new bus
+
+    // console.log('pickingInfo', event, nearestBusInfos)
   }
 
   function handleBusesGeoJsonClick(info, event) {

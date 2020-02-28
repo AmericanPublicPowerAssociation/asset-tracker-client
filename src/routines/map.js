@@ -49,3 +49,12 @@ export function getMapMode(sketchMode) {
   }[sketchMode]
   return mapMode || ViewMode
 }
+
+export function getPickedEditHandle(picks) {
+  // Taken from nebula.gl > mode-handler.js
+  const info = picks && picks.find(pick => pick.isGuide)
+  if (info) {
+    return info.object
+  }
+  return null
+}
