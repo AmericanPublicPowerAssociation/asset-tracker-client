@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
@@ -50,7 +50,6 @@ export default function AssetsMap(props) {
     setSelectedAssetIndexes,
     setLineBusId,
   } = props
-  const deckGL = useRef()  // !!!
   const dispatch = useDispatch()
   const mapStyleName = useSelector(getMapStyleName)
   const mapViewState = useSelector(getMapViewState)
@@ -78,7 +77,6 @@ export default function AssetsMap(props) {
   }
 
   function handleAssetsGeoJsonEdit({editType, editContext, updatedData}, xxx) {
-    // console.log(editContext, xxx)
     switch(editType) {
       // If a feature is being added for the first time,
       case 'addFeature': {
@@ -107,15 +105,11 @@ export default function AssetsMap(props) {
         break
       }
       case 'movePosition': {
-        // console.log('movePosition', editContext.position)
+        console.log('movePosition', editContext.position)
         break
       }
       case 'finishMovePosition': {
-        // console.log('finishMovePosition', editContext.position)
-        // const { position } = editContext
-        // console.log(deckGL.current.pickObject, position)
-        // const info = deckGL.current.pickObject({x: position[1], y: position[0]})
-        // console.log(info)
+        console.log('finishMovePosition', editContext.position)
         break
       }
       default: {}
@@ -175,13 +169,12 @@ export default function AssetsMap(props) {
 
   return (
     <DeckGL
-      ref={deckGL}  // !!!
       controller={true}
       layers={mapLayers}
       viewState={mapViewState}
       pickingRadius={PICKING_RADIUS_IN_PIXELS}
       onViewStateChange={handleViewStateChange}
-      onHover={(e, i) => console.log(e, i)}
+      // onHover={(e, i) => console.log(e, i)}
       // onClick={(e, i) => console.log(e, i)}
     >
       <StaticMap
