@@ -331,7 +331,9 @@ export default function AssetsMap(props) {
     <div onKeyUp={onKeyUp} onDoubleClick={onDoubleClick}>
       <DeckGL
         ref={deckGL}
-        controller={true}
+        controller={{
+          doubleClickZoom: false,
+        }}
         layers={mapLayers}
         viewState={mapViewState}
         pickingRadius={pickingRadius}
