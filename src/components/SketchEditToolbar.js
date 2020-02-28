@@ -46,6 +46,7 @@ export default function SketchEditToolbar(props) {
           </ListItem>
         </Tooltip>
 
+        {/*
         <Tooltip title='Move' aria-label='Move' placement='right'>
           <ListItem
             button
@@ -56,6 +57,7 @@ export default function SketchEditToolbar(props) {
             <SvgIcon fontSize='large' component={MoveIcon} />
           </ListItem>
         </Tooltip>
+        */}
       </List>
     </Paper>
   )
