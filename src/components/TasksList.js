@@ -29,6 +29,7 @@ import Container from "@material-ui/core/Container";
 import EditIcon from '@material-ui/icons/Edit';
 import {ASSET_TYPE_ICON_BY_CODE} from "../constants";
 import {AssetName} from "./AssetTasksPanel";
+import clsx from "clsx";
 
 
 const getPriorityColor  = (priority) => ({
@@ -102,13 +103,64 @@ const useStyles = makeStyles(theme => ({
     fontWeight: '400',
     lineHeight: '1',
     letterSpacing: '0.00938em',
-  }
+  },
+  priorityIndicator: {
+    fontSize: '0.8rem',
+    marginTop: '9px',
+  },
+  noPadding: {
+    padding: 0
+  },
+  moMargin: {
+    margin: 0
+  },
+  maxHeight: {
+    maxHeight: '75vh'
+  },
+  propertiesSection: {
+    paddingTop: '25px',
+    paddingLeft: '35px',
+  },
 }));
 
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+})
+
+
+const Priority = (priorityColor, priority) => {
+  const classes = useStyles()
+
+  return <FiberManualRecordRoundedIcon className={classes.priorityIndicator} color={priorityColor} />
+}
+
+
+export const TaskOverview = (props) => {
+  const {
+    name,
+    status,
+    priority
+  } = props.task
+
+  const classes = useStyles()
+
+  const priorityColor = getPriorityColor(priority.toString())
+  const statusLabel = getStatusLabel(status.toString())
+
+  return (
+    <div style={{display: 'flex', alignItems: 'start'}}>
+      <Priority priorityColor={priorityColor} priority={priority} />
+      <div>
+        <ListItemText primary={name}/>
+        { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
+      </div>
+    </div>
+  )
+}
+
 
 export default function TasksList(props) {
-
   const classes = useStyles()
   const {
     asset,
@@ -133,7 +185,6 @@ export default function TasksList(props) {
   )
 }
 
-
 function TaskItem(props) {
   const {
     itemKey,
@@ -149,7 +200,6 @@ function TaskItem(props) {
   } = task
 
   const classes = useStyles();
-  // To emulate update on the backend
 
   const priorityColor  = getPriorityColor(priority.toString())
   const statusLabel = getStatusLabel(status.toString())
@@ -167,7 +217,6 @@ function TaskItem(props) {
             <ListItemText primary={name}/>
             <div className={classes.actions}>
             { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
-
             <Button className={classes.showComments}
                     onClick={() => showComments(task)}> {commentCount} Comments
             </Button>
@@ -176,43 +225,10 @@ function TaskItem(props) {
           </div>
         </div>
       </ListItem>
-
-
     </>
   )
 }
 
-
-const Priority = (priorityColor, priority) => (
-  <FiberManualRecordRoundedIcon style={{fontSize: '0.8rem', marginTop: '9px'}} color={priorityColor} />
-)
-
-export const TaskOverview = (props) => {
-  const {
-    name,
-    status,
-    priority
-  } = props.task
-
-  const classes = useStyles()
-  
-  const priorityColor  = getPriorityColor(priority.toString())
-  const statusLabel = getStatusLabel(status.toString())
-
-  return (
-    <div style={{display: 'flex', alignItems: 'start'}}>
-      <Priority priorityColor={priorityColor} priority={priority} />
-      <div>
-      <ListItemText primary={name}/>
-      { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
-      </div>
-    </div>
-  )
-}
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 export const TaskFullscreen = (props) => {
   const dispatch = useDispatch()
@@ -236,7 +252,6 @@ export const TaskFullscreen = (props) => {
   const assetType = ASSET_TYPE_ICON_BY_CODE[assetTypeCode]
   const assetTypeName = assetType.name
 
-
   const setPriority = (priority) => dispatch(setTaskPriority(id, parseInt(priority), status))
   const setStatus = (status) => dispatch(setTaskStatus(id, parseInt(status), priority))
 
@@ -245,10 +260,9 @@ export const TaskFullscreen = (props) => {
   return (
     <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
       <AppBar color={priorityColor} className={classes.appBar}>
-
         <Container>
-        <Toolbar style={{padding: 0}}>
-          <Typography style={{margin: 0}} variant="h6" className={classes.title}>
+        <Toolbar className={classes.noPadding}>
+          <Typography variant="h6" className={clsx(classes.title, classes.noMargin)}>
              {task.name} ({task.id})
             <IconButton edge={false} color="inherit" onClick={handleClose} aria-label="close">
               <EditIcon />
@@ -260,15 +274,14 @@ export const TaskFullscreen = (props) => {
         </Toolbar>
         </Container>
       </AppBar>
-
-      <Container style={{maxHeight: '75vh'}}>
+      <Container className={classes.maxHeight}>
         <Grid container>
           <Grid item xs={12} md={9}>
             <TaskComments asset={asset} task={task} classes={classes.listComments} />
             <CommentForm onSubmit={(comment) => { dispatch(addAssetTaskComment(task.id, comment)) }} />
           </Grid>
           <Grid item xs={12} md={3}>
-            <div style={{ paddingTop: '25px', paddingLeft: '35px' }}>
+            <div className={classes.propertiesSection}>
               <AssetName assetTypeName={assetTypeName} assetTypeCode={assetTypeCode} assetName={assetName} />
               <FormControl className={classes.formControl}>
                 <InputLabel htmlFor={`priority`}>Priority</InputLabel>
@@ -286,7 +299,6 @@ export const TaskFullscreen = (props) => {
                 </NativeSelect>
                 <FormHelperText>Select the priority for the task</FormHelperText>
               </FormControl>
-
               <FormControl className={classes.formControl}>
                 <InputLabel htmlFor={`status`}>Status</InputLabel>
                 <NativeSelect
@@ -295,8 +307,7 @@ export const TaskFullscreen = (props) => {
                   inputProps={{
                     name: 'status',
                     id: `status`,
-                  }}
-                >
+                  }}>
                   <option value={0}>New</option>
                   <option value={10}>Pending</option>
                   <option value={100}>Done</option>
@@ -308,6 +319,5 @@ export const TaskFullscreen = (props) => {
           </Grid>
         </Grid>
       </Container>
-
     </Dialog>);
 }
