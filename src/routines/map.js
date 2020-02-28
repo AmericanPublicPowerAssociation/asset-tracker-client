@@ -2,6 +2,7 @@ import {
   DrawLineStringMode,
   DrawPointMode,
   DrawPolygonMode,
+  EditableGeoJsonLayer,
   ModifyMode,
   TranslateMode,
   ViewMode,
@@ -15,13 +16,19 @@ import {
   SKETCH_MODE_EDIT_TRANSLATE,
 } from '../constants'
 
-export class ModifyConnectionMode extends ModifyMode {
+export class CustomEditableGeoJsonLayer extends EditableGeoJsonLayer {
+  getModeProps(props) {
+    const modeProps = super.getModeProps(props)
+    modeProps.onInterpret = props.onInterpret
+    return modeProps
+  }
+}
 
+export class CustomModifyMode extends ModifyMode {
   handleStopDragging(event, props) {
     super.handleStopDragging(event, props)
-    console.log('handleStopDragging', event, props)
+    props.onInterpret(event)
   }
-
 }
 
 export function getMapMode(sketchMode) {
@@ -30,8 +37,7 @@ export function getMapMode(sketchMode) {
     [SKETCH_MODE_ADD_METER]: DrawPointMode,
     [SKETCH_MODE_ADD_TRANSFORMER]: DrawPointMode,
     [SKETCH_MODE_ADD_SUBSTATION]: DrawPolygonMode,
-    // [SKETCH_MODE_EDIT_MODIFY]: ModifyMode,
-    [SKETCH_MODE_EDIT_MODIFY]: ModifyConnectionMode,
+    [SKETCH_MODE_EDIT_MODIFY]: CustomModifyMode,
     [SKETCH_MODE_EDIT_TRANSLATE]: TranslateMode,
   }[sketchMode]
   return mapMode || ViewMode

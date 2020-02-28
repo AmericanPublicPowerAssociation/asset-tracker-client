@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
 import { GeoJsonLayer } from '@deck.gl/layers'
-import { EditableGeoJsonLayer } from 'nebula.gl'
 import {
   // setFocusingBusId,
   setAsset,
@@ -15,12 +14,14 @@ import {
   BUS_RADIUS_IN_METERS,
   LINE_WIDTH_IN_METERS,
   MAP_STYLE_BY_NAME,
+  PICKING_DEPTH,
   PICKING_RADIUS_IN_PIXELS,
   POINT_RADIUS_IN_METERS,
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_LINE,
 } from '../constants'
 import {
+  CustomEditableGeoJsonLayer,
   getAssetTypeCode,
   getMapMode,
   makeAsset,
@@ -41,6 +42,9 @@ const {
   REACT_APP_MAPBOX_TOKEN,
 } = process.env
 
+const ASSETS_GEOJSON_LAYER_ID = 'assets-geojson-layer'
+const BUSES_GEOJSON_LAYER_ID = 'buses-geojson-layer'
+
 export default function AssetsMap(props) {
   const {
     sketchMode,
@@ -51,6 +55,7 @@ export default function AssetsMap(props) {
     setLineBusId,
   } = props
   const dispatch = useDispatch()
+  const deckGL = useRef()
   const mapStyleName = useSelector(getMapStyleName)
   const mapViewState = useSelector(getMapViewState)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
@@ -62,6 +67,8 @@ export default function AssetsMap(props) {
   // const focusingBusId = useSelector(getFocusingBusId)
   const mapLayers = []
   const mapMode = getMapMode(sketchMode)
+  const pickingRadius = PICKING_RADIUS_IN_PIXELS
+  const pickingDepth = PICKING_DEPTH
 
   function handleViewStateChange({viewState}) {
     // Update the map viewport
@@ -76,7 +83,7 @@ export default function AssetsMap(props) {
     setSelectedAssetIndexes([featureIndex])
   }
 
-  function handleAssetsGeoJsonEdit({editType, editContext, updatedData}, xxx) {
+  function handleAssetsGeoJsonEdit({editType, editContext, updatedData}) {
     switch(editType) {
       // If a feature is being added for the first time,
       case 'addFeature': {
@@ -117,6 +124,19 @@ export default function AssetsMap(props) {
     dispatch(setAssetsGeoJson(updatedData))  // Update geojson for assets
   }
 
+  function handleAssetsGeoJsonInterpret(event) {
+    const screenCoords = event.screenCoords
+    const pickingInfo = deckGL.current.pickObject({
+      x: screenCoords[0],
+      y: screenCoords[1],
+      layerIds: [BUSES_GEOJSON_LAYER_ID],
+      radius: pickingRadius,
+      depth: pickingDepth,
+    })
+
+    console.log('pickingInfo', pickingInfo)
+  }
+
   function handleBusesGeoJsonClick(info, event) {
     const busId = info.object.properties.id
     const assetId = assetIdByBusId[busId]
@@ -134,8 +154,8 @@ export default function AssetsMap(props) {
     assetId && dispatch(setFocusingAssetId(assetId))
   }
 
-  mapLayers.push(new EditableGeoJsonLayer({
-    id: 'assets-geojson-layer',
+  mapLayers.push(new CustomEditableGeoJsonLayer({
+    id: ASSETS_GEOJSON_LAYER_ID,
     data: assetsGeoJson,
     mode: mapMode,
     pickable: true,
@@ -153,10 +173,11 @@ export default function AssetsMap(props) {
     },
     onClick: handleAssetsGeoJsonClick,
     onEdit: handleAssetsGeoJsonEdit,
+    onInterpret: handleAssetsGeoJsonInterpret,
   }))
 
   mapLayers.push(new GeoJsonLayer({
-    id: 'buses-geojson-layer',
+    id: BUSES_GEOJSON_LAYER_ID,
     data: busesGeoJson,
     pickable: true,
     stroked: false,
@@ -169,10 +190,12 @@ export default function AssetsMap(props) {
 
   return (
     <DeckGL
+      ref={deckGL}
       controller={true}
       layers={mapLayers}
       viewState={mapViewState}
-      pickingRadius={PICKING_RADIUS_IN_PIXELS}
+      pickingRadius={pickingRadius}
+      pickingDepth={pickingDepth}
       onViewStateChange={handleViewStateChange}
       // onHover={(e, i) => console.log(e, i)}
       // onClick={(e, i) => console.log(e, i)}
