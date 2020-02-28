@@ -6,6 +6,7 @@ import { GeoJsonLayer } from '@deck.gl/layers'
 import {
   // setFocusingBusId,
   setAsset,
+  setAssetConnection,
   setAssetsGeoJson,
   setFocusingAssetId,
   setMapViewState,
@@ -14,6 +15,7 @@ import {
   BUS_RADIUS_IN_METERS,
   LINE_WIDTH_IN_METERS,
   MAP_STYLE_BY_NAME,
+  MINIMUM_BUS_ID_LENGTH,
   PICKING_DEPTH,
   PICKING_RADIUS_IN_PIXELS,
   POINT_RADIUS_IN_METERS,
@@ -22,6 +24,7 @@ import {
 } from '../constants'
 import {
   getByKey,
+  getRandomId,
 } from '../macros'
 import {
   CustomEditableGeoJsonLayer,
@@ -143,48 +146,63 @@ export default function AssetsMap(props) {
     const featureVertexCount = feature.geometry.coordinates.length
     const isMiddleVertex = vertexIndex !== 0 &&
       vertexIndex !== featureVertexCount - 1
-    console.log('isMiddleVertex =', isMiddleVertex)
+    if (isMiddleVertex) {
+      // Split the line
+      console.log('isMiddleVertex')
+      return
+    }
 
-    // const busCount = busInfos.length
-    // if we are at a mid vertex, then split the line
-    // remove old connections into recycle bin lookup
-    // if there are multiple buses, choose the bus that is associated with another asset
-    // if there are no buses, make a new bus
-
-    // if we have no bus, then move connections into recycle bin
-    // if we have a bus, then remove old connections, add this connection
     const vertexAssetId = feature.properties.id
     const vertexAsset = assetById[vertexAssetId]
     const vertexAssetConnections = vertexAsset.connections || []
     const connectionByBusId = getByKey(vertexAssetConnections, 'busId')
-    console.log(connectionByBusId)
+    // console.log(connectionByBusId)
+    const connectionIndex = vertexIndex === 0 ? 0 : 1
+    // console.log(connectionByBusId)
+
+    function getMatchingBusId(isMatchingBusAssetId) {
+      for (let i = 0; i < busInfos.length; i++) {
+        const busInfo = busInfos[i]
+        const busId = busInfo.object.properties.id
+        const busAssetId = assetIdByBusId[busId]
+        if (isMatchingBusAssetId(busAssetId)) {
+          return busId
+        }
+      }
+    }
+
+    function getConnection(busId) {
+      return connectionByBusId[busId] || {busId}
+    }
 
     // Find a bus that belongs to another asset
-    const theirBusId = busInfos.find(busInfo => {
-      const busId = busInfo.object.properties.id
-      const busAssetId = assetIdByBusId[busId]
-      return busAssetId !== vertexAssetId ? busId : null
-    })
+    const theirBusId = getMatchingBusId(
+      busAssetId => busAssetId !== vertexAssetId)
     if (theirBusId) {
-      console.log('SET CONNECTION TO THEIR BUS')
+      console.log('SET CONNECTION TO THEIR BUS', theirBusId)
+      const connection = getConnection(theirBusId)
+      console.log(vertexAssetId, connectionIndex, connection)
+      dispatch(setAssetConnection(vertexAssetId, connectionIndex, connection))
       return
     }
 
     // Find a bus that belongs to this asset
-    const ourBusId = busInfos.find(busInfo => {
-      const busId = busInfo.object.properties.id
-      const busAssetId = assetIdByBusId[busId]
-      return busAssetId === vertexAssetId ? busId : null
-    })
+    const ourBusId = getMatchingBusId(
+      busAssetId => busAssetId === vertexAssetId)
     if (ourBusId) {
-      console.log('KEEP OUR BUS')
+      console.log('KEEP OUR BUS', ourBusId)
+      const connection = getConnection(ourBusId)
+      console.log(vertexAssetId, connectionIndex, connection)
+      dispatch(setAssetConnection(vertexAssetId, connectionIndex, connection))
       return
     }
 
     // Make a new bus
     console.log('MAKE A NEW BUS')
-
-    // If we cannot find such a bus, then make a new bus
+    const newBusId = getRandomId(MINIMUM_BUS_ID_LENGTH)
+    const connection = getConnection(newBusId)
+    console.log(vertexAssetId, connectionIndex, connection)
+    dispatch(setAssetConnection(vertexAssetId, connectionIndex, connection))
 
     // console.log('pickingInfo', event, nearestBusInfos)
   }

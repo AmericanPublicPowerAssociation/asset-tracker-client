@@ -6,6 +6,7 @@ import {
   SET_ASSETS,
   SET_ASSETS_GEOJSON,
   SET_ASSET_ATTRIBUTE,
+  SET_ASSET_CONNECTION,
   SET_ASSET_CONNECTION_ATTRIBUTE,
   SET_ASSET_VALUE,
   SET_FOCUSING_ASSET_ID,
@@ -59,6 +60,13 @@ export function addAssetConnection(assetId, busId) {
   return {
     type: ADD_ASSET_CONNECTION,
     payload: {assetId, busId},
+  }
+}
+
+export function setAssetConnection(assetId, connectionIndex, connection) {
+  return {
+    type: SET_ASSET_CONNECTION,
+    payload: {assetId, connectionIndex, connection},
   }
 }
 
