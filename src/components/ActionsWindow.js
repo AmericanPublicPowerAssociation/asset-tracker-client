@@ -12,7 +12,6 @@ import {
 import {
   getColors,
 } from '../selectors'
-
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',

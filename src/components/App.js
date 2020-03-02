@@ -22,6 +22,7 @@ import {
   refreshAssets,
   setFocusingBusId,
   updateAssets,
+  refreshTasks,
 } from '../actions'
 import {
   IS_WITH_DETAILS,
@@ -82,6 +83,7 @@ export default function App() {
 
   useEffect(() => {
     dispatch(refreshAssets())
+    dispatch(refreshTasks())
     dispatch(refreshRisks())
   }, [dispatch])
 

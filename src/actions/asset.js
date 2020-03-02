@@ -12,6 +12,11 @@ import {
   SET_ASSET_VALUE,
   SET_FOCUSING_ASSET_ID,
   UPDATE_ASSETS,
+  REFRESH_TASKS,
+  SET_TASKS,
+  ADD_TASK,
+  UPDATE_TASK,
+  SET_ASSET_COMMENTS, REFRESH_ASSET_COMMENTS, ADD_TASK_COMMENT,
 } from '../constants'
 
 export function saveAssets() {
@@ -94,9 +99,64 @@ export function setAssetsGeoJson(geojson) {
   }
 }
 
+export function setAssetComments({task_id, comments}) {
+  return {
+    type: SET_ASSET_COMMENTS,
+    payload: {task_id, comments}
+  }
+}
+
 export function setFocusingAssetId(id) {
   return {
     type: SET_FOCUSING_ASSET_ID,
     payload: id,
+  }
+}
+
+export function refreshTasks() {
+  return {
+    type: REFRESH_TASKS
+  }
+}
+
+export function setTasks(assets) {
+  return {
+    type: SET_TASKS,
+    payload: assets
+  }
+}
+
+export function addAssetTask(assetId, name, description) {
+  return {
+    type: ADD_TASK,
+    payload: {assetId, name, description},
+  }
+}
+
+export function setTaskStatus(task_id, status, priority) {
+  return {
+    type: UPDATE_TASK,
+    payload: {task_id, status, priority},
+  }
+}
+
+export function setTaskPriority(task_id, priority, status) {
+  return {
+    type: UPDATE_TASK,
+    payload: {task_id, priority, status},
+  }
+}
+
+export function updateTaskComments(task_id) {
+  return {
+    type: REFRESH_ASSET_COMMENTS,
+    payload: {task_id}
+  }
+}
+
+export function addAssetTaskComment(task_id, text) {
+  return {
+    type: ADD_TASK_COMMENT,
+    payload: {task_id, text},
   }
 }
