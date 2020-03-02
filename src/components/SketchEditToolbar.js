@@ -6,17 +6,18 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import Tooltip from '@material-ui/core/Tooltip'
+import DeleteIcon from '@material-ui/icons/Delete'
 import ModifyIcon from '@material-ui/icons/Edit'
-import MoveIcon from '@material-ui/icons/OpenWith'
+// import MoveIcon from '@material-ui/icons/OpenWith'
 import {
+  SKETCH_MODE_EDIT_DELETE,
   SKETCH_MODE_EDIT_MODIFY,
-  SKETCH_MODE_EDIT_TRANSLATE,
+  // SKETCH_MODE_EDIT_TRANSLATE,
 } from '../constants'
 
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
-    // top: theme.spacing(34),
     top: theme.spacing(22),
     left: theme.spacing(1),
   },
@@ -26,7 +27,7 @@ export default function SketchEditToolbar(props) {
   const classes = useStyles()
   const {
     sketchMode,
-    setSketchMode,
+    changeSketchMode,
   } = props
   const isEditing = sketchMode.startsWith('edit')
   return (
@@ -41,24 +42,33 @@ export default function SketchEditToolbar(props) {
             button
             classes={{selected: 'selected'}}
             selected={sketchMode === SKETCH_MODE_EDIT_MODIFY}
-            onClick={() => {
-              setSketchMode(SKETCH_MODE_EDIT_MODIFY)
-            }}
+            onClick={() => changeSketchMode(SKETCH_MODE_EDIT_MODIFY)}
           >
             <SvgIcon fontSize='large' component={ModifyIcon} />
           </ListItem>
         </Tooltip>
 
+        {/*
         <Tooltip title='Move' aria-label='Move' placement='right'>
           <ListItem
             button
             classes={{selected: 'selected'}}
             selected={sketchMode === SKETCH_MODE_EDIT_TRANSLATE}
-            onClick={() => {
-              setSketchMode(SKETCH_MODE_EDIT_TRANSLATE)
-            }}
+            onClick={() => changeSketchMode(SKETCH_MODE_EDIT_TRANSLATE)}
           >
             <SvgIcon fontSize='large' component={MoveIcon} />
+          </ListItem>
+        </Tooltip>
+        */}
+
+        <Tooltip title='Delete' aria-label='Delete' placement='right'>
+          <ListItem
+            button
+            classes={{selected: 'selected'}}
+            selected={sketchMode === SKETCH_MODE_EDIT_DELETE}
+            onClick={() => changeSketchMode(SKETCH_MODE_EDIT_DELETE)}
+          >
+            <SvgIcon fontSize='large' component={DeleteIcon} />
           </ListItem>
         </Tooltip>
       </List>

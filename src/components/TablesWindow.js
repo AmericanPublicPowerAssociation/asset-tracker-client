@@ -22,11 +22,13 @@ export default function TablesWindow(props) {
   const {
     overlayMode,
     setSelectedAssetIndexes,
+    setSelectedBusIndexes,
   } =  props
 
   const table = {
     assets: <AssetsTable
       setSelectedAssetIndexes={setSelectedAssetIndexes}
+      setSelectedBusIndexes={setSelectedBusIndexes}
     />,
     tasks: <TasksTable />,
     risks: <RisksTable />,

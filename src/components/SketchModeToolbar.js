@@ -26,7 +26,7 @@ export default function SketchModeToolbar(props) {
   const classes = useStyles()
   const {
     sketchMode,
-    setSketchMode,
+    changeSketchMode,
   } = props
   const isViewing = sketchMode === SKETCH_MODE_VIEW
   return (
@@ -41,7 +41,7 @@ export default function SketchModeToolbar(props) {
             button
             classes={{ selected: 'selected' }}
             selected={sketchMode.startsWith(SKETCH_MODE_ADD)}
-            onClick={() => setSketchMode(SKETCH_MODE_ADD)}
+            onClick={() => changeSketchMode(SKETCH_MODE_ADD)}
           >
             <SvgIcon fontSize='large' component={AddIcon} />
           </ListItem>
@@ -52,7 +52,7 @@ export default function SketchModeToolbar(props) {
             button
             classes={{ selected: 'selected' }}
             selected={sketchMode.startsWith(SKETCH_MODE_EDIT)}
-            onClick={() => setSketchMode(SKETCH_MODE_EDIT)}
+            onClick={() => changeSketchMode(SKETCH_MODE_EDIT)}
           >
             <SvgIcon fontSize='large' component={EditIcon} />
           </ListItem>

@@ -41,6 +41,7 @@ export default function DetailsWindow(props) {
     isWithTables,
     overlayMode,
     sketchMode,
+    setSelectedBusIndexes,
   } = props
   const focusingAsset = useSelector(getFocusingAsset)
   const tasksForFocusingAsset = useSelector(getTasksForFocusedAsset)
@@ -57,6 +58,7 @@ export default function DetailsWindow(props) {
       tasks={tasksForFocusingAsset}
       sketchMode={sketchMode}
       overlayMode={overlayMode} 
+      setSelectedBusIndexes={setSelectedBusIndexes}
     /> : <EmptyDetailsPanel />
 
   return (
