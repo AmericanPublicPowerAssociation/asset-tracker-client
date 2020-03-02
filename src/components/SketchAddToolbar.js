@@ -20,7 +20,6 @@ import {
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
-    // top: theme.spacing(34),
     top: theme.spacing(22),
     left: theme.spacing(1),
   },
@@ -29,8 +28,7 @@ const useStyles = makeStyles(theme => ({
 export default function SketchAddToolbar(props) {
   const {
     sketchMode,
-    setSketchMode,
-    onSketchModeAddLine,
+    changeSketchMode,
   } = props
   const classes = useStyles()
   const isAdding = sketchMode.startsWith('add')
@@ -46,14 +44,9 @@ export default function SketchAddToolbar(props) {
             button
             classes={{selected: 'selected'}}
             selected={sketchMode === SKETCH_MODE_ADD_LINE}
-            onClick={() => {
-              setSketchMode(SKETCH_MODE_ADD_LINE)
-              onSketchModeAddLine()
-            }}
+            onClick={() => changeSketchMode(SKETCH_MODE_ADD_LINE)}
           >
-            <AssetTypeSvgIcon
-              assetTypeCode={ASSET_TYPE_CODE_LINE}
-            />
+            <AssetTypeSvgIcon assetTypeCode={ASSET_TYPE_CODE_LINE} />
           </ListItem>
         </Tooltip>
 
@@ -66,13 +59,9 @@ export default function SketchAddToolbar(props) {
             button
             classes={{selected: 'selected'}}
             selected={sketchMode === SKETCH_MODE_ADD_METER}
-            onClick={() => {
-              setSketchMode(SKETCH_MODE_ADD_METER)
-            }}
+            onClick={() => changeSketchMode(SKETCH_MODE_ADD_METER)}
           >
-            <AssetTypeSvgIcon
-              assetTypeCode={ASSET_TYPE_CODE_METER}
-            />
+            <AssetTypeSvgIcon assetTypeCode={ASSET_TYPE_CODE_METER} />
           </ListItem>
         </Tooltip>
 
@@ -85,13 +74,9 @@ export default function SketchAddToolbar(props) {
             button
             classes={{selected: 'selected'}}
             selected={sketchMode === SKETCH_MODE_ADD_TRANSFORMER}
-            onClick={() => {
-              setSketchMode(SKETCH_MODE_ADD_TRANSFORMER)
-            }}
+            onClick={() => changeSketchMode(SKETCH_MODE_ADD_TRANSFORMER)}
           >
-            <AssetTypeSvgIcon
-              assetTypeCode={ASSET_TYPE_CODE_TRANSFORMER}
-            />
+            <AssetTypeSvgIcon assetTypeCode={ASSET_TYPE_CODE_TRANSFORMER} />
           </ListItem>
         </Tooltip>
 
@@ -104,13 +89,9 @@ export default function SketchAddToolbar(props) {
             button
             classes={{selected: 'selected'}}
             selected={sketchMode === SKETCH_MODE_ADD_SUBSTATION}
-            onClick={() => {
-              setSketchMode(SKETCH_MODE_ADD_SUBSTATION)
-            }}
+            onClick={() => changeSketchMode(SKETCH_MODE_ADD_SUBSTATION)}
           >
-            <AssetTypeSvgIcon
-              assetTypeCode={ASSET_TYPE_CODE_SUBSTATION}
-            />
+            <AssetTypeSvgIcon assetTypeCode={ASSET_TYPE_CODE_SUBSTATION} />
           </ListItem>
         </Tooltip>
       </List>

@@ -1,11 +1,13 @@
 import {
   ADD_ASSET_CONNECTION,
+  DELETE_ASSET,
   REFRESH_ASSETS,
   SAVE_ASSETS,
   SET_ASSET,
   SET_ASSETS,
   SET_ASSETS_GEOJSON,
   SET_ASSET_ATTRIBUTE,
+  SET_ASSET_CONNECTION,
   SET_ASSET_CONNECTION_ATTRIBUTE,
   SET_ASSET_VALUE,
   SET_FOCUSING_ASSET_ID,
@@ -45,6 +47,13 @@ export function setAsset(asset) {
   }
 }
 
+export function deleteAsset(assetId){
+  return {
+    type: DELETE_ASSET,
+    payload: assetId
+  }
+}
+
 export function setAssetValue(assetId, key, value) {
   return {
     type: SET_ASSET_VALUE,
@@ -63,6 +72,13 @@ export function addAssetConnection(assetId, busId) {
   return {
     type: ADD_ASSET_CONNECTION,
     payload: {assetId, busId},
+  }
+}
+
+export function setAssetConnection(assetId, connectionIndex, connection) {
+  return {
+    type: SET_ASSET_CONNECTION,
+    payload: {assetId, connectionIndex, connection},
   }
 }
 
