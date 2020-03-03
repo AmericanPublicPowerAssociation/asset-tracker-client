@@ -98,6 +98,7 @@ export default function AssetsMap(props) {
     if (assetId && sketchMode.startsWith(SKETCH_MODE_EDIT_DELETE)) {
       dispatch(deleteAsset(assetId))
       setSelectedAssetIndexes([])
+      dispatch(setFocusingAssetId(null))
       return
     }
     assetId && dispatch(setFocusingAssetId(assetId))
