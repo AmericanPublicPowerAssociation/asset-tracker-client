@@ -14,7 +14,6 @@ import {
   getLetter,
 } from '../macros'
 import {
-  getAssetById,
   getAssetIdsByBusId,
   getBusesGeoJson,
   getFocusingBusId,
