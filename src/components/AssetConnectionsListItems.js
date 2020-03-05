@@ -26,10 +26,10 @@ export default function AssetConnectionsListItems(props) {
     asset,
     isEditing,
     setSelectedBusIndexes,
+    setSelectedAssetIndexes,
   } = props
   const [isOpenByConnectionIndex, setIsOpenByConnectionIndex] = useState({})
   const assetIdsByBusId = useSelector(getAssetIdsByBusId)
-  const assetById = useSelector(getAssetById)
   const assetId = asset.id
   const assetTypeCode = asset.typeCode
   const connections = asset.connections || []
@@ -39,8 +39,7 @@ export default function AssetConnectionsListItems(props) {
   return connections.map((connection, connectionIndex) => {
     const busId = connection.busId
     const connectedAssetIds = assetIdsByBusId[busId].filter(
-      connectedAssetId => connectedAssetId !== assetId).filter(
-      connectedAssetId => assetById[connectedAssetId].deleted !== true)
+      connectedAssetId => connectedAssetId !== assetId)
 
     const connectedAssetCount = connectedAssetIds.length
     const title = `Bus ${getLetter(connectionIndex)}`
@@ -83,7 +82,10 @@ export default function AssetConnectionsListItems(props) {
           isEditing={isEditing}
           onFocus={onClickOrFocus}
         />
-        <BusConnectionsList connectedAssetIds={connectedAssetIds} />
+        <BusConnectionsList
+          connectedAssetIds={connectedAssetIds}
+          setSelectedAssetIndexes={setSelectedAssetIndexes}
+        />
       </CollapsibleListItem> :
       <ListItem
         disableGutters

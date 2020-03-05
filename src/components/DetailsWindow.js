@@ -41,6 +41,7 @@ export default function DetailsWindow(props) {
     overlayMode,
     sketchMode,
     setSelectedBusIndexes,
+    setSelectedAssetIndexes,
   } = props
   const focusingAsset = useSelector(getFocusingAsset)
 
@@ -55,6 +56,7 @@ export default function DetailsWindow(props) {
       asset={focusingAsset}
       sketchMode={sketchMode}
       setSelectedBusIndexes={setSelectedBusIndexes}
+      setSelectedAssetIndexes={setSelectedAssetIndexes}
     /> : <EmptyDetailsPanel />
   return (
     <Paper className={clsx(classes.root, {
