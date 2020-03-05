@@ -22,6 +22,7 @@ import {
   refreshAssets,
   setFocusingBusId,
   updateAssets,
+  refreshTasks,
 } from '../actions'
 import {
   IS_WITH_DETAILS,
@@ -79,15 +80,17 @@ export default function App() {
     const assets = Object.values(assetById)
     dispatch(updateAssets(assets, assetsGeoJson)) 
   }
-  
+
   useEffect(() => {
     dispatch(refreshAssets())
+    dispatch(refreshTasks())
     dispatch(refreshRisks())
   }, [dispatch])
 
   return (
     <div>
       <AssetsMap
+        assetById={assetById}
         sketchMode={sketchMode}
         selectedAssetIndexes={selectedAssetIndexes}
         lineBusId={lineBusId}

@@ -1,26 +1,17 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
-// import { withStyles } from '@material-ui/core/styles'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
-// import Checkbox from "@material-ui/core/Checkbox";
-// import FormControlLabel from "@material-ui/core/FormControlLabel"
-// import CircularProgress from "@material-ui/core/CircularProgress";
-// import Grid from "@material-ui/core/Grid";
-// import {TextField} from "@material-ui/core";
 import FormControl from '@material-ui/core/FormControl'
 import NativeSelect from '@material-ui/core/NativeSelect'
 import Input from '@material-ui/core/Input'
-//import InputLabel from '@material-ui/core/InputLabel'
 import Typography from "@material-ui/core/Typography"
 
 import {
   getAssetById,
-  // getAssetTableData,
-  // getAssetsGeoJson,
   getAssetTypeByCode,
 } from '../selectors'
 
@@ -48,7 +39,11 @@ export default function DownloadManager(props) {
         type: assetTypeByCode[assetType]['name'],
       }
   })
+  if (data !== null && data !== undefined && data.length > 0 && powerId === '') {
+    setPowerId(data[0].id)
+  }
     
+	
     return (<Dialog
         open={open}
         onClose={onClose}

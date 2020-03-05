@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
 import { EditableGeoJsonLayer } from 'nebula.gl'
+// import { GeoJsonLayer } from '@deck.gl/layers'
 import {
   setFocusingBusId,
   deleteAsset,
   setAsset,
+  setAssetConnection,
   setAssetsGeoJson,
   setFocusingAssetId,
   setMapViewState,
@@ -15,6 +17,8 @@ import {
   BUS_RADIUS_IN_METERS,
   LINE_WIDTH_IN_METERS,
   MAP_STYLE_BY_NAME,
+  MINIMUM_BUS_ID_LENGTH,
+  PICKING_DEPTH,
   PICKING_RADIUS_IN_PIXELS,
   POINT_RADIUS_IN_METERS,
   SKETCH_MODE_ADD,
@@ -23,13 +27,22 @@ import {
   SKETCH_MODE_EDIT_DELETE,
 } from '../constants'
 import {
+  getByKey,
+  getRandomId,
+} from '../macros'
+import {
+  CustomEditableGeoJsonLayer,
   getAssetTypeCode,
   getMapMode,
+  getPickedEditHandle,
   makeAsset,
+  removeRearDuplicateCoordinatesInLine,
 } from '../routines'
 import {
-  getAssetTypeByCode,
+  // getFocusingAssetId,
+  // getFocusingBusId,
   getAssetIdByBusId,
+  getAssetTypeByCode,
   getAssetsGeoJson,
   getBusesGeoJson,
   getColors,
@@ -43,8 +56,12 @@ const {
   REACT_APP_MAPBOX_TOKEN,
 } = process.env
 
+const ASSETS_GEOJSON_LAYER_ID = 'assets-geojson-layer'
+const BUSES_GEOJSON_LAYER_ID = 'buses-geojson-layer'
+
 export default function AssetsMap(props) {
   const {
+    assetById,
     sketchMode,
     selectedAssetIndexes,
     lineBusId,
@@ -56,6 +73,7 @@ export default function AssetsMap(props) {
     openDeleteAssetDialog,
   } = props
   const dispatch = useDispatch()
+  const deckGL = useRef()
   const mapStyleName = useSelector(getMapStyleName)
   const mapViewState = useSelector(getMapViewState)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
@@ -67,6 +85,8 @@ export default function AssetsMap(props) {
   // const focusingBusId = useSelector(getFocusingBusId)
   const mapLayers = []
   const mapMode = getMapMode(sketchMode)
+  const pickingRadius = PICKING_RADIUS_IN_PIXELS
+  const pickingDepth = PICKING_DEPTH
 
   function handleViewStateChange({viewState}) {
     // Update the map viewport
@@ -89,32 +109,138 @@ export default function AssetsMap(props) {
   }
 
   function handleAssetsGeoJsonEdit({editType, editContext, updatedData}) {
-    // If a feature is being added for the first time,
-    if (editType === 'addFeature') {
-      const features = updatedData.features
-      const { featureIndexes } = editContext
-      // Add an asset corresponding to the feature
-      const assetTypeCode = getAssetTypeCode(sketchMode)
-      const assetType = assetTypeByCode[assetTypeCode]
-      const asset = makeAsset(assetType, lineBusId)
-      dispatch(setAsset(asset))
-      // Store assetId in feature
-      const assetId = asset.id
-      for (let i = 0; i < featureIndexes.length; i++) {
-        const featureIndex = featureIndexes[i]
-        const feature = features[featureIndex]
-        feature.properties.id = assetId
+    switch(editType) {
+      // If a feature is being added for the first time,
+      case 'addFeature': {
+        const features = updatedData.features
+        const { featureIndexes } = editContext
+        // Add an asset corresponding to the feature
+        const assetTypeCode = getAssetTypeCode(sketchMode)
+        const assetType = assetTypeByCode[assetTypeCode]
+        const asset = makeAsset(assetType, lineBusId)
+        dispatch(setAsset(asset))
+        // Store assetId in feature
+        const assetId = asset.id
+        for (let i = 0; i < featureIndexes.length; i++) {
+          const featureIndex = featureIndexes[i]
+          const feature = features[featureIndex]
+          feature.properties.id = assetId
+        }
+        // If the new feature is a line,
+        if (sketchMode === SKETCH_MODE_ADD_LINE) {
+          // Have subsequent clicks extend the same line
+          setSelectedAssetIndexes(featureIndexes)
+        } else {
+          changeSketchMode(SKETCH_MODE_ADD)
+        }
+        dispatch(setFocusingAssetId(assetId))  // Show details for the new asset
+        break
       }
-      // If the new feature is a line,
-      if (sketchMode === SKETCH_MODE_ADD_LINE) {
-        // Have subsequent clicks extend the same line
-        setSelectedAssetIndexes(featureIndexes)
-      } else {
-        changeSketchMode(SKETCH_MODE_ADD)
+      case 'addPosition': {
+        // adding points to line
+        if (sketchMode === SKETCH_MODE_ADD_LINE) {
+          const features = updatedData.features
+          const { featureIndexes } = editContext
+          if (featureIndexes.length === 1){
+            const featureIndex = featureIndexes[0]
+            const lineFeature = features[featureIndex]
+            const lineCoordinates = lineFeature.geometry.coordinates
+            if (lineCoordinates.length > 2) {
+              // remove duplicate coordinates when double clicking to finish line
+              const newCoordinates = removeRearDuplicateCoordinatesInLine(lineCoordinates)
+              lineFeature.geometry.coordinates = newCoordinates
+            }
+
+          }
+        }
+        break
       }
-      dispatch(setFocusingAssetId(assetId))  // Show details for the new asset
+      default: {}
     }
     dispatch(setAssetsGeoJson(updatedData))  // Update geojson for assets
+  }
+
+  function handleAssetsGeoJsonInterpret(event) {
+    // Find nearest bus
+    const screenCoords = event.screenCoords
+    const busInfos = deckGL.current.pickMultipleObjects({
+      x: screenCoords[0],
+      y: screenCoords[1],
+      layerIds: [BUSES_GEOJSON_LAYER_ID],
+      radius: pickingRadius,
+      depth: pickingDepth,
+    })
+    // Determine whether the user modified a middle vertex
+    const vertex = getPickedEditHandle(event.picks)
+    if (!vertex) {
+      return
+    }
+    const vertexProperties = vertex.properties
+    const vertexIndex = vertexProperties.positionIndexes[0]
+    const featureIndex = vertexProperties.featureIndex
+    const feature = assetsGeoJson.features[featureIndex]
+    const featureVertexCount = feature.geometry.coordinates.length
+    const isMiddleVertex = vertexIndex !== 0 &&
+      vertexIndex !== featureVertexCount - 1
+    if (isMiddleVertex) {
+      // Split the line
+      console.log('isMiddleVertex')
+      return
+    }
+
+    const vertexAssetId = feature.properties.id
+    const vertexAsset = assetById[vertexAssetId]
+    const vertexAssetConnections = vertexAsset.connections || []
+    const connectionByBusId = getByKey(vertexAssetConnections, 'busId')
+    // console.log(connectionByBusId)
+    const connectionIndex = vertexIndex === 0 ? 0 : 1
+    // console.log(connectionByBusId)
+
+    function getMatchingBusId(isMatchingBusAssetId) {
+      for (let i = 0; i < busInfos.length; i++) {
+        const busInfo = busInfos[i]
+        const busId = busInfo.object.properties.id
+        const busAssetId = assetIdByBusId[busId]
+        if (isMatchingBusAssetId(busAssetId)) {
+          return busId
+        }
+      }
+    }
+
+    function getConnection(busId) {
+      return connectionByBusId[busId] || {busId}
+    }
+
+    // Find a bus that belongs to another asset
+    const theirBusId = getMatchingBusId(
+      busAssetId => busAssetId !== vertexAssetId)
+    if (theirBusId) {
+      console.log('SET CONNECTION TO THEIR BUS', theirBusId)
+      const connection = getConnection(theirBusId)
+      console.log(vertexAssetId, connectionIndex, connection)
+      dispatch(setAssetConnection(vertexAssetId, connectionIndex, connection))
+      return
+    }
+
+    // Find a bus that belongs to this asset
+    const ourBusId = getMatchingBusId(
+      busAssetId => busAssetId === vertexAssetId)
+    if (ourBusId) {
+      console.log('KEEP OUR BUS', ourBusId)
+      const connection = getConnection(ourBusId)
+      console.log(vertexAssetId, connectionIndex, connection)
+      dispatch(setAssetConnection(vertexAssetId, connectionIndex, connection))
+      return
+    }
+
+    // Make a new bus
+    console.log('MAKE A NEW BUS')
+    const newBusId = getRandomId(MINIMUM_BUS_ID_LENGTH)
+    const connection = getConnection(newBusId)
+    console.log(vertexAssetId, connectionIndex, connection)
+    dispatch(setAssetConnection(vertexAssetId, connectionIndex, connection))
+
+    // console.log('pickingInfo', event, nearestBusInfos)
   }
 
   function handleBusesGeoJsonClick(info, event) {
@@ -141,8 +267,8 @@ export default function AssetsMap(props) {
     assetId && dispatch(setFocusingAssetId(assetId))
   }
 
-  mapLayers.push(new EditableGeoJsonLayer({
-    id: 'assets-geojson-layer',
+  mapLayers.push(new CustomEditableGeoJsonLayer({
+    id: ASSETS_GEOJSON_LAYER_ID,
     data: assetsGeoJson,
     mode: mapMode,
     pickable: true,
@@ -160,10 +286,12 @@ export default function AssetsMap(props) {
     },
     onClick: handleAssetsGeoJsonClick,
     onEdit: handleAssetsGeoJsonEdit,
+    onInterpret: handleAssetsGeoJsonInterpret,
   }))
 
+  // mapLayers.push(new GeoJsonLayer({
   mapLayers.push(new EditableGeoJsonLayer({
-    id: 'buses-geojson-layer',
+    id: BUSES_GEOJSON_LAYER_ID,
     data: busesGeoJson,
     mode: getMapMode(),
     pickable: true,
@@ -178,9 +306,19 @@ export default function AssetsMap(props) {
     onClick: handleBusesGeoJsonClick,
   }))
 
+  function onDoubleClick(e) {
+    if (sketchMode === SKETCH_MODE_ADD_LINE)
+      changeSketchMode(SKETCH_MODE_ADD)
+  }
+
   function onKeyUp(e) {
     e.preventDefault()
-    if (e.key === 'Delete') {
+    if (e.key === 'Enter') {
+      if (sketchMode === SKETCH_MODE_ADD_LINE) {
+        changeSketchMode(SKETCH_MODE_ADD)
+      }
+    }
+    else if (e.key === 'Delete') {
       if (focusingAssetId &&
           sketchMode.startsWith(SKETCH_MODE_EDIT)
         ) {
@@ -190,12 +328,16 @@ export default function AssetsMap(props) {
   }
 
   return (
-    <div onKeyUp={onKeyUp}>
+    <div onKeyUp={onKeyUp} onDoubleClick={onDoubleClick}>
       <DeckGL
-        controller={true}
+        ref={deckGL}
+        controller={{
+          doubleClickZoom: false,
+        }}
         layers={mapLayers}
         viewState={mapViewState}
-        pickingRadius={PICKING_RADIUS_IN_PIXELS}
+        pickingRadius={pickingRadius}
+        pickingDepth={pickingDepth}
         onViewStateChange={handleViewStateChange}
       >
         <StaticMap

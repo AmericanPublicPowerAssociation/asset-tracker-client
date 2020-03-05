@@ -8,11 +8,11 @@ import SvgIcon from '@material-ui/core/SvgIcon'
 import Tooltip from '@material-ui/core/Tooltip'
 import DeleteIcon from '@material-ui/icons/Delete'
 import ModifyIcon from '@material-ui/icons/Edit'
-import MoveIcon from '@material-ui/icons/OpenWith'
+// import MoveIcon from '@material-ui/icons/OpenWith'
 import {
   SKETCH_MODE_EDIT_DELETE,
   SKETCH_MODE_EDIT_MODIFY,
-  SKETCH_MODE_EDIT_TRANSLATE,
+  // SKETCH_MODE_EDIT_TRANSLATE,
 } from '../constants'
 
 const useStyles = makeStyles(theme => ({
@@ -48,6 +48,7 @@ export default function SketchEditToolbar(props) {
           </ListItem>
         </Tooltip>
 
+        {/*
         <Tooltip title='Move' aria-label='Move' placement='right'>
           <ListItem
             button
@@ -58,7 +59,9 @@ export default function SketchEditToolbar(props) {
             <SvgIcon fontSize='large' component={MoveIcon} />
           </ListItem>
         </Tooltip>
-        <Tooltip title='delete' aria-label='delete' placement='right'>
+        */}
+
+        <Tooltip title='Delete' aria-label='Delete' placement='right'>
           <ListItem
             button
             classes={{selected: 'selected'}}

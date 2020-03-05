@@ -14,6 +14,7 @@ import {
 } from '../constants'
 import {
   getFocusingAsset,
+  getTasksForFocusedAsset,
 } from '../selectors'
 
 const useStyles = makeStyles(theme => ({
@@ -44,7 +45,8 @@ export default function DetailsWindow(props) {
     setSelectedAssetIndexes,
   } = props
   const focusingAsset = useSelector(getFocusingAsset)
-
+  const tasksForFocusingAsset = useSelector(getTasksForFocusedAsset)
+  
   const DetailsPanel = {
     [OVERLAY_MODE_ASSETS]: AssetAttributesPanel,
     [OVERLAY_MODE_TASKS]: AssetTasksPanel,
@@ -54,10 +56,13 @@ export default function DetailsWindow(props) {
   const detailsPanel = focusingAsset ?
     <DetailsPanel
       asset={focusingAsset}
+      tasks={tasksForFocusingAsset}
       sketchMode={sketchMode}
+      overlayMode={overlayMode} 
       setSelectedBusIndexes={setSelectedBusIndexes}
       setSelectedAssetIndexes={setSelectedAssetIndexes}
     /> : <EmptyDetailsPanel />
+
   return (
     <Paper className={clsx(classes.root, {
       poof: !isWithDetails,
