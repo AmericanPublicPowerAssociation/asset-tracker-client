@@ -115,10 +115,6 @@ export default function App() {
         sketchMode={sketchMode}
         changeSketchMode={changeSketchMode}
       />
-      <SketchEditToolbar
-        sketchMode={sketchMode}
-        changeSketchMode={changeSketchMode}
-      />
       <ActionsWindow
         showImportExport={() => setIsImportExportOpen(true)}
       />
