@@ -14,8 +14,10 @@ import Button from "@material-ui/core/Button"
 import {
   addAssetTaskComment,
   setTaskPriority,
-  setTaskStatus
+  setTaskStatus,
+  setTaskName,
 } from '../actions'
+import InputBase from '@material-ui/core/InputBase';
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -257,6 +259,11 @@ export const TaskFullscreen = (props) => {
 
   const priorityColor  = getPriorityColor((priority || '').toString())
 
+
+  function handleChangeTaskName(e) {
+    dispatch(setTaskName(id, e.target.value))
+  }
+
   return (
     <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
       <AppBar color={priorityColor} className={classes.appBar}>
@@ -264,6 +271,7 @@ export const TaskFullscreen = (props) => {
         <Toolbar className={classes.noPadding}>
           <Typography variant="h6" className={clsx(classes.title, classes.noMargin)}>
              {task.name} ({task.id})
+            <InputBase className={classes.noMargin} defaultValue={task.name} onChange={(e) => handleChangeTaskName(e) } />
             <IconButton edge={false} color="inherit" onClick={handleClose} aria-label="close">
               <EditIcon />
             </IconButton>
