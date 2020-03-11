@@ -22,6 +22,7 @@ import TasksList, {TaskFullscreen} from './TasksList'
 import Tooltip from '@material-ui/core/Tooltip'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
+import AddIcon from '@material-ui/icons/Add'
 import {
   addAssetTask, updateTaskComments
 } from '../actions'
@@ -136,8 +137,8 @@ export default function AssetTasksPanel(props) {
     </FormGroup>
     <TasksList showDetails={handleDisplayDetails} showComments={() => {}} asset={asset} tasks={partialTasks} disableInput={disableInput}/>
 
-    <Button className={classes.bottomAction} startIcon={<CloudUploadIcon />} onClick={() => setDialog(true)}>
-      Add taks
+    <Button className={classes.bottomAction} startIcon={<AddIcon />} onClick={() => setDialog(true)}>
+      Add task
     </Button>
   </>)
 
