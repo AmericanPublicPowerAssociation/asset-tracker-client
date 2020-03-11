@@ -14,6 +14,7 @@ import {
   setMapViewState,
 } from '../actions'
 import {
+  ASSET_METER_RADIUS_IN_METERS,
   BUS_RADIUS_IN_METERS,
   LINE_WIDTH_IN_METERS,
   MAP_STYLE_BY_NAME,
@@ -87,6 +88,7 @@ export default function AssetsMap(props) {
   const mapMode = getMapMode(sketchMode)
   const pickingRadius = PICKING_RADIUS_IN_PIXELS
   const pickingDepth = PICKING_DEPTH
+  const ASSET_TYPE_METER_CODE = assetTypeByCode['m'] && assetTypeByCode['m'].code
 
   function handleViewStateChange({viewState}) {
     // Update the map viewport
@@ -125,6 +127,7 @@ export default function AssetsMap(props) {
           const featureIndex = featureIndexes[i]
           const feature = features[featureIndex]
           feature.properties.id = assetId
+          feature.properties.typeCode = assetTypeCode
         }
         // If the new feature is a line,
         if (sketchMode === SKETCH_MODE_ADD_LINE) {
@@ -276,7 +279,12 @@ export default function AssetsMap(props) {
     autoHighlight: sketchMode !== SKETCH_MODE_ADD_LINE,
     highlightColor: colors.assetHighlight,
     selectedFeatureIndexes: selectedAssetIndexes,
-    getRadius: POINT_RADIUS_IN_METERS,
+    getRadius: (feature, isSelected) => {
+      const assetTypeCode = feature.properties.typeCode
+      return assetTypeCode === ASSET_TYPE_METER_CODE ?
+        ASSET_METER_RADIUS_IN_METERS :
+        POINT_RADIUS_IN_METERS
+    },
     getLineWidth: LINE_WIDTH_IN_METERS,
     getFillColor: (feature, isSelected) => {
       return isSelected ? colors.assetSelect : colors.asset

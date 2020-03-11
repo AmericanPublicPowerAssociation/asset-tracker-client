@@ -10,6 +10,9 @@ import {
   setFocusingAssetId,
 } from '../actions'
 import {
+  CLICK_DELAY,
+} from '../constants'
+import {
   getAssetById,
   getAssetsGeoJson,
   getAssetTypeByCode,
@@ -65,7 +68,7 @@ function useClickPreventionOnDoubleClick(onClick, onDoubleClick) {
 
   function handleClick(assetId) {
     api.clearPendingPromises()
-    const waitForClick = cancellablePromise(delay(300))
+    const waitForClick = cancellablePromise(delay(CLICK_DELAY))
     api.appendPendingPromise(waitForClick)
     return waitForClick.promise
       .then( () => {
