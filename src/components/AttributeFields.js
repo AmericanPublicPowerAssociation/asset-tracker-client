@@ -19,6 +19,8 @@ import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import {makeStyles} from "@material-ui/core/styles";
+import Chip from "@material-ui/core/Chip";
+import Paper from "@material-ui/core/Paper";
 
 const useStyle = makeStyles(theme =>  ({
   fullSelect:  {
@@ -27,6 +29,16 @@ const useStyle = makeStyles(theme =>  ({
   fixLabelPosition: {
     'marginLeft': '10px',
     'textTransform': 'capitalize',
+  },
+  singleOption: {
+    margin: theme.spacing(0.5),
+  },
+  root: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    padding: theme.spacing(0.5),
+    'backgroundColor': theme.colo
   }
 }));
 
@@ -105,8 +117,18 @@ function AttributeField(props) {
       TextFieldProps={{ fullWidth: true, variant: 'filled' }}
       trackChange={trackChange}
     />
-  } else if (Array.isArray(attributeType)) {
-    return  <FormControl className={classes.fullSelect}>
+  } else if (Array.isArray(attributeType) && attributeType.length === 1 ) {
+    return <TextField
+      fullWidth
+      variant='filled'
+      key={attributeKey}
+      label={getAttributeLabel(attributeKey)}
+      value={attributeType[0]}
+      disabled={true}
+      InputLabelProps={{ classes: { root: 'capitalized' } }}
+    />
+  } else if (Array.isArray(attributeType) ) {
+    return <FormControl className={classes.fullSelect}>
       <InputLabel shrink id={`${attributeKey}-${assetId}`} className={classes.fixLabelPosition}>
         {getAttributeLabel(attributeKey)}
       </InputLabel>
@@ -119,15 +141,14 @@ function AttributeField(props) {
         value={attributeValueByKey[attributeKey]}
         disabled={!isEditing}
         onChange={e => trackChange(attributeKey, e.target.value)}
-        inputProps={{ inputProps: { onFocus: handleOnFocus } }}
         onFocus={handleOnFocus}
       >
-      {attributeType.map((option) => {
-        return <MenuItem value={option}>{option}</MenuItem>
+      {attributeType.map((option, i) => {
+        return <MenuItem key={`${attributeKey}-${i}`} value={option}>{option}</MenuItem>
       })}
       </Select>
     </FormControl>
-  } else {
+  }  else {
     return <TextField
       fullWidth
       variant='filled'
