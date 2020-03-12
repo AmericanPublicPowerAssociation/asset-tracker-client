@@ -34,7 +34,7 @@ import {
   CustomEditableGeoJsonLayer,
   getAssetTypeCode,
   getMapMode,
-  getPickedEditHandle,
+  getPickedVertex,
   makeAsset,
   removeRearDuplicateCoordinatesInLine,
 } from '../routines'
@@ -161,6 +161,34 @@ export default function AssetsMap(props) {
   }
 
   function handleAssetsGeoJsonInterpret(event) {
+    console.log('INTERPRET')
+
+    // Find the vertex that the user is editing
+    const vertex = getPickedVertex(event)
+    if (!vertex) {
+      return
+    }
+
+    // Determine whether the user modified a middle vertex
+    const vertexProperties = vertex.properties
+    console.log(vertexProperties)
+    const vertexIndex = vertexProperties.positionIndexes[0]
+    const featureIndex = vertexProperties.featureIndex
+    const feature = assetsGeoJson.features[featureIndex]
+    const featureVertexCount = feature.geometry.coordinates.length
+    const isMiddleVertex = vertexIndex !== 0 &&
+      vertexIndex !== featureVertexCount - 1
+    if (isMiddleVertex) {
+      // Split the line
+      console.log('INTERPRET', 'isMiddleVertex', vertexIndex)
+      return
+    }
+    const vertexAssetId = feature.properties.id
+    const vertexAsset = assetById[vertexAssetId]
+    const vertexAssetConnections = vertexAsset.connections || []
+    const connectionByBusId = getByKey(vertexAssetConnections, 'busId')
+    const connectionIndex = vertexIndex === 0 ? 0 : 1
+
     // Find nearest bus
     const screenCoords = event.screenCoords
     const busInfos = deckGL.current.pickMultipleObjects({
@@ -170,31 +198,6 @@ export default function AssetsMap(props) {
       radius: pickingRadius,
       depth: pickingDepth,
     })
-    // Determine whether the user modified a middle vertex
-    const vertex = getPickedEditHandle(event.picks)
-    if (!vertex) {
-      return
-    }
-    const vertexProperties = vertex.properties
-    const vertexIndex = vertexProperties.positionIndexes[0]
-    const featureIndex = vertexProperties.featureIndex
-    const feature = assetsGeoJson.features[featureIndex]
-    const featureVertexCount = feature.geometry.coordinates.length
-    const isMiddleVertex = vertexIndex !== 0 &&
-      vertexIndex !== featureVertexCount - 1
-    if (isMiddleVertex) {
-      // Split the line
-      console.log('isMiddleVertex')
-      return
-    }
-
-    const vertexAssetId = feature.properties.id
-    const vertexAsset = assetById[vertexAssetId]
-    const vertexAssetConnections = vertexAsset.connections || []
-    const connectionByBusId = getByKey(vertexAssetConnections, 'busId')
-    // console.log(connectionByBusId)
-    const connectionIndex = vertexIndex === 0 ? 0 : 1
-    // console.log(connectionByBusId)
 
     function getMatchingBusId(isMatchingBusAssetId) {
       for (let i = 0; i < busInfos.length; i++) {
@@ -239,8 +242,6 @@ export default function AssetsMap(props) {
     const connection = getConnection(newBusId)
     console.log(vertexAssetId, connectionIndex, connection)
     dispatch(setAssetConnection(vertexAssetId, connectionIndex, connection))
-
-    // console.log('pickingInfo', event, nearestBusInfos)
   }
 
   function handleBusesGeoJsonClick(info, event) {

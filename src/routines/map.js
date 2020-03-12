@@ -50,6 +50,16 @@ export function getMapMode(sketchMode) {
   return mapMode || ViewMode
 }
 
+export function useMap() {
+  const dispatch = useDispatch()
+  return useMemo(() => ({
+    function handleViewStateChange({viewState}) {
+      // Update the map viewport
+      dispatch(setMapViewState(viewState))
+    },
+  }), [dispatch])
+}
+
 export function removeRearDuplicateCoordinatesInLine(coordinates) {
   let duplicate = true
   while(duplicate) {
@@ -69,11 +79,9 @@ export function removeRearDuplicateCoordinatesInLine(coordinates) {
   return coordinates
 }
 
-export function getPickedEditHandle(picks) {
-  // Taken from nebula.gl > mode-handler.js
+export function getPickedVertex(event) {
+  const picks = event.picks
+  // Adapted from nebula.gl > mode-handler.js > getPickedEditHandle
   const info = picks && picks.find(pick => pick.isGuide)
-  if (info) {
-    return info.object
-  }
-  return null
+  return info && info.object
 }
