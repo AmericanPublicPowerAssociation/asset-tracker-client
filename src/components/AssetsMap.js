@@ -37,7 +37,6 @@ import {
   getMapMode,
   getPickedEditHandle,
   makeAsset,
-  removeRearDuplicateCoordinatesInLine,
 } from '../routines'
 import {
   // getFocusingAssetId,
@@ -139,25 +138,6 @@ export default function AssetsMap(props) {
           changeSketchMode(SKETCH_MODE_ADD)
         }
         dispatch(setFocusingAssetId(assetId))  // Show details for the new asset
-        break
-      }
-      case 'addPosition': {
-        // adding points to line
-        if (sketchMode === SKETCH_MODE_ADD_LINE) {
-          const features = updatedData.features
-          const { featureIndexes } = editContext
-          if (featureIndexes.length === 1){
-            const featureIndex = featureIndexes[0]
-            const lineFeature = features[featureIndex]
-            const lineCoordinates = lineFeature.geometry.coordinates
-            if (lineCoordinates.length > 2) {
-              // remove duplicate coordinates when double clicking to finish line
-              const newCoordinates = removeRearDuplicateCoordinatesInLine(lineCoordinates)
-              lineFeature.geometry.coordinates = newCoordinates
-            }
-
-          }
-        }
         break
       }
       default: {}
@@ -272,6 +252,29 @@ export default function AssetsMap(props) {
     assetId && dispatch(setFocusingAssetId(assetId))
   }
 
+
+  function handleOnDoubleClick(e) {
+    if (sketchMode === SKETCH_MODE_ADD_LINE) {
+      changeSketchMode(SKETCH_MODE_ADD)
+    }
+  }
+
+  function onKeyUp(e) {
+    e.preventDefault()
+    if (e.key === 'Enter') {
+      if (sketchMode === SKETCH_MODE_ADD_LINE) {
+        changeSketchMode(SKETCH_MODE_ADD)
+      }
+    }
+    else if (e.key === 'Delete') {
+      if (focusingAssetId &&
+          sketchMode.startsWith(SKETCH_MODE_EDIT)
+        ) {
+        openDeleteAssetDialog()
+      }
+    }
+  }
+
   mapLayers.push(new CustomEditableGeoJsonLayer({
     id: ASSETS_GEOJSON_LAYER_ID,
     data: assetsGeoJson,
@@ -297,6 +300,7 @@ export default function AssetsMap(props) {
     onClick: handleAssetsGeoJsonClick,
     onEdit: handleAssetsGeoJsonEdit,
     onInterpret: handleAssetsGeoJsonInterpret,
+    handleOnDoubleClick: handleOnDoubleClick,
   }))
 
   // mapLayers.push(new GeoJsonLayer({
@@ -316,29 +320,8 @@ export default function AssetsMap(props) {
     onClick: handleBusesGeoJsonClick,
   }))
 
-  function onDoubleClick(e) {
-    if (sketchMode === SKETCH_MODE_ADD_LINE)
-      changeSketchMode(SKETCH_MODE_ADD)
-  }
-
-  function onKeyUp(e) {
-    e.preventDefault()
-    if (e.key === 'Enter') {
-      if (sketchMode === SKETCH_MODE_ADD_LINE) {
-        changeSketchMode(SKETCH_MODE_ADD)
-      }
-    }
-    else if (e.key === 'Delete') {
-      if (focusingAssetId &&
-          sketchMode.startsWith(SKETCH_MODE_EDIT)
-        ) {
-        openDeleteAssetDialog()
-      }
-    }
-  }
-
   return (
-    <div onKeyUp={onKeyUp} onDoubleClick={onDoubleClick}>
+    <div onKeyUp={onKeyUp}>
       <DeckGL
         ref={deckGL}
         controller={{
