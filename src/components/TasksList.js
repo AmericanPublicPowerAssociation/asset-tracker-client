@@ -40,12 +40,20 @@ const getPriorityColor  = (priority) => ({
   100:  'secondary',
 }[priority] || 'default')
 
+const getPriorityLabel  = (priority) => ({
+  1: 'Low',
+  10:  'Normal',
+  100:  'High',
+}[priority] || 'default')
+
+
 const getStatusLabel = (status) => ({
   '-1': 'Cancelled',
   '0': 'New',
   '10': 'Pending',
   '100': 'Done'
 }[status])
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -77,7 +85,8 @@ const useStyles = makeStyles(theme => ({
   },
   status: {
     fontSize: '0.7em',
-    height: '25px'
+    height: '25px',
+    marginLeft: '6px',
   },
   showComments: {
     fontSize: '0.7em',
@@ -144,30 +153,6 @@ const Priority = (priorityColor, priority) => {
 }
 
 
-export const TaskOverview = (props) => {
-  const {
-    name,
-    status,
-    priority
-  } = props.task
-
-  const classes = useStyles()
-
-  const priorityColor = getPriorityColor(priority.toString())
-  const statusLabel = getStatusLabel(status.toString())
-
-  return (
-    <div style={{display: 'flex', alignItems: 'start'}}>
-      <Priority priorityColor={priorityColor} priority={priority} />
-      <div>
-        <ListItemText primary={name}/>
-        { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
-      </div>
-    </div>
-  )
-}
-
-
 export default function TasksList(props) {
   const classes = useStyles()
   const {
@@ -209,6 +194,7 @@ function TaskItem(props) {
 
   const classes = useStyles();
 
+  const priorityLabel  = getPriorityLabel(priority.toString())
   const priorityColor  = getPriorityColor(priority.toString())
   const statusLabel = getStatusLabel(status.toString())
   const PriorityIndicator = Priority(priorityColor, priority)
@@ -224,7 +210,10 @@ function TaskItem(props) {
           <div className={classes.fullWidth}>
             <ListItemText primary={name}/>
             <div className={classes.actions}>
+              <div>
+            { priorityLabel && <Chip className={classes.status} color={priorityColor} label={priorityLabel} /> }
             { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
+              </div>
             <Button className={classes.showComments}
                     onClick={() => showComments(task)}> {commentCount} Comments
             </Button>
