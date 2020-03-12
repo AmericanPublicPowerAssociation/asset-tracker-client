@@ -50,6 +50,7 @@ export const getAssetIdsByBusId = createSelector([
   const assetIdsByBusId = {}
 
   for (const [assetId, asset] of Object.entries(assetById)) {
+    if (asset['is_deleted'] === true) continue
     const assetConnections = asset.connections || []
     for (const connection of assetConnections) {
       const busId = connection.busId

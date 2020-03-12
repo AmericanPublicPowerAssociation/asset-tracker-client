@@ -38,7 +38,6 @@ const useStyle = makeStyles(theme =>  ({
     justifyContent: 'center',
     flexWrap: 'wrap',
     padding: theme.spacing(0.5),
-    'backgroundColor': theme.colo
   }
 }));
 

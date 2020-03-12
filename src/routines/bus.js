@@ -1,6 +1,7 @@
 import translateFeature from '@turf/transform-translate'
 import {
   BUS_DISTANCE_IN_KILOMETERS,
+  BUS_DISTANCE_IN_KILOMETERS_FOR_METERS,
 } from '../constants'
 
 export function getBusFeatures(assetFeatures, assetById) {
@@ -33,6 +34,8 @@ function getBusFeaturesForPoint(assetFeature, connections, busIds) {
   const busFeatures = []
   const busCount = connections.length
   const busAngleIncrement = 360 / busCount
+  const assetTypeCode = assetFeature.properties.typeCode
+
 
   for (let i = 0; i < busCount; i++) {
     const connection = connections[i]
@@ -42,7 +45,9 @@ function getBusFeaturesForPoint(assetFeature, connections, busIds) {
     const busAngle = busAngleIncrement * i
     const busGeometry = translateFeature(
       assetFeature,
-      BUS_DISTANCE_IN_KILOMETERS,
+      assetTypeCode === 'm' ?
+        BUS_DISTANCE_IN_KILOMETERS_FOR_METERS :
+        BUS_DISTANCE_IN_KILOMETERS,
       busAngle,
     ).geometry
     busFeatures.push({

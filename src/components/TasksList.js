@@ -14,8 +14,10 @@ import Button from "@material-ui/core/Button"
 import {
   addAssetTaskComment,
   setTaskPriority,
-  setTaskStatus
+  setTaskStatus,
+  setTaskName,
 } from '../actions'
+import InputBase from '@material-ui/core/InputBase';
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -26,7 +28,7 @@ import Slide from "@material-ui/core/Slide";
 import FiberManualRecordRoundedIcon from '@material-ui/icons/FiberManualRecordRounded';
 import TaskComments, {CommentForm} from "./TaskComments";
 import Container from "@material-ui/core/Container";
-import EditIcon from '@material-ui/icons/Edit';
+// import EditIcon from '@material-ui/icons/Edit';
 import {ASSET_TYPE_ICON_BY_CODE} from "../constants";
 import {AssetName} from "./AssetTasksPanel";
 import clsx from "clsx";
@@ -130,6 +132,12 @@ const useStyles = makeStyles(theme => ({
     paddingTop: '25px',
     paddingLeft: '35px',
   },
+  input: {
+    height: theme.typography.h6.fontSize,
+    fontSize: theme.typography.h6.fontSize,
+    fontWeight: theme.typography.h6.fontWeight,
+    color: 'white',
+  }
 }));
 
 
@@ -246,16 +254,21 @@ export const TaskFullscreen = (props) => {
 
   const priorityColor  = getPriorityColor((priority || '').toString())
 
+  function handleChangeTaskName(e) {
+    dispatch(setTaskName(id, e.target.value))
+  }
+
   return (
     <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
       <AppBar color={priorityColor} className={classes.appBar}>
         <Container>
         <Toolbar className={classes.noPadding}>
           <Typography variant="h6" className={clsx(classes.title, classes.noMargin)}>
-             {task.name} ({task.id})
-            <IconButton edge={false} color="inherit" onClick={handleClose} aria-label="close">
+            <InputBase className={clsx(classes.input)} defaultValue={task.name} onChange={(e) => handleChangeTaskName(e) } />
+             ({task.id})
+              {/*<IconButton edge={false} color="inherit" onClick={handleClose} aria-label="close">
               <EditIcon />
-            </IconButton>
+            </IconButton>*/}
           </Typography>
           <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
             <CloseIcon />
