@@ -40,7 +40,6 @@ export class CustomModifyMode extends ModifyMode {
   }
 }
 
-
 export function getMapMode(sketchMode) {
   const mapMode = {
     [SKETCH_MODE_ADD_LINE]: DrawLineStringMode,
