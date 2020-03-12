@@ -17,6 +17,7 @@ import {
 import {
   getColors,
   getAssetByIdLength,
+  getTaskByIdLength,
 } from '../selectors'
 
 const useStyles = makeStyles(theme => ({
@@ -43,7 +44,7 @@ export default function OverlaysWindow(props) {
   const radioColor = colors.active
 
   const visibleAssetCount = useSelector(getAssetByIdLength)
-  const visibleTaskCount = 5
+  const visibleTaskCount = useSelector(getTaskByIdLength)
   const visibleRiskCount = visibleRisks.length
 
   const assetsOverlayLabel = `Assets (${visibleAssetCount})`

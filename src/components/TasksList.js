@@ -14,8 +14,10 @@ import Button from "@material-ui/core/Button"
 import {
   addAssetTaskComment,
   setTaskPriority,
-  setTaskStatus
+  setTaskStatus,
+  setTaskName,
 } from '../actions'
+import InputBase from '@material-ui/core/InputBase';
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -26,7 +28,7 @@ import Slide from "@material-ui/core/Slide";
 import FiberManualRecordRoundedIcon from '@material-ui/icons/FiberManualRecordRounded';
 import TaskComments, {CommentForm} from "./TaskComments";
 import Container from "@material-ui/core/Container";
-import EditIcon from '@material-ui/icons/Edit';
+// import EditIcon from '@material-ui/icons/Edit';
 import {ASSET_TYPE_ICON_BY_CODE} from "../constants";
 import {AssetName} from "./AssetTasksPanel";
 import clsx from "clsx";
@@ -38,12 +40,20 @@ const getPriorityColor  = (priority) => ({
   100:  'secondary',
 }[priority] || 'default')
 
+const getPriorityLabel  = (priority) => ({
+  1: 'Low',
+  10:  'Normal',
+  100:  'High',
+}[priority] || 'default')
+
+
 const getStatusLabel = (status) => ({
   '-1': 'Cancelled',
   '0': 'New',
   '10': 'Pending',
   '100': 'Done'
 }[status])
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -75,7 +85,8 @@ const useStyles = makeStyles(theme => ({
   },
   status: {
     fontSize: '0.7em',
-    height: '25px'
+    height: '25px',
+    marginLeft: '6px',
   },
   showComments: {
     fontSize: '0.7em',
@@ -121,6 +132,12 @@ const useStyles = makeStyles(theme => ({
     paddingTop: '25px',
     paddingLeft: '35px',
   },
+  input: {
+    height: theme.typography.h6.fontSize,
+    fontSize: theme.typography.h6.fontSize,
+    fontWeight: theme.typography.h6.fontWeight,
+    color: 'white',
+  }
 }));
 
 
@@ -133,30 +150,6 @@ const Priority = (priorityColor, priority) => {
   const classes = useStyles()
 
   return <FiberManualRecordRoundedIcon className={classes.priorityIndicator} color={priorityColor} />
-}
-
-
-export const TaskOverview = (props) => {
-  const {
-    name,
-    status,
-    priority
-  } = props.task
-
-  const classes = useStyles()
-
-  const priorityColor = getPriorityColor(priority.toString())
-  const statusLabel = getStatusLabel(status.toString())
-
-  return (
-    <div style={{display: 'flex', alignItems: 'start'}}>
-      <Priority priorityColor={priorityColor} priority={priority} />
-      <div>
-        <ListItemText primary={name}/>
-        { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
-      </div>
-    </div>
-  )
 }
 
 
@@ -201,6 +194,7 @@ function TaskItem(props) {
 
   const classes = useStyles();
 
+  const priorityLabel  = getPriorityLabel(priority.toString())
   const priorityColor  = getPriorityColor(priority.toString())
   const statusLabel = getStatusLabel(status.toString())
   const PriorityIndicator = Priority(priorityColor, priority)
@@ -216,7 +210,10 @@ function TaskItem(props) {
           <div className={classes.fullWidth}>
             <ListItemText primary={name}/>
             <div className={classes.actions}>
+              <div>
+            { priorityLabel && <Chip className={classes.status} color={priorityColor} label={priorityLabel} /> }
             { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
+              </div>
             <Button className={classes.showComments}
                     onClick={() => showComments(task)}> {commentCount} Comments
             </Button>
@@ -257,16 +254,21 @@ export const TaskFullscreen = (props) => {
 
   const priorityColor  = getPriorityColor((priority || '').toString())
 
+  function handleChangeTaskName(e) {
+    dispatch(setTaskName(id, e.target.value))
+  }
+
   return (
     <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
       <AppBar color={priorityColor} className={classes.appBar}>
         <Container>
         <Toolbar className={classes.noPadding}>
           <Typography variant="h6" className={clsx(classes.title, classes.noMargin)}>
-             {task.name} ({task.id})
-            <IconButton edge={false} color="inherit" onClick={handleClose} aria-label="close">
+            <InputBase className={clsx(classes.input)} defaultValue={task.name} onChange={(e) => handleChangeTaskName(e) } />
+             ({task.id})
+              {/*<IconButton edge={false} color="inherit" onClick={handleClose} aria-label="close">
               <EditIcon />
-            </IconButton>
+            </IconButton>*/}
           </Typography>
           <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
             <CloseIcon />
