@@ -98,8 +98,10 @@ export default function AssetsMap(props) {
   function handleAssetsGeoJsonClick(info, event) {
     const assetId = info.object.properties.id
     if (assetId && sketchMode.startsWith(SKETCH_MODE_EDIT_DELETE)) {
-      dispatch(deleteAsset(assetId))
+      dispatch(setFocusingAssetId(null))
       setSelectedAssetIndexes([])
+      setSelectedBusIndexes([])
+      dispatch(deleteAsset(assetId))
       return
     }
     assetId && dispatch(setFocusingAssetId(assetId))
