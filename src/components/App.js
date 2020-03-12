@@ -143,6 +143,7 @@ export default function App() {
         overlayMode={overlayMode}
         sketchMode={sketchMode}
         setSelectedBusIndexes={setSelectedBusIndexes}
+        setSelectedAssetIndexes={setSelectedAssetIndexes}
       />
       { isScreenXS && isWithTables && 
         <TablesDialog

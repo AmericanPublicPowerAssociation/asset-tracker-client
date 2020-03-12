@@ -137,7 +137,7 @@ export default function AssetTasksPanel(props) {
     <TasksList showDetails={handleDisplayDetails} showComments={() => {}} asset={asset} tasks={partialTasks} disableInput={disableInput}/>
 
     <Button className={classes.bottomAction} startIcon={<CloudUploadIcon />} onClick={() => setDialog(true)}>
-      Add taks
+      Add task
     </Button>
   </>)
 

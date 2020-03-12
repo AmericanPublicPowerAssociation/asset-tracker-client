@@ -21,6 +21,7 @@ export default function AssetAttributesPanel(props) {
     asset,
     sketchMode,
     setSelectedBusIndexes,
+    setSelectedAssetIndexes,
   } = props
   const assetTypeByCode = useSelector(getAssetTypeByCode)
 
@@ -49,6 +50,7 @@ export default function AssetAttributesPanel(props) {
         asset={asset}
         isEditing={isEditing}
         setSelectedBusIndexes={setSelectedBusIndexes}
+        setSelectedAssetIndexes={setSelectedAssetIndexes}
       />
     </List>
   )
