@@ -1,5 +1,3 @@
-// import { useMemo } from 'react'
-// import { useDispatch } from 'react-redux'
 import {
   DrawLineStringMode,
   DrawPointMode,
@@ -50,12 +48,6 @@ export function getMapMode(sketchMode) {
     [SKETCH_MODE_EDIT_TRANSLATE]: TranslateMode,
   }[sketchMode]
   return mapMode || ViewMode
-}
-
-export function useMap() {
-  // const dispatch = useDispatch()
-  // return useMemo(() => ({
-  // }), [dispatch])
 }
 
 export function getPickedVertex(event) {

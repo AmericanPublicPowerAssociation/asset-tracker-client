@@ -11,7 +11,6 @@ import {
   setAssetConnection,
   setAssetsGeoJson,
   setFocusingAssetId,
-  setMapViewState,
 } from '../actions'
 import {
   ASSET_METER_RADIUS_IN_METERS,
@@ -27,6 +26,12 @@ import {
   SKETCH_MODE_EDIT,
   SKETCH_MODE_DELETE,
 } from '../constants'
+import {
+  useMovableMap,
+  usePickableLayer,
+  useEditableLayer,
+  useInterpretableLayer,
+} from '../hooks'
 import {
   getByKey,
   getRandomId,
@@ -83,19 +88,26 @@ export default function AssetsMap(props) {
   const colors = useSelector(getColors)
   const focusingAssetId = useSelector(getFocusingAssetId)
   // const focusingBusId = useSelector(getFocusingBusId)
+  const {
+    handleMapMove,
+  } = useMovableMap()
+  const {
+    handleLayerClick,
+  } = usePickableLayer()
+  const {
+    handleLayerEdit,
+  } = useEditableLayer()
+  const {
+    handleLayerInterpret,
+  } = useInterpretableLayer()
+
   const mapLayers = []
   const mapMode = getMapMode(sketchMode)
   const pickingRadius = PICKING_RADIUS_IN_PIXELS
   const pickingDepth = PICKING_DEPTH
   const ASSET_TYPE_METER_CODE = assetTypeByCode['m'] && assetTypeByCode['m'].code
 
-  function handleViewStateChange({viewState}) {
-    // Update the map viewport
-    dispatch(setMapViewState(viewState))
-  }
-
-  function handleAssetsGeoJsonClick(info, event) {
-    const assetId = info.object.properties.id
+  function handleAssetsGeoJsonClick(info) {
     if (assetId && sketchMode.startsWith(SKETCH_MODE_DELETE)) {
       dispatch(setFocusingAssetId(null))
       setSelectedAssetIndexes([])
@@ -332,7 +344,7 @@ export default function AssetsMap(props) {
         viewState={mapViewState}
         pickingRadius={pickingRadius}
         pickingDepth={pickingDepth}
-        onViewStateChange={handleViewStateChange}
+        onViewStateChange={handleMapMove}
       >
         <StaticMap
           mapStyle={MAP_STYLE_BY_NAME[mapStyleName]}
