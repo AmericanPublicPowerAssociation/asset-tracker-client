@@ -25,7 +25,7 @@ import {
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_EDIT,
-  SKETCH_MODE_EDIT_DELETE,
+  SKETCH_MODE_DELETE,
 } from '../constants'
 import {
   getByKey,
@@ -97,7 +97,7 @@ export default function AssetsMap(props) {
 
   function handleAssetsGeoJsonClick(info, event) {
     const assetId = info.object.properties.id
-    if (assetId && sketchMode.startsWith(SKETCH_MODE_EDIT_DELETE)) {
+    if (assetId && sketchMode.startsWith(SKETCH_MODE_DELETE)) {
       dispatch(setFocusingAssetId(null))
       setSelectedAssetIndexes([])
       setSelectedBusIndexes([])

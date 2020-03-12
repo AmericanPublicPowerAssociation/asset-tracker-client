@@ -5,7 +5,6 @@ import AssetsMap from './AssetsMap'
 import SketchButtons from './SketchButtons'
 import SketchModeToolbar from './SketchModeToolbar'
 import SketchAddToolbar from './SketchAddToolbar'
-import SketchEditToolbar from './SketchEditToolbar'
 import ActionsWindow from './ActionsWindow'
 import OptionsWindow from './OptionsWindow'
 import OverlaysWindow from './OverlaysWindow'
@@ -112,10 +111,6 @@ export default function App() {
         changeSketchMode={changeSketchMode}
       />
       <SketchAddToolbar
-        sketchMode={sketchMode}
-        changeSketchMode={changeSketchMode}
-      />
-      <SketchEditToolbar
         sketchMode={sketchMode}
         changeSketchMode={changeSketchMode}
       />
