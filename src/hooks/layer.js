@@ -3,15 +3,24 @@ import { useDispatch } from 'react-redux'
 import {
   deleteAsset,
   setAsset,
+  setAssetConnection,
   setAssetsGeoJson,
   setFocusingAssetId,
   setFocusingBusId,
 } from '../actions'
 import {
+  BUSES_GEOJSON_LAYER_ID,
+  MINIMUM_BUS_ID_LENGTH,
+  PICKING_DEPTH,
+  PICKING_RADIUS_IN_PIXELS,
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_DELETE,
 } from '../constants'
+import {
+  getByKey,
+  getRandomId,
+} from '../macros'
 import {
   getAssetTypeCode,
   getPickedInfo,
@@ -106,11 +115,99 @@ export function useEditableLayer(
   ])
 }
 
-export function useInterpretableLayer() {
-  /*
+export function useInterpretableLayer(
+  assetsGeoJson,
+  assetById,
+  assetIdByBusId,
+  deckGL,
+) {
   const dispatch = useDispatch()
   return useMemo(() => ({
+    handleLayerInterpret(event) {
+      console.log('INTERPRET')
+
+      // Find the vertex that the user is editing
+      const info = getPickedInfo(event, {isGuide: true})
+      if (!info) {
+        return
+      }
+
+      // Determine whether the user modified a middle vertex
+      const vertexProperties = info.object.properties
+      console.log(vertexProperties)
+      const vertexIndex = vertexProperties.positionIndexes[0]
+      const featureIndex = vertexProperties.featureIndex
+      const feature = assetsGeoJson.features[featureIndex]
+      const featureVertexCount = feature.geometry.coordinates.length
+      const isMiddleVertex = vertexIndex !== 0 &&
+        vertexIndex !== featureVertexCount - 1
+      if (isMiddleVertex) {
+        // Split the line
+        console.log('INTERPRET', 'isMiddleVertex', vertexIndex)
+        return
+      }
+      const vertexAssetId = feature.properties.id
+      const vertexAsset = assetById[vertexAssetId]
+      const vertexAssetConnections = vertexAsset.connections || []
+      const connectionByBusId = getByKey(vertexAssetConnections, 'busId')
+      const connectionIndex = vertexIndex === 0 ? 0 : 1
+
+      // Find nearest bus
+      const screenCoords = event.screenCoords
+      const busInfos = deckGL.current.pickMultipleObjects({
+        x: screenCoords[0],
+        y: screenCoords[1],
+        layerIds: [BUSES_GEOJSON_LAYER_ID],
+        radius: PICKING_RADIUS_IN_PIXELS,
+        depth: PICKING_DEPTH,
+      })
+
+      function getMatchingBusId(isMatchingBusAssetId) {
+        for (let i = 0; i < busInfos.length; i++) {
+          const busInfo = busInfos[i]
+          const busId = busInfo.object.properties.id
+          const busAssetId = assetIdByBusId[busId]
+          if (isMatchingBusAssetId(busAssetId)) {
+            return busId
+          }
+        }
+      }
+
+      function getConnection(busId) {
+        return connectionByBusId[busId] || {busId}
+      }
+
+      // Find a bus that belongs to another asset
+      const theirBusId = getMatchingBusId(
+        busAssetId => busAssetId !== vertexAssetId)
+      if (theirBusId) {
+        console.log('SET CONNECTION TO THEIR BUS', theirBusId)
+        const connection = getConnection(theirBusId)
+        dispatch(setAssetConnection(vertexAssetId, connectionIndex, connection))
+        return
+      }
+
+      // Find a bus that belongs to this asset
+      const ourBusId = getMatchingBusId(
+        busAssetId => busAssetId === vertexAssetId)
+      if (ourBusId) {
+        console.log('KEEP OUR BUS', ourBusId)
+        const connection = getConnection(ourBusId)
+        dispatch(setAssetConnection(vertexAssetId, connectionIndex, connection))
+        return
+      }
+
+      // Make a new bus
+      console.log('MAKE A NEW BUS')
+      const newBusId = getRandomId(MINIMUM_BUS_ID_LENGTH)
+      const connection = getConnection(newBusId)
+      dispatch(setAssetConnection(vertexAssetId, connectionIndex, connection))
+    },
   }), [
+    dispatch,
+    assetsGeoJson,
+    assetById,
+    assetIdByBusId,
+    deckGL,
   ])
-  */
 }

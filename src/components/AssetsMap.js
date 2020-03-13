@@ -9,15 +9,15 @@ import {
 // import { GeoJsonLayer } from '@deck.gl/layers'
 import {
   setFocusingBusId,
-  setAssetConnection,
   setFocusingAssetId,
 } from '../actions'
 import {
+  ASSETS_GEOJSON_LAYER_ID,
   ASSET_METER_RADIUS_IN_METERS,
+  BUSES_GEOJSON_LAYER_ID,
   BUS_RADIUS_IN_METERS,
   LINE_WIDTH_IN_METERS,
   MAP_STYLE_BY_NAME,
-  MINIMUM_BUS_ID_LENGTH,
   PICKING_DEPTH,
   PICKING_RADIUS_IN_PIXELS,
   POINT_RADIUS_IN_METERS,
@@ -29,16 +29,11 @@ import {
   useMovableMap,
   usePickableLayer,
   useEditableLayer,
-  // useInterpretableLayer,
+  useInterpretableLayer,
 } from '../hooks'
-import {
-  getByKey,
-  getRandomId,
-} from '../macros'
 import {
   CustomEditableGeoJsonLayer,
   getMapMode,
-  getPickedInfo,
 } from '../routines'
 import {
   getAssetIdByBusId,
@@ -55,9 +50,6 @@ import {
 const {
   REACT_APP_MAPBOX_TOKEN,
 } = process.env
-
-const ASSETS_GEOJSON_LAYER_ID = 'assets-geojson-layer'
-const BUSES_GEOJSON_LAYER_ID = 'buses-geojson-layer'
 
 export default function AssetsMap(props) {
   const {
@@ -104,101 +96,17 @@ export default function AssetsMap(props) {
     setSelectedBusIndexes,
     changeSketchMode)
 
-  /*
   const {
-    // handleLayerInterpret,
-  } = useInterpretableLayer()
-  */
+    handleLayerInterpret,
+  } = useInterpretableLayer(
+    assetsGeoJson,
+    assetById,
+    assetIdByBusId,
+    deckGL)
 
   const mapLayers = []
   const mapMode = getMapMode(sketchMode)
-  const pickingRadius = PICKING_RADIUS_IN_PIXELS
-  const pickingDepth = PICKING_DEPTH
   const ASSET_TYPE_METER_CODE = assetTypeByCode['m'] && assetTypeByCode['m'].code
-
-  function handleAssetsGeoJsonInterpret(event) {
-    console.log('INTERPRET')
-
-    // Find the vertex that the user is editing
-    const info = getPickedInfo(event, {isGuide: true})
-    if (!info) {
-      return
-    }
-
-    // Determine whether the user modified a middle vertex
-    const vertexProperties = info.object.properties
-    console.log(vertexProperties)
-    const vertexIndex = vertexProperties.positionIndexes[0]
-    const featureIndex = vertexProperties.featureIndex
-    const feature = assetsGeoJson.features[featureIndex]
-    const featureVertexCount = feature.geometry.coordinates.length
-    const isMiddleVertex = vertexIndex !== 0 &&
-      vertexIndex !== featureVertexCount - 1
-    if (isMiddleVertex) {
-      // Split the line
-      console.log('INTERPRET', 'isMiddleVertex', vertexIndex)
-      return
-    }
-    const vertexAssetId = feature.properties.id
-    const vertexAsset = assetById[vertexAssetId]
-    const vertexAssetConnections = vertexAsset.connections || []
-    const connectionByBusId = getByKey(vertexAssetConnections, 'busId')
-    const connectionIndex = vertexIndex === 0 ? 0 : 1
-
-    // Find nearest bus
-    const screenCoords = event.screenCoords
-    const busInfos = deckGL.current.pickMultipleObjects({
-      x: screenCoords[0],
-      y: screenCoords[1],
-      layerIds: [BUSES_GEOJSON_LAYER_ID],
-      radius: pickingRadius,
-      depth: pickingDepth,
-    })
-
-    function getMatchingBusId(isMatchingBusAssetId) {
-      for (let i = 0; i < busInfos.length; i++) {
-        const busInfo = busInfos[i]
-        const busId = busInfo.object.properties.id
-        const busAssetId = assetIdByBusId[busId]
-        if (isMatchingBusAssetId(busAssetId)) {
-          return busId
-        }
-      }
-    }
-
-    function getConnection(busId) {
-      return connectionByBusId[busId] || {busId}
-    }
-
-    // Find a bus that belongs to another asset
-    const theirBusId = getMatchingBusId(
-      busAssetId => busAssetId !== vertexAssetId)
-    if (theirBusId) {
-      console.log('SET CONNECTION TO THEIR BUS', theirBusId)
-      const connection = getConnection(theirBusId)
-      console.log(vertexAssetId, connectionIndex, connection)
-      dispatch(setAssetConnection(vertexAssetId, connectionIndex, connection))
-      return
-    }
-
-    // Find a bus that belongs to this asset
-    const ourBusId = getMatchingBusId(
-      busAssetId => busAssetId === vertexAssetId)
-    if (ourBusId) {
-      console.log('KEEP OUR BUS', ourBusId)
-      const connection = getConnection(ourBusId)
-      console.log(vertexAssetId, connectionIndex, connection)
-      dispatch(setAssetConnection(vertexAssetId, connectionIndex, connection))
-      return
-    }
-
-    // Make a new bus
-    console.log('MAKE A NEW BUS')
-    const newBusId = getRandomId(MINIMUM_BUS_ID_LENGTH)
-    const connection = getConnection(newBusId)
-    console.log(vertexAssetId, connectionIndex, connection)
-    dispatch(setAssetConnection(vertexAssetId, connectionIndex, connection))
-  }
 
   function handleBusesGeoJsonClick(info, event) {
     const busId = info.object.properties.id
@@ -230,7 +138,7 @@ export default function AssetsMap(props) {
     }
   }
 
-  function onKeyUp(e) {
+  function handleKeyUp(e) {
     e.preventDefault()
     if (e.key === 'Enter') {
       if (sketchMode === SKETCH_MODE_ADD_LINE) {
@@ -270,7 +178,7 @@ export default function AssetsMap(props) {
     },
     onSelect: handleLayerSelect,
     onEdit: handleLayerEdit,
-    onInterpret: handleAssetsGeoJsonInterpret,
+    onInterpret: handleLayerInterpret,
     onDoubleClick: handleDoubleClick,
   }))
 
@@ -291,14 +199,14 @@ export default function AssetsMap(props) {
   }))
 
   return (
-    <div onKeyUp={onKeyUp}>
+    <div onKeyUp={handleKeyUp}>
       <DeckGL
         ref={deckGL}
         controller={{ doubleClickZoom: false }}
         layers={mapLayers}
         viewState={mapViewState}
-        pickingRadius={pickingRadius}
-        pickingDepth={pickingDepth}
+        pickingRadius={PICKING_RADIUS_IN_PIXELS}
+        pickingDepth={PICKING_DEPTH}
         onViewStateChange={handleMapMove}
       >
         <StaticMap
