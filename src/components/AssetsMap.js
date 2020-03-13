@@ -9,10 +9,7 @@ import {
 // import { GeoJsonLayer } from '@deck.gl/layers'
 import {
   setFocusingBusId,
-  // deleteAsset,
-  setAsset,
   setAssetConnection,
-  setAssetsGeoJson,
   setFocusingAssetId,
 } from '../actions'
 import {
@@ -27,12 +24,11 @@ import {
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_EDIT,
-  // SKETCH_MODE_DELETE,
 } from '../constants'
 import {
   useMovableMap,
   usePickableLayer,
-  // useEditableLayer,
+  useEditableLayer,
   // useInterpretableLayer,
 } from '../hooks'
 import {
@@ -41,14 +37,10 @@ import {
 } from '../macros'
 import {
   CustomEditableGeoJsonLayer,
-  getAssetTypeCode,
   getMapMode,
   getPickedInfo,
-  makeAsset,
 } from '../routines'
 import {
-  // getFocusingAssetId,
-  // getFocusingBusId,
   getAssetIdByBusId,
   getAssetTypeByCode,
   getAssetsGeoJson,
@@ -91,17 +83,28 @@ export default function AssetsMap(props) {
   const colors = useSelector(getColors)
   const focusingAssetId = useSelector(getFocusingAssetId)
   // const focusingBusId = useSelector(getFocusingBusId)
+  //
   const {
     handleMapMove,
   } = useMovableMap()
+
   const {
-    handleSelect,
+    handleLayerSelect,
   } = usePickableLayer(
-    sketchMode, setSelectedAssetIndexes, setSelectedBusIndexes)
-  /*
+    sketchMode,
+    setSelectedAssetIndexes,
+    setSelectedBusIndexes)
+
   const {
-    // handleLayerEdit,
-  } = useEditableLayer()
+    handleLayerEdit,
+  } = useEditableLayer(
+    sketchMode,
+    assetTypeByCode,
+    lineBusId,
+    setSelectedBusIndexes,
+    changeSketchMode)
+
+  /*
   const {
     // handleLayerInterpret,
   } = useInterpretableLayer()
@@ -112,41 +115,6 @@ export default function AssetsMap(props) {
   const pickingRadius = PICKING_RADIUS_IN_PIXELS
   const pickingDepth = PICKING_DEPTH
   const ASSET_TYPE_METER_CODE = assetTypeByCode['m'] && assetTypeByCode['m'].code
-
-  function handleAssetsGeoJsonEdit({editType, editContext, updatedData}) {
-    switch(editType) {
-      // If a feature is being added for the first time,
-      case 'addFeature': {
-        const features = updatedData.features
-        const { featureIndexes } = editContext
-        // Add an asset corresponding to the feature
-        const assetTypeCode = getAssetTypeCode(sketchMode)
-        const assetType = assetTypeByCode[assetTypeCode]
-        const asset = makeAsset(assetType, lineBusId)
-        dispatch(setAsset(asset))
-        // Store assetId in feature
-        const assetId = asset.id
-        for (let i = 0; i < featureIndexes.length; i++) {
-          const featureIndex = featureIndexes[i]
-          const feature = features[featureIndex]
-          feature.properties.id = assetId
-          feature.properties.typeCode = assetTypeCode
-        }
-        // If the new feature is a line,
-        if (sketchMode === SKETCH_MODE_ADD_LINE) {
-          // Have subsequent clicks extend the same line
-          setSelectedAssetIndexes(featureIndexes)
-        } else {
-          changeSketchMode(SKETCH_MODE_ADD)
-        }
-        // Show details for the new asset
-        dispatch(setFocusingAssetId(assetId))
-        break
-      }
-      default: {}
-    }
-    dispatch(setAssetsGeoJson(updatedData))  // Update geojson for assets
-  }
 
   function handleAssetsGeoJsonInterpret(event) {
     console.log('INTERPRET')
@@ -300,9 +268,8 @@ export default function AssetsMap(props) {
     getLineColor: (feature, isSelected) => {
       return isSelected ? colors.assetSelect : colors.asset
     },
-    // onClick: handleLayerClick,
-    onSelect: handleSelect,
-    onEdit: handleAssetsGeoJsonEdit,
+    onSelect: handleLayerSelect,
+    onEdit: handleLayerEdit,
     onInterpret: handleAssetsGeoJsonInterpret,
     onDoubleClick: handleDoubleClick,
   }))
