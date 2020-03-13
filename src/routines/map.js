@@ -4,7 +4,6 @@ import {
   DrawPolygonMode,
   EditableGeoJsonLayer,
   ModifyMode,
-  TranslateMode,
   ViewMode,
 } from 'nebula.gl'
 import {
@@ -13,28 +12,40 @@ import {
   SKETCH_MODE_ADD_SUBSTATION,
   SKETCH_MODE_ADD_TRANSFORMER,
   SKETCH_MODE_EDIT_MODIFY,
-  SKETCH_MODE_EDIT_TRANSLATE,
 } from '../constants'
 
 export class CustomEditableGeoJsonLayer extends EditableGeoJsonLayer {
   getModeProps(props) {
     const modeProps = super.getModeProps(props)
+    modeProps.onSelect = props.onSelect
     modeProps.onInterpret = props.onInterpret
-    modeProps.handleOnDoubleClick = props.handleOnDoubleClick
+    modeProps.onDoubleClick = props.onDoubleClick
     return modeProps
   }
 
   onDoubleClick(event) {
     const modeProps = this.getModeProps(this.props)
-    const handleOnDoubleClick = modeProps.handleOnDoubleClick
-    handleOnDoubleClick && handleOnDoubleClick(event, modeProps)
+    const onDoubleClick = modeProps.onDoubleClick
+    onDoubleClick && onDoubleClick(event, modeProps)
   }
 }
 
 export class CustomModifyMode extends ModifyMode {
+  handleClick(event, props) {
+    super.handleClick(event, props)
+    props.onSelect(event)
+  }
+
   handleStopDragging(event, props) {
     super.handleStopDragging(event, props)
     props.onInterpret(event)
+  }
+}
+
+export class CustomViewMode extends ViewMode {
+  handleClick(event, props) {
+    super.handleClick(event, props)
+    props.onSelect(event)
   }
 }
 
@@ -45,14 +56,11 @@ export function getMapMode(sketchMode) {
     [SKETCH_MODE_ADD_TRANSFORMER]: DrawPointMode,
     [SKETCH_MODE_ADD_SUBSTATION]: DrawPolygonMode,
     [SKETCH_MODE_EDIT_MODIFY]: CustomModifyMode,
-    [SKETCH_MODE_EDIT_TRANSLATE]: TranslateMode,
   }[sketchMode]
-  return mapMode || ViewMode
+  return mapMode || CustomViewMode
 }
 
-export function getPickedVertex(event) {
-  // Adapted from nebula.gl > mode-handler.js > getPickedEditHandle
+export function getPickedInfo(event, {isGuide}) {
   const picks = event.picks
-  const info = picks && picks.find(pick => pick.isGuide)
-  return info && info.object
+  return picks && picks.find(pick => pick.isGuide === isGuide)
 }

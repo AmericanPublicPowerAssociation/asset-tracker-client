@@ -2,11 +2,14 @@ import React, { useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
-import { EditableGeoJsonLayer } from 'nebula.gl'
+import {
+  EditableGeoJsonLayer,
+  ViewMode,
+} from 'nebula.gl'
 // import { GeoJsonLayer } from '@deck.gl/layers'
 import {
   setFocusingBusId,
-  deleteAsset,
+  // deleteAsset,
   setAsset,
   setAssetConnection,
   setAssetsGeoJson,
@@ -24,13 +27,13 @@ import {
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_EDIT,
-  SKETCH_MODE_DELETE,
+  // SKETCH_MODE_DELETE,
 } from '../constants'
 import {
   useMovableMap,
   usePickableLayer,
-  useEditableLayer,
-  useInterpretableLayer,
+  // useEditableLayer,
+  // useInterpretableLayer,
 } from '../hooks'
 import {
   getByKey,
@@ -40,7 +43,7 @@ import {
   CustomEditableGeoJsonLayer,
   getAssetTypeCode,
   getMapMode,
-  getPickedVertex,
+  getPickedInfo,
   makeAsset,
 } from '../routines'
 import {
@@ -92,8 +95,9 @@ export default function AssetsMap(props) {
     handleMapMove,
   } = useMovableMap()
   const {
-    handleLayerClick,
-  } = usePickableLayer()
+    handleSelect,
+  } = usePickableLayer(
+    sketchMode, setSelectedAssetIndexes, setSelectedBusIndexes)
   /*
   const {
     // handleLayerEdit,
@@ -108,29 +112,6 @@ export default function AssetsMap(props) {
   const pickingRadius = PICKING_RADIUS_IN_PIXELS
   const pickingDepth = PICKING_DEPTH
   const ASSET_TYPE_METER_CODE = assetTypeByCode['m'] && assetTypeByCode['m'].code
-
-  function handleAssetsGeoJsonClick(info) {
-    /*
-      if (sketchMode.startsWith(SKETCH_MODE_ADD) || info.isGuide || !assetId) {
-        return
-      } else if (sketchMode === SKETCH_MODE_DELETE) {
-        setSelectedAssetIndexes([])
-        setSelectedBusIndexes([])
-        dispatch(setFocusingAssetId(null))
-        dispatch(deleteAsset(assetId))
-      } else {
-      }
-    if (assetId && sketchMode.startsWith(SKETCH_MODE_DELETE)) {
-      return
-    }
-    assetId && dispatch(setFocusingAssetId(assetId))
-    assetId && dispatch(setFocusingBusId(null))
-    if (sketchMode.startsWith(SKETCH_MODE_ADD) || info.isGuide) return
-    const featureIndex = info.index
-    setSelectedAssetIndexes([featureIndex])
-    setSelectedBusIndexes([])
-    */
-  }
 
   function handleAssetsGeoJsonEdit({editType, editContext, updatedData}) {
     switch(editType) {
@@ -158,7 +139,8 @@ export default function AssetsMap(props) {
         } else {
           changeSketchMode(SKETCH_MODE_ADD)
         }
-        dispatch(setFocusingAssetId(assetId))  // Show details for the new asset
+        // Show details for the new asset
+        dispatch(setFocusingAssetId(assetId))
         break
       }
       default: {}
@@ -170,13 +152,13 @@ export default function AssetsMap(props) {
     console.log('INTERPRET')
 
     // Find the vertex that the user is editing
-    const vertex = getPickedVertex(event)
-    if (!vertex) {
+    const info = getPickedInfo(event, {isGuide: true})
+    if (!info) {
       return
     }
 
     // Determine whether the user modified a middle vertex
-    const vertexProperties = vertex.properties
+    const vertexProperties = info.object.properties
     console.log(vertexProperties)
     const vertexIndex = vertexProperties.positionIndexes[0]
     const featureIndex = vertexProperties.featureIndex
@@ -274,8 +256,7 @@ export default function AssetsMap(props) {
     assetId && dispatch(setFocusingAssetId(assetId))
   }
 
-
-  function handleOnDoubleClick(e) {
+  function handleDoubleClick(e) {
     if (sketchMode === SKETCH_MODE_ADD_LINE) {
       changeSketchMode(SKETCH_MODE_ADD)
     }
@@ -319,17 +300,17 @@ export default function AssetsMap(props) {
     getLineColor: (feature, isSelected) => {
       return isSelected ? colors.assetSelect : colors.asset
     },
-    onClick: handleLayerClick,
+    // onClick: handleLayerClick,
+    onSelect: handleSelect,
     onEdit: handleAssetsGeoJsonEdit,
     onInterpret: handleAssetsGeoJsonInterpret,
-    handleOnDoubleClick: handleOnDoubleClick,
+    onDoubleClick: handleDoubleClick,
   }))
 
-  // mapLayers.push(new GeoJsonLayer({
   mapLayers.push(new EditableGeoJsonLayer({
     id: BUSES_GEOJSON_LAYER_ID,
     data: busesGeoJson,
-    mode: getMapMode(),
+    mode: ViewMode,
     pickable: true,
     stroked: false,
     autoHighlight: true,
@@ -346,9 +327,7 @@ export default function AssetsMap(props) {
     <div onKeyUp={onKeyUp}>
       <DeckGL
         ref={deckGL}
-        controller={{
-          doubleClickZoom: false,
-        }}
+        controller={{ doubleClickZoom: false }}
         layers={mapLayers}
         viewState={mapViewState}
         pickingRadius={pickingRadius}
