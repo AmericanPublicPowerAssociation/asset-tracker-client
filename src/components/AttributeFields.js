@@ -13,14 +13,10 @@ import {
   getAttributeLabel,
 } from '../routines'
 import MenuItem from "@material-ui/core/MenuItem";
-import withStyles from "@material-ui/core/styles/withStyles";
-import InputBase from "@material-ui/core/InputBase";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import {makeStyles} from "@material-ui/core/styles";
-import Chip from "@material-ui/core/Chip";
-import Paper from "@material-ui/core/Paper";
 
 const useStyle = makeStyles(theme =>  ({
   fullSelect:  {
@@ -137,7 +133,7 @@ function AttributeField(props) {
         key={attributeKey}
         labelId={`${attributeKey}-${assetId}`}
         label={getAttributeLabel(attributeKey)}
-        value={attributeValueByKey[attributeKey]}
+        value={attributeValueByKey[attributeKey] || ''}
         disabled={!isEditing}
         onChange={e => trackChange(attributeKey, e.target.value)}
         onFocus={handleOnFocus}
