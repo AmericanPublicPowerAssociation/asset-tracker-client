@@ -1,38 +1,45 @@
 import React  from 'react'
+import clsx from "clsx";
 import { useDispatch } from 'react-redux'
+import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@material-ui/icons/Close'
 import Chip from '@material-ui/core/Chip'
-import { makeStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
 import NativeSelect from '@material-ui/core/NativeSelect'
 import Button from "@material-ui/core/Button"
+import InputBase from '@material-ui/core/InputBase'
+import IconButton from "@material-ui/core/IconButton"
+import Typography from "@material-ui/core/Typography"
+import Grid from "@material-ui/core/Grid"
+import Dialog from "@material-ui/core/Dialog"
+import AppBar from "@material-ui/core/AppBar"
+import Toolbar from "@material-ui/core/Toolbar"
+import Slide from "@material-ui/core/Slide"
+import FiberManualRecordRoundedIcon from '@material-ui/icons/FiberManualRecordRounded'
+import TaskComments, {CommentForm} from "./TaskComments"
+import Container from "@material-ui/core/Container"
+import {AssetName} from "./AssetTasksPanel"
 import {
   addAssetTaskComment,
   setTaskPriority,
   setTaskStatus,
   setTaskName,
 } from '../actions'
-import InputBase from '@material-ui/core/InputBase';
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import Dialog from "@material-ui/core/Dialog";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Slide from "@material-ui/core/Slide";
-import FiberManualRecordRoundedIcon from '@material-ui/icons/FiberManualRecordRounded';
-import TaskComments, {CommentForm} from "./TaskComments";
-import Container from "@material-ui/core/Container";
-// import EditIcon from '@material-ui/icons/Edit';
-import {ASSET_TYPE_ICON_BY_CODE} from "../constants";
-import {AssetName} from "./AssetTasksPanel";
-import clsx from "clsx";
-
+import {
+  ASSET_TYPE_ICON_BY_CODE,
+  TASK_PRIORITY_LOW,
+  TASK_PRIORITY_NORMAL,
+  TASK_PRIORITY_HIGH,
+  TASK_STATUS_NEW,
+  TASK_STATUS_PENDING,
+  TASK_STATUS_DONE,
+  TASK_STATUS_CANCELLED,
+} from "../constants"
 
 const getPriorityColor  = (priority) => ({
   1: 'default',
@@ -295,9 +302,9 @@ export const TaskFullscreen = (props) => {
                     id: `priority`,
                   }}
                 >
-                  <option value={1}>Low</option>
-                  <option value={10}>Normal</option>
-                  <option value={100}>High</option>
+                  <option value={TASK_PRIORITY_LOW}>Low</option>
+                  <option value={TASK_PRIORITY_NORMAL}>Normal</option>
+                  <option value={TASK_PRIORITY_HIGH}>High</option>
                 </NativeSelect>
                 <FormHelperText>Select the priority for the task</FormHelperText>
               </FormControl>
@@ -310,10 +317,10 @@ export const TaskFullscreen = (props) => {
                     name: 'status',
                     id: `status`,
                   }}>
-                  <option value={0}>New</option>
-                  <option value={10}>Pending</option>
-                  <option value={100}>Done</option>
-                  <option value={-1}>Cancelled</option>
+                  <option value={TASK_STATUS_NEW}>New</option>
+                  <option value={TASK_STATUS_PENDING}>Pending</option>
+                  <option value={TASK_STATUS_DONE}>Done</option>
+                  <option value={TASK_STATUS_CANCELLED}>Cancelled</option>
                 </NativeSelect>
                 <FormHelperText>Select the status for the task</FormHelperText>
               </FormControl>
