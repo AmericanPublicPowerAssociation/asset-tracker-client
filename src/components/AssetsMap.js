@@ -94,12 +94,14 @@ export default function AssetsMap(props) {
   const {
     handleLayerClick,
   } = usePickableLayer()
+  /*
   const {
-    handleLayerEdit,
+    // handleLayerEdit,
   } = useEditableLayer()
   const {
-    handleLayerInterpret,
+    // handleLayerInterpret,
   } = useInterpretableLayer()
+  */
 
   const mapLayers = []
   const mapMode = getMapMode(sketchMode)
@@ -108,11 +110,17 @@ export default function AssetsMap(props) {
   const ASSET_TYPE_METER_CODE = assetTypeByCode['m'] && assetTypeByCode['m'].code
 
   function handleAssetsGeoJsonClick(info) {
+    /*
+      if (sketchMode.startsWith(SKETCH_MODE_ADD) || info.isGuide || !assetId) {
+        return
+      } else if (sketchMode === SKETCH_MODE_DELETE) {
+        setSelectedAssetIndexes([])
+        setSelectedBusIndexes([])
+        dispatch(setFocusingAssetId(null))
+        dispatch(deleteAsset(assetId))
+      } else {
+      }
     if (assetId && sketchMode.startsWith(SKETCH_MODE_DELETE)) {
-      dispatch(setFocusingAssetId(null))
-      setSelectedAssetIndexes([])
-      setSelectedBusIndexes([])
-      dispatch(deleteAsset(assetId))
       return
     }
     assetId && dispatch(setFocusingAssetId(assetId))
@@ -121,6 +129,7 @@ export default function AssetsMap(props) {
     const featureIndex = info.index
     setSelectedAssetIndexes([featureIndex])
     setSelectedBusIndexes([])
+    */
   }
 
   function handleAssetsGeoJsonEdit({editType, editContext, updatedData}) {
@@ -310,7 +319,7 @@ export default function AssetsMap(props) {
     getLineColor: (feature, isSelected) => {
       return isSelected ? colors.assetSelect : colors.asset
     },
-    onClick: handleAssetsGeoJsonClick,
+    onClick: handleLayerClick,
     onEdit: handleAssetsGeoJsonEdit,
     onInterpret: handleAssetsGeoJsonInterpret,
     handleOnDoubleClick: handleOnDoubleClick,

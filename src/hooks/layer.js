@@ -6,6 +6,7 @@ export function usePickableLayer() {
   return useMemo(() => ({
     handleLayerClick(info) {
       const assetId = info.object.properties.id
+      console.log('handleLayerClick', assetId)
     },
   }), [dispatch])
 }
