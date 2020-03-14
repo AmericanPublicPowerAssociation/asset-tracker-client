@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import {
   deleteAsset,
   setAsset,
-  setAssetConnection,
+  // setAssetConnection,
   setAssetsGeoJson,
   setFocusingAssetId,
   setFocusingBusId,
@@ -23,6 +23,7 @@ import {
 } from '../macros'
 import {
   getAssetTypeCode,
+  getPickedInterpretation,
   getPickedInfo,
   makeAsset,
 } from '../routines'
@@ -35,8 +36,9 @@ export function usePickableLayer(
   const dispatch = useDispatch()
   return useMemo(() => ({
     handleLayerSelect(event) {
-      const info = getPickedInfo(event, {})
+      const info = getPickedInfo(event, pick => !pick.isGuide)
       let assetId = info && info.object.properties.id
+      console.log('SELECT', assetId, info.index)
       if (!assetId) {
         return
       }
@@ -116,29 +118,41 @@ export function useEditableLayer(
 }
 
 export function useInterpretableLayer(
-  assetsGeoJson,
+  // assetsGeoJson,
   assetById,
   assetIdByBusId,
   deckGL,
 ) {
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   return useMemo(() => ({
     handleLayerInterpret(event) {
-      console.log('INTERPRET')
+      // console.log(getPickedInterpretation(event, deckGL))
+      // console.log('INTERPRET', event.picks.length, event)
+      // const screenCoords = event.screenCoords
+      // const newAssetFeature = getPickedFeature(event, pick => pick.isGuide)
+      // const oldAssetFeature = getPickedFeature(event, pick => !pick.isGuide)
+      // console.log(newAssetFeature, oldAssetFeature)
 
+      /*
       // Find the vertex that the user is editing
       const info = getPickedInfo(event, {isGuide: true})
       if (!info) {
         return
       }
+      const vertex = info.object
+      console.log(vertex)
 
       // Determine whether the user modified a middle vertex
-      const vertexProperties = info.object.properties
+      const vertexProperties = vertex.properties
       console.log(vertexProperties)
       const vertexIndex = vertexProperties.positionIndexes[0]
       const featureIndex = vertexProperties.featureIndex
       const feature = assetsGeoJson.features[featureIndex]
-      const featureVertexCount = feature.geometry.coordinates.length
+      const featureGeometry = feature.geometry
+      if (featureGeometry.type === 'Polygon') {
+        return
+      }
+      const featureVertexCount = featureGeometry.coordinates.length
       const isMiddleVertex = vertexIndex !== 0 &&
         vertexIndex !== featureVertexCount - 1
       if (isMiddleVertex) {
@@ -149,37 +163,8 @@ export function useInterpretableLayer(
       const vertexAssetId = feature.properties.id
       const vertexAsset = assetById[vertexAssetId]
       const vertexAssetConnections = vertexAsset.connections || []
-      const connectionByBusId = getByKey(vertexAssetConnections, 'busId')
-      const connectionIndex = vertexIndex === 0 ? 0 : 1
-
-      // Find nearest bus
-      const screenCoords = event.screenCoords
-      const busInfos = deckGL.current.pickMultipleObjects({
-        x: screenCoords[0],
-        y: screenCoords[1],
-        layerIds: [BUSES_GEOJSON_LAYER_ID],
-        radius: PICKING_RADIUS_IN_PIXELS,
-        depth: PICKING_DEPTH,
-      })
-
-      function getMatchingBusId(isMatchingBusAssetId) {
-        for (let i = 0; i < busInfos.length; i++) {
-          const busInfo = busInfos[i]
-          const busId = busInfo.object.properties.id
-          const busAssetId = assetIdByBusId[busId]
-          if (isMatchingBusAssetId(busAssetId)) {
-            return busId
-          }
-        }
-      }
-
-      function getConnection(busId) {
-        return connectionByBusId[busId] || {busId}
-      }
 
       // Find a bus that belongs to another asset
-      const theirBusId = getMatchingBusId(
-        busAssetId => busAssetId !== vertexAssetId)
       if (theirBusId) {
         console.log('SET CONNECTION TO THEIR BUS', theirBusId)
         const connection = getConnection(theirBusId)
@@ -199,13 +184,66 @@ export function useInterpretableLayer(
 
       // Make a new bus
       console.log('MAKE A NEW BUS')
-      const newBusId = getRandomId(MINIMUM_BUS_ID_LENGTH)
-      const connection = getConnection(newBusId)
+      const newBusId = 
       dispatch(setAssetConnection(vertexAssetId, connectionIndex, connection))
+      */
+
+      function getBusId(event, thisAssetId) {
+        const screenCoords = event.screenCoords
+        const busInfos = deckGL.current.pickMultipleObjects({
+          x: screenCoords[0],
+          y: screenCoords[1],
+          layerIds: [BUSES_GEOJSON_LAYER_ID],
+          radius: PICKING_RADIUS_IN_PIXELS,
+          depth: PICKING_DEPTH,
+        })
+
+        function getMatchingBusId(isMatchingBusAssetId) {
+          for (let i = 0; i < busInfos.length; i++) {
+            const busInfo = busInfos[i]
+            const busId = busInfo.object.properties.id
+            const busAssetId = assetIdByBusId[busId]
+            if (isMatchingBusAssetId(busAssetId)) {
+              return busId
+            }
+          }
+        }
+
+        let busId
+
+        busId = getMatchingBusId(assetId => assetId !== thisAssetId)
+        if (busId) return busId
+
+        busId = getMatchingBusId(assetId => assetId === thisAssetId)
+        if (busId) return busId
+
+        return getRandomId(MINIMUM_BUS_ID_LENGTH)
+      }
+
+      const {
+        busId,
+        connectionIndex,
+        thisAssetId,
+        thatAssetId,
+      } = getPickedInterpretation(event, getBusId)
+
+      if (thatAssetId) {
+        // Split the other line
+      }
+
+      if (!thisAssetId) {
+        return
+      }
+      const thisAsset = assetById[thisAssetId]
+      const thisAssetConnections = thisAsset.connections || []
+      const connectionByBusId = getByKey(thisAssetConnections, 'busId')
+      const connection = connectionByBusId[busId] || {busId}
+      // dispatch(setAssetConnection(thisAssetId, connectionIndex, connection))
+      console.log(busId, connectionIndex, thisAssetId, thatAssetId)
     },
   }), [
-    dispatch,
-    assetsGeoJson,
+    // dispatch,
+    // assetsGeoJson,
     assetById,
     assetIdByBusId,
     deckGL,

@@ -93,13 +93,12 @@ export default function AssetsMap(props) {
     sketchMode,
     assetTypeByCode,
     lineBusId,
-    setSelectedBusIndexes,
+    setSelectedAssetIndexes,
     changeSketchMode)
 
   const {
     handleLayerInterpret,
   } = useInterpretableLayer(
-    assetsGeoJson,
     assetById,
     assetIdByBusId,
     deckGL)

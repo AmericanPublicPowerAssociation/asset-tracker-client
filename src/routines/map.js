@@ -30,6 +30,13 @@ export class CustomEditableGeoJsonLayer extends EditableGeoJsonLayer {
   }
 }
 
+export class CustomDrawLineStringMode extends DrawLineStringMode {
+  handleClick(event, props) {
+    super.handleClick(event, props)
+    props.onInterpret(event)
+  }
+}
+
 export class CustomModifyMode extends ModifyMode {
   handleClick(event, props) {
     super.handleClick(event, props)
@@ -51,7 +58,7 @@ export class CustomViewMode extends ViewMode {
 
 export function getMapMode(sketchMode) {
   const mapMode = {
-    [SKETCH_MODE_ADD_LINE]: DrawLineStringMode,
+    [SKETCH_MODE_ADD_LINE]: CustomDrawLineStringMode,
     [SKETCH_MODE_ADD_METER]: DrawPointMode,
     [SKETCH_MODE_ADD_TRANSFORMER]: DrawPointMode,
     [SKETCH_MODE_ADD_SUBSTATION]: DrawPolygonMode,
@@ -60,7 +67,71 @@ export function getMapMode(sketchMode) {
   return mapMode || CustomViewMode
 }
 
-export function getPickedInfo(event, {isGuide}) {
+export function getPickedFeature(event, select) {
+  const info = getPickedInfo(event, select)
+  if (!info) {
+    return
+  }
+  const layer = info.layer
+  const index = info.index
+  return layer.props.data.features[index]
+}
+
+export function getPickedInterpretation(event, getBusId) {
+  const thisGuideInfo = getPickedInfo(event, pick => pick.isGuide)
+  if (!thisGuideInfo) {
+    // console.log('LINE START', event.picks)
+    // !!! FIX
+    const thatAssetFeatureInfo = getPickedInfo(event, pick =>
+      !pick.isGuide)
+    let thatAssetId
+    if (thatAssetFeatureInfo) {
+      const assetFeatures = thatAssetFeatureInfo.layer.props.data.features
+      const thatAssetFeatureIndex = thatAssetFeatureInfo.index
+      const thatAssetFeature = assetFeatures[thatAssetFeatureIndex]
+      thatAssetId = thatAssetFeature.properties.id
+    }
+    return {thatAssetId}
+  }
+
+  const assetFeatures = thisGuideInfo.layer.props.data.features
+  const thisGuideFeature = thisGuideInfo.object
+  const thisGuideFeatureProperties = thisGuideFeature.properties
+  const thisAssetFeatureIndex = thisGuideFeatureProperties.featureIndex
+  const thisAssetFeature = assetFeatures[thisAssetFeatureIndex]
+  if (!thisAssetFeature) {
+    // console.log('LINE END', event.picks)
+    // !!! FIX
+    const thatAssetFeatureInfo = getPickedInfo(event, pick =>
+      !pick.isGuide)
+    let thatAssetId
+    if (thatAssetFeatureInfo) {
+      const thatAssetFeatureIndex = thatAssetFeatureInfo.index
+      const thatAssetFeature = assetFeatures[thatAssetFeatureIndex]
+      thatAssetId = thatAssetFeature.properties.id
+    }
+    return {thatAssetId}
+  }
+  const thisAssetId = thisAssetFeature.properties.id
+
+  const thisGuideFeatureIndex = thisGuideFeatureProperties.positionIndexes[0]
+  const connectionIndex = thisGuideFeatureIndex === 0 ? 0 : 1
+
+  const busId = getBusId(event, thisAssetId)
+  const thatAssetFeatureInfo = getPickedInfo(event, pick =>
+    !pick.isGuide && pick.index !== thisAssetFeatureIndex)
+
+  let thatAssetId
+  if (thatAssetFeatureInfo) {
+    const thatAssetFeatureIndex = thatAssetFeatureInfo.index
+    const thatAssetFeature = assetFeatures[thatAssetFeatureIndex]
+    thatAssetId = thatAssetFeature.properties.id
+  }
+
+  return {busId, connectionIndex, thisAssetId, thatAssetId}
+}
+
+export function getPickedInfo(event, select) {
   const picks = event.picks
-  return picks && picks.find(pick => pick.isGuide === isGuide)
+  return picks && picks.find(select)
 }
