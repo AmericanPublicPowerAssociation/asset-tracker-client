@@ -23,7 +23,6 @@ import FiberManualRecordRoundedIcon from '@material-ui/icons/FiberManualRecordRo
 import TaskComments, {CommentForm} from "./TaskComments"
 import Container from "@material-ui/core/Container"
 // import EditIcon from '@material-ui/icons/Edit'
-import {ASSET_TYPE_ICON_BY_CODE} from "../constants"
 import {AssetName} from "./AssetTasksPanel"
 import clsx from "clsx"
 import {
