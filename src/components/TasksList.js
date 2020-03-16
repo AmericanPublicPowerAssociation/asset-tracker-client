@@ -1,9 +1,9 @@
 import React  from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@material-ui/icons/Close'
 import Chip from '@material-ui/core/Chip'
 import { makeStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
@@ -11,27 +11,31 @@ import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
 import NativeSelect from '@material-ui/core/NativeSelect'
 import Button from "@material-ui/core/Button"
+import InputBase from '@material-ui/core/InputBase'
+import IconButton from "@material-ui/core/IconButton"
+import Typography from "@material-ui/core/Typography"
+import Grid from "@material-ui/core/Grid"
+import Dialog from "@material-ui/core/Dialog"
+import AppBar from "@material-ui/core/AppBar"
+import Toolbar from "@material-ui/core/Toolbar"
+import Slide from "@material-ui/core/Slide"
+import FiberManualRecordRoundedIcon from '@material-ui/icons/FiberManualRecordRounded'
+import TaskComments, {CommentForm} from "./TaskComments"
+import Container from "@material-ui/core/Container"
+// import EditIcon from '@material-ui/icons/Edit'
+import {ASSET_TYPE_ICON_BY_CODE} from "../constants"
+import {AssetName} from "./AssetTasksPanel"
+import clsx from "clsx"
 import {
   addAssetTaskComment,
+  refreshTasks,
   setTaskPriority,
   setTaskStatus,
   setTaskName,
 } from '../actions'
-import InputBase from '@material-ui/core/InputBase';
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import Dialog from "@material-ui/core/Dialog";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Slide from "@material-ui/core/Slide";
-import FiberManualRecordRoundedIcon from '@material-ui/icons/FiberManualRecordRounded';
-import TaskComments, {CommentForm} from "./TaskComments";
-import Container from "@material-ui/core/Container";
-// import EditIcon from '@material-ui/icons/Edit';
-import {ASSET_TYPE_ICON_BY_CODE} from "../constants";
-import {AssetName} from "./AssetTasksPanel";
-import clsx from "clsx";
+import {
+ getAssetTypeByCode,
+} from '../selectors'
 
 
 const getPriorityColor  = (priority) => ({
@@ -138,11 +142,11 @@ const useStyles = makeStyles(theme => ({
     fontWeight: theme.typography.h6.fontWeight,
     color: 'white',
   }
-}));
+}))
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
+  return <Slide direction="up" ref={ref} {...props} />
 })
 
 
@@ -192,7 +196,7 @@ function TaskItem(props) {
       commentCount
   } = task
 
-  const classes = useStyles();
+  const classes = useStyles()
 
   const priorityLabel  = getPriorityLabel(priority.toString())
   const priorityColor  = getPriorityColor(priority.toString())
@@ -236,7 +240,7 @@ export const TaskFullscreen = (props) => {
     handleClose,
     task,
     asset,
-  } = props;
+  } = props
 
   const {
     id,
@@ -246,7 +250,8 @@ export const TaskFullscreen = (props) => {
 
   const assetName = asset.name
   const assetTypeCode = asset.typeCode
-  const assetType = ASSET_TYPE_ICON_BY_CODE[assetTypeCode]
+  const assetTypeByCode = useSelector(getAssetTypeByCode)
+  const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
 
   const setPriority = (priority) => dispatch(setTaskPriority(id, parseInt(priority), status))
@@ -256,6 +261,11 @@ export const TaskFullscreen = (props) => {
 
   function handleChangeTaskName(e) {
     dispatch(setTaskName(id, e.target.value))
+  }
+
+  function handleCommentFormSubmit(task, comment) {
+    dispatch(addAssetTaskComment(task.id, comment))
+    dispatch(refreshTasks())
   }
 
   return (
@@ -280,7 +290,7 @@ export const TaskFullscreen = (props) => {
         <Grid container>
           <Grid item xs={12} md={9}>
             <TaskComments asset={asset} task={task} classes={classes.listComments} />
-            <CommentForm onSubmit={(comment) => { dispatch(addAssetTaskComment(task.id, comment)) }} />
+            <CommentForm onSubmit={(comment) => handleCommentFormSubmit(task, comment)} />
           </Grid>
           <Grid item xs={12} md={3}>
             <div className={classes.propertiesSection}>
@@ -321,5 +331,5 @@ export const TaskFullscreen = (props) => {
           </Grid>
         </Grid>
       </Container>
-    </Dialog>);
+    </Dialog>)
 }

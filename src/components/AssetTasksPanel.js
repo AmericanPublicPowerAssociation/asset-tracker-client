@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import TextField from '@material-ui/core/TextField'
@@ -23,12 +23,14 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import AddIcon from '@material-ui/icons/Add'
 import {
-  addAssetTask, updateTaskComments
-} from '../actions'
-
+  getAssetTypeByCode,
+} from '../selectors'
 import {
-  ASSET_TYPE_ICON_BY_CODE,
-  TASK_ARCHIVE_STATUS
+  addAssetTask,
+  updateTaskComments,
+} from '../actions'
+import {
+  TASK_ARCHIVE_STATUS,
 } from '../constants'
 
 
@@ -47,7 +49,7 @@ const useStyles = makeStyles(theme => ({
     height: '50vh',
     overflowY: 'auto',
   }
-}));
+}))
 
 
 
@@ -92,10 +94,11 @@ export default function AssetTasksPanel(props) {
   const assetId = asset.id
   const assetName = asset.name
   const assetTypeCode = asset.typeCode
-  const assetType = ASSET_TYPE_ICON_BY_CODE[assetTypeCode]
+  const assetTypeByCode = useSelector(getAssetTypeByCode)
+  const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
 
-  const [archived, setArchived] = useState(false);
+  const [archived, setArchived] = useState(false)
   const [query, setQuery] = useState('')
   const [name, setName]  = useState('')
   const [description, setDescription] = useState('')
@@ -144,11 +147,11 @@ export default function AssetTasksPanel(props) {
   const getTaskById = () => {
       if (taskDetails) {
         for (let i = 0; i < tasks.length; i++) {
-          if (tasks[i].id === taskDetails.id) return tasks[i];
+          if (tasks[i].id === taskDetails.id) return tasks[i]
         }
       }
       return {}
-  };
+  }
 
   return (<>
     {assetNameComponent}
