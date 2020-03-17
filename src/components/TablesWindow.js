@@ -25,12 +25,19 @@ export default function TablesWindow(props) {
     setSelectedBusIndexes,
   } =  props
 
+  function getHeaderLabel(header) {
+    const result = header.replace( /([A-Z])/g, " $1" );
+    var headerLabel = result.charAt(0).toUpperCase() + result.slice(1);
+    return headerLabel
+  }
+
   const table = {
     assets: <AssetsTable
       setSelectedAssetIndexes={setSelectedAssetIndexes}
       setSelectedBusIndexes={setSelectedBusIndexes}
+      getHeaderLabel={getHeaderLabel}
     />,
-    tasks: <TasksTable />,
+    tasks: <TasksTable getHeaderLabel={getHeaderLabel}/>,
     risks: <RisksTable />,
   }[overlayMode]
 
