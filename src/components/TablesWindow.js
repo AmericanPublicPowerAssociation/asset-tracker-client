@@ -3,7 +3,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import AssetsTable from './AssetsTable'
 import TasksTable from './TasksTable'
-import RisksTable from './RisksTable'
+import {
+  RisksTable,
+} from 'asset-report-risks'
 
 const useStyles = makeStyles(theme => ({
   root: {
