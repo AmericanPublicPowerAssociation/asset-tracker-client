@@ -51,7 +51,6 @@ export default function TaskComments(props) {
   const comments = useSelector(getCurrentTaskComments)
 
   return (
-    <>
     <List disablePadding className={props.classes || classes.scroll}>
       { comments.map((comment, index) => (
         <CommentItem
@@ -63,7 +62,6 @@ export default function TaskComments(props) {
         />
       ))}
     </List>
-    </>
   )
 }
 
