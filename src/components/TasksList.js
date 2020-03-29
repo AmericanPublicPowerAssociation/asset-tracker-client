@@ -43,7 +43,7 @@ const getPriorityColor  = (priority) => ({
 }[priority] || 'default')
 
 const getPriorityLabel  = (priority) => ({
-  1: 'Low',
+  1: 'Normal',
   10:  'Important',
   100:  'High',
 }[priority] || 'default')
@@ -334,8 +334,8 @@ export const TaskFullscreen = (props) => {
                     id: `priority`,
                   }}
                 >
-                  <option value={1}>Low</option>
-                  <option value={10}>Normal</option>
+                  <option value={1}>Normal</option>
+                  <option value={10}>Important</option>
                   <option value={100}>High</option>
                 </NativeSelect>
                 <FormHelperText>Select the priority for the task</FormHelperText>
