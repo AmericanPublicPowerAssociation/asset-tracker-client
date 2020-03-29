@@ -28,7 +28,7 @@ import {
 
 import {
   ASSET_TYPE_ICON_BY_CODE,
-  TASK_ARCHIVE_STATUS
+  TASK_ARCHIVE_STATUS, TASK_CANCELLED_STATUS
 } from '../constants'
 
 
@@ -114,7 +114,7 @@ export default function AssetTasksPanel(props) {
   }
 
   const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
-    task => !archived ? task.status !== TASK_ARCHIVE_STATUS : task.status === TASK_ARCHIVE_STATUS
+    task => !archived ? task.status !== TASK_ARCHIVE_STATUS && task.status !== TASK_CANCELLED_STATUS : task.status === TASK_ARCHIVE_STATUS || task.status === TASK_CANCELLED_STATUS
   )
 
   const assetNameComponent = AssetName({

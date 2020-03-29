@@ -29,9 +29,11 @@ import FiberManualRecordRoundedIcon from '@material-ui/icons/FiberManualRecordRo
 import TaskComments, {CommentForm} from "./TaskComments";
 import Container from "@material-ui/core/Container";
 // import EditIcon from '@material-ui/icons/Edit';
-import {ASSET_TYPE_ICON_BY_CODE} from "../constants";
+import {ASSET_TYPE_ICON_BY_CODE, TASK_ARCHIVE_STATUS, TASK_CANCELLED_STATUS} from "../constants";
 import {AssetName} from "./AssetTasksPanel";
 import clsx from "clsx";
+import Radio from "@material-ui/core/Radio";
+import {Box} from "@material-ui/core";
 
 
 const getPriorityColor  = (priority) => ({
@@ -42,7 +44,7 @@ const getPriorityColor  = (priority) => ({
 
 const getPriorityLabel  = (priority) => ({
   1: 'Low',
-  10:  'Normal',
+  10:  'Important',
   100:  'High',
 }[priority] || 'default')
 
@@ -137,6 +139,34 @@ const useStyles = makeStyles(theme => ({
     fontSize: theme.typography.h6.fontSize,
     fontWeight: theme.typography.h6.fontWeight,
     color: 'white',
+  },
+  important: {
+    backgroundColor: `${theme.palette.warning.main} !important`,
+    color: 'white',
+    '&$checked': {
+      backgroundColor: `${theme.palette.warning.main} !important`,
+      color: 'white',
+    },
+  },
+  urgent: {
+    backgroundColor: theme.palette.secondary.main,
+    color: 'white',
+    '&$checked': {
+      backgroundColor: theme.palette.secondary.main,
+      color: 'white',
+    }
+  },
+  importantCheckbox: {
+    color: `${theme.palette.warning.main} !important`,
+    '&$checked': {
+      color: `${theme.palette.warning.main} !important`,
+    },
+  },
+  urgentCheckbox: {
+    color: theme.palette.secondary.main,
+    '&$checked': {
+      color: theme.palette.secondary.main,
+    }
   }
 }));
 
@@ -146,10 +176,15 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 })
 
 
-const Priority = (priorityColor, priority) => {
+const Priority = (priorityColor, priority, label) => {
   const classes = useStyles()
-
-  return <FiberManualRecordRoundedIcon className={classes.priorityIndicator} color={priorityColor} />
+  return <Radio
+    checked={label === TASK_CANCELLED_STATUS || label === TASK_ARCHIVE_STATUS}
+    onChange={(e) => {e.preventDefault();}}
+    color={priorityColor}
+    disableRipple={true}
+    classes={{colorPrimary: classes.importantCheckbox, colorSecondary: classes.urgentCheckbox}}
+  />
 }
 
 
@@ -197,7 +232,7 @@ function TaskItem(props) {
   const priorityLabel  = getPriorityLabel(priority.toString())
   const priorityColor  = getPriorityColor(priority.toString())
   const statusLabel = getStatusLabel(status.toString())
-  const PriorityIndicator = Priority(priorityColor, priority)
+  const PriorityIndicator = Priority(priorityColor, priority, status)
   return (
     <>
       <ListItem
@@ -206,12 +241,16 @@ function TaskItem(props) {
         onClick={ () => showDetails(task) }>
         <div className={classes.spaceBetween}>
           <div className={classes.alignStart}>
-          {PriorityIndicator}
           <div className={classes.fullWidth}>
-            <ListItemText primary={name}/>
+            <Box display="flex">{PriorityIndicator} <ListItemText primary={name}/></Box>
+
             <div className={classes.actions}>
               <div>
-            { priorityLabel && <Chip className={classes.status} color={priorityColor} label={priorityLabel} /> }
+            { priorityLabel !== 'Normal' && <Chip className={classes.status} color={priorityColor}
+                                                  classes={{
+                                                    colorPrimary: classes.important,
+                                                    colorSecondary: classes.urgent}}
+                                                  label={priorityLabel} /> }
             { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
               </div>
             <Button className={classes.showComments}
