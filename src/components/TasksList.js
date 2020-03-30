@@ -151,8 +151,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const Priority = (priorityColor, priority) => {
   const classes = useStyles()
+  const color = priorityColor === 'default' ? 'disabled': priorityColor
 
-  return <FiberManualRecordRoundedIcon className={classes.priorityIndicator} color={priorityColor} />
+  return <FiberManualRecordRoundedIcon className={classes.priorityIndicator} color={color} />
 }
 
 
