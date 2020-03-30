@@ -4,6 +4,8 @@ import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
 import { EditableGeoJsonLayer } from 'nebula.gl'
 // import { GeoJsonLayer } from '@deck.gl/layers'
+import { Feature, LineString, Coord } from '@turf/helpers'
+import lineSlice  from '@turf/line-slice'
 import {
   setFocusingBusId,
   deleteAsset,
@@ -95,7 +97,11 @@ export default function AssetsMap(props) {
   }
 
   function handleAssetsGeoJsonClick(info, event) {
+    console.log('BUSES click')
+    console.log(info)
+    console.log(event)
     const assetId = info.object.properties.id
+    console.log(sketchMode)
     if (assetId && sketchMode.startsWith(SKETCH_MODE_DELETE)) {
       dispatch(setFocusingAssetId(null))
       setSelectedAssetIndexes([])
@@ -105,16 +111,40 @@ export default function AssetsMap(props) {
     }
     assetId && dispatch(setFocusingAssetId(assetId))
     assetId && dispatch(setFocusingBusId(null))
-    if (sketchMode.startsWith(SKETCH_MODE_ADD) || info.isGuide) return
+    if (sketchMode.startsWith(SKETCH_MODE_ADD) || info.isGuide) {
+      if (sketchMode === SKETCH_MODE_ADD_LINE) {
+        const assetInfos = deckGL.current.pickMultipleObjects({
+          x: info.x,
+          y: info.y,
+          layerIds: [ASSETS_GEOJSON_LAYER_ID],
+          radius: pickingRadius,
+          depth: pickingDepth,
+        })
+        console.log(assetInfos)
+        const busesInfos = deckGL.current.pickMultipleObjects({
+          x: info.x,
+          y: info.y,
+          layerIds: [BUSES_GEOJSON_LAYER_ID],
+          radius: pickingRadius,
+          depth: pickingDepth,
+        })
+        console.log(busesInfos)
+
+        changeSketchMode(SKETCH_MODE_ADD, busesInfos[0].object.properties.id)
+      }
+    }
     const featureIndex = info.index
     setSelectedAssetIndexes([featureIndex])
     setSelectedBusIndexes([])
   }
 
   function handleAssetsGeoJsonEdit({editType, editContext, updatedData}) {
+    const splitLines = () => {};
+
     switch(editType) {
       // If a feature is being added for the first time,
       case 'addFeature': {
+        console.log('===== handleAssetsGeoJsonEdit')
         const features = updatedData.features
         const { featureIndexes } = editContext
         // Add an asset corresponding to the feature
@@ -132,12 +162,26 @@ export default function AssetsMap(props) {
         }
         // If the new feature is a line,
         if (sketchMode === SKETCH_MODE_ADD_LINE) {
-          // Have subsequent clicks extend the same line
-          setSelectedAssetIndexes(featureIndexes)
-        } else {
-          changeSketchMode(SKETCH_MODE_ADD)
-        }
-        dispatch(setFocusingAssetId(assetId))  // Show details for the new asset
+          if (featureIndexes.length === 1) {
+            const feature = features[featureIndexes[0]]
+            const vertexAssetId = feature.properties.id
+            const asset = assetById[vertexAssetId]
+            const connectionByBusId = getByKey([], 'busId')
+
+            function getConnection(busId) {
+              return connectionByBusId[busId] || {busId}
+            }
+
+            const newBusId = getRandomId(MINIMUM_BUS_ID_LENGTH)
+            const connection = getConnection(newBusId)
+            dispatch(setAssetConnection(vertexAssetId, 1, connection))
+            // changeSketchMode(SKETCH_MODE_ADD, assetId)
+          } else {
+            console.log(`${SKETCH_MODE_ADD}`)
+            changeSketchMode(SKETCH_MODE_ADD)
+          }
+          dispatch(setFocusingAssetId(assetId))  // Show details for the new asset
+          }
         break
       }
       default: {}
@@ -155,9 +199,12 @@ export default function AssetsMap(props) {
       radius: pickingRadius,
       depth: pickingDepth,
     })
+    console.log(busInfos)
     // Determine whether the user modified a middle vertex
     const vertex = getPickedEditHandle(event.picks)
+    console.log(vertex);
     if (!vertex) {
+      console.log('== Break flow')
       return
     }
     const vertexProperties = vertex.properties
@@ -172,11 +219,14 @@ export default function AssetsMap(props) {
       console.log('isMiddleVertex')
       return
     }
-
+    console.log(feature)
     const vertexAssetId = feature.properties.id
     const vertexAsset = assetById[vertexAssetId]
+    console.log(vertexAsset)
     const vertexAssetConnections = vertexAsset.connections || []
+    console.log(vertexAssetConnections)
     const connectionByBusId = getByKey(vertexAssetConnections, 'busId')
+    console.log(connectionByBusId)
     // console.log(connectionByBusId)
     const connectionIndex = vertexIndex === 0 ? 0 : 1
     // console.log(connectionByBusId)
@@ -199,6 +249,7 @@ export default function AssetsMap(props) {
     // Find a bus that belongs to another asset
     const theirBusId = getMatchingBusId(
       busAssetId => busAssetId !== vertexAssetId)
+    console.log(theirBusId)
     if (theirBusId) {
       console.log('SET CONNECTION TO THEIR BUS', theirBusId)
       const connection = getConnection(theirBusId)
@@ -210,6 +261,7 @@ export default function AssetsMap(props) {
     // Find a bus that belongs to this asset
     const ourBusId = getMatchingBusId(
       busAssetId => busAssetId === vertexAssetId)
+    console.log(ourBusId);
     if (ourBusId) {
       console.log('KEEP OUR BUS', ourBusId)
       const connection = getConnection(ourBusId)
@@ -224,18 +276,21 @@ export default function AssetsMap(props) {
     const connection = getConnection(newBusId)
     console.log(vertexAssetId, connectionIndex, connection)
     dispatch(setAssetConnection(vertexAssetId, connectionIndex, connection))
-
+    
     // console.log('pickingInfo', event, nearestBusInfos)
   }
 
   function handleBusesGeoJsonClick(info, event) {
     const busId = info.object.properties.id
     const assetId = assetIdByBusId[busId]
-
+    console.log(info.object)
+    console.log(assetId)
     if (sketchMode === SKETCH_MODE_ADD_LINE) {
+      console.log('=== SKETCH ADD LINE')
       setLineBusId(busId)
       // If we already started a line,
       if (selectedAssetIndexes.length) {
+        console.log('=== END LINE')
         // End the line
         changeSketchMode(SKETCH_MODE_ADD, busId)
       }
@@ -255,6 +310,7 @@ export default function AssetsMap(props) {
 
   function handleOnDoubleClick(e) {
     if (sketchMode === SKETCH_MODE_ADD_LINE) {
+      console.log('=== HANLDE DOUBLE click')
       changeSketchMode(SKETCH_MODE_ADD)
     }
   }
