@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
     right: theme.spacing(1),
     height: '33%',
     bottom: theme.spacing(5),
-    padding: theme.spacing(1),
+    //padding: theme.spacing(1),
     overflow: 'auto',
   },
 }))
@@ -44,11 +44,10 @@ export default function TablesWindow(props) {
   }[overlayMode]
 
   return (
-    <Paper className={classes.root}>
-      {/* <MyTable {...tableProps} /> */}
+    <div className={classes.root}>
       {/* TODO: Show only what is visible in the map */}
       {/* TODO: Implement paging */}
       { table }
-    </Paper>
+    </div>
   )
 }
