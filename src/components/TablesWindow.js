@@ -1,11 +1,18 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper'
 import AssetsTable from './AssetsTable'
 import TasksTable from './TasksTable'
 import {
   RisksTable,
 } from 'asset-report-risks'
+import {
+  setFocusingAssetId,
+  setFocusingBusId,
+} from '../actions'
+import {
+  getAssetsGeoJson,
+} from '../selectors'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,6 +33,8 @@ export default function TablesWindow(props) {
     setSelectedAssetIndexes,
     setSelectedBusIndexes,
   } =  props
+  const dispatch = useDispatch()
+  const { features } = useSelector(getAssetsGeoJson)
 
   function getHeaderLabel(header) {
     const result = header.replace( /([A-Z])/g, " $1" );
@@ -33,14 +42,41 @@ export default function TablesWindow(props) {
     return headerLabel
   }
 
+  function highlightAsset(assetId) {
+    const selectedIndex = features.findIndex( feature => (
+      feature.properties.id === assetId
+    ))
+    dispatch(setFocusingAssetId(assetId))
+    dispatch(setFocusingBusId(null))
+    setSelectedAssetIndexes([selectedIndex])
+    setSelectedBusIndexes([])
+  }
+
+  const pageSizeOptions = [5, 10]
+
   const table = {
-    assets: <AssetsTable
-      setSelectedAssetIndexes={setSelectedAssetIndexes}
-      setSelectedBusIndexes={setSelectedBusIndexes}
-      getHeaderLabel={getHeaderLabel}
-    />,
-    tasks: <TasksTable getHeaderLabel={getHeaderLabel}/>,
-    risks: <RisksTable />,
+    assets: (
+      <AssetsTable
+        setSelectedAssetIndexes={setSelectedAssetIndexes}
+        setSelectedBusIndexes={setSelectedBusIndexes}
+        getHeaderLabel={getHeaderLabel}
+        highlightAsset={highlightAsset}
+        pageSizeOptions={pageSizeOptions}
+      />
+    ),
+    tasks: (
+      <TasksTable
+        getHeaderLabel={getHeaderLabel}
+        highlightAsset={highlightAsset}
+        pageSizeOptions={pageSizeOptions}
+      />
+    ),
+    risks: (
+      <RisksTable
+        onRowClick={highlightAsset}
+        pageSizeOptions={pageSizeOptions}
+      />
+    ),
   }[overlayMode]
 
   return (

@@ -53,8 +53,13 @@ const TASK_TABLE_COLUMN_NAMES = [
 ]
 
 export default function TasksTable(props) {
+  const tableName = 'Tasks'
   const taskById = useSelector(getOpenTaskById)
-  const { getHeaderLabel } = props
+  const {
+    getHeaderLabel,
+    highlightAsset,
+    pageSizeOptions,
+  } = props
 
   const data = Object.values(taskById).map(
     task => {
@@ -69,14 +74,25 @@ export default function TasksTable(props) {
     return {field, title: getHeaderLabel(field)}
   })
 
-  const tableName = 'Tasks'
+  function handleOnRowClick(event, rowData) {
+    const { assetId } = rowData
+    highlightAsset(assetId)
+  }
+
   return (
     <MaterialTable
+      components={{
+        Container: props => <div style={{background: 'white'}}>{props.children}</div>
+      }}
       icons={tableIcons}
       title={tableName}
-      options={ {search: true} }
+      options={{
+        search: true,
+        pageSizeOptions,
+      }}
       columns={columns}
       data={data}
+      onRowClick={handleOnRowClick}
     />
   )
 }

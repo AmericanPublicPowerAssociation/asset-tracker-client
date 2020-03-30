@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import MaterialTable from 'material-table'
 import AddBox from '@material-ui/icons/AddBox'
 import ArrowDownward from '@material-ui/icons/ArrowDownward'
@@ -17,13 +17,8 @@ import SaveAlt from '@material-ui/icons/SaveAlt'
 import Search from '@material-ui/icons/Search'
 import ViewColumn from '@material-ui/icons/ViewColumn'
 import {
-  setFocusingAssetId,
-  setFocusingBusId,
-} from '../actions' 
-import {
   getAssetById,
   getAssetTypeByCode,
-  getAssetsGeoJson,
 } from '../selectors'
 
 
@@ -53,15 +48,13 @@ const ASSET_TABLE_COLUMN_NAMES = [
 ]
 
 export default function AssetsTable(props) {
-  const dispatch = useDispatch()
   const {
-    setSelectedAssetIndexes,
-    setSelectedBusIndexes,
     getHeaderLabel,
+    highlightAsset,
+    pageSizeOptions,
   } = props
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetById = useSelector(getAssetById)
-  const { features } = useSelector(getAssetsGeoJson)
 
   const tableName = 'Asset'
   const columns = ASSET_TABLE_COLUMN_NAMES.map( field => {
@@ -83,26 +76,20 @@ export default function AssetsTable(props) {
   function handleOnRowClick(event, rowData) {
     const { id, is_deleted } = rowData
     if (is_deleted) return
-    const selectedIndex = features.reduce(
-      (selectedIndex, feature, index) => {
-        const featureId = feature.properties.id
-        if (featureId === id )
-          return index
-        return selectedIndex
-      },
-      null
-    )
-    dispatch(setFocusingAssetId(id))
-    dispatch(setFocusingBusId(null))
-    setSelectedAssetIndexes([selectedIndex])
-    setSelectedBusIndexes([])
+    highlightAsset(id)
   }
 
   return (
     <MaterialTable
+      components={{
+        Container: props => <div style={{background: 'white'}}>{props.children}</div>
+      }}
       icons={tableIcons}
       title={tableName}
-      options={ {search: true} }
+      options={{
+        search: true,
+        pageSizeOptions
+      }}
       columns={columns}
       data={data}
       onRowClick={handleOnRowClick}
