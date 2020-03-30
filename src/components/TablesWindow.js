@@ -21,7 +21,6 @@ const useStyles = makeStyles(theme => ({
     right: theme.spacing(1),
     height: '33%',
     bottom: theme.spacing(5),
-    //padding: theme.spacing(1),
     overflow: 'auto',
   },
 }))
