@@ -108,7 +108,7 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     height: '75vh',
     marginTop: '25px',
-    overflowY: 'auto'
+    overflowY: 'auto',
   },
   label: {
     color: 'rgba(0, 0, 0, 0.54)',
