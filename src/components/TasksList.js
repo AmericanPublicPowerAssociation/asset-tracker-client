@@ -1,4 +1,4 @@
-import React  from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -11,7 +11,7 @@ import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
 import NativeSelect from '@material-ui/core/NativeSelect'
 import Button from "@material-ui/core/Button"
-import InputBase from '@material-ui/core/InputBase'
+import Input from '@material-ui/core/Input'
 import IconButton from "@material-ui/core/IconButton"
 import Typography from "@material-ui/core/Typography"
 import Grid from "@material-ui/core/Grid"
@@ -22,7 +22,8 @@ import Slide from "@material-ui/core/Slide"
 import FiberManualRecordRoundedIcon from '@material-ui/icons/FiberManualRecordRounded'
 import TaskComments, {CommentForm} from "./TaskComments"
 import Container from "@material-ui/core/Container"
-// import EditIcon from '@material-ui/icons/Edit'
+import EditIcon from '@material-ui/icons/Edit'
+import DoneIcon from '@material-ui/icons/Done'
 import {AssetName} from "./AssetTasksPanel"
 import clsx from "clsx"
 import {
@@ -139,8 +140,9 @@ const useStyles = makeStyles(theme => ({
     height: theme.typography.h6.fontSize,
     fontSize: theme.typography.h6.fontSize,
     fontWeight: theme.typography.h6.fontWeight,
-    color: 'white',
-  }
+    color: 'inherit',
+    width: '15ch',
+  },
 }))
 
 
@@ -234,6 +236,7 @@ function TaskItem(props) {
 export const TaskFullscreen = (props) => {
   const dispatch = useDispatch()
   const classes = useStyles()
+  const [toggleEditTaskName, setToggleEditTaskName] = useState(false)
 
   const {
     open,
@@ -268,17 +271,37 @@ export const TaskFullscreen = (props) => {
     dispatch(refreshTasks())
   }
 
+  function handleToggleEditTaskName() {
+    setToggleEditTaskName(!toggleEditTaskName)
+  }
+
   return (
     <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
       <AppBar color={priorityColor} className={classes.appBar}>
         <Container>
         <Toolbar className={classes.noPadding}>
           <Typography variant="h6" className={clsx(classes.title, classes.noMargin)}>
-            <InputBase className={clsx(classes.input)} defaultValue={task.name} onChange={(e) => handleChangeTaskName(e) } />
-             ({task.id})
-              {/*<IconButton edge={false} color="inherit" onClick={handleClose} aria-label="close">
-              <EditIcon />
-            </IconButton>*/}
+            {
+              toggleEditTaskName ?
+              <>
+                <Input
+                  className={clsx(classes.input)}
+                  disableUnderline
+                  defaultValue={task.name}
+                  onChange={handleChangeTaskName}
+                />
+                <IconButton edge={false} color="inherit" onClick={handleToggleEditTaskName} aria-label="close">
+                  <DoneIcon />
+                </IconButton>
+              </>
+              :
+              <>
+                { task.name }
+                <IconButton edge={false} color="inherit" onClick={handleToggleEditTaskName} aria-label="close">
+                  <EditIcon />
+                </IconButton>
+              </>
+            }
           </Typography>
           <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
             <CloseIcon />
