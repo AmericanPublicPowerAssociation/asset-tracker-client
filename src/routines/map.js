@@ -78,20 +78,11 @@ export function getPickedFeature(event, select) {
 }
 
 export function getPickedInterpretation(event, getBusId) {
+  console.log(1)
   const thisGuideInfo = getPickedInfo(event, pick => pick.isGuide)
   if (!thisGuideInfo) {
-    // console.log('LINE START', event.picks)
-    // !!! FIX
-    const thatAssetFeatureInfo = getPickedInfo(event, pick =>
-      !pick.isGuide)
-    let thatAssetId
-    if (thatAssetFeatureInfo) {
-      const assetFeatures = thatAssetFeatureInfo.layer.props.data.features
-      const thatAssetFeatureIndex = thatAssetFeatureInfo.index
-      const thatAssetFeature = assetFeatures[thatAssetFeatureIndex]
-      thatAssetId = thatAssetFeature.properties.id
-    }
-    return {thatAssetId}
+    console.log(2)
+    return {thatAssetId: getPickedAssetId(event)}
   }
 
   const assetFeatures = thisGuideInfo.layer.props.data.features
@@ -99,19 +90,12 @@ export function getPickedInterpretation(event, getBusId) {
   const thisGuideFeatureProperties = thisGuideFeature.properties
   const thisAssetFeatureIndex = thisGuideFeatureProperties.featureIndex
   const thisAssetFeature = assetFeatures[thisAssetFeatureIndex]
+  console.log(3)
   if (!thisAssetFeature) {
-    // console.log('LINE END', event.picks)
-    // !!! FIX
-    const thatAssetFeatureInfo = getPickedInfo(event, pick =>
-      !pick.isGuide)
-    let thatAssetId
-    if (thatAssetFeatureInfo) {
-      const thatAssetFeatureIndex = thatAssetFeatureInfo.index
-      const thatAssetFeature = assetFeatures[thatAssetFeatureIndex]
-      thatAssetId = thatAssetFeature.properties.id
-    }
-    return {thatAssetId}
+    console.log(4)
+    return {thatAssetId: getPickedAssetId(event)}
   }
+  console.log(5)
   const thisAssetId = thisAssetFeature.properties.id
 
   const thisGuideFeatureIndex = thisGuideFeatureProperties.positionIndexes[0]
@@ -129,6 +113,18 @@ export function getPickedInterpretation(event, getBusId) {
   }
 
   return {busId, connectionIndex, thisAssetId, thatAssetId}
+}
+
+export function getPickedAssetId(event) {
+  const assetFeatureInfo = getPickedInfo(event, pick => !pick.isGuide)
+  let assetId = null
+  if (assetFeatureInfo) {
+    const assetFeatures = assetFeatureInfo.layer.props.data.features
+    const assetFeatureIndex = assetFeatureInfo.index
+    const assetFeature = assetFeatures[assetFeatureIndex]
+    assetId = assetFeature.properties.id
+  }
+  return assetId
 }
 
 export function getPickedInfo(event, select) {

@@ -76,6 +76,7 @@ export function useEditableLayer(
       switch(editType) {
         // If a feature is being added for the first time,
         case 'addFeature': {
+          console.log(editType)
           const features = updatedData.features
           const { featureIndexes } = editContext
           // Add an asset corresponding to the feature
@@ -226,8 +227,11 @@ export function useInterpretableLayer(
         thisAssetId,
         thatAssetId,
       } = getPickedInterpretation(event, getBusId)
+      console.log(busId, connectionIndex, thisAssetId, thatAssetId)
 
       if (thatAssetId) {
+        const thatAsset = assetById[thatAssetId]
+        console.log(thatAsset)
         // Split the other line
       }
 
@@ -239,7 +243,6 @@ export function useInterpretableLayer(
       const connectionByBusId = getByKey(thisAssetConnections, 'busId')
       const connection = connectionByBusId[busId] || {busId}
       // dispatch(setAssetConnection(thisAssetId, connectionIndex, connection))
-      console.log(busId, connectionIndex, thisAssetId, thatAssetId)
     },
   }), [
     // dispatch,
