@@ -10,6 +10,8 @@ import Typography from "@material-ui/core/Typography"
 import InputAdornment from "@material-ui/core/InputAdornment"
 import IconButton from "@material-ui/core/IconButton"
 import Input from "@material-ui/core/Input"
+import Scrollbar from 'react-perfect-scrollbar'
+import 'react-perfect-scrollbar/dist/css/styles.css'
 
 
 const useStyles = makeStyles(theme => ({
@@ -43,6 +45,9 @@ const useStyles = makeStyles(theme => ({
   },
   userImage: {
     paddingTop: '.3rem'
+  },
+  scrollBar: {
+    paddingRight: '1rem',
   }
 }))
 
@@ -59,17 +64,19 @@ export default function TaskComments(props) {
 
   return (
     <>
-    <List disablePadding className={props.classes || classes.scroll}>
-      { comments.map((comment, index) => (
-        <CommentItem
-          key={`task-comment-${assetId}-${comment.id}`}
-          itemKey={`task-comment-${comment.id}`}
-          assetId={assetId}
-          task={task}
-          comment={comment}
-        />
-      ))}
-    </List>
+      <List disablePadding className={props.classes || classes.scroll}>
+        <Scrollbar className={classes.scrollBar}>
+          { comments.map((comment, index) => (
+            <CommentItem
+              key={`task-comment-${assetId}-${comment.id}`}
+              itemKey={`task-comment-${comment.id}`}
+              assetId={assetId}
+              task={task}
+              comment={comment}
+            />
+          ))}
+        </Scrollbar>
+      </List>
     </>
   )
 }
@@ -119,7 +126,14 @@ export function CommentForm(props) {
   const {onSubmit} = props;
   const [comment, setComment] = useState('')
 
-  const onClick = () => {
+  function onEnterKeyPress(e) {
+    if ( e.key === 'Enter') {
+      submitComment()
+      e.preventDefault()
+    }
+  }
+
+  function submitComment() {
     if (comment !== '') {
       onSubmit(comment)
       setComment('')
@@ -129,13 +143,15 @@ export function CommentForm(props) {
   return (<div className={classes.bottomAction}>
     <Input id="new_comment" type={'text'} label="New Comment" value={comment} autoComplete=''
       onChange={(e) => setComment(e.target.value) }
+      onKeyPress={onEnterKeyPress}
       fullWidth={true}
       endAdornment={
         <InputAdornment position="end">
           <IconButton
+            disabled={ comment === ''}
             aria-label="Send comment"
-            onClick={onClick}
-            onMouseDown={onClick}>
+            onClick={submitComment}
+            onMouseDown={submitComment}>
             <SendIcon />
           </IconButton>
         </InputAdornment>
