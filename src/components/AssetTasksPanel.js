@@ -17,21 +17,22 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import TasksList, {TaskFullscreen} from './TasksList'
 import Tooltip from '@material-ui/core/Tooltip'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
-import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import AddIcon from '@material-ui/icons/Add'
-import {
-  getAssetTypeByCode,
-} from '../selectors'
+import TasksList, { TaskFullscreen } from './TasksList'
+import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import {
   addAssetTask,
   updateTaskComments,
 } from '../actions'
 import {
   TASK_ARCHIVE_STATUS,
+  TASK_CANCELLED_STATUS,
 } from '../constants'
+import {
+  getAssetTypeByCode,
+} from '../selectors'
 
 
 const useStyles = makeStyles(theme => ({
@@ -48,8 +49,8 @@ const useStyles = makeStyles(theme => ({
   scroll: {
     height: '50vh',
     overflowY: 'auto',
-  }
-}))
+  },
+}));
 
 
 
@@ -117,7 +118,11 @@ export default function AssetTasksPanel(props) {
   }
 
   const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
-    task => !archived ? task.status !== TASK_ARCHIVE_STATUS : task.status === TASK_ARCHIVE_STATUS
+    task => (
+      !archived ?
+      task.status !== TASK_ARCHIVE_STATUS && task.status !== TASK_CANCELLED_STATUS :
+      task.status === TASK_ARCHIVE_STATUS || task.status === TASK_CANCELLED_STATUS
+    )
   )
 
   const assetNameComponent = AssetName({

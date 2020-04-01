@@ -1,6 +1,7 @@
 import tasks from '../datasets/tasks/example1.json'
 
 export const TASK_ARCHIVE_STATUS = 100
+export const TASK_CANCELLED_STATUS = -1
 export const ADD_TASK = 'ADD_TASK'
 export const UPDATE_TASK = 'UPDATE_TASK'
 export const SET_TASK_STATUS = 'SET_STATUS_UPDATE'
