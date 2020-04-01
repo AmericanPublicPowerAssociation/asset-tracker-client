@@ -1,39 +1,42 @@
 import React  from 'react'
+import clsx from "clsx"
 import { useDispatch } from 'react-redux'
+import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import CloseIcon from '@material-ui/icons/Close';
+import Container from "@material-ui/core/Container"
+import CloseIcon from '@material-ui/icons/Close'
 import Chip from '@material-ui/core/Chip'
-import { makeStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
 import NativeSelect from '@material-ui/core/NativeSelect'
 import Button from "@material-ui/core/Button"
+import InputBase from '@material-ui/core/InputBase'
+import IconButton from "@material-ui/core/IconButton"
+import Typography from "@material-ui/core/Typography"
+import Grid from "@material-ui/core/Grid"
+import Dialog from "@material-ui/core/Dialog"
+import AppBar from "@material-ui/core/AppBar"
+import Toolbar from "@material-ui/core/Toolbar"
+import Slide from "@material-ui/core/Slide"
+import Radio from "@material-ui/core/Radio"
+import { Box } from "@material-ui/core"
+import TaskComments, { CommentForm } from "./TaskComments"
+import { AssetName } from "./AssetTasksPanel"
+// import EditIcon from '@material-ui/icons/Edit';
 import {
   addAssetTaskComment,
   setTaskPriority,
   setTaskStatus,
   setTaskName,
 } from '../actions'
-import InputBase from '@material-ui/core/InputBase';
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import Dialog from "@material-ui/core/Dialog";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Slide from "@material-ui/core/Slide";
-import FiberManualRecordRoundedIcon from '@material-ui/icons/FiberManualRecordRounded';
-import TaskComments, {CommentForm} from "./TaskComments";
-import Container from "@material-ui/core/Container";
-// import EditIcon from '@material-ui/icons/Edit';
-import {ASSET_TYPE_ICON_BY_CODE, TASK_ARCHIVE_STATUS, TASK_CANCELLED_STATUS} from "../constants";
-import {AssetName} from "./AssetTasksPanel";
-import clsx from "clsx";
-import Radio from "@material-ui/core/Radio";
-import {Box} from "@material-ui/core";
+import {
+  ASSET_TYPE_ICON_BY_CODE,
+  TASK_ARCHIVE_STATUS,
+  TASK_CANCELLED_STATUS,
+} from "../constants"
 
 
 const getPriorityColor  = (priority) => ({
@@ -246,12 +249,17 @@ function TaskItem(props) {
 
             <div className={classes.actions}>
               <div>
-            { priorityLabel !== 'Normal' && <Chip className={classes.status} color={priorityColor}
-                                                  classes={{
-                                                    colorPrimary: classes.important,
-                                                    colorSecondary: classes.urgent}}
-                                                  label={priorityLabel} /> }
-            { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
+                { priorityLabel !== 'Normal' &&
+                  <Chip
+                    className={classes.status}
+                    color={priorityColor}
+                    classes={{
+                      colorPrimary: classes.important,
+                      colorSecondary: classes.urgent}}
+                    label={priorityLabel}
+                  />
+                }
+                { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
               </div>
             <Button className={classes.showComments}
                     onClick={() => showComments(task)}> {commentCount} Comments
