@@ -1,41 +1,51 @@
-import React, {useState} from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useState } from 'react'
+import {useDispatch, useSelector} from 'react-redux'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import CloseIcon from '@material-ui/icons/Close';
-import Chip from '@material-ui/core/Chip'
 import { makeStyles } from '@material-ui/core/styles'
+import Container from "@material-ui/core/Container"
+import CloseIcon from '@material-ui/icons/Close'
+import Chip from '@material-ui/core/Chip'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
 import NativeSelect from '@material-ui/core/NativeSelect'
 import Button from "@material-ui/core/Button"
+import Input from '@material-ui/core/Input'
+import IconButton from "@material-ui/core/IconButton"
+import Typography from "@material-ui/core/Typography"
+import Grid from "@material-ui/core/Grid"
+import Dialog from "@material-ui/core/Dialog"
+import AppBar from "@material-ui/core/AppBar"
+import Toolbar from "@material-ui/core/Toolbar"
+import Slide from "@material-ui/core/Slide"
+import EditIcon from '@material-ui/icons/Edit'
+import DoneIcon from '@material-ui/icons/Done'
+import Radio from "@material-ui/core/Radio"
+import { Box } from "@material-ui/core"
+import TaskComments, { CommentForm } from "./TaskComments"
+import { AssetName } from "./AssetTasksPanel"
 import {
   addAssetTaskComment,
+  refreshTasks,
   setTaskPriority,
   setTaskStatus,
   setTaskName,
 } from '../actions'
 import InputBase from '@material-ui/core/InputBase';
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import Dialog from "@material-ui/core/Dialog";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Slide from "@material-ui/core/Slide";
-import FiberManualRecordRoundedIcon from '@material-ui/icons/FiberManualRecordRounded';
-import TaskComments, {CommentForm} from "./TaskComments";
-import Container from "@material-ui/core/Container";
-// import EditIcon from '@material-ui/icons/Edit';
-import {ASSET_TYPE_ICON_BY_CODE} from "../constants";
-import {AssetName} from "./AssetTasksPanel";
 import clsx from "clsx";
 import CollapsibleListItem from "./CollapsibleListItem";
 import AssetConnectionsListItems from "./AssetConnectionsListItems";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Collapse from "@material-ui/core/Collapse";
+import {
+  TASK_ARCHIVE_STATUS,
+  TASK_CANCELLED_STATUS,
+} from "../constants"
+import {
+ getAssetTypeByCode,
+} from '../selectors'
 
 
 const getPriorityColor  = (priority) => ({
@@ -45,8 +55,8 @@ const getPriorityColor  = (priority) => ({
 }[priority] || 'default')
 
 const getPriorityLabel  = (priority) => ({
-  1: 'Low',
-  10:  'Normal',
+  1: 'Normal',
+  10:  'Important',
   100:  'High',
 }[priority] || 'default')
 
@@ -146,7 +156,24 @@ const useStyles = makeStyles(theme => ({
     height: theme.typography.h6.fontSize,
     fontSize: theme.typography.h6.fontSize,
     fontWeight: theme.typography.h6.fontWeight,
+    color: 'inherit',
+    width: '15ch',
+  },
+  important: {
+    backgroundColor: `${theme.palette.warning.main} !important`,
     color: 'white',
+    '&$checked': {
+      backgroundColor: `${theme.palette.warning.main} !important`,
+      color: 'white',
+    },
+  },
+  urgent: {
+    backgroundColor: theme.palette.secondary.main,
+    color: 'white',
+    '&$checked': {
+      backgroundColor: theme.palette.secondary.main,
+      color: 'white',
+    }
   },
   desktopContent: {
     marginTop: theme.spacing(4)
@@ -169,19 +196,36 @@ const useStyles = makeStyles(theme => ({
   },
   entered: {
     minHeight: '75px !important'
+  },
+  importantCheckbox: {
+    color: `${theme.palette.warning.main} !important`,
+    '&$checked': {
+      color: `${theme.palette.warning.main} !important`,
+    },
+  },
+  urgentCheckbox: {
+    color: theme.palette.secondary.main,
+    '&$checked': {
+      color: theme.palette.secondary.main,
+    }
   }
 }));
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
+  return <Slide direction="up" ref={ref} {...props} />
 })
 
 
-const Priority = (priorityColor, priority) => {
+const Priority = (priorityColor, priority, label) => {
   const classes = useStyles()
-
-  return <FiberManualRecordRoundedIcon className={classes.priorityIndicator} color={priorityColor} />
+  return <Radio
+    checked={label === TASK_CANCELLED_STATUS || label === TASK_ARCHIVE_STATUS}
+    onChange={(e) => {e.preventDefault();}}
+    color={priorityColor}
+    disableRipple={true}
+    classes={{colorPrimary: classes.importantCheckbox, colorSecondary: classes.urgentCheckbox}}
+  />
 }
 
 
@@ -224,12 +268,12 @@ function TaskItem(props) {
       commentCount
   } = task
 
-  const classes = useStyles();
+  const classes = useStyles()
 
   const priorityLabel  = getPriorityLabel(priority.toString())
   const priorityColor  = getPriorityColor(priority.toString())
   const statusLabel = getStatusLabel(status.toString())
-  const PriorityIndicator = Priority(priorityColor, priority)
+  const PriorityIndicator = Priority(priorityColor, priority, status)
   return (
     <>
       <ListItem
@@ -238,13 +282,22 @@ function TaskItem(props) {
         onClick={ () => showDetails(task) }>
         <div className={classes.spaceBetween}>
           <div className={classes.alignStart}>
-          {PriorityIndicator}
           <div className={classes.fullWidth}>
-            <ListItemText primary={name}/>
+            <Box display="flex">{PriorityIndicator} <ListItemText primary={name}/></Box>
+
             <div className={classes.actions}>
               <div>
-            { priorityLabel && <Chip className={classes.status} color={priorityColor} label={priorityLabel} /> }
-            { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
+                { priorityLabel !== 'Normal' &&
+                  <Chip
+                    className={classes.status}
+                    color={priorityColor}
+                    classes={{
+                      colorPrimary: classes.important,
+                      colorSecondary: classes.urgent}}
+                    label={priorityLabel}
+                  />
+                }
+                { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
               </div>
             <Button className={classes.showComments}
                     onClick={() => showComments(task)}> {commentCount} Comments
@@ -262,13 +315,14 @@ function TaskItem(props) {
 export const TaskFullscreen = (props) => {
   const dispatch = useDispatch()
   const classes = useStyles()
+  const [toggleEditTaskName, setToggleEditTaskName] = useState(false)
 
   const {
     open,
     handleClose,
     task,
     asset,
-  } = props;
+  } = props
 
   const {
     id,
@@ -278,7 +332,8 @@ export const TaskFullscreen = (props) => {
 
   const assetName = asset.name
   const assetTypeCode = asset.typeCode
-  const assetType = ASSET_TYPE_ICON_BY_CODE[assetTypeCode]
+  const assetTypeByCode = useSelector(getAssetTypeByCode)
+  const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
 
   const isScreenXS = useMediaQuery('(max-width:600px)')
@@ -292,6 +347,15 @@ export const TaskFullscreen = (props) => {
 
   function handleChangeTaskName(e) {
     dispatch(setTaskName(id, e.target.value))
+  }
+
+  function handleCommentFormSubmit(task, comment) {
+    dispatch(addAssetTaskComment(task.id, comment))
+    dispatch(refreshTasks())
+  }
+
+  function handleToggleEditTaskName() {
+    setToggleEditTaskName(!toggleEditTaskName)
   }
 
   const taskheader = (<div>
@@ -309,6 +373,7 @@ export const TaskFullscreen = (props) => {
           <option value={10}>Normal</option>
           <option value={100}>High</option>
         </NativeSelect>
+        <FormHelperText>Select the priority for the task</FormHelperText>
       </FormControl>
       <FormControl className={classes.formControl}>
         <InputLabel htmlFor={`status`}>Status</InputLabel>
@@ -324,13 +389,13 @@ export const TaskFullscreen = (props) => {
           <option value={100}>Done</option>
           <option value={-1}>Cancelled</option>
         </NativeSelect>
+        <FormHelperText>Select the status for the task</FormHelperText>
       </FormControl>
     </div>)
-  const commentSection = (<div style={{display: 'flex', flexDirection: 'column', width: '100%', maxHeight: '100%', height: '100%'}}>
 
+const commentSection = (<div style={{display: 'flex', flexDirection: 'column', width: '100%', maxHeight: '100%', height: '100%'}}>
       <TaskComments asset={asset} task={task} classes={classes.listComments} />
-
-    <CommentForm onSubmit={(comment) => { dispatch(addAssetTaskComment(task.id, comment)) }} />
+      <CommentForm onSubmit={(comment) => handleCommentFormSubmit(task, comment)} />
     </div>)
 
   const assetDetails = (<>
@@ -386,11 +451,27 @@ export const TaskFullscreen = (props) => {
       <Container>
         <Toolbar className={classes.noPadding}>
           <Typography variant="h6" className={clsx(classes.title, classes.noMargin)}>
-            <InputBase className={clsx(classes.input)} defaultValue={task.name} onChange={(e) => handleChangeTaskName(e) } />
-            ({task.id})
-            {/*<IconButton edge={false} color="inherit" onClick={handleClose} aria-label="close">
-              <EditIcon />
-            </IconButton>*/}
+            {
+              toggleEditTaskName ?
+              <>
+                <Input
+                  className={clsx(classes.input)}
+                  disableUnderline
+                  defaultValue={task.name}
+                  onChange={handleChangeTaskName}
+                />
+                <IconButton edge={false} color="inherit" onClick={handleToggleEditTaskName} aria-label="close">
+                  <DoneIcon />
+                </IconButton>
+              </>
+              :
+              <>
+                { task.name }
+                <IconButton edge={false} color="inherit" onClick={handleToggleEditTaskName} aria-label="close">
+                  <EditIcon />
+                </IconButton>
+              </>
+            }
           </Typography>
           <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
             <CloseIcon />

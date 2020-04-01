@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import TextField from '@material-ui/core/TextField'
@@ -17,19 +17,22 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import TasksList, {TaskFullscreen} from './TasksList'
 import Tooltip from '@material-ui/core/Tooltip'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
-import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import AddIcon from '@material-ui/icons/Add'
+import TasksList, { TaskFullscreen } from './TasksList'
+import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import {
-  addAssetTask, updateTaskComments
+  addAssetTask,
+  updateTaskComments,
 } from '../actions'
-
 import {
-  ASSET_TYPE_ICON_BY_CODE,
-  TASK_ARCHIVE_STATUS
+  TASK_ARCHIVE_STATUS,
+  TASK_CANCELLED_STATUS,
 } from '../constants'
+import {
+  getAssetTypeByCode,
+} from '../selectors'
 
 
 const useStyles = makeStyles(theme => ({
@@ -46,7 +49,7 @@ const useStyles = makeStyles(theme => ({
   scroll: {
     height: '50vh',
     overflowY: 'auto',
-  }
+  },
 }));
 
 
@@ -92,10 +95,11 @@ export default function AssetTasksPanel(props) {
   const assetId = asset.id
   const assetName = asset.name
   const assetTypeCode = asset.typeCode
-  const assetType = ASSET_TYPE_ICON_BY_CODE[assetTypeCode]
+  const assetTypeByCode = useSelector(getAssetTypeByCode)
+  const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
 
-  const [archived, setArchived] = useState(false);
+  const [archived, setArchived] = useState(false)
   const [query, setQuery] = useState('')
   const [name, setName]  = useState('')
   const [description, setDescription] = useState('')
@@ -114,7 +118,11 @@ export default function AssetTasksPanel(props) {
   }
 
   const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
-    task => !archived ? task.status !== TASK_ARCHIVE_STATUS : task.status === TASK_ARCHIVE_STATUS
+    task => (
+      !archived ?
+      task.status !== TASK_ARCHIVE_STATUS && task.status !== TASK_CANCELLED_STATUS :
+      task.status === TASK_ARCHIVE_STATUS || task.status === TASK_CANCELLED_STATUS
+    )
   )
 
   const assetNameComponent = AssetName({
@@ -144,11 +152,11 @@ export default function AssetTasksPanel(props) {
   const getTaskById = () => {
       if (taskDetails) {
         for (let i = 0; i < tasks.length; i++) {
-          if (tasks[i].id === taskDetails.id) return tasks[i];
+          if (tasks[i].id === taskDetails.id) return tasks[i]
         }
       }
       return {}
-  };
+  }
 
   return (<>
     {assetNameComponent}
