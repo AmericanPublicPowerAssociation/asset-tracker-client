@@ -135,7 +135,7 @@ const useStyles = makeStyles(theme => ({
     margin: 0
   },
   maxHeight: {
-    height: '100%',
+    height: '100% !important',
     overflow: 'hidden',
   },
   propertiesSection: {
@@ -341,6 +341,7 @@ export const TaskFullscreen = (props) => {
       isEditing={false}
       setSelectedBusIndexes={() => {}}
       setSelectedAssetIndexes={() => {}}
+      noHighlight={true}
     />
   </>)
 
@@ -362,17 +363,21 @@ export const TaskFullscreen = (props) => {
           </Toolbar>
         </Container>
       </AppBar>
+   <Container>
     <CollapsibleListItem title="Task details" isOpen={openTaskDetails} setIsOpen={setOpenTaskDetails} entered={classes.entered}>
         {taskheader}
     </CollapsibleListItem>
+   </Container>
     <Collapse in={openTask} classes={{entered: clsx(classes.overflow, classes.maxHeight), wrapper: classes.maxHeight}}>
       {commentSection}
     </Collapse>
+    <Container>
     <CollapsibleListItem title={assetName} isOpen={!openTask} setIsOpen={(status) => setOpenTask(!status)}>
       <Grid container>
         {assetDetails}
       </Grid>
     </CollapsibleListItem>
+    </Container>
     </>
   )
 
