@@ -1,37 +1,42 @@
 import React  from 'react'
+import clsx from "clsx"
 import { useDispatch } from 'react-redux'
+import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import CloseIcon from '@material-ui/icons/Close';
+import Container from "@material-ui/core/Container"
+import CloseIcon from '@material-ui/icons/Close'
 import Chip from '@material-ui/core/Chip'
-import { makeStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
 import NativeSelect from '@material-ui/core/NativeSelect'
 import Button from "@material-ui/core/Button"
+import InputBase from '@material-ui/core/InputBase'
+import IconButton from "@material-ui/core/IconButton"
+import Typography from "@material-ui/core/Typography"
+import Grid from "@material-ui/core/Grid"
+import Dialog from "@material-ui/core/Dialog"
+import AppBar from "@material-ui/core/AppBar"
+import Toolbar from "@material-ui/core/Toolbar"
+import Slide from "@material-ui/core/Slide"
+import Radio from "@material-ui/core/Radio"
+import { Box } from "@material-ui/core"
+import TaskComments, { CommentForm } from "./TaskComments"
+import { AssetName } from "./AssetTasksPanel"
+// import EditIcon from '@material-ui/icons/Edit';
 import {
   addAssetTaskComment,
   setTaskPriority,
   setTaskStatus,
   setTaskName,
 } from '../actions'
-import InputBase from '@material-ui/core/InputBase';
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import Dialog from "@material-ui/core/Dialog";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Slide from "@material-ui/core/Slide";
-import FiberManualRecordRoundedIcon from '@material-ui/icons/FiberManualRecordRounded';
-import TaskComments, {CommentForm} from "./TaskComments";
-import Container from "@material-ui/core/Container";
-// import EditIcon from '@material-ui/icons/Edit';
-import {ASSET_TYPE_ICON_BY_CODE} from "../constants";
-import {AssetName} from "./AssetTasksPanel";
-import clsx from "clsx";
+import {
+  ASSET_TYPE_ICON_BY_CODE,
+  TASK_ARCHIVE_STATUS,
+  TASK_CANCELLED_STATUS,
+} from "../constants"
 
 
 const getPriorityColor  = (priority) => ({
@@ -41,8 +46,8 @@ const getPriorityColor  = (priority) => ({
 }[priority] || 'default')
 
 const getPriorityLabel  = (priority) => ({
-  1: 'Low',
-  10:  'Normal',
+  1: 'Normal',
+  10:  'Important',
   100:  'High',
 }[priority] || 'default')
 
@@ -137,6 +142,34 @@ const useStyles = makeStyles(theme => ({
     fontSize: theme.typography.h6.fontSize,
     fontWeight: theme.typography.h6.fontWeight,
     color: 'white',
+  },
+  important: {
+    backgroundColor: `${theme.palette.warning.main} !important`,
+    color: 'white',
+    '&$checked': {
+      backgroundColor: `${theme.palette.warning.main} !important`,
+      color: 'white',
+    },
+  },
+  urgent: {
+    backgroundColor: theme.palette.secondary.main,
+    color: 'white',
+    '&$checked': {
+      backgroundColor: theme.palette.secondary.main,
+      color: 'white',
+    }
+  },
+  importantCheckbox: {
+    color: `${theme.palette.warning.main} !important`,
+    '&$checked': {
+      color: `${theme.palette.warning.main} !important`,
+    },
+  },
+  urgentCheckbox: {
+    color: theme.palette.secondary.main,
+    '&$checked': {
+      color: theme.palette.secondary.main,
+    }
   }
 }));
 
@@ -146,10 +179,15 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 })
 
 
-const Priority = (priorityColor, priority) => {
+const Priority = (priorityColor, priority, label) => {
   const classes = useStyles()
-
-  return <FiberManualRecordRoundedIcon className={classes.priorityIndicator} color={priorityColor} />
+  return <Radio
+    checked={label === TASK_CANCELLED_STATUS || label === TASK_ARCHIVE_STATUS}
+    onChange={(e) => {e.preventDefault();}}
+    color={priorityColor}
+    disableRipple={true}
+    classes={{colorPrimary: classes.importantCheckbox, colorSecondary: classes.urgentCheckbox}}
+  />
 }
 
 
@@ -197,7 +235,7 @@ function TaskItem(props) {
   const priorityLabel  = getPriorityLabel(priority.toString())
   const priorityColor  = getPriorityColor(priority.toString())
   const statusLabel = getStatusLabel(status.toString())
-  const PriorityIndicator = Priority(priorityColor, priority)
+  const PriorityIndicator = Priority(priorityColor, priority, status)
   return (
     <>
       <ListItem
@@ -206,13 +244,22 @@ function TaskItem(props) {
         onClick={ () => showDetails(task) }>
         <div className={classes.spaceBetween}>
           <div className={classes.alignStart}>
-          {PriorityIndicator}
           <div className={classes.fullWidth}>
-            <ListItemText primary={name}/>
+            <Box display="flex">{PriorityIndicator} <ListItemText primary={name}/></Box>
+
             <div className={classes.actions}>
               <div>
-            { priorityLabel && <Chip className={classes.status} color={priorityColor} label={priorityLabel} /> }
-            { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
+                { priorityLabel !== 'Normal' &&
+                  <Chip
+                    className={classes.status}
+                    color={priorityColor}
+                    classes={{
+                      colorPrimary: classes.important,
+                      colorSecondary: classes.urgent}}
+                    label={priorityLabel}
+                  />
+                }
+                { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
               </div>
             <Button className={classes.showComments}
                     onClick={() => showComments(task)}> {commentCount} Comments
@@ -295,8 +342,8 @@ export const TaskFullscreen = (props) => {
                     id: `priority`,
                   }}
                 >
-                  <option value={1}>Low</option>
-                  <option value={10}>Normal</option>
+                  <option value={1}>Normal</option>
+                  <option value={10}>Important</option>
                   <option value={100}>High</option>
                 </NativeSelect>
                 <FormHelperText>Select the priority for the task</FormHelperText>
