@@ -344,7 +344,6 @@ export const TaskFullscreen = (props) => {
                 >
                   <option value={1}>Normal</option>
                   <option value={10}>Important</option>
-                  <option value={100}>High</option>
                 </NativeSelect>
                 <FormHelperText>Select the priority for the task</FormHelperText>
               </FormControl>
