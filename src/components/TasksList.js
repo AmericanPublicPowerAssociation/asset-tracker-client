@@ -42,7 +42,6 @@ import {
 import {
   TASK_PRIORITY_LOW,
   TASK_PRIORITY_NORMAL,
-  TASK_PRIORITY_HIGH,
   TASK_STATUS_NEW,
   TASK_STATUS_PENDING,
   TASK_STATUS_DONE,
@@ -375,9 +374,8 @@ export const TaskFullscreen = (props) => {
             id: `priority`,
           }}
         >
-          <option value={TASK_PRIORITY_LOW}>Low</option>
-          <option value={TASK_PRIORITY_NORMAL}>Normal</option>
-          <option value={TASK_PRIORITY_HIGH}>High</option>
+          <option value={TASK_PRIORITY_LOW}>Normal</option>
+          <option value={TASK_PRIORITY_NORMAL}>Important</option>
         </NativeSelect>
         <FormHelperText>Select the priority for the task</FormHelperText>
       </FormControl>

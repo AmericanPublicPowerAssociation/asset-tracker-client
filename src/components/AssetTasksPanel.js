@@ -37,8 +37,8 @@ import {
 
 const useStyles = makeStyles(theme => ({
   formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
+    marginTop: theme.spacing(1),
+    width: '100%',
   },
   bottomAction: {
     width: '95%',
@@ -104,7 +104,7 @@ export default function AssetTasksPanel(props) {
   const [name, setName]  = useState('')
   const [description, setDescription] = useState('')
   const [status, setStatus]  = useState('new')
-  const [priority, setPriority] = useState('')
+  const [priority, setPriority] = useState('normal')
   const [dialog, setDialog] = useState(false)	   
   const [taskDetails, setTaskDetails] = useState(false)
   
@@ -179,28 +179,10 @@ export default function AssetTasksPanel(props) {
                   id: 'priority',
               }}
             >
-              <option value='low'>Low</option>
-              <option value='medium'>Medium</option>
-              <option value='high'>High</option>
+              <option value='normal'>Normal</option>
+              <option value='important'>Important</option>
             </NativeSelect>
             <FormHelperText>Select the priority for the task</FormHelperText>
-          </FormControl>
-
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor='status'>Status</InputLabel>
-            <NativeSelect
-              value={status}
-              onChange={ (e) => {setStatus(e.target.value)}}
-              inputProps={{
-                name: 'status',
-                  id: `status`,
-              }}>
-              <option value="" />
-              <option value='active'>Active</option>
-              <option value='review'>Review</option>
-              <option value='pending'>Pending</option>
-            </NativeSelect>
-            <FormHelperText>Select the status for the task</FormHelperText>
           </FormControl>
         </div>
       </DialogContent>
