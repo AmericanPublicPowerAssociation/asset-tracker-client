@@ -18,15 +18,13 @@ const {
 export default function AssetsMap() {
   const mapStyle = useSelector(getMapStyle)
   const mapViewState = useSelector(getMapViewState)
-  const {
-    handleMapMove,
-  } = useMovableMap()
-  const {
-    handleMapKey,
-  } = useEditableMap()
+  const { handleMapMove } = useMovableMap()
+  const { handleMapKey } = useEditableMap()
+  const mapLayers = []
   return (
     <div onKeyUp={handleMapKey}>
       <DeckGL
+        layers={mapLayers}
         controller={{ doubleClickZoom: false }}
         viewState={mapViewState}
         onViewStateChange={handleMapMove}
