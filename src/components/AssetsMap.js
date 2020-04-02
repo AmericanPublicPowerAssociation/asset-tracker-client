@@ -120,6 +120,7 @@ export default function AssetsMap(props) {
           radius: pickingRadius,
           depth: pickingDepth,
         })
+        if (assetInfos.length !== 2) return;
         console.log(assetInfos)
         const busesInfos = deckGL.current.pickMultipleObjects({
           x: info.x,
