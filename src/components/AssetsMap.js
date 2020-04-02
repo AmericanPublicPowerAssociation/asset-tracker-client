@@ -4,7 +4,7 @@ import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
 import { EditableGeoJsonLayer } from 'nebula.gl'
 // import { GeoJsonLayer } from '@deck.gl/layers'
-import { Feature, LineString, Coord } from '@turf/helpers'
+import { Feature, LineString, Coord, point } from '@turf/helpers'
 import lineSlice  from '@turf/line-slice'
 import {
   setFocusingBusId,
@@ -13,7 +13,7 @@ import {
   setAssetConnection,
   setAssetsGeoJson,
   setFocusingAssetId,
-  setMapViewState,
+  setMapViewState, setAssetAttribute,
 } from '../actions'
 import {
   ASSET_METER_RADIUS_IN_METERS,
@@ -129,6 +129,36 @@ export default function AssetsMap(props) {
           depth: pickingDepth,
         })
         console.log(busesInfos)
+        const assetObjective = assetInfos[0].object
+        const magnet = busesInfos[0].object
+        const assetTypeCode = getAssetTypeCode(sketchMode)
+        const assetType = assetTypeByCode[assetTypeCode]
+        const connections = assetById[assetObjective.properties.id].connections
+        const asset = makeAsset(assetType, [...connections])
+        dispatch(setAsset(asset))
+        const sliceFirst = lineSlice(point(assetObjective.geometry.coordinates[0]),
+          busesInfos[0].object,
+          assetInfos[0].object)
+
+        const last = assetInfos[0].object.geometry.coordinates.length - 1
+        const sliceSecond = lineSlice(busesInfos[0].object,
+          point(assetInfos[0].object.geometry.coordinates[last]),
+          assetInfos[0].object.geometry)
+        sliceSecond.properties = {id: asset.id, typeCode: "l"}
+        assetsGeoJson.features.forEach((asset, i) => {
+          if (asset.properties.id === assetObjective.properties.id) {
+            alert('Updated')
+            asset.geometry = sliceFirst.geometry
+            console.log(i)
+          }
+        })
+        assetsGeoJson.features.push(sliceSecond)
+        sliceFirst.properties.typeCode = assetTypeCode
+
+        dispatch(setAssetConnection(assetObjective.properties.id, 1, {busId: magnet.properties.id}))
+        dispatch(setAssetConnection(asset.id, 0, {busId: magnet.properties.id}))
+        console.log(assetsGeoJson)
+        dispatch(setAssetsGeoJson(assetsGeoJson))  // Update geojson for assets
 
         changeSketchMode(SKETCH_MODE_ADD, busesInfos[0].object.properties.id)
       }
@@ -140,6 +170,7 @@ export default function AssetsMap(props) {
 
   function handleAssetsGeoJsonEdit({editType, editContext, updatedData}) {
     const splitLines = () => {};
+    console.log(updatedData)
 
     switch(editType) {
       // If a feature is being added for the first time,

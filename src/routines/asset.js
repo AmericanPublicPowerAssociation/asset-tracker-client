@@ -24,8 +24,12 @@ export function makeAsset(assetType, lineBusId) {
 
   switch(assetTypeCode) {
     case ASSET_TYPE_CODE_LINE: {
-      const busId = lineBusId || getRandomId(MINIMUM_BUS_ID_LENGTH)
-      asset.connections = [{busId}]
+      if (Array.isArray(lineBusId)) {
+        asset.connections = lineBusId
+      } else {
+        const busId = lineBusId || getRandomId(MINIMUM_BUS_ID_LENGTH)
+        asset.connections = [{busId}]
+      }
       break
     }
     case ASSET_TYPE_CODE_TRANSFORMER: {
