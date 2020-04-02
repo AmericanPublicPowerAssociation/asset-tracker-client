@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import clsx from "clsx"
 import { makeStyles } from '@material-ui/core/styles'
 import Container from "@material-ui/core/Container"
 import CloseIcon from '@material-ui/icons/Close'
@@ -27,7 +26,6 @@ import Radio from "@material-ui/core/Radio"
 import { Box } from "@material-ui/core"
 import TaskComments, { CommentForm } from "./TaskComments"
 import { AssetName } from "./AssetTasksPanel"
-// import EditIcon from '@material-ui/icons/Edit';
 import {
   addAssetTaskComment,
   refreshTasks,
@@ -35,6 +33,12 @@ import {
   setTaskStatus,
   setTaskName,
 } from '../actions'
+import InputBase from '@material-ui/core/InputBase';
+import clsx from "clsx";
+import CollapsibleListItem from "./CollapsibleListItem";
+import AssetConnectionsListItems from "./AssetConnectionsListItems";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import Collapse from "@material-ui/core/Collapse";
 import {
   TASK_ARCHIVE_STATUS,
   TASK_CANCELLED_STATUS,
@@ -67,6 +71,9 @@ const getStatusLabel = (status) => ({
 
 
 const useStyles = makeStyles(theme => ({
+  background: {
+    backgroundColor: '#FAFAFA',
+  },
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
@@ -112,9 +119,11 @@ const useStyles = makeStyles(theme => ({
   listComments: {
     display: 'flex',
     flexDirection: 'column',
-    height: '75vh',
-    marginTop: '25px',
+    height: '100%',
+    paddingTop: '25px',
     overflowY: 'auto',
+    backgroundColor: 'white',
+    paddingLeft: '15px'
   },
   label: {
     color: 'rgba(0, 0, 0, 0.54)',
@@ -136,7 +145,8 @@ const useStyles = makeStyles(theme => ({
     margin: 0
   },
   maxHeight: {
-    maxHeight: '75vh'
+    height: '100% !important',
+    overflow: 'hidden',
   },
   propertiesSection: {
     paddingTop: '25px',
@@ -164,6 +174,28 @@ const useStyles = makeStyles(theme => ({
       backgroundColor: theme.palette.secondary.main,
       color: 'white',
     }
+  },
+  desktopContent: {
+    marginTop: theme.spacing(4)
+  },
+  chat: {
+    display: 'flex',
+    flexGrow: 2,
+    paddingLeft: theme.spacing(6),
+    paddingRight: theme.spacing(6),
+    height: '95%'
+  },
+  innerChat: {
+    paddingLeft: '25px',
+    paddingRight: '25px',
+    backgroundColor: 'white',
+    height: '100%'
+  },
+  overflow: {
+    'overflow': 'auto'
+  },
+  entered: {
+    minHeight: '75px !important'
   },
   importantCheckbox: {
     color: `${theme.palette.warning.main} !important`,
@@ -304,6 +336,10 @@ export const TaskFullscreen = (props) => {
   const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
 
+  const isScreenXS = useMediaQuery('(max-width:600px)')
+
+  const [openTask, setOpenTask] = useState(true)
+  const [openTaskDetails, setOpenTaskDetails] = useState(false)
   const setPriority = (priority) => dispatch(setTaskPriority(id, parseInt(priority), status))
   const setStatus = (status) => dispatch(setTaskStatus(id, parseInt(status), priority))
 
@@ -322,10 +358,97 @@ export const TaskFullscreen = (props) => {
     setToggleEditTaskName(!toggleEditTaskName)
   }
 
-  return (
-    <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+  const taskheader = (<div>
+      <FormControl className={classes.formControl}>
+        <InputLabel htmlFor={`priority`}>Priority</InputLabel>
+        <NativeSelect
+          value={priority}
+          onChange={ (e) => setPriority(e.target.value)}
+          inputProps={{
+            name: 'priority',
+            id: `priority`,
+          }}
+        >
+          <option value={1}>Low</option>
+          <option value={10}>Normal</option>
+          <option value={100}>High</option>
+        </NativeSelect>
+        <FormHelperText>Select the priority for the task</FormHelperText>
+      </FormControl>
+      <FormControl className={classes.formControl}>
+        <InputLabel htmlFor={`status`}>Status</InputLabel>
+        <NativeSelect
+          value={status}
+          onChange={ (e) => setStatus(e.target.value)}
+          inputProps={{
+            name: 'status',
+            id: `status`,
+          }}>
+          <option value={0}>New</option>
+          <option value={10}>Pending</option>
+          <option value={100}>Done</option>
+          <option value={-1}>Cancelled</option>
+        </NativeSelect>
+        <FormHelperText>Select the status for the task</FormHelperText>
+      </FormControl>
+    </div>)
+
+const commentSection = (<div style={{display: 'flex', flexDirection: 'column', width: '100%', maxHeight: '100%', height: '100%'}}>
+      <TaskComments asset={asset} task={task} classes={classes.listComments} />
+      <CommentForm onSubmit={(comment) => handleCommentFormSubmit(task, comment)} />
+    </div>)
+
+  const assetDetails = (<>
+    <AssetName assetTypeName={assetTypeName} assetTypeCode={assetTypeCode} assetName={assetName} />
+
+    <AssetConnectionsListItems
+      asset={asset}
+      isEditing={false}
+      setSelectedBusIndexes={() => {}}
+      setSelectedAssetIndexes={() => {}}
+      noHighlight={true}
+    />
+  </>)
+
+
+  const mobileTaskDetail = (<>
       <AppBar color={priorityColor} className={classes.appBar}>
         <Container>
+          <Toolbar className={classes.noPadding}>
+            <Typography variant="h6" className={clsx(classes.title, classes.noMargin)}>
+              <InputBase className={clsx(classes.input)} defaultValue={task.name} onChange={(e) => handleChangeTaskName(e) } />
+              ({task.id})
+              {/*<IconButton edge={false} color="inherit" onClick={handleClose} aria-label="close">
+              <EditIcon />
+            </IconButton>*/}
+            </Typography>
+            <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
+              <CloseIcon />
+            </IconButton>
+          </Toolbar>
+        </Container>
+      </AppBar>
+   <Container>
+    <CollapsibleListItem title="Task details" isOpen={openTaskDetails} setIsOpen={setOpenTaskDetails} entered={classes.entered}>
+        {taskheader}
+    </CollapsibleListItem>
+   </Container>
+    <Collapse in={openTask} classes={{entered: clsx(classes.overflow, classes.maxHeight), wrapper: classes.maxHeight}}>
+      {commentSection}
+    </Collapse>
+    <Container>
+    <CollapsibleListItem title={assetName} isOpen={!openTask} setIsOpen={(status) => setOpenTask(!status)}>
+      <Grid container>
+        {assetDetails}
+      </Grid>
+    </CollapsibleListItem>
+    </Container>
+    </>
+  )
+
+  const desktopTaskDetails = (<>
+    <AppBar color={priorityColor} className={classes.appBar}>
+      <Container>
         <Toolbar className={classes.noPadding}>
           <Typography variant="h6" className={clsx(classes.title, classes.noMargin)}>
             {
@@ -354,52 +477,27 @@ export const TaskFullscreen = (props) => {
             <CloseIcon />
           </IconButton>
         </Toolbar>
-        </Container>
-      </AppBar>
-      <Container className={classes.maxHeight}>
-        <Grid container>
-          <Grid item xs={12} md={9}>
-            <TaskComments asset={asset} task={task} classes={classes.listComments} />
-            <CommentForm onSubmit={(comment) => handleCommentFormSubmit(task, comment)} />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <div className={classes.propertiesSection}>
-              <AssetName assetTypeName={assetTypeName} assetTypeCode={assetTypeCode} assetName={assetName} />
-              <FormControl className={classes.formControl}>
-                <InputLabel htmlFor={`priority`}>Priority</InputLabel>
-                <NativeSelect
-                  value={priority}
-                  onChange={ (e) => setPriority(e.target.value)}
-                  inputProps={{
-                    name: 'priority',
-                    id: `priority`,
-                  }}
-                >
-                  <option value={1}>Normal</option>
-                  <option value={10}>Important</option>
-                  <option value={100}>High</option>
-                </NativeSelect>
-                <FormHelperText>Select the priority for the task</FormHelperText>
-              </FormControl>
-              <FormControl className={classes.formControl}>
-                <InputLabel htmlFor={`status`}>Status</InputLabel>
-                <NativeSelect
-                  value={status}
-                  onChange={ (e) => setStatus(e.target.value)}
-                  inputProps={{
-                    name: 'status',
-                    id: `status`,
-                  }}>
-                  <option value={0}>New</option>
-                  <option value={10}>Pending</option>
-                  <option value={100}>Done</option>
-                  <option value={-1}>Cancelled</option>
-                </NativeSelect>
-                <FormHelperText>Select the status for the task</FormHelperText>
-              </FormControl>
-            </div>
-          </Grid>
-        </Grid>
       </Container>
-    </Dialog>)
+    </AppBar>
+    <Container className={classes.maxHeight}>
+    <Grid container direction="row" className={classes.maxHeight}>
+    <Grid item xs={2} className={classes.desktopContent}>
+    {assetDetails}
+    </Grid>
+    <Grid item xs={8} className={classes.chat}>
+    {commentSection}
+    </Grid>
+    <Grid item xs={2} className={classes.desktopContent}>
+    {taskheader}
+    </Grid>
+  </Grid>
+    </Container>
+    </>)
+
+  return (
+    <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition} classes={{paper: classes.background}}>
+
+        { isScreenXS ? mobileTaskDetail : desktopTaskDetails }
+
+    </Dialog>);
 }

@@ -26,6 +26,7 @@ export default function AssetConnectionsListItems(props) {
     isEditing,
     setSelectedBusIndexes,
     setSelectedAssetIndexes,
+    noHighlight,
   } = props
   const [isOpenByConnectionIndex, setIsOpenByConnectionIndex] = useState({})
   const assetIdsByBusId = useSelector(getAssetIdsByBusId)
@@ -72,7 +73,7 @@ export default function AssetConnectionsListItems(props) {
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         onClick={onClickOrFocus}
-        highlight={ focusingBusId === busId }
+        highlight={ !noHighlight && focusingBusId === busId }
       >
         <BusAttributesListItem
           assetId={assetId}
