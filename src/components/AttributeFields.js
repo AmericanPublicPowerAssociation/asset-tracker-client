@@ -18,7 +18,7 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import {makeStyles} from "@material-ui/core/styles";
 
-const useStyle = makeStyles(theme =>  ({
+const useStyles = makeStyles(theme =>  ({
   fullSelect:  {
     width: '100%'
   },
@@ -75,7 +75,7 @@ function AttributeField(props) {
     onFocus,
   } = props
   const dispatch = useDispatch()
-  const classes = useStyle()
+  const classes = useStyles()
 
   function trackChange(attributeKey, attributeValue) {
     dispatch(setAssetAttribute(assetId, attributeKey, attributeValue))
