@@ -38,5 +38,5 @@ export const PICKING_DEPTH = 5
 export const TOGGLE_MAP_STYLE = 'TOGGLE_MAP_STYLE'
 export const SET_MAP_VIEW_STATE = 'SET_MAP_VIEW_STATE'
 
-export const ASSETS_GEOJSON_LAYER_ID = 'assets-geojson-layer'
-export const BUSES_GEOJSON_LAYER_ID = 'buses-geojson-layer'
+export const ASSETS_MAP_LAYER_ID = 'assets'
+export const BUSES_MAP_LAYER_ID = 'buses'

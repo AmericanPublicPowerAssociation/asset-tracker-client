@@ -12,9 +12,7 @@ import {
   setFocusingAssetId,
 } from '../actions'
 import {
-  ASSETS_GEOJSON_LAYER_ID,
   ASSET_METER_RADIUS_IN_METERS,
-  BUSES_GEOJSON_LAYER_ID,
   BUS_RADIUS_IN_METERS,
   LINE_WIDTH_IN_METERS,
   MAP_STYLE_BY_NAME,
@@ -33,7 +31,6 @@ import {
 } from '../hooks'
 import {
   CustomEditableGeoJsonLayer,
-  getMapMode,
 } from '../routines'
 import {
   getAssetIdByBusId,
@@ -46,10 +43,6 @@ import {
   getMapStyleName,
   getMapViewState,
 } from '../selectors'
-
-const {
-  REACT_APP_MAPBOX_TOKEN,
-} = process.env
 
 export default function AssetsMap(props) {
   const {
@@ -66,19 +59,11 @@ export default function AssetsMap(props) {
   } = props
   const dispatch = useDispatch()
   const deckGL = useRef()
-  const mapStyleName = useSelector(getMapStyleName)
-  const mapViewState = useSelector(getMapViewState)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetIdByBusId = useSelector(getAssetIdByBusId)
-  const assetsGeoJson = useSelector(getAssetsGeoJson)
-  const busesGeoJson = useSelector(getBusesGeoJson)
   const colors = useSelector(getColors)
   const focusingAssetId = useSelector(getFocusingAssetId)
   // const focusingBusId = useSelector(getFocusingBusId)
-
-  const {
-    handleMapMove,
-  } = useMovableMap()
 
   const {
     handleLayerSelect,
@@ -103,8 +88,6 @@ export default function AssetsMap(props) {
     assetIdByBusId,
     deckGL)
 
-  const mapLayers = []
-  const mapMode = getMapMode(sketchMode)
   const ASSET_TYPE_METER_CODE = assetTypeByCode['m'] && assetTypeByCode['m'].code
 
   function handleBusesGeoJsonClick(info, event) {
@@ -152,9 +135,6 @@ export default function AssetsMap(props) {
   }
 
   mapLayers.push(new CustomEditableGeoJsonLayer({
-    id: ASSETS_GEOJSON_LAYER_ID,
-    data: assetsGeoJson,
-    mode: mapMode,
     pickable: true,
     stroked: false,
     autoHighlight: sketchMode !== SKETCH_MODE_ADD_LINE,
@@ -180,9 +160,6 @@ export default function AssetsMap(props) {
   }))
 
   mapLayers.push(new EditableGeoJsonLayer({
-    id: BUSES_GEOJSON_LAYER_ID,
-    data: busesGeoJson,
-    mode: ViewMode,
     pickable: true,
     stroked: false,
     autoHighlight: true,
@@ -196,22 +173,13 @@ export default function AssetsMap(props) {
   }))
 
   return (
-    <div onKeyUp={handleKeyUp}>
-      <DeckGL
-        ref={deckGL}
-        controller={{ doubleClickZoom: false }}
-        layers={mapLayers}
-        viewState={mapViewState}
-        pickingRadius={PICKING_RADIUS_IN_PIXELS}
-        pickingDepth={PICKING_DEPTH}
-        onViewStateChange={handleMapMove}
-      >
-        <StaticMap
-          mapStyle={MAP_STYLE_BY_NAME[mapStyleName]}
-          mapboxApiAccessToken={REACT_APP_MAPBOX_TOKEN}
-        />
-      </DeckGL>
-    </div>
+    <DeckGL
+      ref={deckGL}
+      layers={mapLayers}
+      pickingRadius={PICKING_RADIUS_IN_PIXELS}
+      pickingDepth={PICKING_DEPTH}
+    >
+    </DeckGL>
   )
 }
 

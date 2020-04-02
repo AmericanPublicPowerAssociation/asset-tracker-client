@@ -7,6 +7,8 @@ import {
   ViewMode,
 } from 'nebula.gl'
 import {
+  ASSETS_MAP_LAYER_ID,
+  BUSES_MAP_LAYER_ID,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_ADD_METER,
   SKETCH_MODE_ADD_SUBSTATION,
@@ -17,8 +19,8 @@ import {
 export class CustomEditableGeoJsonLayer extends EditableGeoJsonLayer {
   getModeProps(props) {
     const modeProps = super.getModeProps(props)
-    modeProps.onSelect = props.onSelect
-    modeProps.onInterpret = props.onInterpret
+    // modeProps.onSelect = props.onSelect
+    // modeProps.onInterpret = props.onInterpret
     modeProps.onDoubleClick = props.onDoubleClick
     return modeProps
   }
@@ -31,29 +33,29 @@ export class CustomEditableGeoJsonLayer extends EditableGeoJsonLayer {
 }
 
 export class CustomDrawLineStringMode extends DrawLineStringMode {
-  handleClick(event, props) {
-    super.handleClick(event, props)
-    props.onInterpret(event)
-  }
+  // handleClick(event, props) {
+    // super.handleClick(event, props)
+    // props.onInterpret(event)
+  // }
 }
 
 export class CustomModifyMode extends ModifyMode {
-  handleClick(event, props) {
-    super.handleClick(event, props)
-    props.onSelect(event)
-  }
+  // handleClick(event, props) {
+    // super.handleClick(event, props)
+    // props.onSelect(event)
+  // }
 
-  handleStopDragging(event, props) {
-    super.handleStopDragging(event, props)
-    props.onInterpret(event)
-  }
+  // handleStopDragging(event, props) {
+    // super.handleStopDragging(event, props)
+    // props.onInterpret(event)
+  // }
 }
 
 export class CustomViewMode extends ViewMode {
-  handleClick(event, props) {
-    super.handleClick(event, props)
-    props.onSelect(event)
-  }
+  // handleClick(event, props) {
+    // super.handleClick(event, props)
+    // props.onSelect(event)
+  // }
 }
 
 export function getMapMode(sketchMode) {
@@ -78,10 +80,8 @@ export function getPickedFeature(event, select) {
 }
 
 export function getPickedInterpretation(event, getBusId) {
-  console.log(1)
   const thisGuideInfo = getPickedInfo(event, pick => pick.isGuide)
   if (!thisGuideInfo) {
-    console.log(2)
     return {thatAssetId: getPickedAssetId(event)}
   }
 
@@ -90,12 +90,9 @@ export function getPickedInterpretation(event, getBusId) {
   const thisGuideFeatureProperties = thisGuideFeature.properties
   const thisAssetFeatureIndex = thisGuideFeatureProperties.featureIndex
   const thisAssetFeature = assetFeatures[thisAssetFeatureIndex]
-  console.log(3)
   if (!thisAssetFeature) {
-    console.log(4)
     return {thatAssetId: getPickedAssetId(event)}
   }
-  console.log(5)
   const thisAssetId = thisAssetFeature.properties.id
 
   const thisGuideFeatureIndex = thisGuideFeatureProperties.positionIndexes[0]
@@ -130,4 +127,21 @@ export function getPickedAssetId(event) {
 export function getPickedInfo(event, select) {
   const picks = event.picks
   return picks && picks.find(select)
+}
+
+export function getAssetsMapLayer(assetsGeoJson, sketchMode) {
+  const mapMode = getMapMode(sketchMode)
+  return new CustomEditableGeoJsonLayer({
+    id: ASSETS_MAP_LAYER_ID,
+    data: assetsGeoJson,
+    mode: mapMode,
+  })
+}
+
+export function getBusesMapLayer(busesGeoJson) {
+  return new EditableGeoJsonLayer({
+    id: BUSES_MAP_LAYER_ID,
+    data: busesGeoJson,
+    mode: ViewMode,
+  })
 }

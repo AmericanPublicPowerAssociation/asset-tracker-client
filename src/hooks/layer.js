@@ -9,7 +9,7 @@ import {
   setFocusingBusId,
 } from '../actions'
 import {
-  BUSES_GEOJSON_LAYER_ID,
+  BUSES_MAP_LAYER_ID,
   MINIMUM_BUS_ID_LENGTH,
   PICKING_DEPTH,
   PICKING_RADIUS_IN_PIXELS,
@@ -18,7 +18,7 @@ import {
   SKETCH_MODE_DELETE,
 } from '../constants'
 import {
-  getByKey,
+  // getByKey,
   getRandomId,
 } from '../macros'
 import {
@@ -194,7 +194,7 @@ export function useInterpretableLayer(
         const busInfos = deckGL.current.pickMultipleObjects({
           x: screenCoords[0],
           y: screenCoords[1],
-          layerIds: [BUSES_GEOJSON_LAYER_ID],
+          layerIds: [BUSES_MAP_LAYER_ID],
           radius: PICKING_RADIUS_IN_PIXELS,
           depth: PICKING_DEPTH,
         })
@@ -238,10 +238,10 @@ export function useInterpretableLayer(
       if (!thisAssetId) {
         return
       }
-      const thisAsset = assetById[thisAssetId]
-      const thisAssetConnections = thisAsset.connections || []
-      const connectionByBusId = getByKey(thisAssetConnections, 'busId')
-      const connection = connectionByBusId[busId] || {busId}
+      // const thisAsset = assetById[thisAssetId]
+      // const thisAssetConnections = thisAsset.connections || []
+      // const connectionByBusId = getByKey(thisAssetConnections, 'busId')
+      // const connection = connectionByBusId[busId] || {busId}
       // dispatch(setAssetConnection(thisAssetId, connectionIndex, connection))
     },
   }), [
