@@ -9,7 +9,6 @@ export const getFocusingAssetId = state => state.focusingAssetId
 export const getTaskById = state => state.taskById
 export const getComments = state => state.taskComments.comments || []
 
-
 export const getAssetByIdLength = createSelector([
   getAssetById,
 ], (
