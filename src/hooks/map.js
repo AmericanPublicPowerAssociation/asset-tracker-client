@@ -13,3 +13,12 @@ export function useMovableMap() {
     },
   }), [dispatch])
 }
+
+export function useEditableMap() {
+  return useMemo(() => ({
+    handleMapKey(e) {
+      e.persist()
+      console.log(e)
+    },
+  }), [])
+}

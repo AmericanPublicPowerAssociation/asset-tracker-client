@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
 import {
+  useEditableMap,
   useMovableMap,
 } from '../hooks'
 import {
@@ -20,16 +21,21 @@ export default function AssetsMap() {
   const {
     handleMapMove,
   } = useMovableMap()
+  const {
+    handleMapKey,
+  } = useEditableMap()
   return (
-    <DeckGL
-      controller={{ doubleClickZoom: false }}
-      viewState={mapViewState}
-      onViewStateChange={handleMapMove}
-    >
-      <StaticMap
-        mapStyle={mapStyle}
-        mapboxApiAccessToken={REACT_APP_MAPBOX_TOKEN}
-      />
-    </DeckGL>
+    <div onKeyUp={handleMapKey}>
+      <DeckGL
+        controller={{ doubleClickZoom: false }}
+        viewState={mapViewState}
+        onViewStateChange={handleMapMove}
+      >
+        <StaticMap
+          mapStyle={mapStyle}
+          mapboxApiAccessToken={REACT_APP_MAPBOX_TOKEN}
+        />
+      </DeckGL>
+    </div>
   )
 }
