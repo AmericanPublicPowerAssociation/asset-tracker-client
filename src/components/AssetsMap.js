@@ -145,9 +145,7 @@ export default function AssetsMap(props) {
       }
     }
     else if (e.key === 'Delete') {
-      if (focusingAssetId &&
-          sketchMode.startsWith(SKETCH_MODE_EDIT)
-        ) {
+      if (focusingAssetId && sketchMode.startsWith(SKETCH_MODE_EDIT)) {
         openDeleteAssetDialog()
       }
     }
