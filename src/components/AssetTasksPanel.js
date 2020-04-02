@@ -28,7 +28,7 @@ import {
 } from '../actions'
 import {
   TASK_ARCHIVE_STATUS,
-  TASK_CANCELLED_STATUS,
+  TASK_STATUS_CANCELLED,
 } from '../constants'
 import {
   getAssetTypeByCode,
@@ -120,8 +120,8 @@ export default function AssetTasksPanel(props) {
   const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
     task => (
       !archived ?
-      task.status !== TASK_ARCHIVE_STATUS && task.status !== TASK_CANCELLED_STATUS :
-      task.status === TASK_ARCHIVE_STATUS || task.status === TASK_CANCELLED_STATUS
+      task.status !== TASK_ARCHIVE_STATUS && task.status !== TASK_STATUS_CANCELLED :
+      task.status === TASK_ARCHIVE_STATUS || task.status === TASK_STATUS_CANCELLED
     )
   )
 

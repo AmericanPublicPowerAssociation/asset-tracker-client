@@ -1,3 +1,4 @@
+import clsx from "clsx"
 import React, { useState } from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import List from '@material-ui/core/List'
@@ -12,6 +13,7 @@ import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
 import NativeSelect from '@material-ui/core/NativeSelect'
 import Button from "@material-ui/core/Button"
+import InputBase from '@material-ui/core/InputBase'
 import Input from '@material-ui/core/Input'
 import IconButton from "@material-ui/core/IconButton"
 import Typography from "@material-ui/core/Typography"
@@ -24,8 +26,12 @@ import EditIcon from '@material-ui/icons/Edit'
 import DoneIcon from '@material-ui/icons/Done'
 import Radio from "@material-ui/core/Radio"
 import { Box } from "@material-ui/core"
+import CollapsibleListItem from "./CollapsibleListItem"
+import AssetConnectionsListItems from "./AssetConnectionsListItems"
+import useMediaQuery from "@material-ui/core/useMediaQuery"
+import Collapse from "@material-ui/core/Collapse"
+import {AssetName} from "./AssetTasksPanel"
 import TaskComments, { CommentForm } from "./TaskComments"
-import { AssetName } from "./AssetTasksPanel"
 import {
   addAssetTaskComment,
   refreshTasks,
@@ -33,15 +39,15 @@ import {
   setTaskStatus,
   setTaskName,
 } from '../actions'
-import InputBase from '@material-ui/core/InputBase';
-import clsx from "clsx";
-import CollapsibleListItem from "./CollapsibleListItem";
-import AssetConnectionsListItems from "./AssetConnectionsListItems";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import Collapse from "@material-ui/core/Collapse";
 import {
+  TASK_PRIORITY_LOW,
+  TASK_PRIORITY_NORMAL,
+  TASK_PRIORITY_HIGH,
+  TASK_STATUS_NEW,
+  TASK_STATUS_PENDING,
+  TASK_STATUS_DONE,
+  TASK_STATUS_CANCELLED,
   TASK_ARCHIVE_STATUS,
-  TASK_CANCELLED_STATUS,
 } from "../constants"
 import {
  getAssetTypeByCode,
@@ -220,7 +226,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const Priority = (priorityColor, priority, label) => {
   const classes = useStyles()
   return <Radio
-    checked={label === TASK_CANCELLED_STATUS || label === TASK_ARCHIVE_STATUS}
+    checked={label === TASK_STATUS_CANCELLED || label === TASK_ARCHIVE_STATUS}
     onChange={(e) => {e.preventDefault();}}
     color={priorityColor}
     disableRipple={true}
@@ -369,9 +375,9 @@ export const TaskFullscreen = (props) => {
             id: `priority`,
           }}
         >
-          <option value={1}>Low</option>
-          <option value={10}>Normal</option>
-          <option value={100}>High</option>
+          <option value={TASK_PRIORITY_LOW}>Low</option>
+          <option value={TASK_PRIORITY_NORMAL}>Normal</option>
+          <option value={TASK_PRIORITY_HIGH}>High</option>
         </NativeSelect>
         <FormHelperText>Select the priority for the task</FormHelperText>
       </FormControl>
@@ -384,10 +390,10 @@ export const TaskFullscreen = (props) => {
             name: 'status',
             id: `status`,
           }}>
-          <option value={0}>New</option>
-          <option value={10}>Pending</option>
-          <option value={100}>Done</option>
-          <option value={-1}>Cancelled</option>
+          <option value={TASK_STATUS_NEW}>New</option>
+          <option value={TASK_STATUS_PENDING}>Pending</option>
+          <option value={TASK_STATUS_DONE}>Done</option>
+          <option value={TASK_STATUS_CANCELLED}>Cancelled</option>
         </NativeSelect>
         <FormHelperText>Select the status for the task</FormHelperText>
       </FormControl>
@@ -480,17 +486,17 @@ const commentSection = (<div style={{display: 'flex', flexDirection: 'column', w
       </Container>
     </AppBar>
     <Container className={classes.maxHeight}>
-    <Grid container direction="row" className={classes.maxHeight}>
-    <Grid item xs={2} className={classes.desktopContent}>
-    {assetDetails}
-    </Grid>
-    <Grid item xs={8} className={classes.chat}>
-    {commentSection}
-    </Grid>
-    <Grid item xs={2} className={classes.desktopContent}>
-    {taskheader}
-    </Grid>
-  </Grid>
+      <Grid container direction="row" className={classes.maxHeight}>
+        <Grid item xs={2} className={classes.desktopContent}>
+          {assetDetails}
+        </Grid>
+        <Grid item xs={8} className={classes.chat}>
+          {commentSection}
+        </Grid>
+        <Grid item xs={2} className={classes.desktopContent}>
+          {taskheader}
+        </Grid>
+      </Grid>
     </Container>
     </>)
 
