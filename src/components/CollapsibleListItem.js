@@ -28,6 +28,7 @@ export default function CollapsibleListItem(props) {
     setIsOpen,
     onClick,
     highlight,
+    entered
   } = props
 
   function handleClick() {
@@ -50,7 +51,7 @@ export default function CollapsibleListItem(props) {
         {isOpen ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
 
-      <Collapse in={isOpen} className= {clsx({
+      <Collapse in={isOpen} classes={{ entered:  entered }} className= {clsx({
           [classes.root]: highlight
         })}
       >
