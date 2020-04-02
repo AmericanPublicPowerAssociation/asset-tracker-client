@@ -4,6 +4,7 @@ import {
 } from './asset'
 import {
   BRIGHT_MAP_STYLE_NAMES,
+  MAP_STYLE_BY_NAME,
 } from '../constants'
 import {
   getBusFeatures,
@@ -12,6 +13,14 @@ import {
 export const getMapStyleName = state => state.mapStyleName
 export const getMapViewState = state => state.mapViewState
 export const getAssetsGeoJson = state => state.assetsGeoJson
+
+export const getMapStyle = createSelector([
+  getMapStyleName,
+], (
+  mapStyleName,
+) => {
+  return MAP_STYLE_BY_NAME[mapStyleName]
+})
 
 export const getIsMapStyleBright = createSelector([
   getMapStyleName,
