@@ -1,10 +1,8 @@
 import React, { useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
 import {
   EditableGeoJsonLayer,
-  ViewMode,
 } from 'nebula.gl'
 // import { GeoJsonLayer } from '@deck.gl/layers'
 import {
@@ -15,7 +13,6 @@ import {
   ASSET_METER_RADIUS_IN_METERS,
   BUS_RADIUS_IN_METERS,
   LINE_WIDTH_IN_METERS,
-  MAP_STYLE_BY_NAME,
   PICKING_DEPTH,
   PICKING_RADIUS_IN_PIXELS,
   POINT_RADIUS_IN_METERS,
@@ -24,7 +21,6 @@ import {
   SKETCH_MODE_EDIT,
 } from '../constants'
 import {
-  useMovableMap,
   usePickableLayer,
   useEditableLayer,
   useInterpretableLayer,
@@ -35,25 +31,19 @@ import {
 import {
   getAssetIdByBusId,
   getAssetTypeByCode,
-  getAssetsGeoJson,
-  getBusesGeoJson,
   getColors,
   getFocusingAssetId,
   // getFocusingBusId,
-  getMapStyleName,
-  getMapViewState,
 } from '../selectors'
 
 export default function AssetsMap(props) {
   const {
     assetById,
     sketchMode,
-    selectedAssetIndexes,
     lineBusId,
     changeSketchMode,
     setSelectedAssetIndexes,
     setLineBusId,
-    selectedBusIndexes,
     setSelectedBusIndexes,
     openDeleteAssetDialog,
   } = props
@@ -139,7 +129,6 @@ export default function AssetsMap(props) {
     stroked: false,
     autoHighlight: sketchMode !== SKETCH_MODE_ADD_LINE,
     highlightColor: colors.assetHighlight,
-    selectedFeatureIndexes: selectedAssetIndexes,
     getRadius: (feature, isSelected) => {
       const assetTypeCode = feature.properties.typeCode
       return assetTypeCode === ASSET_TYPE_METER_CODE ?
@@ -175,7 +164,6 @@ export default function AssetsMap(props) {
   return (
     <DeckGL
       ref={deckGL}
-      layers={mapLayers}
       pickingRadius={PICKING_RADIUS_IN_PIXELS}
       pickingDepth={PICKING_DEPTH}
     >

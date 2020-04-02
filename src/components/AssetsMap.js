@@ -23,6 +23,8 @@ const {
 
 export default function AssetsMap({
   sketchMode,
+  selectedAssetIndexes,
+  selectedBusIndexes,
 }) {
   const mapStyle = useSelector(getMapStyle)
   const mapViewState = useSelector(getMapViewState)
@@ -31,8 +33,13 @@ export default function AssetsMap({
   const { handleMapMove } = useMovableMap()
   const { handleMapKey } = useEditableMap()
   const mapLayers = [
-    getAssetsMapLayer(assetsGeoJson, sketchMode),
-    getBusesMapLayer(busesGeoJson),
+    getAssetsMapLayer(
+      assetsGeoJson,
+      selectedAssetIndexes,
+      sketchMode),
+    getBusesMapLayer(
+      busesGeoJson,
+      selectedBusIndexes),
   ]
   return (
     <div onKeyUp={handleMapKey}>

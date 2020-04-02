@@ -129,19 +129,28 @@ export function getPickedInfo(event, select) {
   return picks && picks.find(select)
 }
 
-export function getAssetsMapLayer(assetsGeoJson, sketchMode) {
+export function getAssetsMapLayer(
+  assetsGeoJson,
+  selectedAssetIndexes,
+  sketchMode,
+) {
   const mapMode = getMapMode(sketchMode)
   return new CustomEditableGeoJsonLayer({
     id: ASSETS_MAP_LAYER_ID,
     data: assetsGeoJson,
     mode: mapMode,
+    selectedFeatureIndexes: selectedAssetIndexes,
   })
 }
 
-export function getBusesMapLayer(busesGeoJson) {
+export function getBusesMapLayer(
+  busesGeoJson,
+  selectedBusIndexes,
+) {
   return new EditableGeoJsonLayer({
     id: BUSES_MAP_LAYER_ID,
     data: busesGeoJson,
     mode: ViewMode,
+    selectedBusIndexes: selectedBusIndexes,
   })
 }
