@@ -7,8 +7,11 @@ import {
   ViewMode,
 } from 'nebula.gl'
 import {
+  ASSET_RADIUS_IN_METERS_BY_CODE,
   ASSETS_MAP_LAYER_ID,
+  ASSET_LINE_WIDTH_IN_METERS,
   BUSES_MAP_LAYER_ID,
+  BUS_RADIUS_IN_METERS,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_ADD_METER,
   SKETCH_MODE_ADD_SUBSTATION,
@@ -132,6 +135,7 @@ export function getPickedInfo(event, select) {
 export function getAssetsMapLayer(
   assetsGeoJson,
   selectedAssetIndexes,
+  colors,
   sketchMode,
 ) {
   const mapMode = getMapMode(sketchMode)
@@ -140,17 +144,41 @@ export function getAssetsMapLayer(
     data: assetsGeoJson,
     mode: mapMode,
     selectedFeatureIndexes: selectedAssetIndexes,
+    autoHighlight: true,
+    highlightColor: colors.assetHighlight,
+    pickable: true,
+    stroked: false,
+    getRadius: feature => {
+      const assetTypeCode = feature.properties.typeCode
+      return ASSET_RADIUS_IN_METERS_BY_CODE[assetTypeCode]
+    },
+    getLineWidth: ASSET_LINE_WIDTH_IN_METERS,
+    getFillColor: (feature, isSelected) => {
+      return isSelected ? colors.assetSelect : colors.asset
+    },
+    getLineColor: (feature, isSelected) => {
+      return isSelected ? colors.assetSelect : colors.asset
+    },
   })
 }
 
 export function getBusesMapLayer(
   busesGeoJson,
   selectedBusIndexes,
+  colors,
 ) {
   return new EditableGeoJsonLayer({
     id: BUSES_MAP_LAYER_ID,
     data: busesGeoJson,
     mode: ViewMode,
     selectedBusIndexes: selectedBusIndexes,
+    autoHighlight: true,
+    highlightColor: colors.busHighlight,
+    pickable: true,
+    stroked: false,
+    getRadius: BUS_RADIUS_IN_METERS,
+    getFillColor: (feature, isSelected) => {
+      return isSelected ? colors.busSelect : colors.bus
+    },
   })
 }

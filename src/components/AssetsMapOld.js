@@ -1,6 +1,4 @@
-import React, { useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import DeckGL from '@deck.gl/react'
+import { useDispatch } from 'react-redux'
 import {
   EditableGeoJsonLayer,
 } from 'nebula.gl'
@@ -10,12 +8,8 @@ import {
   setFocusingAssetId,
 } from '../actions'
 import {
-  ASSET_METER_RADIUS_IN_METERS,
-  BUS_RADIUS_IN_METERS,
-  LINE_WIDTH_IN_METERS,
   PICKING_DEPTH,
   PICKING_RADIUS_IN_PIXELS,
-  POINT_RADIUS_IN_METERS,
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_EDIT,
@@ -31,7 +25,6 @@ import {
 import {
   getAssetIdByBusId,
   getAssetTypeByCode,
-  getColors,
   getFocusingAssetId,
   // getFocusingBusId,
 } from '../selectors'
@@ -48,10 +41,8 @@ export default function AssetsMap(props) {
     openDeleteAssetDialog,
   } = props
   const dispatch = useDispatch()
-  const deckGL = useRef()
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetIdByBusId = useSelector(getAssetIdByBusId)
-  const colors = useSelector(getColors)
   const focusingAssetId = useSelector(getFocusingAssetId)
   // const focusingBusId = useSelector(getFocusingBusId)
 
@@ -77,8 +68,6 @@ export default function AssetsMap(props) {
     assetById,
     assetIdByBusId,
     deckGL)
-
-  const ASSET_TYPE_METER_CODE = assetTypeByCode['m'] && assetTypeByCode['m'].code
 
   function handleBusesGeoJsonClick(info, event) {
     const busId = info.object.properties.id
@@ -125,23 +114,6 @@ export default function AssetsMap(props) {
   }
 
   mapLayers.push(new CustomEditableGeoJsonLayer({
-    pickable: true,
-    stroked: false,
-    autoHighlight: sketchMode !== SKETCH_MODE_ADD_LINE,
-    highlightColor: colors.assetHighlight,
-    getRadius: (feature, isSelected) => {
-      const assetTypeCode = feature.properties.typeCode
-      return assetTypeCode === ASSET_TYPE_METER_CODE ?
-        ASSET_METER_RADIUS_IN_METERS :
-        POINT_RADIUS_IN_METERS
-    },
-    getLineWidth: LINE_WIDTH_IN_METERS,
-    getFillColor: (feature, isSelected) => {
-      return isSelected ? colors.assetSelect : colors.asset
-    },
-    getLineColor: (feature, isSelected) => {
-      return isSelected ? colors.assetSelect : colors.asset
-    },
     onSelect: handleLayerSelect,
     onEdit: handleLayerEdit,
     onInterpret: handleLayerInterpret,
@@ -149,27 +121,8 @@ export default function AssetsMap(props) {
   }))
 
   mapLayers.push(new EditableGeoJsonLayer({
-    pickable: true,
-    stroked: false,
-    autoHighlight: true,
-    highlightColor: colors.busHighlight,
-    selectedFeatureIndexes: selectedBusIndexes,
-    getRadius: BUS_RADIUS_IN_METERS,
-    getFillColor: (feature, isSelected) => {
-      return isSelected ? colors.busSelect : colors.bus
-    },
     onClick: handleBusesGeoJsonClick,
   }))
-
-  return (
-    <DeckGL
-      ref={deckGL}
-      pickingRadius={PICKING_RADIUS_IN_PIXELS}
-      pickingDepth={PICKING_DEPTH}
-    >
-    </DeckGL>
-  )
-}
 
 /*
 *    and we clicked on a bus
