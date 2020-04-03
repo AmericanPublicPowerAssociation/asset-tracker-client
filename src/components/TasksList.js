@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -343,6 +343,7 @@ export const TaskFullscreen = (props) => {
 
   const isScreenXS = useMediaQuery('(max-width:600px)')
 
+  const [taskName, setStateTaskName] = useState()
   const [openTask, setOpenTask] = useState(true)
   const [openTaskDetails, setOpenTaskDetails] = useState(false)
   const setPriority = (priority) => dispatch(setTaskPriority(id, parseInt(priority), status))
@@ -350,8 +351,18 @@ export const TaskFullscreen = (props) => {
 
   const priorityColor  = getPriorityColor((priority || '').toString())
 
+  useEffect(()=> {
+    const { name } = task
+    setStateTaskName(name)
+  }, [task])
+
   function handleChangeTaskName(e) {
-    dispatch(setTaskName(id, e.target.value))
+    setStateTaskName(e.target.value)
+  }
+
+  function handleSubmitTaskName() {
+    dispatch(setTaskName(id, taskName, priority, status))
+    handleToggleEditTaskName()
   }
 
   function handleCommentFormSubmit(task, comment) {
@@ -414,17 +425,32 @@ const commentSection = (<div style={{display: 'flex', flexDirection: 'column', w
     />
   </>)
 
-
   const mobileTaskDetail = (<>
       <AppBar color={priorityColor} className={classes.appBar}>
         <Container>
           <Toolbar className={classes.noPadding}>
             <Typography variant="h6" className={clsx(classes.title, classes.noMargin)}>
-              <InputBase className={clsx(classes.input)} defaultValue={task.name} onChange={(e) => handleChangeTaskName(e) } />
-              ({task.id})
-              {/*<IconButton edge={false} color="inherit" onClick={handleClose} aria-label="close">
-              <EditIcon />
-            </IconButton>*/}
+              {
+                toggleEditTaskName ?
+                <>
+                  <Input
+                    className={clsx(classes.input)}
+                    disableUnderline
+                    defaultValue={taskName}
+                    onChange={handleChangeTaskName}
+                  />
+                  <IconButton edge={false} color="inherit" onClick={handleSubmitTaskName} aria-label="close">
+                    <DoneIcon />
+                  </IconButton>
+                </>
+                :
+                <>
+                  { taskName }
+                  <IconButton edge={false} color="inherit" onClick={handleToggleEditTaskName} aria-label="close">
+                    <EditIcon />
+                  </IconButton>
+                </>
+              }
             </Typography>
             <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
               <CloseIcon />
@@ -461,16 +487,16 @@ const commentSection = (<div style={{display: 'flex', flexDirection: 'column', w
                 <Input
                   className={clsx(classes.input)}
                   disableUnderline
-                  defaultValue={task.name}
+                  defaultValue={taskName}
                   onChange={handleChangeTaskName}
                 />
-                <IconButton edge={false} color="inherit" onClick={handleToggleEditTaskName} aria-label="close">
+                <IconButton edge={false} color="inherit" onClick={handleSubmitTaskName} aria-label="close">
                   <DoneIcon />
                 </IconButton>
               </>
               :
               <>
-                { task.name }
+                { taskName }
                 <IconButton edge={false} color="inherit" onClick={handleToggleEditTaskName} aria-label="close">
                   <EditIcon />
                 </IconButton>
