@@ -4,10 +4,12 @@ import {
   takeLatest,
 } from 'redux-saga/effects'
 import {
+  refreshTasks,
   setAssetComments,
   setAssets,
   setTasks,
-  refreshTasks, updateTaskComments
+  setTaskCommentCount,
+  updateTaskComments,
 } from '../actions'
 import {
   REFRESH_ASSETS,
@@ -118,5 +120,11 @@ export function* resetAssets(payload) {
 }
 
 export function* updateComments(payload) {
+  const {
+    comments,
+    task_id,
+  } = payload
+  const commentCount = comments.length
   yield put(setAssetComments(payload))
+  yield put(setTaskCommentCount(task_id, commentCount))
 }
