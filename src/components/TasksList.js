@@ -34,7 +34,6 @@ import {AssetName} from "./AssetTasksPanel"
 import TaskComments, { CommentForm } from "./TaskComments"
 import {
   addAssetTaskComment,
-  refreshTasks,
   setTaskPriority,
   setTaskStatus,
   setTaskName,
@@ -356,7 +355,6 @@ export const TaskFullscreen = (props) => {
 
   function handleCommentFormSubmit(task, comment) {
     dispatch(addAssetTaskComment(task.id, comment))
-    dispatch(refreshTasks())
   }
 
   function handleToggleEditTaskName() {
