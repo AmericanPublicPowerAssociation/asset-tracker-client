@@ -139,6 +139,19 @@ export function getAssetsMapLayer(
   sketchMode,
 ) {
   const mapMode = getMapMode(sketchMode)
+
+  function handleFeatureClick(info, event) {
+    console.log('feature click assets', info, event)
+  }
+
+  function handleLayerDoubleClick(event) {
+    console.log('layer doubleclick assets', event)
+  }
+
+  function handleLayerEdit({editType, editContext, updatedData}) {
+    console.log('layer edit assets', editType, editContext, updatedData)
+  }
+
   return new CustomEditableGeoJsonLayer({
     id: ASSETS_MAP_LAYER_ID,
     data: assetsGeoJson,
@@ -159,6 +172,9 @@ export function getAssetsMapLayer(
     getLineColor: (feature, isSelected) => {
       return isSelected ? colors.assetSelect : colors.asset
     },
+    onClick: handleFeatureClick,
+    onDoubleClick: handleLayerDoubleClick,
+    onEdit: handleLayerEdit,
   })
 }
 
@@ -167,6 +183,11 @@ export function getBusesMapLayer(
   selectedBusIndexes,
   colors,
 ) {
+
+  function handleFeatureClick(info, event) {
+    console.log('buses', info, event)
+  }
+
   return new EditableGeoJsonLayer({
     id: BUSES_MAP_LAYER_ID,
     data: busesGeoJson,
@@ -180,5 +201,6 @@ export function getBusesMapLayer(
     getFillColor: (feature, isSelected) => {
       return isSelected ? colors.busSelect : colors.bus
     },
+    onClick: handleFeatureClick,
   })
 }
