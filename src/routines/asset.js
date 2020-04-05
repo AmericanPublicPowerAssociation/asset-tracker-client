@@ -71,3 +71,7 @@ export function getSelectedAssetId(selectedAssetIndexes, assetsGeoJson) {
   const feature = assetsGeoJson.features[selectedAssetIndex]
   return feature && feature.properties.id
 }
+
+export function makeAssetId() {
+  return getRandomId(MINIMUM_ASSET_ID_LENGTH)
+}

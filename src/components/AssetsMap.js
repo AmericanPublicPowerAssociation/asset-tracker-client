@@ -11,10 +11,6 @@ import {
   useMovableMap,
 } from '../hooks'
 import {
-  getAssetsMapLayer,
-  getBusesMapLayer,
-} from '../routines'
-import {
   getAssetsGeoJson,
   getBusesGeoJson,
   getColors,
@@ -39,21 +35,19 @@ export default function AssetsMap({
   const busesGeoJson = useSelector(getBusesGeoJson)
   const colors = useSelector(getColors)
   const { handleMapMove } = useMovableMap()
-  const { handleMapKey, handleMapClick, processMapEdit } = useEditableMap(
+  const {
+    getAssetsMapLayer,
+    getBusesMapLayer,
+    handleMapKey,
+    handleMapClick,
+  } = useEditableMap(
     sketchMode,
     mapEditState,
-    setSelectedAssetIndexes)
+    selectedAssetIndexes, setSelectedAssetIndexes,
+    selectedBusIndexes)
   const mapLayers = [
-    getAssetsMapLayer(
-      assetsGeoJson,
-      selectedAssetIndexes,
-      colors,
-      sketchMode, changeSketchMode,
-      mapEditState, processMapEdit),
-    getBusesMapLayer(
-      busesGeoJson,
-      selectedBusIndexes,
-      colors),
+    getAssetsMapLayer(assetsGeoJson, colors, changeSketchMode),
+    getBusesMapLayer(busesGeoJson, colors),
   ]
   return (
     <div onKeyUp={handleMapKey}>
