@@ -105,8 +105,7 @@ export default function AssetsMap(props) {
       if (sketchMode === SKETCH_MODE_ADD_LINE) {
         changeSketchMode(SKETCH_MODE_ADD)
       }
-    }
-    else if (e.key === 'Delete') {
+    } else if (e.key === 'Delete') {
       if (focusingAssetId && sketchMode.startsWith(SKETCH_MODE_EDIT)) {
         openDeleteAssetDialog()
       }
@@ -118,10 +117,6 @@ export default function AssetsMap(props) {
     onEdit: handleLayerEdit,
     onInterpret: handleLayerInterpret,
     onDoubleClick: handleDoubleClick,
-  }))
-
-  mapLayers.push(new EditableGeoJsonLayer({
-    onClick: handleBusesGeoJsonClick,
   }))
 
 /*

@@ -16,9 +16,12 @@ export function useMovableMap() {
 
 export function useEditableMap() {
   return useMemo(() => ({
-    handleMapKey(e) {
-      e.persist()
-      console.log(e)
+    handleMapKey(event) {
+      event.persist()
+      console.log('map key', event)
+    },
+    handleMapClick(info, event) {
+      console.log('map click', info, event)
     },
   }), [])
 }

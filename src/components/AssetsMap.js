@@ -38,7 +38,7 @@ export default function AssetsMap({
   const busesGeoJson = useSelector(getBusesGeoJson)
   const colors = useSelector(getColors)
   const { handleMapMove } = useMovableMap()
-  const { handleMapKey } = useEditableMap()
+  const { handleMapKey, handleMapClick } = useEditableMap()
   const mapLayers = [
     getAssetsMapLayer(
       assetsGeoJson,
@@ -60,6 +60,7 @@ export default function AssetsMap({
         controller={{ doubleClickZoom: false }}
         viewState={mapViewState}
         onViewStateChange={handleMapMove}
+        onClick={handleMapClick}
       >
         <StaticMap
           mapStyle={mapStyle}

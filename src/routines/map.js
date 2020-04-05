@@ -20,56 +20,30 @@ import {
 } from '../constants'
 
 export class CustomEditableGeoJsonLayer extends EditableGeoJsonLayer {
-  getModeProps(props) {
-    const modeProps = super.getModeProps(props)
-    // modeProps.onSelect = props.onSelect
-    // modeProps.onInterpret = props.onInterpret
-    modeProps.onDoubleClick = props.onDoubleClick
-    return modeProps
-  }
-
   onDoubleClick(event) {
-    const modeProps = this.getModeProps(this.props)
-    const onDoubleClick = modeProps.onDoubleClick
-    onDoubleClick && onDoubleClick(event, modeProps)
+    const props = this.props
+    super.onDoubleClick(event, props)
+    const onDoubleClick = props.onDoubleClick
+    onDoubleClick && onDoubleClick(event, props)
   }
-}
 
-export class CustomDrawLineStringMode extends DrawLineStringMode {
-  // handleClick(event, props) {
-    // super.handleClick(event, props)
-    // props.onInterpret(event)
-  // }
-}
-
-export class CustomModifyMode extends ModifyMode {
-  // handleClick(event, props) {
-    // super.handleClick(event, props)
-    // props.onSelect(event)
-  // }
-
-  // handleStopDragging(event, props) {
-    // super.handleStopDragging(event, props)
-    // props.onInterpret(event)
-  // }
-}
-
-export class CustomViewMode extends ViewMode {
-  // handleClick(event, props) {
-    // super.handleClick(event, props)
-    // props.onSelect(event)
-  // }
+  onStopDragging(event) {
+    const props = this.props
+    super.onStopDragging(event, props)
+    const onStopDragging = props.onStopDragging
+    onStopDragging && onStopDragging(event, props)
+  }
 }
 
 export function getMapMode(sketchMode) {
   const mapMode = {
-    [SKETCH_MODE_ADD_LINE]: CustomDrawLineStringMode,
+    [SKETCH_MODE_ADD_LINE]: DrawLineStringMode,
     [SKETCH_MODE_ADD_METER]: DrawPointMode,
     [SKETCH_MODE_ADD_TRANSFORMER]: DrawPointMode,
     [SKETCH_MODE_ADD_SUBSTATION]: DrawPolygonMode,
-    [SKETCH_MODE_EDIT_MODIFY]: CustomModifyMode,
+    [SKETCH_MODE_EDIT_MODIFY]: ModifyMode,
   }[sketchMode]
-  return mapMode || CustomViewMode
+  return mapMode || ViewMode
 }
 
 export function getPickedFeature(event, select) {
@@ -140,16 +114,20 @@ export function getAssetsMapLayer(
 ) {
   const mapMode = getMapMode(sketchMode)
 
-  function handleFeatureClick(info, event) {
-    console.log('feature click assets', info, event)
+  function handleAssetClick(info, event) {
+    console.log('asset click', info, event)
+  }
+
+  function handleAssetEdit({editType, editContext, updatedData}) {
+    console.log('asset edit', editType, editContext, updatedData)
   }
 
   function handleLayerDoubleClick(event) {
-    console.log('layer doubleclick assets', event)
+    console.log('layer doubleclick', event)
   }
 
-  function handleLayerEdit({editType, editContext, updatedData}) {
-    console.log('layer edit assets', editType, editContext, updatedData)
+  function handleLayerStopDragging(event) {
+    console.log('layer stop dragging', event)
   }
 
   return new CustomEditableGeoJsonLayer({
@@ -172,9 +150,10 @@ export function getAssetsMapLayer(
     getLineColor: (feature, isSelected) => {
       return isSelected ? colors.assetSelect : colors.asset
     },
-    onClick: handleFeatureClick,
+    onClick: handleAssetClick,
+    onEdit: handleAssetEdit,
     onDoubleClick: handleLayerDoubleClick,
-    onEdit: handleLayerEdit,
+    onStopDragging: handleLayerStopDragging,
   })
 }
 
@@ -184,8 +163,8 @@ export function getBusesMapLayer(
   colors,
 ) {
 
-  function handleFeatureClick(info, event) {
-    console.log('buses', info, event)
+  function handleBusClick(info, event) {
+    console.log('bus click', info, event)
   }
 
   return new EditableGeoJsonLayer({
@@ -201,6 +180,6 @@ export function getBusesMapLayer(
     getFillColor: (feature, isSelected) => {
       return isSelected ? colors.busSelect : colors.bus
     },
-    onClick: handleFeatureClick,
+    onClick: handleBusClick,
   })
 }
