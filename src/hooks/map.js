@@ -8,13 +8,13 @@ import {
   MINIMUM_ASSET_ID_LENGTH,
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_LINE,
-  SKETCH_MODE_ADD_METER,
-  SKETCH_MODE_ADD_SUBSTATION,
-  SKETCH_MODE_ADD_TRANSFORMER,
 } from '../constants'
 import {
   getRandomId,
 } from '../macros'
+import {
+  getAssetTypeCode,
+} from '../routines'
 
 export function useMovableMap() {
   const dispatch = useDispatch()
@@ -29,8 +29,42 @@ export function useMovableMap() {
 export function useEditableMap(
   sketchMode,
   mapEditState,
+  setSelectedAssetIndexes,
 ) {
   const dispatch = useDispatch()
+
+  function processMapEdit(mapEditState) {
+    console.log('process map edit')
+
+    const { editType, updatedData } = mapEditState
+    // If we have a new feature,
+    if (editType === 'addFeature') {
+      const { editContext } = mapEditState
+      const { featureIndexes } = editContext
+      if (sketchMode === SKETCH_MODE_ADD_LINE) {
+        // Have subsequent clicks extend the same line
+        setSelectedAssetIndexes(featureIndexes)
+      }
+      // Update feature properties
+      const { features } = updatedData
+      const { sourceAssetId } = mapEditState
+      const sourceAssetTypeCode = getAssetTypeCode(sketchMode)
+      for (let i = 0; i < featureIndexes.length; i++) {
+        const featureIndex = featureIndexes[i]
+        const feature = features[featureIndex]
+        const featureProperties = feature.properties
+        featureProperties.id = sourceAssetId
+        featureProperties.typeCode = sourceAssetTypeCode
+      }
+      delete mapEditState.editType
+    }
+    if (updatedData) {
+      // Update geojson for assets
+      dispatch(setAssetsGeoJson(updatedData))
+      delete mapEditState.updatedData
+    }
+  }
+
   return useMemo(() => ({
     handleMapKey(event) {
       event.persist()
@@ -40,38 +74,16 @@ export function useEditableMap(
       console.log('map click', info, event)
       if (sketchMode.startsWith(SKETCH_MODE_ADD)) {
         // Get or set a new assetId
-        let { sourceAssetId } = mapEditState
-        if (!sourceAssetId) {
-          sourceAssetId = mapEditState.sourceAssetId = getRandomId(
+        if (!mapEditState.sourceAssetId) {
+          mapEditState.sourceAssetId = getRandomId(
             MINIMUM_ASSET_ID_LENGTH)
         }
-
-        switch (sketchMode) {
-          case SKETCH_MODE_ADD_LINE: {
-            break
-          }
-          case SKETCH_MODE_ADD_METER: {
-            break
-          }
-          case SKETCH_MODE_ADD_TRANSFORMER: {
-            break
-          }
-          case SKETCH_MODE_ADD_SUBSTATION: {
-            break
-          }
-          default: {
-          }
-        }
-
-        const { editType } = mapEditState
-        if (editType === 'addFeature') {
-          delete mapEditState.editType
-          // Update geojson for assets
-          const { editContext, updatedData } = mapEditState
-          dispatch(setAssetsGeoJson(updatedData))
-          console.log('addFeature', editContext)
-        }
+        processMapEdit(mapEditState)
       }
     },
-  }), [dispatch, sketchMode, mapEditState])
+    processMapEdit,
+  }), [
+    sketchMode,
+    mapEditState, processMapEdit,
+  ])
 }

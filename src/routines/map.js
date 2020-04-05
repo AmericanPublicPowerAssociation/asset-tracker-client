@@ -12,6 +12,7 @@ import {
   ASSET_LINE_WIDTH_IN_METERS,
   BUSES_MAP_LAYER_ID,
   BUS_RADIUS_IN_METERS,
+  SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_ADD_METER,
   SKETCH_MODE_ADD_SUBSTATION,
@@ -46,72 +47,12 @@ export function getMapMode(sketchMode) {
   return mapMode || ViewMode
 }
 
-export function getPickedFeature(event, select) {
-  const info = getPickedInfo(event, select)
-  if (!info) {
-    return
-  }
-  const layer = info.layer
-  const index = info.index
-  return layer.props.data.features[index]
-}
-
-export function getPickedInterpretation(event, getBusId) {
-  const thisGuideInfo = getPickedInfo(event, pick => pick.isGuide)
-  if (!thisGuideInfo) {
-    return {thatAssetId: getPickedAssetId(event)}
-  }
-
-  const assetFeatures = thisGuideInfo.layer.props.data.features
-  const thisGuideFeature = thisGuideInfo.object
-  const thisGuideFeatureProperties = thisGuideFeature.properties
-  const thisAssetFeatureIndex = thisGuideFeatureProperties.featureIndex
-  const thisAssetFeature = assetFeatures[thisAssetFeatureIndex]
-  if (!thisAssetFeature) {
-    return {thatAssetId: getPickedAssetId(event)}
-  }
-  const thisAssetId = thisAssetFeature.properties.id
-
-  const thisGuideFeatureIndex = thisGuideFeatureProperties.positionIndexes[0]
-  const connectionIndex = thisGuideFeatureIndex === 0 ? 0 : 1
-
-  const busId = getBusId(event, thisAssetId)
-  const thatAssetFeatureInfo = getPickedInfo(event, pick =>
-    !pick.isGuide && pick.index !== thisAssetFeatureIndex)
-
-  let thatAssetId
-  if (thatAssetFeatureInfo) {
-    const thatAssetFeatureIndex = thatAssetFeatureInfo.index
-    const thatAssetFeature = assetFeatures[thatAssetFeatureIndex]
-    thatAssetId = thatAssetFeature.properties.id
-  }
-
-  return {busId, connectionIndex, thisAssetId, thatAssetId}
-}
-
-export function getPickedAssetId(event) {
-  const assetFeatureInfo = getPickedInfo(event, pick => !pick.isGuide)
-  let assetId = null
-  if (assetFeatureInfo) {
-    const assetFeatures = assetFeatureInfo.layer.props.data.features
-    const assetFeatureIndex = assetFeatureInfo.index
-    const assetFeature = assetFeatures[assetFeatureIndex]
-    assetId = assetFeature.properties.id
-  }
-  return assetId
-}
-
-export function getPickedInfo(event, select) {
-  const picks = event.picks
-  return picks && picks.find(select)
-}
-
 export function getAssetsMapLayer(
   assetsGeoJson,
   selectedAssetIndexes,
   colors,
-  sketchMode,
-  mapEditState,
+  sketchMode, changeSketchMode,
+  mapEditState, processMapEdit,
 ) {
   const mapMode = getMapMode(sketchMode)
 
@@ -124,10 +65,21 @@ export function getAssetsMapLayer(
     mapEditState.editType = editType
     mapEditState.editContext = editContext
     mapEditState.updatedData = updatedData
+
+    if (mapEditState.withDoubleClick) {
+      processMapEdit(mapEditState)
+
+      if (sketchMode === SKETCH_MODE_ADD_LINE) {
+        changeSketchMode(SKETCH_MODE_ADD)
+      }
+
+      delete mapEditState.withDoubleClick
+    }
   }
 
   function handleLayerDoubleClick(event) {
     console.log('layer double click', event)
+    mapEditState.withDoubleClick = true
   }
 
   function handleLayerStopDragging(event) {
@@ -144,8 +96,7 @@ export function getAssetsMapLayer(
     pickable: true,
     stroked: false,
     getRadius: feature => {
-      const assetTypeCode = feature.properties.typeCode
-      return ASSET_RADIUS_IN_METERS_BY_CODE[assetTypeCode]
+      return ASSET_RADIUS_IN_METERS_BY_CODE[feature.properties.typeCode]
     },
     getLineWidth: ASSET_LINE_WIDTH_IN_METERS,
     getFillColor: (feature, isSelected) => {

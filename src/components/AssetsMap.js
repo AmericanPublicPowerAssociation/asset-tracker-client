@@ -27,8 +27,8 @@ const {
 } = process.env
 
 export default function AssetsMap({
-  sketchMode,
-  selectedAssetIndexes,
+  sketchMode, changeSketchMode,
+  selectedAssetIndexes, setSelectedAssetIndexes,
   selectedBusIndexes,
 }) {
   const deckGL = useRef()
@@ -39,16 +39,17 @@ export default function AssetsMap({
   const busesGeoJson = useSelector(getBusesGeoJson)
   const colors = useSelector(getColors)
   const { handleMapMove } = useMovableMap()
-  const { handleMapKey, handleMapClick } = useEditableMap(
+  const { handleMapKey, handleMapClick, processMapEdit } = useEditableMap(
     sketchMode,
-    mapEditState)
+    mapEditState,
+    setSelectedAssetIndexes)
   const mapLayers = [
     getAssetsMapLayer(
       assetsGeoJson,
       selectedAssetIndexes,
       colors,
-      sketchMode,
-      mapEditState),
+      sketchMode, changeSketchMode,
+      mapEditState, processMapEdit),
     getBusesMapLayer(
       busesGeoJson,
       selectedBusIndexes,

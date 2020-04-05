@@ -59,6 +59,7 @@ export default function App() {
   const assetById = useSelector(getAssetById)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
 
+  /*
   function changeSketchMode(newSketchMode, busId) {
     if (sketchMode === SKETCH_MODE_ADD_LINE) {
       const lineAssetId = getSelectedAssetId(selectedAssetIndexes, assetsGeoJson)
@@ -73,6 +74,12 @@ export default function App() {
     setSelectedBusIndexes([])
     setSketchMode(newSketchMode)
     dispatch(setFocusingBusId(null))
+  }
+  */
+
+  function changeSketchMode(newSketchMode) {
+    setSelectedAssetIndexes([])
+    setSketchMode(newSketchMode)
   }
 
   function saveAssets() {

@@ -93,12 +93,6 @@ export default function AssetsMap(props) {
     assetId && dispatch(setFocusingAssetId(assetId))
   }
 
-  function handleDoubleClick(e) {
-    if (sketchMode === SKETCH_MODE_ADD_LINE) {
-      changeSketchMode(SKETCH_MODE_ADD)
-    }
-  }
-
   function handleKeyUp(e) {
     e.preventDefault()
     if (e.key === 'Enter') {
