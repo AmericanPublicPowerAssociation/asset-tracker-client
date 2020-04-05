@@ -123,7 +123,7 @@ export function getAssetsMapLayer(
   }
 
   function handleLayerDoubleClick(event) {
-    console.log('layer doubleclick', event)
+    console.log('layer double click', event)
   }
 
   function handleLayerStopDragging(event) {
