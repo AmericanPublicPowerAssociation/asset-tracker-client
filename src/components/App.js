@@ -17,32 +17,31 @@ import {
   refreshRisks,
 } from 'asset-report-risks'
 import {
-  addAssetConnection,
+  // addAssetConnection,
   refreshAssets,
-  setFocusingBusId,
+  // setFocusingBusId,
   updateAssets,
   refreshTasks,
 } from '../actions'
 import {
   IS_WITH_DETAILS,
   IS_WITH_TABLES,
-  MINIMUM_BUS_ID_LENGTH,
+  // MINIMUM_BUS_ID_LENGTH,
   OVERLAY_MODE,
   SKETCH_MODE,
-  SKETCH_MODE_ADD_LINE,
+  // SKETCH_MODE_ADD_LINE,
 } from '../constants'
 import {
-  getRandomId,
+  // getRandomId,
 } from '../macros'
 import {
-  getSelectedAssetId,
+  // getSelectedAssetId,
 } from '../routines'
 import {
   getAssetById,
   getAssetsGeoJson,
 } from '../selectors'
 import './App.css'
-
 
 export default function App() {
   const dispatch = useDispatch()
@@ -169,8 +168,7 @@ export default function App() {
         />
       }
 
-      {
-        deleteDialogOpen &&
+      {deleteDialogOpen &&
         <DeleteAssetDialog
           openDialog={deleteDialogOpen}
           onClose={ () => setDeleteDialogOpen(false)}
