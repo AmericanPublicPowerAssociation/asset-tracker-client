@@ -35,14 +35,16 @@ export function useMovableMap() {
 }
 
 export function useEditableMap(
-  sketchMode,
+  sketchMode, changeSketchMode,
+  assetsGeoJson, selectedAssetIndexes, setSelectedAssetIndexes,
+  busesGeoJson, selectedBusIndexes,
   mapEditState,
-  selectedAssetIndexes, setSelectedAssetIndexes,
-  selectedBusIndexes,
+  colors,
 ) {
   const dispatch = useDispatch()
+  const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
   return useMemo(() => ({
-    getAssetsMapLayer(assetsGeoJson, colors, changeSketchMode) {
+    getAssetsMapLayer() {
       const mapMode = getMapMode(sketchMode)
 
       function handleAssetEdit({editType, editContext, updatedData}) {
@@ -50,7 +52,7 @@ export function useEditableMap(
         // If we have a new feature,
         if (editType === 'addFeature') {
           const { featureIndexes } = editContext
-          if (sketchMode === SKETCH_MODE_ADD_LINE) {
+          if (isAddingLine) {
             // Have subsequent clicks extend the same line
             setSelectedAssetIndexes(featureIndexes)
           } else {
@@ -70,10 +72,15 @@ export function useEditableMap(
           }
         }
         if (mapEditState.withDoubleClick) {
-          if (sketchMode === SKETCH_MODE_ADD_LINE) {
+          if (isAddingLine) {
+            // End line on double click
             changeSketchMode(SKETCH_MODE_ADD)
           }
           delete mapEditState.withDoubleClick
+        }
+        if (!isAddingLine) {
+          // Prevent adding multiple assets by mistake
+          changeSketchMode(SKETCH_MODE_ADD)
         }
         // Update geojson for assets
         dispatch(setAssetsGeoJson(updatedData))
@@ -117,7 +124,7 @@ export function useEditableMap(
         onStopDragging: handleLayerStopDragging,
       })
     },
-    getBusesMapLayer(busesGeoJson, colors) {
+    getBusesMapLayer() {
       function handleBusClick(info, event) {
         console.log('bus click', info, event)
       }
@@ -141,10 +148,19 @@ export function useEditableMap(
     handleMapKey(event) {
       event.persist()
       console.log('map key', event)
+      switch (event.key) {
+        case 'Enter': {
+          if (isAddingLine) {
+            changeSketchMode(SKETCH_MODE_ADD)
+          }
+          break
+        }
+        default: { }
+      }
     },
     handleMapClick(info, event) {
       console.log('map click', info, event)
-      if (sketchMode === SKETCH_MODE_ADD_LINE) {
+      if (isAddingLine) {
         if (!selectedAssetIndexes) {
           // Set a new asset id if we started a line
           mapEditState.sourceAssetId = makeAssetId()
@@ -153,9 +169,10 @@ export function useEditableMap(
     },
   }), [
     dispatch,
-    sketchMode,
+    sketchMode, isAddingLine, changeSketchMode,
+    assetsGeoJson, selectedAssetIndexes, setSelectedAssetIndexes,
+    busesGeoJson, selectedBusIndexes,
     mapEditState,
-    selectedAssetIndexes, setSelectedAssetIndexes,
-    selectedBusIndexes,
+    colors,
   ])
 }

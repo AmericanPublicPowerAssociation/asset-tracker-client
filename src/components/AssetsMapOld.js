@@ -2,7 +2,6 @@ import { useDispatch } from 'react-redux'
 import {
   EditableGeoJsonLayer,
 } from 'nebula.gl'
-// import { GeoJsonLayer } from '@deck.gl/layers'
 import {
   setFocusingBusId,
   setFocusingAssetId,
@@ -30,44 +29,10 @@ import {
 } from '../selectors'
 
 export default function AssetsMap(props) {
-  const {
-    assetById,
-    sketchMode,
-    lineBusId,
-    changeSketchMode,
-    setSelectedAssetIndexes,
-    setLineBusId,
-    setSelectedBusIndexes,
-    openDeleteAssetDialog,
-  } = props
-  const dispatch = useDispatch()
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetIdByBusId = useSelector(getAssetIdByBusId)
   const focusingAssetId = useSelector(getFocusingAssetId)
   // const focusingBusId = useSelector(getFocusingBusId)
-
-  const {
-    handleLayerSelect,
-  } = usePickableLayer(
-    sketchMode,
-    setSelectedAssetIndexes,
-    setSelectedBusIndexes)
-
-  const {
-    handleLayerEdit,
-  } = useEditableLayer(
-    sketchMode,
-    assetTypeByCode,
-    lineBusId,
-    setSelectedAssetIndexes,
-    changeSketchMode)
-
-  const {
-    handleLayerInterpret,
-  } = useInterpretableLayer(
-    assetById,
-    assetIdByBusId,
-    deckGL)
 
   function handleBusesGeoJsonClick(info, event) {
     const busId = info.object.properties.id
@@ -80,8 +45,7 @@ export default function AssetsMap(props) {
         // End the line
         changeSketchMode(SKETCH_MODE_ADD, busId)
       }
-    }
-    else {
+    } else {
       if (info.picked) {
         const busIndex = info.index
         setSelectedBusIndexes([busIndex])
@@ -95,16 +59,13 @@ export default function AssetsMap(props) {
 
   function handleKeyUp(e) {
     e.preventDefault()
-    if (e.key === 'Enter') {
-      if (sketchMode === SKETCH_MODE_ADD_LINE) {
-        changeSketchMode(SKETCH_MODE_ADD)
-      }
-    } else if (e.key === 'Delete') {
+    if (e.key === 'Delete') {
       if (focusingAssetId && sketchMode.startsWith(SKETCH_MODE_EDIT)) {
         openDeleteAssetDialog()
       }
     }
   }
+}
 
 /*
 *    and we clicked on a bus

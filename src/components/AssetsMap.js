@@ -41,13 +41,14 @@ export default function AssetsMap({
     handleMapKey,
     handleMapClick,
   } = useEditableMap(
-    sketchMode,
+    sketchMode, changeSketchMode,
+    assetsGeoJson, selectedAssetIndexes, setSelectedAssetIndexes,
+    busesGeoJson, selectedBusIndexes,
     mapEditState,
-    selectedAssetIndexes, setSelectedAssetIndexes,
-    selectedBusIndexes)
+    colors)
   const mapLayers = [
-    getAssetsMapLayer(assetsGeoJson, colors, changeSketchMode),
-    getBusesMapLayer(busesGeoJson, colors),
+    getAssetsMapLayer(),
+    getBusesMapLayer(),
   ]
   return (
     <div onKeyUp={handleMapKey}>
