@@ -40,16 +40,13 @@ import {
   setTaskName,
 } from '../actions'
 import {
-  TASK_PRIORITY_LOW,
-  TASK_PRIORITY_NORMAL,
-  TASK_STATUS_NEW,
-  TASK_STATUS_PENDING,
-  TASK_STATUS_DONE,
   TASK_STATUS_CANCELLED,
   TASK_ARCHIVE_STATUS,
 } from "../constants"
 import {
- getAssetTypeByCode,
+  getAssetTypeByCode,
+  getTaskPriorityTypes,
+  getTaskStatusTypes,
 } from '../selectors'
 
 
@@ -58,21 +55,6 @@ const getPriorityColor  = (priority) => ({
   10:  'primary',
   100:  'secondary',
 }[priority] || 'default')
-
-const getPriorityLabel  = (priority) => ({
-  1: 'Normal',
-  10:  'Important',
-  100:  'High',
-}[priority] || 'default')
-
-
-const getStatusLabel = (status) => ({
-  '-1': 'Cancelled',
-  '0': 'New',
-  '10': 'Pending',
-  '100': 'Done'
-}[status])
-
 
 
 const useStyles = makeStyles(theme => ({
@@ -274,10 +256,11 @@ function TaskItem(props) {
   } = task
 
   const classes = useStyles()
-
-  const priorityLabel  = getPriorityLabel(priority.toString())
-  const priorityColor  = getPriorityColor(priority.toString())
-  const statusLabel = getStatusLabel(status.toString())
+  const priorityType = useSelector(getTaskPriorityTypes)
+  const statusType = useSelector(getTaskStatusTypes)
+  const priorityLabel = priorityType[priority].name
+  const priorityColor = getPriorityColor(priority.toString())
+  const statusLabel = statusType[status].name
   const PriorityIndicator = Priority(priorityColor, priority, status)
   return (
     <>
@@ -320,6 +303,8 @@ function TaskItem(props) {
 export const TaskFullscreen = (props) => {
   const dispatch = useDispatch()
   const classes = useStyles()
+  const taskPriorityTypes = useSelector(getTaskPriorityTypes)
+  const taskStatusTypes = useSelector(getTaskStatusTypes)
   const [toggleEditTaskName, setToggleEditTaskName] = useState(false)
 
   const {
@@ -374,8 +359,16 @@ export const TaskFullscreen = (props) => {
             id: `priority`,
           }}
         >
-          <option value={TASK_PRIORITY_LOW}>Normal</option>
-          <option value={TASK_PRIORITY_NORMAL}>Important</option>
+          {
+            Object.values(taskPriorityTypes).map( priorityType => (
+              <option
+                key={`priority-type-${priorityType.code}`}
+                value={priorityType.code}
+              >
+                {priorityType.name}
+              </option>
+            ))
+          }
         </NativeSelect>
         <FormHelperText>Select the priority for the task</FormHelperText>
       </FormControl>
@@ -388,10 +381,16 @@ export const TaskFullscreen = (props) => {
             name: 'status',
             id: `status`,
           }}>
-          <option value={TASK_STATUS_NEW}>New</option>
-          <option value={TASK_STATUS_PENDING}>Pending</option>
-          <option value={TASK_STATUS_DONE}>Done</option>
-          <option value={TASK_STATUS_CANCELLED}>Cancelled</option>
+          {
+            Object.values(taskStatusTypes).map( statusType => (
+              <option
+                key={`status-type-${statusType.code}`}
+                value={statusType.code}
+              >
+                {statusType.name}
+              </option>
+            ))
+          }
         </NativeSelect>
         <FormHelperText>Select the status for the task</FormHelperText>
       </FormControl>
