@@ -3,8 +3,6 @@ import { useDispatch } from 'react-redux'
 import {
   deleteAsset,
   setAsset,
-  // setAssetConnection,
-  setAssetsGeoJson,
   setFocusingAssetId,
   setFocusingBusId,
 } from '../actions'
@@ -18,7 +16,6 @@ import {
   SKETCH_MODE_DELETE,
 } from '../constants'
 import {
-  // getByKey,
   getRandomId,
 } from '../macros'
 import {
@@ -76,7 +73,6 @@ export function useEditableLayer(
       switch(editType) {
         // If a feature is being added for the first time,
         case 'addFeature': {
-          console.log(editType)
           const features = updatedData.features
           const { featureIndexes } = editContext
           // Add an asset corresponding to the feature
@@ -105,8 +101,6 @@ export function useEditableLayer(
         }
         default: {}
       }
-      // Update geojson for assets
-      dispatch(setAssetsGeoJson(updatedData))
     },
   }), [
     dispatch,

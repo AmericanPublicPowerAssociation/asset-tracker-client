@@ -34,17 +34,21 @@ export default function AssetsMap({
   const deckGL = useRef()
   const mapStyle = useSelector(getMapStyle)
   const mapViewState = useSelector(getMapViewState)
+  const mapEditState = {}
   const assetsGeoJson = useSelector(getAssetsGeoJson)
   const busesGeoJson = useSelector(getBusesGeoJson)
   const colors = useSelector(getColors)
   const { handleMapMove } = useMovableMap()
-  const { handleMapKey, handleMapClick } = useEditableMap()
+  const { handleMapKey, handleMapClick } = useEditableMap(
+    sketchMode,
+    mapEditState)
   const mapLayers = [
     getAssetsMapLayer(
       assetsGeoJson,
       selectedAssetIndexes,
       colors,
-      sketchMode),
+      sketchMode,
+      mapEditState),
     getBusesMapLayer(
       busesGeoJson,
       selectedBusIndexes,

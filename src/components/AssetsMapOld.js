@@ -112,13 +112,6 @@ export default function AssetsMap(props) {
     }
   }
 
-  mapLayers.push(new CustomEditableGeoJsonLayer({
-    onSelect: handleLayerSelect,
-    onEdit: handleLayerEdit,
-    onInterpret: handleLayerInterpret,
-    onDoubleClick: handleDoubleClick,
-  }))
-
 /*
 *    and we clicked on a bus
 *       add a connection to that bus

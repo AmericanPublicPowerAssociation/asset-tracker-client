@@ -111,6 +111,7 @@ export function getAssetsMapLayer(
   selectedAssetIndexes,
   colors,
   sketchMode,
+  mapEditState,
 ) {
   const mapMode = getMapMode(sketchMode)
 
@@ -120,6 +121,9 @@ export function getAssetsMapLayer(
 
   function handleAssetEdit({editType, editContext, updatedData}) {
     console.log('asset edit', editType, editContext, updatedData)
+    mapEditState.editType = editType
+    mapEditState.editContext = editContext
+    mapEditState.updatedData = updatedData
   }
 
   function handleLayerDoubleClick(event) {
