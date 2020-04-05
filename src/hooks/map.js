@@ -51,14 +51,11 @@ export function useEditableMap(
         console.log('asset edit', editType, editContext, updatedData)
         // If we have a new feature,
         if (editType === 'addFeature') {
-          const { featureIndexes } = editContext
-          if (isAddingLine) {
-            // Have subsequent clicks extend the same line
-            setSelectedAssetIndexes(featureIndexes)
-          } else {
+          if (!isAddingLine) {
             mapEditState.sourceAssetId = makeAssetId()
           }
           // Update feature properties
+          const { featureIndexes } = editContext
           const { features } = updatedData
           const { sourceAssetId } = mapEditState
           const sourceAssetTypeCode = getAssetTypeCode(sketchMode)
@@ -70,6 +67,13 @@ export function useEditableMap(
             featureProperties.id = sourceAssetId
             featureProperties.typeCode = sourceAssetTypeCode
           }
+          if (isAddingLine) {
+            // Have subsequent clicks extend the same line
+            setSelectedAssetIndexes(featureIndexes)
+          } else {
+            // Prevent adding multiple assets by mistake
+            changeSketchMode(SKETCH_MODE_ADD)
+          }
         }
         if (mapEditState.withDoubleClick) {
           if (isAddingLine) {
@@ -77,10 +81,6 @@ export function useEditableMap(
             changeSketchMode(SKETCH_MODE_ADD)
           }
           delete mapEditState.withDoubleClick
-        }
-        if (!isAddingLine) {
-          // Prevent adding multiple assets by mistake
-          changeSketchMode(SKETCH_MODE_ADD)
         }
         // Update geojson for assets
         dispatch(setAssetsGeoJson(updatedData))
