@@ -55,10 +55,14 @@ export function* watchAddTask() {
   yield takeEvery(ADD_TASK, function* (action) {
     const url = '/tasks.json'
     const payload = action.payload
-
+    const body = {
+      ...payload,
+      priority: parseInt(payload['priority']),
+      status: parseInt(payload['status']),
+    }
     yield fetchSafely(url, {
       method: 'POST',
-      body: JSON.stringify(payload),
+      body: JSON.stringify(body),
     }, {
       on200: updateTasks,
     })
