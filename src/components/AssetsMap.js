@@ -107,8 +107,11 @@ export default function AssetsMap(props) {
     }
     assetId && dispatch(setFocusingAssetId(assetId))
     assetId && dispatch(setFocusingBusId(null))
+    // Validate that were adding assets
     if (sketchMode.startsWith(SKETCH_MODE_ADD) || info.isGuide) {
+      // Validate that were adding a line
       if (sketchMode === SKETCH_MODE_ADD_LINE) {
+        // Given the info provided in the parameters we get the assets on such point
         const assetInfos = deckGL.current.pickMultipleObjects({
           x: info.x,
           y: info.y,
@@ -116,37 +119,53 @@ export default function AssetsMap(props) {
           radius: pickingRadius,
           depth: pickingDepth,
         })
+        // 'tentative' results means the line hast more than 2 vertex
+        // o-----o-----o THe mos basic example of the multi-string line
         const joinedLines = assetInfos.filter((asset) => asset.object.properties.guideType !== "tentative")
+        // Here we need two know if the clock overlap two objects
+        // Maybe i missed to check if the two elements are lines
         if (joinedLines.length !== 2) return;
 
+        // This could be improved checking who is new assets, instead of hardcoded index
         const new_asset = joinedLines[0]
         const old_asset = joinedLines[1]
-        const feature = new_asset
-        const vertexAssetId = feature.object.properties.id
-        const connectionByBusId = getByKey([], 'busId')
 
-        function getConnection(busId) {
-          return connectionByBusId[busId] || {busId}
-        }
-        
+        // We need to know the bus to wich the elements will be connected
+        const vertexAssetId = new_asset.object.properties.id
+
+
         const assetObjective = old_asset.object
+        // Create a new line, because instead of delete lines.
+        // We reduce the existent lines and add a new line
+        // After that we wire those lines
+        // 1. o-------------------o Existing lines
+        // 2. o-------o             Reduce existing lines
+        // 3.         o-----------o Create new line
+        // 4. o-------o-----------o Wire lines
+
+        // Each block correspond to one step
+        // 1. o-------------------o Existing lines
         const assetTypeCode = getAssetTypeCode(sketchMode)
         const assetType = assetTypeByCode[assetTypeCode]
-        const connections = assetById[assetObjective.properties.id].connections
         const asset = makeAsset(assetType, [])
         dispatch(setAsset(asset))
 
+        // 2. o-------o             Reduce existing lines
         const [splitAsset] = assetInfos.filter((asset) => asset.object.properties.id !== undefined && asset.object.properties.id.length < 10);
         const sliceFirst = lineSlice(point(splitAsset.object.geometry.coordinates[0]),
           point(info.coordinate),
           splitAsset.object)
 
+        // 3.         o-----------o Create new line
         const last = assetObjective.geometry.coordinates.length - 1
         const sliceSecond = lineSlice(point(info.coordinate),
           point(splitAsset.object.geometry.coordinates[last]),
           // point(assetObjective.geometry.coordinates[last]),
           splitAsset.object)
         sliceSecond.properties = {id: asset.id, typeCode: "l"}
+
+        // 4. o-------o-----------o Wire lines
+        // Here we update the points for the existing line
         assetsGeoJson.features.forEach((asset, i) => {
           if (asset.properties.id === assetObjective.properties.id) {
             alert('Updated')
@@ -156,10 +175,12 @@ export default function AssetsMap(props) {
         assetsGeoJson.features.push(sliceSecond)
         sliceFirst.properties.typeCode = assetTypeCode
 
+
         dispatch(setAssetConnection(assetObjective.properties.id, 1, {busId: vertexAssetId}))
         dispatch(setAssetConnection(asset.id, 0, {busId: vertexAssetId}))
         dispatch(setAssetsGeoJson(assetsGeoJson))  // Update geojson for assets
 
+        // Doesn't allow the user continue adding new points to the new line
         changeSketchMode(SKETCH_MODE_ADD, vertexAssetId)
       }
 
