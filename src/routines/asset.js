@@ -19,7 +19,6 @@ import {
 } from '../routines'
 
 export function makeAsset(assetId, assetType) {
-  console.log('make asset', assetId, assetType)
   const assetName = getAssetName(assetType, assetId)
   const assetTypeCode = assetType.code
   const asset = {id: assetId, typeCode: assetTypeCode, name: assetName}
@@ -27,6 +26,7 @@ export function makeAsset(assetId, assetType) {
   switch (assetTypeCode) {
     case ASSET_TYPE_CODE_LINE: {
       asset.connections = [
+        {busId: makeBusId()},
         {busId: makeBusId()},
       ]
       break
