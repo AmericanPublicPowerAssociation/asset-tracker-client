@@ -5,6 +5,7 @@ import {
   ViewMode,
 } from 'nebula.gl'
 import {
+  setAsset,
   setAssetsGeoJson,
   setMapViewState,
 } from '../actions'
@@ -21,6 +22,7 @@ import {
   CustomEditableGeoJsonLayer,
   getAssetTypeCode,
   getMapMode,
+  makeAsset,
   makeAssetId,
 } from '../routines'
 
@@ -36,6 +38,7 @@ export function useMovableMap() {
 
 export function useEditableMap(
   sketchMode, changeSketchMode,
+  assetTypeByCode,
   assetsGeoJson, selectedAssetIndexes, setSelectedAssetIndexes,
   busesGeoJson, selectedBusIndexes,
   mapEditState,
@@ -67,6 +70,11 @@ export function useEditableMap(
             featureProperties.id = sourceAssetId
             featureProperties.typeCode = sourceAssetTypeCode
           }
+          // Make an asset corresponding to the feature
+          const sourceAssetType = assetTypeByCode[sourceAssetTypeCode]
+          const asset = makeAsset(sourceAssetId, sourceAssetType)
+          dispatch(setAsset(asset))
+
           if (isAddingLine) {
             // Have subsequent clicks extend the same line
             setSelectedAssetIndexes(featureIndexes)
@@ -161,7 +169,7 @@ export function useEditableMap(
     handleMapClick(info, event) {
       console.log('map click', info, event)
       if (isAddingLine) {
-        if (!selectedAssetIndexes) {
+        if (!selectedAssetIndexes.length) {
           // Set a new asset id if we started a line
           mapEditState.sourceAssetId = makeAssetId()
         }
@@ -169,10 +177,12 @@ export function useEditableMap(
     },
   }), [
     dispatch,
-    sketchMode, isAddingLine, changeSketchMode,
+    sketchMode, changeSketchMode,
+    assetTypeByCode,
     assetsGeoJson, selectedAssetIndexes, setSelectedAssetIndexes,
     busesGeoJson, selectedBusIndexes,
     mapEditState,
     colors,
+    isAddingLine,
   ])
 }

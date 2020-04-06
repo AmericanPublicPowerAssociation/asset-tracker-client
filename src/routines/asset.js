@@ -5,7 +5,6 @@ import {
   ASSET_TYPE_CODE_SUBSTATION,
   ASSET_TYPE_CODE_TRANSFORMER,
   MINIMUM_ASSET_ID_LENGTH,
-  MINIMUM_BUS_ID_LENGTH,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_ADD_METER,
   SKETCH_MODE_ADD_SUBSTATION,
@@ -15,37 +14,50 @@ import {
   expandCamelCase,
   getRandomId,
 } from '../macros'
+import {
+  makeBusId,
+} from '../routines'
 
-export function makeAsset(assetType, lineBusId) {
-  const assetTypeCode = assetType.code
-  const assetId = getRandomId(MINIMUM_ASSET_ID_LENGTH)
+export function makeAsset(assetId, assetType) {
+  console.log('make asset', assetId, assetType)
   const assetName = getAssetName(assetType, assetId)
+  const assetTypeCode = assetType.code
   const asset = {id: assetId, typeCode: assetTypeCode, name: assetName}
 
-  switch(assetTypeCode) {
+  switch (assetTypeCode) {
     case ASSET_TYPE_CODE_LINE: {
-      const busId = lineBusId || getRandomId(MINIMUM_BUS_ID_LENGTH)
-      asset.connections = [{busId}]
-      break
-    }
-    case ASSET_TYPE_CODE_TRANSFORMER: {
       asset.connections = [
-        {busId: getRandomId(MINIMUM_BUS_ID_LENGTH)},
-        {busId: getRandomId(MINIMUM_BUS_ID_LENGTH)}]
+        {busId: makeBusId()},
+      ]
       break
     }
     case ASSET_TYPE_CODE_METER: {
       asset.connections = [
-        {busId: getRandomId(MINIMUM_BUS_ID_LENGTH)},
+        {busId: makeBusId()},
       ]
       break
     }
-    default: {
+    case ASSET_TYPE_CODE_TRANSFORMER: {
+      asset.connections = [
+        {busId: makeBusId()},
+        {busId: makeBusId()},
+      ]
+      break
     }
+    default: { }
   }
 
   return asset
 }
+
+/*
+export function makeAsset(assetType, lineBusId) {
+  case ASSET_TYPE_CODE_LINE: {
+    const busId = lineBusId || getRandomId(MINIMUM_BUS_ID_LENGTH)
+    asset.connections = [{busId}]
+  }
+}
+*/
 
 export function getAssetTypeCode(sketchMode) {
   return {

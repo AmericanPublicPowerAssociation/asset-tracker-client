@@ -29,7 +29,6 @@ import {
 } from '../selectors'
 
 export default function AssetsMap(props) {
-  const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetIdByBusId = useSelector(getAssetIdByBusId)
   const focusingAssetId = useSelector(getFocusingAssetId)
   // const focusingBusId = useSelector(getFocusingBusId)

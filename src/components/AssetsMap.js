@@ -11,6 +11,7 @@ import {
   useMovableMap,
 } from '../hooks'
 import {
+  getAssetTypeByCode,
   getAssetsGeoJson,
   getBusesGeoJson,
   getColors,
@@ -31,6 +32,7 @@ export default function AssetsMap({
   const mapStyle = useSelector(getMapStyle)
   const mapViewState = useSelector(getMapViewState)
   const mapEditState = {}
+  const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
   const busesGeoJson = useSelector(getBusesGeoJson)
   const colors = useSelector(getColors)
@@ -42,6 +44,7 @@ export default function AssetsMap({
     handleMapClick,
   } = useEditableMap(
     sketchMode, changeSketchMode,
+    assetTypeByCode,
     assetsGeoJson, selectedAssetIndexes, setSelectedAssetIndexes,
     busesGeoJson, selectedBusIndexes,
     mapEditState,

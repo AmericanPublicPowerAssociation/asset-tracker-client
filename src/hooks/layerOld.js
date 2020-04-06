@@ -59,33 +59,16 @@ export function usePickableLayer(
 }
 
 export function useEditableLayer(
-  sketchMode,
-  assetTypeByCode,
-  lineBusId,
-  setSelectedAssetIndexes,
-  changeSketchMode,
 ) {
-  const dispatch = useDispatch()
   return useMemo(() => ({
     handleLayerEdit({editType, editContext, updatedData}) {
       switch(editType) {
         // If a feature is being added for the first time,
         case 'addFeature': {
-          // Add an asset corresponding to the feature
-          const assetType = assetTypeByCode[assetTypeCode]
-          const asset = makeAsset(assetType, lineBusId)
-          dispatch(setAsset(asset))
-
-          // If the new feature is a line,
-          if (sketchMode === SKETCH_MODE_ADD_LINE) {
-          } else {
-            changeSketchMode(SKETCH_MODE_ADD)
-          }
           // Show details for the new asset
           dispatch(setFocusingAssetId(assetId))
           break
         }
-        default: {}
       }
     },
   }), [
@@ -93,12 +76,7 @@ export function useEditableLayer(
 }
 
 export function useInterpretableLayer(
-  // assetsGeoJson,
-  assetById,
-  assetIdByBusId,
-  deckGL,
 ) {
-  // const dispatch = useDispatch()
   return useMemo(() => ({
     handleLayerInterpret(event) {
       // const screenCoords = event.screenCoords
