@@ -97,8 +97,6 @@ export default function AssetsMap(props) {
   }
 
   function handleAssetsGeoJsonClick(info, event, data) {
-    console.log(`===== DATA`)
-    console.log(info)
     const assetId = info.object.properties.id
     if (assetId && sketchMode.startsWith(SKETCH_MODE_DELETE)) {
       dispatch(setFocusingAssetId(null))
@@ -118,45 +116,30 @@ export default function AssetsMap(props) {
           radius: pickingRadius,
           depth: pickingDepth,
         })
-        console.log(assetInfos)
-        console.log(assetsGeoJson)
         const joinedLines = assetInfos.filter((asset) => asset.object.properties.guideType !== "tentative")
-        console.log(joinedLines)
         if (joinedLines.length !== 2) return;
 
         const new_asset = joinedLines[0]
-        console.log('New asses')
-        console.log(new_asset)
         const old_asset = joinedLines[1]
-        console.log('Old asses')
-        console.log(old_asset)
         const feature = new_asset
         const vertexAssetId = feature.object.properties.id
-        console.log(assetById[old_asset.object.properties.id])
         const connectionByBusId = getByKey([], 'busId')
 
         function getConnection(busId) {
           return connectionByBusId[busId] || {busId}
         }
-
-        const newBusId = getRandomId(MINIMUM_BUS_ID_LENGTH)
-        const connection = getConnection(newBusId)
-        dispatch(setAssetConnection(vertexAssetId, 1, connection))
-
+        
         const assetObjective = old_asset.object
         const assetTypeCode = getAssetTypeCode(sketchMode)
         const assetType = assetTypeByCode[assetTypeCode]
         const connections = assetById[assetObjective.properties.id].connections
         const asset = makeAsset(assetType, [])
         dispatch(setAsset(asset))
-        console.log(assetInfos)
 
         const [splitAsset] = assetInfos.filter((asset) => asset.object.properties.id !== undefined && asset.object.properties.id.length < 10);
-        console.log(splitAsset)
         const sliceFirst = lineSlice(point(splitAsset.object.geometry.coordinates[0]),
           point(info.coordinate),
           splitAsset.object)
-        console.log(sliceFirst)
 
         const last = assetObjective.geometry.coordinates.length - 1
         const sliceSecond = lineSlice(point(info.coordinate),
@@ -164,7 +147,6 @@ export default function AssetsMap(props) {
           // point(assetObjective.geometry.coordinates[last]),
           splitAsset.object)
         sliceSecond.properties = {id: asset.id, typeCode: "l"}
-        console.log(sliceSecond)
         assetsGeoJson.features.forEach((asset, i) => {
           if (asset.properties.id === assetObjective.properties.id) {
             alert('Updated')
@@ -190,10 +172,6 @@ export default function AssetsMap(props) {
 
   function handleAssetsGeoJsonEdit({editType, editContext, updatedData}) {
     const splitLines = () => {};
-    console.log(editType)
-    console.log(editContext)
-    console.log(updatedData)
-    console.log(assetsGeoJson)
     switch(editType) {
       // If a feature is being added for the first time,
       case 'addFeature': {
