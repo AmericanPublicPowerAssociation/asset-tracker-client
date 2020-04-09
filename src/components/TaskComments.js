@@ -92,11 +92,14 @@ function CommentItem(props) {
     text,
     creationUserId,
     // modificationTimestamp,
-    // creationTimestamp
+    creationTimestamp
   } = comment
 
-  const timestamp = (new Date()).toDateString();
+  // JS datetime works in milliseconds, that's why you times 1000
+  const timestamp = (new Date(creationTimestamp * 1000)).toLocaleString();
   
+  console.log(creationTimestamp)
+  console.log(comment)
   const classes = useStyles();
 
   return (
