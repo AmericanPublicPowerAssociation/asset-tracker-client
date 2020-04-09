@@ -5,6 +5,7 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import { makeStyles } from '@material-ui/core/styles'
+import Badge from '@material-ui/core/Badge'
 import Container from "@material-ui/core/Container"
 import CloseIcon from '@material-ui/icons/Close'
 import Chip from '@material-ui/core/Chip'
@@ -24,6 +25,7 @@ import Toolbar from "@material-ui/core/Toolbar"
 import Slide from "@material-ui/core/Slide"
 import EditIcon from '@material-ui/icons/Edit'
 import DoneIcon from '@material-ui/icons/Done'
+import CommentIcon from '@material-ui/icons/Comment'
 import Radio from "@material-ui/core/Radio"
 import { Box } from "@material-ui/core"
 import CollapsibleListItem from "./CollapsibleListItem"
@@ -34,22 +36,18 @@ import {AssetName} from "./AssetTasksPanel"
 import TaskComments, { CommentForm } from "./TaskComments"
 import {
   addAssetTaskComment,
-  refreshTasks,
   setTaskPriority,
   setTaskStatus,
   setTaskName,
 } from '../actions'
 import {
-  TASK_PRIORITY_LOW,
-  TASK_PRIORITY_NORMAL,
-  TASK_STATUS_NEW,
-  TASK_STATUS_PENDING,
-  TASK_STATUS_DONE,
   TASK_STATUS_CANCELLED,
   TASK_ARCHIVE_STATUS,
 } from "../constants"
 import {
- getAssetTypeByCode,
+  getAssetTypeByCode,
+  getTaskPriorityTypes,
+  getTaskStatusTypes,
 } from '../selectors'
 
 
@@ -58,21 +56,6 @@ const getPriorityColor  = (priority) => ({
   10:  'primary',
   100:  'secondary',
 }[priority] || 'default')
-
-const getPriorityLabel  = (priority) => ({
-  1: 'Normal',
-  10:  'Important',
-  100:  'High',
-}[priority] || 'default')
-
-
-const getStatusLabel = (status) => ({
-  '-1': 'Cancelled',
-  '0': 'New',
-  '10': 'Pending',
-  '100': 'Done'
-}[status])
-
 
 
 const useStyles = makeStyles(theme => ({
@@ -109,10 +92,6 @@ const useStyles = makeStyles(theme => ({
     fontSize: '0.7em',
     height: '25px',
     marginLeft: '6px',
-  },
-  showComments: {
-    fontSize: '0.7em',
-    padding: 0
   },
   appBar: {
     position: 'relative',
@@ -274,10 +253,11 @@ function TaskItem(props) {
   } = task
 
   const classes = useStyles()
-
-  const priorityLabel  = getPriorityLabel(priority.toString())
-  const priorityColor  = getPriorityColor(priority.toString())
-  const statusLabel = getStatusLabel(status.toString())
+  const priorityType = useSelector(getTaskPriorityTypes)
+  const statusType = useSelector(getTaskStatusTypes)
+  const priorityLabel = priorityType[priority].name
+  const priorityColor = getPriorityColor(priority.toString())
+  const statusLabel = statusType[status].name
   const PriorityIndicator = Priority(priorityColor, priority, status)
   return (
     <>
@@ -304,9 +284,11 @@ function TaskItem(props) {
                 }
                 { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
               </div>
-            <Button className={classes.showComments}
-                    onClick={() => showComments(task)}> {commentCount} Comments
-            </Button>
+            <IconButton onClick={() => showComments(task)}>
+              <Badge badgeContent={commentCount} color="secondary">
+                <CommentIcon />
+              </Badge>
+            </IconButton>
             </div>
           </div>
           </div>
@@ -320,6 +302,8 @@ function TaskItem(props) {
 export const TaskFullscreen = (props) => {
   const dispatch = useDispatch()
   const classes = useStyles()
+  const taskPriorityTypes = useSelector(getTaskPriorityTypes)
+  const taskStatusTypes = useSelector(getTaskStatusTypes)
   const [toggleEditTaskName, setToggleEditTaskName] = useState(false)
 
   const {
@@ -367,7 +351,6 @@ export const TaskFullscreen = (props) => {
 
   function handleCommentFormSubmit(task, comment) {
     dispatch(addAssetTaskComment(task.id, comment))
-    dispatch(refreshTasks())
   }
 
   function handleToggleEditTaskName() {
@@ -385,8 +368,16 @@ export const TaskFullscreen = (props) => {
             id: `priority`,
           }}
         >
-          <option value={TASK_PRIORITY_LOW}>Normal</option>
-          <option value={TASK_PRIORITY_NORMAL}>Important</option>
+          {
+            Object.values(taskPriorityTypes).map( priorityType => (
+              <option
+                key={`priority-type-${priorityType.code}`}
+                value={priorityType.code}
+              >
+                {priorityType.name}
+              </option>
+            ))
+          }
         </NativeSelect>
         <FormHelperText>Select the priority for the task</FormHelperText>
       </FormControl>
@@ -399,10 +390,16 @@ export const TaskFullscreen = (props) => {
             name: 'status',
             id: `status`,
           }}>
-          <option value={TASK_STATUS_NEW}>New</option>
-          <option value={TASK_STATUS_PENDING}>Pending</option>
-          <option value={TASK_STATUS_DONE}>Done</option>
-          <option value={TASK_STATUS_CANCELLED}>Cancelled</option>
+          {
+            Object.values(taskStatusTypes).map( statusType => (
+              <option
+                key={`status-type-${statusType.code}`}
+                value={statusType.code}
+              >
+                {statusType.name}
+              </option>
+            ))
+          }
         </NativeSelect>
         <FormHelperText>Select the status for the task</FormHelperText>
       </FormControl>

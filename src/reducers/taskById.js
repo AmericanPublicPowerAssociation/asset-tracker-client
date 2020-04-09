@@ -1,5 +1,6 @@
 import {
   SET_TASKS,
+  SET_TASK_COMMENT_COUNT,
   SET_TASK_NAME,
 } from '../constants'
 import {
@@ -18,6 +19,11 @@ const taskById = (state = initialState, action) => {
       const { id, name } = action.payload
       const newTask = {...state[id], name }
       return {...state, [id]: newTask}
+    }
+    case SET_TASK_COMMENT_COUNT: {
+      const { id, commentCount } = action.payload
+      const newTask = { ...state[id], commentCount }
+      return { ...state, [id]: newTask }
     }
     default: {
       return state

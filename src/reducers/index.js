@@ -16,7 +16,8 @@ import assetById from './assetById'
 import focusingAssetId from './focusingAssetId'
 import focusingBusId from './focusingBusId'
 import taskById from './taskById'
-import taskComments from "./taskComments";
+import taskComments from "./taskComments"
+import taskCodeTypes from './taskCodeTypes'
 
 const reduceHorizontally = combineReducers({
   mapStyleName,
@@ -33,6 +34,7 @@ const reduceHorizontally = combineReducers({
   productVersionSuggestions,
   sortedRisks,
   risks,
+  taskCodeTypes,
 })
 
 const reduceVertically = (state, action) => {
