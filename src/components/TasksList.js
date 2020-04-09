@@ -5,6 +5,7 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import { makeStyles } from '@material-ui/core/styles'
+import Badge from '@material-ui/core/Badge'
 import Container from "@material-ui/core/Container"
 import CloseIcon from '@material-ui/icons/Close'
 import Chip from '@material-ui/core/Chip'
@@ -24,6 +25,7 @@ import Toolbar from "@material-ui/core/Toolbar"
 import Slide from "@material-ui/core/Slide"
 import EditIcon from '@material-ui/icons/Edit'
 import DoneIcon from '@material-ui/icons/Done'
+import CommentIcon from '@material-ui/icons/Comment'
 import Radio from "@material-ui/core/Radio"
 import { Box } from "@material-ui/core"
 import CollapsibleListItem from "./CollapsibleListItem"
@@ -109,10 +111,6 @@ const useStyles = makeStyles(theme => ({
     fontSize: '0.7em',
     height: '25px',
     marginLeft: '6px',
-  },
-  showComments: {
-    fontSize: '0.7em',
-    padding: 0
   },
   appBar: {
     position: 'relative',
@@ -304,9 +302,11 @@ function TaskItem(props) {
                 }
                 { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
               </div>
-            <Button className={classes.showComments}
-                    onClick={() => showComments(task)}> {commentCount} Comments
-            </Button>
+            <IconButton onClick={() => showComments(task)}> 
+              <Badge badgeContent={commentCount} color="secondary">
+                <CommentIcon />
+              </Badge>
+            </IconButton>
             </div>
           </div>
           </div>
