@@ -13,8 +13,6 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
 import NativeSelect from '@material-ui/core/NativeSelect'
-import Button from "@material-ui/core/Button"
-import InputBase from '@material-ui/core/InputBase'
 import Input from '@material-ui/core/Input'
 import IconButton from "@material-ui/core/IconButton"
 import Typography from "@material-ui/core/Typography"
@@ -327,7 +325,7 @@ export const TaskFullscreen = (props) => {
 
   const isScreenXS = useMediaQuery('(max-width:600px)')
 
-  const [taskName, setStateTaskName] = useState()
+  const [taskNameState, setTaskNameState] = useState()
   const [openTask, setOpenTask] = useState(true)
   const [openTaskDetails, setOpenTaskDetails] = useState(false)
   const setPriority = (priority) => dispatch(setTaskPriority(id, parseInt(priority), status))
@@ -337,15 +335,15 @@ export const TaskFullscreen = (props) => {
 
   useEffect(()=> {
     const { name } = task
-    setStateTaskName(name)
+    setTaskNameState(name)
   }, [task])
 
   function handleChangeTaskName(e) {
-    setStateTaskName(e.target.value)
+    setTaskNameState(e.target.value)
   }
 
   function handleSubmitTaskName() {
-    dispatch(setTaskName(id, taskName, priority, status))
+    dispatch(setTaskName(id, taskNameState, priority, status))
     handleToggleEditTaskName()
   }
 
@@ -433,7 +431,7 @@ const commentSection = (<div style={{display: 'flex', flexDirection: 'column', w
                   <Input
                     className={clsx(classes.input)}
                     disableUnderline
-                    defaultValue={taskName}
+                    defaultValue={taskNameState}
                     onChange={handleChangeTaskName}
                   />
                   <IconButton edge={false} color="inherit" onClick={handleSubmitTaskName} aria-label="close">
@@ -442,7 +440,7 @@ const commentSection = (<div style={{display: 'flex', flexDirection: 'column', w
                 </>
                 :
                 <>
-                  { taskName }
+                  { taskNameState }
                   <IconButton edge={false} color="inherit" onClick={handleToggleEditTaskName} aria-label="close">
                     <EditIcon />
                   </IconButton>
@@ -484,7 +482,7 @@ const commentSection = (<div style={{display: 'flex', flexDirection: 'column', w
                 <Input
                   className={clsx(classes.input)}
                   disableUnderline
-                  defaultValue={taskName}
+                  defaultValue={ taskNameState }
                   onChange={handleChangeTaskName}
                 />
                 <IconButton edge={false} color="inherit" onClick={handleSubmitTaskName} aria-label="close">
@@ -493,7 +491,7 @@ const commentSection = (<div style={{display: 'flex', flexDirection: 'column', w
               </>
               :
               <>
-                { taskName }
+                { taskNameState }
                 <IconButton edge={false} color="inherit" onClick={handleToggleEditTaskName} aria-label="close">
                   <EditIcon />
                 </IconButton>

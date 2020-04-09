@@ -98,8 +98,6 @@ function CommentItem(props) {
   // JS datetime works in milliseconds, that's why you times 1000
   const timestamp = (new Date(creationTimestamp * 1000)).toLocaleString();
   
-  console.log(creationTimestamp)
-  console.log(comment)
   const classes = useStyles();
 
   return (
