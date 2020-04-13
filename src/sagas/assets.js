@@ -3,6 +3,7 @@ import {
   takeEvery,
   takeLatest,
 } from 'redux-saga/effects'
+import { refreshRisks } from 'asset-report-risks'
 import {
   refreshTasks,
   setAssetComments,
@@ -39,7 +40,10 @@ export function* watchUpdateAssets() {
       method: 'PATCH',
       body: JSON.stringify(payload),
     }, {
-      on200: resetAssets,
+      on200: function*(payload) {
+        yield resetAssets(payload)
+        yield put(refreshRisks())
+      },
     })
   })
 }
