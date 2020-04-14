@@ -77,6 +77,9 @@ export default function TaskComments(props) {
         prevScrollHeight = nextScrollHeight
       }
     }, 50)
+    return () => {
+      clearInterval(intervalId)
+    }
   }, [asset.id, task])
 
   return (
