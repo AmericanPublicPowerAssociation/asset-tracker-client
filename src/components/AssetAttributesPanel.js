@@ -15,6 +15,8 @@ import {
 import {
   getAssetTypeByCode,
 } from '../selectors'
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import useTheme from "@material-ui/core/styles/useTheme";
 
 export default function AssetAttributesPanel(props) {
   const {
@@ -22,13 +24,14 @@ export default function AssetAttributesPanel(props) {
     sketchMode,
     setSelectedBusIndexes,
     setSelectedAssetIndexes,
+    setExpand,
+    expand
   } = props
   const assetTypeByCode = useSelector(getAssetTypeByCode)
 
   const assetTypeCode = asset.typeCode
   const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
-
   const isEditing = sketchMode !== SKETCH_MODE_VIEW
 
   return (
@@ -41,7 +44,7 @@ export default function AssetAttributesPanel(props) {
         </Tooltip>
 
         <ListItemText>
-          <AssetName asset={asset} isEditing={isEditing} />
+          <AssetName asset={asset} isEditing={isEditing} setExpand={setExpand} expand={expand} />
         </ListItemText>
       </ListItem>
 
@@ -51,6 +54,7 @@ export default function AssetAttributesPanel(props) {
         isEditing={isEditing}
         setSelectedBusIndexes={setSelectedBusIndexes}
         setSelectedAssetIndexes={setSelectedAssetIndexes}
+        expand={expand}
       />
     </List>
   )
