@@ -43,6 +43,7 @@
     "extends": "react-app",
     "rules": {
       "comma-dangle": ["error", "always-multiline"],
+      "quotes": ["error", "single"],
       "semi": ["error", "never"],
       "space-before-function-paren": ["error", {
         "anonymous": "always",
