@@ -32,6 +32,7 @@ import {
 } from '../constants'
 import {
   getAssetTypeByCode,
+  getTaskPriorityTypes,
 } from '../selectors'
 
 
@@ -98,23 +99,23 @@ export default function AssetTasksPanel(props) {
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
+  const taskPriorityTypes = useSelector(getTaskPriorityTypes)
+  const priorityTypeNormal = taskPriorityTypes['10'].code
 
   const [archived, setArchived] = useState(false)
   const [query, setQuery] = useState('')
   const [name, setName]  = useState('')
   const [description, setDescription] = useState('')
-  const [status, setStatus]  = useState('new')
-  const [priority, setPriority] = useState('normal')
+  const [priority, setPriority] = useState(priorityTypeNormal)
   const [dialog, setDialog] = useState(false)	   
   const [taskDetails, setTaskDetails] = useState(false)
   
   const addTask = () => {
     setDialog(false)
-    dispatch(addAssetTask(assetId, name, description, status, priority))
+    dispatch(addAssetTask(assetId, name, description, priority))
     setName('')
     setDescription('')
     setPriority('')
-    setStatus('')
   }
 
   const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
@@ -179,8 +180,14 @@ export default function AssetTasksPanel(props) {
                   id: 'priority',
               }}
             >
-              <option value='normal'>Normal</option>
-              <option value='important'>Important</option>
+              {
+                Object.values(taskPriorityTypes).map( priorityType => (
+                  <option
+                    key={`priority-type-${priorityType.code}`}
+                    value={priorityType.code}>{priorityType.name}
+                  </option>
+                ))
+              }
             </NativeSelect>
             <FormHelperText>Select the priority for the task</FormHelperText>
           </FormControl>
@@ -190,7 +197,7 @@ export default function AssetTasksPanel(props) {
         <Button onClick={() => {setDialog(false)}}  color="primary">
           Cancel
         </Button>
-        <Button onClick={addTask}  color="primary">
+        <Button onClick={addTask}  color="secondary" disabled={name === ''}>
           Create
         </Button>
       </DialogActions>

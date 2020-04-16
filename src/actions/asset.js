@@ -126,10 +126,10 @@ export function setTasks(assets) {
   }
 }
 
-export function addAssetTask(assetId, name, description) {
+export function addAssetTask(assetId, name, description, priority) {
   return {
     type: ADD_TASK,
-    payload: {assetId, name, description},
+    payload: {assetId, name, description, priority},
   }
 }
 

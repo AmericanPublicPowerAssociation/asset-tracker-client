@@ -3,18 +3,23 @@ import {
   takeEvery,
   takeLatest,
 } from 'redux-saga/effects'
+import { refreshRisks } from 'asset-report-risks'
 import {
+  refreshTasks,
   setAssetComments,
   setAssets,
   setTasks,
-  refreshTasks, updateTaskComments
+  setTaskCommentCount,
+  updateTaskComments,
 } from '../actions'
 import {
   REFRESH_ASSETS,
   UPDATE_ASSETS,
   REFRESH_TASKS,
   ADD_TASK,
-  UPDATE_TASK, REFRESH_ASSET_COMMENTS, ADD_TASK_COMMENT
+  UPDATE_TASK,
+  REFRESH_ASSET_COMMENTS,
+  ADD_TASK_COMMENT,
 } from '../constants'
 import {
   fetchSafely,
@@ -37,7 +42,11 @@ export function* watchUpdateAssets() {
       method: 'PATCH',
       body: JSON.stringify(payload),
     }, {
-      on200: resetAssets,
+      on200: function*(payload) {
+        yield resetAssets(payload)
+        yield updateTasks()
+        yield put(refreshRisks())
+      },
     })
   })
 }
@@ -55,10 +64,14 @@ export function* watchAddTask() {
   yield takeEvery(ADD_TASK, function* (action) {
     const url = '/tasks.json'
     const payload = action.payload
-
+    const body = {
+      ...payload,
+      priority: parseInt(payload['priority']),
+      status: parseInt(payload['status']),
+    }
     yield fetchSafely(url, {
       method: 'POST',
-      body: JSON.stringify(payload),
+      body: JSON.stringify(body),
     }, {
       on200: updateTasks,
     })
@@ -80,11 +93,11 @@ export function* watchUpdateTask() {
 
 export function* watchRefreshAssetComments() {
   yield takeLatest(REFRESH_ASSET_COMMENTS, function* (action) {
-    const task_id = action.payload.task_id;
+    const task_id = action.payload.task_id
 
     const url = `/tasks/${task_id}/comments.json`
     yield fetchSafely(url, {}, {
-      on200: (comments) => updateComments({task_id, comments}),
+      on200: (comments) => updateComments({ task_id, comments }),
     })
   })
 }
@@ -92,7 +105,7 @@ export function* watchRefreshAssetComments() {
 export function* watchAddTaskComment() {
   yield takeEvery(ADD_TASK_COMMENT, function* (action) {
     const payload = action.payload
-    const task_id = action.payload.task_id;
+    const task_id = action.payload.task_id
     const url = `/tasks/${task_id}/comments.json`
 
     yield fetchSafely(url, {
@@ -118,5 +131,11 @@ export function* resetAssets(payload) {
 }
 
 export function* updateComments(payload) {
+  const {
+    comments,
+    task_id,
+  } = payload
+  const commentCount = comments.length
   yield put(setAssetComments(payload))
+  yield put(setTaskCommentCount(task_id, commentCount))
 }
