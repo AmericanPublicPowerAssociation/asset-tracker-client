@@ -41,12 +41,12 @@
   },
   "eslintConfig": {
     "extends": "react-app",
-    rules: {
-      'comma-dangle': ['error', 'always-multiline'],
-      'semi': ['error', 'never'],
-      'space-before-function-paren': ['error', {
-        'anonymous': 'always',
-        'named': 'never'
+    "rules": {
+      "comma-dangle": ["error", "always-multiline"],
+      "semi": ["error", "never"],
+      "space-before-function-paren": ["error", {
+        "anonymous": "always",
+        "named": "never"
       }]
     }
   },
