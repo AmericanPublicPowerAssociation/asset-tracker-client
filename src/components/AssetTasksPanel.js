@@ -100,12 +100,13 @@ export default function AssetTasksPanel(props) {
   const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
   const taskPriorityTypes = useSelector(getTaskPriorityTypes)
+  const priorityTypeNormal = taskPriorityTypes['10'].code
 
   const [archived, setArchived] = useState(false)
   const [query, setQuery] = useState('')
   const [name, setName]  = useState('')
   const [description, setDescription] = useState('')
-  const [priority, setPriority] = useState('')
+  const [priority, setPriority] = useState(priorityTypeNormal)
   const [dialog, setDialog] = useState(false)	   
   const [taskDetails, setTaskDetails] = useState(false)
   
@@ -179,7 +180,6 @@ export default function AssetTasksPanel(props) {
                   id: 'priority',
               }}
             >
-              <option aria-label="None" value="" />
               {
                 Object.values(taskPriorityTypes).map( priorityType => (
                   <option
@@ -197,7 +197,7 @@ export default function AssetTasksPanel(props) {
         <Button onClick={() => {setDialog(false)}}  color="primary">
           Cancel
         </Button>
-        <Button onClick={addTask}  color="secondary" disabled={name === '' || priority === ''}>
+        <Button onClick={addTask}  color="secondary" disabled={name === ''}>
           Create
         </Button>
       </DialogActions>
