@@ -17,7 +17,9 @@ import {
   UPDATE_ASSETS,
   REFRESH_TASKS,
   ADD_TASK,
-  UPDATE_TASK, REFRESH_ASSET_COMMENTS, ADD_TASK_COMMENT
+  UPDATE_TASK,
+  REFRESH_ASSET_COMMENTS,
+  ADD_TASK_COMMENT,
 } from '../constants'
 import {
   fetchSafely,
@@ -42,6 +44,7 @@ export function* watchUpdateAssets() {
     }, {
       on200: function*(payload) {
         yield resetAssets(payload)
+        yield updateTasks()
         yield put(refreshRisks())
       },
     })
@@ -90,11 +93,11 @@ export function* watchUpdateTask() {
 
 export function* watchRefreshAssetComments() {
   yield takeLatest(REFRESH_ASSET_COMMENTS, function* (action) {
-    const task_id = action.payload.task_id;
+    const task_id = action.payload.task_id
 
     const url = `/tasks/${task_id}/comments.json`
     yield fetchSafely(url, {}, {
-      on200: (comments) => updateComments({task_id, comments}),
+      on200: (comments) => updateComments({ task_id, comments }),
     })
   })
 }
@@ -102,7 +105,7 @@ export function* watchRefreshAssetComments() {
 export function* watchAddTaskComment() {
   yield takeEvery(ADD_TASK_COMMENT, function* (action) {
     const payload = action.payload
-    const task_id = action.payload.task_id;
+    const task_id = action.payload.task_id
     const url = `/tasks/${task_id}/comments.json`
 
     yield fetchSafely(url, {
