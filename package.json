@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",
+    "@turf/line-slice": "^5.1.5",
     "@turf/transform-translate": "^5.1.5",
     "asset-report-risks": "file:../asset-report-risks/client",
     "clsx": "^1.0.4",
@@ -12,7 +13,6 @@
     "dotenv": "^8.2.0",
     "downshift": "^5.0.3",
     "immer": "^5.3.2",
-    "immutable": "^4.0.0-rc.12",
     "material-table": "^1.57.2",
     "nebula.gl": "^0.17.1",
     "react": "^16.12.0",
