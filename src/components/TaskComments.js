@@ -12,6 +12,7 @@ import IconButton from "@material-ui/core/IconButton"
 import Input from "@material-ui/core/Input"
 import Scrollbar from 'react-perfect-scrollbar'
 import 'react-perfect-scrollbar/dist/css/styles.css'
+import dateFormat from 'dateformat'
 
 
 const useStyles = makeStyles(theme => ({
@@ -96,10 +97,9 @@ function CommentItem(props) {
   } = comment
 
   // JS datetime works in milliseconds, that's why you times 1000
-  const timestamp = (new Date(creationTimestamp * 1000)).toLocaleString();
-  
-  console.log(creationTimestamp)
-  console.log(comment)
+  const now = new Date(creationTimestamp * 1000)
+  const timestamp = dateFormat(now, "dddd, mmmm d, yyyy h:MMtt")
+
   const classes = useStyles();
 
   return (

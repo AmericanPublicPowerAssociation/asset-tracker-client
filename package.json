@@ -8,6 +8,7 @@
     "@turf/transform-translate": "^5.1.5",
     "asset-report-risks": "file:../asset-report-risks/client",
     "clsx": "^1.0.4",
+    "dateformat": "^3.0.3",
     "deck.gl": "^8.0.12",
     "dotenv": "^8.2.0",
     "downshift": "^5.0.3",
