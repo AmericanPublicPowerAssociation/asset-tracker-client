@@ -1,12 +1,14 @@
-import clsx from "clsx"
+import clsx from 'clsx'
 import React, { useState, useEffect } from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import makeStyles from '@material-ui/core/styles/makeStyles'
+import useTheme from '@material-ui/core/styles/useTheme'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import { makeStyles } from '@material-ui/core/styles'
 import Badge from '@material-ui/core/Badge'
-import Container from "@material-ui/core/Container"
+import Container from '@material-ui/core/Container'
 import CloseIcon from '@material-ui/icons/Close'
 import Chip from '@material-ui/core/Chip'
 import InputLabel from '@material-ui/core/InputLabel'
@@ -14,24 +16,23 @@ import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
 import NativeSelect from '@material-ui/core/NativeSelect'
 import Input from '@material-ui/core/Input'
-import IconButton from "@material-ui/core/IconButton"
-import Typography from "@material-ui/core/Typography"
-import Grid from "@material-ui/core/Grid"
-import Dialog from "@material-ui/core/Dialog"
-import AppBar from "@material-ui/core/AppBar"
-import Toolbar from "@material-ui/core/Toolbar"
-import Slide from "@material-ui/core/Slide"
+import IconButton from '@material-ui/core/IconButton'
+import Typography from '@material-ui/core/Typography'
+import Grid from '@material-ui/core/Grid'
+import Dialog from '@material-ui/core/Dialog'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Slide from '@material-ui/core/Slide'
 import EditIcon from '@material-ui/icons/Edit'
 import DoneIcon from '@material-ui/icons/Done'
 import CommentIcon from '@material-ui/icons/Comment'
-import Radio from "@material-ui/core/Radio"
-import { Box } from "@material-ui/core"
-import CollapsibleListItem from "./CollapsibleListItem"
-import AssetConnectionsListItems from "./AssetConnectionsListItems"
-import useMediaQuery from "@material-ui/core/useMediaQuery"
-import Collapse from "@material-ui/core/Collapse"
-import {AssetName} from "./AssetTasksPanel"
-import TaskComments, { CommentForm } from "./TaskComments"
+import Radio from '@material-ui/core/Radio'
+import { Box } from '@material-ui/core'
+import CollapsibleListItem from './CollapsibleListItem'
+import AssetConnectionsListItems from './AssetConnectionsListItems'
+import Collapse from '@material-ui/core/Collapse'
+import { AssetName } from './AssetTasksPanel'
+import TaskComments, { CommentForm } from './TaskComments'
 import {
   addAssetTaskComment,
   setTaskPriority,
@@ -41,20 +42,18 @@ import {
 import {
   TASK_STATUS_CANCELLED,
   TASK_ARCHIVE_STATUS,
-} from "../constants"
+} from '../constants'
 import {
   getAssetTypeByCode,
   getTaskPriorityTypes,
   getTaskStatusTypes,
 } from '../selectors'
 
-
 const getPriorityColor  = (priority) => ({
   1: 'default',
   10:  'primary',
   100:  'secondary',
 }[priority] || 'default')
-
 
 const useStyles = makeStyles(theme => ({
   background: {
@@ -71,20 +70,20 @@ const useStyles = makeStyles(theme => ({
   spaceBetween: {
     display: 'flex',
     width: '100%',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   alignStart: {
     display: 'flex',
     alignItems: 'start',
-    width: '100%'
+    width: '100%',
   },
   actions: {
     display: 'flex',
-    alignItems: "center",
-    justifyContent: 'space-between'
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   fullWidth: {
-    width: '100%'
+    width: '100%',
   },
   status: {
     fontSize: '0.7em',
@@ -105,13 +104,12 @@ const useStyles = makeStyles(theme => ({
     paddingTop: '25px',
     overflowY: 'auto',
     backgroundColor: 'white',
-    paddingLeft: '15px'
+    paddingLeft: '15px',
   },
   label: {
     color: 'rgba(0, 0, 0, 0.54)',
     padding: '0',
     fontSize: '1rem',
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     fontWeight: '400',
     lineHeight: '1',
     letterSpacing: '0.00938em',
@@ -121,10 +119,10 @@ const useStyles = makeStyles(theme => ({
     marginTop: '9px',
   },
   noPadding: {
-    padding: 0
+    padding: 0,
   },
   moMargin: {
-    margin: 0
+    margin: 0,
   },
   maxHeight: {
     height: '100% !important',
@@ -155,29 +153,29 @@ const useStyles = makeStyles(theme => ({
     '&$checked': {
       backgroundColor: theme.palette.secondary.main,
       color: 'white',
-    }
+    },
   },
   desktopContent: {
-    marginTop: theme.spacing(4)
+    marginTop: theme.spacing(4),
   },
   chat: {
     display: 'flex',
     flexGrow: 2,
     paddingLeft: theme.spacing(6),
     paddingRight: theme.spacing(6),
-    height: '95%'
+    height: '95%',
   },
   innerChat: {
     paddingLeft: '25px',
     paddingRight: '25px',
     backgroundColor: 'white',
-    height: '100%'
+    height: '100%',
   },
   overflow: {
-    'overflow': 'auto'
+    'overflow': 'auto',
   },
   entered: {
-    minHeight: '75px !important'
+    minHeight: '75px !important',
   },
   importantCheckbox: {
     color: `${theme.palette.warning.main} !important`,
@@ -189,13 +187,13 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.secondary.main,
     '&$checked': {
       color: theme.palette.secondary.main,
-    }
-  }
-}));
+    },
+  },
+}))
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />
+  return <Slide direction='up' ref={ref} {...props} />
 })
 
 
@@ -203,10 +201,10 @@ const Priority = (priorityColor, priority, label) => {
   const classes = useStyles()
   return <Radio
     checked={label === TASK_STATUS_CANCELLED || label === TASK_ARCHIVE_STATUS}
-    onChange={(e) => {e.preventDefault();}}
+    onChange={(e) => {e.preventDefault()}}
     color={priorityColor}
     disableRipple={true}
-    classes={{colorPrimary: classes.importantCheckbox, colorSecondary: classes.urgentCheckbox}}
+    classes={{ colorPrimary: classes.importantCheckbox, colorSecondary: classes.urgentCheckbox }}
   />
 }
 
@@ -217,7 +215,7 @@ export default function TasksList(props) {
     asset,
     tasks,
     showComments,
-    showDetails
+    showDetails,
   } = props
   const assetId = asset.id
 
@@ -241,13 +239,13 @@ function TaskItem(props) {
     itemKey,
     task,
     showComments,
-    showDetails
+    showDetails,
   } = props
   const {
-      name,
-      status,
-      priority,
-      commentCount
+    name,
+    status,
+    priority,
+    commentCount,
   } = task
 
   const classes = useStyles()
@@ -266,7 +264,7 @@ function TaskItem(props) {
         <div className={classes.spaceBetween}>
           <div className={classes.alignStart}>
           <div className={classes.fullWidth}>
-            <Box display="flex">{PriorityIndicator} <ListItemText primary={name}/></Box>
+            <Box display='flex'>{PriorityIndicator} <ListItemText primary={name}/></Box>
 
             <div className={classes.actions}>
               <div>
@@ -276,7 +274,7 @@ function TaskItem(props) {
                     color={priorityColor}
                     classes={{
                       colorPrimary: classes.important,
-                      colorSecondary: classes.urgent}}
+                      colorSecondary: classes.urgent }}
                     label={priorityLabel}
                   />
                 }
@@ -298,6 +296,7 @@ function TaskItem(props) {
 
 
 export const TaskFullscreen = (props) => {
+  const theme = useTheme()
   const dispatch = useDispatch()
   const classes = useStyles()
   const taskPriorityTypes = useSelector(getTaskPriorityTypes)
@@ -314,7 +313,7 @@ export const TaskFullscreen = (props) => {
   const {
     id,
     status,
-    priority
+    priority,
   } = task
 
   const assetName = asset.name
@@ -323,7 +322,7 @@ export const TaskFullscreen = (props) => {
   const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
 
-  const isScreenXS = useMediaQuery('(max-width:600px)')
+  const isLayoutMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   const [taskNameState, setTaskNameState] = useState()
   const [openTask, setOpenTask] = useState(true)
@@ -357,13 +356,13 @@ export const TaskFullscreen = (props) => {
 
   const taskheader = (<div>
       <FormControl className={classes.formControl}>
-        <InputLabel htmlFor={`priority`}>Priority</InputLabel>
+        <InputLabel htmlFor='priority'>Priority</InputLabel>
         <NativeSelect
           value={priority}
           onChange={ (e) => setPriority(e.target.value)}
           inputProps={{
             name: 'priority',
-            id: `priority`,
+            id: 'priority',
           }}
         >
           {
@@ -380,13 +379,13 @@ export const TaskFullscreen = (props) => {
         <FormHelperText>Select the priority for the task</FormHelperText>
       </FormControl>
       <FormControl className={classes.formControl}>
-        <InputLabel htmlFor={`status`}>Status</InputLabel>
+        <InputLabel htmlFor={'status'}>Status</InputLabel>
         <NativeSelect
           value={status}
           onChange={ (e) => setStatus(e.target.value)}
           inputProps={{
             name: 'status',
-            id: `status`,
+            id: 'status',
           }}>
           {
             Object.values(taskStatusTypes).map( statusType => (
@@ -403,7 +402,7 @@ export const TaskFullscreen = (props) => {
       </FormControl>
     </div>)
 
-const commentSection = (<div style={{display: 'flex', flexDirection: 'column', width: '100%', maxHeight: '100%', height: '100%'}}>
+const commentSection = (<div style={{ display: 'flex', flexDirection: 'column', width: '100%', maxHeight: '100%', height: '100%' }}>
       <TaskComments asset={asset} task={task} classes={classes.listComments} />
       <CommentForm onSubmit={(comment) => handleCommentFormSubmit(task, comment)} />
     </div>)
@@ -447,18 +446,18 @@ const commentSection = (<div style={{display: 'flex', flexDirection: 'column', w
                 </>
               }
             </Typography>
-            <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
+            <IconButton edge='end' color='inherit' onClick={handleClose} aria-label='close'>
               <CloseIcon />
             </IconButton>
           </Toolbar>
         </Container>
       </AppBar>
    <Container>
-    <CollapsibleListItem title="Task details" isOpen={openTaskDetails} setIsOpen={setOpenTaskDetails} entered={classes.entered}>
+    <CollapsibleListItem title='Task details' isOpen={openTaskDetails} setIsOpen={setOpenTaskDetails} entered={classes.entered}>
         {taskheader}
     </CollapsibleListItem>
    </Container>
-    <Collapse in={openTask} classes={{entered: clsx(classes.overflow, classes.maxHeight), wrapper: classes.maxHeight}}>
+    <Collapse in={openTask} classes={{ entered: clsx(classes.overflow, classes.maxHeight), wrapper: classes.maxHeight }}>
       {commentSection}
     </Collapse>
     <Container>
@@ -475,7 +474,7 @@ const commentSection = (<div style={{display: 'flex', flexDirection: 'column', w
     <AppBar color={priorityColor} className={classes.appBar}>
       <Container>
         <Toolbar className={classes.noPadding}>
-          <Typography variant="h6" className={clsx(classes.title, classes.noMargin)}>
+          <Typography variant='h6' className={clsx(classes.title, classes.noMargin)}>
             {
               toggleEditTaskName ?
               <>
@@ -498,14 +497,14 @@ const commentSection = (<div style={{display: 'flex', flexDirection: 'column', w
               </>
             }
           </Typography>
-          <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
+          <IconButton edge='end' color='inherit' onClick={handleClose} aria-label='close'>
             <CloseIcon />
           </IconButton>
         </Toolbar>
       </Container>
     </AppBar>
     <Container className={classes.maxHeight}>
-      <Grid container direction="row" className={classes.maxHeight}>
+      <Grid container direction='row' className={classes.maxHeight}>
         <Grid item xs={2} className={classes.desktopContent}>
           {assetDetails}
         </Grid>
@@ -520,9 +519,9 @@ const commentSection = (<div style={{display: 'flex', flexDirection: 'column', w
     </>)
 
   return (
-    <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition} classes={{paper: classes.background}}>
+    <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition} classes={{ paper: classes.background }}>
 
-        { isScreenXS ? mobileTaskDetail : desktopTaskDetails }
+      { isLayoutMobile ? mobileTaskDetail : desktopTaskDetails }
 
-    </Dialog>);
+    </Dialog>)
 }

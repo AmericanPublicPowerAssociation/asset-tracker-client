@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {useSelector} from 'react-redux'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -59,13 +59,33 @@ export default function TaskComments(props) {
     task,
   } = props
   const assetId = asset.id
+  const scrollBarRef = useRef()
 
   const comments = useSelector(getCurrentTaskComments)
+
+  useEffect( () => {
+    const scrollBarContainer = scrollBarRef.current._container
+    let prevScrollHeight = scrollBarContainer.scrollHeight
+    const intervalId = setInterval( function () {
+      let nextScrollHeight = scrollBarContainer.scrollHeight
+      if (nextScrollHeight === prevScrollHeight) {
+        console.log(nextScrollHeight)
+        scrollBarContainer.scrollTop = nextScrollHeight
+        clearInterval(intervalId)
+      }
+      else {
+        prevScrollHeight = nextScrollHeight
+      }
+    }, 50)
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [asset.id, task])
 
   return (
     <>
       <List disablePadding className={props.classes || classes.scroll}>
-        <Scrollbar className={classes.scrollBar}>
+        <Scrollbar className={classes.scrollBar} ref={scrollBarRef}>
           { comments.map((comment, index) => (
             <CommentItem
               key={`task-comment-${assetId}-${comment.id}`}
