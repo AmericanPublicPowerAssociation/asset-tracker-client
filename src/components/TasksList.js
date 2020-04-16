@@ -32,6 +32,7 @@ import CollapsibleListItem from "./CollapsibleListItem"
 import AssetConnectionsListItems from "./AssetConnectionsListItems"
 import useMediaQuery from "@material-ui/core/useMediaQuery"
 import Collapse from "@material-ui/core/Collapse"
+import Divider from '@material-ui/core/Divider'
 import {AssetName} from "./AssetTasksPanel"
 import TaskComments, { CommentForm } from "./TaskComments"
 import {
@@ -261,14 +262,14 @@ function TaskItem(props) {
   const PriorityIndicator = Priority(priorityColor, priority, status)
   return (
     <>
-      <ListItem
+      <ListItem button
         key={`${itemKey}-li`}
         disableGutters
         onClick={ () => showDetails(task) }>
         <div className={classes.spaceBetween}>
           <div className={classes.alignStart}>
           <div className={classes.fullWidth}>
-            <Box display="flex">{PriorityIndicator} <ListItemText primary={name}/></Box>
+            <ListItemText primary={name} className={classes.status}/>
 
             <div className={classes.actions}>
               <div>
@@ -294,6 +295,7 @@ function TaskItem(props) {
           </div>
         </div>
       </ListItem>
+      <Divider/>
     </>
   )
 }
