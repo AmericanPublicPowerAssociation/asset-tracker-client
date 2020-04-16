@@ -29,13 +29,16 @@ import Slide from '@material-ui/core/Slide'
 import EditIcon from '@material-ui/icons/Edit'
 import DoneIcon from '@material-ui/icons/Done'
 import CommentIcon from '@material-ui/icons/Comment'
-import Radio from '@material-ui/core/Radio'
-import { Box } from '@material-ui/core'
-import CollapsibleListItem from './CollapsibleListItem'
-import AssetConnectionsListItems from './AssetConnectionsListItems'
-import Collapse from '@material-ui/core/Collapse'
-import {AssetName} from './AssetTasksPanel'
-import TaskComments, { CommentForm } from './TaskComments'
+import Radio from "@material-ui/core/Radio"
+import { Box } from "@material-ui/core"
+import CollapsibleListItem from "./CollapsibleListItem"
+import AssetConnectionsListItems from "./AssetConnectionsListItems"
+import useMediaQuery from "@material-ui/core/useMediaQuery"
+import Collapse from "@material-ui/core/Collapse"
+import Divider from '@material-ui/core/Divider'
+import {AssetName} from "./AssetTasksPanel"
+import TaskComments, { CommentForm } from "./TaskComments"
+
 import {
   addAssetTaskComment,
   setTaskPriority,
@@ -260,39 +263,39 @@ function TaskItem(props) {
   const PriorityIndicator = Priority(priorityColor, priority, status)
   return (
     <>
-      <ListItem
+      <ListItem button
         key={`${itemKey}-li`}
         disableGutters
         onClick={ () => showDetails(task) }>
         <div className={classes.spaceBetween}>
           <div className={classes.alignStart}>
-          <div className={classes.fullWidth}>
-            <Box display='flex'>{PriorityIndicator} <ListItemText primary={name}/></Box>
-
-            <div className={classes.actions}>
-              <div>
-                { priorityLabel !== 'Normal' &&
-                  <Chip
-                    className={classes.status}
-                    color={priorityColor}
-                    classes={{
-                      colorPrimary: classes.important,
-                      colorSecondary: classes.urgent}}
-                    label={priorityLabel}
-                  />
-                }
-                { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
+            <div className={classes.fullWidth}>
+              <ListItemText primary={name} className={classes.status} />
+              <div className={classes.actions}>
+                <div>
+                  { priorityLabel !== 'Normal' &&
+                    <Chip
+                      className={classes.status}
+                      color={priorityColor}
+                      classes={{
+                        colorPrimary: classes.important,
+                        colorSecondary: classes.urgent}}
+                      label={priorityLabel}
+                    />
+                  }
+                  { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
+                </div>
+                <IconButton onClick={() => showComments(task)}> 
+                  <Badge badgeContent={commentCount} color='secondary'>
+                    <CommentIcon />
+                  </Badge>
+                </IconButton>
               </div>
-            <IconButton onClick={() => showComments(task)}> 
-              <Badge badgeContent={commentCount} color='secondary'>
-                <CommentIcon />
-              </Badge>
-            </IconButton>
             </div>
-          </div>
           </div>
         </div>
       </ListItem>
+      <Divider />
     </>
   )
 }
