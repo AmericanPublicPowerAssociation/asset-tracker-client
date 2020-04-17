@@ -6,6 +6,7 @@ import {
 
 
 export const getTaskById = state => state.taskById
+export const getTaskCodeTypes = state => state.taskCodeTypes
 
 export const getOpenTaskById = createSelector([
   getTaskById,
@@ -27,4 +28,21 @@ export const getOpenTaskByIdLength = createSelector([
   openTaskById,
 ) => {
   return openTaskById.length
+})
+
+
+export const getTaskPriorityTypes = createSelector([
+  getTaskCodeTypes,
+], (
+  taskCodeTypes
+) => {
+  return taskCodeTypes.taskPriorityTypes
+})
+
+export const getTaskStatusTypes = createSelector([
+  getTaskCodeTypes,
+], (
+  taskCodeTypes
+) => {
+  return taskCodeTypes.taskStatusTypes
 })

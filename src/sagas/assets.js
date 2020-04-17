@@ -4,10 +4,12 @@ import {
   takeLatest,
 } from 'redux-saga/effects'
 import {
+  refreshTasks,
   setAssetComments,
   setAssets,
   setTasks,
-  refreshTasks, updateTaskComments
+  setTaskCommentCount,
+  updateTaskComments,
 } from '../actions'
 import {
   REFRESH_ASSETS,
@@ -55,10 +57,14 @@ export function* watchAddTask() {
   yield takeEvery(ADD_TASK, function* (action) {
     const url = '/tasks.json'
     const payload = action.payload
-
+    const body = {
+      ...payload,
+      priority: parseInt(payload['priority']),
+      status: parseInt(payload['status']),
+    }
     yield fetchSafely(url, {
       method: 'POST',
-      body: JSON.stringify(payload),
+      body: JSON.stringify(body),
     }, {
       on200: updateTasks,
     })
@@ -118,5 +124,11 @@ export function* resetAssets(payload) {
 }
 
 export function* updateComments(payload) {
+  const {
+    comments,
+    task_id,
+  } = payload
+  const commentCount = comments.length
   yield put(setAssetComments(payload))
+  yield put(setTaskCommentCount(task_id, commentCount))
 }
