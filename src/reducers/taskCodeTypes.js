@@ -25,4 +25,4 @@ const taskCodeTypes = (state = initialState, action) => {
   }
 }
 
-export default taskCodeTypes 
+export default taskCodeTypes

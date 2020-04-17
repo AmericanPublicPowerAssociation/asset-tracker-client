@@ -1,7 +1,5 @@
-// !!! Hard to read, needs cleaning
-
 import clsx from 'clsx'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import useTheme from '@material-ui/core/styles/useTheme'
@@ -17,7 +15,6 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
 import NativeSelect from '@material-ui/core/NativeSelect'
-import InputBase from '@material-ui/core/InputBase'
 import Input from '@material-ui/core/Input'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
@@ -33,7 +30,6 @@ import Radio from "@material-ui/core/Radio"
 import { Box } from "@material-ui/core"
 import CollapsibleListItem from "./CollapsibleListItem"
 import AssetConnectionsListItems from "./AssetConnectionsListItems"
-import useMediaQuery from "@material-ui/core/useMediaQuery"
 import Collapse from "@material-ui/core/Collapse"
 import Divider from '@material-ui/core/Divider'
 import {AssetName} from "./AssetTasksPanel"
@@ -210,7 +206,7 @@ const Priority = (priorityColor, priority, label) => {
     onChange={(e) => {e.preventDefault()}}
     color={priorityColor}
     disableRipple={true}
-    classes={{colorPrimary: classes.importantCheckbox, colorSecondary: classes.urgentCheckbox}}
+    classes={{ colorPrimary: classes.importantCheckbox, colorSecondary: classes.urgentCheckbox }}
   />
 }
 
@@ -260,7 +256,7 @@ function TaskItem(props) {
   const priorityLabel = priorityType[priority].name
   const priorityColor = getPriorityColor(priority.toString())
   const statusLabel = statusType[status].name
-  const PriorityIndicator = Priority(priorityColor, priority, status)
+
   return (
     <>
       <ListItem button
@@ -279,7 +275,7 @@ function TaskItem(props) {
                       color={priorityColor}
                       classes={{
                         colorPrimary: classes.important,
-                        colorSecondary: classes.urgent}}
+                        colorSecondary: classes.urgent }}
                       label={priorityLabel}
                     />
                   }
@@ -330,6 +326,7 @@ export const TaskFullscreen = (props) => {
 
   const isLayoutMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
+  const [taskNameState, setTaskNameState] = useState()
   const [openTask, setOpenTask] = useState(true)
   const [openTaskDetails, setOpenTaskDetails] = useState(false)
   const setPriority = (priority) => dispatch(setTaskPriority(id, parseInt(priority), status))
@@ -337,8 +334,18 @@ export const TaskFullscreen = (props) => {
 
   const priorityColor  = getPriorityColor((priority || '').toString())
 
+  useEffect(()=> {
+    const { name } = task
+    setTaskNameState(name)
+  }, [task])
+
   function handleChangeTaskName(e) {
-    dispatch(setTaskName(id, e.target.value))
+    setTaskNameState(e.target.value)
+  }
+
+  function handleSubmitTaskName() {
+    dispatch(setTaskName(id, taskNameState, priority, status))
+    handleToggleEditTaskName()
   }
 
   function handleCommentFormSubmit(task, comment) {
@@ -397,7 +404,7 @@ export const TaskFullscreen = (props) => {
       </FormControl>
     </div>)
 
-const commentSection = (<div style={{display: 'flex', flexDirection: 'column', width: '100%', maxHeight: '100%', height: '100%'}}>
+const commentSection = (<div style={{ display: 'flex', flexDirection: 'column', width: '100%', maxHeight: '100%', height: '100%' }}>
       <TaskComments asset={asset} task={task} classes={classes.listComments} />
       <CommentForm onSubmit={(comment) => handleCommentFormSubmit(task, comment)} />
     </div>)
@@ -414,17 +421,32 @@ const commentSection = (<div style={{display: 'flex', flexDirection: 'column', w
     />
   </>)
 
-
   const mobileTaskDetail = (<>
       <AppBar color={priorityColor} className={classes.appBar}>
         <Container>
           <Toolbar className={classes.noPadding}>
-            <Typography variant='h6' className={clsx(classes.title, classes.noMargin)}>
-              <InputBase className={clsx(classes.input)} defaultValue={task.name} onChange={(e) => handleChangeTaskName(e) } />
-              ({task.id})
-              {/*<IconButton edge={false} color='inherit' onClick={handleClose} aria-label='close'>
-              <EditIcon />
-            </IconButton>*/}
+            <Typography variant="h6" className={clsx(classes.title, classes.noMargin)}>
+              {
+                toggleEditTaskName ?
+                <>
+                  <Input
+                    className={clsx(classes.input)}
+                    disableUnderline
+                    defaultValue={taskNameState}
+                    onChange={handleChangeTaskName}
+                  />
+                  <IconButton edge={false} color="inherit" onClick={handleSubmitTaskName} aria-label="close">
+                    <DoneIcon />
+                  </IconButton>
+                </>
+                :
+                <>
+                  { taskNameState }
+                  <IconButton edge={false} color="inherit" onClick={handleToggleEditTaskName} aria-label="close">
+                    <EditIcon />
+                  </IconButton>
+                </>
+              }
             </Typography>
             <IconButton edge='end' color='inherit' onClick={handleClose} aria-label='close'>
               <CloseIcon />
@@ -437,7 +459,7 @@ const commentSection = (<div style={{display: 'flex', flexDirection: 'column', w
         {taskheader}
     </CollapsibleListItem>
    </Container>
-    <Collapse in={openTask} classes={{entered: clsx(classes.overflow, classes.maxHeight), wrapper: classes.maxHeight}}>
+    <Collapse in={openTask} classes={{ entered: clsx(classes.overflow, classes.maxHeight), wrapper: classes.maxHeight }}>
       {commentSection}
     </Collapse>
     <Container>
@@ -461,17 +483,17 @@ const commentSection = (<div style={{display: 'flex', flexDirection: 'column', w
                 <Input
                   className={clsx(classes.input)}
                   disableUnderline
-                  defaultValue={task.name}
+                  defaultValue={ taskNameState }
                   onChange={handleChangeTaskName}
                 />
-                <IconButton edge={false} color='inherit' onClick={handleToggleEditTaskName} aria-label='close'>
+                <IconButton edge={false} color="inherit" onClick={handleSubmitTaskName} aria-label="close">
                   <DoneIcon />
                 </IconButton>
               </>
               :
               <>
-                { task.name }
-                <IconButton edge={false} color='inherit' onClick={handleToggleEditTaskName} aria-label='close'>
+                { taskNameState }
+                <IconButton edge={false} color="inherit" onClick={handleToggleEditTaskName} aria-label="close">
                   <EditIcon />
                 </IconButton>
               </>
@@ -499,7 +521,7 @@ const commentSection = (<div style={{display: 'flex', flexDirection: 'column', w
     </>)
 
   return (
-    <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition} classes={{paper: classes.background}}>
+    <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition} classes={{ paper: classes.background }}>
 
       { isLayoutMobile ? mobileTaskDetail : desktopTaskDetails }
 
