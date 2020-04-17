@@ -1,29 +1,14 @@
-import { useDispatch } from 'react-redux'
-import {
-  EditableGeoJsonLayer,
-} from 'nebula.gl'
 import {
   setFocusingBusId,
   setFocusingAssetId,
 } from '../actions'
 import {
-  PICKING_DEPTH,
-  PICKING_RADIUS_IN_PIXELS,
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_EDIT,
 } from '../constants'
 import {
-  usePickableLayer,
-  useEditableLayer,
-  useInterpretableLayer,
-} from '../hooks'
-import {
-  CustomEditableGeoJsonLayer,
-} from '../routines'
-import {
   getAssetIdByBusId,
-  getAssetTypeByCode,
   getFocusingAssetId,
   // getFocusingBusId,
 } from '../selectors'

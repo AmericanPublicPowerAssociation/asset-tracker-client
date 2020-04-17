@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import { useDispatch } from 'react-redux'
 import {
   deleteAsset,
-  setAsset,
   setFocusingAssetId,
   setFocusingBusId,
 } from '../actions'
@@ -11,8 +10,6 @@ import {
   MINIMUM_BUS_ID_LENGTH,
   PICKING_DEPTH,
   PICKING_RADIUS_IN_PIXELS,
-  SKETCH_MODE_ADD,
-  SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_DELETE,
 } from '../constants'
 import {
@@ -21,7 +18,6 @@ import {
 import {
   getPickedInterpretation,
   getPickedInfo,
-  makeAsset,
 } from '../routines'
 
 export function usePickableLayer(

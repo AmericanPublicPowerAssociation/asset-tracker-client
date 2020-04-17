@@ -2,11 +2,7 @@ import React, { useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
-<<<<<<< HEAD
-import {
-=======
 import { EditableGeoJsonLayer } from 'nebula.gl'
-// import { GeoJsonLayer } from '@deck.gl/layers'
 import { Feature, LineString, Coord, point } from '@turf/helpers'
 import lineSlice  from '@turf/line-slice'
 import {
@@ -25,9 +21,7 @@ import {
   MAP_STYLE_BY_NAME,
   MINIMUM_BUS_ID_LENGTH,
   PICKING_DEPTH,
->>>>>>> feature/split-line
   PICKING_RADIUS_IN_PIXELS,
-  PICKING_DEPTH,
 } from '../constants'
 import {
   useEditableMap,
@@ -59,7 +53,6 @@ export default function AssetsMap({
   const assetsGeoJson = useSelector(getAssetsGeoJson)
   const busesGeoJson = useSelector(getBusesGeoJson)
   const colors = useSelector(getColors)
-<<<<<<< HEAD
   const { handleMapMove } = useMovableMap()
   const {
     getAssetsMapLayer,
@@ -77,7 +70,7 @@ export default function AssetsMap({
     getAssetsMapLayer(),
     getBusesMapLayer(),
   ]
-=======
+
   const focusingAssetId = useSelector(getFocusingAssetId)
   // const focusingBusId = useSelector(getFocusingBusId)
   const mapLayers = []
@@ -324,20 +317,8 @@ export default function AssetsMap({
     assetId && dispatch(setFocusingAssetId(assetId))
   }
 
-
-  function handleOnDoubleClick(e) {
-    if (sketchMode === SKETCH_MODE_ADD_LINE) {
-      changeSketchMode(SKETCH_MODE_ADD)
-    }
-  }
-
   function onKeyUp(e) {
     e.preventDefault()
-    if (e.key === 'Enter') {
-      if (sketchMode === SKETCH_MODE_ADD_LINE) {
-        changeSketchMode(SKETCH_MODE_ADD)
-      }
-    }
     else if (e.key === 'Delete') {
       if (focusingAssetId &&
           sketchMode.startsWith(SKETCH_MODE_EDIT)
@@ -391,25 +372,3 @@ export default function AssetsMap({
     },
     onClick: handleBusesGeoJsonClick,
   }))
-
->>>>>>> feature/split-line
-  return (
-    <div onKeyUp={handleMapKey}>
-      <DeckGL
-        ref={deckGL}
-        layers={mapLayers}
-        pickingRadius={PICKING_RADIUS_IN_PIXELS}
-        pickingDepth={PICKING_DEPTH}
-        controller={{ doubleClickZoom: false }}
-        viewState={mapViewState}
-        onViewStateChange={handleMapMove}
-        onClick={handleMapClick}
-      >
-        <StaticMap
-          mapStyle={mapStyle}
-          mapboxApiAccessToken={REACT_APP_MAPBOX_TOKEN}
-        />
-      </DeckGL>
-    </div>
-  )
-}
