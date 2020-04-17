@@ -1,6 +1,7 @@
 export const SKETCH_MODE_VIEW = 'view'
 
 export const SKETCH_MODE_ADD = 'add'
+export const SKETCH_MODE_ADD_ASSET = 'add >'
 export const SKETCH_MODE_ADD_LINE = 'add > line'
 export const SKETCH_MODE_ADD_TRANSFORMER = 'add > transformer'
 export const SKETCH_MODE_ADD_SUBSTATION = 'add > substation'

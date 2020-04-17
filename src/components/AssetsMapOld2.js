@@ -73,7 +73,6 @@ export default function AssetsMap({
 
   const focusingAssetId = useSelector(getFocusingAssetId)
   // const focusingBusId = useSelector(getFocusingBusId)
-  const mapLayers = []
   const mapMode = getMapMode(sketchMode)
   const pickingRadius = PICKING_RADIUS_IN_PIXELS
   const pickingDepth = PICKING_DEPTH
@@ -93,7 +92,6 @@ export default function AssetsMap({
       dispatch(deleteAsset(assetId))
       return
     }
-    assetId && dispatch(setFocusingAssetId(assetId))
     assetId && dispatch(setFocusingBusId(null))
     // Validate that were adding assets
     if (sketchMode.startsWith(SKETCH_MODE_ADD) || info.isGuide) {
@@ -295,7 +293,6 @@ export default function AssetsMap({
   }
 
   function handleBusesGeoJsonClick(info, event) {
-    const busId = info.object.properties.id
     const assetId = assetIdByBusId[busId]
     if (sketchMode === SKETCH_MODE_ADD_LINE) {
       setLineBusId(busId)
@@ -319,7 +316,7 @@ export default function AssetsMap({
 
   function onKeyUp(e) {
     e.preventDefault()
-    else if (e.key === 'Delete') {
+    if (e.key === 'Delete') {
       if (focusingAssetId &&
           sketchMode.startsWith(SKETCH_MODE_EDIT)
         ) {
@@ -371,4 +368,4 @@ export default function AssetsMap({
       return isSelected ? colors.busSelect : colors.bus
     },
     onClick: handleBusesGeoJsonClick,
-  }))
+  })

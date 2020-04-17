@@ -7,6 +7,7 @@ import {
 import {
   setAsset,
   setAssetsGeoJson,
+  setFocusingAssetId,
   setMapViewState,
 } from '../actions'
 import {
@@ -16,6 +17,7 @@ import {
   BUSES_MAP_LAYER_ID,
   BUS_RADIUS_IN_METERS,
   SKETCH_MODE_ADD,
+  SKETCH_MODE_ADD_ASSET,
   SKETCH_MODE_ADD_LINE,
 } from '../constants'
 import {
@@ -29,7 +31,7 @@ import {
 export function useMovableMap() {
   const dispatch = useDispatch()
   return useMemo(() => ({
-    handleMapMove({viewState}) {
+    handleMapMove({ viewState }) {
       // Update the map viewport
       dispatch(setMapViewState(viewState))
     },
@@ -38,7 +40,7 @@ export function useMovableMap() {
 
 export function useEditableMap(
   sketchMode, changeSketchMode,
-  assetTypeByCode,
+  assetIdByBusId, assetTypeByCode,
   assetsGeoJson, selectedAssetIndexes, setSelectedAssetIndexes,
   busesGeoJson, selectedBusIndexes,
   mapEditState,
@@ -50,7 +52,7 @@ export function useEditableMap(
     getAssetsMapLayer() {
       const mapMode = getMapMode(sketchMode)
 
-      function handleAssetEdit({editType, editContext, updatedData}) {
+      function handleAssetEdit({ editType, editContext, updatedData }) {
         console.log('asset edit', editType, editContext, updatedData)
         // If we have a new feature,
         if (editType === 'addFeature') {
@@ -96,6 +98,11 @@ export function useEditableMap(
 
       function handleAssetClick(info, event) {
         console.log('asset click', info, event)
+        const targetAssetId = info.object.properties.id
+        // If we are not adding a specific type of asset,
+        if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
+          dispatch(setFocusingAssetId(targetAssetId))
+        }
       }
 
       function handleLayerDoubleClick(event) {
@@ -135,6 +142,12 @@ export function useEditableMap(
     getBusesMapLayer() {
       function handleBusClick(info, event) {
         console.log('bus click', info, event)
+        const targetBusId = info.object.properties.id
+        const targetAssetId = assetIdByBusId[targetBusId]
+        // If we are not adding a specific type of asset,
+        if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
+          dispatch(setFocusingAssetId(targetAssetId))
+        }
       }
 
       return new EditableGeoJsonLayer({
@@ -178,7 +191,7 @@ export function useEditableMap(
   }), [
     dispatch,
     sketchMode, changeSketchMode,
-    assetTypeByCode,
+    assetIdByBusId, assetTypeByCode,
     assetsGeoJson, selectedAssetIndexes, setSelectedAssetIndexes,
     busesGeoJson, selectedBusIndexes,
     mapEditState,

@@ -8,20 +8,14 @@ import {
   SKETCH_MODE_EDIT,
 } from '../constants'
 import {
-  getAssetIdByBusId,
   getFocusingAssetId,
   // getFocusingBusId,
 } from '../selectors'
 
-export default function AssetsMap(props) {
-  const assetIdByBusId = useSelector(getAssetIdByBusId)
   const focusingAssetId = useSelector(getFocusingAssetId)
   // const focusingBusId = useSelector(getFocusingBusId)
 
   function handleBusesGeoJsonClick(info, event) {
-    const busId = info.object.properties.id
-    const assetId = assetIdByBusId[busId]
-
     if (sketchMode === SKETCH_MODE_ADD_LINE) {
       setLineBusId(busId)
       // If we already started a line,
@@ -38,7 +32,6 @@ export default function AssetsMap(props) {
     }
 
     // busId && dispatch(setFocusingBusId(busId))
-    assetId && dispatch(setFocusingAssetId(assetId))
   }
 
   function handleKeyUp(e) {

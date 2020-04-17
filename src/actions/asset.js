@@ -102,7 +102,7 @@ export function setAssetsGeoJson(geojson) {
 export function setAssetComments({task_id, comments}) {
   return {
     type: SET_ASSET_COMMENTS,
-    payload: {task_id, comments}
+    payload: { task_id, comments },
   }
 }
 
