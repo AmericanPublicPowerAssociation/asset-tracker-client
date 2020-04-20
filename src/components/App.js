@@ -80,12 +80,23 @@ export default function App() {
     dispatch(updateAssets(assets, assetsGeoJson)) 
   }
 
+  function mangeAssetAction(action, format, assetId) {
+    if (action === 'download') {
+      if (format === 'dss') {
+        window.location = `/assets.dss?source=${assetId}`
+      }
+      if (format === 'csv') {
+        window.location = `/assets.csv`
+      }
+      setIsImportExportOpen(false)
+    }
+  }
+
   useEffect(() => {
     dispatch(refreshAssets())
     dispatch(refreshTasks())
     dispatch(refreshRisks())
   }, [dispatch])
-
   return (
     <div>
       <AssetsMap
@@ -130,10 +141,7 @@ export default function App() {
       />
       <DownloadManager
         open={isImportExportOpen}
-        onOk={element => {
-          window.location = `/assets.dss?source=${element}`
-          setIsImportExportOpen(false)}
-        }
+        onOk={mangeAssetAction}
         onCancel={() => {setIsImportExportOpen(false)}}
         onClose={()=> {setIsImportExportOpen(false)}}
       />

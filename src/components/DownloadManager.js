@@ -25,6 +25,8 @@ export default function DownloadManager(props) {
   } = props;
 
   const [powerId, setPowerId] = useState('')
+  const [action, setAction] = useState('download')
+  const [format, setFormat] = useState('dss')
   // const { head, data, name } = useSelector(getAssetTableData)
   const assetById = useSelector(getAssetById)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
@@ -51,20 +53,39 @@ export default function DownloadManager(props) {
             <DialogTitle>Download Manager</DialogTitle>
 	    
             <DialogContent>
-            <Typography component='p'>Select the power source</Typography>
+            <Typography component='p'>What i want to do?</Typography>
 	    <FormControl fullWidth>
-
-	    <NativeSelect
-	    onChange={(e) => setPowerId(e.target.value)} value={powerId}
-        input={<Input id='asset-type-select' />}
-	    >
-	    {data.map((asset) => <option value={asset.id} key={asset.id}>{asset.name}</option>)}
-       </NativeSelect>
+        <NativeSelect
+          onChange={(e) => setAction(e.target.value)} value={powerId}
+          input={<Input id='asset-type-select' />}
+        >
+          <option value='download'>Download Assets</option>
+          <option value='upload'>Upload Assets</option>
+        </NativeSelect>
+        { action === 'download' ?
+          <>
+          <Typography component='p'>Select the format</Typography>
+          <NativeSelect
+            onChange={(e) => setFormat(e.target.value)} value={powerId}
+            input={<Input id='asset-type-select' />}>
+            <option value='dss'>DSS</option>
+            <option value='csv'>CSV</option>
+          </NativeSelect> </>: <></>}
+        { action === 'download' && format === 'dss' ?
+          <>
+            <Typography component='p'>Select the power source</Typography>
+            <NativeSelect
+              onChange={(e) => setPowerId(e.target.value)} value={powerId}
+              input={<Input id='asset-type-select' />}
+            >
+              {data.map((asset) => <option value={asset.id} key={asset.id}>{asset.name}</option>)}
+            </NativeSelect></> : <></>
+        }
     </FormControl>
         </DialogContent>
         <DialogActions>
             <Button onClick={onCancel}>Cancel</Button>
-            <Button onClick={() => onOk(powerId)} color='primary'>Ok</Button>
+            <Button onClick={() => onOk(action, format, powerId)} color='primary'>Ok</Button>
         </DialogActions>
 	    </Dialog>)
 }
