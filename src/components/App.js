@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import useTheme from '@material-ui/core/styles/useTheme'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import AssetsMap from './AssetsMap'
 import SketchButtons from './SketchButtons'
@@ -47,6 +48,7 @@ import Uppy from "@uppy/core";
 
 export default function App() {
   const dispatch = useDispatch()
+  const theme = useTheme()
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [sketchMode, setSketchMode] = useState(SKETCH_MODE)
   const [overlayMode, setOverlayMode] = useState(OVERLAY_MODE)
@@ -56,7 +58,7 @@ export default function App() {
   const [selectedAssetIndexes, setSelectedAssetIndexes] = useState([])
   const [selectedBusIndexes, setSelectedBusIndexes] = useState([])
   const [lineBusId, setLineBusId] = useState(null)
-  const isScreenXS = useMediaQuery('(max-width:600px)')
+  const isLayoutMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const assetById = useSelector(getAssetById)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
   const [uppy, setUppy] = useState(null)
@@ -173,25 +175,20 @@ export default function App() {
         setSelectedBusIndexes={setSelectedBusIndexes}
         setSelectedAssetIndexes={setSelectedAssetIndexes}
       />
-      { isScreenXS && isWithTables && 
-        <TablesDialog
-          isWithTables={isWithTables}
-          setIsWithTables={setIsWithTables}
-        /> 
-      }
-      { !isScreenXS &&
-        isWithTables &&
-        <TablesWindow
-          isWithTables={isWithTables}
-          setIsWithTables={setIsWithTables}
-          overlayMode={overlayMode}
-          setSelectedAssetIndexes={setSelectedAssetIndexes}
-          setSelectedBusIndexes={setSelectedBusIndexes}
-        />
-      }
-
-      {
-        deleteDialogOpen &&
+    {isWithTables && (isLayoutMobile ?
+      <TablesDialog
+        isWithTables={isWithTables}
+        setIsWithTables={setIsWithTables}
+      /> :
+      <TablesWindow
+        isWithTables={isWithTables}
+        setIsWithTables={setIsWithTables}
+        overlayMode={overlayMode}
+        setSelectedAssetIndexes={setSelectedAssetIndexes}
+        setSelectedBusIndexes={setSelectedBusIndexes}
+      />
+    )}
+      { deleteDialogOpen &&
         <DeleteAssetDialog
           openDialog={deleteDialogOpen}
           onClose={ () => setDeleteDialogOpen(false)}

@@ -10,6 +10,7 @@
     "@uppy/react": "^1.6.3",
     "asset-report-risks": "file:../asset-report-risks/client",
     "clsx": "^1.0.4",
+    "dateformat": "^3.0.3",
     "deck.gl": "^8.0.12",
     "dotenv": "^8.2.0",
     "downshift": "^5.0.3",
@@ -42,7 +43,17 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "comma-dangle": ["error", "always-multiline"],
+      "object-curly-spacing": ["error", "always"],
+      "quotes": ["error", "single"],
+      "semi": ["error", "never"],
+      "space-before-function-paren": ["error", {
+        "anonymous": "always",
+        "named": "never"
+      }]
+    }
   },
   "browserslist": {
     "production": [
