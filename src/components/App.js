@@ -31,6 +31,7 @@ import {
   OVERLAY_MODE,
   SKETCH_MODE,
   SKETCH_MODE_ADD_LINE,
+  SKETCH_MODE_VIEW,
 } from '../constants'
 import {
   getRandomId,
@@ -44,6 +45,18 @@ import {
 } from '../selectors'
 import './App.css'
 
+
+function usePrevenWindowUnload(preventDefault) {
+  useEffect( () => {
+    if (!preventDefault) return
+    const handleBeforeUnload = event => {
+      event.preventDefault()
+      event.returnValue = ''
+    }
+    window.addEventListener("beforeunload", handleBeforeUnload)
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload)
+  }, [preventDefault])
+}
 
 export default function App() {
   const dispatch = useDispatch()
@@ -60,6 +73,7 @@ export default function App() {
   const isLayoutMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const assetById = useSelector(getAssetById)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
+  usePrevenWindowUnload(sketchMode !== SKETCH_MODE_VIEW)
 
   function changeSketchMode(newSketchMode, busId) {
     if (sketchMode === SKETCH_MODE_ADD_LINE) {
