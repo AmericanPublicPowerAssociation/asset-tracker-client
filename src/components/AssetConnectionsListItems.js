@@ -33,7 +33,7 @@ export default function AssetConnectionsListItems(props) {
     noHighlight,
     expand
   } = props
-  const matches = useMediaQuery(theme.breakpoints.up('sm'));
+  const isNotMobile = useMediaQuery(theme.breakpoints.up('sm'));
   const [isOpenByConnectionIndex, setIsOpenByConnectionIndex] = useState({})
   const assetIdsByBusId = useSelector(getAssetIdsByBusId)
   const assetId = asset.id
@@ -75,7 +75,7 @@ export default function AssetConnectionsListItems(props) {
       <CollapsibleListItem
         key={connectionIndex}
         title={title}
-        description={matches || expand ? description : null}
+        description={(isNotMobile || expand) ? description : null}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         onClick={onClickOrFocus}
@@ -93,7 +93,7 @@ export default function AssetConnectionsListItems(props) {
           setSelectedAssetIndexes={setSelectedAssetIndexes}
         />
       </CollapsibleListItem> :
-      ( matches || expand ?
+      ( isNotMobile || expand ?
       <ListItem
         disableGutters
         component='div'

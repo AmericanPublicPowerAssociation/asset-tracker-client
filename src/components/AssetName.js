@@ -17,8 +17,8 @@ const useStyles = makeStyles(theme => ({
     padding: '0 !important',
   },
   inline: {
-    display: "flex",
-    justifyContent: "space-between"
+    display: 'flex',
+    justifyContent: 'space-between'
   }
 }))
 

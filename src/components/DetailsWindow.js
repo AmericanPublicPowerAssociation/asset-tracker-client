@@ -83,7 +83,7 @@ export default function DetailsWindow(props) {
     [OVERLAY_MODE_RISKS]: AssetRisksPanel,
   }[overlayMode]
 
-  const matches = useMediaQuery(theme.breakpoints.up('sm'));
+  const isNotMobile = useMediaQuery(theme.breakpoints.up('sm'));
 
   const detailsPanel = focusingAsset ?
     <DetailsPanel
@@ -93,9 +93,9 @@ export default function DetailsWindow(props) {
       overlayMode={overlayMode} 
       setSelectedBusIndexes={setSelectedBusIndexes}
       setSelectedAssetIndexes={setSelectedAssetIndexes}
-      response={matches}
-      expand={expand}
-      setExpand={setExpand}
+      response={isNotMobile}
+      isDetailsWindowExpanded={expand}
+      setIsDetailsWindowExpanded={setExpand}
     /> : <EmptyDetailsPanel />
 
   return expand ? (<Dialog fullScreen open={expand} onClose={setExpand} TransitionComponent={Transition} classes={{paper: classes.background}}>
@@ -107,8 +107,8 @@ export default function DetailsWindow(props) {
       {detailsPanel}
     </Paper>
   </Dialog>) : (
-    matches || focusingAsset ?
-    <Paper className={clsx( !matches ? classes.responsive : classes.root, {
+    isNotMobile || focusingAsset ?
+    <Paper className={clsx( !isNotMobile ? classes.responsive : classes.root, {
       poof: !isWithDetails,
       [classes.withTables]: isWithTables,
     })}>
