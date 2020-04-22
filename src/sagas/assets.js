@@ -9,14 +9,14 @@ import {
   setAssets,
   setTasks,
   setTaskCommentCount,
-  updateTaskComments,
+  updateTaskComments, refreshAssets,
 } from '../actions'
 import {
   REFRESH_ASSETS,
   UPDATE_ASSETS,
   REFRESH_TASKS,
   ADD_TASK,
-  UPDATE_TASK, REFRESH_ASSET_COMMENTS, ADD_TASK_COMMENT
+  UPDATE_TASK, REFRESH_ASSET_COMMENTS, ADD_TASK_COMMENT, UPLOAD_ASSETS_CSV
 } from '../constants'
 import {
   fetchSafely,
@@ -131,4 +131,28 @@ export function* updateComments(payload) {
   const commentCount = comments.length
   yield put(setAssetComments(payload))
   yield put(setTaskCommentCount(task_id, commentCount))
+}
+
+export function* watchUploadAssetsCsv() {
+  console.log('===Watch')
+  yield takeEvery(UPLOAD_ASSETS_CSV, function* (action) {
+    const data = new FormData()
+
+    data.append('file', action.payload.file)
+    data.append('overwrite', action.payload.overwrite)
+
+    yield fetchSafely('/assets.csv', {
+      method: 'PATCH',
+      body: data,
+    }, {
+      on200: function* (asset) {
+        yield put(refreshAssets())
+        action.payload.close()
+      },
+      on400: function* (errors) {
+        yield put(refreshAssets())
+        console.log(errors)
+      },
+    })
+  })
 }

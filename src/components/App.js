@@ -21,7 +21,7 @@ import {
   refreshAssets,
   setFocusingBusId,
   updateAssets,
-  refreshTasks,
+  refreshTasks, uploadAssetsCsv,
 } from '../actions'
 import {
   IS_WITH_DETAILS,
@@ -42,6 +42,7 @@ import {
   getAssetsGeoJson,
 } from '../selectors'
 import './App.css'
+import Uppy from "@uppy/core";
 
 
 export default function App() {
@@ -58,6 +59,13 @@ export default function App() {
   const isScreenXS = useMediaQuery('(max-width:600px)')
   const assetById = useSelector(getAssetById)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
+  const [uppy, setUppy] = useState(null)
+
+  useEffect(() => setUppy(Uppy({
+    meta: { type: 'avatar' },
+    restrictions: { maxNumberOfFiles: 1 },
+    autoProceed: false
+  })), [])
 
   function changeSketchMode(newSketchMode, busId) {
     if (sketchMode === SKETCH_MODE_ADD_LINE) {
@@ -80,7 +88,7 @@ export default function App() {
     dispatch(updateAssets(assets, assetsGeoJson)) 
   }
 
-  function mangeAssetAction(action, format, assetId) {
+  function mangeAssetAction(action, format, assetId, opts) {
     if (action === 'download') {
       if (format === 'dss') {
         window.location = `/assets.dss?source=${assetId}`
@@ -89,6 +97,17 @@ export default function App() {
         window.location = `/assets.csv`
       }
       setIsImportExportOpen(false)
+    } else {
+      if (opts.files && opts.files.length > 0) {
+        dispatch(uploadAssetsCsv({
+          file: opts.files[0].data,
+          overwrite: opts.overwrite,
+          close: () => {
+            uppy.reset()
+            setIsImportExportOpen(false)
+          }
+        }))
+      }
     }
   }
 
@@ -142,6 +161,7 @@ export default function App() {
       <DownloadManager
         open={isImportExportOpen}
         onOk={mangeAssetAction}
+        uppy={uppy}
         onCancel={() => {setIsImportExportOpen(false)}}
         onClose={()=> {setIsImportExportOpen(false)}}
       />
