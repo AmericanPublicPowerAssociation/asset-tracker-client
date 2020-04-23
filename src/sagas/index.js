@@ -14,7 +14,8 @@ import {
   watchAssetTasks,
   watchUpdateTask,
   watchRefreshAssetComments,
-  watchAddTaskComment
+  watchAddTaskComment,
+  watchUploadAssetsCsv
 } from './assets'
 
 export default function* () {
@@ -30,5 +31,6 @@ export default function* () {
     watchSuggestVendorNames(),
     watchSuggestProductNames(),
     watchSuggestProductVersions(),
+    watchUploadAssetsCsv()
   ])
 }
