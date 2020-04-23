@@ -72,10 +72,12 @@ export function useEditableMap(
             featureProperties.id = sourceAssetId
             featureProperties.typeCode = sourceAssetTypeCode
           }
-          // Make an asset corresponding to the feature
+          // Make a new asset corresponding to the feature
           const sourceAssetType = assetTypeByCode[sourceAssetTypeCode]
           const asset = makeAsset(sourceAssetId, sourceAssetType)
           dispatch(setAsset(asset))
+          // Focus on new asset
+          dispatch(setFocusingAssetId(sourceAssetId))
 
           if (isAddingLine) {
             // Have subsequent clicks extend the same line
@@ -99,6 +101,9 @@ export function useEditableMap(
       function handleAssetClick(info, event) {
         console.log('asset click', info, event)
         const targetAssetId = info.object.properties.id
+        if (!targetAssetId) {
+          return
+        }
         // If we are not adding a specific type of asset,
         if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
           dispatch(setFocusingAssetId(targetAssetId))
