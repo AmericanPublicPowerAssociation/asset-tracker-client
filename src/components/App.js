@@ -18,7 +18,6 @@ import {
   refreshRisks,
 } from 'asset-report-risks'
 import {
-  // addAssetConnection,
   refreshAssets,
   // setFocusingBusId,
   updateAssets,

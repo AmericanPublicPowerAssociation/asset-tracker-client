@@ -34,7 +34,7 @@ import { Box } from '@material-ui/core'
 import CollapsibleListItem from './CollapsibleListItem'
 import AssetConnectionsListItems from './AssetConnectionsListItems'
 import Collapse from '@material-ui/core/Collapse'
-import {AssetName} from './AssetTasksPanel'
+import { AssetName } from './AssetTasksPanel'
 import TaskComments, { CommentForm } from './TaskComments'
 import {
   addAssetTaskComment,

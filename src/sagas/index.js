@@ -14,7 +14,7 @@ import {
   watchAssetTasks,
   watchUpdateTask,
   watchRefreshAssetComments,
-  watchAddTaskComment
+  watchAddTaskComment,
 } from './assets'
 
 export default function* () {

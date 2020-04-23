@@ -1,85 +1,67 @@
 import {
-  ADD_ASSET_CONNECTION,
+  ADD_TASK,
+  ADD_TASK_COMMENT,
   DELETE_ASSET,
   REFRESH_ASSETS,
+  REFRESH_TASKS,
+  REFRESH_TASK_COMMENTS,
   SAVE_ASSETS,
   SET_ASSET,
   SET_ASSETS,
   SET_ASSETS_GEOJSON,
   SET_ASSET_ATTRIBUTE,
+  SET_ASSET_COMMENTS,
   SET_ASSET_CONNECTION,
   SET_ASSET_CONNECTION_ATTRIBUTE,
   SET_ASSET_VALUE,
   SET_FOCUSING_ASSET_ID,
-  UPDATE_ASSETS,
-  REFRESH_TASKS,
   SET_TASKS,
-  ADD_TASK,
+  UPDATE_ASSETS,
   UPDATE_TASK,
-  SET_ASSET_COMMENTS, REFRESH_ASSET_COMMENTS, ADD_TASK_COMMENT,
 } from '../constants'
 
 export function saveAssets() {
-  return {type: SAVE_ASSETS}
+  return { type: SAVE_ASSETS }
 }
 
 export function refreshAssets() {
-  return {type: REFRESH_ASSETS}
+  return { type: REFRESH_ASSETS }
 }
 
 export function updateAssets(assets, assetsGeoJson) {
-  return {
-    type: UPDATE_ASSETS,
-    payload: {assets, assetsGeoJson},
-  }
+  return { type: UPDATE_ASSETS, payload: { assets, assetsGeoJson } }
 }
 
 export function setAssets(assets) {
-  return {
-    type: SET_ASSETS,
-    payload: assets,
-  }
+  return { type: SET_ASSETS, payload: assets }
 }
 
 export function setAsset(asset) {
-  return {
-    type: SET_ASSET,
-    payload: asset,
-  }
+  return { type: SET_ASSET, payload: asset }
 }
 
 export function deleteAsset(assetId){
-  return {
-    type: DELETE_ASSET,
-    payload: assetId
-  }
+  return { type: DELETE_ASSET, payload: assetId }
 }
 
 export function setAssetValue(assetId, key, value) {
   return {
     type: SET_ASSET_VALUE,
-    payload: {assetId, key, value},
+    payload: { assetId, key, value },
   }
 }
 
 export function setAssetAttribute(assetId, key, value) {
   return {
     type: SET_ASSET_ATTRIBUTE,
-    payload: {assetId, key, value},
+    payload: { assetId, key, value },
   }
 }
 
-export function addAssetConnection(assetId, busId) {
-  return {
-    type: ADD_ASSET_CONNECTION,
-    payload: {assetId, busId},
-  }
-}
-
-export function setAssetConnection(assetId, connectionIndex, connection) {
+export function setAssetConnection(assetId, assetVertexIndex, connection) {
   return {
     type: SET_ASSET_CONNECTION,
-    payload: {assetId, connectionIndex, connection},
+    payload: { assetId, assetVertexIndex, connection },
   }
 }
 
@@ -88,7 +70,7 @@ export function setAssetConnectionAttribute(
 ) {
   return {
     type: SET_ASSET_CONNECTION_ATTRIBUTE,
-    payload: {assetId, connectionIndex, key, value},
+    payload: { assetId, connectionIndex, key, value },
   }
 }
 
@@ -99,7 +81,7 @@ export function setAssetsGeoJson(geojson) {
   }
 }
 
-export function setAssetComments({task_id, comments}) {
+export function setAssetComments({ task_id, comments }) {
   return {
     type: SET_ASSET_COMMENTS,
     payload: { task_id, comments },
@@ -115,48 +97,48 @@ export function setFocusingAssetId(id) {
 
 export function refreshTasks() {
   return {
-    type: REFRESH_TASKS
+    type: REFRESH_TASKS,
   }
 }
 
 export function setTasks(assets) {
   return {
     type: SET_TASKS,
-    payload: assets
+    payload: assets,
   }
 }
 
 export function addAssetTask(assetId, name, description, priority) {
   return {
     type: ADD_TASK,
-    payload: {assetId, name, description, priority},
+    payload: { assetId, name, description, priority },
   }
 }
 
 export function setTaskStatus(task_id, status, priority) {
   return {
     type: UPDATE_TASK,
-    payload: {task_id, status, priority},
+    payload: { task_id, status, priority },
   }
 }
 
 export function setTaskPriority(task_id, priority, status) {
   return {
     type: UPDATE_TASK,
-    payload: {task_id, priority, status},
+    payload: { task_id, priority, status },
   }
 }
 
-export function updateTaskComments(task_id) {
+export function refreshTaskComments(task_id) {
   return {
-    type: REFRESH_ASSET_COMMENTS,
-    payload: {task_id}
+    type: REFRESH_TASK_COMMENTS,
+    payload: { task_id },
   }
 }
 
 export function addAssetTaskComment(task_id, text) {
   return {
     type: ADD_TASK_COMMENT,
-    payload: {task_id, text},
+    payload: { task_id, text },
   }
 }

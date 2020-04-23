@@ -1,6 +1,5 @@
 import produce from 'immer'
 import {
-  ADD_ASSET_CONNECTION,
   DELETE_ASSET,
   SET_ASSET,
   SET_ASSETS,
@@ -46,18 +45,10 @@ const assetById = (state = initialState, action) => {
         attributes[key] = value
       })
     }
-    case ADD_ASSET_CONNECTION: {
-      // TODO: See if we can consolidate this as a case of SET_ASSET_CONNECTION
-      const { assetId, busId } = action.payload
-      return produce(state, draft => {
-        const connections = draft[assetId].connections
-        connections.push({busId})
-      })
-    }
     case SET_ASSET_CONNECTION: {
-      const { assetId, connectionIndex, connection } = action.payload
+      const { assetId, assetVertexIndex, connection } = action.payload
       return produce(state, draft => {
-        draft[assetId].connections[connectionIndex] = connection
+        draft[assetId].connections[assetVertexIndex] = connection
       })
     }
     case SET_ASSET_CONNECTION_ATTRIBUTE: {

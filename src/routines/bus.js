@@ -56,7 +56,7 @@ function getBusFeaturesForPoint(assetFeature, connections, busIds) {
     ).geometry
     busFeatures.push({
       type: 'Feature',
-      properties: {id: busId},
+      properties: { id: busId },
       geometry: busGeometry,
     })
     busIds.push(busId)
@@ -81,11 +81,11 @@ function getBusFeaturesForLine(assetFeature, connections, busIds) {
 
     busFeatures.push({
       type: 'Feature',
-      properties: {id: busId},
+      properties: { id: busId },
       geometry: {
         type: 'Point',
         coordinates: busXYs[i],
-      }
+      },
     })
     busIds.push(busId)
   }

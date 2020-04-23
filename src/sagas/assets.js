@@ -4,19 +4,21 @@ import {
   takeLatest,
 } from 'redux-saga/effects'
 import {
+  refreshTaskComments,
   refreshTasks,
   setAssetComments,
   setAssets,
-  setTasks,
   setTaskCommentCount,
-  updateTaskComments,
+  setTasks,
 } from '../actions'
 import {
-  REFRESH_ASSETS,
-  UPDATE_ASSETS,
-  REFRESH_TASKS,
   ADD_TASK,
-  UPDATE_TASK, REFRESH_ASSET_COMMENTS, ADD_TASK_COMMENT
+  ADD_TASK_COMMENT,
+  REFRESH_ASSETS,
+  REFRESH_TASKS,
+  REFRESH_TASK_COMMENTS,
+  UPDATE_ASSETS,
+  UPDATE_TASK,
 } from '../constants'
 import {
   fetchSafely,
@@ -84,13 +86,12 @@ export function* watchUpdateTask() {
   })
 }
 
-export function* watchRefreshAssetComments() {
-  yield takeLatest(REFRESH_ASSET_COMMENTS, function* (action) {
-    const task_id = action.payload.task_id;
-
+export function* watchRefreshTaskComments() {
+  yield takeLatest(REFRESH_TASK_COMMENTS, function* (action) {
+    const task_id = action.payload.task_id
     const url = `/tasks/${task_id}/comments.json`
     yield fetchSafely(url, {}, {
-      on200: (comments) => updateComments({task_id, comments}),
+      on200: (comments) => updateComments({ task_id, comments }),
     })
   })
 }
@@ -98,14 +99,14 @@ export function* watchRefreshAssetComments() {
 export function* watchAddTaskComment() {
   yield takeEvery(ADD_TASK_COMMENT, function* (action) {
     const payload = action.payload
-    const task_id = action.payload.task_id;
+    const task_id = action.payload.task_id
     const url = `/tasks/${task_id}/comments.json`
 
     yield fetchSafely(url, {
       method: 'POST',
       body: JSON.stringify(payload),
     }, {
-      on200: () => put(updateTaskComments(task_id)),
+      on200: () => put(refreshTaskComments(task_id)),
     })
   })
 }

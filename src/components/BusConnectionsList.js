@@ -18,7 +18,6 @@ import {
   getAssetTypeByCode,
 } from '../selectors'
 
-
 function cancellablePromise(promise) {
   let isCancelled = false
 

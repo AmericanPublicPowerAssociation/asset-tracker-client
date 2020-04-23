@@ -18,7 +18,7 @@ export default function AssetDialogListItem(props) {
   const {
     typeCode,
     name,
-    id
+    id,
   } = asset
   const assetTypeByCode = useSelector(getAssetTypeByCode)
 

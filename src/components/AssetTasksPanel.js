@@ -24,7 +24,7 @@ import TasksList, { TaskFullscreen } from './TasksList'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import {
   addAssetTask,
-  updateTaskComments,
+  refreshTaskComments,
 } from '../actions'
 import {
   TASK_ARCHIVE_STATUS,
@@ -130,7 +130,7 @@ export default function AssetTasksPanel(props) {
   })
 
   const handleDisplayDetails = (task) => {
-    dispatch(updateTaskComments(task.id))
+    dispatch(refreshTaskComments(task.id))
     setTaskDetails(task)
   }
 

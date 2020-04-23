@@ -186,6 +186,7 @@ export function useEditableMap(
     },
     handleMapClick(info, event) {
       console.log('map click', info, event)
+      console.log(isAddingLine, selectedAssetIndexes)
       if (isAddingLine) {
         if (!selectedAssetIndexes.length) {
           // Set a new asset id if we started a line

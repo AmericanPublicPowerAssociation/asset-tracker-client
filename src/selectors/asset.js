@@ -74,7 +74,7 @@ export const getFocusingAsset = createSelector([
 
 export const getTasksForFocusedAsset = createSelector([
   getFocusingAssetId,
-  getTaskById
+  getTaskById,
 ], (
   focusingAssetId,
   taskById,
@@ -84,7 +84,7 @@ export const getTasksForFocusedAsset = createSelector([
 })
 
 export const getCurrentTaskComments = createSelector([
-  getComments
+  getComments,
 ], (
   comments,
 ) => {
