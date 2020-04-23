@@ -84,7 +84,8 @@ const useStyles = makeStyles(theme => ({
   actions: {
     display: 'flex',
     alignItems: "center",
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    paddingBottom: '0px'
   },
   fullWidth: {
     width: '100%'
@@ -93,6 +94,8 @@ const useStyles = makeStyles(theme => ({
     fontSize: '0.7em',
     height: '25px',
     marginLeft: '6px',
+    marginTop: '0',
+    marginBottom: '0'
   },
   appBar: {
     position: 'relative',
@@ -262,40 +265,44 @@ function TaskItem(props) {
   const PriorityIndicator = Priority(priorityColor, priority, status)
   return (
     <>
+      <div>
       <ListItem button
         key={`${itemKey}-li`}
         disableGutters
+        classes={{root: classes.actions}}
         onClick={ () => showDetails(task) }>
         <div className={classes.spaceBetween}>
           <div className={classes.alignStart}>
-          <div className={classes.fullWidth}>
-            <ListItemText primary={name} className={classes.status}/>
-
-            <div className={classes.actions}>
-              <div>
-                { priorityLabel !== 'Normal' &&
-                  <Chip
-                    className={classes.status}
-                    color={priorityColor}
-                    classes={{
-                      colorPrimary: classes.important,
-                      colorSecondary: classes.urgent}}
-                    label={priorityLabel}
-                  />
-                }
-                { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
+            <div className={classes.fullWidth}>
+              <ListItemText primary={name} className={classes.status}/>
+              <div className={classes.actions} >
+                <div>
+                  { priorityLabel !== 'Normal' &&
+                    <Chip
+                      className={classes.status}
+                      color={priorityColor}
+                      classes={{
+                        colorPrimary: classes.important,
+                        colorSecondary: classes.urgent}}
+                      label={priorityLabel}
+                    />
+                  }
+                  { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
+                </div>
+                <div>
+                  <IconButton onClick={() => showComments(task)}> 
+                    <Badge badgeContent={commentCount} color="secondary">
+                      <CommentIcon />
+                    </Badge>
+                  </IconButton>
+                </div>
               </div>
-            <IconButton onClick={() => showComments(task)}> 
-              <Badge badgeContent={commentCount} color="secondary">
-                <CommentIcon />
-              </Badge>
-            </IconButton>
             </div>
-          </div>
           </div>
         </div>
       </ListItem>
       <Divider/>
+        </div>
     </>
   )
 }

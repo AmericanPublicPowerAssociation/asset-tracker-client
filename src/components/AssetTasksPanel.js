@@ -63,90 +63,93 @@ export const AssetName = (props) => {
   } = props
 
   return (<ListItem
-    disableGutters
-    component='div'>
-    <Tooltip title={assetTypeName} placement='left'>
-      <ListItemIcon>
-        <AssetTypeSvgIcon
-          assetTypeCode={assetTypeCode}
-        />
-      </ListItemIcon>
-    </Tooltip>
-    <Tooltip title={assetName} placement='bottom'>
-      <ListItemText
-        primary={
-          <Typography variant='h5' style={{fontSize: '1rem'}}>
-            {assetName}
-          </Typography>
-        }
+  disableGutters
+  component='div'>
+  <Tooltip title={assetTypeName} placement='left'>
+    <ListItemIcon>
+      <AssetTypeSvgIcon
+        assetTypeCode={assetTypeCode}
       />
-    </Tooltip>
-  </ListItem>)
+    </ListItemIcon>
+  </Tooltip>
+  <Tooltip title={assetName} placement='bottom'>
+    <ListItemText
+      primary={
+        <Typography variant='h5' style={{fontSize: '1rem'}}>
+          {assetName}
+        </Typography>
+      }
+    />
+  </Tooltip>
+</ListItem>)
 }
 
 export default function AssetTasksPanel(props) {
-  const dispatch = useDispatch()
-  const classes = useStyles()
-  const {
-    asset,
-    tasks,
-    disableInput,
-  } = props
+const dispatch = useDispatch()
+const classes = useStyles()
+const {
+  asset,
+  tasks,
+  disableInput,
+} = props
 
-  const assetId = asset.id
-  const assetName = asset.name
-  const assetTypeCode = asset.typeCode
-  const assetTypeByCode = useSelector(getAssetTypeByCode)
-  const assetType = assetTypeByCode[assetTypeCode]
-  const assetTypeName = assetType.name
-  const taskPriorityTypes = useSelector(getTaskPriorityTypes)
+const assetId = asset.id
+const assetName = asset.name
+const assetTypeCode = asset.typeCode
+const assetTypeByCode = useSelector(getAssetTypeByCode)
+const assetType = assetTypeByCode[assetTypeCode]
+const assetTypeName = assetType.name
+const taskPriorityTypes = useSelector(getTaskPriorityTypes)
 
-  const [archived, setArchived] = useState(false)
-  const [query, setQuery] = useState('')
-  const [name, setName]  = useState('')
-  const [description, setDescription] = useState('')
-  const [priority, setPriority] = useState('')
-  const [dialog, setDialog] = useState(false)	   
-  const [taskDetails, setTaskDetails] = useState(false)
-  
-  const addTask = () => {
-    setDialog(false)
-    dispatch(addAssetTask(assetId, name, description, priority))
-    setName('')
-    setDescription('')
-    setPriority('')
-  }
+const [archived, setArchived] = useState(false)
+const [query, setQuery] = useState('')
+const [name, setName]  = useState('')
+const [description, setDescription] = useState('')
+const [priority, setPriority] = useState('')
+const [dialog, setDialog] = useState(false)	   
+const [taskDetails, setTaskDetails] = useState(false)
 
-  const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
-    task => (
-      !archived ?
-      task.status !== TASK_ARCHIVE_STATUS && task.status !== TASK_STATUS_CANCELLED :
-      task.status === TASK_ARCHIVE_STATUS || task.status === TASK_STATUS_CANCELLED
-    )
+const addTask = () => {
+  setDialog(false)
+  dispatch(addAssetTask(assetId, name, description, priority))
+  setName('')
+  setDescription('')
+  setPriority('')
+}
+
+const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
+  task => (
+    !archived ?
+    task.status !== TASK_ARCHIVE_STATUS && task.status !== TASK_STATUS_CANCELLED :
+    task.status === TASK_ARCHIVE_STATUS || task.status === TASK_STATUS_CANCELLED
   )
+)
 
-  const assetNameComponent = AssetName({
-    assetName, assetTypeCode, assetTypeName
-  })
+const assetNameComponent = AssetName({
+  assetName, assetTypeCode, assetTypeName
+})
 
-  const handleDisplayDetails = (task) => {
-    dispatch(updateTaskComments(task.id))
-    setTaskDetails(task)
-  }
+const handleDisplayDetails = (task) => {
+  dispatch(updateTaskComments(task.id))
+  setTaskDetails(task)
+}
 
-  const listTasks = (<>
-    <FormGroup row>
-      <TextField id="search" label="Search task" value={query}
-                 onChange={(e) => setQuery(e.target.value) } />
-      <FormControlLabel control={
-        <Switch checked={archived} onChange={ () => setArchived(!archived) } value="archived" />}
-                        label="Show archived tasks" />
-    </FormGroup>
+const listTasks = (<>
+  <FormGroup row>
+    <TextField id="search" label="Search task" value={query}
+                onChange={(e) => setQuery(e.target.value) } />
+    <FormControlLabel control={
+      <Switch checked={archived} onChange={ () => setArchived(!archived) } value="archived" />}
+                      label="Show archived tasks" />
+  </FormGroup>
+  <div>
     <TasksList showDetails={handleDisplayDetails} showComments={() => {}} asset={asset} tasks={partialTasks} disableInput={disableInput}/>
-
+  </div>
+  <div>
     <Button className={classes.bottomAction} startIcon={<AddIcon />} onClick={() => setDialog(true)}>
       Add task
     </Button>
+  </div>
   </>)
 
   const getTaskById = () => {
