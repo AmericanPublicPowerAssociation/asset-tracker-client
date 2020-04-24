@@ -13,6 +13,9 @@ import {
   getCountDescription,
 } from '../macros'
 import {
+  getConnectedAssetIds,
+} from '../routines'
+import {
   getAssetIdsByBusId,
   getBusesGeoJson,
   getFocusingBusId,
@@ -36,8 +39,8 @@ export default function AssetConnectionsListItems({
 
   return Object.entries(connections).map(([index, connection]) => {
     const { busId } = connection
-    const connectedAssetIds = assetIdsByBusId[busId].filter(
-      connectedAssetId => connectedAssetId !== assetId)
+    const connectedAssetIds = getConnectedAssetIds(
+      assetId, busId, assetIdsByBusId)
     const connectedAssetCount = connectedAssetIds.length
     const title = 'Bus ' + index
     const description = getCountDescription(connectedAssetCount, 'connection')

@@ -8,7 +8,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import AssetName from './AssetName'
 import AssetAttributesListItem from './AssetAttributesListItem'
-// import AssetConnectionsListItems from './AssetConnectionsListItems'
+import AssetConnectionsListItems from './AssetConnectionsListItems'
 import {
   SKETCH_MODE_VIEW,
 } from '../constants'
@@ -46,14 +46,13 @@ export default function AssetAttributesPanel(props) {
       </ListItem>
 
       <AssetAttributesListItem asset={asset} isEditing={isEditing} />
-    {/*
+
       <AssetConnectionsListItems
         asset={asset}
         isEditing={isEditing}
         setSelectedBusIndexes={setSelectedBusIndexes}
         setSelectedAssetIndexes={setSelectedAssetIndexes}
       />
-    */}
     </List>
   )
 }

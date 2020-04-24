@@ -21,51 +21,18 @@ import {
 export function makeAsset(assetId, assetType) {
   const assetName = getAssetName(assetType, assetId)
   const assetTypeCode = assetType.code
-  const asset = {id: assetId, typeCode: assetTypeCode, name: assetName}
+  const asset = { id: assetId, typeCode: assetTypeCode, name: assetName }
+  const busId = makeBusId()
+  const connectionByIndex = { 0: { busId } }
 
-  switch (assetTypeCode) {
-    case ASSET_TYPE_CODE_LINE: {
-      /*
-      if (Array.isArray(lineBusId)) {
-        asset.connections = lineBusId
-      } else {
-        const busId = lineBusId || getRandomId(MINIMUM_BUS_ID_LENGTH)
-        asset.connections = [{busId}]
-      }
-      */
-      asset.connections = [
-        {busId: makeBusId()},
-        {busId: makeBusId()},
-      ]
-      break
-    }
-    case ASSET_TYPE_CODE_METER: {
-      asset.connections = [
-        {busId: makeBusId()},
-      ]
-      break
-    }
-    case ASSET_TYPE_CODE_TRANSFORMER: {
-      asset.connections = [
-        {busId: makeBusId()},
-        {busId: makeBusId()},
-      ]
-      break
-    }
-    default: { }
+  if (assetTypeCode === ASSET_TYPE_CODE_TRANSFORMER) {
+    const busId = makeBusId()
+    connectionByIndex[1] = { busId }
   }
 
+  asset.connections = connectionByIndex
   return asset
 }
-
-/*
-export function makeAsset(assetType, lineBusId) {
-  case ASSET_TYPE_CODE_LINE: {
-    const busId = lineBusId || getRandomId(MINIMUM_BUS_ID_LENGTH)
-    asset.connections = [{busId}]
-  }
-}
-*/
 
 export function getAssetTypeCode(sketchMode) {
   return {
@@ -94,4 +61,14 @@ export function getSelectedAssetId(selectedAssetIndexes, assetsGeoJson) {
 
 export function makeAssetId() {
   return getRandomId(MINIMUM_ASSET_ID_LENGTH)
+}
+
+export function getConnectedAssetCount(asset, assetIdsByBusId) {
+  // TODO
+  return 0
+}
+
+export function getConnectedAssetIds(assetId, busId, assetIdsByBusId) {
+  return assetIdsByBusId[busId].filter(
+    connectedAssetId => connectedAssetId !== assetId)
 }
