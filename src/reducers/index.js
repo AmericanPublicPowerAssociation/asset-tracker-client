@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import reduceReducers from 'reduce-reducers'
+import produce from 'immer'
 import {
   sortedRisks,
   risks,
@@ -16,7 +17,7 @@ import assetById from './assetById'
 import focusingAssetId from './focusingAssetId'
 import focusingBusId from './focusingBusId'
 import taskById from './taskById'
-import taskComments from "./taskComments"
+import taskComments from './taskComments'
 import taskCodeTypes from './taskCodeTypes'
 
 const reduceHorizontally = combineReducers({
@@ -37,9 +38,10 @@ const reduceHorizontally = combineReducers({
   taskCodeTypes,
 })
 
-const reduceVertically = (state, action) => {
-  return state
-}
+const reduceVertically = produce((draft, action) => {
+  switch (action.type) {
+  }
+})
 
 export default reduceReducers(
   reduceHorizontally,

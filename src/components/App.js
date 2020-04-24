@@ -54,7 +54,7 @@ export default function App() {
   const [isImportExportOpen, setIsImportExportOpen] = useState(false)
   const [selectedAssetIndexes, setSelectedAssetIndexes] = useState([])
   const [selectedBusIndexes, setSelectedBusIndexes] = useState([])
-  const [lineBusId, setLineBusId] = useState(null)
+  // const [lineBusId, setLineBusId] = useState(null)
   const isLayoutMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const assetById = useSelector(getAssetById)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
@@ -97,10 +97,10 @@ export default function App() {
         assetById={assetById}
         sketchMode={sketchMode}
         selectedAssetIndexes={selectedAssetIndexes}
-        lineBusId={lineBusId}
+        // lineBusId={lineBusId}
         changeSketchMode={changeSketchMode}
         setSelectedAssetIndexes={setSelectedAssetIndexes}
-        setLineBusId={setLineBusId}
+        // setLineBusId={setLineBusId}
         selectedBusIndexes={selectedBusIndexes}
         setSelectedBusIndexes={setSelectedBusIndexes}
         openDeleteAssetDialog={ () => setDeleteDialogOpen(true) }

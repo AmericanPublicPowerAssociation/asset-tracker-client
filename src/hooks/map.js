@@ -75,6 +75,7 @@ export function useEditableMap(
           if (isAddingLine) {
             // Have subsequent clicks extend the same line
             setSelectedAssetIndexes(featureIndexes)
+            // !!! Add line to list of assets that need to be processed
           } else {
             // Prevent adding multiple assets by mistake
             changeSketchMode(SKETCH_MODE_ADD)
