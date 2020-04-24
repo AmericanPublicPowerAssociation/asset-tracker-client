@@ -32,7 +32,7 @@ import CommentIcon from '@material-ui/icons/Comment'
 import Radio from '@material-ui/core/Radio'
 import { Box } from '@material-ui/core'
 import CollapsibleListItem from './CollapsibleListItem'
-import AssetConnectionsListItems from './AssetConnectionsListItems'
+// import AssetConnectionsListItems from './AssetConnectionsListItems'
 import Collapse from '@material-ui/core/Collapse'
 import { AssetName } from './AssetTasksPanel'
 import TaskComments, { CommentForm } from './TaskComments'
@@ -207,7 +207,10 @@ const Priority = (priorityColor, priority, label) => {
     onChange={(e) => {e.preventDefault()}}
     color={priorityColor}
     disableRipple={true}
-    classes={{colorPrimary: classes.importantCheckbox, colorSecondary: classes.urgentCheckbox}}
+    classes={{
+      colorPrimary: classes.importantCheckbox,
+      colorSecondary: classes.urgentCheckbox,
+    }}
   />
 }
 
@@ -277,7 +280,8 @@ function TaskItem(props) {
                     color={priorityColor}
                     classes={{
                       colorPrimary: classes.important,
-                      colorSecondary: classes.urgent}}
+                      colorSecondary: classes.urgent,
+                    }}
                     label={priorityLabel}
                   />
                 }
@@ -394,7 +398,7 @@ export const TaskFullscreen = (props) => {
       </FormControl>
     </div>)
 
-const commentSection = (<div style={{display: 'flex', flexDirection: 'column', width: '100%', maxHeight: '100%', height: '100%'}}>
+const commentSection = (<div style={{ display: 'flex', flexDirection: 'column', width: '100%', maxHeight: '100%', height: '100%' }}>
       <TaskComments asset={asset} task={task} classes={classes.listComments} />
       <CommentForm onSubmit={(comment) => handleCommentFormSubmit(task, comment)} />
     </div>)
@@ -402,6 +406,7 @@ const commentSection = (<div style={{display: 'flex', flexDirection: 'column', w
   const assetDetails = (<>
     <AssetName assetTypeName={assetTypeName} assetTypeCode={assetTypeCode} assetName={assetName} />
 
+  {/*
     <AssetConnectionsListItems
       asset={asset}
       isEditing={false}
@@ -409,6 +414,7 @@ const commentSection = (<div style={{display: 'flex', flexDirection: 'column', w
       setSelectedAssetIndexes={() => {}}
       noHighlight={true}
     />
+  */}
   </>)
 
 
@@ -434,7 +440,10 @@ const commentSection = (<div style={{display: 'flex', flexDirection: 'column', w
         {taskheader}
     </CollapsibleListItem>
    </Container>
-    <Collapse in={openTask} classes={{entered: clsx(classes.overflow, classes.maxHeight), wrapper: classes.maxHeight}}>
+    <Collapse in={openTask} classes={{
+      entered: clsx(classes.overflow, classes.maxHeight),
+      wrapper: classes.maxHeight,
+    }}>
       {commentSection}
     </Collapse>
     <Container>
@@ -496,7 +505,7 @@ const commentSection = (<div style={{display: 'flex', flexDirection: 'column', w
     </>)
 
   return (
-    <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition} classes={{paper: classes.background}}>
+    <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition} classes={{ paper: classes.background }}>
 
       { isLayoutMobile ? mobileTaskDetail : desktopTaskDetails }
 

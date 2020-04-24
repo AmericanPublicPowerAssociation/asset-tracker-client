@@ -11,7 +11,6 @@ import {
 } from '../actions'
 import {
   getCountDescription,
-  getLetter,
 } from '../macros'
 import {
   getAssetIdsByBusId,
@@ -19,20 +18,19 @@ import {
   getFocusingBusId,
 } from '../selectors'
 
-export default function AssetConnectionsListItems(props) {
+export default function AssetConnectionsListItems({
+  asset,
+  isEditing,
+  setSelectedBusIndexes,
+  setSelectedAssetIndexes,
+  noHighlight,
+}) {
   const dispatch = useDispatch()
-  const {
-    asset,
-    isEditing,
-    setSelectedBusIndexes,
-    setSelectedAssetIndexes,
-    noHighlight,
-  } = props
   const [isOpenByConnectionIndex, setIsOpenByConnectionIndex] = useState({})
   const assetIdsByBusId = useSelector(getAssetIdsByBusId)
   const assetId = asset.id
   const assetTypeCode = asset.typeCode
-  const connections = asset.connections || []
+  const connections = asset.connections || {}
   const busesGeoJson = useSelector(getBusesGeoJson)
   const focusingBusId = useSelector(getFocusingBusId)
 

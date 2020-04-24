@@ -28,15 +28,24 @@ export const MAP_STYLE_NAMES = ['dark', 'street', 'satellite']
 export const MAP_STYLE_COUNT = MAP_STYLE_NAMES.length
 export const BRIGHT_MAP_STYLE_NAMES = ['street']
 
+export const ASSET_LINE_WIDTH_IN_METERS = 5
+
 export const ASSET_RADIUS_IN_METERS_BY_CODE = {
   [ASSET_TYPE_CODE_METER]: 5,
   [ASSET_TYPE_CODE_TRANSFORMER]: 10,
 }
-export const ASSET_LINE_WIDTH_IN_METERS = 5
+
 export const BUS_RADIUS_IN_METERS = 5
-export const BUS_DISTANCE_IN_METERS = 15
-export const BUS_DISTANCE_IN_KILOMETERS = BUS_DISTANCE_IN_METERS / 1000
-export const BUS_DISTANCE_IN_KILOMETERS_FOR_METERS = 10 / 1000
+export const BUS_DISTANCE_IN_KILOMETERS_BY_CODE = Object.entries(
+  ASSET_RADIUS_IN_METERS_BY_CODE,
+).reduce((busDistanceInKilometersByCode, [
+  typeCode,
+  assetRadiusInMeters,
+]) => {
+  busDistanceInKilometersByCode[typeCode] = (
+    assetRadiusInMeters + BUS_RADIUS_IN_METERS) / 1000
+  return busDistanceInKilometersByCode
+}, {})
 
 export const PICKING_RADIUS_IN_PIXELS = Math.max(
   ...Object.values(ASSET_RADIUS_IN_METERS_BY_CODE)) + 1

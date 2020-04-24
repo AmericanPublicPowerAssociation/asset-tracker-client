@@ -5,24 +5,19 @@ import {
   REFRESH_ASSETS,
   REFRESH_TASKS,
   REFRESH_TASK_COMMENTS,
-  SAVE_ASSETS,
   SET_ASSET,
   SET_ASSETS,
   SET_ASSETS_GEOJSON,
   SET_ASSET_ATTRIBUTE,
-  SET_ASSET_COMMENTS,
   SET_ASSET_CONNECTION,
   SET_ASSET_CONNECTION_ATTRIBUTE,
   SET_ASSET_VALUE,
   SET_FOCUSING_ASSET_ID,
   SET_TASKS,
+  SET_TASK_COMMENTS,
   UPDATE_ASSETS,
   UPDATE_TASK,
 } from '../constants'
-
-export function saveAssets() {
-  return { type: SAVE_ASSETS }
-}
 
 export function refreshAssets() {
   return { type: REFRESH_ASSETS }
@@ -66,11 +61,11 @@ export function setAssetConnection(assetId, assetVertexIndex, connection) {
 }
 
 export function setAssetConnectionAttribute(
-  assetId, connectionIndex, key, value,
+  assetId, assetVertexIndex, key, value,
 ) {
   return {
     type: SET_ASSET_CONNECTION_ATTRIBUTE,
-    payload: { assetId, connectionIndex, key, value },
+    payload: { assetId, assetVertexIndex, key, value },
   }
 }
 
@@ -81,9 +76,9 @@ export function setAssetsGeoJson(geojson) {
   }
 }
 
-export function setAssetComments({ task_id, comments }) {
+export function setTaskComments({ task_id, comments }) {
   return {
-    type: SET_ASSET_COMMENTS,
+    type: SET_TASK_COMMENTS,
     payload: { task_id, comments },
   }
 }

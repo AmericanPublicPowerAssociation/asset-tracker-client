@@ -1,3 +1,4 @@
+// import assets from '../datasets/assets/example1.json'
 import {
   ReactComponent as LineIcon,
 } from '../images/assets/line-16.svg'
@@ -10,6 +11,8 @@ import {
 import {
   ReactComponent as MeterIcon,
 } from '../images/assets/meter-white-16.svg'
+
+// export const ASSETS = assets
 
 export const MINIMUM_ASSET_ID_LENGTH = 16
 export const ABBREVIATED_ASSET_ID_LENGTH = 7
@@ -26,23 +29,17 @@ export const ASSET_TYPE_ICON_BY_CODE = {
   [ASSET_TYPE_CODE_SUBSTATION]: SubstationIcon,
 }
 
-export const SAVE_ASSETS = 'SAVE_ASSETS'
-
 export const REFRESH_ASSETS = 'REFRESH_ASSETS'
+export const SET_ASSETS = 'SET_ASSETS'
+
 export const UPDATE_ASSETS = 'UPDATE_ASSETS'
 
-export const SET_ASSETS = 'SET_ASSETS'
 export const SET_ASSET = 'SET_ASSET'
 export const DELETE_ASSET = 'DELETE_ASSET'
+
 export const SET_ASSET_VALUE = 'SET_ASSET_VALUE'
 export const SET_ASSET_ATTRIBUTE = 'SET_ASSET_ATTRIBUTE'
 export const SET_ASSET_CONNECTION = 'SET_ASSET_CONNECTION'
 export const SET_ASSET_CONNECTION_ATTRIBUTE = 'SET_ASSET_CONNECTION_ATTRIBUTE'
-
 export const SET_ASSETS_GEOJSON = 'SET_ASSETS_GEOJSON'
 export const SET_FOCUSING_ASSET_ID = 'SET_FOCUSING_ASSET_ID'
-
-export const REFRESH_TASKS = 'REFRESH_TASKS'
-export const SET_TASKS = 'SET_TASK'
-
-export const SET_ASSET_COMMENTS = 'SET_ASSET_COMMENTS'

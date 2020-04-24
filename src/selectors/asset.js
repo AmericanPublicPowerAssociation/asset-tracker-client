@@ -25,8 +25,11 @@ export const getAssetIdByBusId = createSelector([
   const assetIdByBusId = {}
 
   for (const [assetId, asset] of Object.entries(assetById)) {
-    const assetConnections = asset.connections || []
-    for (const connection of assetConnections) {
+    if (asset['is_deleted'] === true) {
+      continue
+    }
+    const assetConnections = asset.connections || {}
+    for (const connection of Object.values(assetConnections)) {
       const busId = connection.busId
 
       if (busId in assetIdByBusId && asset.typeCode === ASSET_TYPE_CODE_LINE) {
@@ -49,9 +52,11 @@ export const getAssetIdsByBusId = createSelector([
   const assetIdsByBusId = {}
 
   for (const [assetId, asset] of Object.entries(assetById)) {
-    if (asset['is_deleted'] === true) continue
-    const assetConnections = asset.connections || []
-    for (const connection of assetConnections) {
+    if (asset['is_deleted'] === true) {
+      continue
+    }
+    const assetConnections = asset.connections || {}
+    for (const connection of Object.values(assetConnections)) {
       const busId = connection.busId
       const assetIds = assetIdsByBusId[busId] || []
       assetIdsByBusId[busId] = [...assetIds, assetId]

@@ -1,17 +1,17 @@
 import {
-  SET_ASSET_COMMENTS,
+  SET_TASK_COMMENTS,
 } from '../constants'
 
 const initialState = {}
 
 const taskComments = (state = initialState, action) => {
   switch(action.type) {
-    case SET_ASSET_COMMENTS: {
-      const {task_id, comments} = action.payload
+    case SET_TASK_COMMENTS: {
+      const { task_id, comments } = action.payload
 
       return {
         task_id,
-        comments: comments || []
+        comments: comments || [],
       }
     }
     default: {

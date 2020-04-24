@@ -1,5 +1,6 @@
 import produce from 'immer'
 import {
+  // ASSETS,
   DELETE_ASSET,
   SET_ASSET,
   SET_ASSETS,
@@ -13,6 +14,7 @@ import {
 } from '../macros'
 
 const initialState = {}
+// const initialState = getByKey(ASSETS, 'id')
 
 const assetById = (state = initialState, action) => {
   switch(action.type) {
@@ -52,11 +54,11 @@ const assetById = (state = initialState, action) => {
       })
     }
     case SET_ASSET_CONNECTION_ATTRIBUTE: {
-      const { assetId, connectionIndex, key, value } = action.payload
+      const { assetId, assetVertexIndex, key, value } = action.payload
       return produce(state, draft => {
         const asset = draft[assetId]
         const connections = asset.connections
-        const attributes = connections[connectionIndex].attributes
+        const attributes = connections[assetVertexIndex].attributes
         attributes[key] = value
       })
     }

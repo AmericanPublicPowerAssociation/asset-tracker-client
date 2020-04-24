@@ -6,9 +6,9 @@ import {
 import {
   refreshTaskComments,
   refreshTasks,
-  setAssetComments,
   setAssets,
   setTaskCommentCount,
+  setTaskComments,
   setTasks,
 } from '../actions'
 import {
@@ -130,6 +130,6 @@ export function* updateComments(payload) {
     task_id,
   } = payload
   const commentCount = comments.length
-  yield put(setAssetComments(payload))
+  yield put(setTaskComments(payload))
   yield put(setTaskCommentCount(task_id, commentCount))
 }

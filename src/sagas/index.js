@@ -13,7 +13,7 @@ import {
   watchAddTask,
   watchAssetTasks,
   watchUpdateTask,
-  watchRefreshAssetComments,
+  watchRefreshTaskComments,
   watchAddTaskComment,
 } from './assets'
 
@@ -25,7 +25,7 @@ export default function* () {
     watchAssetTasks(),
     watchAddTask(),
     watchUpdateTask(),
-    watchRefreshAssetComments(),
+    watchRefreshTaskComments(),
     watchAddTaskComment(),
     watchSuggestVendorNames(),
     watchSuggestProductNames(),

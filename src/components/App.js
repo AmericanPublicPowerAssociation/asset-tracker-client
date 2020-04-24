@@ -70,9 +70,7 @@ export default function App() {
       }
     }
     setLineBusId(null)
-    setSelectedAssetIndexes([])
     setSelectedBusIndexes([])
-    setSketchMode(newSketchMode)
     dispatch(setFocusingBusId(null))
   }
   */
