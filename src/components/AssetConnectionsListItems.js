@@ -26,7 +26,7 @@ export default function AssetConnectionsListItems({
   noHighlight,
 }) {
   const dispatch = useDispatch()
-  const [isOpenByConnectionIndex, setIsOpenByConnectionIndex] = useState({})
+  const [isOpenByIndex, setIsOpenByIndex] = useState({})
   const assetIdsByBusId = useSelector(getAssetIdsByBusId)
   const assetId = asset.id
   const assetTypeCode = asset.typeCode
@@ -34,43 +34,40 @@ export default function AssetConnectionsListItems({
   const busesGeoJson = useSelector(getBusesGeoJson)
   const focusingBusId = useSelector(getFocusingBusId)
 
-  return connections.map((connection, connectionIndex) => {
-    const busId = connection.busId
+  return Object.entries(connections).map(([index, connection]) => {
+    const { busId } = connection
     const connectedAssetIds = assetIdsByBusId[busId].filter(
       connectedAssetId => connectedAssetId !== assetId)
-
     const connectedAssetCount = connectedAssetIds.length
-    const title = `Bus ${getLetter(connectionIndex)}`
+    const title = 'Bus ' + index
     const description = getCountDescription(connectedAssetCount, 'connection')
-    const isOpen = isOpenByConnectionIndex[connectionIndex]
+    const isOpen = isOpenByIndex[index]
 
     function setIsOpen(value) {
-      const state = isOpenByConnectionIndex
-      const nextState = produce(state, draft => {
-        draft[connectionIndex] = value
-      })
-      setIsOpenByConnectionIndex(nextState)
+      setIsOpenByIndex(produce(isOpenByIndex, draft => {
+        draft[index] = value
+      }))
     }
 
-    function onClickOrFocus() {
-      const features = busesGeoJson.features
-      const index = features.findIndex( feature => feature.properties.id === busId)
-      if (index > -1) {
-        setSelectedBusIndexes([index])
+    function handleClickOrFocus() {
+      const featureIndex = busesGeoJson.features.findIndex(
+        feature => feature.properties.id === busId)
+      if (featureIndex > -1) {
+        setSelectedBusIndexes([featureIndex])
         dispatch(setFocusingBusId(busId))
-      }
-      else
+      } else {
         setSelectedBusIndexes([])
+      }
     }
 
     return connectedAssetCount > 0 ?
       <CollapsibleListItem
-        key={connectionIndex}
+        key={index}
         title={title}
         description={description}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        onClick={onClickOrFocus}
+        onClick={handleClickOrFocus}
         highlight={ !noHighlight && focusingBusId === busId }
       >
         <BusAttributesListItem
@@ -78,18 +75,14 @@ export default function AssetConnectionsListItems({
           assetTypeCode={assetTypeCode}
           connection={connection}
           isEditing={isEditing}
-          onFocus={onClickOrFocus}
+          onFocus={handleClickOrFocus}
         />
         <BusConnectionsList
           connectedAssetIds={connectedAssetIds}
           setSelectedAssetIndexes={setSelectedAssetIndexes}
         />
       </CollapsibleListItem> :
-      <ListItem
-        disableGutters
-        component='div'
-        key={connectionIndex}
-      >
+      <ListItem key={index} disableGutters component='div'>
         <ListItemText primary={title} secondary={description} />
       </ListItem>
   })

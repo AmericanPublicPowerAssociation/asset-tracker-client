@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { useDispatch } from 'react-redux'
 import {
   EditableGeoJsonLayer,
@@ -28,14 +27,16 @@ import {
   makeAssetId,
 } from '../routines'
 
+let nextAssetId = makeAssetId()
+
 export function useMovableMap() {
   const dispatch = useDispatch()
-  return useMemo(() => ({
+  return {
     handleMapMove({ viewState }) {
       // Update the map viewport
       dispatch(setMapViewState(viewState))
     },
-  }), [dispatch])
+  }
 }
 
 export function useEditableMap(
@@ -48,7 +49,7 @@ export function useEditableMap(
 ) {
   const dispatch = useDispatch()
   const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
-  return useMemo(() => ({
+  return {
     getAssetsMapLayer() {
       const mapMode = getMapMode(sketchMode)
 
@@ -56,29 +57,21 @@ export function useEditableMap(
         console.log('asset edit', editType, editContext, updatedData)
         // If we have a new feature,
         if (editType === 'addFeature') {
-          if (!isAddingLine) {
-            mapEditState.sourceAssetId = makeAssetId()
-          }
           // Update feature properties
           const { featureIndexes } = editContext
           const { features } = updatedData
-          const { sourceAssetId } = mapEditState
-          const sourceAssetTypeCode = getAssetTypeCode(sketchMode)
-          console.log('add feature', sourceAssetId, sourceAssetTypeCode)
-          for (let i = 0; i < featureIndexes.length; i++) {
-            const featureIndex = featureIndexes[i]
-            const feature = features[featureIndex]
-            const featureProperties = feature.properties
-            featureProperties.id = sourceAssetId
-            featureProperties.typeCode = sourceAssetTypeCode
+          const assetTypeCode = getAssetTypeCode(sketchMode)
+          console.log('add feature', nextAssetId, assetTypeCode)
+          for (const featureIndex of featureIndexes) {
+            const featureProperties = features[featureIndex].properties
+            featureProperties.id = nextAssetId
+            featureProperties.typeCode = assetTypeCode
           }
           // Make a new asset corresponding to the feature
-          const sourceAssetType = assetTypeByCode[sourceAssetTypeCode]
-          const asset = makeAsset(sourceAssetId, sourceAssetType)
+          const asset = makeAsset(nextAssetId, assetTypeByCode[assetTypeCode])
           dispatch(setAsset(asset))
-          // Focus on new asset
-          dispatch(setFocusingAssetId(sourceAssetId))
-
+          dispatch(setFocusingAssetId(nextAssetId))
+          nextAssetId = makeAssetId()
           if (isAddingLine) {
             // Have subsequent clicks extend the same line
             setSelectedAssetIndexes(featureIndexes)
@@ -89,13 +82,11 @@ export function useEditableMap(
         }
         if (mapEditState.withDoubleClick) {
           if (isAddingLine) {
-            // End line on double click
-            changeSketchMode(SKETCH_MODE_ADD)
+            changeSketchMode(SKETCH_MODE_ADD)  // End line on double click
           }
           delete mapEditState.withDoubleClick
         }
-        // Update geojson for assets
-        dispatch(setAssetsGeoJson(updatedData))
+        dispatch(setAssetsGeoJson(updatedData))  // Update geojson for assets
       }
 
       function handleAssetClick(info, event) {
@@ -186,22 +177,6 @@ export function useEditableMap(
     },
     handleMapClick(info, event) {
       console.log('map click', info, event)
-      console.log(isAddingLine, selectedAssetIndexes)
-      if (isAddingLine) {
-        if (!selectedAssetIndexes.length) {
-          // Set a new asset id if we started a line
-          mapEditState.sourceAssetId = makeAssetId()
-        }
-      }
     },
-  }), [
-    dispatch,
-    sketchMode, changeSketchMode,
-    assetIdByBusId, assetTypeByCode,
-    assetsGeoJson, selectedAssetIndexes, setSelectedAssetIndexes,
-    busesGeoJson, selectedBusIndexes,
-    mapEditState,
-    colors,
-    isAddingLine,
-  ])
+  }
 }
