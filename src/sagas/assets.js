@@ -10,7 +10,9 @@ import {
   setAssets,
   setTasks,
   setTaskCommentCount,
-  updateTaskComments, refreshAssets,
+  updateTaskComments,
+  refreshAssets,
+  setMapBoundingbox,
 } from '../actions'
 import {
   REFRESH_ASSETS,
@@ -20,7 +22,7 @@ import {
   UPDATE_TASK,
   REFRESH_ASSET_COMMENTS,
   ADD_TASK_COMMENT,
-  UPLOAD_ASSETS_CSV
+  UPLOAD_ASSETS_CSV,
 } from '../constants'
 import {
   fetchSafely,
@@ -129,6 +131,9 @@ export function* resetTasks(payload) {
 
 export function* resetAssets(payload) {
   yield put(setAssets(payload))
+  const { boundingBox } = payload
+  if (boundingBox)
+    yield put(setMapBoundingbox(boundingBox))
 }
 
 export function* updateComments(payload) {
