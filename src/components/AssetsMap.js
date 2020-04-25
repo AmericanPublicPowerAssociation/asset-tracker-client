@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
 import {
-  PICKING_RADIUS_IN_PIXELS,
   PICKING_DEPTH,
+  PICKING_RADIUS_IN_PIXELS,
 } from '../constants'
 import {
   useEditableMap,
@@ -24,11 +24,7 @@ const {
   REACT_APP_MAPBOX_TOKEN,
 } = process.env
 
-export default function AssetsMap({
-  sketchMode, changeSketchMode,
-  selectedAssetIndexes, setSelectedAssetIndexes,
-  selectedBusIndexes,
-}) {
+export default function AssetsMap() {
   const deckGL = useRef()
   const mapStyle = useSelector(getMapStyle)
   const mapViewState = useSelector(getMapViewState)
@@ -45,7 +41,7 @@ export default function AssetsMap({
     handleMapKey,
     handleMapClick,
   } = useEditableMap(
-    sketchMode, changeSketchMode,
+    sketchMode, setSketchMode,
     assetIdByBusId, assetTypeByCode,
     assetsGeoJson, selectedAssetIndexes, setSelectedAssetIndexes,
     busesGeoJson, selectedBusIndexes,

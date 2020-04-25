@@ -12,6 +12,7 @@ import {
 
 export const getMapStyleName = state => state.mapStyleName
 export const getMapViewState = state => state.mapViewState
+export const getSketchMode = state => state.sketchMode
 export const getAssetsGeoJson = state => state.assetsGeoJson
 
 export const getMapStyle = createSelector([

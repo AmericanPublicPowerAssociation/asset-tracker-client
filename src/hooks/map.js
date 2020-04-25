@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   EditableGeoJsonLayer,
   ViewMode,
@@ -48,6 +48,7 @@ export function useEditableMap(
   colors,
 ) {
   const dispatch = useDispatch()
+  const sketchMode = useSelector(getSketchMode)
   const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
   return {
     getAssetsMapLayer() {

@@ -1,10 +1,4 @@
 import {
-  ADD_TASK,
-  ADD_TASK_COMMENT,
-  DELETE_ASSET,
-  REFRESH_ASSETS,
-  REFRESH_TASKS,
-  REFRESH_TASK_COMMENTS,
   SET_ASSET,
   SET_ASSETS,
   SET_ASSETS_GEOJSON,
@@ -13,18 +7,11 @@ import {
   SET_ASSET_CONNECTION_ATTRIBUTE,
   SET_ASSET_VALUE,
   SET_FOCUSING_ASSET_ID,
-  SET_TASKS,
-  SET_TASK_COMMENTS,
   UPDATE_ASSETS,
-  UPDATE_TASK,
 } from '../constants'
 
 export function refreshAssets() {
   return { type: REFRESH_ASSETS }
-}
-
-export function updateAssets(assets, assetsGeoJson) {
-  return { type: UPDATE_ASSETS, payload: { assets, assetsGeoJson } }
 }
 
 export function setAssets(assets) {
@@ -33,6 +20,10 @@ export function setAssets(assets) {
 
 export function setAsset(asset) {
   return { type: SET_ASSET, payload: asset }
+}
+
+export function updateAssets(assets, assetsGeoJson) {
+  return { type: UPDATE_ASSETS, payload: { assets, assetsGeoJson } }
 }
 
 export function deleteAsset(assetId){
@@ -76,64 +67,9 @@ export function setAssetsGeoJson(geojson) {
   }
 }
 
-export function setTaskComments({ task_id, comments }) {
-  return {
-    type: SET_TASK_COMMENTS,
-    payload: { task_id, comments },
-  }
-}
-
 export function setFocusingAssetId(id) {
   return {
     type: SET_FOCUSING_ASSET_ID,
     payload: id,
-  }
-}
-
-export function refreshTasks() {
-  return {
-    type: REFRESH_TASKS,
-  }
-}
-
-export function setTasks(assets) {
-  return {
-    type: SET_TASKS,
-    payload: assets,
-  }
-}
-
-export function addAssetTask(assetId, name, description, priority) {
-  return {
-    type: ADD_TASK,
-    payload: { assetId, name, description, priority },
-  }
-}
-
-export function setTaskStatus(task_id, status, priority) {
-  return {
-    type: UPDATE_TASK,
-    payload: { task_id, status, priority },
-  }
-}
-
-export function setTaskPriority(task_id, priority, status) {
-  return {
-    type: UPDATE_TASK,
-    payload: { task_id, priority, status },
-  }
-}
-
-export function refreshTaskComments(task_id) {
-  return {
-    type: REFRESH_TASK_COMMENTS,
-    payload: { task_id },
-  }
-}
-
-export function addAssetTaskComment(task_id, text) {
-  return {
-    type: ADD_TASK_COMMENT,
-    payload: { task_id, text },
   }
 }

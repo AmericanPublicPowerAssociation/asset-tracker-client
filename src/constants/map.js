@@ -56,3 +56,25 @@ export const SET_MAP_VIEW_STATE = 'SET_MAP_VIEW_STATE'
 
 export const ASSETS_MAP_LAYER_ID = 'assets'
 export const BUSES_MAP_LAYER_ID = 'buses'
+
+export const SKETCH_MODE_VIEW = 'view'
+
+export const SKETCH_MODE_ADD = 'add'
+export const SKETCH_MODE_ADD_ASSET = 'add >'
+export const SKETCH_MODE_ADD_LINE = 'add > line'
+export const SKETCH_MODE_ADD_TRANSFORMER = 'add > transformer'
+export const SKETCH_MODE_ADD_SUBSTATION = 'add > substation'
+export const SKETCH_MODE_ADD_METER = 'add > meter'
+
+export const SKETCH_MODE_EDIT = 'edit'
+export const SKETCH_MODE_EDIT_MODIFY = 'edit > modify'
+export const SKETCH_MODE_EDIT_TRANSLATE = 'edit > translate'
+
+export const SKETCH_MODE_DELETE = 'delete'
+
+export const SKETCH_MODE = SKETCH_MODE_VIEW
+
+export const SET_SKETCH_MODE = 'SET_SKETCH_MODE'
+
+export const SET_SELECTED_ASSET_INDEXES = 'SET_SELECTED_ASSET_INDEXES'
+export const SET_SELECTED_BUS_INDEXES = 'SET_SELECTED_BUS_INDEXES'

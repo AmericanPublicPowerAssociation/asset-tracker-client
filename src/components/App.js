@@ -13,30 +13,19 @@ import DetailsWindow from './DetailsWindow'
 import TablesWindow from './TablesWindow'
 import TablesDialog from './TablesDialog'
 import DownloadManager from './DownloadManager'
-import DeleteAssetDialog from './DeleteAssetDialog'
+import AssetDeleteDialog from './AssetDeleteDialog'
 import {
   refreshRisks,
 } from 'asset-report-risks'
 import {
   refreshAssets,
-  // setFocusingBusId,
-  updateAssets,
   refreshTasks,
+  updateAssets,
 } from '../actions'
 import {
   IS_WITH_DETAILS,
   IS_WITH_TABLES,
-  // MINIMUM_BUS_ID_LENGTH,
-  OVERLAY_MODE,
-  SKETCH_MODE,
-  // SKETCH_MODE_ADD_LINE,
 } from '../constants'
-import {
-  // getRandomId,
-} from '../macros'
-import {
-  // getSelectedAssetId,
-} from '../routines'
 import {
   getAssetById,
   getAssetsGeoJson,
@@ -46,15 +35,13 @@ import './App.css'
 export default function App() {
   const dispatch = useDispatch()
   const theme = useTheme()
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const [sketchMode, setSketchMode] = useState(SKETCH_MODE)
-  const [overlayMode, setOverlayMode] = useState(OVERLAY_MODE)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
-  const [isImportExportOpen, setIsImportExportOpen] = useState(false)
-  const [selectedAssetIndexes, setSelectedAssetIndexes] = useState([])
-  const [selectedBusIndexes, setSelectedBusIndexes] = useState([])
-  // const [lineBusId, setLineBusId] = useState(null)
+  const [
+    isImportExportDialogOpen,
+    setIsImportExportDialogOpen,
+  ] = useState(false)
   const isLayoutMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const assetById = useSelector(getAssetById)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
@@ -75,11 +62,6 @@ export default function App() {
   }
   */
 
-  function changeSketchMode(newSketchMode) {
-    setSelectedAssetIndexes([])
-    setSketchMode(newSketchMode)
-  }
-
   function saveAssets() {
     const assets = Object.values(assetById)
     dispatch(updateAssets(assets, assetsGeoJson)) 
@@ -94,33 +76,15 @@ export default function App() {
   return (
     <div>
       <AssetsMap
-        assetById={assetById}
-        sketchMode={sketchMode}
-        selectedAssetIndexes={selectedAssetIndexes}
-        // lineBusId={lineBusId}
-        changeSketchMode={changeSketchMode}
-        setSelectedAssetIndexes={setSelectedAssetIndexes}
-        // setLineBusId={setLineBusId}
-        selectedBusIndexes={selectedBusIndexes}
-        setSelectedBusIndexes={setSelectedBusIndexes}
-        openDeleteAssetDialog={ () => setDeleteDialogOpen(true) }
+        // openAssetDeleteDialog={ () => setIsDeleteDialogOpen(true) }
       />
       <SketchButtons
-        overlayMode={overlayMode}
-        sketchMode={sketchMode}
-        changeSketchMode={changeSketchMode}
         saveAssets={saveAssets}
       />
-      <SketchModeToolbar
-        sketchMode={sketchMode}
-        changeSketchMode={changeSketchMode}
-      />
-      <SketchAddToolbar
-        sketchMode={sketchMode}
-        changeSketchMode={changeSketchMode}
-      />
+      <SketchModeToolbar />
+      <SketchAddToolbar />
       <ActionsWindow
-        showImportExport={() => setIsImportExportOpen(true)}
+        showImportExport={() => setIsImportExportDialogOpen(true)}
       />
       <OptionsWindow
         isWithDetails={isWithDetails}
@@ -128,27 +92,19 @@ export default function App() {
         setIsWithDetails={setIsWithDetails}
         setIsWithTables={setIsWithTables}
       />
-      <OverlaysWindow
-        sketchMode={sketchMode}
-        overlayMode={overlayMode}
-        setOverlayMode={setOverlayMode}
-      />
+      <OverlaysWindow />
       <DownloadManager
-        open={isImportExportOpen}
+        open={isImportExportDialogOpen}
         onOk={element => {
           window.location = `/assets.dss?source=${element}`
-          setIsImportExportOpen(false)}
+          setIsImportExportDialogOpen(false)}
         }
-        onCancel={() => {setIsImportExportOpen(false)}}
-        onClose={()=> {setIsImportExportOpen(false)}}
+        onCancel={() => {setIsImportExportDialogOpen(false)}}
+        onClose={()=> {setIsImportExportDialogOpen(false)}}
       />
       <DetailsWindow
         isWithDetails={isWithDetails}
         isWithTables={isWithTables}
-        overlayMode={overlayMode}
-        sketchMode={sketchMode}
-        setSelectedBusIndexes={setSelectedBusIndexes}
-        setSelectedAssetIndexes={setSelectedAssetIndexes}
       />
     {isWithTables && (isLayoutMobile ?
       <TablesDialog
@@ -158,16 +114,12 @@ export default function App() {
       <TablesWindow
         isWithTables={isWithTables}
         setIsWithTables={setIsWithTables}
-        overlayMode={overlayMode}
-        setSelectedAssetIndexes={setSelectedAssetIndexes}
-        setSelectedBusIndexes={setSelectedBusIndexes}
       />
     )}
-      { deleteDialogOpen &&
-        <DeleteAssetDialog
-          openDialog={deleteDialogOpen}
-          onClose={ () => setDeleteDialogOpen(false)}
-          setSelectedAssetIndexes={setSelectedAssetIndexes}
+      { isDeleteDialogOpen &&
+        <AssetDeleteDialog
+          openDialog={isDeleteDialogOpen}
+          onClose={ () => setIsDeleteDialogOpen(false) }
         />
       }
     </div>
