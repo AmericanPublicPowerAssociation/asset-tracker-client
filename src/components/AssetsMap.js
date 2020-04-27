@@ -6,9 +6,7 @@ import {
   PICKING_DEPTH,
   PICKING_RADIUS_IN_PIXELS,
 } from '../constants'
-import {
-  MapProvider,
-} from '../features/maps/mapScreen'
+import { MapProvider } from '../features/maps/mapScreen'
 import {
   useEditableMap,
   useMovableMap,

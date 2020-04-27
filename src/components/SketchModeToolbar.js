@@ -1,5 +1,5 @@
 import React from 'react'
-import clsx from 'clsx'
+import { useDispatch, useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import List from '@material-ui/core/List'
@@ -10,12 +10,17 @@ import AddIcon from '@material-ui/icons/Add'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete'
 import {
+  setSketchMode,
+} from '../actions'
+import {
   SKETCH_MODE_ADD,
   SKETCH_MODE_EDIT,
-  SKETCH_MODE_EDIT_MODIFY,
   SKETCH_MODE_DELETE,
   SKETCH_MODE_VIEW,
 } from '../constants'
+import {
+  getSketchMode,
+} from '../selectors'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -25,26 +30,20 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function SketchModeToolbar(props) {
+export default function SketchModeToolbar() {
+  const dispatch = useDispatch()
   const classes = useStyles()
-  const {
-    sketchMode,
-    changeSketchMode,
-  } = props
+  const sketchMode = useSelector(getSketchMode)
   const isViewing = sketchMode === SKETCH_MODE_VIEW
-  return (
-    <Paper
-      className={clsx(classes.root, {
-        poof: isViewing,
-      })}
-    >
+  return !isViewing && (
+    <Paper className={classes.root} >
       <List>
         <Tooltip title='Add' aria-label='Add' placement='right'>
           <ListItem
             button
             classes={{ selected: 'selected' }}
             selected={sketchMode.startsWith(SKETCH_MODE_ADD)}
-            onClick={() => changeSketchMode(SKETCH_MODE_ADD)}
+            onClick={() => dispatch(setSketchMode(SKETCH_MODE_ADD))}
           >
             <SvgIcon fontSize='large' component={AddIcon} />
           </ListItem>
@@ -54,8 +53,8 @@ export default function SketchModeToolbar(props) {
           <ListItem
             button
             classes={{ selected: 'selected' }}
-            selected={sketchMode.startsWith(SKETCH_MODE_EDIT)}
-            onClick={() => changeSketchMode(SKETCH_MODE_EDIT_MODIFY)}
+            selected={sketchMode === SKETCH_MODE_EDIT}
+            onClick={() => dispatch(setSketchMode(SKETCH_MODE_EDIT))}
           >
             <SvgIcon fontSize='large' component={EditIcon} />
           </ListItem>
@@ -64,9 +63,9 @@ export default function SketchModeToolbar(props) {
         <Tooltip title='Delete' aria-label='Delete' placement='right'>
           <ListItem
             button
-            classes={{selected: 'selected'}}
+            classes={{ selected: 'selected' }}
             selected={sketchMode === SKETCH_MODE_DELETE}
-            onClick={() => changeSketchMode(SKETCH_MODE_DELETE)}
+            onClick={() => dispatch(setSketchMode(SKETCH_MODE_DELETE))}
           >
             <SvgIcon fontSize='large' component={DeleteIcon} />
           </ListItem>

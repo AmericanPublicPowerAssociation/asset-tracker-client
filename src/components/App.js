@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import useTheme from '@material-ui/core/styles/useTheme'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import AssetsMap from './AssetsMap'
@@ -25,10 +25,6 @@ import {
   IS_WITH_DETAILS,
   IS_WITH_TABLES,
 } from '../constants'
-import {
-  getAssetById,
-  getAssetsGeoJson,
-} from '../selectors'
 import './App.css'
 
 export default function App() {
@@ -42,8 +38,6 @@ export default function App() {
     setIsImportExportDialogOpen,
   ] = useState(false)
   const isLayoutMobile = useMediaQuery(theme.breakpoints.down('sm'))
-  const assetById = useSelector(getAssetById)
-  const assetsGeoJson = useSelector(getAssetsGeoJson)
 
   /*
   function changeSketchMode(newSketchMode, busId) {
@@ -73,8 +67,8 @@ export default function App() {
         // openAssetDeleteDialog={ () => setIsDeleteDialogOpen(true) }
       />
       <SketchButtons />
-    {/*
       <SketchModeToolbar />
+    {/*
       <SketchAddToolbar />
       <ActionsWindow
         showImportExport={() => setIsImportExportDialogOpen(true)}

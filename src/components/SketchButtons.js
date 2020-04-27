@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
     },
   },
   changeButton: {
-    transition: '0.5s',
+    transition: '1s',
     background: theme.palette.secondary.main,
     '&:hover': {
       background: theme.palette.secondary.main,
@@ -73,8 +73,7 @@ export default function SketchButtons() {
   return (
     <div className={classes.root}>
       <Fab
-        className={clsx(
-          classes.changeButton, iconColor, 'pulse-animation')}
+        className={clsx(classes.changeButton, iconColor, 'pulse-animation')}
         size='small'
         disabled={!isWithAssetsOverlay}
         onClick={handleChange}
@@ -84,8 +83,7 @@ export default function SketchButtons() {
 
     {!isViewing &&
       <Fab
-        className={clsx(
-          classes.cancelButton, 'flip-animation')}
+        className={clsx(classes.cancelButton, 'flip-animation')}
         size='small' 
         onClick={handleCancel}
       >

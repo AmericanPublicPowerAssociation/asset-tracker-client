@@ -74,8 +74,6 @@ export const SKETCH_MODE_ADD_SUBSTATION = 'add > substation'
 export const SKETCH_MODE_ADD_METER = 'add > meter'
 
 export const SKETCH_MODE_EDIT = 'edit'
-export const SKETCH_MODE_EDIT_MODIFY = 'edit > modify'
-export const SKETCH_MODE_EDIT_TRANSLATE = 'edit > translate'
 
 export const SKETCH_MODE_DELETE = 'delete'
 
