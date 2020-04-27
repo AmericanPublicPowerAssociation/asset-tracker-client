@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect'
+import { createSelector } from '@reduxjs/toolkit'
 import {
   COLORS_BY_MAP_STYLE_NAME,
 } from '../constants'

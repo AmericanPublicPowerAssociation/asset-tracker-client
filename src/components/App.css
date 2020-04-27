@@ -17,7 +17,14 @@
 .capitalized {
   text-transform: capitalize;
 }
-
 .tcell-strikethrough {
   text-decoration: line-through !important;
+}
+.flip-animation:hover {
+  transition: 0.50s;
+  transform: rotate(360deg);
+}
+.pulse-animation:hover {
+  transition: 0.50s;
+  transform: scale(1.25);
 }

@@ -20,7 +20,6 @@ import {
 import {
   refreshAssets,
   refreshTasks,
-  updateAssets,
 } from '../actions'
 import {
   IS_WITH_DETAILS,
@@ -62,11 +61,6 @@ export default function App() {
   }
   */
 
-  function saveAssets() {
-    const assets = Object.values(assetById)
-    dispatch(updateAssets(assets, assetsGeoJson)) 
-  }
-
   useEffect(() => {
     dispatch(refreshAssets())
     dispatch(refreshTasks())
@@ -78,9 +72,8 @@ export default function App() {
       <AssetsMap
         // openAssetDeleteDialog={ () => setIsDeleteDialogOpen(true) }
       />
-      <SketchButtons
-        saveAssets={saveAssets}
-      />
+      <SketchButtons />
+    {/*
       <SketchModeToolbar />
       <SketchAddToolbar />
       <ActionsWindow
@@ -122,6 +115,7 @@ export default function App() {
           onClose={ () => setIsDeleteDialogOpen(false) }
         />
       }
+    */}
     </div>
   )
 }

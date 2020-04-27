@@ -9,7 +9,7 @@ import  {
 } from 'asset-report-risks'
 import {
   watchRefreshAssets,
-  watchUpdateAssets,
+  watchSaveAssets,
   watchAddTask,
   watchAssetTasks,
   watchUpdateTask,
@@ -21,7 +21,7 @@ export default function* () {
   yield all([
     watchRefreshAssets(),
     watchRefreshRisks(),
-    watchUpdateAssets(),
+    watchSaveAssets(),
     watchAssetTasks(),
     watchAddTask(),
     watchUpdateTask(),

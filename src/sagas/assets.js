@@ -1,5 +1,6 @@
 import {
   put,
+  select,
   takeEvery,
   takeLatest,
 } from 'redux-saga/effects'
@@ -17,12 +18,16 @@ import {
   REFRESH_ASSETS,
   REFRESH_TASKS,
   REFRESH_TASK_COMMENTS,
-  UPDATE_ASSETS,
+  SAVE_ASSETS,
   UPDATE_TASK,
 } from '../constants'
 import {
   fetchSafely,
 } from '../macros'
+import {
+  getAssetById,
+  getAssetsGeoJson,
+} from '../selectors'
 
 export function* watchRefreshAssets() {
   yield takeLatest(REFRESH_ASSETS, function* (action) {
@@ -33,13 +38,15 @@ export function* watchRefreshAssets() {
   })
 }
 
-export function* watchUpdateAssets() {
-  yield takeEvery(UPDATE_ASSETS, function* (action) {
+export function* watchSaveAssets() {
+  yield takeEvery(SAVE_ASSETS, function* (action) {
     const url = '/assets.json'
-    const payload = action.payload
+    const assetById = yield select(getAssetById)
+    const assets = Object.values(assetById)
+    const assetsGeoJson = yield select(getAssetsGeoJson)
     yield fetchSafely(url, {
       method: 'PATCH',
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ assets, assetsGeoJson }),
     }, {
       on200: resetAssets,
     })
@@ -75,7 +82,7 @@ export function* watchAddTask() {
 
 export function* watchUpdateTask() {
   yield takeEvery(UPDATE_TASK, function* (action) {
-    const url = `/tasks/${action.payload.task_id}.json`
+    const url = `/tasks/${action.payload.taskId}.json`
     const payload = action.payload
     yield fetchSafely(url, {
       method: 'PATCH',
@@ -88,10 +95,10 @@ export function* watchUpdateTask() {
 
 export function* watchRefreshTaskComments() {
   yield takeLatest(REFRESH_TASK_COMMENTS, function* (action) {
-    const task_id = action.payload.task_id
-    const url = `/tasks/${task_id}/comments.json`
+    const taskId = action.payload.taskId
+    const url = `/tasks/${taskId}/comments.json`
     yield fetchSafely(url, {}, {
-      on200: (comments) => updateComments({ task_id, comments }),
+      on200: (comments) => updateComments({ taskId, comments }),
     })
   })
 }
@@ -99,18 +106,17 @@ export function* watchRefreshTaskComments() {
 export function* watchAddTaskComment() {
   yield takeEvery(ADD_TASK_COMMENT, function* (action) {
     const payload = action.payload
-    const task_id = action.payload.task_id
-    const url = `/tasks/${task_id}/comments.json`
+    const taskId = action.payload.taskId
+    const url = `/tasks/${taskId}/comments.json`
 
     yield fetchSafely(url, {
       method: 'POST',
       body: JSON.stringify(payload),
     }, {
-      on200: () => put(refreshTaskComments(task_id)),
+      on200: () => put(refreshTaskComments(taskId)),
     })
   })
 }
-
 
 export function* updateTasks() {
   yield put(refreshTasks())
@@ -127,9 +133,9 @@ export function* resetAssets(payload) {
 export function* updateComments(payload) {
   const {
     comments,
-    task_id,
+    taskId,
   } = payload
   const commentCount = comments.length
   yield put(setTaskComments(payload))
-  yield put(setTaskCommentCount(task_id, commentCount))
+  yield put(setTaskCommentCount(taskId, commentCount))
 }

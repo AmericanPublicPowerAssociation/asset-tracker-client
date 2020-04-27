@@ -32,7 +32,7 @@ export const ASSET_TYPE_ICON_BY_CODE = {
 export const REFRESH_ASSETS = 'REFRESH_ASSETS'
 export const SET_ASSETS = 'SET_ASSETS'
 
-export const UPDATE_ASSETS = 'UPDATE_ASSETS'
+export const SAVE_ASSETS = 'SAVE_ASSETS'
 
 export const SET_ASSET = 'SET_ASSET'
 export const DELETE_ASSET = 'DELETE_ASSET'

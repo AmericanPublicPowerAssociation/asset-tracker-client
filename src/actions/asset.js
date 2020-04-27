@@ -1,4 +1,7 @@
 import {
+  DELETE_ASSET,
+  REFRESH_ASSETS,
+  SAVE_ASSETS,
   SET_ASSET,
   SET_ASSETS,
   SET_ASSETS_GEOJSON,
@@ -7,7 +10,6 @@ import {
   SET_ASSET_CONNECTION_ATTRIBUTE,
   SET_ASSET_VALUE,
   SET_FOCUSING_ASSET_ID,
-  UPDATE_ASSETS,
 } from '../constants'
 
 export function refreshAssets() {
@@ -22,8 +24,8 @@ export function setAsset(asset) {
   return { type: SET_ASSET, payload: asset }
 }
 
-export function updateAssets(assets, assetsGeoJson) {
-  return { type: UPDATE_ASSETS, payload: { assets, assetsGeoJson } }
+export function saveAssets() {
+  return { type: SAVE_ASSETS }
 }
 
 export function deleteAsset(assetId){

@@ -16,7 +16,7 @@ import {
 } from '../constants'
 import {
   getColors,
-  getAssetByIdLength,
+  getAssetCount,
   getOpenTaskByIdLength,
 } from '../selectors'
 
@@ -43,7 +43,7 @@ export default function OverlaysWindow(props) {
 
   const radioColor = colors.active
 
-  const visibleAssetCount = useSelector(getAssetByIdLength)
+  const visibleAssetCount = useSelector(getAssetCount)
   const visibleTaskCount = useSelector(getOpenTaskByIdLength)
   const visibleRiskCount = visibleRisks.length
 
@@ -54,7 +54,7 @@ export default function OverlaysWindow(props) {
   const RadioControl = (
     <Radio
       color='secondary'
-      classes={{colorSecondary: radioColor}}
+      classes={{ colorSecondary: radioColor }}
     />
   )
 

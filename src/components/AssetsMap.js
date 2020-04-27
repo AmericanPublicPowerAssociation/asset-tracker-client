@@ -7,15 +7,13 @@ import {
   PICKING_RADIUS_IN_PIXELS,
 } from '../constants'
 import {
+  MapProvider,
+} from '../features/maps/mapScreen'
+import {
   useEditableMap,
   useMovableMap,
 } from '../hooks'
 import {
-  getAssetIdByBusId,
-  getAssetTypeByCode,
-  getAssetsGeoJson,
-  getBusesGeoJson,
-  getColors,
   getMapStyle,
   getMapViewState,
 } from '../selectors'
@@ -28,46 +26,33 @@ export default function AssetsMap() {
   const deckGL = useRef()
   const mapStyle = useSelector(getMapStyle)
   const mapViewState = useSelector(getMapViewState)
-  const mapEditState = {}
-  const assetIdByBusId = useSelector(getAssetIdByBusId)
-  const assetTypeByCode = useSelector(getAssetTypeByCode)
-  const assetsGeoJson = useSelector(getAssetsGeoJson)
-  const busesGeoJson = useSelector(getBusesGeoJson)
-  const colors = useSelector(getColors)
   const { handleMapMove } = useMovableMap()
   const {
     getAssetsMapLayer,
     getBusesMapLayer,
     handleMapKey,
     handleMapClick,
-  } = useEditableMap(
-    sketchMode, setSketchMode,
-    assetIdByBusId, assetTypeByCode,
-    assetsGeoJson, selectedAssetIndexes, setSelectedAssetIndexes,
-    busesGeoJson, selectedBusIndexes,
-    mapEditState,
-    colors)
-  const mapLayers = [
-    getAssetsMapLayer(),
-    getBusesMapLayer(),
-  ]
+  } = useEditableMap()
+  const mapLayers = [getAssetsMapLayer(), getBusesMapLayer()]
   return (
-    <div onKeyUp={handleMapKey}>
-      <DeckGL
-        ref={deckGL}
-        layers={mapLayers}
-        pickingRadius={PICKING_RADIUS_IN_PIXELS}
-        pickingDepth={PICKING_DEPTH}
-        controller={{ doubleClickZoom: false }}
-        viewState={mapViewState}
-        onViewStateChange={handleMapMove}
-        onClick={handleMapClick}
-      >
-        <StaticMap
-          mapStyle={mapStyle}
-          mapboxApiAccessToken={REACT_APP_MAPBOX_TOKEN}
-        />
-      </DeckGL>
-    </div>
+    <MapProvider>
+      <div onKeyUp={handleMapKey}>
+        <DeckGL
+          ref={deckGL}
+          layers={mapLayers}
+          pickingRadius={PICKING_RADIUS_IN_PIXELS}
+          pickingDepth={PICKING_DEPTH}
+          controller={{ doubleClickZoom: false }}
+          viewState={mapViewState}
+          onViewStateChange={handleMapMove}
+          onClick={handleMapClick}
+        >
+          <StaticMap
+            mapStyle={mapStyle}
+            mapboxApiAccessToken={REACT_APP_MAPBOX_TOKEN}
+          />
+        </DeckGL>
+      </div>
+    </MapProvider>
   )
 }

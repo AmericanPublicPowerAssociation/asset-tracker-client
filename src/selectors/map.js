@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect'
+import { createSelector } from '@reduxjs/toolkit'
 import {
   getAssetById,
 } from './asset'
@@ -12,8 +12,11 @@ import {
 
 export const getMapStyleName = state => state.mapStyleName
 export const getMapViewState = state => state.mapViewState
+export const getOverlayMode = state => state.overlayMode
 export const getSketchMode = state => state.sketchMode
 export const getAssetsGeoJson = state => state.assetsGeoJson
+export const getSelectedAssetIndexes = state => state.selectedAssetIndexes
+export const getSelectedBusIndexes = state => state.selectedBusIndexes
 
 export const getMapStyle = createSelector([
   getMapStyleName,

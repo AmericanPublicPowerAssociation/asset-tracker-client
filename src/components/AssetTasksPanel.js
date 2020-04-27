@@ -23,7 +23,7 @@ import AddIcon from '@material-ui/icons/Add'
 import TasksList, { TaskFullscreen } from './TasksList'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import {
-  addAssetTask,
+  addTask,
   refreshTaskComments,
 } from '../actions'
 import {
@@ -34,7 +34,6 @@ import {
   getAssetTypeByCode,
   getTaskPriorityTypes,
 } from '../selectors'
-
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -51,9 +50,7 @@ const useStyles = makeStyles(theme => ({
     height: '50vh',
     overflowY: 'auto',
   },
-}));
-
-
+}))
 
 export const AssetName = (props) => {
   const {
@@ -75,7 +72,7 @@ export const AssetName = (props) => {
     <Tooltip title={assetName} placement='bottom'>
       <ListItemText
         primary={
-          <Typography variant='h5' style={{fontSize: '1rem'}}>
+          <Typography variant='h5' style={{ fontSize: '1rem' }}>
             {assetName}
           </Typography>
         }
@@ -109,9 +106,9 @@ export default function AssetTasksPanel(props) {
   const [dialog, setDialog] = useState(false)	   
   const [taskDetails, setTaskDetails] = useState(false)
   
-  const addTask = () => {
+  function handleTaskAddClick() {
     setDialog(false)
-    dispatch(addAssetTask(assetId, name, description, priority))
+    dispatch(addTask(assetId, name, description, priority))
     setName('')
     setDescription('')
     setPriority('')
@@ -122,12 +119,10 @@ export default function AssetTasksPanel(props) {
       !archived ?
       task.status !== TASK_ARCHIVE_STATUS && task.status !== TASK_STATUS_CANCELLED :
       task.status === TASK_ARCHIVE_STATUS || task.status === TASK_STATUS_CANCELLED
-    )
-  )
+  ))
 
   const assetNameComponent = AssetName({
-    assetName, assetTypeCode, assetTypeName
-  })
+    assetName, assetTypeCode, assetTypeName })
 
   const handleDisplayDetails = (task) => {
     dispatch(refreshTaskComments(task.id))
@@ -197,7 +192,11 @@ export default function AssetTasksPanel(props) {
         <Button onClick={() => {setDialog(false)}}  color="primary">
           Cancel
         </Button>
-        <Button onClick={addTask}  color="secondary" disabled={name === '' || priority === ''}>
+        <Button
+          onClick={handleTaskAddClick}
+          color='secondary'
+          disabled={name === '' || priority === ''}
+        >
           Create
         </Button>
       </DialogActions>

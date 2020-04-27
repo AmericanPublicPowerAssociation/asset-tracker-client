@@ -57,6 +57,13 @@ export const SET_MAP_VIEW_STATE = 'SET_MAP_VIEW_STATE'
 export const ASSETS_MAP_LAYER_ID = 'assets'
 export const BUSES_MAP_LAYER_ID = 'buses'
 
+export const OVERLAY_MODE_ASSETS = 'assets'
+export const OVERLAY_MODE_TASKS = 'tasks'
+export const OVERLAY_MODE_RISKS = 'risks'
+export const OVERLAY_MODE = OVERLAY_MODE_ASSETS
+
+export const SET_OVERLAY_MODE = 'SET_OVERLAY_MODE'
+
 export const SKETCH_MODE_VIEW = 'view'
 
 export const SKETCH_MODE_ADD = 'add'

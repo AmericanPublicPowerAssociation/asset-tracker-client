@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect'
+import { createSelector } from '@reduxjs/toolkit'
 import {
   ASSET_TYPE_CODE_LINE,
 } from '../constants'
@@ -9,7 +9,7 @@ export const getFocusingAssetId = state => state.focusingAssetId
 export const getTaskById = state => state.taskById
 export const getComments = state => state.taskComments.comments || []
 
-export const getAssetByIdLength = createSelector([
+export const getAssetCount = createSelector([
   getAssetById,
 ], (
   assetById,

@@ -1,3 +1,4 @@
+import { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   EditableGeoJsonLayer,
@@ -8,6 +9,8 @@ import {
   setAssetsGeoJson,
   setFocusingAssetId,
   setMapViewState,
+  setSketchMode,
+  setSelectedAssetIndexes,
 } from '../actions'
 import {
   ASSETS_MAP_LAYER_ID,
@@ -20,12 +23,25 @@ import {
   SKETCH_MODE_ADD_LINE,
 } from '../constants'
 import {
+  MapContext,
+} from '../features/maps/mapScreen'
+import {
   CustomEditableGeoJsonLayer,
   getAssetTypeCode,
   getMapMode,
   makeAsset,
   makeAssetId,
 } from '../routines'
+import {
+  getAssetIdByBusId,
+  getAssetTypeByCode,
+  getAssetsGeoJson,
+  getBusesGeoJson,
+  getColors,
+  getSelectedAssetIndexes,
+  getSelectedBusIndexes,
+  getSketchMode,
+} from '../selectors'
 
 let nextAssetId = makeAssetId()
 
@@ -39,16 +55,17 @@ export function useMovableMap() {
   }
 }
 
-export function useEditableMap(
-  sketchMode, changeSketchMode,
-  assetIdByBusId, assetTypeByCode,
-  assetsGeoJson, selectedAssetIndexes, setSelectedAssetIndexes,
-  busesGeoJson, selectedBusIndexes,
-  mapEditState,
-  colors,
-) {
+export function useEditableMap() {
+  const map = useContext(MapContext)
   const dispatch = useDispatch()
   const sketchMode = useSelector(getSketchMode)
+  const assetsGeoJson = useSelector(getAssetsGeoJson)
+  const busesGeoJson = useSelector(getBusesGeoJson)
+  const selectedAssetIndexes = useSelector(getSelectedAssetIndexes)
+  const selectedBusIndexes = useSelector(getSelectedBusIndexes)
+  const assetTypeByCode = useSelector(getAssetTypeByCode)
+  const assetIdByBusId = useSelector(getAssetIdByBusId)
+  const colors = useSelector(getColors)
   const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
   return {
     getAssetsMapLayer() {
@@ -75,18 +92,19 @@ export function useEditableMap(
           nextAssetId = makeAssetId()
           if (isAddingLine) {
             // Have subsequent clicks extend the same line
-            setSelectedAssetIndexes(featureIndexes)
+            dispatch(setSelectedAssetIndexes(featureIndexes))
             // !!! Add line to list of assets that need to be processed
           } else {
             // Prevent adding multiple assets by mistake
-            changeSketchMode(SKETCH_MODE_ADD)
+            dispatch(setSketchMode(SKETCH_MODE_ADD))
           }
         }
-        if (mapEditState.withDoubleClick) {
+        if (map.withDoubleClick) {
           if (isAddingLine) {
-            changeSketchMode(SKETCH_MODE_ADD)  // End line on double click
+            // End line on double click
+            dispatch(setSketchMode(SKETCH_MODE_ADD))
           }
-          delete mapEditState.withDoubleClick
+          delete map.withDoubleClick
         }
         dispatch(setAssetsGeoJson(updatedData))  // Update geojson for assets
       }
@@ -105,7 +123,7 @@ export function useEditableMap(
 
       function handleLayerDoubleClick(event) {
         console.log('layer double click', event)
-        mapEditState.withDoubleClick = true
+        map.withDoubleClick = true
       }
 
       function handleLayerStopDragging(event) {
@@ -170,7 +188,7 @@ export function useEditableMap(
       switch (event.key) {
         case 'Enter': {
           if (isAddingLine) {
-            changeSketchMode(SKETCH_MODE_ADD)
+            dispatch(setSketchMode(SKETCH_MODE_ADD))
           }
           break
         }

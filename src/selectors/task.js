@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect'
+import { createSelector } from '@reduxjs/toolkit'
 import {
   TASK_STATUS_DONE,
   TASK_STATUS_CANCELLED,
@@ -34,7 +34,7 @@ export const getOpenTaskByIdLength = createSelector([
 export const getTaskPriorityTypes = createSelector([
   getTaskCodeTypes,
 ], (
-  taskCodeTypes
+  taskCodeTypes,
 ) => {
   return taskCodeTypes.taskPriorityTypes
 })
@@ -42,7 +42,7 @@ export const getTaskPriorityTypes = createSelector([
 export const getTaskStatusTypes = createSelector([
   getTaskCodeTypes,
 ], (
-  taskCodeTypes
+  taskCodeTypes,
 ) => {
   return taskCodeTypes.taskStatusTypes
 })
