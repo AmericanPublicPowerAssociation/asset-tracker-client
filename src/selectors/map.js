@@ -1,10 +1,11 @@
-import { createSelector } from '@reduxjs/toolkit'
+import { createSelector } from 'reselect'
 import {
   getAssetById,
 } from './asset'
 import {
   BRIGHT_MAP_STYLE_NAMES,
   MAP_STYLE_BY_NAME,
+  SKETCH_MODE_VIEW,
 } from '../constants'
 import {
   getBusFeatures,
@@ -47,4 +48,12 @@ export const getBusesGeoJson = createSelector([
     type: 'FeatureCollection',
     features: busFeatures,
   }
+})
+
+export const getIsViewing = createSelector([
+  getSketchMode,
+], (
+  sketchMode,
+) => {
+  return sketchMode === SKETCH_MODE_VIEW
 })

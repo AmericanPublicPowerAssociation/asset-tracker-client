@@ -8,6 +8,7 @@ import BusAttributesListItem from './BusAttributesListItem'
 import BusConnectionsList from './BusConnectionsList'
 import {
   setFocusingBusId,
+  setSelectedBusIndexes,
 } from '../actions'
 import {
   getCountDescription,
@@ -21,21 +22,15 @@ import {
   getFocusingBusId,
 } from '../selectors'
 
-export default function AssetConnectionsListItems({
-  asset,
-  isEditing,
-  setSelectedBusIndexes,
-  setSelectedAssetIndexes,
-  noHighlight,
-}) {
+export default function AssetConnectionsListItems({ asset, isEditing }) {
   const dispatch = useDispatch()
   const [isOpenByIndex, setIsOpenByIndex] = useState({})
+  const busesGeoJson = useSelector(getBusesGeoJson)
+  const focusingBusId = useSelector(getFocusingBusId)
   const assetIdsByBusId = useSelector(getAssetIdsByBusId)
   const assetId = asset.id
   const assetTypeCode = asset.typeCode
   const connections = asset.connections || {}
-  const busesGeoJson = useSelector(getBusesGeoJson)
-  const focusingBusId = useSelector(getFocusingBusId)
 
   return Object.entries(connections).map(([index, connection]) => {
     const { busId } = connection
@@ -56,11 +51,9 @@ export default function AssetConnectionsListItems({
       const featureIndex = busesGeoJson.features.findIndex(
         feature => feature.properties.id === busId)
       if (featureIndex > -1) {
-        setSelectedBusIndexes([featureIndex])
-        dispatch(setFocusingBusId(busId))
-      } else {
-        setSelectedBusIndexes([])
+        dispatch(setSelectedBusIndexes([featureIndex]))
       }
+      dispatch(setFocusingBusId(busId))
     }
 
     return connectedAssetCount > 0 ?
@@ -71,7 +64,7 @@ export default function AssetConnectionsListItems({
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         onClick={handleClickOrFocus}
-        highlight={ !noHighlight && focusingBusId === busId }
+        highlight={ focusingBusId === busId }
       >
         <BusAttributesListItem
           assetId={assetId}
@@ -80,10 +73,7 @@ export default function AssetConnectionsListItems({
           isEditing={isEditing}
           onFocus={handleClickOrFocus}
         />
-        <BusConnectionsList
-          connectedAssetIds={connectedAssetIds}
-          setSelectedAssetIndexes={setSelectedAssetIndexes}
-        />
+        <BusConnectionsList connectedAssetIds={connectedAssetIds} />
       </CollapsibleListItem> :
       <ListItem key={index} disableGutters component='div'>
         <ListItemText primary={title} secondary={description} />

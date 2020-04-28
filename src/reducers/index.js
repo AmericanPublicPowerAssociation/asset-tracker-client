@@ -8,9 +8,6 @@ import {
   sortedRisks,
   vendorNameSuggestions,
 } from 'asset-report-risks'
-import {
-  SET_SKETCH_MODE,
-} from '../constants'
 
 import mapStyleName from './mapStyleName'
 import mapViewState from './mapViewState'
@@ -30,7 +27,6 @@ import taskCodeTypes from './taskCodeTypes'
 const reduceHorizontally = combineReducers({
   mapStyleName,
   mapViewState,
-  sketchMode,
   overlayMode,
   selectedAssetIndexes,
   selectedBusIndexes,
@@ -47,18 +43,10 @@ const reduceHorizontally = combineReducers({
   sortedRisks,
   risks,
   taskCodeTypes,
+  sketchMode,  // Keep last
 })
 
 const reduceVertically = produce((draft, action) => {
-  switch (action.type) {
-    case SET_SKETCH_MODE: {
-      const sketchMode = action.payload
-      draft.selectedAssetIndexes = []
-      draft.sketchMode = sketchMode
-      break
-    }
-    default: { }
-  }
 })
 
 export default reduceReducers(

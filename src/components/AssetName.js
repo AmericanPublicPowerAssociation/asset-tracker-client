@@ -14,11 +14,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function AssetName(props) {
-  const {
-    asset,
-    isEditing,
-  } = props
+export default function AssetName({ asset, isEditing }) {
   const classes = useStyles()
   const dispatch = useDispatch()
 

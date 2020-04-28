@@ -2,7 +2,6 @@ import React, { useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
-import { EditableGeoJsonLayer } from 'nebula.gl'
 import { Feature, LineString, Coord, point } from '@turf/helpers'
 import lineSlice  from '@turf/line-slice'
 import {

@@ -1,4 +1,4 @@
-export default function AssetRisksPanel() {
+export default function AssetRisksPanel({ asset }) {
   return (
     'Risks for Focused Asset'
   )

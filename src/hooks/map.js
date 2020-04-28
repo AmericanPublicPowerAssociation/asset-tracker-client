@@ -1,16 +1,16 @@
-import { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   EditableGeoJsonLayer,
+} from '@nebula.gl/layers'
+import {
   ViewMode,
-} from 'nebula.gl'
+} from '@nebula.gl/edit-modes'
 import {
   setAsset,
   setAssetsGeoJson,
   setFocusingAssetId,
   setMapViewState,
   setSketchMode,
-  setSelectedAssetIndexes,
 } from '../actions'
 import {
   ASSETS_MAP_LAYER_ID,
@@ -20,13 +20,9 @@ import {
   BUS_RADIUS_IN_METERS,
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_ASSET,
-  SKETCH_MODE_ADD_LINE,
 } from '../constants'
 import {
-  MapContext,
-} from '../features/maps/mapScreen'
-import {
-  CustomEditableGeoJsonLayer,
+  // CustomEditableGeoJsonLayer,
   getAssetTypeCode,
   getMapMode,
   makeAsset,
@@ -49,14 +45,12 @@ export function useMovableMap() {
   const dispatch = useDispatch()
   return {
     handleMapMove({ viewState }) {
-      // Update the map viewport
       dispatch(setMapViewState(viewState))
     },
   }
 }
 
 export function useEditableMap() {
-  const map = useContext(MapContext)
   const dispatch = useDispatch()
   const sketchMode = useSelector(getSketchMode)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
@@ -66,7 +60,6 @@ export function useEditableMap() {
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetIdByBusId = useSelector(getAssetIdByBusId)
   const colors = useSelector(getColors)
-  const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
   return {
     getAssetsMapLayer() {
       const mapMode = getMapMode(sketchMode)
@@ -90,28 +83,15 @@ export function useEditableMap() {
           dispatch(setAsset(asset))
           dispatch(setFocusingAssetId(nextAssetId))
           nextAssetId = makeAssetId()
-          if (isAddingLine) {
-            // Have subsequent clicks extend the same line
-            dispatch(setSelectedAssetIndexes(featureIndexes))
-            // !!! Add line to list of assets that need to be processed
-          } else {
-            // Prevent adding multiple assets by mistake
-            dispatch(setSketchMode(SKETCH_MODE_ADD))
-          }
-        }
-        if (map.withDoubleClick) {
-          if (isAddingLine) {
-            // End line on double click
-            dispatch(setSketchMode(SKETCH_MODE_ADD))
-          }
-          delete map.withDoubleClick
+          // Prevent adding multiple assets by mistake
+          dispatch(setSketchMode(SKETCH_MODE_ADD))
         }
         dispatch(setAssetsGeoJson(updatedData))  // Update geojson for assets
       }
 
       function handleAssetClick(info, event) {
         console.log('asset click', info, event)
-        const targetAssetId = info.object.properties.id
+        const targetAssetId = info.object && info.object.properties.id
         if (!targetAssetId) {
           return
         }
@@ -121,16 +101,20 @@ export function useEditableMap() {
         }
       }
 
+      /*
       function handleLayerDoubleClick(event) {
         console.log('layer double click', event)
-        map.withDoubleClick = true
       }
+      */
 
       function handleLayerStopDragging(event) {
         console.log('layer stop dragging', event)
       }
 
-      return new CustomEditableGeoJsonLayer({
+      console.log(assetsGeoJson)
+
+      // return new CustomEditableGeoJsonLayer({
+      return new EditableGeoJsonLayer({
         id: ASSETS_MAP_LAYER_ID,
         data: assetsGeoJson,
         mode: mapMode,
@@ -151,14 +135,14 @@ export function useEditableMap() {
         },
         onClick: handleAssetClick,
         onEdit: handleAssetEdit,
-        onDoubleClick: handleLayerDoubleClick,
-        onStopDragging: handleLayerStopDragging,
+        // onDoubleClick: handleLayerDoubleClick,
+        // onStopDragging: handleLayerStopDragging,
       })
     },
     getBusesMapLayer() {
       function handleBusClick(info, event) {
         console.log('bus click', info, event)
-        const targetBusId = info.object.properties.id
+        const targetBusId = info.object && info.object.properties.id
         const targetAssetId = assetIdByBusId[targetBusId]
         // If we are not adding a specific type of asset,
         if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
@@ -186,8 +170,8 @@ export function useEditableMap() {
       event.persist()
       console.log('map key', event)
       switch (event.key) {
-        case 'Enter': {
-          if (isAddingLine) {
+        case 'Escape': {
+          if (sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
             dispatch(setSketchMode(SKETCH_MODE_ADD))
           }
           break

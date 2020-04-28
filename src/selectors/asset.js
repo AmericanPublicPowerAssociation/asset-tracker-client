@@ -1,4 +1,4 @@
-import { createSelector } from '@reduxjs/toolkit'
+import { createSelector } from 'reselect'
 import {
   ASSET_TYPE_CODE_LINE,
 } from '../constants'
@@ -6,8 +6,6 @@ import {
 export const getAssetTypeByCode = state => state.assetTypeByCode
 export const getAssetById = state => state.assetById
 export const getFocusingAssetId = state => state.focusingAssetId
-export const getTaskById = state => state.taskById
-export const getComments = state => state.taskComments.comments || []
 
 export const getAssetCount = createSelector([
   getAssetById,
@@ -74,24 +72,4 @@ export const getFocusingAsset = createSelector([
   assetById,
 ) => {
   return assetById[focusingAssetId]
-})
-
-
-export const getTasksForFocusedAsset = createSelector([
-  getFocusingAssetId,
-  getTaskById,
-], (
-  focusingAssetId,
-  taskById,
-) => {
-  const keys = Object.keys(taskById).filter((key) => taskById[key].assetId === focusingAssetId)
-  return keys.map((key) => taskById[key])
-})
-
-export const getCurrentTaskComments = createSelector([
-  getComments,
-], (
-  comments,
-) => {
-  return comments
 })

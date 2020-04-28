@@ -8,6 +8,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import {
   setFocusingAssetId,
+  setSelectedAssetIndexes,
 } from '../actions'
 import {
   CLICK_DELAY,
@@ -23,8 +24,8 @@ function cancellablePromise(promise) {
 
   const wrappedPromise = new Promise( (resolve, reject) => {
     promise.then(
-      value => (isCancelled ? reject({isCancelled, value}): resolve(value)),
-      error => reject({ isCancelled, error}),
+      value => (isCancelled ? reject({ isCancelled, value }): resolve(value)),
+      error => reject({ isCancelled, error }),
     )
   })
 
@@ -90,11 +91,7 @@ function useClickPreventionOnDoubleClick(onClick, onDoubleClick) {
 }
 
 
-export default function BusConnectionsList(props) {
-  const {
-    connectedAssetIds,
-    setSelectedAssetIndexes,
-  } = props
+export default function BusConnectionsList({ connectedAssetIds }) {
   const dispatch = useDispatch()
   const [onClick, onDoubleClick] = useClickPreventionOnDoubleClick(
     onClickHighlight,
@@ -112,7 +109,7 @@ export default function BusConnectionsList(props) {
   function onClickHighlight(assetId) {
     const features = assetsGeoJson.features
     const index = features.findIndex( feature => feature.properties.id === assetId)
-    index > -1 && setSelectedAssetIndexes([index])
+    index > -1 && dispatch(setSelectedAssetIndexes([index]))
   }
 
   return (

@@ -1,11 +1,13 @@
 import {
+  EditableGeoJsonLayer,
+} from '@nebula.gl/layers'
+import {
   DrawLineStringMode,
   DrawPointMode,
   DrawPolygonMode,
-  EditableGeoJsonLayer,
   ModifyMode,
   ViewMode,
-} from 'nebula.gl'
+} from '@nebula.gl/edit-modes'
 import {
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_ADD_METER,
@@ -15,12 +17,14 @@ import {
 } from '../constants'
 
 export class CustomEditableGeoJsonLayer extends EditableGeoJsonLayer {
+  /*
   onDoubleClick(event) {
     const props = this.props
     super.onDoubleClick(event, props)
     const onDoubleClick = props.onDoubleClick
     onDoubleClick && onDoubleClick(event, props)
   }
+  */
 
   onStopDragging(event) {
     const props = this.props

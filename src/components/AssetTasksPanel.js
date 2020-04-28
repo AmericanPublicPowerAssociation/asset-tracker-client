@@ -32,6 +32,7 @@ import {
 } from '../constants'
 import {
   getAssetTypeByCode,
+  getFocusingTasks,
   getTaskPriorityTypes,
 } from '../selectors'
 
@@ -81,14 +82,10 @@ export const AssetName = (props) => {
   </ListItem>)
 }
 
-export default function AssetTasksPanel(props) {
-  const dispatch = useDispatch()
+export default function AssetTasksPanel({ asset }) {
   const classes = useStyles()
-  const {
-    asset,
-    tasks,
-    disableInput,
-  } = props
+  const dispatch = useDispatch()
+  const tasks = useSelector(getFocusingTasks)
 
   const assetId = asset.id
   const assetName = asset.name
@@ -131,13 +128,13 @@ export default function AssetTasksPanel(props) {
 
   const listTasks = (<>
     <FormGroup row>
-      <TextField id="search" label="Search task" value={query}
+      <TextField id='search' label='Search task' value={query}
                  onChange={(e) => setQuery(e.target.value) } />
       <FormControlLabel control={
-        <Switch checked={archived} onChange={ () => setArchived(!archived) } value="archived" />}
-                        label="Show archived tasks" />
+        <Switch checked={archived} onChange={ () => setArchived(!archived) } value='archived' />}
+                        label='Show closed tasks' />
     </FormGroup>
-    <TasksList showDetails={handleDisplayDetails} showComments={() => {}} asset={asset} tasks={partialTasks} disableInput={disableInput}/>
+    <TasksList showDetails={handleDisplayDetails} showComments={() => {}} asset={asset} tasks={partialTasks} />
 
     <Button className={classes.bottomAction} startIcon={<AddIcon />} onClick={() => setDialog(true)}>
       Add task
@@ -145,22 +142,22 @@ export default function AssetTasksPanel(props) {
   </>)
 
   const getTaskById = () => {
-      if (taskDetails) {
-        for (let i = 0; i < tasks.length; i++) {
-          if (tasks[i].id === taskDetails.id) return tasks[i]
-        }
+    if (taskDetails) {
+      for (let i = 0; i < tasks.length; i++) {
+        if (tasks[i].id === taskDetails.id) return tasks[i]
       }
-      return {}
+    }
+    return {}
   }
 
   return (<>
     {assetNameComponent}
     {listTasks}
 
-    <Dialog open={dialog} onClose={() => setDialog(false)} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">Add task</DialogTitle>
+    <Dialog open={dialog} onClose={() => setDialog(false)} aria-labelledby='form-dialog-title'>
+      <DialogTitle id='form-dialog-title'>Add task</DialogTitle>
       <DialogContent>
-        <TextField id="name" label="Task name" value={name}
+        <TextField id='name' label='Task name' value={name}
                    onChange={(e) => setName(e.target.value) } />
 
         <div>
@@ -174,7 +171,7 @@ export default function AssetTasksPanel(props) {
                   id: 'priority',
               }}
             >
-              <option aria-label="None" value="" />
+              <option aria-label='None' value='' />
               {
                 Object.values(taskPriorityTypes).map( priorityType => (
                   <option
@@ -189,7 +186,7 @@ export default function AssetTasksPanel(props) {
         </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => {setDialog(false)}}  color="primary">
+        <Button onClick={() => {setDialog(false)}}  color='primary'>
           Cancel
         </Button>
         <Button

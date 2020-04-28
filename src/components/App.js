@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import useTheme from '@material-ui/core/styles/useTheme'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
-import AssetsMap from './AssetsMap'
+// import useTheme from '@material-ui/core/styles/useTheme'
+// import useMediaQuery from '@material-ui/core/useMediaQuery'
+import AssetsMap from './AssetsMapTest'
+// import AssetsMap from './AssetsMap'
 import SketchButtons from './SketchButtons'
 import SketchModeToolbar from './SketchModeToolbar'
 import SketchAddToolbar from './SketchAddToolbar'
@@ -10,10 +11,10 @@ import ActionsWindow from './ActionsWindow'
 import OptionsWindow from './OptionsWindow'
 import OverlaysWindow from './OverlaysWindow'
 import DetailsWindow from './DetailsWindow'
-import TablesWindow from './TablesWindow'
-import TablesDialog from './TablesDialog'
-import DownloadManager from './DownloadManager'
-import AssetDeleteDialog from './AssetDeleteDialog'
+// import TablesWindow from './TablesWindow'
+// import TablesDialog from './TablesDialog'
+// import ImportExportDialog from './ImportExportDialog'
+// import AssetDeleteDialog from './AssetDeleteDialog'
 import {
   refreshRisks,
 } from 'asset-report-risks'
@@ -28,14 +29,14 @@ import {
 import './App.css'
 
 export default function App() {
-  const theme = useTheme()
+  // const theme = useTheme()
   const dispatch = useDispatch()
-  const isLayoutMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  // const isLayoutMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  // const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [
-    isImportExportDialogOpen,
+    // isImportExportDialogOpen,
     setIsImportExportDialogOpen,
   ] = useState(false)
 
@@ -72,27 +73,18 @@ export default function App() {
       <ActionsWindow
         showImportExportDialog={() => setIsImportExportDialogOpen(true)}
       />
-    {/*
       <OptionsWindow
         isWithDetails={isWithDetails}
         isWithTables={isWithTables}
-        setIsWithDetails={setIsWithDetails}
-        setIsWithTables={setIsWithTables}
+        toggleDetailsWindow={() => setIsWithDetails(!isWithDetails)}
+        toggleTablesWindow={() => setIsWithTables(!isWithTables)}
       />
       <OverlaysWindow />
-      <DownloadManager
-        open={isImportExportDialogOpen}
-        onOk={element => {
-          window.location = `/assets.dss?source=${element}`
-          setIsImportExportDialogOpen(false)}
-        }
-        onCancel={() => {setIsImportExportDialogOpen(false)}}
-        onClose={()=> {setIsImportExportDialogOpen(false)}}
-      />
       <DetailsWindow
         isWithDetails={isWithDetails}
         isWithTables={isWithTables}
       />
+    {/*
     {isWithTables && (isLayoutMobile ?
       <TablesDialog
         isWithTables={isWithTables}
@@ -103,12 +95,21 @@ export default function App() {
         setIsWithTables={setIsWithTables}
       />
     )}
-      { isDeleteDialogOpen &&
-        <AssetDeleteDialog
-          openDialog={isDeleteDialogOpen}
-          onClose={ () => setIsDeleteDialogOpen(false) }
-        />
-      }
+      <ImportExportDialog
+        open={isImportExportDialogOpen}
+        onOk={element => {
+          window.location = `/assets.dss?source=${element}`
+          setIsImportExportDialogOpen(false)}
+        }
+        onCancel={() => {setIsImportExportDialogOpen(false)}}
+        onClose={()=> {setIsImportExportDialogOpen(false)}}
+      />
+    { isDeleteDialogOpen &&
+      <AssetDeleteDialog
+        openDialog={isDeleteDialogOpen}
+        onClose={ () => setIsDeleteDialogOpen(false) }
+      />
+    }
     */}
     </div>
   )

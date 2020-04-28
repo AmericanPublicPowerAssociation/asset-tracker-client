@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button'
 import FormControl from '@material-ui/core/FormControl'
 import NativeSelect from '@material-ui/core/NativeSelect'
 import Input from '@material-ui/core/Input'
-import Typography from "@material-ui/core/Typography"
+import Typography from '@material-ui/core/Typography'
 
 import {
   getAssetById,
@@ -16,13 +16,13 @@ import {
 } from '../selectors'
 
 
-export default function DownloadManager(props) {
+export default function ImportExportDialog(props) {
   const {
     open,
     onClose,
     onCancel,
-    onOk
-  } = props;
+    onOk,
+  } = props
 
   const [powerId, setPowerId] = useState('')
   // const { head, data, name } = useSelector(getAssetTableData)

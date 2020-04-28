@@ -14,7 +14,7 @@ import {
 } from '../constants'
 import {
   getFocusingAsset,
-  getTasksForFocusedAsset,
+  getOverlayMode,
 } from '../selectors'
 
 const useStyles = makeStyles(theme => ({
@@ -34,18 +34,10 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function DetailsWindow(props) {
+export default function DetailsWindow({ isWithDetails, isWithTables }) {
   const classes = useStyles()
-  const {
-    isWithDetails,
-    isWithTables,
-    overlayMode,
-    sketchMode,
-    setSelectedBusIndexes,
-    setSelectedAssetIndexes,
-  } = props
+  const overlayMode = useSelector(getOverlayMode)
   const focusingAsset = useSelector(getFocusingAsset)
-  const tasksForFocusingAsset = useSelector(getTasksForFocusedAsset)
   
   const DetailsPanel = {
     [OVERLAY_MODE_ASSETS]: AssetAttributesPanel,
@@ -54,18 +46,11 @@ export default function DetailsWindow(props) {
   }[overlayMode]
 
   const detailsPanel = focusingAsset ?
-    <DetailsPanel
-      asset={focusingAsset}
-      tasks={tasksForFocusingAsset}
-      sketchMode={sketchMode}
-      overlayMode={overlayMode} 
-      setSelectedBusIndexes={setSelectedBusIndexes}
-      setSelectedAssetIndexes={setSelectedAssetIndexes}
-    /> : <EmptyDetailsPanel />
+    <DetailsPanel asset={focusingAsset} /> :
+    <EmptyDetailsPanel />
 
-  return (
+  return isWithDetails && (
     <Paper className={clsx(classes.root, {
-      poof: !isWithDetails,
       [classes.withTables]: isWithTables,
     })}>
       {detailsPanel}

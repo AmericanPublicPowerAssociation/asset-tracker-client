@@ -6,7 +6,6 @@ import {
   PICKING_DEPTH,
   PICKING_RADIUS_IN_PIXELS,
 } from '../constants'
-import { MapProvider } from '../features/maps/mapScreen'
 import {
   useEditableMap,
   useMovableMap,
@@ -31,26 +30,28 @@ export default function AssetsMap() {
     handleMapKey,
     handleMapClick,
   } = useEditableMap()
-  const mapLayers = [getAssetsMapLayer(), getBusesMapLayer()]
+  const mapLayers = [
+    getAssetsMapLayer(),
+    // getBusesMapLayer(),
+  ]
+  // console.log(mapLayers)
   return (
-    <MapProvider>
-      <div onKeyUp={handleMapKey}>
-        <DeckGL
-          ref={deckGL}
-          layers={mapLayers}
-          pickingRadius={PICKING_RADIUS_IN_PIXELS}
-          pickingDepth={PICKING_DEPTH}
-          controller={{ doubleClickZoom: false }}
-          viewState={mapViewState}
-          onViewStateChange={handleMapMove}
-          onClick={handleMapClick}
-        >
-          <StaticMap
-            mapStyle={mapStyle}
-            mapboxApiAccessToken={REACT_APP_MAPBOX_TOKEN}
-          />
-        </DeckGL>
-      </div>
-    </MapProvider>
+    <div onKeyUp={handleMapKey}>
+      <DeckGL
+        ref={deckGL}
+        layers={mapLayers}
+        pickingRadius={PICKING_RADIUS_IN_PIXELS}
+        pickingDepth={PICKING_DEPTH}
+        controller={{ doubleClickZoom: false }}
+        viewState={mapViewState}
+        onViewStateChange={handleMapMove}
+        onClick={handleMapClick}
+      >
+        <StaticMap
+          mapStyle={mapStyle}
+          mapboxApiAccessToken={REACT_APP_MAPBOX_TOKEN}
+        />
+      </DeckGL>
+    </div>
   )
 }

@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import { useDispatch } from 'react-redux'
 import {
   deleteAsset,
   setFocusingAssetId,
@@ -20,56 +19,25 @@ import {
   getPickedInfo,
 } from '../routines'
 
-export function usePickableLayer(
-  sketchMode,
-  setSelectedAssetIndexes,
-  setSelectedBusIndexes,
-) {
-  const dispatch = useDispatch()
-  return useMemo(() => ({
-    handleLayerSelect(event) {
-      const info = getPickedInfo(event, pick => !pick.isGuide)
-      let assetId = info && info.object.properties.id
-      if (!assetId) {
-        return
-      }
-      let selectedAssetIndexes = [info.index]
-      if (sketchMode === SKETCH_MODE_DELETE) {
-        dispatch(deleteAsset(assetId))
-        selectedAssetIndexes = []
-        assetId = null
-      }
-      // Update selection in map
-      setSelectedAssetIndexes(selectedAssetIndexes)
-      setSelectedBusIndexes([])
-      // Update focus in detail
-      dispatch(setFocusingAssetId(assetId))
-      dispatch(setFocusingBusId(null))
-    },
-  }), [
-    dispatch,
-    sketchMode,
-    setSelectedAssetIndexes,
-    setSelectedBusIndexes,
-  ])
-}
-
-export function useEditableLayer(
-) {
-  return useMemo(() => ({
-    handleLayerEdit({editType, editContext, updatedData}) {
-      switch(editType) {
-        // If a feature is being added for the first time,
-        case 'addFeature': {
-          // Show details for the new asset
-          dispatch(setFocusingAssetId(assetId))
-          break
-        }
-      }
-    },
-  }), [
-  ])
-}
+handleLayerSelect(event) {
+  const info = getPickedInfo(event, pick => !pick.isGuide)
+  let assetId = info && info.object.properties.id
+  if (!assetId) {
+    return
+  }
+  let selectedAssetIndexes = [info.index]
+  if (sketchMode === SKETCH_MODE_DELETE) {
+    dispatch(deleteAsset(assetId))
+    selectedAssetIndexes = []
+    assetId = null
+  }
+  // Update selection in map
+  setSelectedAssetIndexes(selectedAssetIndexes)
+  setSelectedBusIndexes([])
+  // Update focus in detail
+  dispatch(setFocusingAssetId(assetId))
+  dispatch(setFocusingBusId(null))
+},
 
 export function useInterpretableLayer(
 ) {
