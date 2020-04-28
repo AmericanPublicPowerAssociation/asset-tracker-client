@@ -2,8 +2,8 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
-import ImportExportIcon from '@material-ui/icons/ImportExport'
 import Tooltip from '@material-ui/core/Tooltip'
+import ImportExportIcon from '@material-ui/icons/ImportExport'
 import SeeUserIcon from '@material-ui/icons/AccountCircle'
 import SignOutIcon from '@material-ui/icons/LockOpen'
 import {
@@ -12,6 +12,7 @@ import {
 import {
   getColors,
 } from '../selectors'
+
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
@@ -20,22 +21,22 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function ActionsWindow(props) {
+export default function ActionsWindow({ showImportExportDialog }) {
   const classes = useStyles()
   const colors = useSelector(getColors)
   const activeColor = colors.active
-  const {
-    showImportExport,
-  } = props
   return (
     <div className={classes.root}>
       <Tooltip title='Import and Export Assets'>
-        <IconButton onClick={showImportExport} className={activeColor}>
+        <IconButton
+          className={activeColor}
+          onClick={showImportExportDialog}
+        >
           <ImportExportIcon />
         </IconButton>
       </Tooltip>
 
-      <Tooltip title={`See Agenda for ${USER_NAME}`}>
+      <Tooltip title={`Edit Preferences for ${USER_NAME}`}>
         <IconButton className={activeColor}>
           <SeeUserIcon />
         </IconButton>

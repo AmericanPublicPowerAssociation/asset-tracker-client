@@ -31,8 +31,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function SketchModeToolbar() {
-  const dispatch = useDispatch()
   const classes = useStyles()
+  const dispatch = useDispatch()
   const sketchMode = useSelector(getSketchMode)
   const isViewing = sketchMode === SKETCH_MODE_VIEW
   return !isViewing && (

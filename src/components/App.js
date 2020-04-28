@@ -28,16 +28,16 @@ import {
 import './App.css'
 
 export default function App() {
-  const dispatch = useDispatch()
   const theme = useTheme()
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const dispatch = useDispatch()
+  const isLayoutMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [
     isImportExportDialogOpen,
     setIsImportExportDialogOpen,
   ] = useState(false)
-  const isLayoutMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   /*
   function changeSketchMode(newSketchMode, busId) {
@@ -68,11 +68,11 @@ export default function App() {
       />
       <SketchButtons />
       <SketchModeToolbar />
-    {/*
       <SketchAddToolbar />
       <ActionsWindow
-        showImportExport={() => setIsImportExportDialogOpen(true)}
+        showImportExportDialog={() => setIsImportExportDialogOpen(true)}
       />
+    {/*
       <OptionsWindow
         isWithDetails={isWithDetails}
         isWithTables={isWithTables}
