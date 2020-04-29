@@ -53,8 +53,7 @@ export default function AssetsMap() {
             [-93.26075731086718, 37.24263772131575],
             [-93.26085387039171, 37.240246200746924],
             [-93.25677691268905, 37.24010954013665],
-            [-93.256594522476, 37.24263772131575],
-            [-93.26075731086718, 37.24263772131575]
+            [-93.26075731086718, 37.24263772131575],
           ]],
         },
       }],
@@ -78,6 +77,7 @@ export default function AssetsMap() {
       ref={deckGL}
       controller={true}
       layers={mapLayers}
+      pickingRadius={20}
       initialViewState={mapViewState}
       onClick={(info, event) => console.log(
         'map click', info.object, info, event)}
