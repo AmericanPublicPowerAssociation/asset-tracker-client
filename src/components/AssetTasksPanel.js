@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
   },
   bottomAction: {
-    width: '95%',
+    width: '100%',
     bottom: 0,
   },
   scroll: {
