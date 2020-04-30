@@ -134,10 +134,8 @@ export function* updateComments(payload) {
 }
 
 export function* watchUploadAssetsCsv() {
-  console.log('===Watch')
   yield takeEvery(UPLOAD_ASSETS_CSV, function* (action) {
     const data = new FormData()
-
     data.append('file', action.payload.file)
     data.append('overwrite', action.payload.overwrite)
 

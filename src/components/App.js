@@ -29,7 +29,7 @@ import {
   MINIMUM_BUS_ID_LENGTH,
   OVERLAY_MODE,
   SKETCH_MODE,
-  SKETCH_MODE_ADD_LINE,
+  SKETCH_MODE_ADD_LINE, SKETCH_MODE_VIEW,
 } from '../constants'
 import {
   getRandomId,
@@ -42,7 +42,6 @@ import {
   getAssetsGeoJson,
 } from '../selectors'
 import './App.css'
-import Uppy from "@uppy/core";
 
 
 export default function App() {
@@ -59,14 +58,6 @@ export default function App() {
   const isScreenXS = useMediaQuery('(max-width:600px)')
   const assetById = useSelector(getAssetById)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
-  const [uppy, setUppy] = useState(null)
-
-  useEffect(() => setUppy(Uppy({
-    meta: { type: 'avatar' },
-    restrictions: { maxNumberOfFiles: 1 },
-    autoProceed: false
-  })), [])
-
   function changeSketchMode(newSketchMode, busId) {
     if (sketchMode === SKETCH_MODE_ADD_LINE) {
       const lineAssetId = getSelectedAssetId(selectedAssetIndexes, assetsGeoJson)
@@ -86,29 +77,6 @@ export default function App() {
   function saveAssets() {
     const assets = Object.values(assetById)
     dispatch(updateAssets(assets, assetsGeoJson)) 
-  }
-
-  function mangeAssetAction(action, format, assetId, opts) {
-    if (action === 'download') {
-      if (format === 'dss') {
-        window.location = `/assets.dss?source=${assetId}`
-      }
-      if (format === 'csv') {
-        window.location = `/assets.csv`
-      }
-      setIsImportExportOpen(false)
-    } else {
-      if (opts.files && opts.files.length > 0) {
-        dispatch(uploadAssetsCsv({
-          file: opts.files[0].data,
-          overwrite: opts.overwrite,
-          close: () => {
-            uppy.reset()
-            setIsImportExportOpen(false)
-          }
-        }))
-      }
-    }
   }
 
   useEffect(() => {
@@ -146,6 +114,7 @@ export default function App() {
       />
       <ActionsWindow
         showImportExport={() => setIsImportExportOpen(true)}
+        disableExportAndExport={sketchMode !== SKETCH_MODE_VIEW}
       />
       <OptionsWindow
         isWithDetails={isWithDetails}
@@ -160,8 +129,7 @@ export default function App() {
       />
       <DownloadManager
         open={isImportExportOpen}
-        onOk={mangeAssetAction}
-        uppy={uppy}
+        onOk={() => {setIsImportExportOpen(false)}}
         onCancel={() => {setIsImportExportOpen(false)}}
         onClose={()=> {setIsImportExportOpen(false)}}
       />

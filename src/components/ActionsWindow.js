@@ -24,13 +24,17 @@ export default function ActionsWindow(props) {
   const classes = useStyles()
   const colors = useSelector(getColors)
   const activeColor = colors.active
+  const inactiveColor = colors.inactive
+
   const {
     showImportExport,
+    disableExportAndExport
   } = props
+
   return (
     <div className={classes.root}>
       <Tooltip title='Import and Export Assets'>
-        <IconButton onClick={showImportExport} className={activeColor}>
+        <IconButton disabled={disableExportAndExport} onClick={showImportExport} className={ disableExportAndExport ? inactiveColor : activeColor}>
           <ImportExportIcon />
         </IconButton>
       </Tooltip>
