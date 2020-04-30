@@ -118,7 +118,7 @@ export default function AssetTasksPanel(props) {
     dispatch(addAssetTask(assetId, name, description, priority))
     setName('')
     setDescription('')
-    setPriority('')
+    setPriority(priorityTypeNormal)
   }
 
 const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
