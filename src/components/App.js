@@ -44,7 +44,6 @@ import {
   getAssetsGeoJson,
 } from '../selectors'
 import './App.css'
-import Uppy from "@uppy/core";
 
 
 function usePrevenWindowUnload(preventDefault) {
@@ -74,15 +73,8 @@ export default function App() {
   const isLayoutMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const assetById = useSelector(getAssetById)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
+
   usePrevenWindowUnload(sketchMode !== SKETCH_MODE_VIEW)
-  const [uppy, setUppy] = useState(null)
-
-  useEffect(() => setUppy(Uppy({
-    meta: { type: 'avatar' },
-    restrictions: { maxNumberOfFiles: 1 },
-    autoProceed: false
-  })), [])
-
 
   function changeSketchMode(newSketchMode, busId) {
     if (sketchMode === SKETCH_MODE_ADD_LINE) {
@@ -103,29 +95,6 @@ export default function App() {
   function saveAssets() {
     const assets = Object.values(assetById)
     dispatch(updateAssets(assets, assetsGeoJson)) 
-  }
-
-  function mangeAssetAction(action, format, assetId, opts) {
-    if (action === 'download') {
-      if (format === 'dss') {
-        window.location = `/assets.dss?source=${assetId}`
-      }
-      if (format === 'csv') {
-        window.location = `/assets.csv`
-      }
-      setIsImportExportOpen(false)
-    } else {
-      if (opts.files && opts.files.length > 0) {
-        dispatch(uploadAssetsCsv({
-          file: opts.files[0].data,
-          overwrite: opts.overwrite,
-          close: () => {
-            uppy.reset()
-            setIsImportExportOpen(false)
-          }
-        }))
-      }
-    }
   }
 
   useEffect(() => {
@@ -163,6 +132,7 @@ export default function App() {
       />
       <ActionsWindow
         showImportExport={() => setIsImportExportOpen(true)}
+        disableExportAndExport={sketchMode !== SKETCH_MODE_VIEW}
       />
       <OptionsWindow
         isWithDetails={isWithDetails}
@@ -177,8 +147,7 @@ export default function App() {
       />
       <DownloadManager
         open={isImportExportOpen}
-        onOk={mangeAssetAction}
-        uppy={uppy}
+        onOk={() => {setIsImportExportOpen(false)}}
         onCancel={() => {setIsImportExportOpen(false)}}
         onClose={()=> {setIsImportExportOpen(false)}}
       />
