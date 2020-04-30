@@ -26,14 +26,14 @@ import Slide from '@material-ui/core/Slide'
 import EditIcon from '@material-ui/icons/Edit'
 import DoneIcon from '@material-ui/icons/Done'
 import CommentIcon from '@material-ui/icons/Comment'
-import Radio from "@material-ui/core/Radio"
-import { Box } from "@material-ui/core"
-import CollapsibleListItem from "./CollapsibleListItem"
-import AssetConnectionsListItems from "./AssetConnectionsListItems"
-import Collapse from "@material-ui/core/Collapse"
+import Radio from '@material-ui/core/Radio'
+import { Box } from '@material-ui/core'
+import CollapsibleListItem from './CollapsibleListItem'
+import AssetConnectionsListItems from './AssetConnectionsListItems'
+import Collapse from '@material-ui/core/Collapse'
 import Divider from '@material-ui/core/Divider'
-import {AssetName} from "./AssetTasksPanel"
-import TaskComments, { CommentForm } from "./TaskComments"
+import { AssetName } from './AssetTasksPanel'
+import TaskComments, { CommentForm } from './TaskComments'
 
 import {
   addAssetTaskComment,
@@ -66,7 +66,7 @@ const useStyles = makeStyles(theme => ({
     minWidth: 120,
   },
   scroll: {
-    height: '70%',
+    height: '100%',
     overflowY: 'auto',
   },
   spaceBetween: {
@@ -91,6 +91,8 @@ const useStyles = makeStyles(theme => ({
     fontSize: '0.7em',
     height: '25px',
     marginLeft: '6px',
+    marginTop: '0',
+    marginBottom: '0',
   },
   appBar: {
     position: 'relative',
@@ -262,6 +264,7 @@ function TaskItem(props) {
       <ListItem button
         key={`${itemKey}-li`}
         disableGutters
+        classes={{ root: classes.actions }}
         onClick={ () => showDetails(task) }>
         <div className={classes.spaceBetween}>
           <div className={classes.alignStart}>
