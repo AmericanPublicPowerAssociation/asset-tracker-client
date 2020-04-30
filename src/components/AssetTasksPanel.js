@@ -43,15 +43,18 @@ const useStyles = makeStyles(theme => ({
   },
   bottomAction: {
     width: '95%',
-    position: 'absolute',
     bottom: 0,
-    marging: 0,
   },
   scroll: {
     height: '50vh',
     overflowY: 'auto',
   },
-}));
+  listTasks: {
+    overflow: 'auto',
+    marginBottom: '10px',
+    height: '100%',
+  },
+}))
 
 
 
@@ -63,70 +66,71 @@ export const AssetName = (props) => {
   } = props
 
   return (<ListItem
-  disableGutters
-  component='div'>
-  <Tooltip title={assetTypeName} placement='left'>
-    <ListItemIcon>
-      <AssetTypeSvgIcon
-        assetTypeCode={assetTypeCode}
+    disableGutters
+    component='div'>
+    <Tooltip title={assetTypeName} placement='left'>
+      <ListItemIcon>
+        <AssetTypeSvgIcon
+          assetTypeCode={assetTypeCode}
+        />
+      </ListItemIcon>
+    </Tooltip>
+    <Tooltip title={assetName} placement='bottom'>
+      <ListItemText
+        primary={
+          <Typography variant='h5' style={{ fontSize: '1rem' }}>
+            {assetName}
+          </Typography>
+        }
       />
-    </ListItemIcon>
-  </Tooltip>
-  <Tooltip title={assetName} placement='bottom'>
-    <ListItemText
-      primary={
-        <Typography variant='h5' style={{fontSize: '1rem'}}>
-          {assetName}
-        </Typography>
-      }
-    />
-  </Tooltip>
-</ListItem>)
+    </Tooltip>
+  </ListItem>)
 }
 
 export default function AssetTasksPanel(props) {
-const dispatch = useDispatch()
-const classes = useStyles()
-const {
-  asset,
-  tasks,
-  disableInput,
-} = props
+  const dispatch = useDispatch()
+  const classes = useStyles()
+  const {
+    asset,
+    tasks,
+    disableInput,
+  } = props
 
-const assetId = asset.id
-const assetName = asset.name
-const assetTypeCode = asset.typeCode
-const assetTypeByCode = useSelector(getAssetTypeByCode)
-const assetType = assetTypeByCode[assetTypeCode]
-const assetTypeName = assetType.name
-const taskPriorityTypes = useSelector(getTaskPriorityTypes)
+  const assetId = asset.id
+  const assetName = asset.name
+  const assetTypeCode = asset.typeCode
+  const assetTypeByCode = useSelector(getAssetTypeByCode)
+  const assetType = assetTypeByCode[assetTypeCode]
+  const assetTypeName = assetType.name
+  const taskPriorityTypes = useSelector(getTaskPriorityTypes)
+  const priorityTypeNormal = taskPriorityTypes['10'].code
 
-const [archived, setArchived] = useState(false)
-const [query, setQuery] = useState('')
-const [name, setName]  = useState('')
-const [description, setDescription] = useState('')
-const [priority, setPriority] = useState('')
-const [dialog, setDialog] = useState(false)	   
-const [taskDetails, setTaskDetails] = useState(false)
-
-const addTask = () => {
-  setDialog(false)
-  dispatch(addAssetTask(assetId, name, description, priority))
-  setName('')
-  setDescription('')
-  setPriority('')
-}
+  const [archived, setArchived] = useState(false)
+  const [query, setQuery] = useState('')
+  const [name, setName]  = useState('')
+  const [description, setDescription] = useState('')
+  const [priority, setPriority] = useState(priorityTypeNormal)
+  const [dialog, setDialog] = useState(false)	   
+  const [taskDetails, setTaskDetails] = useState(false)
+  
+  const addTask = () => {
+    setDialog(false)
+    dispatch(addAssetTask(assetId, name, description, priority))
+    setName('')
+    setDescription('')
+    setPriority('')
+  }
 
 const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
   task => (
     !archived ?
     task.status !== TASK_ARCHIVE_STATUS && task.status !== TASK_STATUS_CANCELLED :
     task.status === TASK_ARCHIVE_STATUS || task.status === TASK_STATUS_CANCELLED
-  )
+  ),
 )
 
 const assetNameComponent = AssetName({
-  assetName, assetTypeCode, assetTypeName
+  assetName, assetTypeCode, assetTypeName,
 })
 
 const handleDisplayDetails = (task) => {
@@ -142,7 +146,7 @@ const listTasks = (<>
       <Switch checked={archived} onChange={ () => setArchived(!archived) } value="archived" />}
                       label="Show archived tasks" />
   </FormGroup>
-  <div>
+  <div className={classes.listTasks}>
     <TasksList showDetails={handleDisplayDetails} showComments={() => {}} asset={asset} tasks={partialTasks} disableInput={disableInput}/>
   </div>
   <div>
@@ -182,7 +186,6 @@ const listTasks = (<>
                   id: 'priority',
               }}
             >
-              <option aria-label="None" value="" />
               {
                 Object.values(taskPriorityTypes).map( priorityType => (
                   <option
@@ -200,7 +203,7 @@ const listTasks = (<>
         <Button onClick={() => {setDialog(false)}}  color="primary">
           Cancel
         </Button>
-        <Button onClick={addTask}  color="secondary" disabled={name === '' || priority === ''}>
+        <Button onClick={addTask}  color="secondary" disabled={name === ''}>
           Create
         </Button>
       </DialogActions>

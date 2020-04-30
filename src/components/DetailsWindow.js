@@ -28,6 +28,8 @@ const useStyles = makeStyles(theme => ({
     overflowY: 'auto',
     overflowX: 'hidden',
     zIndex: 1,
+    display: 'flex',
+    flexDirection: 'column',
   },
   withTables: {
     bottom: '50%',
@@ -55,6 +57,7 @@ export default function DetailsWindow(props) {
 
   const detailsPanel = focusingAsset ?
     <DetailsPanel
+      className={classes.root}
       asset={focusingAsset}
       tasks={tasksForFocusingAsset}
       sketchMode={sketchMode}

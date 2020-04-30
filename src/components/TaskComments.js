@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {useSelector} from 'react-redux'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -12,6 +12,7 @@ import IconButton from "@material-ui/core/IconButton"
 import Input from "@material-ui/core/Input"
 import Scrollbar from 'react-perfect-scrollbar'
 import 'react-perfect-scrollbar/dist/css/styles.css'
+import dateFormat from 'dateformat'
 
 
 const useStyles = makeStyles(theme => ({
@@ -59,13 +60,33 @@ export default function TaskComments(props) {
     task,
   } = props
   const assetId = asset.id
+  const scrollBarRef = useRef()
 
   const comments = useSelector(getCurrentTaskComments)
+
+  useEffect( () => {
+    const scrollBarContainer = scrollBarRef.current._container
+    let prevScrollHeight = scrollBarContainer.scrollHeight
+    const intervalId = setInterval( function () {
+      let nextScrollHeight = scrollBarContainer.scrollHeight
+      if (nextScrollHeight === prevScrollHeight) {
+        console.log(nextScrollHeight)
+        scrollBarContainer.scrollTop = nextScrollHeight
+        clearInterval(intervalId)
+      }
+      else {
+        prevScrollHeight = nextScrollHeight
+      }
+    }, 50)
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [asset.id, task])
 
   return (
     <>
       <List disablePadding className={props.classes || classes.scroll}>
-        <Scrollbar className={classes.scrollBar}>
+        <Scrollbar className={classes.scrollBar} ref={scrollBarRef}>
           { comments.map((comment, index) => (
             <CommentItem
               key={`task-comment-${assetId}-${comment.id}`}
@@ -96,10 +117,9 @@ function CommentItem(props) {
   } = comment
 
   // JS datetime works in milliseconds, that's why you times 1000
-  const timestamp = (new Date(creationTimestamp * 1000)).toLocaleString();
-  
-  console.log(creationTimestamp)
-  console.log(comment)
+  const now = new Date(creationTimestamp * 1000)
+  const timestamp = dateFormat(now, "dddd, mmmm d, yyyy h:MMtt")
+
   const classes = useStyles();
 
   return (
