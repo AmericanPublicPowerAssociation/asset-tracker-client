@@ -1,3 +1,4 @@
+import {WebMercatorViewport} from '@deck.gl/core'
 import {
   DrawLineStringMode,
   DrawPointMode,
@@ -58,4 +59,9 @@ export function getPickedEditHandle(picks) {
     return info.object
   }
   return null
+}
+
+export function getMapviewFromBoudingBox(boundingBox, width, height) {
+  const viewport = new WebMercatorViewport({ width, height })
+  return (boundingBox.length > 0 ) && viewport.fitBounds(boundingBox, { padding: 20 })
 }
