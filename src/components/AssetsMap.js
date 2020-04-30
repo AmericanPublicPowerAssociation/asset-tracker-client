@@ -89,7 +89,7 @@ export default function AssetsMap(props) {
   const pickingDepth = PICKING_DEPTH
   const ASSET_TYPE_METER_CODE = assetTypeByCode['m'] && assetTypeByCode['m'].code
 
-  function handleViewStateChange({viewState}) {
+  function handleViewStateChange({ viewState }) {
     // Update the map viewport
     dispatch(setMapViewState(viewState))
   }
@@ -111,7 +111,7 @@ export default function AssetsMap(props) {
     setSelectedBusIndexes([])
   }
 
-  function handleAssetsGeoJsonEdit({editType, editContext, updatedData}) {
+  function handleAssetsGeoJsonEdit({ editType, editContext, updatedData }) {
     switch(editType) {
       // If a feature is being added for the first time,
       case 'addFeature': {
@@ -193,7 +193,7 @@ export default function AssetsMap(props) {
     }
 
     function getConnection(busId) {
-      return connectionByBusId[busId] || {busId}
+      return connectionByBusId[busId] || { busId }
     }
 
     // Find a bus that belongs to another asset

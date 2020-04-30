@@ -18,16 +18,22 @@ import {
   getBusesGeoJson,
   getFocusingBusId,
 } from '../selectors'
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import useTheme from "@material-ui/core/styles/useTheme";
 
 export default function AssetConnectionsListItems(props) {
   const dispatch = useDispatch()
+  const theme = useTheme();
+
   const {
     asset,
     isEditing,
     setSelectedBusIndexes,
     setSelectedAssetIndexes,
     noHighlight,
+    expand
   } = props
+  const isNotMobile = useMediaQuery(theme.breakpoints.up('sm'));
   const [isOpenByConnectionIndex, setIsOpenByConnectionIndex] = useState({})
   const assetIdsByBusId = useSelector(getAssetIdsByBusId)
   const assetId = asset.id
@@ -69,7 +75,7 @@ export default function AssetConnectionsListItems(props) {
       <CollapsibleListItem
         key={connectionIndex}
         title={title}
-        description={description}
+        description={(isNotMobile || expand) ? description : null}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         onClick={onClickOrFocus}
@@ -87,12 +93,13 @@ export default function AssetConnectionsListItems(props) {
           setSelectedAssetIndexes={setSelectedAssetIndexes}
         />
       </CollapsibleListItem> :
+      ( isNotMobile || expand ?
       <ListItem
         disableGutters
         component='div'
         key={connectionIndex}
       >
         <ListItemText primary={title} secondary={description} />
-      </ListItem>
+      </ListItem> : <></>)
   })
 }
