@@ -16,7 +16,7 @@ import {
   SET_TASKS,
   ADD_TASK,
   UPDATE_TASK,
-  SET_ASSET_COMMENTS, REFRESH_ASSET_COMMENTS, ADD_TASK_COMMENT,
+  SET_ASSET_COMMENTS, REFRESH_ASSET_COMMENTS, ADD_TASK_COMMENT, UPLOAD_ASSETS_CSV,
 } from '../constants'
 
 export function saveAssets() {
@@ -126,10 +126,10 @@ export function setTasks(assets) {
   }
 }
 
-export function addAssetTask(assetId, name, description) {
+export function addAssetTask(assetId, name, description, priority) {
   return {
     type: ADD_TASK,
-    payload: {assetId, name, description},
+    payload: {assetId, name, description, priority},
   }
 }
 
@@ -158,5 +158,12 @@ export function addAssetTaskComment(task_id, text) {
   return {
     type: ADD_TASK_COMMENT,
     payload: {task_id, text},
+  }
+}
+
+export function uploadAssetsCsv(payload) {
+  return {
+    type: UPLOAD_ASSETS_CSV,
+    payload,
   }
 }

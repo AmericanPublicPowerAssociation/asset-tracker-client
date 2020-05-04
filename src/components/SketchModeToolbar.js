@@ -8,9 +8,12 @@ import Tooltip from '@material-ui/core/Tooltip'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import AddIcon from '@material-ui/icons/Add'
 import EditIcon from '@material-ui/icons/Edit'
+import DeleteIcon from '@material-ui/icons/Delete'
 import {
   SKETCH_MODE_ADD,
   SKETCH_MODE_EDIT,
+  SKETCH_MODE_EDIT_MODIFY,
+  SKETCH_MODE_DELETE,
   SKETCH_MODE_VIEW,
 } from '../constants'
 
@@ -52,9 +55,20 @@ export default function SketchModeToolbar(props) {
             button
             classes={{ selected: 'selected' }}
             selected={sketchMode.startsWith(SKETCH_MODE_EDIT)}
-            onClick={() => changeSketchMode(SKETCH_MODE_EDIT)}
+            onClick={() => changeSketchMode(SKETCH_MODE_EDIT_MODIFY)}
           >
             <SvgIcon fontSize='large' component={EditIcon} />
+          </ListItem>
+        </Tooltip>
+
+        <Tooltip title='Delete' aria-label='Delete' placement='right'>
+          <ListItem
+            button
+            classes={{selected: 'selected'}}
+            selected={sketchMode === SKETCH_MODE_DELETE}
+            onClick={() => changeSketchMode(SKETCH_MODE_DELETE)}
+          >
+            <SvgIcon fontSize='large' component={DeleteIcon} />
           </ListItem>
         </Tooltip>
       </List>

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import useTheme from '@material-ui/core/styles/useTheme'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import AssetsMap from './AssetsMap'
 import SketchButtons from './SketchButtons'
 import SketchModeToolbar from './SketchModeToolbar'
 import SketchAddToolbar from './SketchAddToolbar'
-import SketchEditToolbar from './SketchEditToolbar'
 import ActionsWindow from './ActionsWindow'
 import OptionsWindow from './OptionsWindow'
 import OverlaysWindow from './OverlaysWindow'
@@ -22,7 +22,7 @@ import {
   refreshAssets,
   setFocusingBusId,
   updateAssets,
-  refreshTasks,
+  refreshTasks, uploadAssetsCsv,
 } from '../actions'
 import {
   IS_WITH_DETAILS,
@@ -31,6 +31,7 @@ import {
   OVERLAY_MODE,
   SKETCH_MODE,
   SKETCH_MODE_ADD_LINE,
+  SKETCH_MODE_VIEW,
 } from '../constants'
 import {
   getRandomId,
@@ -45,8 +46,21 @@ import {
 import './App.css'
 
 
+function usePrevenWindowUnload(preventDefault) {
+  useEffect( () => {
+    if (!preventDefault) return
+    const handleBeforeUnload = event => {
+      event.preventDefault()
+      event.returnValue = ''
+    }
+    window.addEventListener("beforeunload", handleBeforeUnload)
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload)
+  }, [preventDefault])
+}
+
 export default function App() {
   const dispatch = useDispatch()
+  const theme = useTheme()
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [sketchMode, setSketchMode] = useState(SKETCH_MODE)
   const [overlayMode, setOverlayMode] = useState(OVERLAY_MODE)
@@ -56,9 +70,11 @@ export default function App() {
   const [selectedAssetIndexes, setSelectedAssetIndexes] = useState([])
   const [selectedBusIndexes, setSelectedBusIndexes] = useState([])
   const [lineBusId, setLineBusId] = useState(null)
-  const isScreenXS = useMediaQuery('(max-width:600px)')
+  const isLayoutMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const assetById = useSelector(getAssetById)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
+
+  usePrevenWindowUnload(sketchMode !== SKETCH_MODE_VIEW)
 
   function changeSketchMode(newSketchMode, busId) {
     if (sketchMode === SKETCH_MODE_ADD_LINE) {
@@ -86,7 +102,6 @@ export default function App() {
     dispatch(refreshTasks())
     dispatch(refreshRisks())
   }, [dispatch])
-
   return (
     <div>
       <AssetsMap
@@ -115,12 +130,9 @@ export default function App() {
         sketchMode={sketchMode}
         changeSketchMode={changeSketchMode}
       />
-      <SketchEditToolbar
-        sketchMode={sketchMode}
-        changeSketchMode={changeSketchMode}
-      />
       <ActionsWindow
         showImportExport={() => setIsImportExportOpen(true)}
+        disableExportAndExport={sketchMode !== SKETCH_MODE_VIEW}
       />
       <OptionsWindow
         isWithDetails={isWithDetails}
@@ -135,10 +147,7 @@ export default function App() {
       />
       <DownloadManager
         open={isImportExportOpen}
-        onOk={element => {
-          window.location = `/assets.dss?source=${element}`
-          setIsImportExportOpen(false)}
-        }
+        onOk={() => {setIsImportExportOpen(false)}}
         onCancel={() => {setIsImportExportOpen(false)}}
         onClose={()=> {setIsImportExportOpen(false)}}
       />
@@ -148,26 +157,22 @@ export default function App() {
         overlayMode={overlayMode}
         sketchMode={sketchMode}
         setSelectedBusIndexes={setSelectedBusIndexes}
+        setSelectedAssetIndexes={setSelectedAssetIndexes}
       />
-      { isScreenXS && isWithTables && 
-        <TablesDialog
-          isWithTables={isWithTables}
-          setIsWithTables={setIsWithTables}
-        /> 
-      }
-      { !isScreenXS &&
-        isWithTables &&
-        <TablesWindow
-          isWithTables={isWithTables}
-          setIsWithTables={setIsWithTables}
-          overlayMode={overlayMode}
-          setSelectedAssetIndexes={setSelectedAssetIndexes}
-          setSelectedBusIndexes={setSelectedBusIndexes}
-        />
-      }
-
-      {
-        deleteDialogOpen &&
+    {isWithTables && (isLayoutMobile ?
+      <TablesDialog
+        isWithTables={isWithTables}
+        setIsWithTables={setIsWithTables}
+      /> :
+      <TablesWindow
+        isWithTables={isWithTables}
+        setIsWithTables={setIsWithTables}
+        overlayMode={overlayMode}
+        setSelectedAssetIndexes={setSelectedAssetIndexes}
+        setSelectedBusIndexes={setSelectedBusIndexes}
+      />
+    )}
+      { deleteDialogOpen &&
         <DeleteAssetDialog
           openDialog={deleteDialogOpen}
           onClose={ () => setDeleteDialogOpen(false)}

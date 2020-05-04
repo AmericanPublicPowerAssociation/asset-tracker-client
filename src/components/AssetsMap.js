@@ -14,6 +14,7 @@ import {
   setMapViewState,
 } from '../actions'
 import {
+  ASSET_METER_RADIUS_IN_METERS,
   BUS_RADIUS_IN_METERS,
   LINE_WIDTH_IN_METERS,
   MAP_STYLE_BY_NAME,
@@ -24,7 +25,7 @@ import {
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_EDIT,
-  SKETCH_MODE_EDIT_DELETE,
+  SKETCH_MODE_DELETE,
 } from '../constants'
 import {
   getByKey,
@@ -36,7 +37,6 @@ import {
   getMapMode,
   getPickedEditHandle,
   makeAsset,
-  removeRearDuplicateCoordinatesInLine,
 } from '../routines'
 import {
   // getFocusingAssetId,
@@ -87,18 +87,20 @@ export default function AssetsMap(props) {
   const mapMode = getMapMode(sketchMode)
   const pickingRadius = PICKING_RADIUS_IN_PIXELS
   const pickingDepth = PICKING_DEPTH
+  const ASSET_TYPE_METER_CODE = assetTypeByCode['m'] && assetTypeByCode['m'].code
 
-  function handleViewStateChange({viewState}) {
+  function handleViewStateChange({ viewState }) {
     // Update the map viewport
     dispatch(setMapViewState(viewState))
   }
 
   function handleAssetsGeoJsonClick(info, event) {
     const assetId = info.object.properties.id
-    if (assetId && sketchMode.startsWith(SKETCH_MODE_EDIT_DELETE)) {
-      dispatch(deleteAsset(assetId))
-      setSelectedAssetIndexes([])
+    if (assetId && sketchMode.startsWith(SKETCH_MODE_DELETE)) {
       dispatch(setFocusingAssetId(null))
+      setSelectedAssetIndexes([])
+      setSelectedBusIndexes([])
+      dispatch(deleteAsset(assetId))
       return
     }
     assetId && dispatch(setFocusingAssetId(assetId))
@@ -109,7 +111,7 @@ export default function AssetsMap(props) {
     setSelectedBusIndexes([])
   }
 
-  function handleAssetsGeoJsonEdit({editType, editContext, updatedData}) {
+  function handleAssetsGeoJsonEdit({ editType, editContext, updatedData }) {
     switch(editType) {
       // If a feature is being added for the first time,
       case 'addFeature': {
@@ -126,6 +128,7 @@ export default function AssetsMap(props) {
           const featureIndex = featureIndexes[i]
           const feature = features[featureIndex]
           feature.properties.id = assetId
+          feature.properties.typeCode = assetTypeCode
         }
         // If the new feature is a line,
         if (sketchMode === SKETCH_MODE_ADD_LINE) {
@@ -135,25 +138,6 @@ export default function AssetsMap(props) {
           changeSketchMode(SKETCH_MODE_ADD)
         }
         dispatch(setFocusingAssetId(assetId))  // Show details for the new asset
-        break
-      }
-      case 'addPosition': {
-        // adding points to line
-        if (sketchMode === SKETCH_MODE_ADD_LINE) {
-          const features = updatedData.features
-          const { featureIndexes } = editContext
-          if (featureIndexes.length === 1){
-            const featureIndex = featureIndexes[0]
-            const lineFeature = features[featureIndex]
-            const lineCoordinates = lineFeature.geometry.coordinates
-            if (lineCoordinates.length > 2) {
-              // remove duplicate coordinates when double clicking to finish line
-              const newCoordinates = removeRearDuplicateCoordinatesInLine(lineCoordinates)
-              lineFeature.geometry.coordinates = newCoordinates
-            }
-
-          }
-        }
         break
       }
       default: {}
@@ -209,7 +193,7 @@ export default function AssetsMap(props) {
     }
 
     function getConnection(busId) {
-      return connectionByBusId[busId] || {busId}
+      return connectionByBusId[busId] || { busId }
     }
 
     // Find a bus that belongs to another asset
@@ -268,6 +252,29 @@ export default function AssetsMap(props) {
     assetId && dispatch(setFocusingAssetId(assetId))
   }
 
+
+  function handleOnDoubleClick(e) {
+    if (sketchMode === SKETCH_MODE_ADD_LINE) {
+      changeSketchMode(SKETCH_MODE_ADD)
+    }
+  }
+
+  function onKeyUp(e) {
+    e.preventDefault()
+    if (e.key === 'Enter') {
+      if (sketchMode === SKETCH_MODE_ADD_LINE) {
+        changeSketchMode(SKETCH_MODE_ADD)
+      }
+    }
+    else if (e.key === 'Delete') {
+      if (focusingAssetId &&
+          sketchMode.startsWith(SKETCH_MODE_EDIT)
+        ) {
+        openDeleteAssetDialog()
+      }
+    }
+  }
+
   mapLayers.push(new CustomEditableGeoJsonLayer({
     id: ASSETS_GEOJSON_LAYER_ID,
     data: assetsGeoJson,
@@ -277,7 +284,12 @@ export default function AssetsMap(props) {
     autoHighlight: sketchMode !== SKETCH_MODE_ADD_LINE,
     highlightColor: colors.assetHighlight,
     selectedFeatureIndexes: selectedAssetIndexes,
-    getRadius: POINT_RADIUS_IN_METERS,
+    getRadius: (feature, isSelected) => {
+      const assetTypeCode = feature.properties.typeCode
+      return assetTypeCode === ASSET_TYPE_METER_CODE ?
+        ASSET_METER_RADIUS_IN_METERS :
+        POINT_RADIUS_IN_METERS
+    },
     getLineWidth: LINE_WIDTH_IN_METERS,
     getFillColor: (feature, isSelected) => {
       return isSelected ? colors.assetSelect : colors.asset
@@ -288,6 +300,7 @@ export default function AssetsMap(props) {
     onClick: handleAssetsGeoJsonClick,
     onEdit: handleAssetsGeoJsonEdit,
     onInterpret: handleAssetsGeoJsonInterpret,
+    handleOnDoubleClick: handleOnDoubleClick,
   }))
 
   // mapLayers.push(new GeoJsonLayer({
@@ -307,29 +320,8 @@ export default function AssetsMap(props) {
     onClick: handleBusesGeoJsonClick,
   }))
 
-  function onDoubleClick(e) {
-    if (sketchMode === SKETCH_MODE_ADD_LINE)
-      changeSketchMode(SKETCH_MODE_ADD)
-  }
-
-  function onKeyUp(e) {
-    e.preventDefault()
-    if (e.key === 'Enter') {
-      if (sketchMode === SKETCH_MODE_ADD_LINE) {
-        changeSketchMode(SKETCH_MODE_ADD)
-      }
-    }
-    else if (e.key === 'Delete') {
-      if (focusingAssetId &&
-          sketchMode.startsWith(SKETCH_MODE_EDIT)
-        ) {
-        openDeleteAssetDialog()
-      }
-    }
-  }
-
   return (
-    <div onKeyUp={onKeyUp} onDoubleClick={onDoubleClick}>
+    <div onKeyUp={onKeyUp}>
       <DeckGL
         ref={deckGL}
         controller={{

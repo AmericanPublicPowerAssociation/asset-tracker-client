@@ -1,3 +1,4 @@
+import {WebMercatorViewport} from '@deck.gl/core'
 import {
   DrawLineStringMode,
   DrawPointMode,
@@ -20,13 +21,13 @@ export class CustomEditableGeoJsonLayer extends EditableGeoJsonLayer {
   getModeProps(props) {
     const modeProps = super.getModeProps(props)
     modeProps.onInterpret = props.onInterpret
+    modeProps.handleOnDoubleClick = props.handleOnDoubleClick
     return modeProps
   }
 
   onDoubleClick(event) {
-    const mode = this.getActiveMode()
     const modeProps = this.getModeProps(this.props)
-    const handleOnDoubleClick = mode.handleOnDoubleClick
+    const handleOnDoubleClick = modeProps.handleOnDoubleClick
     handleOnDoubleClick && handleOnDoubleClick(event, modeProps)
   }
 }
@@ -37,6 +38,7 @@ export class CustomModifyMode extends ModifyMode {
     props.onInterpret(event)
   }
 }
+
 
 export function getMapMode(sketchMode) {
   const mapMode = {
@@ -50,25 +52,6 @@ export function getMapMode(sketchMode) {
   return mapMode || ViewMode
 }
 
-export function removeRearDuplicateCoordinatesInLine(coordinates) {
-  let duplicate = true
-  while(duplicate) {
-    const coord1 = coordinates.pop()
-    const coord2 = coordinates.pop()
-    const [lon1, lat1] = coord1
-    const [lon2, lat2] = coord2
-    if (lon1 === lon2 && lat1 === lat2){
-      coordinates.push(coord1)
-    }
-    else {
-      coordinates.push(coord2)
-      coordinates.push(coord1)
-      duplicate = false
-    }
-  }
-  return coordinates
-}
-
 export function getPickedEditHandle(picks) {
   // Taken from nebula.gl > mode-handler.js
   const info = picks && picks.find(pick => pick.isGuide)
@@ -76,4 +59,9 @@ export function getPickedEditHandle(picks) {
     return info.object
   }
   return null
+}
+
+export function getMapviewFromBoudingBox(boundingBox, width, height) {
+  const viewport = new WebMercatorViewport({ width, height })
+  return (boundingBox.length > 0 ) && viewport.fitBounds(boundingBox, { padding: 20 })
 }

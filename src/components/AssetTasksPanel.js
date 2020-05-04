@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import TextField from '@material-ui/core/TextField'
@@ -13,41 +13,48 @@ import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Switch from '@material-ui/core/Switch'
 import Button from '@material-ui/core/Button'
-import CloudUploadIcon from '@material-ui/icons/CloudUpload'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import TasksList, {TaskFullscreen} from './TasksList'
 import Tooltip from '@material-ui/core/Tooltip'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
+import AddIcon from '@material-ui/icons/Add'
+import TasksList, { TaskFullscreen } from './TasksList'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import {
-  addAssetTask, updateTaskComments
+  addAssetTask,
+  updateTaskComments,
 } from '../actions'
-
 import {
-  ASSET_TYPE_ICON_BY_CODE,
-  TASK_ARCHIVE_STATUS
+  TASK_ARCHIVE_STATUS,
+  TASK_STATUS_CANCELLED,
 } from '../constants'
+import {
+  getAssetTypeByCode,
+  getTaskPriorityTypes,
+} from '../selectors'
 
 
 const useStyles = makeStyles(theme => ({
   formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
+    marginTop: theme.spacing(1),
+    width: '100%',
   },
   bottomAction: {
-    width: '95%',
-    position: 'absolute',
+    width: '100%',
     bottom: 0,
-    marging: 0,
   },
   scroll: {
     height: '50vh',
     overflowY: 'auto',
-  }
-}));
+  },
+  listTasks: {
+    overflow: 'auto',
+    marginBottom: '10px',
+    height: '100%',
+  },
+}))
 
 
 
@@ -71,7 +78,7 @@ export const AssetName = (props) => {
     <Tooltip title={assetName} placement='bottom'>
       <ListItemText
         primary={
-          <Typography variant='h5' style={{fontSize: '1rem'}}>
+          <Typography variant='h5' style={{ fontSize: '1rem' }}>
             {assetName}
           </Typography>
         }
@@ -92,63 +99,71 @@ export default function AssetTasksPanel(props) {
   const assetId = asset.id
   const assetName = asset.name
   const assetTypeCode = asset.typeCode
-  const assetType = ASSET_TYPE_ICON_BY_CODE[assetTypeCode]
+  const assetTypeByCode = useSelector(getAssetTypeByCode)
+  const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
+  const taskPriorityTypes = useSelector(getTaskPriorityTypes)
+  const priorityTypeNormal = taskPriorityTypes['10'].code
 
-  const [archived, setArchived] = useState(false);
+  const [archived, setArchived] = useState(false)
   const [query, setQuery] = useState('')
   const [name, setName]  = useState('')
   const [description, setDescription] = useState('')
-  const [status, setStatus]  = useState('new')
-  const [priority, setPriority] = useState('')
+  const [priority, setPriority] = useState(priorityTypeNormal)
   const [dialog, setDialog] = useState(false)	   
   const [taskDetails, setTaskDetails] = useState(false)
   
   const addTask = () => {
     setDialog(false)
-    dispatch(addAssetTask(assetId, name, description, status, priority))
+    dispatch(addAssetTask(assetId, name, description, priority))
     setName('')
     setDescription('')
-    setPriority('')
-    setStatus('')
+    setPriority(priorityTypeNormal)
   }
 
-  const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
-    task => !archived ? task.status !== TASK_ARCHIVE_STATUS : task.status === TASK_ARCHIVE_STATUS
-  )
+const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
+  task => (
+    !archived ?
+    task.status !== TASK_ARCHIVE_STATUS && task.status !== TASK_STATUS_CANCELLED :
+    task.status === TASK_ARCHIVE_STATUS || task.status === TASK_STATUS_CANCELLED
+  ),
+)
 
-  const assetNameComponent = AssetName({
-    assetName, assetTypeCode, assetTypeName
-  })
+const assetNameComponent = AssetName({
+  assetName, assetTypeCode, assetTypeName,
+})
 
-  const handleDisplayDetails = (task) => {
-    dispatch(updateTaskComments(task.id))
-    setTaskDetails(task)
-  }
+const handleDisplayDetails = (task) => {
+  dispatch(updateTaskComments(task.id))
+  setTaskDetails(task)
+}
 
-  const listTasks = (<>
-    <FormGroup row>
-      <TextField id="search" label="Search task" value={query}
-                 onChange={(e) => setQuery(e.target.value) } />
-      <FormControlLabel control={
-        <Switch checked={archived} onChange={ () => setArchived(!archived) } value="archived" />}
-                        label="Show archived tasks" />
-    </FormGroup>
+const listTasks = (<>
+  <FormGroup row>
+    <TextField id="search" label="Search task" value={query}
+                onChange={(e) => setQuery(e.target.value) } />
+    <FormControlLabel control={
+      <Switch checked={archived} onChange={ () => setArchived(!archived) } value="archived" />}
+                      label="Show archived tasks" />
+  </FormGroup>
+  <div className={classes.listTasks}>
     <TasksList showDetails={handleDisplayDetails} showComments={() => {}} asset={asset} tasks={partialTasks} disableInput={disableInput}/>
-
-    <Button className={classes.bottomAction} startIcon={<CloudUploadIcon />} onClick={() => setDialog(true)}>
-      Add taks
+  </div>
+  <div>
+    <Button className={classes.bottomAction} startIcon={<AddIcon />} onClick={() => setDialog(true)}>
+      Add task
     </Button>
+  </div>
   </>)
 
   const getTaskById = () => {
       if (taskDetails) {
         for (let i = 0; i < tasks.length; i++) {
-          if (tasks[i].id === taskDetails.id) return tasks[i];
+          if (tasks[i].id === taskDetails.id) return tasks[i]
         }
       }
       return {}
-  };
+  }
 
   return (<>
     {assetNameComponent}
@@ -171,28 +186,16 @@ export default function AssetTasksPanel(props) {
                   id: 'priority',
               }}
             >
-              <option value='low'>Low</option>
-              <option value='medium'>Medium</option>
-              <option value='high'>High</option>
+              {
+                Object.values(taskPriorityTypes).map( priorityType => (
+                  <option
+                    key={`priority-type-${priorityType.code}`}
+                    value={priorityType.code}>{priorityType.name}
+                  </option>
+                ))
+              }
             </NativeSelect>
             <FormHelperText>Select the priority for the task</FormHelperText>
-          </FormControl>
-
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor='status'>Status</InputLabel>
-            <NativeSelect
-              value={status}
-              onChange={ (e) => {setStatus(e.target.value)}}
-              inputProps={{
-                name: 'status',
-                  id: `status`,
-              }}>
-              <option value="" />
-              <option value='active'>Active</option>
-              <option value='review'>Review</option>
-              <option value='pending'>Pending</option>
-            </NativeSelect>
-            <FormHelperText>Select the status for the task</FormHelperText>
           </FormControl>
         </div>
       </DialogContent>
@@ -200,7 +203,7 @@ export default function AssetTasksPanel(props) {
         <Button onClick={() => {setDialog(false)}}  color="primary">
           Cancel
         </Button>
-        <Button onClick={addTask}  color="primary">
+        <Button onClick={addTask}  color="secondary" disabled={name === ''}>
           Create
         </Button>
       </DialogActions>
