@@ -1,10 +1,12 @@
 import {
+  UPDATE_TASK,
   SET_TASK_COMMENT_COUNT,
-  SET_TASK_NAME,
 } from '../constants'
 
-export function setTaskName(id, name) {
-  return {type: SET_TASK_NAME, payload: {id, name}}
+export function setTaskName(task_id, name, priority, status) {
+  return {
+    type: UPDATE_TASK,
+    payload: {task_id, name, priority, status}}
 }
 
 export function setTaskCommentCount(id, commentCount) {

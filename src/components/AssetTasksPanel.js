@@ -42,16 +42,19 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
   },
   bottomAction: {
-    width: '95%',
-    position: 'absolute',
+    width: '100%',
     bottom: 0,
-    marging: 0,
   },
   scroll: {
     height: '50vh',
     overflowY: 'auto',
   },
-}));
+  listTasks: {
+    overflow: 'auto',
+    marginBottom: '10px',
+    height: '100%',
+  },
+}))
 
 
 
@@ -75,7 +78,7 @@ export const AssetName = (props) => {
     <Tooltip title={assetName} placement='bottom'>
       <ListItemText
         primary={
-          <Typography variant='h5' style={{fontSize: '1rem'}}>
+          <Typography variant='h5' style={{ fontSize: '1rem' }}>
             {assetName}
           </Typography>
         }
@@ -115,39 +118,42 @@ export default function AssetTasksPanel(props) {
     dispatch(addAssetTask(assetId, name, description, priority))
     setName('')
     setDescription('')
-    setPriority('')
+    setPriority(priorityTypeNormal)
   }
 
-  const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
-    task => (
-      !archived ?
-      task.status !== TASK_ARCHIVE_STATUS && task.status !== TASK_STATUS_CANCELLED :
-      task.status === TASK_ARCHIVE_STATUS || task.status === TASK_STATUS_CANCELLED
-    )
-  )
+const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
+  task => (
+    !archived ?
+    task.status !== TASK_ARCHIVE_STATUS && task.status !== TASK_STATUS_CANCELLED :
+    task.status === TASK_ARCHIVE_STATUS || task.status === TASK_STATUS_CANCELLED
+  ),
+)
 
-  const assetNameComponent = AssetName({
-    assetName, assetTypeCode, assetTypeName
-  })
+const assetNameComponent = AssetName({
+  assetName, assetTypeCode, assetTypeName,
+})
 
-  const handleDisplayDetails = (task) => {
-    dispatch(updateTaskComments(task.id))
-    setTaskDetails(task)
-  }
+const handleDisplayDetails = (task) => {
+  dispatch(updateTaskComments(task.id))
+  setTaskDetails(task)
+}
 
-  const listTasks = (<>
-    <FormGroup row>
-      <TextField id="search" label="Search task" value={query}
-                 onChange={(e) => setQuery(e.target.value) } />
-      <FormControlLabel control={
-        <Switch checked={archived} onChange={ () => setArchived(!archived) } value="archived" />}
-                        label="Show archived tasks" />
-    </FormGroup>
+const listTasks = (<>
+  <FormGroup row>
+    <TextField id="search" label="Search task" value={query}
+                onChange={(e) => setQuery(e.target.value) } />
+    <FormControlLabel control={
+      <Switch checked={archived} onChange={ () => setArchived(!archived) } value="archived" />}
+                      label="Show archived tasks" />
+  </FormGroup>
+  <div className={classes.listTasks}>
     <TasksList showDetails={handleDisplayDetails} showComments={() => {}} asset={asset} tasks={partialTasks} disableInput={disableInput}/>
-
+  </div>
+  <div>
     <Button className={classes.bottomAction} startIcon={<AddIcon />} onClick={() => setDialog(true)}>
       Add task
     </Button>
+  </div>
   </>)
 
   const getTaskById = () => {
