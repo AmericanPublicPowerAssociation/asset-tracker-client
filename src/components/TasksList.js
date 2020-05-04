@@ -26,8 +26,7 @@ import Slide from '@material-ui/core/Slide'
 import EditIcon from '@material-ui/icons/Edit'
 import DoneIcon from '@material-ui/icons/Done'
 import CommentIcon from '@material-ui/icons/Comment'
-import Radio from '@material-ui/core/Radio'
-import { Box } from '@material-ui/core'
+// import Radio from '@material-ui/core/Radio'
 import CollapsibleListItem from './CollapsibleListItem'
 import AssetConnectionsListItems from './AssetConnectionsListItems'
 import Collapse from '@material-ui/core/Collapse'
@@ -42,8 +41,8 @@ import {
   setTaskName,
 } from '../actions'
 import {
-  TASK_STATUS_CANCELLED,
-  TASK_ARCHIVE_STATUS,
+  // TASK_STATUS_CANCELLED,
+  // TASK_ARCHIVE_STATUS,
 } from '../constants'
 import {
   getAssetTypeByCode,
@@ -201,6 +200,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 })
 
 
+/*
 const Priority = (priorityColor, priority, label) => {
   const classes = useStyles()
   return <Radio
@@ -211,6 +211,7 @@ const Priority = (priorityColor, priority, label) => {
     classes={{ colorPrimary: classes.importantCheckbox, colorSecondary: classes.urgentCheckbox }}
   />
 }
+*/
 
 
 export default function TasksList(props) {
@@ -265,7 +266,8 @@ function TaskItem(props) {
         key={`${itemKey}-li`}
         disableGutters
         classes={{ root: classes.actions }}
-        onClick={ () => showDetails(task) }>
+        onClick={ () => showDetails(task) }
+      >
         <div className={classes.spaceBetween}>
           <div className={classes.alignStart}>
             <div className={classes.fullWidth}>
@@ -290,6 +292,11 @@ function TaskItem(props) {
                   </Badge>
                 </IconButton>
               </div>
+            <IconButton onClick={() => showComments(task)}> 
+              <Badge badgeContent={commentCount} color='secondary'>
+                <CommentIcon />
+              </Badge>
+            </IconButton>
             </div>
           </div>
         </div>
