@@ -24,7 +24,7 @@ export default function RisksTable(props) {
 
   useEffect(() => {
     const { sortKey, order } = sortedRisks
-    dispatch(refreshRisks({sortKey, order}))
+    dispatch(refreshRisks({ sortKey, order }))
   }, [dispatch, sortedRisks])
 
   function onRowClickCallBack(assetId) {

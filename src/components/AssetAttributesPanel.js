@@ -16,17 +16,21 @@ import {
   getAssetTypeByCode,
 } from '../selectors'
 
+
 export default function AssetAttributesPanel(props) {
   const {
     asset,
     sketchMode,
+    setSelectedBusIndexes,
+    setSelectedAssetIndexes,
+    setIsDetailsWindowExpanded,
+    isDetailsWindowExpanded
   } = props
   const assetTypeByCode = useSelector(getAssetTypeByCode)
 
   const assetTypeCode = asset.typeCode
   const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
-
   const isEditing = sketchMode !== SKETCH_MODE_VIEW
 
   return (
@@ -39,12 +43,18 @@ export default function AssetAttributesPanel(props) {
         </Tooltip>
 
         <ListItemText>
-          <AssetName asset={asset} isEditing={isEditing} />
+          <AssetName asset={asset} isEditing={isEditing} setExpand={setIsDetailsWindowExpanded} expand={isDetailsWindowExpanded} />
         </ListItemText>
       </ListItem>
 
       <AssetAttributesListItem asset={asset} isEditing={isEditing} />
-      <AssetConnectionsListItems asset={asset} isEditing={isEditing} />
+      <AssetConnectionsListItems
+        asset={asset}
+        isEditing={isEditing}
+        setSelectedBusIndexes={setSelectedBusIndexes}
+        setSelectedAssetIndexes={setSelectedAssetIndexes}
+        expand={isDetailsWindowExpanded}
+      />
     </List>
   )
 }

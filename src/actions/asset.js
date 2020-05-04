@@ -1,15 +1,22 @@
 import {
   ADD_ASSET_CONNECTION,
+  DELETE_ASSET,
   REFRESH_ASSETS,
   SAVE_ASSETS,
   SET_ASSET,
   SET_ASSETS,
   SET_ASSETS_GEOJSON,
   SET_ASSET_ATTRIBUTE,
+  SET_ASSET_CONNECTION,
   SET_ASSET_CONNECTION_ATTRIBUTE,
   SET_ASSET_VALUE,
   SET_FOCUSING_ASSET_ID,
   UPDATE_ASSETS,
+  REFRESH_TASKS,
+  SET_TASKS,
+  ADD_TASK,
+  UPDATE_TASK,
+  SET_ASSET_COMMENTS, REFRESH_ASSET_COMMENTS, ADD_TASK_COMMENT, UPLOAD_ASSETS_CSV,
 } from '../constants'
 
 export function saveAssets() {
@@ -41,6 +48,13 @@ export function setAsset(asset) {
   }
 }
 
+export function deleteAsset(assetId){
+  return {
+    type: DELETE_ASSET,
+    payload: assetId
+  }
+}
+
 export function setAssetValue(assetId, key, value) {
   return {
     type: SET_ASSET_VALUE,
@@ -62,6 +76,13 @@ export function addAssetConnection(assetId, busId) {
   }
 }
 
+export function setAssetConnection(assetId, connectionIndex, connection) {
+  return {
+    type: SET_ASSET_CONNECTION,
+    payload: {assetId, connectionIndex, connection},
+  }
+}
+
 export function setAssetConnectionAttribute(
   assetId, connectionIndex, key, value,
 ) {
@@ -78,9 +99,71 @@ export function setAssetsGeoJson(geojson) {
   }
 }
 
+export function setAssetComments({task_id, comments}) {
+  return {
+    type: SET_ASSET_COMMENTS,
+    payload: {task_id, comments}
+  }
+}
+
 export function setFocusingAssetId(id) {
   return {
     type: SET_FOCUSING_ASSET_ID,
     payload: id,
+  }
+}
+
+export function refreshTasks() {
+  return {
+    type: REFRESH_TASKS
+  }
+}
+
+export function setTasks(assets) {
+  return {
+    type: SET_TASKS,
+    payload: assets
+  }
+}
+
+export function addAssetTask(assetId, name, description, priority) {
+  return {
+    type: ADD_TASK,
+    payload: {assetId, name, description, priority},
+  }
+}
+
+export function setTaskStatus(task_id, status, priority) {
+  return {
+    type: UPDATE_TASK,
+    payload: {task_id, status, priority},
+  }
+}
+
+export function setTaskPriority(task_id, priority, status) {
+  return {
+    type: UPDATE_TASK,
+    payload: {task_id, priority, status},
+  }
+}
+
+export function updateTaskComments(task_id) {
+  return {
+    type: REFRESH_ASSET_COMMENTS,
+    payload: {task_id}
+  }
+}
+
+export function addAssetTaskComment(task_id, text) {
+  return {
+    type: ADD_TASK_COMMENT,
+    payload: {task_id, text},
+  }
+}
+
+export function uploadAssetsCsv(payload) {
+  return {
+    type: UPLOAD_ASSETS_CSV,
+    payload,
   }
 }
