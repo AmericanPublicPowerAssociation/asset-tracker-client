@@ -4,6 +4,7 @@ import {
 } from '../routines'
 import {
   MAP_VIEW_STATE,
+  SET_PAN_MAP_TO_ASSET,
   SET_MAP_BOUNDING_BOX,
   SET_MAP_VIEW_STATE,
 } from '../constants'
@@ -53,6 +54,27 @@ const mapViewState = produce((draft, action) => {
       draft.width = width
       draft.height = height
       draft.reset = true
+      break
+    }
+    case SET_PAN_MAP_TO_ASSET: {
+      const assetGeoJson = action.payload
+      console.log(assetGeoJson)
+      const { type, coordinates } = assetGeoJson.geometry
+      let lon, lat
+      if ( type === 'Point') {
+        [lon, lat] = coordinates
+      }
+      else if ( type === 'LineString') {
+        [lon, lat] = coordinates[0]
+      }
+      else if ( type === 'Polygon') {
+        [lon, lat] = coordinates[0][0]
+      }
+      else {
+        break
+      }
+      draft.longitude = lon
+      draft.latitude = lat
       break
     }
     default: { }
