@@ -27,11 +27,8 @@ import {
       if (info.picked) {
         const busIndex = info.index
         setSelectedBusIndexes([busIndex])
-        dispatch(setFocusingBusId(busId))
       }
     }
-
-    // busId && dispatch(setFocusingBusId(busId))
   }
 
   function handleKeyUp(e) {

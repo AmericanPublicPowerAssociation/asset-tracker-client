@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import clsx from 'clsx'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import produce from 'immer'
@@ -40,6 +41,7 @@ export default function AssetConnectionsListItems({ asset, isEditing }) {
     const title = 'Bus ' + index
     const description = getCountDescription(connectedAssetCount, 'connection')
     const isOpen = isOpenByIndex[index]
+    const isHighlighted = focusingBusId === busId
 
     function setIsOpen(value) {
       setIsOpenByIndex(produce(isOpenByIndex, draft => {
@@ -61,10 +63,10 @@ export default function AssetConnectionsListItems({ asset, isEditing }) {
         key={index}
         title={title}
         description={description}
+        isHighlighted={isHighlighted}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         onClick={handleClickOrFocus}
-        highlight={ focusingBusId === busId }
       >
         <BusAttributesListItem
           assetId={assetId}
@@ -75,7 +77,14 @@ export default function AssetConnectionsListItems({ asset, isEditing }) {
         />
         <BusConnectionsList connectedAssetIds={connectedAssetIds} />
       </CollapsibleListItem> :
-      <ListItem key={index} disableGutters component='div'>
+      <ListItem
+        key={index}
+        component='div'
+        className={clsx({
+          highlighted: isHighlighted,
+        })}
+        disableGutters
+      >
         <ListItemText primary={title} secondary={description} />
       </ListItem>
   })

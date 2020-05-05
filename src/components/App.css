@@ -14,11 +14,11 @@
   color: white !important;
   background-color: #ff4081 !important;
 }
+.highlighted {
+  background-color: yellow !important;
+}
 .capitalized {
   text-transform: capitalize;
-}
-.tcell-strikethrough {
-  text-decoration: line-through !important;
 }
 .flip-animation:hover {
   transition: 0.50s;

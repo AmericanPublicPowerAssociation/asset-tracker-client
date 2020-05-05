@@ -5,12 +5,12 @@ import DeckGL from '@deck.gl/react'
 import { Feature, LineString, Coord, point } from '@turf/helpers'
 import lineSlice  from '@turf/line-slice'
 import {
-  setFocusingBusId,
   deleteAsset,
   setAsset,
   setAssetConnection,
   setAssetsGeoJson,
   setFocusingAssetId,
+  setFocusingBusId,
   setMapViewState, setAssetAttribute,
 } from '../actions'
 import {

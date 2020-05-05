@@ -10,6 +10,7 @@ import {
   setAsset,
   setAssetsGeoJson,
   setFocusingAssetId,
+  setFocusingBusId,
   setMapViewState,
   setSketchMode,
 } from '../actions'
@@ -142,6 +143,7 @@ export function useEditableMap() {
         // If we are not adding a specific type of asset,
         if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
           dispatch(setFocusingAssetId(targetAssetId))
+          dispatch(setFocusingBusId(targetBusId))
         }
       }
 
