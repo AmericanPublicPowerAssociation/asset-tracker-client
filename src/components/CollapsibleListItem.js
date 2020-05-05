@@ -16,12 +16,11 @@ export default function CollapsibleListItem({
   onClick,
   entered,
 }) {
+
   function handleClick() {
     setIsOpen(!isOpen)
     if (onClick) onClick()
   }
-
-  console.log('CC', isHighlighted)
 
   return (
     <>

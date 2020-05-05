@@ -12,6 +12,7 @@ import {
   setFocusingAssetId,
   setFocusingBusId,
   setMapViewState,
+  setSelectedAssetIndexes,
   setSketchMode,
 } from '../actions'
 import {
@@ -67,19 +68,21 @@ export function useEditableMap() {
       function handleAssetEdit({ editType, editContext, updatedData }) {
         console.log('asset edit', editType, editContext, updatedData)
         if (editType === 'addFeature') {
+          const assetId = nextAssetId
           const assetTypeCode = getAssetTypeCode(sketchMode)
-          console.log('add feature', nextAssetId, assetTypeCode)
+          console.log('add feature', assetId, assetTypeCode)
           const { featureIndexes } = editContext
           console.assert(featureIndexes.length === 1)
           const featureIndex = featureIndexes[0]
           const { features } = updatedData
           const feature = features[featureIndex]
           const featureProperties = feature.properties
-          featureProperties.id = nextAssetId
+          featureProperties.id = assetId
           featureProperties.typeCode = assetTypeCode
           dispatch(makeAssetName(feature))
           dispatch(setAsset(makeAsset(feature)))
-          dispatch(setFocusingAssetId(nextAssetId))
+          dispatch(setFocusingAssetId(assetId))
+          dispatch(setSelectedAssetIndexes(featureIndexes))
           nextAssetId = makeAssetId()
           // Prevent adding multiple assets by mistake
           dispatch(setSketchMode(SKETCH_MODE_ADD))

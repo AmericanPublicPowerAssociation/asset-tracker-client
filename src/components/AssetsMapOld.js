@@ -1,20 +1,3 @@
-import {
-  setFocusingBusId,
-  setFocusingAssetId,
-} from '../actions'
-import {
-  SKETCH_MODE_ADD,
-  SKETCH_MODE_ADD_LINE,
-  SKETCH_MODE_EDIT,
-} from '../constants'
-import {
-  getFocusingAssetId,
-  // getFocusingBusId,
-} from '../selectors'
-
-  const focusingAssetId = useSelector(getFocusingAssetId)
-  // const focusingBusId = useSelector(getFocusingBusId)
-
   function handleBusesGeoJsonClick(info, event) {
     if (sketchMode === SKETCH_MODE_ADD_LINE) {
       setLineBusId(busId)
@@ -32,14 +15,12 @@ import {
   }
 
   function handleKeyUp(e) {
-    e.preventDefault()
     if (e.key === 'Delete') {
       if (focusingAssetId && sketchMode.startsWith(SKETCH_MODE_EDIT)) {
         openDeleteAssetDialog()
       }
     }
   }
-}
 
 /*
 *    and we clicked on a bus

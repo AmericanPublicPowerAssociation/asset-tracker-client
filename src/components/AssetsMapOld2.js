@@ -1,7 +1,3 @@
-import React, { useRef } from 'react'
-import { useSelector } from 'react-redux'
-import { StaticMap } from 'react-map-gl'
-import DeckGL from '@deck.gl/react'
 import { Feature, LineString, Coord, point } from '@turf/helpers'
 import lineSlice  from '@turf/line-slice'
 import {
@@ -35,52 +31,7 @@ import {
   getMapViewState,
 } from '../selectors'
 
-const {
-  REACT_APP_MAPBOX_TOKEN,
-} = process.env
-
-export default function AssetsMap({
-  sketchMode, changeSketchMode,
-  selectedAssetIndexes, setSelectedAssetIndexes,
-  selectedBusIndexes,
-}) {
-  const deckGL = useRef()
-  const mapStyle = useSelector(getMapStyle)
-  const mapViewState = useSelector(getMapViewState)
-  const mapEditState = {}
-  const assetTypeByCode = useSelector(getAssetTypeByCode)
-  const assetsGeoJson = useSelector(getAssetsGeoJson)
-  const busesGeoJson = useSelector(getBusesGeoJson)
-  const colors = useSelector(getColors)
-  const { handleMapMove } = useMovableMap()
-  const {
-    getAssetsMapLayer,
-    getBusesMapLayer,
-    handleMapKey,
-    handleMapClick,
-  } = useEditableMap(
-    sketchMode, changeSketchMode,
-    assetTypeByCode,
-    assetsGeoJson, selectedAssetIndexes, setSelectedAssetIndexes,
-    busesGeoJson, selectedBusIndexes,
-    mapEditState,
-    colors)
-  const mapLayers = [
-    getAssetsMapLayer(),
-    getBusesMapLayer(),
-  ]
-
-  const focusingAssetId = useSelector(getFocusingAssetId)
-  // const focusingBusId = useSelector(getFocusingBusId)
   const mapMode = getMapMode(sketchMode)
-  const pickingRadius = PICKING_RADIUS_IN_PIXELS
-  const pickingDepth = PICKING_DEPTH
-  const ASSET_TYPE_METER_CODE = assetTypeByCode['m'] && assetTypeByCode['m'].code
-
-  function handleViewStateChange({viewState}) {
-    // Update the map viewport
-    dispatch(setMapViewState(viewState))
-  }
 
   function handleAssetsGeoJsonClick(info, event, data) {
     const assetId = info.object.properties.id
@@ -314,7 +265,6 @@ export default function AssetsMap({
   }
 
   function onKeyUp(e) {
-    e.preventDefault()
     if (e.key === 'Delete') {
       if (focusingAssetId &&
           sketchMode.startsWith(SKETCH_MODE_EDIT)
@@ -325,11 +275,6 @@ export default function AssetsMap({
   }
 
   mapLayers.push(new CustomEditableGeoJsonLayer({
-    id: ASSETS_GEOJSON_LAYER_ID,
-    data: assetsGeoJson,
-    mode: mapMode,
-    pickable: true,
-    stroked: false,
     autoHighlight: sketchMode !== SKETCH_MODE_ADD_LINE,
     highlightColor: colors.assetHighlight,
     selectedFeatureIndexes: selectedAssetIndexes,
@@ -354,11 +299,7 @@ export default function AssetsMap({
 
   // mapLayers.push(new GeoJsonLayer({
   mapLayers.push(new EditableGeoJsonLayer({
-    id: BUSES_GEOJSON_LAYER_ID,
-    data: busesGeoJson,
     mode: getMapMode(),
-    pickable: true,
-    stroked: false,
     autoHighlight: true,
     highlightColor: colors.busHighlight,
     selectedFeatureIndexes: selectedBusIndexes,
