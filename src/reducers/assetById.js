@@ -1,6 +1,5 @@
 import produce from 'immer'
 import {
-  // ASSETS,
   DELETE_ASSET,
   SET_ASSET,
   SET_ASSETS,
@@ -9,18 +8,14 @@ import {
   SET_ASSET_CONNECTION_ATTRIBUTE,
   SET_ASSET_VALUE,
 } from '../constants'
-import {
-  getByKey,
-} from '../macros'
 
 const initialState = {}
-// const initialState = getByKey(ASSETS, 'id')
 
 const assetById = (state = initialState, action) => {
   switch(action.type) {
     case SET_ASSETS: {
-      const { assets } = action.payload
-      return getByKey(assets, 'id')
+      const { assetById } = action.payload
+      return assetById
     }
     case SET_ASSET: {
       const asset = action.payload

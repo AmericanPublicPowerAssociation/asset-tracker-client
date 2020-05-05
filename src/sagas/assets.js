@@ -1,3 +1,4 @@
+import getCentroid from '@turf/centroid'
 import {
   put,
   select,
@@ -7,6 +8,7 @@ import {
 import {
   refreshTaskComments,
   refreshTasks,
+  setAssetValue,
   setAssets,
   setTaskCommentCount,
   setTaskComments,
@@ -15,6 +17,7 @@ import {
 import {
   ADD_TASK,
   ADD_TASK_COMMENT,
+  MAKE_ASSET_NAME,
   REFRESH_ASSETS,
   REFRESH_TASKS,
   REFRESH_TASK_COMMENTS,
@@ -29,6 +32,10 @@ import {
   getAssetsGeoJson,
 } from '../selectors'
 
+const {
+  REACT_APP_GOOGLE_TOKEN,
+} = process.env
+
 export function* watchRefreshAssets() {
   yield takeLatest(REFRESH_ASSETS, function* (action) {
     const url = '/assets.json'
@@ -42,13 +49,32 @@ export function* watchSaveAssets() {
   yield takeEvery(SAVE_ASSETS, function* (action) {
     const url = '/assets.json'
     const assetById = yield select(getAssetById)
-    const assets = Object.values(assetById)
     const assetsGeoJson = yield select(getAssetsGeoJson)
     yield fetchSafely(url, {
       method: 'PATCH',
-      body: JSON.stringify({ assets, assetsGeoJson }),
+      body: JSON.stringify({ assetById, assetsGeoJson }),
     }, {
       on200: resetAssets,
+    })
+  })
+}
+
+export function* watchMakeAssetName() {
+  yield takeEvery(MAKE_ASSET_NAME, function* (action) {
+    const feature = action.payload
+    const assetId = feature.properties.id
+    const geometry = feature.geometry
+    const centroid = getCentroid(geometry)
+    const [longitude, latitude] = centroid.geometry.coordinates
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${REACT_APP_GOOGLE_TOKEN}`
+    yield fetchSafely(url, {}, {
+      on200: function* ({ results }) {
+        if (!results.length) {
+          return
+        }
+        const assetName = results[0].formatted_address
+        yield put(setAssetValue(assetId, 'name', assetName))
+      },
     })
   })
 }

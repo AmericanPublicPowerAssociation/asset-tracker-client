@@ -32,9 +32,8 @@ export default function AssetsMap() {
   } = useEditableMap()
   const mapLayers = [
     getAssetsMapLayer(),
-    // getBusesMapLayer(),
+    getBusesMapLayer(),
   ]
-  // console.log(mapLayers)
   return (
     <div onKeyUp={handleMapKey}>
       <DeckGL

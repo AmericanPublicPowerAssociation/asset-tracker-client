@@ -6,6 +6,7 @@ import {
   ViewMode,
 } from '@nebula.gl/edit-modes'
 import {
+  makeAssetName,
   setAsset,
   setAssetsGeoJson,
   setFocusingAssetId,
@@ -30,7 +31,6 @@ import {
 } from '../routines'
 import {
   getAssetIdByBusId,
-  getAssetTypeByCode,
   getAssetsGeoJson,
   getBusesGeoJson,
   getColors,
@@ -57,7 +57,6 @@ export function useEditableMap() {
   const busesGeoJson = useSelector(getBusesGeoJson)
   const selectedAssetIndexes = useSelector(getSelectedAssetIndexes)
   const selectedBusIndexes = useSelector(getSelectedBusIndexes)
-  const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetIdByBusId = useSelector(getAssetIdByBusId)
   const colors = useSelector(getColors)
   return {
@@ -66,27 +65,25 @@ export function useEditableMap() {
 
       function handleAssetEdit({ editType, editContext, updatedData }) {
         console.log('asset edit', editType, editContext, updatedData)
-        // If we have a new feature,
         if (editType === 'addFeature') {
-          // Update feature properties
-          const { featureIndexes } = editContext
-          const { features } = updatedData
           const assetTypeCode = getAssetTypeCode(sketchMode)
           console.log('add feature', nextAssetId, assetTypeCode)
-          for (const featureIndex of featureIndexes) {
-            const featureProperties = features[featureIndex].properties
-            featureProperties.id = nextAssetId
-            featureProperties.typeCode = assetTypeCode
-          }
-          // Make a new asset corresponding to the feature
-          const asset = makeAsset(nextAssetId, assetTypeByCode[assetTypeCode])
-          dispatch(setAsset(asset))
+          const { featureIndexes } = editContext
+          console.assert(featureIndexes.length === 1)
+          const featureIndex = featureIndexes[0]
+          const { features } = updatedData
+          const feature = features[featureIndex]
+          const featureProperties = feature.properties
+          featureProperties.id = nextAssetId
+          featureProperties.typeCode = assetTypeCode
+          dispatch(makeAssetName(feature))
+          dispatch(setAsset(makeAsset(feature)))
           dispatch(setFocusingAssetId(nextAssetId))
           nextAssetId = makeAssetId()
           // Prevent adding multiple assets by mistake
           dispatch(setSketchMode(SKETCH_MODE_ADD))
         }
-        dispatch(setAssetsGeoJson(updatedData))  // Update geojson for assets
+        dispatch(setAssetsGeoJson(updatedData))
       }
 
       function handleAssetClick(info, event) {
@@ -105,13 +102,11 @@ export function useEditableMap() {
       function handleLayerDoubleClick(event) {
         console.log('layer double click', event)
       }
-      */
 
       function handleLayerStopDragging(event) {
         console.log('layer stop dragging', event)
       }
-
-      console.log(assetsGeoJson)
+      */
 
       // return new CustomEditableGeoJsonLayer({
       return new EditableGeoJsonLayer({

@@ -1,5 +1,4 @@
 import {
-  ABBREVIATED_ASSET_ID_LENGTH,
   ASSET_TYPE_CODE_LINE,
   ASSET_TYPE_CODE_METER,
   ASSET_TYPE_CODE_SUBSTATION,
@@ -18,19 +17,43 @@ import {
   makeBusId,
 } from '../routines'
 
-export function makeAsset(assetId, assetType) {
-  const assetName = getAssetName(assetType, assetId)
-  const assetTypeCode = assetType.code
-  const asset = { id: assetId, typeCode: assetTypeCode, name: assetName }
-  const busId = makeBusId()
-  const connectionByIndex = { 0: { busId } }
-
-  if (assetTypeCode === ASSET_TYPE_CODE_TRANSFORMER) {
-    const busId = makeBusId()
-    connectionByIndex[1] = { busId }
+export function makeAsset(
+  feature,
+) {
+  const featureProperties = feature.properties
+  const featureGeometry = feature.geometry
+  const assetId = featureProperties.id
+  const assetTypeCode = featureProperties.typeCode
+  const connectionByIndex = {}
+  const asset = {
+    id: assetId,
+    typeCode: assetTypeCode,
+    name: assetId,
+    connections: connectionByIndex,
   }
+  const bus0Id = makeBusId()
+  const bus1Id = makeBusId()
 
-  asset.connections = connectionByIndex
+  switch (assetTypeCode) {
+    case ASSET_TYPE_CODE_LINE: {
+      const lastVertexIndex = featureGeometry.coordinates.length - 1
+      connectionByIndex[0] = { busId: bus0Id }
+      connectionByIndex[lastVertexIndex] = { busId: bus1Id }
+      break
+    }
+    case ASSET_TYPE_CODE_METER: {
+      connectionByIndex[0] = { busId: bus0Id }
+      break
+    }
+    case ASSET_TYPE_CODE_TRANSFORMER: {
+      connectionByIndex[0] = { busId: bus0Id }
+      connectionByIndex[1] = { busId: bus1Id }
+      break
+    }
+    default: {
+      break
+    }
+  }
   return asset
 }
 
@@ -41,12 +64,6 @@ export function getAssetTypeCode(sketchMode) {
     [SKETCH_MODE_ADD_SUBSTATION]: ASSET_TYPE_CODE_SUBSTATION,
     [SKETCH_MODE_ADD_METER]: ASSET_TYPE_CODE_METER,
   }[sketchMode]
-}
-
-export function getAssetName(assetType, assetId) {
-  const abbreviatedAssetId = assetId.substring(
-    0, ABBREVIATED_ASSET_ID_LENGTH)
-  return `${assetType.name} ${abbreviatedAssetId}`
 }
 
 export function getAttributeLabel(attributeKey) {

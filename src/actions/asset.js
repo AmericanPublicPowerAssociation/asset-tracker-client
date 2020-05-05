@@ -1,5 +1,6 @@
 import {
   DELETE_ASSET,
+  MAKE_ASSET_NAME,
   REFRESH_ASSETS,
   SAVE_ASSETS,
   SET_ASSET,
@@ -73,5 +74,12 @@ export function setFocusingAssetId(id) {
   return {
     type: SET_FOCUSING_ASSET_ID,
     payload: id,
+  }
+}
+
+export function makeAssetName(feature) {
+  return {
+    type: MAKE_ASSET_NAME,
+    payload: feature,
   }
 }

@@ -24,7 +24,6 @@ export class CustomEditableGeoJsonLayer extends EditableGeoJsonLayer {
     const onDoubleClick = props.onDoubleClick
     onDoubleClick && onDoubleClick(event, props)
   }
-  */
 
   onStopDragging(event) {
     const props = this.props
@@ -32,6 +31,7 @@ export class CustomEditableGeoJsonLayer extends EditableGeoJsonLayer {
     const onStopDragging = props.onStopDragging
     onStopDragging && onStopDragging(event, props)
   }
+  */
 }
 
 export function getMapMode(sketchMode) {

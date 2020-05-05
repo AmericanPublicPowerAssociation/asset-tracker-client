@@ -71,5 +71,10 @@ export const getFocusingAsset = createSelector([
   focusingAssetId,
   assetById,
 ) => {
-  return assetById[focusingAssetId]
+  let asset = assetById[focusingAssetId]
+  if (asset) {
+    asset = Object.assign({}, asset)
+    asset.id = focusingAssetId
+  }
+  return asset
 })
