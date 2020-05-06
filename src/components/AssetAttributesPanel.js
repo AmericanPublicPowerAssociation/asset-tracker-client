@@ -10,28 +10,23 @@ import AssetName from './AssetName'
 import AssetAttributesListItem from './AssetAttributesListItem'
 import AssetConnectionsListItems from './AssetConnectionsListItems'
 import {
-  SKETCH_MODE_VIEW,
-} from '../constants'
+} from '../actions'
 import {
+  getIsViewing,
   getAssetTypeByCode,
 } from '../selectors'
 
-
-export default function AssetAttributesPanel(props) {
-  const {
-    asset,
-    sketchMode,
-    setSelectedBusIndexes,
-    setSelectedAssetIndexes,
-    setIsDetailsWindowExpanded,
-    isDetailsWindowExpanded
-  } = props
+export default function AssetAttributesPanel({
+  asset,
+  setIsDetailsWindowExpanded,
+  isDetailsWindowExpanded,
+}) {
+  const isViewing = useSelector(getIsViewing)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
-
   const assetTypeCode = asset.typeCode
   const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
-  const isEditing = sketchMode !== SKETCH_MODE_VIEW
+  const isEditing = !isViewing
 
   return (
     <List component='div' disablePadding>
@@ -51,8 +46,6 @@ export default function AssetAttributesPanel(props) {
       <AssetConnectionsListItems
         asset={asset}
         isEditing={isEditing}
-        setSelectedBusIndexes={setSelectedBusIndexes}
-        setSelectedAssetIndexes={setSelectedAssetIndexes}
         expand={isDetailsWindowExpanded}
       />
     </List>

@@ -1,11 +1,14 @@
 import React from 'react'
-import clsx from 'clsx'
+import { useDispatch, useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import Tooltip from '@material-ui/core/Tooltip'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
+import {
+  setSketchMode,
+} from '../actions'
 import {
   ASSET_TYPE_CODE_LINE,
   ASSET_TYPE_CODE_METER,
@@ -16,6 +19,9 @@ import {
   SKETCH_MODE_ADD_SUBSTATION,
   SKETCH_MODE_ADD_TRANSFORMER,
 } from '../constants'
+import {
+  getSketchMode,
+} from '../selectors'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,14 +32,12 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function SketchAddToolbar(props) {
-  const {
-    sketchMode,
-    changeSketchMode,
-  } = props
   const classes = useStyles()
+  const dispatch = useDispatch()
+  const sketchMode = useSelector(getSketchMode)
   const isAdding = sketchMode.startsWith('add')
-  return (
-    <Paper className={clsx(classes.root, {poof: !isAdding})}>
+  return isAdding && (
+    <Paper className={classes.root}>
       <List>
         <Tooltip
           title='Add Line'
@@ -42,9 +46,9 @@ export default function SketchAddToolbar(props) {
         >
           <ListItem
             button
-            classes={{selected: 'selected'}}
+            classes={{ selected: 'selected' }}
             selected={sketchMode === SKETCH_MODE_ADD_LINE}
-            onClick={() => changeSketchMode(SKETCH_MODE_ADD_LINE)}
+            onClick={() => dispatch(setSketchMode(SKETCH_MODE_ADD_LINE))}
           >
             <AssetTypeSvgIcon assetTypeCode={ASSET_TYPE_CODE_LINE} />
           </ListItem>
@@ -57,9 +61,9 @@ export default function SketchAddToolbar(props) {
         >
           <ListItem
             button
-            classes={{selected: 'selected'}}
+            classes={{ selected: 'selected' }}
             selected={sketchMode === SKETCH_MODE_ADD_METER}
-            onClick={() => changeSketchMode(SKETCH_MODE_ADD_METER)}
+            onClick={() => dispatch(setSketchMode(SKETCH_MODE_ADD_METER))}
           >
             <AssetTypeSvgIcon assetTypeCode={ASSET_TYPE_CODE_METER} />
           </ListItem>
@@ -72,9 +76,9 @@ export default function SketchAddToolbar(props) {
         >
           <ListItem
             button
-            classes={{selected: 'selected'}}
+            classes={{ selected: 'selected' }}
             selected={sketchMode === SKETCH_MODE_ADD_TRANSFORMER}
-            onClick={() => changeSketchMode(SKETCH_MODE_ADD_TRANSFORMER)}
+            onClick={() => dispatch(setSketchMode(SKETCH_MODE_ADD_TRANSFORMER))}
           >
             <AssetTypeSvgIcon assetTypeCode={ASSET_TYPE_CODE_TRANSFORMER} />
           </ListItem>
@@ -87,9 +91,9 @@ export default function SketchAddToolbar(props) {
         >
           <ListItem
             button
-            classes={{selected: 'selected'}}
+            classes={{ selected: 'selected' }}
             selected={sketchMode === SKETCH_MODE_ADD_SUBSTATION}
-            onClick={() => changeSketchMode(SKETCH_MODE_ADD_SUBSTATION)}
+            onClick={() => dispatch(setSketchMode(SKETCH_MODE_ADD_SUBSTATION))}
           >
             <AssetTypeSvgIcon assetTypeCode={ASSET_TYPE_CODE_SUBSTATION} />
           </ListItem>

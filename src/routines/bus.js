@@ -1,8 +1,11 @@
 import translateFeature from '@turf/transform-translate'
 import {
-  BUS_DISTANCE_IN_KILOMETERS,
-  BUS_DISTANCE_IN_KILOMETERS_FOR_METERS,
+  BUS_DISTANCE_IN_KILOMETERS_BY_CODE,
+  MINIMUM_BUS_ID_LENGTH,
 } from '../constants'
+import {
+  getRandomId,
+} from '../macros'
 
 export function getBusFeatures(assetFeatures, assetById) {
   const busIds = []
@@ -32,30 +35,29 @@ export function getBusFeatures(assetFeatures, assetById) {
 
 function getBusFeaturesForPoint(assetFeature, connections, busIds) {
   const busFeatures = []
-  const busCount = connections.length
+  const busCount = Object.keys(connections).length
   const busAngleIncrement = 360 / busCount
   const assetTypeCode = assetFeature.properties.typeCode
+  const busDistanceInKilometers = BUS_DISTANCE_IN_KILOMETERS_BY_CODE[
+    assetTypeCode]
+  let busAngle = 0
 
-
-  for (let i = 0; i < busCount; i++) {
-    const connection = connections[i]
+  for (const connection of Object.values(connections)) {
     const busId = connection.busId
     if (busIds.includes(busId)) continue
 
-    const busAngle = busAngleIncrement * i
     const busGeometry = translateFeature(
       assetFeature,
-      assetTypeCode === 'm' ?
-        BUS_DISTANCE_IN_KILOMETERS_FOR_METERS :
-        BUS_DISTANCE_IN_KILOMETERS,
+      busDistanceInKilometers,
       busAngle,
     ).geometry
     busFeatures.push({
       type: 'Feature',
-      properties: {id: busId},
+      properties: { id: busId },
       geometry: busGeometry,
     })
     busIds.push(busId)
+    busAngle += busAngleIncrement
   }
 
   return busFeatures
@@ -64,27 +66,28 @@ function getBusFeaturesForPoint(assetFeature, connections, busIds) {
 function getBusFeaturesForLine(assetFeature, connections, busIds) {
   const busFeatures = []
   const assetXYs = assetFeature.geometry.coordinates
-  const busCount = connections.length
-  const busXYs = [
-    assetXYs[0],
-    assetXYs[assetXYs.length - 1],
-  ]
 
-  for (let i = 0; i < busCount; i++) {
-    const connection = connections[i]
+  for (const [
+    lineVertexIndex,
+    connection,
+  ] of Object.entries(connections)) {
     const busId = connection.busId
     if (busIds.includes(busId)) continue
 
     busFeatures.push({
       type: 'Feature',
-      properties: {id: busId},
+      properties: { id: busId },
       geometry: {
         type: 'Point',
-        coordinates: busXYs[i],
-      }
+        coordinates: assetXYs[lineVertexIndex],
+      },
     })
     busIds.push(busId)
   }
 
   return busFeatures
+}
+
+export function makeBusId() {
+  return getRandomId(MINIMUM_BUS_ID_LENGTH)
 }

@@ -15,7 +15,7 @@ import {
 } from '../selectors'
 
 
-export default function DeleteAssetDialog(props) {
+export default function AssetDeleteDialog(props) {
   const {
     onClose,
     openDialog,

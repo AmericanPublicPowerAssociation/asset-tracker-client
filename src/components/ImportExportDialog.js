@@ -1,43 +1,36 @@
-import React, {useEffect, useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
 import FormControl from '@material-ui/core/FormControl'
-import NativeSelect from '@material-ui/core/NativeSelect'
+// import NativeSelect from '@material-ui/core/NativeSelect'
 import Input from '@material-ui/core/Input'
-import Typography from "@material-ui/core/Typography"
-import Uppy from '@uppy/core'
-import { DragDrop, ProgressBar } from '@uppy/react'
-import '@uppy/core/dist/style.css'
-import '@uppy/drag-drop/dist/style.css'
-import '@uppy/progress-bar/dist/style.css'
+import Typography from '@material-ui/core/Typography'
 
 import {
   getAssetById,
   getAssetTypeByCode,
 } from '../selectors'
-import {Checkbox} from "@material-ui/core";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import {DropzoneArea} from "material-ui-dropzone";
-import Grid from "@material-ui/core/Grid";
-import {uploadAssetsCsv} from "../actions";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import {ASSET_TYPE_CODE_TRANSFORMER} from "../constants";
+import { Checkbox } from '@material-ui/core'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import {DropzoneArea} from "material-ui-dropzone"
+import Grid from "@material-ui/core/Grid"
+import {uploadAssetsCsv} from "../actions"
+import Select from "@material-ui/core/Select"
+import MenuItem from "@material-ui/core/MenuItem"
+import {ASSET_TYPE_CODE_TRANSFORMER} from "../constants"
 
-export default function DownloadManager(props) {
-  const dispatch = useDispatch()
-  const {
+export default function ImportExportDialog({
     open,
     onClose,
     onCancel,
     onOk,
-  } = props;
-
+}) {
+  const dispatch = useDispatch()
   const uploaderProps = {
     acceptedFiles: ['text/csv'],
     filesLimit: 1,
@@ -82,7 +75,7 @@ export default function DownloadManager(props) {
         window.location = `/assets.dss?source=${powerId}`
       }
       if (format === 'csv') {
-        window.location = `/assets.csv`
+        window.location = '/assets.csv'
       }
       onClose()
     } else {

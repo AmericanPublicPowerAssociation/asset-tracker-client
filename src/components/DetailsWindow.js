@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
-import clsx from 'clsx'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
+import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import AssetAttributesPanel from './AssetAttributesPanel'
@@ -14,12 +14,12 @@ import {
 } from '../constants'
 import {
   getFocusingAsset,
-  getTasksForFocusedAsset,
+  getOverlayMode,
 } from '../selectors'
-import useTheme from "@material-ui/core/styles/useTheme";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import Dialog from "@material-ui/core/Dialog";
-import Slide from "@material-ui/core/Slide";
+import useTheme from '@material-ui/core/styles/useTheme'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
+import Dialog from '@material-ui/core/Dialog'
+import Slide from '@material-ui/core/Slide'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -60,63 +60,47 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />
+  return <Slide direction='up' ref={ref} {...props} />
 })
 
-
-export default function DetailsWindow(props) {
-  const classes = useStyles()
+export default function DetailsWindow({ isWithTables }) {
   const theme = useTheme()
-  const {
-    isWithDetails,
-    isWithTables,
-    overlayMode,
-    sketchMode,
-    setSelectedBusIndexes,
-    setSelectedAssetIndexes,
-  } = props
-  const [expand, setExpand] = useState(false)
+  const classes = useStyles()
+  const overlayMode = useSelector(getOverlayMode)
   const focusingAsset = useSelector(getFocusingAsset)
-  const tasksForFocusingAsset = useSelector(getTasksForFocusedAsset)
-  
+  const [expand, setExpand] = useState(false)
+  const isNotMobile = useMediaQuery(theme.breakpoints.up('sm'))
+
   const DetailsPanel = {
     [OVERLAY_MODE_ASSETS]: AssetAttributesPanel,
     [OVERLAY_MODE_TASKS]: AssetTasksPanel,
     [OVERLAY_MODE_RISKS]: AssetRisksPanel,
   }[overlayMode]
 
-  const isNotMobile = useMediaQuery(theme.breakpoints.up('sm'));
-
   const detailsPanel = focusingAsset ?
     <DetailsPanel
       className={classes.root}
       asset={focusingAsset}
-      tasks={tasksForFocusingAsset}
-      sketchMode={sketchMode}
-      overlayMode={overlayMode} 
-      setSelectedBusIndexes={setSelectedBusIndexes}
-      setSelectedAssetIndexes={setSelectedAssetIndexes}
+      // tasks={focusingTasks}
       response={isNotMobile}
       isDetailsWindowExpanded={expand}
       setIsDetailsWindowExpanded={setExpand}
     /> : <EmptyDetailsPanel />
 
-  return expand ? (<Dialog fullScreen open={expand} onClose={setExpand} TransitionComponent={Transition} classes={{paper: classes.background}}>
-
-    <Paper className={clsx( classes.fullView, {
-      poof: !isWithDetails,
-      [classes.withTables]: isWithTables,
-    })}>
-      {detailsPanel}
-    </Paper>
-  </Dialog>) : (
-    isNotMobile || focusingAsset ?
+  // TODO: Clean
+  return expand ? (
+    <Dialog fullScreen open={expand} onClose={setExpand} TransitionComponent={Transition} classes={{ paper: classes.background }}>
+      <Paper className={clsx( classes.fullView, {
+        [classes.withTables]: isWithTables,
+      })}>
+        {detailsPanel}
+      </Paper>
+    </Dialog>
+  ) : (isNotMobile || focusingAsset ?
     <Paper className={clsx( !isNotMobile ? classes.responsive : classes.root, {
-      poof: !isWithDetails,
       [classes.withTables]: isWithTables,
     })}>
       {detailsPanel}
-    </Paper>
-      : <></>
+    </Paper> : <></>
   )
 }

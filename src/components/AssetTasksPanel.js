@@ -23,8 +23,7 @@ import AddIcon from '@material-ui/icons/Add'
 import TasksList, { TaskFullscreen } from './TasksList'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import {
-  addAssetTask,
-  updateTaskComments,
+  addTask,
 } from '../actions'
 import {
   TASK_ARCHIVE_STATUS,
@@ -32,9 +31,9 @@ import {
 } from '../constants'
 import {
   getAssetTypeByCode,
+  getFocusingTasks,
   getTaskPriorityTypes,
 } from '../selectors'
-
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -55,8 +54,6 @@ const useStyles = makeStyles(theme => ({
     height: '100%',
   },
 }))
-
-
 
 export const AssetName = (props) => {
   const {
@@ -87,16 +84,12 @@ export const AssetName = (props) => {
   </ListItem>)
 }
 
-export default function AssetTasksPanel(props) {
-  const dispatch = useDispatch()
+export default function AssetTasksPanel({ asset }) {
   const classes = useStyles()
-  const {
-    asset,
-    tasks,
-    disableInput,
-  } = props
+  const dispatch = useDispatch()
+  const tasks = useSelector(getFocusingTasks)
 
-  const assetId = asset.id
+  // const assetId = asset.id
   const assetName = asset.name
   const assetTypeCode = asset.typeCode
   const assetTypeByCode = useSelector(getAssetTypeByCode)
@@ -108,18 +101,20 @@ export default function AssetTasksPanel(props) {
   const [archived, setArchived] = useState(false)
   const [query, setQuery] = useState('')
   const [name, setName]  = useState('')
-  const [description, setDescription] = useState('')
+  // const [description, setDescription] = useState('')
   const [priority, setPriority] = useState(priorityTypeNormal)
   const [dialog, setDialog] = useState(false)	   
   const [taskDetails, setTaskDetails] = useState(false)
   
-  const addTask = () => {
+  /*
+  function handleTaskAddClick() {
     setDialog(false)
-    dispatch(addAssetTask(assetId, name, description, priority))
+    dispatch(addTask(assetId, name, description, priority))
     setName('')
     setDescription('')
     setPriority(priorityTypeNormal)
   }
+  */
 
 const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
   task => (
@@ -144,7 +139,7 @@ const listTasks = (<>
                 onChange={(e) => setQuery(e.target.value) } />
     <FormControlLabel control={
       <Switch checked={archived} onChange={ () => setArchived(!archived) } value="archived" />}
-                      label="Show archived tasks" />
+                      label="Show closed tasks" />
   </FormGroup>
   <div className={classes.listTasks}>
     <TasksList showDetails={handleDisplayDetails} showComments={() => {}} asset={asset} tasks={partialTasks} disableInput={disableInput}/>
@@ -157,22 +152,22 @@ const listTasks = (<>
   </>)
 
   const getTaskById = () => {
-      if (taskDetails) {
-        for (let i = 0; i < tasks.length; i++) {
-          if (tasks[i].id === taskDetails.id) return tasks[i]
-        }
+    if (taskDetails) {
+      for (let i = 0; i < tasks.length; i++) {
+        if (tasks[i].id === taskDetails.id) return tasks[i]
       }
-      return {}
+    }
+    return {}
   }
 
   return (<>
     {assetNameComponent}
     {listTasks}
 
-    <Dialog open={dialog} onClose={() => setDialog(false)} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">Add task</DialogTitle>
+    <Dialog open={dialog} onClose={() => setDialog(false)} aria-labelledby='form-dialog-title'>
+      <DialogTitle id='form-dialog-title'>Add task</DialogTitle>
       <DialogContent>
-        <TextField id="name" label="Task name" value={name}
+        <TextField id='name' label='Task name' value={name}
                    onChange={(e) => setName(e.target.value) } />
 
         <div>
@@ -200,10 +195,14 @@ const listTasks = (<>
         </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => {setDialog(false)}}  color="primary">
+        <Button onClick={() => {setDialog(false)}}  color='primary'>
           Cancel
         </Button>
-        <Button onClick={addTask}  color="secondary" disabled={name === ''}>
+        <Button
+          onClick={addTask}
+          color="secondary"
+          disabled={name === ''}
+        >
           Create
         </Button>
       </DialogActions>

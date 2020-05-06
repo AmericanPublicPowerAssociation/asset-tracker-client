@@ -21,17 +21,15 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function OptionsWindow(props) {
+export default function OptionsWindow({
+  isWithDetails,
+  isWithTables,
+  toggleDetailsWindow,
+  toggleTablesWindow,
+}) {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const {
-    isWithDetails,
-    isWithTables,
-    setIsWithDetails,
-    setIsWithTables,
-  } = props
   const colors = useSelector(getColors)
-  // const isFullScreenDataDialog = useSelector(getIsFullScreenDataDialog)
   const activeColor = colors.active
   const inactiveColor = colors.inactive
   return (
@@ -39,7 +37,7 @@ export default function OptionsWindow(props) {
       <Tooltip title='Toggle Styles'>
         <IconButton
           className={activeColor}
-          onClick={() => dispatch({type: TOGGLE_MAP_STYLE})}
+          onClick={() => dispatch({ type: TOGGLE_MAP_STYLE })}
         >
           <StylesIcon />
         </IconButton>
@@ -48,22 +46,20 @@ export default function OptionsWindow(props) {
       <Tooltip title='Toggle Details'>
         <IconButton
           className={isWithDetails ? activeColor : inactiveColor}
-          onClick={() => setIsWithDetails(!isWithDetails)}
+          onClick={() => toggleDetailsWindow}
         >
           <DetailsIcon />
         </IconButton>
       </Tooltip>
 
-    {
       <Tooltip title='Toggle Tables'>
         <IconButton
           className={isWithTables ? activeColor : inactiveColor}
-          onClick={() => setIsWithTables(!isWithTables)}
+          onClick={() => toggleTablesWindow}
         >
           <TableIcon />
         </IconButton>
       </Tooltip>
-    }
     </div>
   )
 }

@@ -1,32 +1,44 @@
 import {
   put,
+  select,
   takeEvery,
   takeLatest,
 } from 'redux-saga/effects'
+import getCentroid from '@turf/centroid'
 import { refreshRisks } from 'asset-report-risks'
 import {
-  refreshTasks,
-  setAssetComments,
-  setAssets,
-  setTasks,
-  setTaskCommentCount,
-  updateTaskComments,
   refreshAssets,
-  setMapBoundingbox,
+  refreshTaskComments,
+  refreshTasks,
+  setAssetValue,
+  setAssets,
+  setMapBoundingBox,
+  setTaskCommentCount,
+  setTaskComments,
+  setTasks,
 } from '../actions'
 import {
-  REFRESH_ASSETS,
-  UPDATE_ASSETS,
-  REFRESH_TASKS,
   ADD_TASK,
-  UPDATE_TASK,
-  REFRESH_ASSET_COMMENTS,
   ADD_TASK_COMMENT,
+  MAKE_ASSET_NAME,
+  REFRESH_ASSETS,
+  REFRESH_TASKS,
+  REFRESH_TASK_COMMENTS,
+  SAVE_ASSETS,
+  UPDATE_TASK,
   UPLOAD_ASSETS_CSV,
 } from '../constants'
 import {
   fetchSafely,
 } from '../macros'
+import {
+  getAssetById,
+  getAssetsGeoJson,
+} from '../selectors'
+
+const {
+  REACT_APP_GOOGLE_TOKEN,
+} = process.env
 
 export function* watchRefreshAssets() {
   yield takeLatest(REFRESH_ASSETS, function* (action) {
@@ -37,18 +49,39 @@ export function* watchRefreshAssets() {
   })
 }
 
-export function* watchUpdateAssets() {
-  yield takeEvery(UPDATE_ASSETS, function* (action) {
+export function* watchSaveAssets() {
+  yield takeEvery(SAVE_ASSETS, function* (action) {
     const url = '/assets.json'
-    const payload = action.payload
+    const assetById = yield select(getAssetById)
+    const assetsGeoJson = yield select(getAssetsGeoJson)
     yield fetchSafely(url, {
       method: 'PATCH',
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ assetById, assetsGeoJson }),
     }, {
       on200: function*(payload) {
         yield resetAssets(payload)
         yield updateTasks()
         yield put(refreshRisks())
+      },
+    })
+  })
+}
+
+export function* watchMakeAssetName() {
+  yield takeEvery(MAKE_ASSET_NAME, function* (action) {
+    const feature = action.payload
+    const assetId = feature.properties.id
+    const geometry = feature.geometry
+    const centroid = getCentroid(geometry)
+    const [longitude, latitude] = centroid.geometry.coordinates
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${REACT_APP_GOOGLE_TOKEN}`
+    yield fetchSafely(url, {}, {
+      on200: function* ({ results }) {
+        if (!results.length) {
+          return
+        }
+        const assetName = results[0].formatted_address
+        yield put(setAssetValue(assetId, 'name', assetName))
       },
     })
   })
@@ -83,7 +116,7 @@ export function* watchAddTask() {
 
 export function* watchUpdateTask() {
   yield takeEvery(UPDATE_TASK, function* (action) {
-    const url = `/tasks/${action.payload.task_id}.json`
+    const url = `/tasks/${action.payload.taskId}.json`
     const payload = action.payload
     yield fetchSafely(url, {
       method: 'PATCH',
@@ -94,13 +127,12 @@ export function* watchUpdateTask() {
   })
 }
 
-export function* watchRefreshAssetComments() {
-  yield takeLatest(REFRESH_ASSET_COMMENTS, function* (action) {
-    const task_id = action.payload.task_id
-
-    const url = `/tasks/${task_id}/comments.json`
+export function* watchRefreshTaskComments() {
+  yield takeLatest(REFRESH_TASK_COMMENTS, function* (action) {
+    const taskId = action.payload.taskId
+    const url = `/tasks/${taskId}/comments.json`
     yield fetchSafely(url, {}, {
-      on200: (comments) => updateComments({ task_id, comments }),
+      on200: (comments) => updateTaskComments({ taskId, comments }),
     })
   })
 }
@@ -108,18 +140,17 @@ export function* watchRefreshAssetComments() {
 export function* watchAddTaskComment() {
   yield takeEvery(ADD_TASK_COMMENT, function* (action) {
     const payload = action.payload
-    const task_id = action.payload.task_id
-    const url = `/tasks/${task_id}/comments.json`
+    const taskId = action.payload.taskId
+    const url = `/tasks/${taskId}/comments.json`
 
     yield fetchSafely(url, {
       method: 'POST',
       body: JSON.stringify(payload),
     }, {
-      on200: () => put(updateTaskComments(task_id)),
+      on200: () => put(refreshTaskComments(taskId)),
     })
   })
 }
-
 
 export function* updateTasks() {
   yield put(refreshTasks())
@@ -132,18 +163,20 @@ export function* resetTasks(payload) {
 export function* resetAssets(payload) {
   yield put(setAssets(payload))
   const { boundingBox } = payload
-  if (boundingBox)
-    yield put(setMapBoundingbox(boundingBox))
+  if (!boundingBox) {
+    return
+  }
+  yield put(setMapBoundingBox(boundingBox))
 }
 
-export function* updateComments(payload) {
+export function* updateTaskComments(payload) {
   const {
     comments,
-    task_id,
+    taskId,
   } = payload
   const commentCount = comments.length
-  yield put(setAssetComments(payload))
-  yield put(setTaskCommentCount(task_id, commentCount))
+  yield put(setTaskComments(payload))
+  yield put(setTaskCommentCount(taskId, commentCount))
 }
 
 export function* watchUploadAssetsCsv() {

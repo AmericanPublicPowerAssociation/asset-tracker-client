@@ -1,76 +1,65 @@
 import React from 'react'
 import clsx from 'clsx'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import Radio from '@material-ui/core/Radio'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import {
-  getRisks,
+  getVisibleRiskCount,
 } from 'asset-report-risks'
+import {
+  setOverlayMode,
+} from '../actions'
 import {
   OVERLAY_MODE_ASSETS,
   OVERLAY_MODE_RISKS,
   OVERLAY_MODE_TASKS,
-  SKETCH_MODE_VIEW,
 } from '../constants'
 import {
+  getAssetCount,
   getColors,
-  getAssetByIdLength,
-  getOpenTaskByIdLength,
+  getIsViewing,
+  getOpenTaskCount,
+  getOverlayMode,
 } from '../selectors'
 
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
     top: theme.spacing(6),
-    // left: theme.spacing(1),
   },
 }))
 
-export default function OverlaysWindow(props) {
+export default function OverlaysWindow() {
   const classes = useStyles()
-  const {
-    overlayMode,
-    sketchMode,
-    setOverlayMode,
-  } = props
-
+  const dispatch = useDispatch()
+  const isViewing = useSelector(getIsViewing)
+  const overlayMode = useSelector(getOverlayMode)
   const colors = useSelector(getColors)
-	const visibleRisks = useSelector(getRisks)
+  // TODO: Update selectors to show counts for what is currently visible in map
+  // TODO: Implement getVisibleAssetCount
+  // TODO: Implement getVisibleTaskCount
+  // TODO: Implement getVisibleRiskCount
+  const visibleAssetCount = useSelector(getAssetCount)
+  const visibleTaskCount = useSelector(getOpenTaskCount)
+  const visibleRiskCount = useSelector(getVisibleRiskCount)
 
-  const isViewing = sketchMode === SKETCH_MODE_VIEW
-
-  const radioColor = colors.active
-
-  const visibleAssetCount = useSelector(getAssetByIdLength)
-  const visibleTaskCount = useSelector(getOpenTaskByIdLength)
-  const visibleRiskCount = visibleRisks.length
+  const color = colors.active
 
   const assetsOverlayLabel = `Assets (${visibleAssetCount})`
   const tasksOverlayLabel = `Tasks (${visibleTaskCount})`
   const risksOverlayLabel = `Risks (${visibleRiskCount})`
 
   const RadioControl = (
-    <Radio
-      color='secondary'
-      classes={{colorSecondary: radioColor}}
-    />
+    <Radio color='secondary' classes={{ colorSecondary: color }} />
   )
 
-  function handleChange(e) {
-    setOverlayMode(e.target.value)
-  }
-
-  return (
-    <div className={clsx(classes.root, {
-      poof: !isViewing,
-    }, radioColor)}>
-
-    {/* TODO: Show counts for what is visible in map after applying filters */}
+  return isViewing && (
+    <div className={clsx(classes.root, color)}>
       <RadioGroup
         value={overlayMode}
-        onChange={handleChange}
+        onChange={e => dispatch(setOverlayMode(e.target.value))}
       >
         <FormControlLabel
           value={OVERLAY_MODE_ASSETS}

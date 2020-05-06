@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import clsx from 'clsx'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import produce from 'immer'
@@ -8,96 +9,93 @@ import BusAttributesListItem from './BusAttributesListItem'
 import BusConnectionsList from './BusConnectionsList'
 import {
   setFocusingBusId,
+  setSelectedBusIndexes,
 } from '../actions'
 import {
   getCountDescription,
-  getLetter,
 } from '../macros'
+import {
+  getConnectedAssetIds,
+} from '../routines'
 import {
   getAssetIdsByBusId,
   getBusesGeoJson,
   getFocusingBusId,
 } from '../selectors'
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import useTheme from "@material-ui/core/styles/useTheme";
+import useMediaQuery from '@material-ui/core/useMediaQuery'
+import useTheme from '@material-ui/core/styles/useTheme'
 
-export default function AssetConnectionsListItems(props) {
+export default function AssetConnectionsListItems({
+  asset,
+  isEditing,
+  // TODO: Rename
+  noHighlight,
+  expand,
+}) {
   const dispatch = useDispatch()
-  const theme = useTheme();
-
-  const {
-    asset,
-    isEditing,
-    setSelectedBusIndexes,
-    setSelectedAssetIndexes,
-    noHighlight,
-    expand
-  } = props
-  const isNotMobile = useMediaQuery(theme.breakpoints.up('sm'));
-  const [isOpenByConnectionIndex, setIsOpenByConnectionIndex] = useState({})
+  const theme = useTheme()
+  const isNotMobile = useMediaQuery(theme.breakpoints.up('sm'))
+  // const [isOpenByConnectionIndex, setIsOpenByConnectionIndex] = useState({})
+  const [isOpenByIndex, setIsOpenByIndex] = useState({})
+  const busesGeoJson = useSelector(getBusesGeoJson)
+  const focusingBusId = useSelector(getFocusingBusId)
   const assetIdsByBusId = useSelector(getAssetIdsByBusId)
   const assetId = asset.id
   const assetTypeCode = asset.typeCode
-  const connections = asset.connections || []
-  const busesGeoJson = useSelector(getBusesGeoJson)
-  const focusingBusId = useSelector(getFocusingBusId)
+  const connections = asset.connections || {}
 
-  return connections.map((connection, connectionIndex) => {
-    const busId = connection.busId
-    const connectedAssetIds = assetIdsByBusId[busId].filter(
-      connectedAssetId => connectedAssetId !== assetId)
-
+  return Object.entries(connections).map(([index, connection]) => {
+    const { busId } = connection
+    const connectedAssetIds = getConnectedAssetIds(
+      assetId, busId, assetIdsByBusId)
     const connectedAssetCount = connectedAssetIds.length
-    const title = `Bus ${getLetter(connectionIndex)}`
+    const title = 'Bus ' + index
     const description = getCountDescription(connectedAssetCount, 'connection')
-    const isOpen = isOpenByConnectionIndex[connectionIndex]
+    const isOpen = isOpenByIndex[index]
+    const isHighlighted = focusingBusId === busId
 
     function setIsOpen(value) {
-      const state = isOpenByConnectionIndex
-      const nextState = produce(state, draft => {
-        draft[connectionIndex] = value
-      })
-      setIsOpenByConnectionIndex(nextState)
+      setIsOpenByIndex(produce(isOpenByIndex, draft => {
+        draft[index] = value
+      }))
     }
 
-    function onClickOrFocus() {
-      const features = busesGeoJson.features
-      const index = features.findIndex( feature => feature.properties.id === busId)
-      if (index > -1) {
-        setSelectedBusIndexes([index])
-        dispatch(setFocusingBusId(busId))
+    function handleClickOrFocus() {
+      const featureIndex = busesGeoJson.features.findIndex(
+        feature => feature.properties.id === busId)
+      if (featureIndex > -1) {
+        dispatch(setSelectedBusIndexes([featureIndex]))
       }
-      else
-        setSelectedBusIndexes([])
+      dispatch(setFocusingBusId(busId))
     }
 
     return connectedAssetCount > 0 ?
       <CollapsibleListItem
-        key={connectionIndex}
+        key={index}
         title={title}
         description={(isNotMobile || expand) ? description : null}
+        isHighlighted={isHighlighted}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        onClick={onClickOrFocus}
-        highlight={ !noHighlight && focusingBusId === busId }
+        onClick={handleClickOrFocus}
       >
         <BusAttributesListItem
           assetId={assetId}
           assetTypeCode={assetTypeCode}
           connection={connection}
           isEditing={isEditing}
-          onFocus={onClickOrFocus}
+          onFocus={handleClickOrFocus}
         />
-        <BusConnectionsList
-          connectedAssetIds={connectedAssetIds}
-          setSelectedAssetIndexes={setSelectedAssetIndexes}
-        />
+        <BusConnectionsList connectedAssetIds={connectedAssetIds} />
       </CollapsibleListItem> :
       ( isNotMobile || expand ?
       <ListItem
-        disableGutters
+        key={index}
         component='div'
-        key={connectionIndex}
+        className={clsx({
+          highlighted: isHighlighted,
+        })}
+        disableGutters
       >
         <ListItemText primary={title} secondary={description} />
       </ListItem> : <></>)

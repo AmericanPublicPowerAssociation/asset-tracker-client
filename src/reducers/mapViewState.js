@@ -1,6 +1,6 @@
 import produce from 'immer'
 import {
-  getMapviewFromBoudingBox,
+  getMapViewStateFromBoundingBox,
 } from '../routines'
 import {
   MAP_VIEW_STATE,
@@ -33,9 +33,14 @@ const mapViewState = produce((draft, action) => {
     }
     case SET_MAP_BOUNDING_BOX: {
       const boundingBox = action.payload
-      if (draft['reset']) return
-      const viewport = getMapviewFromBoudingBox(boundingBox, window.innerWidth, window.innerHeight)
-      if (!viewport) return
+      if (draft['reset']) {
+        return
+      }
+      const viewState = getMapViewStateFromBoundingBox(
+        boundingBox, window.innerWidth, window.innerHeight)
+      if (!viewState) {
+        return
+      }
       const {
         longitude,
         latitude,
@@ -44,7 +49,7 @@ const mapViewState = produce((draft, action) => {
         bearing,
         width,
         height,
-      } = viewport
+      } = viewState
       draft.longitude = longitude
       draft.latitude = latitude
       draft.zoom = zoom

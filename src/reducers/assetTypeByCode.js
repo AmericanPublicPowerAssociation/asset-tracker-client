@@ -1,20 +1,17 @@
 import {
   SET_ASSETS,
 } from '../constants'
-import {
-  getByKey,
-} from '../macros'
 
 const initialState = {}
 
 const assetTypeByCode = (state = initialState, action) => {
   switch(action.type) {
     case SET_ASSETS: {
-      const { assetTypes } = action.payload
-      if (!assetTypes) {
+      const { assetTypeByCode } = action.payload
+      if (!assetTypeByCode) {
         return state
       }
-      return getByKey(assetTypes, 'code')
+      return assetTypeByCode
     }
     default: {
       return state

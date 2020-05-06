@@ -6,10 +6,10 @@ import Typography from '@material-ui/core/Typography'
 import {
   setAssetValue,
 } from '../actions'
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import useTheme from "@material-ui/core/styles/useTheme";
+import ExpandLess from '@material-ui/icons/ExpandLess'
+import ExpandMore from '@material-ui/icons/ExpandMore'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
+import useTheme from '@material-ui/core/styles/useTheme'
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -18,23 +18,23 @@ const useStyles = makeStyles(theme => ({
   },
   inline: {
     display: 'flex',
-    justifyContent: 'space-between'
-  }
+    justifyContent: 'space-between',
+  },
 }))
 
-export default function AssetName(props) {
-  const theme = useTheme();
-  const {
-    asset,
-    isEditing,
-    setExpand,
-    expand
-  } = props
+export default function AssetName({
+  asset,
+  isEditing,
+  // TODO: Rename
+  expand,
+  setExpand,
+}) {
+  const theme = useTheme()
   const classes = useStyles()
   const dispatch = useDispatch()
 
   const assetId = asset.id
-  const isMobileView = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobileView = useMediaQuery(theme.breakpoints.down('sm'))
   const assetName = asset.name
 
   function handleChange(event) {

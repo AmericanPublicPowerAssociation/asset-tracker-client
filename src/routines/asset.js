@@ -1,11 +1,9 @@
 import {
-  ABBREVIATED_ASSET_ID_LENGTH,
   ASSET_TYPE_CODE_LINE,
   ASSET_TYPE_CODE_METER,
   ASSET_TYPE_CODE_SUBSTATION,
   ASSET_TYPE_CODE_TRANSFORMER,
   MINIMUM_ASSET_ID_LENGTH,
-  MINIMUM_BUS_ID_LENGTH,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_ADD_METER,
   SKETCH_MODE_ADD_SUBSTATION,
@@ -15,35 +13,47 @@ import {
   expandCamelCase,
   getRandomId,
 } from '../macros'
+import {
+  makeBusId,
+} from '../routines'
 
-export function makeAsset(assetType, lineBusId) {
-  const assetTypeCode = assetType.code
-  const assetId = getRandomId(MINIMUM_ASSET_ID_LENGTH)
-  const assetName = getAssetName(assetType, assetId)
-  const asset = {id: assetId, typeCode: assetTypeCode, name: assetName}
+export function makeAsset(
+  feature,
+) {
+  const featureProperties = feature.properties
+  const featureGeometry = feature.geometry
+  const assetId = featureProperties.id
+  const assetTypeCode = featureProperties.typeCode
+  const connectionByIndex = {}
+  const asset = {
+    id: assetId,
+    typeCode: assetTypeCode,
+    name: assetId,
+    connections: connectionByIndex,
+  }
+  const bus0Id = makeBusId()
+  const bus1Id = makeBusId()
 
-  switch(assetTypeCode) {
+  switch (assetTypeCode) {
     case ASSET_TYPE_CODE_LINE: {
-      const busId = lineBusId || getRandomId(MINIMUM_BUS_ID_LENGTH)
-      asset.connections = [{busId}]
-      break
-    }
-    case ASSET_TYPE_CODE_TRANSFORMER: {
-      asset.connections = [
-        {busId: getRandomId(MINIMUM_BUS_ID_LENGTH)},
-        {busId: getRandomId(MINIMUM_BUS_ID_LENGTH)}]
+      const lastVertexIndex = featureGeometry.coordinates.length - 1
+      connectionByIndex[0] = { busId: bus0Id }
+      connectionByIndex[lastVertexIndex] = { busId: bus1Id }
       break
     }
     case ASSET_TYPE_CODE_METER: {
-      asset.connections = [
-        {busId: getRandomId(MINIMUM_BUS_ID_LENGTH)},
-      ]
+      connectionByIndex[0] = { busId: bus0Id }
+      break
+    }
+    case ASSET_TYPE_CODE_TRANSFORMER: {
+      connectionByIndex[0] = { busId: bus0Id }
+      connectionByIndex[1] = { busId: bus1Id }
       break
     }
     default: {
+      break
     }
   }
-
   return asset
 }
 
@@ -56,12 +66,6 @@ export function getAssetTypeCode(sketchMode) {
   }[sketchMode]
 }
 
-export function getAssetName(assetType, assetId) {
-  const abbreviatedAssetId = assetId.substring(
-    0, ABBREVIATED_ASSET_ID_LENGTH)
-  return `${assetType.name} ${abbreviatedAssetId}`
-}
-
 export function getAttributeLabel(attributeKey) {
   return expandCamelCase(attributeKey).replace('percent', '%')
 }
@@ -70,4 +74,18 @@ export function getSelectedAssetId(selectedAssetIndexes, assetsGeoJson) {
   const selectedAssetIndex = selectedAssetIndexes[0]
   const feature = assetsGeoJson.features[selectedAssetIndex]
   return feature && feature.properties.id
+}
+
+export function makeAssetId() {
+  return getRandomId(MINIMUM_ASSET_ID_LENGTH)
+}
+
+export function getConnectedAssetCount(asset, assetIdsByBusId) {
+  // TODO
+  return 0
+}
+
+export function getConnectedAssetIds(assetId, busId, assetIdsByBusId) {
+  return assetIdsByBusId[busId].filter(
+    connectedAssetId => connectedAssetId !== assetId)
 }

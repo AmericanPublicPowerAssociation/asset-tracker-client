@@ -15,6 +15,6 @@ export function* fetchSafely(url, options, callbacks) {
   } else if (on400 && status === 400) {
     yield on400(yield response.json())
   } else {
-    yield put(logError({status}))
+    yield put(logError({ status }))
   }
 }

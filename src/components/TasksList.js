@@ -28,7 +28,7 @@ import DoneIcon from '@material-ui/icons/Done'
 import CommentIcon from '@material-ui/icons/Comment'
 // import Radio from '@material-ui/core/Radio'
 import CollapsibleListItem from './CollapsibleListItem'
-import AssetConnectionsListItems from './AssetConnectionsListItems'
+// import AssetConnectionsListItems from './AssetConnectionsListItems'
 import Collapse from '@material-ui/core/Collapse'
 import Divider from '@material-ui/core/Divider'
 import { AssetName } from './AssetTasksPanel'
@@ -208,7 +208,10 @@ const Priority = (priorityColor, priority, label) => {
     onChange={(e) => {e.preventDefault()}}
     color={priorityColor}
     disableRipple={true}
-    classes={{ colorPrimary: classes.importantCheckbox, colorSecondary: classes.urgentCheckbox }}
+    classes={{
+      colorPrimary: classes.importantCheckbox,
+      colorSecondary: classes.urgentCheckbox,
+    }}
   />
 }
 */
@@ -422,6 +425,7 @@ const commentSection = (<div style={{ display: 'flex', flexDirection: 'column', 
   const assetDetails = (<>
     <AssetName assetTypeName={assetTypeName} assetTypeCode={assetTypeCode} assetName={assetName} />
 
+  {/*
     <AssetConnectionsListItems
       asset={asset}
       isEditing={false}
@@ -429,6 +433,7 @@ const commentSection = (<div style={{ display: 'flex', flexDirection: 'column', 
       setSelectedAssetIndexes={() => {}}
       noHighlight={true}
     />
+  */}
   </>)
 
   const mobileTaskDetail = (<>
@@ -469,7 +474,10 @@ const commentSection = (<div style={{ display: 'flex', flexDirection: 'column', 
         {taskheader}
     </CollapsibleListItem>
    </Container>
-    <Collapse in={openTask} classes={{ entered: clsx(classes.overflow, classes.maxHeight), wrapper: classes.maxHeight }}>
+    <Collapse in={openTask} classes={{
+      entered: clsx(classes.overflow, classes.maxHeight),
+      wrapper: classes.maxHeight,
+    }}>
       {commentSection}
     </Collapse>
     <Container>

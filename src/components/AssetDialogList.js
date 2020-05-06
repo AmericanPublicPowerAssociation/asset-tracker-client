@@ -1,14 +1,13 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import List from '@material-ui/core/List'
 import DetailsDialog from './DetailsDialog'
 import AssetDialogListItem from './AssetDialogListItem'
 import {
-  getAssetById
+  getAssetById,
 } from '../selectors' 
 
-
-export default function AssetDialogList({searchString}) {
+export default function AssetDialogList({ searchString }) {
   const assetById = useSelector(getAssetById)
   const [showDetails, setShowDetails] = useState(false)
   const [showAssetId, setShowAssetID] = useState('')
