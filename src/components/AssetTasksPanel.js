@@ -26,8 +26,8 @@ import {
   addTask,
 } from '../actions'
 import {
-  TASK_ARCHIVE_STATUS,
-  TASK_STATUS_CANCELLED,
+  // TASK_ARCHIVE_STATUS,
+  // TASK_STATUS_CANCELLED,
 } from '../constants'
 import {
   getAssetTypeByCode,
@@ -86,7 +86,7 @@ export const AssetName = (props) => {
 
 export default function AssetTasksPanel({ asset }) {
   const classes = useStyles()
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const tasks = useSelector(getFocusingTasks)
 
   // const assetId = asset.id
@@ -116,6 +116,7 @@ export default function AssetTasksPanel({ asset }) {
   }
   */
 
+/*
 const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
   task => (
     !archived ?
@@ -123,15 +124,18 @@ const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
     task.status === TASK_ARCHIVE_STATUS || task.status === TASK_STATUS_CANCELLED
   ),
 )
+*/
 
 const assetNameComponent = AssetName({
   assetName, assetTypeCode, assetTypeName,
 })
 
+/*
 const handleDisplayDetails = (task) => {
-  dispatch(updateTaskComments(task.id))
+  // dispatch(updateTaskComments(task.id))
   setTaskDetails(task)
 }
+*/
 
 const listTasks = (<>
   <FormGroup row>
@@ -142,7 +146,9 @@ const listTasks = (<>
                       label="Show closed tasks" />
   </FormGroup>
   <div className={classes.listTasks}>
+    {/*
     <TasksList showDetails={handleDisplayDetails} showComments={() => {}} asset={asset} tasks={partialTasks} disableInput={disableInput}/>
+    */}
   </div>
   <div>
     <Button className={classes.bottomAction} startIcon={<AddIcon />} onClick={() => setDialog(true)}>
