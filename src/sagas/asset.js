@@ -163,10 +163,9 @@ export function* resetTasks(payload) {
 export function* resetAssets(payload) {
   yield put(setAssets(payload))
   const { boundingBox } = payload
-  if (!boundingBox) {
-    return
+  if (boundingBox) {
+    yield put(setMapBoundingBox(boundingBox))
   }
-  yield put(setMapBoundingBox(boundingBox))
 }
 
 export function* updateTaskComments(payload) {

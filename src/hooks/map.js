@@ -81,8 +81,8 @@ export function useEditableMap() {
           featureProperties.typeCode = assetTypeCode
           dispatch(makeAssetName(feature))
           dispatch(setAsset(makeAsset(feature)))
-          dispatch(setFocusingAssetId(assetId))
           dispatch(setSelectedAssetIndexes(featureIndexes))
+          dispatch(setFocusingAssetId(assetId))
           nextAssetId = makeAssetId()
           // Prevent adding multiple assets by mistake
           dispatch(setSketchMode(SKETCH_MODE_ADD))
@@ -98,6 +98,7 @@ export function useEditableMap() {
         }
         // If we are not adding a specific type of asset,
         if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
+          dispatch(setSelectedAssetIndexes([info.index]))
           dispatch(setFocusingAssetId(targetAssetId))
         }
       }
