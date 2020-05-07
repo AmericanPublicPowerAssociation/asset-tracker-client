@@ -168,7 +168,7 @@ export function useEditableMap() {
       })
     },
     handleMapKey(event) {
-      event.persist()
+      event.persist()  // Populate event with extra signals
       console.log('map key', event)
       switch (event.key) {
         case 'Escape': {

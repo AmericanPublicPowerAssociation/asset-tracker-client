@@ -35,7 +35,6 @@ export default function AssetConnectionsListItems({
   const dispatch = useDispatch()
   const theme = useTheme()
   const isNotMobile = useMediaQuery(theme.breakpoints.up('sm'))
-  // const [isOpenByConnectionIndex, setIsOpenByConnectionIndex] = useState({})
   const [isOpenByIndex, setIsOpenByIndex] = useState({})
   const busesGeoJson = useSelector(getBusesGeoJson)
   const focusingBusId = useSelector(getFocusingBusId)
@@ -43,6 +42,8 @@ export default function AssetConnectionsListItems({
   const assetId = asset.id
   const assetTypeCode = asset.typeCode
   const connections = asset.connections || {}
+  console.log('isNotMobile', isNotMobile, connections, expand)
+  console.log(isNotMobile || expand)
 
   return Object.entries(connections).map(([index, connection]) => {
     const { busId } = connection
@@ -69,6 +70,8 @@ export default function AssetConnectionsListItems({
       dispatch(setFocusingBusId(busId))
     }
 
+    // TODO: Fix unclear isNotMobile || expand syntax
+    // TODO: Replace <></> technique (causing missing index warning)
     return connectedAssetCount > 0 ?
       <CollapsibleListItem
         key={index}
@@ -91,13 +94,12 @@ export default function AssetConnectionsListItems({
       ( isNotMobile || expand ?
       <ListItem
         key={index}
+        className={clsx({ highlighted: isHighlighted })}
         component='div'
-        className={clsx({
-          highlighted: isHighlighted,
-        })}
         disableGutters
       >
         <ListItemText primary={title} secondary={description} />
-      </ListItem> : <></>)
+      </ListItem>
+      : <></>)
   })
 }

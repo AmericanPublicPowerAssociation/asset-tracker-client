@@ -17,11 +17,11 @@
 .capitalized {
   text-transform: capitalize;
 }
-.flip-animation:hover {
+.spin-animation:hover {
   transition: 0.50s;
   transform: rotate(360deg);
 }
-.pulse-animation:hover {
+.rise-animation:hover {
   transition: 0.50s;
   transform: scale(1.25);
 }
