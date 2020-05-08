@@ -67,6 +67,10 @@ export function useEditableMap() {
 
       function handleAssetEdit({ editType, editContext, updatedData }) {
         console.log('asset edit', editType, editContext, updatedData)
+
+        // TODO: Consider handling all events here instead of using asset click, bus click, map click separately
+        // TODO: Consider using deckGL ref and picking engine to detect nearby assets and buses
+
         if (editType === 'addFeature') {
           const assetId = nextAssetId
           const assetTypeCode = getAssetTypeCode(sketchMode)
@@ -149,6 +153,9 @@ export function useEditableMap() {
           dispatch(setFocusingAssetId(targetAssetId))
           dispatch(setFocusingBusId(targetBusId))
         }
+        // if we are adding a line,
+        // push the bus ids to a list
+        // if we the bus id count is two, then end the line with the appropriate connections
       }
 
       return new EditableGeoJsonLayer({

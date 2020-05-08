@@ -42,8 +42,6 @@ export default function AssetConnectionsListItems({
   const assetId = asset.id
   const assetTypeCode = asset.typeCode
   const connections = asset.connections || {}
-  console.log('isNotMobile', isNotMobile, connections, expand)
-  console.log(isNotMobile || expand)
 
   return Object.entries(connections).map(([index, connection]) => {
     const { busId } = connection
