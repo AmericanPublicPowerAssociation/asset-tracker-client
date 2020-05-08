@@ -57,26 +57,29 @@ export default function AssetsTable(props) {
   const assetById = useSelector(getAssetById)
 
   const tableName = 'Asset'
+
   const columns = ASSET_TABLE_COLUMN_NAMES.map( field => {
     return { field, title: getHeaderLabel(field) }
   })
 
-  const data = Object.values(assetById).map(
-    asset => {
+  const data = Object.entries(assetById).map(
+    assetEntry => {
+      const [assetId, asset] = assetEntry
       const assetType = asset['typeCode']
       const attributes = asset['attributes']
       const vendorName = attributes ? attributes['vendorName'] : ''
       return {
         ...asset,
+        assetId,
         vendorName,
         type: assetTypeByCode[assetType]['name'],
       }
   })
 
   function handleOnRowClick(event, rowData) {
-    const { id, is_deleted } = rowData
+    const { assetId, is_deleted } = rowData
     if (is_deleted) return
-    highlightAsset(id)
+    highlightAsset(assetId)
   }
 
   return (

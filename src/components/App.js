@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-// import useTheme from '@material-ui/core/styles/useTheme'
-// import useMediaQuery from '@material-ui/core/useMediaQuery'
+import useTheme from '@material-ui/core/styles/useTheme'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 import AssetsMap from './AssetsMap'
 import SketchButtons from './SketchButtons'
 import SketchModeToolbar from './SketchModeToolbar'
@@ -10,8 +10,8 @@ import ActionsWindow from './ActionsWindow'
 import OptionsWindow from './OptionsWindow'
 import OverlaysWindow from './OverlaysWindow'
 import DetailsWindow from './DetailsWindow'
-// import TablesWindow from './TablesWindow'
-// import TablesDialog from './TablesDialog'
+import TablesWindow from './TablesWindow'
+import TablesDialog from './TablesDialog'
 // import ImportExportDialog from './ImportExportDialog'
 // import AssetDeleteDialog from './AssetDeleteDialog'
 import {
@@ -45,10 +45,10 @@ function usePreventWindowUnload(preventDefault) {
 }
 
 export default function App() {
-  // const theme = useTheme()
+  const theme = useTheme()
   const dispatch = useDispatch()
   const isViewing = useSelector(getIsViewing)
-  // const isLayoutMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const isLayoutMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
   // const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -109,7 +109,6 @@ export default function App() {
         isWithTables={isWithTables}
       />
     }
-    {/*
     {isWithTables && (isLayoutMobile ?
       <TablesDialog
         isWithTables={isWithTables}
@@ -120,6 +119,7 @@ export default function App() {
         setIsWithTables={setIsWithTables}
       />
     )}
+    {/*
       <ImportExportDialog
         open={isImportExportDialogOpen}
         onOk={() => {setIsImportExportOpen(false)}}

@@ -24,8 +24,8 @@ const useStyles = makeStyles(theme => ({
 export default function OptionsWindow({
   isWithDetails,
   isWithTables,
+  setIsWithTables,
   toggleDetailsWindow,
-  toggleTablesWindow,
 }) {
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -55,7 +55,9 @@ export default function OptionsWindow({
       <Tooltip title='Toggle Tables'>
         <IconButton
           className={isWithTables ? activeColor : inactiveColor}
-          onClick={() => toggleTablesWindow}
+          onClick={() => {
+            setIsWithTables( prevState => !prevState)
+          }}
         >
           <TableIcon />
         </IconButton>
