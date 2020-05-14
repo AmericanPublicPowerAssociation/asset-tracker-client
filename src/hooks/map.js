@@ -7,6 +7,7 @@ import {
 } from '@nebula.gl/edit-modes'
 import {
   makeAssetName,
+  deleteAsset,
   setAsset,
   setAssetsGeoJson,
   setFocusingAssetId,
@@ -23,6 +24,7 @@ import {
   BUS_RADIUS_IN_METERS,
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_ASSET,
+  SKETCH_MODE_DELETE,
 } from '../constants'
 import {
   // CustomEditableGeoJsonLayer,
@@ -33,6 +35,7 @@ import {
 } from '../routines'
 import {
   getAssetIdByBusId,
+  getAssetIdsByBusId,
   getAssetsGeoJson,
   getBusesGeoJson,
   getColors,
@@ -60,6 +63,7 @@ export function useEditableMap() {
   const selectedAssetIndexes = useSelector(getSelectedAssetIndexes)
   const selectedBusIndexes = useSelector(getSelectedBusIndexes)
   const assetIdByBusId = useSelector(getAssetIdByBusId)
+  const assetIdsByBusId = useSelector(getAssetIdsByBusId)
   const colors = useSelector(getColors)
   return {
     getAssetsMapLayer() {
@@ -100,8 +104,15 @@ export function useEditableMap() {
         if (!targetAssetId) {
           return
         }
+
+        if (sketchMode === SKETCH_MODE_DELETE) {
+          dispatch(setSelectedAssetIndexes([]))
+          dispatch(setFocusingAssetId(null))
+          dispatch(setFocusingBusId(null))
+          dispatch(deleteAsset(targetAssetId, assetIdsByBusId))
+        }
         // If we are not adding a specific type of asset,
-        if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
+        else if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
           dispatch(setSelectedAssetIndexes([info.index]))
           dispatch(setFocusingAssetId(targetAssetId))
         }
