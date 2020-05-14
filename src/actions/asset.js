@@ -32,8 +32,8 @@ export function saveAssets() {
   return { type: SAVE_ASSETS }
 }
 
-export function deleteAsset(assetId){
-  return { type: DELETE_ASSET, payload: assetId }
+export function deleteAsset(assetId, assetIdsByBusId){
+  return { type: DELETE_ASSET, payload: { assetId, assetIdsByBusId } }
 }
 
 export function setAssetValue(assetId, key, value) {
