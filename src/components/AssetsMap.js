@@ -31,8 +31,8 @@ export default function AssetsMap() {
     handleMapClick,
   } = useEditableMap()
   const mapLayers = [
-    getAssetsMapLayer(),
-    getBusesMapLayer(),
+    getAssetsMapLayer(deckGL),
+    getBusesMapLayer(deckGL),
   ]
   return (
     <div onKeyUp={handleMapKey}>

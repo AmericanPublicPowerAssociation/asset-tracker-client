@@ -7,7 +7,7 @@ import {
 } from '@nebula.gl/edit-modes'
 import {
   makeAssetName,
-  setAsset,
+  setAsset, setAssetConnection,
   setAssetsGeoJson,
   setFocusingAssetId,
   setFocusingBusId,
@@ -22,12 +22,13 @@ import {
   BUSES_MAP_LAYER_ID,
   BUS_RADIUS_IN_METERS,
   SKETCH_MODE_ADD,
-  SKETCH_MODE_ADD_ASSET,
+  SKETCH_MODE_ADD_ASSET, SKETCH_MODE_ADD_METER, SKETCH_MODE_EDIT, PICKING_RADIUS_IN_PIXELS, PICKING_DEPTH,
 } from '../constants'
 import {
+  CustomEditableGeoJsonLayer,
   // CustomEditableGeoJsonLayer,
   getAssetTypeCode,
-  getMapMode,
+  getMapMode, getPickedEditHandle,
   makeAsset,
   makeAssetId,
 } from '../routines'
@@ -62,10 +63,12 @@ export function useEditableMap() {
   const assetIdByBusId = useSelector(getAssetIdByBusId)
   const colors = useSelector(getColors)
   return {
-    getAssetsMapLayer() {
+    getAssetsMapLayer(deckGL) {
       const mapMode = getMapMode(sketchMode)
 
-      function handleAssetEdit({ editType, editContext, updatedData }) {
+      function handleAssetEdit(event) {
+        const { editType, editContext, updatedData } = event
+        console.log(event)
         console.log('asset edit', editType, editContext, updatedData)
 
         // TODO: Consider handling all events here instead of using asset click, bus click, map click separately
@@ -111,14 +114,43 @@ export function useEditableMap() {
       function handleLayerDoubleClick(event) {
         console.log('layer double click', event)
       }
-
-      function handleLayerStopDragging(event) {
-        console.log('layer stop dragging', event)
-      }
       */
+      function handleLayerStopDragging(event) {
+        console.log('== STOP dragging')
+        const screenCoords = event.screenCoords
+
+        const busInfos = deckGL.current.pickMultipleObjects({
+          x: screenCoords[0],
+          y: screenCoords[1],
+          layerIds: [BUSES_MAP_LAYER_ID],
+          radius: PICKING_RADIUS_IN_PIXELS,
+          depth: PICKING_DEPTH,
+        })
+        // Determine whether the user modified a middle vertex
+        const vertex = getPickedEditHandle(event.picks)
+
+        if (sketchMode === SKETCH_MODE_EDIT) {
+          console.log(vertex)
+          console.log(busInfos)
+          console.log(vertex.picks)
+          console.log(busInfos.length === 0)
+          let asset
+          if (busInfos.length === 0 && event.picks) {
+            asset = event.picks[1].object.properties
+            dispatch(setAssetConnection(asset.id, 0, ''))
+            console.log('== dispatched')
+          } else {
+            asset = event.picks[1].object.properties
+            console.log(asset)
+            if (!asset.typeCode === 'm') return;
+            console.log(busInfos[0].object.properties)
+            dispatch(setAssetConnection(asset.id, 0, {busId: busInfos[0].object.properties.id}))
+          }
+        }
+      }
 
       // return new CustomEditableGeoJsonLayer({
-      return new EditableGeoJsonLayer({
+      return new CustomEditableGeoJsonLayer({
         id: ASSETS_MAP_LAYER_ID,
         data: assetsGeoJson,
         mode: mapMode,
@@ -140,16 +172,31 @@ export function useEditableMap() {
         onClick: handleAssetClick,
         onEdit: handleAssetEdit,
         // onDoubleClick: handleLayerDoubleClick,
-        // onStopDragging: handleLayerStopDragging,
+        onStopDragging: handleLayerStopDragging,
       })
     },
-    getBusesMapLayer() {
+    getBusesMapLayer(deckGL) {
       function handleBusClick(info, event) {
         console.log('bus click', info, event)
         const targetBusId = info.object && info.object.properties.id
         const targetAssetId = assetIdByBusId[targetBusId]
         // If we are not adding a specific type of asset,
-        if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
+        console.log(sketchMode)
+        if (sketchMode === SKETCH_MODE_ADD) {
+          const assetInfos = deckGL.current.pickMultipleObjects({
+            x: info.x,
+            y: info.y,
+            layerIds: [ASSETS_MAP_LAYER_ID],
+            radius: PICKING_RADIUS_IN_PIXELS,
+            depth: PICKING_DEPTH,
+          })
+          console.log(assetInfos)
+          if (assetInfos.length > 0 && assetInfos[0].object.properties.typeCode === 'm') {
+            const asset = assetInfos[0].object.properties;
+            dispatch(setAssetConnection(asset.id, 0, {busId: targetBusId}))
+          }
+        }
+        else if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
           dispatch(setFocusingAssetId(targetAssetId))
           dispatch(setFocusingBusId(targetBusId))
         }

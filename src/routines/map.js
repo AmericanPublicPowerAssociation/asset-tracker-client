@@ -1,5 +1,6 @@
 import { WebMercatorViewport } from '@deck.gl/core'
 import {
+  EditableGeoJsonLayer
   // EditableGeoJsonLayer,
 } from '@nebula.gl/layers'
 import {
@@ -17,7 +18,7 @@ import {
   SKETCH_MODE_EDIT,
 } from '../constants'
 
-/*
+
 export class CustomEditableGeoJsonLayer extends EditableGeoJsonLayer {
   onDoubleClick(event) {
     const props = this.props
@@ -33,7 +34,7 @@ export class CustomEditableGeoJsonLayer extends EditableGeoJsonLayer {
     onStopDragging && onStopDragging(event, props)
   }
 }
-*/
+
 
 export function getMapMode(sketchMode) {
   const mapMode = {
@@ -46,7 +47,7 @@ export function getMapMode(sketchMode) {
   return mapMode || ViewMode
 }
 
-/*
+
 export function getPickedEditHandle(picks) {
   // Taken from nebula.gl > mode-handler.js
   const info = picks && picks.find(pick => pick.isGuide)
@@ -55,7 +56,6 @@ export function getPickedEditHandle(picks) {
   }
   return null
 }
-*/
 
 export function getMapViewStateFromBoundingBox(boundingBox, width, height) {
   if (!boundingBox.length) {
