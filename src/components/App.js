@@ -104,7 +104,6 @@ export default function App() {
         setIsWithTables={setIsWithTables}
       />
       <OverlaysWindow />
-      <OverlaysWindow />
     {isWithDetails &&
       <DetailsWindow
         isWithDetails={isWithDetails}
