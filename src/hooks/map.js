@@ -95,6 +95,22 @@ export function useEditableMap() {
           // Prevent adding multiple assets by mistake
           dispatch(setSketchMode(SKETCH_MODE_ADD))
         }
+        else if (editType === 'removePosition') {
+          console.log('edit remove')
+          const { featureIndexes, positionIndexes } = editContext
+          const { features } = updatedData
+          const positionIndex = positionIndexes[0]
+          const featureIndex = featureIndexes[0]
+          const feature = features[featureIndex]
+          const geometry =  feature['geometry']
+          if (feature.properties.typeCode === 'l') {
+            const coordinatesLength = geometry.coordinates.length
+            if (coordinatesLength === positionIndex || positionIndex === 0) {
+              // it is one endpoint of line
+              console.log('endpoint')
+            }
+          }
+        }
         dispatch(setAssetsGeoJson(updatedData))
       }
 
