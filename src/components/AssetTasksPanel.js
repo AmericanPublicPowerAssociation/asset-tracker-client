@@ -26,8 +26,8 @@ import {
   addTask,
 } from '../actions'
 import {
-  // TASK_ARCHIVE_STATUS,
-  // TASK_STATUS_CANCELLED,
+  TASK_ARCHIVE_STATUS,
+  TASK_STATUS_CANCELLED,
 } from '../constants'
 import {
   getAssetTypeByCode,
@@ -55,7 +55,8 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export const AssetName = (props) => {
+
+export function AssetName(props) {
   const {
     assetTypeName,
     assetTypeCode,
@@ -86,10 +87,10 @@ export const AssetName = (props) => {
 
 export default function AssetTasksPanel({ asset }) {
   const classes = useStyles()
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
   const tasks = useSelector(getFocusingTasks)
 
-  // const assetId = asset.id
+  const assetId = asset.id
   const assetName = asset.name
   const assetTypeCode = asset.typeCode
   const assetTypeByCode = useSelector(getAssetTypeByCode)
@@ -101,61 +102,48 @@ export default function AssetTasksPanel({ asset }) {
   const [archived, setArchived] = useState(false)
   const [query, setQuery] = useState('')
   const [name, setName]  = useState('')
-  // const [description, setDescription] = useState('')
+  const [description, setDescription] = useState('')
   const [priority, setPriority] = useState(priorityTypeNormal)
   const [dialog, setDialog] = useState(false)	   
   const [taskDetails, setTaskDetails] = useState(false)
   
-  /*
-  function handleTaskAddClick() {
+  function handleClickToCreateAddTask() {
     setDialog(false)
     dispatch(addTask(assetId, name, description, priority))
     setName('')
     setDescription('')
     setPriority(priorityTypeNormal)
   }
-  */
 
-/*
-const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
-  task => (
-    !archived ?
-    task.status !== TASK_ARCHIVE_STATUS && task.status !== TASK_STATUS_CANCELLED :
-    task.status === TASK_ARCHIVE_STATUS || task.status === TASK_STATUS_CANCELLED
-  ),
-)
-*/
+  const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
+    task => (
+      !archived ?
+      task.status !== TASK_ARCHIVE_STATUS && task.status !== TASK_STATUS_CANCELLED :
+      task.status === TASK_ARCHIVE_STATUS || task.status === TASK_STATUS_CANCELLED
+    ),
+  )
 
-const assetNameComponent = AssetName({
-  assetName, assetTypeCode, assetTypeName,
-})
+  const handleDisplayDetails = (task) => {
+    setTaskDetails(task)
+  }
 
-/*
-const handleDisplayDetails = (task) => {
-  // dispatch(updateTaskComments(task.id))
-  setTaskDetails(task)
-}
-*/
-
-const listTasks = (<>
-  <FormGroup row>
-    <TextField id="search" label="Search task" value={query}
-                onChange={(e) => setQuery(e.target.value) } />
-    <FormControlLabel control={
-      <Switch checked={archived} onChange={ () => setArchived(!archived) } value="archived" />}
-                      label="Show closed tasks" />
-  </FormGroup>
-  <div className={classes.listTasks}>
-    {/*
-    <TasksList showDetails={handleDisplayDetails} showComments={() => {}} asset={asset} tasks={partialTasks} disableInput={disableInput}/>
-    */}
-  </div>
-  <div>
-    <Button className={classes.bottomAction} startIcon={<AddIcon />} onClick={() => setDialog(true)}>
-      Add task
-    </Button>
-  </div>
-  </>)
+  const listTasks = (<>
+    <FormGroup row>
+      <TextField id="search" label="Search task" value={query}
+        onChange={(e) => setQuery(e.target.value) } />
+      <FormControlLabel control={
+        <Switch checked={archived} onChange={ () => setArchived(!archived) } value="archived" />}
+          label="Show closed tasks" />
+    </FormGroup>
+    <div className={classes.listTasks}>
+      <TasksList showDetails={handleDisplayDetails} asset={asset} tasks={partialTasks}/>
+    </div>
+    <div>
+      <Button className={classes.bottomAction} startIcon={<AddIcon />} onClick={() => setDialog(true)}>
+        Add task
+      </Button>
+    </div>
+    </>)
 
   const getTaskById = () => {
     if (taskDetails) {
@@ -167,14 +155,14 @@ const listTasks = (<>
   }
 
   return (<>
-    {assetNameComponent}
+    {AssetName({ assetName, assetTypeCode, assetTypeName })}
     {listTasks}
 
     <Dialog open={dialog} onClose={() => setDialog(false)} aria-labelledby='form-dialog-title'>
       <DialogTitle id='form-dialog-title'>Add task</DialogTitle>
       <DialogContent>
         <TextField id='name' label='Task name' value={name}
-                   onChange={(e) => setName(e.target.value) } />
+          onChange={(e) => setName(e.target.value) } />
 
         <div>
           <FormControl className={classes.formControl}>
@@ -205,7 +193,7 @@ const listTasks = (<>
           Cancel
         </Button>
         <Button
-          onClick={addTask}
+          onClick={handleClickToCreateAddTask}
           color="secondary"
           disabled={name === ''}
         >
@@ -214,7 +202,7 @@ const listTasks = (<>
       </DialogActions>
     </Dialog>
     <TaskFullscreen open={taskDetails !== false} asset={asset} task={getTaskById()}
-                      handleClose={ () => setTaskDetails(false)}
+      handleClose={ () => setTaskDetails(false)}
     />
   </>)
 }
