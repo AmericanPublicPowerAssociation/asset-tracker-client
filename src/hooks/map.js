@@ -72,7 +72,9 @@ export function useEditableMap(deckGL) {
         const { position } = editContext
         console.log('position', position)
         console.log('xy', deckGL.current.viewports[0].project(position))
+        console.log('addTentativePosition', event)
       } else if (editType === 'finishMovePosition') {
+        console.log('finishMovePosition', event)
       } else if (editType === 'addFeature') {
         const assetId = nextAssetId
         const assetTypeCode = getAssetTypeCode(sketchMode)
