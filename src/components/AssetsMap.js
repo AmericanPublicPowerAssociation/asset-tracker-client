@@ -21,19 +21,11 @@ const {
 
 export default function AssetsMap() {
   const deckGL = useRef()
+  window.deckGL = deckGL  // !!! Temporary for debugging
   const mapStyle = useSelector(getMapStyle)
   const mapViewState = useSelector(getMapViewState)
   const { handleMapMove } = useMovableMap()
-  const {
-    getAssetsMapLayer,
-    getBusesMapLayer,
-    handleMapKey,
-    handleMapClick,
-  } = useEditableMap()
-  const mapLayers = [
-    getAssetsMapLayer(deckGL),
-    getBusesMapLayer(deckGL),
-  ]
+  const { mapLayers, handleMapKey, handleMapClick } = useEditableMap(deckGL)
   return (
     <div onKeyUp={handleMapKey}>
       <DeckGL

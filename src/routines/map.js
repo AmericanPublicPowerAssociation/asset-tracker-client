@@ -1,7 +1,6 @@
 import { WebMercatorViewport } from '@deck.gl/core'
 import {
-  EditableGeoJsonLayer
-  // EditableGeoJsonLayer,
+  EditableGeoJsonLayer,
 } from '@nebula.gl/layers'
 import {
   DrawLineStringMode,

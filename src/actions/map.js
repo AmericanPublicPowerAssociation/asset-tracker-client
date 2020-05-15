@@ -40,5 +40,4 @@ export function setSelectedBusIndexes(selectedBusIndexes) {
     type: SET_SELECTED_BUS_INDEXES,
     payload: selectedBusIndexes,
   }
->>>>>>> develop
 }
