@@ -222,7 +222,6 @@ export default function TasksList(props) {
   const {
     asset,
     tasks,
-    showComments,
     showDetails,
   } = props
   const assetId = asset.id
@@ -235,7 +234,6 @@ export default function TasksList(props) {
           assetId={assetId}
           task={task}
           showDetails={showDetails}
-          showComments={showComments}
         />
       ))}
     </List>
@@ -246,7 +244,6 @@ function TaskItem(props) {
   const {
     itemKey,
     task,
-    showComments,
     showDetails,
   } = props
   const {
@@ -289,17 +286,12 @@ function TaskItem(props) {
                   }
                   { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
                 </div>
-                <IconButton onClick={() => showComments(task)}> 
+                <IconButton>
                   <Badge badgeContent={commentCount} color='secondary'>
                     <CommentIcon />
                   </Badge>
                 </IconButton>
               </div>
-            <IconButton onClick={() => showComments(task)}> 
-              <Badge badgeContent={commentCount} color='secondary'>
-                <CommentIcon />
-              </Badge>
-            </IconButton>
             </div>
           </div>
         </div>
