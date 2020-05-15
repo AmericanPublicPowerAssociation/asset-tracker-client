@@ -37,7 +37,7 @@ export default function TablesWindow(props) {
   const { features } = useSelector(getAssetsGeoJson)
 
   function getHeaderLabel(header) {
-    const result = header.replace( /([A-Z])/g, ' $1' )
+    const result = header.replace(/([A-Z])/g, ' $1')
     var headerLabel = result.charAt(0).toUpperCase() + result.slice(1)
     return headerLabel
   }
@@ -81,6 +81,7 @@ export default function TablesWindow(props) {
       <RisksTable
         onRowClick={highlightAsset}
         pageSizeOptions={pageSizeOptions}
+        setSelectedAssetIndexes={setSelectedAssetIndexes}
       />
     ),
   }[overlayMode]

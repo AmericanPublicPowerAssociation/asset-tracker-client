@@ -3,5 +3,5 @@ import {
 } from '../constants'
 
 export function logError() {
-  return {type: LOG_ERROR}
+  return { type: LOG_ERROR }
 }

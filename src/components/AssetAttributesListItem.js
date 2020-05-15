@@ -11,11 +11,7 @@ import {
   getAssetTypeByCode,
 } from '../selectors'
 
-export default function AssetAttributesListItem(props) {
-  const {
-    asset,
-    isEditing,
-  } = props
+export default function AssetAttributesListItem({ asset, isEditing }) {
   const [isOpen, setIsOpen] = useState(false)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetId = asset.id

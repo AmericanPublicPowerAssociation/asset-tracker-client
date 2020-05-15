@@ -1,12 +1,15 @@
 import { createSelector } from 'reselect'
 import {
+  getFocusingAssetId,
+} from './asset'
+import {
   TASK_STATUS_DONE,
   TASK_STATUS_CANCELLED,
 } from '../constants'
 
-
 export const getTaskById = state => state.taskById
 export const getTaskCodeTypes = state => state.taskCodeTypes
+export const getTaskComments = state => state.taskComments.comments || []
 
 export const getOpenTaskById = createSelector([
   getTaskById,
@@ -22,7 +25,7 @@ export const getOpenTaskById = createSelector([
     })
 })
 
-export const getOpenTaskByIdLength = createSelector([
+export const getOpenTaskCount = createSelector([
   getOpenTaskById,
 ], (
   openTaskById,
@@ -30,11 +33,10 @@ export const getOpenTaskByIdLength = createSelector([
   return openTaskById.length
 })
 
-
 export const getTaskPriorityTypes = createSelector([
   getTaskCodeTypes,
 ], (
-  taskCodeTypes
+  taskCodeTypes,
 ) => {
   return taskCodeTypes.taskPriorityTypes
 })
@@ -42,7 +44,28 @@ export const getTaskPriorityTypes = createSelector([
 export const getTaskStatusTypes = createSelector([
   getTaskCodeTypes,
 ], (
-  taskCodeTypes
+  taskCodeTypes,
 ) => {
   return taskCodeTypes.taskStatusTypes
+})
+
+export const getFocusingTasks = createSelector([
+  getTaskById,
+  getFocusingAssetId,
+], (
+  taskById,
+  focusingAssetId,
+) => {
+  // TODO: Consider replacing this with a lookup table
+  const focusingTaskIds = Object.keys(taskById).filter(
+    taskId => taskById[taskId].assetId === focusingAssetId)
+  return focusingTaskIds.map(taskId => taskById[taskId])
+})
+
+export const getCurrentTaskComments = createSelector([
+  getTaskComments,
+], (
+  comments,
+) => {
+  return comments
 })

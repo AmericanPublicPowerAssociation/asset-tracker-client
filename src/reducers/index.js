@@ -1,27 +1,35 @@
 import { combineReducers } from 'redux'
 import reduceReducers from 'reduce-reducers'
+import produce from 'immer'
 import {
-  sortedRisks,
-  risks,
   productNameSuggestions,
   productVersionSuggestions,
+  risks,
+  sortedRisks,
   vendorNameSuggestions,
 } from 'asset-report-risks'
 
 import mapStyleName from './mapStyleName'
 import mapViewState from './mapViewState'
+import sketchMode from './sketchMode'
+import overlayMode from './overlayMode'
+import selectedAssetIndexes from './selectedAssetIndexes'
+import selectedBusIndexes from './selectedBusIndexes'
 import assetTypeByCode from './assetTypeByCode'
 import assetsGeoJson from './assetsGeoJson'
 import assetById from './assetById'
 import focusingAssetId from './focusingAssetId'
 import focusingBusId from './focusingBusId'
 import taskById from './taskById'
-import taskComments from "./taskComments"
+import taskComments from './taskComments'
 import taskCodeTypes from './taskCodeTypes'
 
 const reduceHorizontally = combineReducers({
   mapStyleName,
   mapViewState,
+  overlayMode,
+  selectedAssetIndexes,
+  selectedBusIndexes,
   assetTypeByCode,
   assetsGeoJson,
   assetById,
@@ -35,11 +43,11 @@ const reduceHorizontally = combineReducers({
   sortedRisks,
   risks,
   taskCodeTypes,
+  sketchMode,  // Keep last
 })
 
-const reduceVertically = (state, action) => {
-  return state
-}
+const reduceVertically = produce((draft, action) => {
+})
 
 export default reduceReducers(
   reduceHorizontally,

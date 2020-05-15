@@ -6,11 +6,8 @@ import {
 export const getAssetTypeByCode = state => state.assetTypeByCode
 export const getAssetById = state => state.assetById
 export const getFocusingAssetId = state => state.focusingAssetId
-export const getTaskById = state => state.taskById
-export const getComments = state => state.taskComments.comments || []
 
-
-export const getAssetByIdLength = createSelector([
+export const getAssetCount = createSelector([
   getAssetById,
 ], (
   assetById,
@@ -26,8 +23,11 @@ export const getAssetIdByBusId = createSelector([
   const assetIdByBusId = {}
 
   for (const [assetId, asset] of Object.entries(assetById)) {
-    const assetConnections = asset.connections || []
-    for (const connection of assetConnections) {
+    if (asset['is_deleted'] === true) {
+      continue
+    }
+    const assetConnections = asset.connections || {}
+    for (const connection of Object.values(assetConnections)) {
       const busId = connection.busId
 
       if (busId in assetIdByBusId && asset.typeCode === ASSET_TYPE_CODE_LINE) {
@@ -50,9 +50,11 @@ export const getAssetIdsByBusId = createSelector([
   const assetIdsByBusId = {}
 
   for (const [assetId, asset] of Object.entries(assetById)) {
-    if (asset['is_deleted'] === true) continue
-    const assetConnections = asset.connections || []
-    for (const connection of assetConnections) {
+    if (asset['is_deleted'] === true) {
+      continue
+    }
+    const assetConnections = asset.connections || {}
+    for (const connection of Object.values(assetConnections)) {
       const busId = connection.busId
       const assetIds = assetIdsByBusId[busId] || []
       assetIdsByBusId[busId] = [...assetIds, assetId]
@@ -69,25 +71,10 @@ export const getFocusingAsset = createSelector([
   focusingAssetId,
   assetById,
 ) => {
-  return assetById[focusingAssetId]
-})
-
-
-export const getTasksForFocusedAsset = createSelector([
-  getFocusingAssetId,
-  getTaskById
-], (
-  focusingAssetId,
-  taskById,
-) => {
-  const keys = Object.keys(taskById).filter((key) => taskById[key].assetId === focusingAssetId)
-  return keys.map((key) => taskById[key])
-})
-
-export const getCurrentTaskComments = createSelector([
-  getComments
-], (
-  comments,
-) => {
-  return comments
+  let asset = assetById[focusingAssetId]
+  if (asset) {
+    asset = Object.assign({}, asset)
+    asset.id = focusingAssetId
+  }
+  return asset
 })

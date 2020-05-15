@@ -1,6 +1,3 @@
-.poof {
-  display: none !important;
-}
 .black {
   color: black !important;
 }
@@ -14,10 +11,17 @@
   color: white !important;
   background-color: #ff4081 !important;
 }
+.highlighted {
+  background-color: yellow !important;
+}
 .capitalized {
   text-transform: capitalize;
 }
-
-.tcell-strikethrough {
-  text-decoration: line-through !important;
+.spin-animation:hover {
+  transition: 0.50s;
+  transform: rotate(360deg);
+}
+.rise-animation:hover {
+  transition: 0.50s;
+  transform: scale(1.25);
 }

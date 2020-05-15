@@ -1,6 +1,5 @@
 import produce from 'immer'
 import {
-  ADD_ASSET_CONNECTION,
   DELETE_ASSET,
   SET_ASSET,
   SET_ASSETS,
@@ -9,17 +8,14 @@ import {
   SET_ASSET_CONNECTION_ATTRIBUTE,
   SET_ASSET_VALUE,
 } from '../constants'
-import {
-  getByKey,
-} from '../macros'
 
 const initialState = {}
 
 const assetById = (state = initialState, action) => {
   switch(action.type) {
     case SET_ASSETS: {
-      const { assets } = action.payload
-      return getByKey(assets, 'id')
+      const { assetById } = action.payload
+      return assetById
     }
     case SET_ASSET: {
       const asset = action.payload
@@ -46,26 +42,18 @@ const assetById = (state = initialState, action) => {
         attributes[key] = value
       })
     }
-    case ADD_ASSET_CONNECTION: {
-      // TODO: See if we can consolidate this as a case of SET_ASSET_CONNECTION
-      const { assetId, busId } = action.payload
-      return produce(state, draft => {
-        const connections = draft[assetId].connections
-        connections.push({busId})
-      })
-    }
     case SET_ASSET_CONNECTION: {
-      const { assetId, connectionIndex, connection } = action.payload
+      const { assetId, assetVertexIndex, connection } = action.payload
       return produce(state, draft => {
-        draft[assetId].connections[connectionIndex] = connection
+        draft[assetId].connections[assetVertexIndex] = connection
       })
     }
     case SET_ASSET_CONNECTION_ATTRIBUTE: {
-      const { assetId, connectionIndex, key, value } = action.payload
+      const { assetId, assetVertexIndex, key, value } = action.payload
       return produce(state, draft => {
         const asset = draft[assetId]
         const connections = asset.connections
-        const attributes = connections[connectionIndex].attributes
+        const attributes = connections[assetVertexIndex].attributes
         attributes[key] = value
       })
     }

@@ -1,8 +1,13 @@
-import React, {useState} from 'react'
-import clsx from 'clsx'
+// TODO: Rewrite from scratch to clean up logic
+
+import React, { forwardRef, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { makeStyles } from '@material-ui/core/styles'
+import clsx from 'clsx'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 import Paper from '@material-ui/core/Paper'
+import Dialog from '@material-ui/core/Dialog'
+import Slide from '@material-ui/core/Slide'
 import AssetAttributesPanel from './AssetAttributesPanel'
 import AssetTasksPanel from './AssetTasksPanel'
 import AssetRisksPanel from './AssetRisksPanel'
@@ -14,12 +19,8 @@ import {
 } from '../constants'
 import {
   getFocusingAsset,
-  getTasksForFocusedAsset,
+  getOverlayMode,
 } from '../selectors'
-import useTheme from "@material-ui/core/styles/useTheme";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import Dialog from "@material-ui/core/Dialog";
-import Slide from "@material-ui/core/Slide";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -34,6 +35,7 @@ const useStyles = makeStyles(theme => ({
     zIndex: 1,
     display: 'flex',
     flexDirection: 'column',
+    // TODO: Use maxHeight with fixed bottom https://stackoverflow.com/a/45990480/192092
   },
   withTables: {
     bottom: '50%',
@@ -47,7 +49,6 @@ const useStyles = makeStyles(theme => ({
     overflowY: 'auto',
     overflowX: 'hidden',
     zIndex: 1,
-    maxHeight: '80%',
   },
   fullView: {
     padding: theme.spacing(1),
@@ -55,68 +56,59 @@ const useStyles = makeStyles(theme => ({
     overflowX: 'hidden',
     zIndex: 1,
     height: '100%',
-    maxHeight: '100%',
   },
 }))
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction='up' ref={ref} {...props} />
 })
 
-
-export default function DetailsWindow(props) {
-  const classes = useStyles()
+export default function DetailsWindow({ isWithTables }) {
   const theme = useTheme()
-  const {
-    isWithDetails,
-    isWithTables,
-    overlayMode,
-    sketchMode,
-    setSelectedBusIndexes,
-    setSelectedAssetIndexes,
-  } = props
-  const [expand, setExpand] = useState(false)
+  const classes = useStyles()
+  const overlayMode = useSelector(getOverlayMode)
   const focusingAsset = useSelector(getFocusingAsset)
-  const tasksForFocusingAsset = useSelector(getTasksForFocusedAsset)
-  
+  const [expand, setExpand] = useState(false)
+  const isNotMobile = useMediaQuery(theme.breakpoints.up('sm'))
+
   const DetailsPanel = {
     [OVERLAY_MODE_ASSETS]: AssetAttributesPanel,
     [OVERLAY_MODE_TASKS]: AssetTasksPanel,
     [OVERLAY_MODE_RISKS]: AssetRisksPanel,
   }[overlayMode]
 
-  const isNotMobile = useMediaQuery(theme.breakpoints.up('sm'));
-
   const detailsPanel = focusingAsset ?
     <DetailsPanel
       className={classes.root}
       asset={focusingAsset}
-      tasks={tasksForFocusingAsset}
-      sketchMode={sketchMode}
-      overlayMode={overlayMode} 
-      setSelectedBusIndexes={setSelectedBusIndexes}
-      setSelectedAssetIndexes={setSelectedAssetIndexes}
+      // tasks={focusingTasks}
       response={isNotMobile}
       isDetailsWindowExpanded={expand}
       setIsDetailsWindowExpanded={setExpand}
     /> : <EmptyDetailsPanel />
 
-  return expand ? (<Dialog fullScreen open={expand} onClose={setExpand} TransitionComponent={Transition} classes={{paper: classes.background}}>
-
-    <Paper className={clsx( classes.fullView, {
-      poof: !isWithDetails,
+  // TODO: Clean
+  return expand ? (
+    <Dialog
+      fullScreen
+      open={expand}
+      onClose={setExpand}
+      TransitionComponent={Transition}
+    >
+      <Paper className={clsx(classes.fullView, {
+        [classes.withTables]: isWithTables,
+      })}>
+        {detailsPanel}
+      </Paper>
+    </Dialog>
+  ) : (isNotMobile || focusingAsset ?
+    <Paper className={clsx(!isNotMobile ? classes.responsive : classes.root, {
       [classes.withTables]: isWithTables,
     })}>
       {detailsPanel}
-    </Paper>
-  </Dialog>) : (
-    isNotMobile || focusingAsset ?
-    <Paper className={clsx( !isNotMobile ? classes.responsive : classes.root, {
-      poof: !isWithDetails,
-      [classes.withTables]: isWithTables,
-    })}>
-      {detailsPanel}
-    </Paper>
-      : <></>
+    </Paper> : <></>
   )
+
+// show expanded only if not mobile and is expanded
+// otherwise show regular paper
 }

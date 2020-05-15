@@ -26,10 +26,9 @@ import Slide from '@material-ui/core/Slide'
 import EditIcon from '@material-ui/icons/Edit'
 import DoneIcon from '@material-ui/icons/Done'
 import CommentIcon from '@material-ui/icons/Comment'
-import Radio from '@material-ui/core/Radio'
-import { Box } from '@material-ui/core'
+// import Radio from '@material-ui/core/Radio'
 import CollapsibleListItem from './CollapsibleListItem'
-import AssetConnectionsListItems from './AssetConnectionsListItems'
+// import AssetConnectionsListItems from './AssetConnectionsListItems'
 import Collapse from '@material-ui/core/Collapse'
 import Divider from '@material-ui/core/Divider'
 import { AssetName } from './AssetTasksPanel'
@@ -42,8 +41,8 @@ import {
   setTaskName,
 } from '../actions'
 import {
-  TASK_STATUS_CANCELLED,
-  TASK_ARCHIVE_STATUS,
+  // TASK_STATUS_CANCELLED,
+  // TASK_ARCHIVE_STATUS,
 } from '../constants'
 import {
   getAssetTypeByCode,
@@ -201,6 +200,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 })
 
 
+/*
 const Priority = (priorityColor, priority, label) => {
   const classes = useStyles()
   return <Radio
@@ -208,9 +208,13 @@ const Priority = (priorityColor, priority, label) => {
     onChange={(e) => {e.preventDefault()}}
     color={priorityColor}
     disableRipple={true}
-    classes={{ colorPrimary: classes.importantCheckbox, colorSecondary: classes.urgentCheckbox }}
+    classes={{
+      colorPrimary: classes.importantCheckbox,
+      colorSecondary: classes.urgentCheckbox,
+    }}
   />
 }
+*/
 
 
 export default function TasksList(props) {
@@ -218,7 +222,6 @@ export default function TasksList(props) {
   const {
     asset,
     tasks,
-    showComments,
     showDetails,
   } = props
   const assetId = asset.id
@@ -231,7 +234,6 @@ export default function TasksList(props) {
           assetId={assetId}
           task={task}
           showDetails={showDetails}
-          showComments={showComments}
         />
       ))}
     </List>
@@ -242,7 +244,6 @@ function TaskItem(props) {
   const {
     itemKey,
     task,
-    showComments,
     showDetails,
   } = props
   const {
@@ -265,7 +266,8 @@ function TaskItem(props) {
         key={`${itemKey}-li`}
         disableGutters
         classes={{ root: classes.actions }}
-        onClick={ () => showDetails(task) }>
+        onClick={ () => showDetails(task) }
+      >
         <div className={classes.spaceBetween}>
           <div className={classes.alignStart}>
             <div className={classes.fullWidth}>
@@ -284,7 +286,7 @@ function TaskItem(props) {
                   }
                   { statusLabel && <Chip className={classes.status} label={statusLabel} /> }
                 </div>
-                <IconButton onClick={() => showComments(task)}> 
+                <IconButton>
                   <Badge badgeContent={commentCount} color='secondary'>
                     <CommentIcon />
                   </Badge>
@@ -415,6 +417,7 @@ const commentSection = (<div style={{ display: 'flex', flexDirection: 'column', 
   const assetDetails = (<>
     <AssetName assetTypeName={assetTypeName} assetTypeCode={assetTypeCode} assetName={assetName} />
 
+  {/*
     <AssetConnectionsListItems
       asset={asset}
       isEditing={false}
@@ -422,6 +425,7 @@ const commentSection = (<div style={{ display: 'flex', flexDirection: 'column', 
       setSelectedAssetIndexes={() => {}}
       noHighlight={true}
     />
+  */}
   </>)
 
   const mobileTaskDetail = (<>
@@ -462,7 +466,10 @@ const commentSection = (<div style={{ display: 'flex', flexDirection: 'column', 
         {taskheader}
     </CollapsibleListItem>
    </Container>
-    <Collapse in={openTask} classes={{ entered: clsx(classes.overflow, classes.maxHeight), wrapper: classes.maxHeight }}>
+    <Collapse in={openTask} classes={{
+      entered: clsx(classes.overflow, classes.maxHeight),
+      wrapper: classes.maxHeight,
+    }}>
       {commentSection}
     </Collapse>
     <Container>

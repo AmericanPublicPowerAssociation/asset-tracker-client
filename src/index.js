@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { applyMiddleware, compose, createStore } from 'redux'
@@ -19,7 +19,7 @@ const store = createStore(reduceState, initialState, enhanceStore(
 
 configureEnvironment()
 sagaMiddleware.run(reduceSaga)
-ReactDOM.render(
+render(
   <Provider store={store}>
     <Router>
       <App />

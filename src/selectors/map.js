@@ -4,6 +4,8 @@ import {
 } from './asset'
 import {
   BRIGHT_MAP_STYLE_NAMES,
+  MAP_STYLE_BY_NAME,
+  SKETCH_MODE_VIEW,
 } from '../constants'
 import {
   getBusFeatures,
@@ -11,7 +13,19 @@ import {
 
 export const getMapStyleName = state => state.mapStyleName
 export const getMapViewState = state => state.mapViewState
+export const getOverlayMode = state => state.overlayMode
+export const getSketchMode = state => state.sketchMode
 export const getAssetsGeoJson = state => state.assetsGeoJson
+export const getSelectedAssetIndexes = state => state.selectedAssetIndexes
+export const getSelectedBusIndexes = state => state.selectedBusIndexes
+
+export const getMapStyle = createSelector([
+  getMapStyleName,
+], (
+  mapStyleName,
+) => {
+  return MAP_STYLE_BY_NAME[mapStyleName]
+})
 
 export const getIsMapStyleBright = createSelector([
   getMapStyleName,
@@ -34,4 +48,12 @@ export const getBusesGeoJson = createSelector([
     type: 'FeatureCollection',
     features: busFeatures,
   }
+})
+
+export const getIsViewing = createSelector([
+  getSketchMode,
+], (
+  sketchMode,
+) => {
+  return sketchMode === SKETCH_MODE_VIEW
 })

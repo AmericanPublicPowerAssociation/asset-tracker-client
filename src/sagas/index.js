@@ -8,29 +8,31 @@ import  {
   watchSuggestVendorNames,
 } from 'asset-report-risks'
 import {
-  watchRefreshAssets,
-  watchUpdateAssets,
   watchAddTask,
-  watchAssetTasks,
-  watchUpdateTask,
-  watchRefreshAssetComments,
   watchAddTaskComment,
-  watchUploadAssetsCsv
-} from './assets'
+  watchAssetTasks,
+  watchMakeAssetName,
+  watchRefreshAssets,
+  watchRefreshTaskComments,
+  watchSaveAssets,
+  watchUpdateTask,
+  watchUploadAssetsCsv,
+} from './asset'
 
 export default function* () {
   yield all([
     watchRefreshAssets(),
     watchRefreshRisks(),
-    watchUpdateAssets(),
+    watchSaveAssets(),
+    watchUploadAssetsCsv(),
+    watchMakeAssetName(),
     watchAssetTasks(),
     watchAddTask(),
     watchUpdateTask(),
-    watchRefreshAssetComments(),
+    watchRefreshTaskComments(),
     watchAddTaskComment(),
     watchSuggestVendorNames(),
     watchSuggestProductNames(),
     watchSuggestProductVersions(),
-    watchUploadAssetsCsv()
   ])
 }

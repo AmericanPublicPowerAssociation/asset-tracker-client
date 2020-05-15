@@ -39,7 +39,7 @@ const tableIcons = {
   Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
   SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 }
 
 const ASSET_TABLE_COLUMN_NAMES = [
@@ -58,7 +58,7 @@ export default function AssetsTable(props) {
 
   const tableName = 'Asset'
   const columns = ASSET_TABLE_COLUMN_NAMES.map( field => {
-    return {field, title: getHeaderLabel(field) }
+    return { field, title: getHeaderLabel(field) }
   })
 
   const data = Object.values(assetById).map(
@@ -82,13 +82,15 @@ export default function AssetsTable(props) {
   return (
     <MaterialTable
       components={{
-        Container: props => <div style={{background: 'white'}}>{props.children}</div>
+        Container: props => (
+          <div style={{ background: 'white' }}>{props.children}</div>
+        ),
       }}
       icons={tableIcons}
       title={tableName}
       options={{
         search: true,
-        pageSizeOptions
+        pageSizeOptions,
       }}
       columns={columns}
       data={data}

@@ -1,6 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
 import SketchIcon from '@material-ui/icons/Edit'
@@ -11,11 +11,17 @@ import {
 } from 'asset-report-risks'
 import {
   refreshAssets,
+  saveAssets,
+  setSketchMode,
 } from '../actions'
 import {
   OVERLAY_MODE_ASSETS,
   SKETCH_MODE_VIEW,
 } from '../constants'
+import {
+  getOverlayMode,
+  getSketchMode,
+} from '../selectors'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,7 +33,14 @@ const useStyles = makeStyles(theme => ({
       margin: theme.spacing(1),
     },
   },
-  cancelFab: {
+  changeButton: {
+    transition: '1s',
+    background: theme.palette.secondary.main,
+    '&:hover': {
+      background: theme.palette.secondary.main,
+    },
+  },
+  cancelButton: {
     background: 'white',
     '&:hover': {
       background: 'white',
@@ -35,52 +48,48 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function SketchButtons(props) {
+export default function SketchButtons() {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const {
-    overlayMode,
-    sketchMode,
-    changeSketchMode,
-    saveAssets,
-  } = props
+  const overlayMode = useSelector(getOverlayMode)
+  const sketchMode = useSelector(getSketchMode)
+  const isWithAssetsOverlay = overlayMode === OVERLAY_MODE_ASSETS
   const isViewing = sketchMode === SKETCH_MODE_VIEW
   const iconColor = isViewing ? 'black' : 'white'
 
-  function handleConfirm() {
+  function handleChange() {
     if (!isViewing) {
-      saveAssets()
+      dispatch(saveAssets())
     }
-    changeSketchMode(isViewing ? 'sketch' : SKETCH_MODE_VIEW)
+    dispatch(setSketchMode(isViewing ? 'sketch' : SKETCH_MODE_VIEW))
   }
 
   function handleCancel() {
-    changeSketchMode(SKETCH_MODE_VIEW)
+    dispatch(setSketchMode(SKETCH_MODE_VIEW))
     dispatch(refreshAssets())
     dispatch(refreshRisks())
   }
 
   return (
-    <div className={clsx(classes.root, {
-      poof: overlayMode !== OVERLAY_MODE_ASSETS,
-    })}>
+    <div className={classes.root}>
       <Fab
-        className={clsx(iconColor)}
+        className={clsx(classes.changeButton, iconColor, 'rise-animation')}
         size='small'
-        color='secondary'
-        onClick={handleConfirm}
+        disabled={!isWithAssetsOverlay}
+        onClick={handleChange}
       >
         {isViewing ? <SketchIcon /> : <SaveIcon />}
       </Fab>
+
+    {!isViewing &&
       <Fab
-        className={clsx(classes.cancelFab, {
-          poof: isViewing,
-        })}
+        className={clsx(classes.cancelButton, 'spin-animation')}
         size='small' 
         onClick={handleCancel}
       >
-        <CloseIcon style={{color: 'blue'}}/>
+        <CloseIcon style={{ color: 'blue' }}/>
       </Fab>
+    }
     </div>
   )
 }

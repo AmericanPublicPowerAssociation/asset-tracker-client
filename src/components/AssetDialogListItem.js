@@ -7,6 +7,9 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import {
+  getConnectedAssetCount,
+} from '../routines'
+import {
   getAssetTypeByCode,
 } from '../selectors'
 
@@ -18,12 +21,11 @@ export default function AssetDialogListItem(props) {
   const {
     typeCode,
     name,
-    id
+    id,
   } = asset
   const assetTypeByCode = useSelector(getAssetTypeByCode)
-
   const assetTypeName = assetTypeByCode[typeCode].name
-  const numOfConnections = asset['connections'] ? asset['connections'].length : 0
+  const connectionCount = getConnectedAssetCount(asset)
 
   return (
     <>
@@ -31,7 +33,6 @@ export default function AssetDialogListItem(props) {
           <Grid container spacing={2}>
             <Grid item xs={4}>
               <Grid
-                item
                 container
                 direction='column'
                 alignItems='center'
@@ -48,7 +49,6 @@ export default function AssetDialogListItem(props) {
             </Grid>
             <Grid item xs={8}>
               <Grid
-                item
                 container
                 direction='column'
                 spacing={1}
@@ -57,8 +57,8 @@ export default function AssetDialogListItem(props) {
                   {name}
                 </Grid>
                 <Grid>
-                  {numOfConnections}
-                  {numOfConnections === 1 ? ' connection' : ' connections'}
+                  {connectionCount}
+                  {connectionCount === 1 ? ' connection' : ' connections'}
                 </Grid>
                 <Grid item xs>
                   <Button
