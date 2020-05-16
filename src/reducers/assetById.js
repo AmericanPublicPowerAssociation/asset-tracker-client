@@ -1,6 +1,7 @@
 import produce from 'immer'
 import {
   DELETE_ASSET,
+  REMOVE_LINE_END_POINT,
   SET_ASSET,
   SET_ASSETS,
   SET_ASSET_ATTRIBUTE,
@@ -58,11 +59,12 @@ const assetById = (state = initialState, action) => {
       })
     }
     case DELETE_ASSET: {
-      const { assetId, assetIdsByBusId } = action.payload
-      const assetConnection = state[assetId].connections
-      const assetBusIds = Object.entries(assetConnection).map( ([key, bus]) => bus.busId)
-      console.log('********', assetId, assetIdsByBusId, assetBusIds)
+      const { assetId } = action.payload
+      // const assetConnection = state[assetId].connections
+      // const assetBusIds = Object.entries(assetConnection).map( ([key, bus]) => bus.busId)
+      // console.log('********', assetId, assetIdsByBusId, assetBusIds)
       return produce(state, draft => {
+        /*
         for (const assetBusId of assetBusIds) {
           const connectedAssetsToBusId = assetIdsByBusId[assetBusId]
           for (const connectedAssetId of connectedAssetsToBusId) {
@@ -78,7 +80,23 @@ const assetById = (state = initialState, action) => {
             console.log(JSON.stringify(connectedAssetConnections))
           }
         }
+        */
         draft[assetId]['is_deleted'] = true
+      })
+    }
+    case REMOVE_LINE_END_POINT: {
+      const { assetId, assetVertexIndex, connection } = action.payload
+      return produce(state, draft => {
+        if (assetVertexIndex !== 0)
+          draft[assetId].connections[assetVertexIndex] = connection
+        else {
+          const asset =  draft[assetId]
+          const connections = asset.connections
+          for (const [index, connection] of Object.entries(connections)) {
+            if (index === 0 ) continue
+            connections[index-1] = connection
+          }
+        }
       })
     }
     default: {

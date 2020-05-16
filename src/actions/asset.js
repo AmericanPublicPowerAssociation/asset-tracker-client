@@ -4,6 +4,7 @@ import {
   DELETE_ASSET,
   MAKE_ASSET_NAME,
   REFRESH_ASSETS,
+  REMOVE_LINE_END_POINT,
   SAVE_ASSETS,
   SET_ASSET,
   SET_ASSETS,
@@ -33,7 +34,7 @@ export function saveAssets() {
 }
 
 export function deleteAsset(assetId, assetIdsByBusId){
-  return { type: DELETE_ASSET, payload: { assetId, assetIdsByBusId } }
+  return { type: DELETE_ASSET, payload: { assetId } }
 }
 
 export function setAssetValue(assetId, key, value) {
@@ -90,6 +91,13 @@ export function makeAssetName(feature) {
 export function uploadAssetsCsv(payload) {
   return {
     type: UPLOAD_ASSETS_CSV,
+    payload,
+  }
+}
+
+export function removeLineEndPoint(payload) {
+  return {
+    type: REMOVE_LINE_END_POINT,
     payload,
   }
 }

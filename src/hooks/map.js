@@ -4,6 +4,7 @@ import { ViewMode } from '@nebula.gl/edit-modes'
 import {
   makeAssetName,
   deleteAsset,
+  removeLineEndPoint,
   setAsset, setAssetConnection,
   setAssetsGeoJson,
   setFocusingAssetId,
@@ -101,7 +102,7 @@ export function useEditableMap(deckGL) {
       }
       else if (editType === 'removePosition') {
         console.log('edit remove')
-        const { featureIndexes, positionIndexes } = editContext
+        const { featureIndexes, positionIndexes, position } = editContext
         const { features } = updatedData
         const positionIndex = positionIndexes[0]
         const featureIndex = featureIndexes[0]
@@ -109,9 +110,11 @@ export function useEditableMap(deckGL) {
         const geometry =  feature['geometry']
         if (feature.properties.typeCode === 'l') {
           const coordinatesLength = geometry.coordinates.length
+          const assetId = feature.properties.id
           if (coordinatesLength === positionIndex || positionIndex === 0) {
             // it is one endpoint of line
-            console.log('endpoint')
+            // dispatch(setAssetConnection(assetId, positionIndex, ''))
+            // dispatch(removeLineEndPoint(assetId, positionIndex, ''))
           }
         }
       }
@@ -130,7 +133,7 @@ export function useEditableMap(deckGL) {
         dispatch(setSelectedAssetIndexes([]))
         dispatch(setFocusingAssetId(null))
         dispatch(setFocusingBusId(null))
-        dispatch(deleteAsset(targetAssetId, assetIdsByBusId))
+        dispatch(deleteAsset(targetAssetId))
       }
       // If we are not adding a specific type of asset,
       else if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
@@ -148,6 +151,7 @@ export function useEditableMap(deckGL) {
     function handleLayerStopDragging(event) {
       console.log('layer stop dragging', event)
       const screenCoords = event.screenCoords
+      console.log('*********************', event)
 
       const busInfos = deckGL.current.pickMultipleObjects({
         x: screenCoords[0],
