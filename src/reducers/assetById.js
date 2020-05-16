@@ -60,27 +60,7 @@ const assetById = (state = initialState, action) => {
     }
     case DELETE_ASSET: {
       const { assetId } = action.payload
-      // const assetConnection = state[assetId].connections
-      // const assetBusIds = Object.entries(assetConnection).map( ([key, bus]) => bus.busId)
-      // console.log('********', assetId, assetIdsByBusId, assetBusIds)
       return produce(state, draft => {
-        /*
-        for (const assetBusId of assetBusIds) {
-          const connectedAssetsToBusId = assetIdsByBusId[assetBusId]
-          for (const connectedAssetId of connectedAssetsToBusId) {
-            const connectedAsset = draft[connectedAssetId]
-            if (connectedAsset.typeCode !== 'l') continue
-            // remove connections from lines only
-            const connectedAssetConnections = connectedAsset.connections
-            const connectedAssetConnection = Object.entries(connectedAssetConnections).find( ([key, connection]) => connection.busId === assetBusId)
-            if (connectedAssetConnection) {
-              const [index, connection] = connectedAssetConnection
-              delete connectedAssetConnections[index]
-            }
-            console.log(JSON.stringify(connectedAssetConnections))
-          }
-        }
-        */
         draft[assetId]['is_deleted'] = true
       })
     }
