@@ -69,6 +69,10 @@ export function useEditableMap(deckGL) {
       console.log('asset edit', editType, editContext, updatedData)
 
       if (editType === 'addTentativePosition') {
+        // 1. Move add asset code in addFeature into a function
+        // 2. add asset in addTentativePosition for polygons and lines
+        // 3. add asset in addFeature for points
+        // 4. if we have a line, then also add connection to bus
         const { position } = editContext
         console.log('position', position)
         console.log('xy', deckGL.current.viewports[0].project(position))
