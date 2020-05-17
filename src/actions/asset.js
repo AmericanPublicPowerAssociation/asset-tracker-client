@@ -80,10 +80,10 @@ export function setFocusingAssetId(id) {
   }
 }
 
-export function makeAssetName(feature) {
+export function makeAssetName(assetId, position) {
   return {
     type: MAKE_ASSET_NAME,
-    payload: feature,
+    payload: { assetId, position },
   }
 }
 

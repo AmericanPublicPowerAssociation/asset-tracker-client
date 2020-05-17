@@ -17,13 +17,7 @@ import {
   makeBusId,
 } from '../routines'
 
-export function makeAsset(
-  feature,
-) {
-  const featureProperties = feature.properties
-  const featureGeometry = feature.geometry
-  const assetId = featureProperties.id
-  const assetTypeCode = featureProperties.typeCode
+export function makeAsset(assetId, assetTypeCode) {
   const connectionByIndex = {}
   const asset = {
     id: assetId,
@@ -36,9 +30,7 @@ export function makeAsset(
 
   switch (assetTypeCode) {
     case ASSET_TYPE_CODE_LINE: {
-      const lastVertexIndex = featureGeometry.coordinates.length - 1
       connectionByIndex[0] = { busId: bus0Id }
-      connectionByIndex[lastVertexIndex] = { busId: bus1Id }
       break
     }
     case ASSET_TYPE_CODE_METER: {
@@ -50,10 +42,10 @@ export function makeAsset(
       connectionByIndex[1] = { busId: bus1Id }
       break
     }
-    default: {
-      break
-    }
+    default: { }
   }
+
+  console.log('make asset', assetId, assetTypeCode)
   return asset
 }
 
