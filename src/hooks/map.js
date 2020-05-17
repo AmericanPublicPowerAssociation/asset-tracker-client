@@ -1,10 +1,11 @@
-import { useContext } from 'react'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import { ViewMode } from '@nebula.gl/edit-modes'
 import {
   makeAssetName,
-  setAsset, setAssetConnection,
+  setAsset,
+  // setAssetConnection,
   setAssetsGeoJson,
   setFocusingAssetId,
   setFocusingBusId,
@@ -13,38 +14,51 @@ import {
   setSketchMode,
 } from '../actions'
 import {
-  EditableMapContext,
-} from '../contexts'
-import {
   ASSETS_MAP_LAYER_ID,
   ASSET_LINE_WIDTH_IN_METERS,
   ASSET_RADIUS_IN_METERS_BY_CODE,
   BUSES_MAP_LAYER_ID,
   BUS_RADIUS_IN_METERS,
-  PICKING_DEPTH,
-  PICKING_RADIUS_IN_PIXELS,
+  // PICKING_DEPTH,
+  // PICKING_RADIUS_IN_PIXELS,
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_ASSET,
-  SKETCH_MODE_EDIT,
+  // SKETCH_MODE_EDIT,
 } from '../constants'
 import {
   CustomEditableGeoJsonLayer,
   getAssetTypeCode,
   getFeaturePack,
   getMapMode,
-  getPickedEditHandle,
+  // getPickedEditHandle,
   makeAsset,
+  makeAssetId,
 } from '../routines'
 import {
   getAssetIdByBusId,
   getAssetsGeoJson,
   getBusesGeoJson,
   getColors,
-  getFocusingAssetId,
   getSelectedAssetIndexes,
   getSelectedBusIndexes,
   getSketchMode,
 } from '../selectors'
+
+const EDITING_ASSET_ID_BY_MAP_ID = {}
+
+function getEditingAssetId(mapId) {
+  return EDITING_ASSET_ID_BY_MAP_ID[mapId]
+}
+
+function makeEditingAssetId(mapId) {
+  const assetId = makeAssetId()
+  EDITING_ASSET_ID_BY_MAP_ID[mapId] = assetId
+  return assetId
+}
+
+function clearEditingAssetId(mapId) {
+  delete EDITING_ASSET_ID_BY_MAP_ID[mapId]
+}
 
 export function useMovableMap() {
   const dispatch = useDispatch()
@@ -55,27 +69,25 @@ export function useMovableMap() {
   }
 }
 
-export function useEditableMap(deckGL) {
+export function useEditableMap(mapId, deckGL) {
   const dispatch = useDispatch()
   const sketchMode = useSelector(getSketchMode)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
   const busesGeoJson = useSelector(getBusesGeoJson)
   const selectedAssetIndexes = useSelector(getSelectedAssetIndexes)
   const selectedBusIndexes = useSelector(getSelectedBusIndexes)
-  const focusingAssetId = useSelector(getFocusingAssetId)
   const assetIdByBusId = useSelector(getAssetIdByBusId)
   const colors = useSelector(getColors)
   const assetTypeCode = getAssetTypeCode(sketchMode)
-  const {
-    editingAssetId,
-    resetEditingAssetId,
-  } = useContext(EditableMapContext)
 
   function addAsset(position) {
-    const asset = makeAsset(editingAssetId, assetTypeCode)
+    if (getEditingAssetId()) return
+    const assetId = makeEditingAssetId()
+    const asset = makeAsset(assetId, assetTypeCode)
     dispatch(setAsset(asset))
-    dispatch(setFocusingAssetId(editingAssetId))
-    dispatch(makeAssetName(editingAssetId, position))
+    dispatch(setFocusingAssetId(assetId))
+    dispatch(makeAssetName(assetId, position))
+    console.log('add asset', asset)
     return asset
   }
 
@@ -87,10 +99,7 @@ export function useEditableMap(deckGL) {
       console.log('asset edit', editType, editContext, updatedData)
 
       if (editType === 'addTentativePosition') {
-        console.log(focusingAssetId, editingAssetId)
-        if (focusingAssetId !== editingAssetId) {
-          addAsset(editContext.position)
-        }
+        addAsset(editContext.position)
         /*
         if (featureGeometryType === 'LineString') {
           console.log(editContext)
@@ -109,19 +118,16 @@ export function useEditableMap(deckGL) {
       } else if (editType === 'addFeature') {
         const [featureIndex, feature] = getFeaturePack(event)
         const featureGeometry = feature.geometry
+        const featureProperties = feature.properties
         if (featureGeometry.type === 'Point') {
           addAsset(featureGeometry.coordinates)
         }
-        const featureProperties = feature.properties
-        featureProperties.id = editingAssetId
+        featureProperties.id = getEditingAssetId()
         featureProperties.typeCode = assetTypeCode
+        clearEditingAssetId()  // Prepare for next asset
         dispatch(setSelectedAssetIndexes([featureIndex]))
-        // Prevent adding multiple assets by mistake
-        dispatch(setSketchMode(SKETCH_MODE_ADD))
-        // Prepare for next asset
-        resetEditingAssetId()
+        dispatch(setSketchMode(SKETCH_MODE_ADD))  // Add one asset at a time
       }
-
       dispatch(setAssetsGeoJson(updatedData))
     }
 
@@ -146,6 +152,7 @@ export function useEditableMap(deckGL) {
 
     function handleLayerStopDragging(event) {
       console.log('layer stop dragging', event)
+      /*
       const screenCoords = event.screenCoords
 
       const busInfos = deckGL.current.pickMultipleObjects({
@@ -177,6 +184,7 @@ export function useEditableMap(deckGL) {
           }))
         }
       }
+      */
     }
 
     return new CustomEditableGeoJsonLayer({
@@ -212,6 +220,7 @@ export function useEditableMap(deckGL) {
       const targetAssetId = assetIdByBusId[targetBusId]
 
       // If we are not adding a specific type of asset,
+      /*
       if (sketchMode === SKETCH_MODE_ADD) {
         const assetInfos = deckGL.current.pickMultipleObjects({
           x: info.x,
@@ -228,7 +237,8 @@ export function useEditableMap(deckGL) {
           }))
         }
       }
-      else if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
+      */
+      if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
         dispatch(setFocusingAssetId(targetAssetId))
         dispatch(setFocusingBusId(targetBusId))
       }

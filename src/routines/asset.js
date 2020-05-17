@@ -45,7 +45,6 @@ export function makeAsset(assetId, assetTypeCode) {
     default: { }
   }
 
-  console.log('make asset', assetId, assetTypeCode)
   return asset
 }
 
