@@ -20,8 +20,8 @@ import {
   ASSET_RADIUS_IN_METERS_BY_CODE,
   BUSES_MAP_LAYER_ID,
   BUS_RADIUS_IN_METERS,
-  // PICKING_DEPTH,
-  // PICKING_RADIUS_IN_PIXELS,
+  PICKING_DEPTH,
+  PICKING_RADIUS_IN_PIXELS,
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_ASSET,
   SKETCH_MODE_ADD_LINE,
@@ -68,6 +68,7 @@ export function useEditableMap(deckGL) {
   const assetIdByBusId = useSelector(getAssetIdByBusId)
   const colors = useSelector(getColors)
   const assetTypeCode = getAssetTypeCode(sketchMode)
+  const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
 
   function getAssetsMapLayer() {
     const mapMode = getMapMode(sketchMode)
@@ -79,27 +80,52 @@ export function useEditableMap(deckGL) {
       if (editType === 'addTentativePosition') {
         if (!editingAsset.id) {
           editingAsset = makeEditingAsset(assetTypeCode)
-          dispatch(setEditingAsset(editingAsset))
         }
-        /*
-        if (featureGeometryType === 'LineString') {
-          console.log(editContext)
-          // dispatch(setAssetConnection(asset.id, ))
-          // look for nearby bus
-          // add connection
+        if (isAddingLine) {
+          // Look for nearby objects
+          const { position } = editContext
+          const screenCoords = deckGL.current.viewports[0].project(position)
+          const nearbyAssetInfos = deckGL.current.pickMultipleObjects({
+            x: screenCoords[0],
+            y: screenCoords[1],
+            layerIds: [ASSETS_MAP_LAYER_ID],
+            radius: PICKING_RADIUS_IN_PIXELS,
+            depth: PICKING_DEPTH,
+          })
+          console.log('nearbyAssetInfos', nearbyAssetInfos)
+          const nearbyBusInfos = deckGL.current.pickMultipleObjects({
+            x: screenCoords[0],
+            y: screenCoords[1],
+            layerIds: [BUSES_MAP_LAYER_ID],
+            radius: PICKING_RADIUS_IN_PIXELS,
+            depth: PICKING_DEPTH,
+          })
+          console.log('nearbyBusInfos', nearbyBusInfos)
+          // Convert objects into features
+          const nearbyAssetFeatures = nearbyAssetInfos.map(info => info.object)
+          const nearbyBusFeatures = nearbyBusInfos.map(info => info.object)
+          // Get editing feature
+          const editingAssetFeature = nearbyAssetFeatures.find(
+            feature => feature.properties.guideType)
+          const vertexCount = editingAssetFeature ?
+            editingAssetFeature.geometry.coordinates.length : 1
+          console.log('vertexCount', vertexCount)
+          // Add connection to nearby bus if one exists
+          if (nearbyBusFeatures.length) {
+            const busId = nearbyBusFeatures[0].properties.id
+            editingAsset = produce(editingAsset, draft => {
+              draft.connections[vertexCount - 1] = { busId }
+            })
+          }
         }
-        // 4. if we have a line, then also add connection to bus
-        */
-        const { position } = editContext
-        console.log('position', position)
-        console.log('xy', deckGL.current.viewports[0].project(position))
+        dispatch(setEditingAsset(editingAsset))
       } else if (editType === 'finishMovePosition') {
         console.log('finishMovePosition', event)
       } else if (editType === 'addFeature') {
         const [featureIndex, feature] = getFeaturePack(event)
         if (!editingAsset.id) {
           editingAsset = makeEditingAsset(assetTypeCode)
-        } else if (sketchMode === SKETCH_MODE_ADD_LINE) {
+        } else if (isAddingLine) {
           const vertexCount = feature.geometry.coordinates.length
           editingAsset = produce(editingAsset, draft => {
             draft.connections[vertexCount - 1] = {
