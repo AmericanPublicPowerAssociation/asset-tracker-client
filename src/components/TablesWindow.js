@@ -9,10 +9,13 @@ import {
 import {
   setFocusingAssetId,
   setFocusingBusId,
+  setSelectedAssetIndexes,
+  setSelectedBusIndexes,
   setPanMapToAsset,
 } from '../actions'
 import {
   getAssetsGeoJson,
+  getOverlayMode,
 } from '../selectors'
 
 const useStyles = makeStyles(theme => ({
@@ -28,13 +31,9 @@ const useStyles = makeStyles(theme => ({
 
 export default function TablesWindow(props) {
   const classes = useStyles()
-  const {
-    overlayMode,
-    setSelectedAssetIndexes,
-    setSelectedBusIndexes,
-  } =  props
   const dispatch = useDispatch()
   const { features } = useSelector(getAssetsGeoJson)
+  const overlayMode = useSelector(getOverlayMode)
 
   function getHeaderLabel(header) {
     const result = header.replace(/([A-Z])/g, ' $1')
@@ -63,8 +62,6 @@ export default function TablesWindow(props) {
   const table = {
     assets: (
       <AssetsTable
-        setSelectedAssetIndexes={setSelectedAssetIndexes}
-        setSelectedBusIndexes={setSelectedBusIndexes}
         getHeaderLabel={getHeaderLabel}
         highlightAsset={highlightAsset}
         pageSizeOptions={pageSizeOptions}
@@ -81,7 +78,6 @@ export default function TablesWindow(props) {
       <RisksTable
         onRowClick={highlightAsset}
         pageSizeOptions={pageSizeOptions}
-        setSelectedAssetIndexes={setSelectedAssetIndexes}
       />
     ),
   }[overlayMode]
