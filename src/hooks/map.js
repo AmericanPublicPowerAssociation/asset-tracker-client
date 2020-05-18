@@ -127,11 +127,13 @@ export function useEditableMap(deckGL) {
           editingAsset = makeEditingAsset(assetTypeCode)
         } else if (isAddingLine) {
           const vertexCount = feature.geometry.coordinates.length
-          editingAsset = produce(editingAsset, draft => {
-            draft.connections[vertexCount - 1] = {
-              busId: makeBusId(),
-            }
-          })
+          if (!editingAsset.connections[vertexCount - 1]) {
+            editingAsset = produce(editingAsset, draft => {
+              draft.connections[vertexCount - 1] = {
+                busId: makeBusId(),
+              }
+            })
+          }
         }
         const assetId = editingAsset.id
         updateFeature(feature, editingAsset)
