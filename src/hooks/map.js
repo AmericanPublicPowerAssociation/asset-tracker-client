@@ -93,25 +93,23 @@ export function useEditableMap(deckGL) {
         const { position } = editContext
         console.log('position', position)
         console.log('xy', deckGL.current.viewports[0].project(position))
-        console.log('addTentativePosition', event)
       } else if (editType === 'finishMovePosition') {
         console.log('finishMovePosition', event)
       } else if (editType === 'addFeature') {
         const [featureIndex, feature] = getFeaturePack(event)
-        let asset = editingAsset
-        if (!asset.id) {
-          asset = makeEditingAsset(assetTypeCode)
+        if (!editingAsset.id) {
+          editingAsset = makeEditingAsset(assetTypeCode)
         } else if (sketchMode === SKETCH_MODE_ADD_LINE) {
           const vertexCount = feature.geometry.coordinates.length
-          asset = produce(asset, draft => {
+          editingAsset = produce(editingAsset, draft => {
             draft.connections[vertexCount - 1] = {
               busId: makeBusId(),
             }
           })
         }
-        const assetId = asset.id
-        updateFeature(feature, asset)
-        dispatch(setAsset(asset))
+        const assetId = editingAsset.id
+        updateFeature(feature, editingAsset)
+        dispatch(setAsset(editingAsset))
         dispatch(fillAssetName(assetId, feature))
         dispatch(setFocusingAssetId(assetId))
         dispatch(setSelectedAssetIndexes([featureIndex]))
@@ -142,6 +140,7 @@ export function useEditableMap(deckGL) {
     function handleLayerStopDragging(event) {
       console.log('layer stop dragging', event)
       /*
+      // TODO: Fix side effects and make code easier to read
       const screenCoords = event.screenCoords
 
       const busInfos = deckGL.current.pickMultipleObjects({
