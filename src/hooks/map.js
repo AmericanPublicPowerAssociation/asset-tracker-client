@@ -3,6 +3,9 @@ import { produce } from 'immer'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import { ViewMode } from '@nebula.gl/edit-modes'
 import {
+  // makeAssetName,
+  deleteAsset,
+  removeLineEndPoint,
   fillAssetName,
   setAsset,
   // setAssetConnection,
@@ -25,6 +28,7 @@ import {
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_ASSET,
   SKETCH_MODE_ADD_LINE,
+  SKETCH_MODE_DELETE,
   // SKETCH_MODE_EDIT,
 } from '../constants'
 import {
@@ -143,6 +147,25 @@ export function useEditableMap(deckGL) {
         dispatch(setSelectedAssetIndexes([featureIndex]))
         dispatch(setSketchMode(SKETCH_MODE_ADD))  // Add one at a time
       }
+      else if (editType === 'removePosition') {
+        console.log('edit remove')
+        const { featureIndexes, positionIndexes } = editContext
+        const { features } = updatedData
+        const positionIndex = positionIndexes[0]
+        const featureIndex = featureIndexes[0]
+        const feature = features[featureIndex]
+        const geometry =  feature['geometry']
+        if (feature.properties.typeCode === 'l') {
+          const coordinatesLength = geometry.coordinates.length
+          const assetId = feature.properties.id
+          if (coordinatesLength === positionIndex || positionIndex === 0) {
+            // it is one endpoint of line
+            // dispatch(setAssetConnection(assetId, positionIndex, ''))
+            dispatch(removeLineEndPoint(assetId, positionIndex, coordinatesLength))
+          }
+        }
+      }
+
       dispatch(setAssetsGeoJson(updatedData))
     }
 
@@ -152,8 +175,15 @@ export function useEditableMap(deckGL) {
       if (!targetAssetId) {
         return
       }
+
+      if (sketchMode === SKETCH_MODE_DELETE) {
+        dispatch(setSelectedAssetIndexes([]))
+        dispatch(setFocusingAssetId(null))
+        dispatch(setFocusingBusId(null))
+        dispatch(deleteAsset(targetAssetId))
+      }
       // If we are not adding a specific type of asset,
-      if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
+      else if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
         dispatch(setSelectedAssetIndexes([info.index]))
         dispatch(setFocusingAssetId(targetAssetId))
       }
@@ -170,6 +200,7 @@ export function useEditableMap(deckGL) {
       /*
       // TODO: Fix side effects and make code easier to read
       const screenCoords = event.screenCoords
+      console.log('*********************', event)
 
       const busInfos = deckGL.current.pickMultipleObjects({
         x: screenCoords[0],
@@ -255,8 +286,10 @@ export function useEditableMap(deckGL) {
       }
       */
       if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
-        dispatch(setFocusingAssetId(targetAssetId))
-        dispatch(setFocusingBusId(targetBusId))
+        if (targetAssetId) {
+          dispatch(setFocusingAssetId(targetAssetId))
+          dispatch(setFocusingBusId(targetBusId))
+        }
       }
     }
 
