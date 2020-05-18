@@ -130,10 +130,10 @@ export function useEditableMap(deckGL) {
         const { features } = updatedData
         const asset = features[featureIndexes[0]]
         const assetId = asset.properties.id
-        
+
         switch (asset.properties.typeCode) {
           case ASSET_TYPE_CODE_LINE: {
-            const assetVerticesLength = asset.geometry.coordinates.length 
+            const assetVerticesLength = asset.geometry.coordinates.length
             const assetVertexIndex = positionIndexes[0]
             if (assetVertexIndex === 0 || assetVertexIndex === assetVerticesLength-1) {
               // endpoints only
@@ -148,7 +148,7 @@ export function useEditableMap(deckGL) {
               const nearbyBusFeatures = nearbyBusInfos.map(info => info.object)
               const newBusIndex = nearbyBusFeatures.length === 1 ? 0 : 1
               const newBusId = (nearbyBusFeatures.length) ?
-                  nearbyBusFeatures[newBusIndex].properties.id : 
+                  nearbyBusFeatures[newBusIndex].properties.id :
                   makeBusId()
               const newConnection = { busId: newBusId, attributes: {} }
               dispatch(setAssetConnection(assetId, assetVertexIndex, newConnection))
