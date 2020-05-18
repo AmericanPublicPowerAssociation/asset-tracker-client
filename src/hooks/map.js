@@ -8,7 +8,7 @@ import {
   removeLineEndPoint,
   fillAssetName,
   setAsset,
-  // setAssetConnection,
+  setAssetConnection,
   setAssetsGeoJson,
   setEditingAsset,
   setFocusingAssetId,
@@ -21,6 +21,7 @@ import {
   ASSETS_MAP_LAYER_ID,
   ASSET_LINE_WIDTH_IN_METERS,
   ASSET_RADIUS_IN_METERS_BY_CODE,
+  ASSET_TYPE_CODE_LINE,
   BUSES_MAP_LAYER_ID,
   BUS_RADIUS_IN_METERS,
   PICKING_DEPTH,
@@ -125,6 +126,37 @@ export function useEditableMap(deckGL) {
         dispatch(setEditingAsset(editingAsset))
       } else if (editType === 'finishMovePosition') {
         console.log('finishMovePosition', event)
+        const { position, positionIndexes, featureIndexes } = editContext
+        const { features } = updatedData
+        const asset = features[featureIndexes[0]]
+        const assetId = asset.properties.id
+        
+        switch (asset.properties.typeCode) {
+          case ASSET_TYPE_CODE_LINE: {
+            const assetVerticesLength = asset.geometry.coordinates.length 
+            const assetVertexIndex = positionIndexes[0]
+            if (assetVertexIndex === 0 || assetVertexIndex === assetVerticesLength-1) {
+              // endpoints only
+              const screenCoords = deckGL.current.viewports[0].project(position)
+              const nearbyBusInfos = deckGL.current.pickMultipleObjects({
+                x: screenCoords[0],
+                y: screenCoords[1],
+                layerIds: [BUSES_MAP_LAYER_ID],
+                radius: PICKING_RADIUS_IN_PIXELS,
+                depth: PICKING_DEPTH,
+              })
+              const nearbyBusFeatures = nearbyBusInfos.map(info => info.object)
+              const newBusIndex = nearbyBusFeatures.length === 1 ? 0 : 1
+              const newBusId = (nearbyBusFeatures.length) ?
+                  nearbyBusFeatures[newBusIndex].properties.id : 
+                  makeBusId()
+              const newConnection = { busId: newBusId, attributes: {} }
+              dispatch(setAssetConnection(assetId, assetVertexIndex, newConnection))
+            }
+            break
+          }
+          default: {}
+        }
       } else if (editType === 'addFeature') {
         const [featureIndex, feature] = getFeaturePack(event)
         if (!editingAsset.id) {
@@ -155,7 +187,7 @@ export function useEditableMap(deckGL) {
         const featureIndex = featureIndexes[0]
         const feature = features[featureIndex]
         const geometry =  feature['geometry']
-        if (feature.properties.typeCode === 'l') {
+        if (feature.properties.typeCode === ASSET_TYPE_CODE_LINE) {
           const coordinatesLength = geometry.coordinates.length
           const assetId = feature.properties.id
           if (coordinatesLength === positionIndex || positionIndex === 0) {
