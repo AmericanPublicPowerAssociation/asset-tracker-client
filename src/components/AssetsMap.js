@@ -21,7 +21,6 @@ const {
 
 export default function AssetsMap() {
   const deckGL = useRef()
-  window.deckGL = deckGL  // !!! Temporary for debugging
   const mapStyle = useSelector(getMapStyle)
   const mapViewState = useSelector(getMapViewState)
   const { handleMapMove } = useMovableMap()

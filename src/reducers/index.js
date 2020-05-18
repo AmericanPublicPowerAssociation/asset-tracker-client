@@ -8,7 +8,6 @@ import {
   sortedRisks,
   vendorNameSuggestions,
 } from 'asset-report-risks'
-
 import mapStyleName from './mapStyleName'
 import mapViewState from './mapViewState'
 import sketchMode from './sketchMode'
@@ -18,6 +17,7 @@ import selectedBusIndexes from './selectedBusIndexes'
 import assetTypeByCode from './assetTypeByCode'
 import assetsGeoJson from './assetsGeoJson'
 import assetById from './assetById'
+import editingAsset from './editingAsset'
 import focusingAssetId from './focusingAssetId'
 import focusingBusId from './focusingBusId'
 import taskById from './taskById'
@@ -34,6 +34,7 @@ const reduceHorizontally = combineReducers({
   assetsGeoJson,
   assetById,
   taskById,
+  editingAsset,
   focusingAssetId,
   focusingBusId,
   taskComments,

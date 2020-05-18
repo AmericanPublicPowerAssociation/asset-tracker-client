@@ -10,8 +10,8 @@ import {
   refreshAssets,
   refreshTaskComments,
   refreshTasks,
-  setAssetValue,
   setAssets,
+  setAssetValue,
   setMapBoundingBox,
   setTaskCommentCount,
   setTaskComments,
@@ -20,7 +20,7 @@ import {
 import {
   ADD_TASK,
   ADD_TASK_COMMENT,
-  MAKE_ASSET_NAME,
+  FILL_ASSET_NAME,
   REFRESH_ASSETS,
   REFRESH_TASKS,
   REFRESH_TASK_COMMENTS,
@@ -67,12 +67,10 @@ export function* watchSaveAssets() {
   })
 }
 
-export function* watchMakeAssetName() {
-  yield takeEvery(MAKE_ASSET_NAME, function* (action) {
-    const feature = action.payload
-    const assetId = feature.properties.id
-    const geometry = feature.geometry
-    const centroid = getCentroid(geometry)
+export function* watchFillAssetName() {
+  yield takeEvery(FILL_ASSET_NAME, function* (action) {
+    const { assetId, feature } = action.payload
+    const centroid = getCentroid(feature)
     const [longitude, latitude] = centroid.geometry.coordinates
     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${REACT_APP_GOOGLE_TOKEN}`
     yield fetchSafely(url, {}, {

@@ -6,6 +6,7 @@ import {
 export const getAssetTypeByCode = state => state.assetTypeByCode
 export const getAssetById = state => state.assetById
 export const getFocusingAssetId = state => state.focusingAssetId
+export const getEditingAsset = state => state.editingAsset
 
 export const getAssetCount = createSelector([
   getAssetById,
@@ -17,13 +18,17 @@ export const getAssetCount = createSelector([
 
 export const getAssetIdByBusId = createSelector([
   getAssetById,
+  getEditingAsset,
 ], (
   assetById,
+  editingAsset,
 ) => {
   const assetIdByBusId = {}
+  const assets = Object.entries(assetById)
+  if (editingAsset.id) assets.push([editingAsset.id, editingAsset])
 
-  for (const [assetId, asset] of Object.entries(assetById)) {
-    if (asset['is_deleted'] === true) {
+  for (const [assetId, asset] of assets) {
+    if (asset['is_deleted']) {
       continue
     }
     const assetConnections = asset.connections || {}
@@ -44,13 +49,17 @@ export const getAssetIdByBusId = createSelector([
 
 export const getAssetIdsByBusId = createSelector([
   getAssetById,
+  getEditingAsset,
 ], (
   assetById,
+  editingAsset,
 ) => {
   const assetIdsByBusId = {}
+  const assets = Object.entries(assetById)
+  if (editingAsset.id) assets.push([editingAsset.id, editingAsset])
 
-  for (const [assetId, asset] of Object.entries(assetById)) {
-    if (asset['is_deleted'] === true) {
+  for (const [assetId, asset] of assets) {
+    if (asset['is_deleted']) {
       continue
     }
     const assetConnections = asset.connections || {}
