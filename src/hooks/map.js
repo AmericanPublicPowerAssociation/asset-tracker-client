@@ -29,7 +29,7 @@ import {
   SKETCH_MODE_ADD_ASSET,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_DELETE,
-  // SKETCH_MODE_EDIT,
+  SKETCH_MODE_EDIT,
 } from '../constants'
 import {
   CustomEditableGeoJsonLayer,
@@ -47,6 +47,7 @@ import {
   getBusesGeoJson,
   getColors,
   getEditingAsset,
+  getFocusingAssetId,
   getSelectedAssetIndexes,
   getSelectedBusIndexes,
   getSketchMode,
@@ -67,6 +68,7 @@ export function useEditableMap(deckGL) {
   let editingAsset = useSelector(getEditingAsset)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
   const busesGeoJson = useSelector(getBusesGeoJson)
+  const focusingAssetId = useSelector(getFocusingAssetId)
   const selectedAssetIndexes = useSelector(getSelectedAssetIndexes)
   const selectedBusIndexes = useSelector(getSelectedBusIndexes)
   const assetIdByBusId = useSelector(getAssetIdByBusId)
@@ -325,6 +327,16 @@ export function useEditableMap(deckGL) {
           }
           break
         }
+        case 'Delete':
+        case 'Backspace': {
+          if (sketchMode.startsWith(SKETCH_MODE_EDIT)) {
+            dispatch(setFocusingAssetId(null))
+            dispatch(setFocusingBusId(null))
+            dispatch(setSelectedAssetIndexes([]))
+            dispatch(deleteAsset(focusingAssetId))
+          }
+        }
+
         default: { }
       }
     },
