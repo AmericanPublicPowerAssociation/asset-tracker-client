@@ -2,7 +2,7 @@
 
 import {
   DELETE_ASSET,
-  MAKE_ASSET_NAME,
+  FILL_ASSET_NAME,
   REFRESH_ASSETS,
   SAVE_ASSETS,
   SET_ASSET,
@@ -12,6 +12,8 @@ import {
   SET_ASSET_CONNECTION,
   SET_ASSET_CONNECTION_ATTRIBUTE,
   SET_ASSET_VALUE,
+  SET_EDITING_ASSET,
+  SET_EDITING_ASSET_VALUE,
   SET_FOCUSING_ASSET_ID,
   UPLOAD_ASSETS_CSV,
 } from '../constants'
@@ -80,10 +82,24 @@ export function setFocusingAssetId(id) {
   }
 }
 
-export function makeAssetName(assetId, position) {
+export function setEditingAsset(asset) {
   return {
-    type: MAKE_ASSET_NAME,
-    payload: { assetId, position },
+    type: SET_EDITING_ASSET,
+    payload: asset,
+  }
+}
+
+export function setEditingAssetValue(key, value) {
+  return {
+    type: SET_EDITING_ASSET_VALUE,
+    payload: { key, value },
+  }
+}
+
+export function fillAssetName(assetId, feature) {
+  return {
+    type: FILL_ASSET_NAME,
+    payload: { assetId, feature },
   }
 }
 

@@ -17,7 +17,8 @@ import {
   makeBusId,
 } from '../routines'
 
-export function makeAsset(assetId, assetTypeCode) {
+export function makeEditingAsset(assetTypeCode) {
+  const assetId = makeAssetId()
   const connectionByIndex = {}
   const asset = {
     id: assetId,

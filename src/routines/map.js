@@ -72,3 +72,9 @@ export function getFeaturePack({ editContext, updatedData }) {
   const feature = features[featureIndex]
   return [featureIndex, feature]
 }
+
+export function updateFeature(feature, asset) {
+  const featureProperties = feature.properties
+  featureProperties.id = asset.id
+  featureProperties.typeCode = asset.typeCode
+}

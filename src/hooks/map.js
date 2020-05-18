@@ -1,12 +1,13 @@
-import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { produce } from 'immer'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import { ViewMode } from '@nebula.gl/edit-modes'
 import {
-  makeAssetName,
+  fillAssetName,
   setAsset,
   // setAssetConnection,
   setAssetsGeoJson,
+  setEditingAsset,
   setFocusingAssetId,
   setFocusingBusId,
   setMapViewState,
@@ -23,6 +24,7 @@ import {
   // PICKING_RADIUS_IN_PIXELS,
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_ASSET,
+  SKETCH_MODE_ADD_LINE,
   // SKETCH_MODE_EDIT,
 } from '../constants'
 import {
@@ -31,34 +33,20 @@ import {
   getFeaturePack,
   getMapMode,
   // getPickedEditHandle,
-  makeAsset,
-  makeAssetId,
+  makeBusId,
+  makeEditingAsset,
+  updateFeature,
 } from '../routines'
 import {
   getAssetIdByBusId,
   getAssetsGeoJson,
   getBusesGeoJson,
   getColors,
+  getEditingAsset,
   getSelectedAssetIndexes,
   getSelectedBusIndexes,
   getSketchMode,
 } from '../selectors'
-
-const EDITING_ASSET_ID_BY_MAP_ID = {}
-
-function getEditingAssetId(mapId) {
-  return EDITING_ASSET_ID_BY_MAP_ID[mapId]
-}
-
-function makeEditingAssetId(mapId) {
-  const assetId = makeAssetId()
-  EDITING_ASSET_ID_BY_MAP_ID[mapId] = assetId
-  return assetId
-}
-
-function clearEditingAssetId(mapId) {
-  delete EDITING_ASSET_ID_BY_MAP_ID[mapId]
-}
 
 export function useMovableMap() {
   const dispatch = useDispatch()
@@ -69,9 +57,10 @@ export function useMovableMap() {
   }
 }
 
-export function useEditableMap(mapId, deckGL) {
+export function useEditableMap(deckGL) {
   const dispatch = useDispatch()
   const sketchMode = useSelector(getSketchMode)
+  let editingAsset = useSelector(getEditingAsset)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
   const busesGeoJson = useSelector(getBusesGeoJson)
   const selectedAssetIndexes = useSelector(getSelectedAssetIndexes)
@@ -79,17 +68,6 @@ export function useEditableMap(mapId, deckGL) {
   const assetIdByBusId = useSelector(getAssetIdByBusId)
   const colors = useSelector(getColors)
   const assetTypeCode = getAssetTypeCode(sketchMode)
-
-  function addAsset(position) {
-    if (getEditingAssetId()) return
-    const assetId = makeEditingAssetId()
-    const asset = makeAsset(assetId, assetTypeCode)
-    dispatch(setAsset(asset))
-    dispatch(setFocusingAssetId(assetId))
-    dispatch(makeAssetName(assetId, position))
-    console.log('add asset', asset)
-    return asset
-  }
 
   function getAssetsMapLayer() {
     const mapMode = getMapMode(sketchMode)
@@ -99,7 +77,10 @@ export function useEditableMap(mapId, deckGL) {
       console.log('asset edit', editType, editContext, updatedData)
 
       if (editType === 'addTentativePosition') {
-        addAsset(editContext.position)
+        if (!editingAsset.id) {
+          editingAsset = makeEditingAsset(assetTypeCode)
+          dispatch(setEditingAsset(editingAsset))
+        }
         /*
         if (featureGeometryType === 'LineString') {
           console.log(editContext)
@@ -117,16 +98,24 @@ export function useEditableMap(mapId, deckGL) {
         console.log('finishMovePosition', event)
       } else if (editType === 'addFeature') {
         const [featureIndex, feature] = getFeaturePack(event)
-        const featureGeometry = feature.geometry
-        const featureProperties = feature.properties
-        if (featureGeometry.type === 'Point') {
-          addAsset(featureGeometry.coordinates)
+        let asset = editingAsset
+        if (!asset.id) {
+          asset = makeEditingAsset(assetTypeCode)
+        } else if (sketchMode === SKETCH_MODE_ADD_LINE) {
+          const vertexCount = feature.geometry.coordinates.length
+          asset = produce(asset, draft => {
+            draft.connections[vertexCount - 1] = {
+              busId: makeBusId(),
+            }
+          })
         }
-        featureProperties.id = getEditingAssetId()
-        featureProperties.typeCode = assetTypeCode
-        clearEditingAssetId()  // Prepare for next asset
+        const assetId = asset.id
+        updateFeature(feature, asset)
+        dispatch(setAsset(asset))
+        dispatch(fillAssetName(assetId, feature))
+        dispatch(setFocusingAssetId(assetId))
         dispatch(setSelectedAssetIndexes([featureIndex]))
-        dispatch(setSketchMode(SKETCH_MODE_ADD))  // Add one asset at a time
+        dispatch(setSketchMode(SKETCH_MODE_ADD))  // Add one at a time
       }
       dispatch(setAssetsGeoJson(updatedData))
     }
