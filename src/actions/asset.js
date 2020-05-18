@@ -2,8 +2,9 @@
 
 import {
   DELETE_ASSET,
-  MAKE_ASSET_NAME,
+  FILL_ASSET_NAME,
   REFRESH_ASSETS,
+  REMOVE_LINE_END_POINT,
   SAVE_ASSETS,
   SET_ASSET,
   SET_ASSETS,
@@ -12,6 +13,8 @@ import {
   SET_ASSET_CONNECTION,
   SET_ASSET_CONNECTION_ATTRIBUTE,
   SET_ASSET_VALUE,
+  SET_EDITING_ASSET,
+  SET_EDITING_ASSET_VALUE,
   SET_FOCUSING_ASSET_ID,
   UPLOAD_ASSETS_CSV,
 } from '../constants'
@@ -33,7 +36,7 @@ export function saveAssets() {
 }
 
 export function deleteAsset(assetId){
-  return { type: DELETE_ASSET, payload: assetId }
+  return { type: DELETE_ASSET, payload: { assetId } }
 }
 
 export function setAssetValue(assetId, key, value) {
@@ -80,10 +83,24 @@ export function setFocusingAssetId(id) {
   }
 }
 
-export function makeAssetName(feature) {
+export function setEditingAsset(asset) {
   return {
-    type: MAKE_ASSET_NAME,
-    payload: feature,
+    type: SET_EDITING_ASSET,
+    payload: asset,
+  }
+}
+
+export function setEditingAssetValue(key, value) {
+  return {
+    type: SET_EDITING_ASSET_VALUE,
+    payload: { key, value },
+  }
+}
+
+export function fillAssetName(assetId, feature) {
+  return {
+    type: FILL_ASSET_NAME,
+    payload: { assetId, feature },
   }
 }
 
@@ -91,5 +108,14 @@ export function uploadAssetsCsv(payload) {
   return {
     type: UPLOAD_ASSETS_CSV,
     payload,
+  }
+}
+
+export function removeLineEndPoint(
+  assetId, assetVertexIndex, largestAssetVertexIndex,
+) {
+  return {
+    type: REMOVE_LINE_END_POINT,
+    payload: { assetId, assetVertexIndex, largestAssetVertexIndex },
   }
 }

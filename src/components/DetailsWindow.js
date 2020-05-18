@@ -18,6 +18,7 @@ import {
   OVERLAY_MODE_TASKS,
 } from '../constants'
 import {
+  getEditingAsset,
   getFocusingAsset,
   getOverlayMode,
 } from '../selectors'
@@ -68,8 +69,11 @@ export default function DetailsWindow({ isWithTables }) {
   const classes = useStyles()
   const overlayMode = useSelector(getOverlayMode)
   const focusingAsset = useSelector(getFocusingAsset)
+  const editingAsset = useSelector(getEditingAsset)
   const [expand, setExpand] = useState(false)
+  // TODO: Use consistent useMediaQuery string
   const isNotMobile = useMediaQuery(theme.breakpoints.up('sm'))
+  const asset = editingAsset.id ? editingAsset : focusingAsset
 
   const DetailsPanel = {
     [OVERLAY_MODE_ASSETS]: AssetAttributesPanel,
@@ -77,10 +81,10 @@ export default function DetailsWindow({ isWithTables }) {
     [OVERLAY_MODE_RISKS]: AssetRisksPanel,
   }[overlayMode]
 
-  const detailsPanel = focusingAsset ?
+  const detailsPanel = asset ?
     <DetailsPanel
       className={classes.root}
-      asset={focusingAsset}
+      asset={asset}
       // tasks={focusingTasks}
       response={isNotMobile}
       isDetailsWindowExpanded={expand}
@@ -101,7 +105,7 @@ export default function DetailsWindow({ isWithTables }) {
         {detailsPanel}
       </Paper>
     </Dialog>
-  ) : (isNotMobile || focusingAsset ?
+  ) : (isNotMobile || asset ?
     <Paper className={clsx(!isNotMobile ? classes.responsive : classes.root, {
       [classes.withTables]: isWithTables,
     })}>

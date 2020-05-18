@@ -1,6 +1,7 @@
 import produce from 'immer'
 import {
   DELETE_ASSET,
+  REMOVE_LINE_END_POINT,
   SET_ASSET,
   SET_ASSETS,
   SET_ASSET_ATTRIBUTE,
@@ -58,9 +59,31 @@ const assetById = (state = initialState, action) => {
       })
     }
     case DELETE_ASSET: {
-      const assetId = action.payload
+      const { assetId } = action.payload
       return produce(state, draft => {
         draft[assetId]['is_deleted'] = true
+      })
+    }
+    case REMOVE_LINE_END_POINT: {
+      const {
+        assetId,
+        assetVertexIndex,
+        largestAssetVertexIndex } = action.payload
+      return produce(state, draft => {
+        const asset = draft[assetId]
+        const connections = asset.connections
+        if (assetVertexIndex === 0) {
+          delete connections[0]
+          for (const [index, connection] of Object.entries(connections))
+            connections[index-1] = connection
+
+          if (!connections[0]) connections[0] = ''
+          delete connections[largestAssetVertexIndex]
+        }
+        else if (assetVertexIndex === largestAssetVertexIndex) {
+          delete connections[largestAssetVertexIndex]
+          connections[largestAssetVertexIndex-1] = ''
+        }
       })
     }
     default: {

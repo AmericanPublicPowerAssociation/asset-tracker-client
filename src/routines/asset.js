@@ -17,28 +17,22 @@ import {
   makeBusId,
 } from '../routines'
 
-export function makeAsset(
-  feature,
-) {
-  const featureProperties = feature.properties
-  const featureGeometry = feature.geometry
-  const assetId = featureProperties.id
-  const assetTypeCode = featureProperties.typeCode
+export function makeEditingAsset(assetTypeCode) {
+  const assetId = makeAssetId()
   const connectionByIndex = {}
   const asset = {
     id: assetId,
     typeCode: assetTypeCode,
     name: assetId,
     connections: connectionByIndex,
+    variables: {},  // Hold temporary variables
   }
   const bus0Id = makeBusId()
   const bus1Id = makeBusId()
 
   switch (assetTypeCode) {
     case ASSET_TYPE_CODE_LINE: {
-      const lastVertexIndex = featureGeometry.coordinates.length - 1
       connectionByIndex[0] = { busId: bus0Id }
-      connectionByIndex[lastVertexIndex] = { busId: bus1Id }
       break
     }
     case ASSET_TYPE_CODE_METER: {
@@ -50,10 +44,9 @@ export function makeAsset(
       connectionByIndex[1] = { busId: bus1Id }
       break
     }
-    default: {
-      break
-    }
+    default: { }
   }
+
   return asset
 }
 

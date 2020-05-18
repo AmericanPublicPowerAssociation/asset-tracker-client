@@ -11,6 +11,7 @@ import {
   setFocusingBusId,
   setSelectedAssetIndexes,
   setSelectedBusIndexes,
+  setPanMapToAsset,
 } from '../actions'
 import {
   getAssetsGeoJson,
@@ -35,7 +36,7 @@ export default function TablesWindow(props) {
   const overlayMode = useSelector(getOverlayMode)
 
   function getHeaderLabel(header) {
-    const result = header.replace( /([A-Z])/g, ' $1')
+    const result = header.replace(/([A-Z])/g, ' $1')
     var headerLabel = result.charAt(0).toUpperCase() + result.slice(1)
     return headerLabel
   }
@@ -46,8 +47,14 @@ export default function TablesWindow(props) {
     ))
     dispatch(setFocusingAssetId(assetId))
     dispatch(setFocusingBusId(null))
-    dispatch(setSelectedAssetIndexes([selectedIndex]))
-    dispatch(setSelectedBusIndexes([]))
+    setSelectedAssetIndexes([selectedIndex])
+    setSelectedBusIndexes([])
+    if (selectedIndex > -1)
+      panToAsset(features[selectedIndex])
+  }
+
+  function panToAsset(assetGeoJson) {
+    dispatch(setPanMapToAsset(assetGeoJson))
   }
 
   const pageSizeOptions = [5, 10]

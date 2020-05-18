@@ -20,7 +20,7 @@ const assetsGeoJson = (state=initialState, action) => {
       return assetsGeoJson
     }
     case DELETE_ASSET: {
-      const assetId = action.payload
+      const { assetId } = action.payload
       const features = state.features.filter( (asset) => (
         assetId !== asset.properties.id
       ))

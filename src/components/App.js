@@ -1,3 +1,5 @@
+// TODO: Have a single useMediaQuery in App and decide mobile vs desktop components at App level
+
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import useTheme from '@material-ui/core/styles/useTheme'
@@ -101,7 +103,6 @@ export default function App() {
         setIsWithDetails={setIsWithDetails}
         setIsWithTables={setIsWithTables}
       />
-      <OverlaysWindow />
       <OverlaysWindow />
     {isWithDetails &&
       <DetailsWindow
