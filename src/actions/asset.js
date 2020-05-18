@@ -33,7 +33,7 @@ export function saveAssets() {
   return { type: SAVE_ASSETS }
 }
 
-export function deleteAsset(assetId, assetIdsByBusId){
+export function deleteAsset(assetId){
   return { type: DELETE_ASSET, payload: { assetId } }
 }
 
@@ -95,9 +95,11 @@ export function uploadAssetsCsv(payload) {
   }
 }
 
-export function removeLineEndPoint(payload) {
+export function removeLineEndPoint(
+  assetId, assetVertexIndex, largestAssetVertexIndex,
+) {
   return {
     type: REMOVE_LINE_END_POINT,
-    payload,
+    payload: { assetId, assetVertexIndex, largestAssetVertexIndex },
   }
 }

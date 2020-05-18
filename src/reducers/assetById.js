@@ -65,17 +65,24 @@ const assetById = (state = initialState, action) => {
       })
     }
     case REMOVE_LINE_END_POINT: {
-      const { assetId, assetVertexIndex, connection } = action.payload
+      const {
+        assetId,
+        assetVertexIndex,
+        largestAssetVertexIndex } = action.payload
       return produce(state, draft => {
-        if (assetVertexIndex !== 0)
-          draft[assetId].connections[assetVertexIndex] = connection
-        else {
-          const asset =  draft[assetId]
-          const connections = asset.connections
-          for (const [index, connection] of Object.entries(connections)) {
-            if (index === 0 ) continue
+        const asset = draft[assetId]
+        const connections = asset.connections
+        if (assetVertexIndex === 0) {
+          delete connections[0]
+          for (const [index, connection] of Object.entries(connections))
             connections[index-1] = connection
-          }
+
+          if (!connections[0]) connections[0] = ''
+          delete connections[largestAssetVertexIndex]
+        }
+        else if (assetVertexIndex === largestAssetVertexIndex) {
+          delete connections[largestAssetVertexIndex]
+          connections[largestAssetVertexIndex-1] = ''
         }
       })
     }

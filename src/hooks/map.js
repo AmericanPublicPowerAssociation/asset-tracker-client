@@ -35,7 +35,6 @@ import {
 } from '../routines'
 import {
   getAssetIdByBusId,
-  getAssetIdsByBusId,
   getAssetsGeoJson,
   getBusesGeoJson,
   getColors,
@@ -63,7 +62,6 @@ export function useEditableMap(deckGL) {
   const selectedAssetIndexes = useSelector(getSelectedAssetIndexes)
   const selectedBusIndexes = useSelector(getSelectedBusIndexes)
   const assetIdByBusId = useSelector(getAssetIdByBusId)
-  const assetIdsByBusId = useSelector(getAssetIdsByBusId)
   const colors = useSelector(getColors)
 
   function getAssetsMapLayer() {
@@ -102,7 +100,7 @@ export function useEditableMap(deckGL) {
       }
       else if (editType === 'removePosition') {
         console.log('edit remove')
-        const { featureIndexes, positionIndexes, position } = editContext
+        const { featureIndexes, positionIndexes } = editContext
         const { features } = updatedData
         const positionIndex = positionIndexes[0]
         const featureIndex = featureIndexes[0]
@@ -114,7 +112,7 @@ export function useEditableMap(deckGL) {
           if (coordinatesLength === positionIndex || positionIndex === 0) {
             // it is one endpoint of line
             // dispatch(setAssetConnection(assetId, positionIndex, ''))
-            // dispatch(removeLineEndPoint(assetId, positionIndex, ''))
+            dispatch(removeLineEndPoint(assetId, positionIndex, coordinatesLength))
           }
         }
       }
@@ -234,8 +232,10 @@ export function useEditableMap(deckGL) {
         }
       }
       else if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
-        dispatch(setFocusingAssetId(targetAssetId))
-        dispatch(setFocusingBusId(targetBusId))
+        if (targetAssetId) {
+          dispatch(setFocusingAssetId(targetAssetId))
+          dispatch(setFocusingBusId(targetBusId))
+        }
       }
     }
 
