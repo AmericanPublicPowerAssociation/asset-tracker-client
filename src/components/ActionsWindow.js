@@ -23,7 +23,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function ActionsWindow({
   setIsWithImportExport,
-  // TODO: Rename
   isWithImportExport,
 }) {
   const classes = useStyles()

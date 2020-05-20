@@ -92,7 +92,6 @@ export default function App() {
       <SketchModeToolbar />
       <SketchAddToolbar />
       <ActionsWindow
-        // TODO: Rename
         isWithImportExport={isViewing}
         setIsWithImportExport={setIsWithImportExport}
       />
