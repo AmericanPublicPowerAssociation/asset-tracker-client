@@ -17,12 +17,12 @@ import {
 import { Checkbox } from '@material-ui/core'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import {DropzoneArea} from "material-ui-dropzone"
-import Grid from "@material-ui/core/Grid"
-import {uploadAssetsCsv} from "../actions"
-import Select from "@material-ui/core/Select"
-import MenuItem from "@material-ui/core/MenuItem"
-import {ASSET_TYPE_CODE_TRANSFORMER} from "../constants"
+import { DropzoneArea } from 'material-ui-dropzone'
+import Grid from '@material-ui/core/Grid'
+import { uploadAssetsCsv } from '../actions'
+import Select from '@material-ui/core/Select'
+import MenuItem from '@material-ui/core/MenuItem'
+import { ASSET_TYPE_CODE_TRANSFORMER } from '../constants'
 
 export default function ImportExportDialog({
     open,
@@ -42,7 +42,7 @@ export default function ImportExportDialog({
     clearOnUnmount: false,
     getDropRejectMessage: (rejectedFile, acceptedFiles, maxFileSize) => {
       return `File ${rejectedFile.name} was rejected. Only supports CSV files.`
-    }
+    },
   }
 
   const [powerId, setPowerId] = useState('')
@@ -93,7 +93,7 @@ export default function ImportExportDialog({
             setOverwriteRecords(false)
             setConfirmOverwriteRecords(false)
             onClose()
-          }
+          },
         }))
       }
     }
