@@ -364,14 +364,17 @@ export function useEditableMap(deckGL) {
         }
         case 'Delete':
         case 'Backspace': {
-          if (sketchMode.startsWith(SKETCH_MODE_EDIT)) {
+          if (
+            sketchMode === SKETCH_MODE_ADD ||
+            sketchMode === SKETCH_MODE_EDIT
+          ) {
             dispatch(setFocusingAssetId(null))
             dispatch(setFocusingBusId(null))
             dispatch(setSelectedAssetIndexes([]))
             dispatch(deleteAsset(focusingAssetId))
           }
+          break
         }
-
         default: { }
       }
     },
