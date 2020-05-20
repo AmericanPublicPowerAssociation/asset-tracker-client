@@ -146,6 +146,9 @@ export function useEditableMap(deckGL) {
                 depth: PICKING_DEPTH,
               })
               const nearbyBusFeatures = nearbyBusInfos.map(info => info.object)
+              // TODO: Consider whether we need to filter bus features instead of this
+              // TODO: This assumes that nearbyBusFeatures is in sorted order
+              // TODO: Case length >= 2 happens when moving endpoint from nowhere to bus
               const newBusIndex = nearbyBusFeatures.length === 1 ? 0 : 1
               const newBusId = (nearbyBusFeatures.length) ?
                   nearbyBusFeatures[newBusIndex].properties.id :
