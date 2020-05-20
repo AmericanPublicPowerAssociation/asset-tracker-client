@@ -22,8 +22,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function ActionsWindow({
-  setIsWithImportExport,
   isWithImportExport,
+  setIsWithImportExport,
 }) {
   const classes = useStyles()
   const colors = useSelector(getColors)
