@@ -117,9 +117,14 @@ export function useEditableMap(deckGL) {
           const vertexCount = editingAssetFeature ?
             editingAssetFeature.geometry.coordinates.length : 1
           console.log('vertexCount', vertexCount)
-          // Add connection to nearby bus if one exists
+          // Add connection to nearby bus or make a new bus
+          let busId
           if (nearbyBusFeatures.length) {
-            const busId = nearbyBusFeatures[0].properties.id
+            busId = nearbyBusFeatures[0].properties.id
+          } else if (vertexCount === 1) {
+            busId = makeBusId()
+          }
+          if (busId) {
             editingAsset = produce(editingAsset, draft => {
               draft.connections[vertexCount - 1] = { busId }
             })
@@ -135,9 +140,9 @@ export function useEditableMap(deckGL) {
 
         switch (asset.properties.typeCode) {
           case ASSET_TYPE_CODE_LINE: {
-            const assetVerticesLength = asset.geometry.coordinates.length
+            const assetVertexCount = asset.geometry.coordinates.length
             const assetVertexIndex = positionIndexes[0]
-            if (assetVertexIndex === 0 || assetVertexIndex === assetVerticesLength-1) {
+            if (assetVertexIndex === 0 || assetVertexIndex === assetVertexCount - 1) {
               // endpoints only
               const screenCoords = deckGL.current.viewports[0].project(position)
               const nearbyBusInfos = deckGL.current.pickMultipleObjects({
@@ -170,9 +175,7 @@ export function useEditableMap(deckGL) {
           const vertexCount = feature.geometry.coordinates.length
           if (!editingAsset.connections[vertexCount - 1]) {
             editingAsset = produce(editingAsset, draft => {
-              draft.connections[vertexCount - 1] = {
-                busId: makeBusId(),
-              }
+              draft.connections[vertexCount - 1] = { busId: makeBusId() }
             })
           }
         }
@@ -183,8 +186,7 @@ export function useEditableMap(deckGL) {
         dispatch(setFocusingAssetId(assetId))
         dispatch(setSelectedAssetIndexes([featureIndex]))
         dispatch(setSketchMode(SKETCH_MODE_ADD))  // Add one at a time
-      }
-      else if (editType === 'removePosition') {
+      } else if (editType === 'removePosition') {
         console.log('edit remove')
         const { featureIndexes, positionIndexes } = editContext
         const { features } = updatedData
@@ -198,7 +200,8 @@ export function useEditableMap(deckGL) {
           if (coordinatesLength === positionIndex || positionIndex === 0) {
             // it is one endpoint of line
             // dispatch(setAssetConnection(assetId, positionIndex, ''))
-            dispatch(removeLineEndPoint(assetId, positionIndex, coordinatesLength))
+            dispatch(removeLineEndPoint(
+              assetId, positionIndex, coordinatesLength - 1))
           }
         }
       }
