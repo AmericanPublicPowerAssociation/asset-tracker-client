@@ -118,7 +118,7 @@ export default function AssetTasksPanel({ asset }) {
   const [dialog, setDialog] = useState(false)	   
   const [taskDetails, setTaskDetails] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
-  const [taskFilter, setTaskFilter] = useState(null)
+  const [taskFilter, setTaskFilter] = useState(false)
 
   function handleClickToCreateAddTask() {
     setDialog(false)
@@ -128,11 +128,23 @@ export default function AssetTasksPanel({ asset }) {
     setPriority(priorityTypeNormal)
   }
 
+  const notArchived = (task) => { return task.status !== TASK_ARCHIVE_STATUS && task.status !== TASK_STATUS_CANCELLED }
+  const isArchived = (task) => { return task.status === TASK_ARCHIVE_STATUS || task.status === TASK_STATUS_CANCELLED }
+
   const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
     task => (
-      !archived ?
-      task.status !== TASK_ARCHIVE_STATUS && task.status !== TASK_STATUS_CANCELLED && task.priority === taskFilter :
-      task.status === TASK_ARCHIVE_STATUS || task.status === TASK_STATUS_CANCELLED && task.priority === taskFilter
+      taskFilter ?
+        (
+          !archived ?
+            notArchived(task) && task.priority === taskFilter :
+            isArchived(task) && task.priority === taskFilter
+        )
+      :
+        (
+          !archived ?
+            notArchived(task) :
+            isArchived(task)
+        )
     ),
   )
 
@@ -166,6 +178,7 @@ export default function AssetTasksPanel({ asset }) {
         >
           <MenuItem onClick={selectTaskFilter} value={10}>Normal</MenuItem>
           <MenuItem onClick={selectTaskFilter} value={100}>Important</MenuItem>
+          <MenuItem onClick={selectTaskFilter} value={null}>Clear</MenuItem>
         </Menu>
       </div>
     </FormGroup>
