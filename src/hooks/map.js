@@ -129,6 +129,36 @@ export function useEditableMap(deckGL) {
               draft.connections[vertexCount - 1] = { busId }
             })
           }
+          // If there is a nearby asset
+          if (nearbyAssetFeatures.length) {
+            if (nearbyBusFeatures.length) {
+              console.log('NEARBY ASSET && NEARBY BUS')
+              // If there was a nearby bus, do nothing
+            } else {
+              console.log('NEARBY ASSET && NOT NEARBY BUS')
+              const nearbyAssetFeature = nearbyAssetFeatures[0]
+              // If the nearby asset was a line,
+              if (nearbyAssetFeature.type === 'LineString') {
+                console.log('NEARBY LINESTRING')
+
+                nearbyAssetFeature.geometry.coordinates
+
+                // Get nearest vertex if within picking distance
+                // 1. convert vertices to pixel coordinates
+                // 2. get distance to each
+                // 3. sort
+                // 4. check if within picking distance
+                // 5. if yes, then use this vertexIndex
+                // 6. if no, then make point on line and use that vertexIndex
+                // 6.1 get nearest point on line
+                // 6.2 insert that point as a vertex on line
+                // 6.3 update feature geometry
+                // 6.4 update downstream connection vertices
+                //
+                // 7. add connection
+              }
+            }
+          }
         }
         dispatch(setEditingAsset(editingAsset))
       } else if (editType === 'finishMovePosition') {
