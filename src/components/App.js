@@ -14,7 +14,7 @@ import OverlaysWindow from './OverlaysWindow'
 import DetailsWindow from './DetailsWindow'
 import TablesWindow from './TablesWindow'
 import TablesDialog from './TablesDialog'
-// import ImportExportDialog from './ImportExportDialog'
+import ImportExportDialog from './ImportExportDialog'
 // import AssetDeleteDialog from './AssetDeleteDialog'
 import {
   refreshRisks,
@@ -26,6 +26,7 @@ import {
 import {
   IS_WITH_DETAILS,
   IS_WITH_TABLES,
+  IS_WITH_IMPORT_EXPORT,
 } from '../constants'
 import {
   getIsViewing,
@@ -54,12 +55,10 @@ export default function App() {
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
   // const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-  /*
   const [
-    isImportExportDialogOpen,
-    setIsImportExportDialogOpen,
-  ] = useState(false)
-  */
+    isWithImportExport,
+    setIsWithImportExport,
+  ] = useState(IS_WITH_IMPORT_EXPORT)
 
   usePreventWindowUnload(!isViewing)
 
@@ -94,8 +93,8 @@ export default function App() {
       <SketchAddToolbar />
       <ActionsWindow
         // TODO: Rename
-        // disableExportAndExport={sketchMode !== SKETCH_MODE_VIEW}
-        // showImportExportDialog={() => setIsImportExportDialogOpen(true)}
+        isWithImportExport={isViewing}
+        setIsWithImportExport={setIsWithImportExport}
       />
       <OptionsWindow
         isWithDetails={isWithDetails}
@@ -120,15 +119,12 @@ export default function App() {
         setIsWithTables={setIsWithTables}
       />
     )}
-    {/*
       <ImportExportDialog
-        open={isImportExportDialogOpen}
-        onOk={() => {setIsImportExportOpen(false)}}
-        onCancel={() => {setIsImportExportDialogOpen(false)}}
-        onClose={()=> {setIsImportExportDialogOpen(false)}}
-        toggleDetailsWindow={() => setIsWithDetails(!isWithDetails)}
-        toggleTablesWindow={() => setIsWithTables(!isWithTables)}
+        open={isWithImportExport}
+        onCancel={() => {setIsWithImportExport(false)}}
+        onClose={()=> {setIsWithImportExport(false)}}
       />
+    {/*
       <ImportExportDialog
         onOk={element => {
           window.location = `/assets.dss?source=${element}`
