@@ -196,9 +196,9 @@ export function useEditableMap(deckGL) {
           const coordinatesLength = geometry.coordinates.length
           const assetId = feature.properties.id
           if (coordinatesLength === positionIndex || positionIndex === 0) {
-            // it is one endpoint of line
-            // dispatch(setAssetConnection(assetId, positionIndex, ''))
-            dispatch(removeLineEndPoint(assetId, positionIndex, coordinatesLength))
+            // it is one endpoint of  the line
+            dispatch(removeLineEndPoint(assetId, positionIndex, coordinatesLength - 1))
+            dispatch(setSelectedAssetIndexes([]))
           }
         }
       }
