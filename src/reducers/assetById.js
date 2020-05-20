@@ -9,6 +9,9 @@ import {
   SET_ASSET_CONNECTION_ATTRIBUTE,
   SET_ASSET_VALUE,
 } from '../constants'
+import {
+  makeBusId,
+} from '../routines'
 
 const initialState = {}
 
@@ -67,23 +70,30 @@ const assetById = (state = initialState, action) => {
     case REMOVE_LINE_END_POINT: {
       const {
         assetId,
-        assetVertexIndex,
-        largestAssetVertexIndex } = action.payload
+        selectedAssetVertexIndex,
+        largestAssetVertexIndex,
+      } = action.payload
       return produce(state, draft => {
         const asset = draft[assetId]
-        const connections = asset.connections
-        if (assetVertexIndex === 0) {
+        let connections = asset.connections
+        console.log('old connections', JSON.parse(JSON.stringify(draft[assetId]['connections'])))
+        if (selectedAssetVertexIndex === 0) {
           delete connections[0]
-          for (const [index, connection] of Object.entries(connections))
-            connections[index-1] = connection
+          const newConnections = Object.entries(connections).reduce( (newConnection, [key, connection]) => {
+            newConnection[key - 1] = connection
+            return newConnection
+          }, {} )
 
-          if (!connections[0]) connections[0] = ''
-          delete connections[largestAssetVertexIndex]
+          if (!newConnections[0])
+            newConnections[0] = { busId: makeBusId() }
+          draft[assetId]['connections'] =  newConnections
         }
-        else if (assetVertexIndex === largestAssetVertexIndex) {
-          delete connections[largestAssetVertexIndex]
-          connections[largestAssetVertexIndex-1] = ''
+        else if (selectedAssetVertexIndex > largestAssetVertexIndex) {
+          delete connections[selectedAssetVertexIndex]
+          if (!connections[largestAssetVertexIndex])
+            connections[largestAssetVertexIndex] = { busId: makeBusId() }
         }
+        console.log('new connections', JSON.parse(JSON.stringify(draft[assetId]['connections'])))
       })
     }
     default: {
