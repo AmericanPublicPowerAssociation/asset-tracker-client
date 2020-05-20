@@ -112,10 +112,10 @@ export function uploadAssetsCsv(payload) {
 }
 
 export function removeLineEndPoint(
-  assetId, assetVertexIndex, largestAssetVertexIndex,
+  assetId, selectedAssetVertexIndex, largestAssetVertexIndex,
 ) {
   return {
     type: REMOVE_LINE_END_POINT,
-    payload: { assetId, assetVertexIndex, largestAssetVertexIndex },
+    payload: { assetId, selectedAssetVertexIndex, largestAssetVertexIndex },
   }
 }
