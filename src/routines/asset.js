@@ -31,10 +31,12 @@ export function makeEditingAsset(assetTypeCode) {
   const bus1Id = makeBusId()
 
   switch (assetTypeCode) {
+    /*
     case ASSET_TYPE_CODE_LINE: {
       connectionByIndex[0] = { busId: bus0Id }
       break
     }
+    */
     case ASSET_TYPE_CODE_METER: {
       connectionByIndex[0] = { busId: bus0Id }
       break
