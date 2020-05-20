@@ -25,7 +25,7 @@ export default function OptionsWindow({
   isWithDetails,
   isWithTables,
   setIsWithTables,
-  toggleDetailsWindow,
+  setIsWithDetails,
 }) {
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -46,7 +46,9 @@ export default function OptionsWindow({
       <Tooltip title='Toggle Details'>
         <IconButton
           className={isWithDetails ? activeColor : inactiveColor}
-          onClick={() => toggleDetailsWindow}
+          onClick={() => {
+            setIsWithDetails( prevState => !prevState)
+          }}
         >
           <DetailsIcon />
         </IconButton>

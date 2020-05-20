@@ -129,7 +129,7 @@ export default function AssetTasksPanel({ asset }) {
 
   const listTasks = (<>
     <FormGroup row>
-      <TextField id="search" label="Search task" value={query}
+      <TextField fullWidth id="search" label="Search task" value={query}
         onChange={(e) => setQuery(e.target.value) } />
       <FormControlLabel control={
         <Switch checked={archived} onChange={ () => setArchived(!archived) } value="archived" />}
