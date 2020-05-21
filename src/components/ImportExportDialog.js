@@ -45,7 +45,7 @@ export default function ImportExportDialog({
     },
   }
 
-  const [powerId, setPowerId] = useState('')
+  const [powerName, setPowerName] = useState('')
   const [action, setAction] = useState('download')
   const [format, setFormat] = useState('dss')
   const [overwriteRecords, setOverwriteRecords] = useState(false)
@@ -66,13 +66,13 @@ export default function ImportExportDialog({
         type: assetTypeByCode[assetType]['name'],
       }
   })
-  if (data !== null && data !== undefined && data.length > 0 && powerId === '') {
-    setPowerId(data[0].id)
+  if (data !== null && data !== undefined && data.length > 0 && powerName === '') {
+    setPowerName(data[0].id)
   }
   function selectAction() {
     if (action === 'download') {
       if (format === 'dss') {
-        window.location = `/assets.dss?source=${powerId}`
+        window.location = `/assets.dss?source=${powerName}`
       }
       if (format === 'csv') {
         window.location = '/assets.csv'
@@ -159,10 +159,10 @@ export default function ImportExportDialog({
                     <>
                       <Typography component='p'>Select the power source</Typography>
                       <Select
-                        onChange={(e) => setPowerId(e.target.value)} value={powerId}
+                        onChange={(e) => setPowerName(e.target.value)} value={powerName}
                         input={<Input id='asset-type-select' />}
                       >
-                        {data.map((asset) => <MenuItem value={asset.id} key={asset.id}>{asset.name}</MenuItem>)}
+                        {data.map((asset) => <MenuItem value={asset.name} key={asset.name}>{asset.name}</MenuItem>)}
                       </Select></> : <></>
                   }
                 </FormControl>
