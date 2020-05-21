@@ -117,7 +117,7 @@ export default function AssetTasksPanel({ asset }) {
   const [priority, setPriority] = useState(priorityTypeNormal)
   const [dialog, setDialog] = useState(false)	   
   const [taskDetails, setTaskDetails] = useState(false)
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState(false)
   const [taskFilter, setTaskFilter] = useState(false)
 
   function handleClickToCreateAddTask() {
