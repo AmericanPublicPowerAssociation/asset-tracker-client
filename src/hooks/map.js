@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { produce } from 'immer'
+import getNearestPointOnLine from '@turf/nearest-point-on-line'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import { ViewMode } from '@nebula.gl/edit-modes'
 import {
@@ -7,6 +8,7 @@ import {
   deleteAsset,
   removeLineEndPoint,
   fillAssetName,
+  insertAssetVertex,
   setAsset,
   setAssetConnection,
   setAssetsGeoJson,
@@ -81,7 +83,8 @@ export function useEditableMap(deckGL) {
     const mapMode = getMapMode(sketchMode)
 
     function handleAssetEdit(event) {
-      const { editType, editContext, updatedData } = event
+      const { editType, editContext } = event
+      let { updatedData } = event
       console.log('asset edit', editType, editContext, updatedData)
 
       if (editType === 'addTentativePosition') {
@@ -129,31 +132,119 @@ export function useEditableMap(deckGL) {
               draft.connections[vertexCount - 1] = { busId }
             })
           }
+          const nearbyAssetInfo = nearbyAssetInfos.find(info => !info.object.properties.guideType)
           // If there is a nearby asset
-          if (nearbyAssetFeatures.length) {
+          if (nearbyAssetInfo) {
+            const nearbyAssetIndex = nearbyAssetInfo.index
+            const { features } = updatedData
+            const lineFeature = features[nearbyAssetIndex]
+
+            const nearbyAssetFeature = nearbyAssetInfo.object
             if (nearbyBusFeatures.length) {
               console.log('NEARBY ASSET && NEARBY BUS')
               // If there was a nearby bus, do nothing
             } else {
               console.log('NEARBY ASSET && NOT NEARBY BUS')
-              const nearbyAssetFeature = nearbyAssetFeatures[0]
               // If the nearby asset was a line,
-              if (nearbyAssetFeature.type === 'LineString') {
+              if (nearbyAssetFeature.geometry.type === 'LineString') {
                 console.log('NEARBY LINESTRING')
-
-                nearbyAssetFeature.geometry.coordinates
-
-                // Get nearest vertex if within picking distance
+                const lineMapVertices = nearbyAssetFeature.geometry.coordinates
+                console.log('MAP VERTICES', lineMapVertices)
+                // ==> Get nearest vertex if within picking distance
                 // 1. convert vertices to pixel coordinates
+                const linePixelVertices = lineMapVertices.map(
+                  _ => deckGL.current.viewports[0].project(_))
+                console.log('PIXEL VERTICES', linePixelVertices)
                 // 2. get distance to each
-                // 3. sort
+                const distances = linePixelVertices.map(([x, y]) => Math.hypot(x - screenCoords[0], y - screenCoords[1]))
+                console.log('DISTANCES', distances)
+                // 3. get index of nearest
+                function argMin(array) {
+                  // put into macros
+                  // https://gist.github.com/engelen/fbce4476c9e68c52ff7e5c2da5c24a28
+                  return array.map((x, i) => [x, i]).reduce((r, a) => (a[0] < r[0] ? a : r))[1]
+                }
+                const nearestVertexIndex = argMin(distances)
+                console.log('NEAREST VERTEX INDEX', nearestVertexIndex)
                 // 4. check if within picking distance
-                // 5. if yes, then use this vertexIndex
-                // 6. if no, then make point on line and use that vertexIndex
-                // 6.1 get nearest point on line
-                // 6.2 insert that point as a vertex on line
-                // 6.3 update feature geometry
-                // 6.4 update downstream connection vertices
+                const nearestVertexDistance = distances[nearestVertexIndex]
+                console.log('NEAREST VERTEX DISTANCE', nearestVertexDistance)
+                console.log('PICKING RADIUS IN PIXELS', PICKING_RADIUS_IN_PIXELS)
+
+                let vertexIndex
+                if (nearestVertexDistance < PICKING_RADIUS_IN_PIXELS) {
+                  // 5. if yes, then use this vertexIndex
+                  vertexIndex = nearestVertexIndex
+                  console.log('IS NEAR VERTEX')
+                  const lineAssetId = lineFeature.properties.id
+                  if (!busId) busId = makeBusId()
+                  dispatch(setAssetConnection(
+                    lineAssetId,
+                    vertexIndex,
+                    { busId },
+                  ))
+                } else {
+                  // 6. if no, then make point on line and use that vertexIndex
+                  console.log('IS TOO FAR FROM VERTEX')
+                  // 6.1 get nearest point on line
+                  const nearestPointOnLine = getNearestPointOnLine(nearbyAssetFeature, {
+                    type: 'Feature',
+                    geometry: {
+                      type: 'Point',
+                      coordinates: position,
+                    },
+                  })
+                  const nearestPointOnLinePosition = nearestPointOnLine.geometry.coordinates
+                  const nearestPointOnLinePriorIndex = nearestPointOnLine.properties.index
+                  // console.log(nearestPointOnLinePosition, nearestPointOnLinePriorIndex)
+                  // 6.2 insert that point as a vertex on line
+                  const lineGeometry = lineFeature.geometry
+                  const oldXYs = lineGeometry.coordinates
+                  const newXYs = [
+                    ...oldXYs.slice(0, nearestPointOnLinePriorIndex + 1),
+                    nearestPointOnLinePosition,
+                    ...oldXYs.slice(nearestPointOnLinePriorIndex + 1, oldXYs.length),
+                  ]
+                  console.log('BEFORE', oldXYs)
+                  console.log('AFTER', newXYs)
+                  /*
+                  // Insert new coordinate after index, remove 0 items
+                  lineXYs.splice(nearestPointOnLinePriorIndex, 0, nearestPointOnLinePosition)
+                  lineGeometry.coordinates = newXYs
+                  lineFeature.geometry = produce(lineGeometry, draft => {
+                    draft.coordinates.splice(nearestPointOnLinePriorIndex, 0, nearestPointOnLinePosition)
+                  })
+                  lineFeature.geometry = {
+                    type: 'LineString',
+                    coordinates: newXYs,
+                  }
+                  updatedData[nearbyAssetIndex] = {
+                    type: 'Feature',
+                    geometry: {
+                      type: 'LineString',
+                      coordinates: newXYs,
+                    },
+                    properties: lineFeature.properties,
+                  }
+                  */
+                  // lineFeature.properties.xyz = 1
+                  updatedData = produce(updatedData, draft => {
+                    draft.features[nearbyAssetIndex].geometry.coordinates = newXYs
+                  })
+                  // 6.3 update feature geometry
+                  // see above
+                  // 6.4 update downstream connection vertices
+                  const lineAssetId = lineFeature.properties.id
+                  if (!busId) busId = makeBusId()
+                  dispatch(insertAssetVertex(lineAssetId, nearestVertexIndex, {
+                    busId,
+                  }))
+
+                  // for each connection below index
+                  // bump it forward
+                  // connect to index
+                }
+
                 //
                 // 7. add connection
               }
