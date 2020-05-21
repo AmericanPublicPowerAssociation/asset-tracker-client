@@ -8,7 +8,6 @@ import {
   SET_TASKS,
   SET_TASK_COMMENTS,
   SET_TASK_COMMENT_COUNT,
-  SET_TASK_NAME,
   UPDATE_TASK,
 } from '../constants'
 
@@ -20,8 +19,8 @@ export function setTasks(assets) {
   return { type: SET_TASKS, payload: assets }
 }
 
-export function setTaskName(id, name) {
-  return { type: SET_TASK_NAME, payload: { id, name } }
+export function setTaskName(taskId, name) {
+  return { type: UPDATE_TASK, payload: { taskId, name } }
 }
 
 export function setTaskComments({ taskId, comments }) {
