@@ -29,6 +29,7 @@ import FilterListIcon from '@material-ui/icons/FilterList'
 
 import {
   addTask,
+  refreshTaskComments,
 } from '../actions'
 import {
   TASK_ARCHIVE_STATUS,
@@ -149,6 +150,7 @@ export default function AssetTasksPanel({ asset }) {
   )
 
   const handleDisplayDetails = (task) => {
+    dispatch(refreshTaskComments(task.id))
     setTaskDetails(task)
   }
 
