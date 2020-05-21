@@ -2,7 +2,9 @@
 
 import {
   DELETE_ASSET,
+  DELETE_ASSET_VERTEX,
   FILL_ASSET_NAME,
+  INSERT_ASSET_VERTEX,
   REFRESH_ASSETS,
   REMOVE_LINE_END_POINT,
   SAVE_ASSETS,
@@ -117,5 +119,26 @@ export function removeLineEndPoint(
   return {
     type: REMOVE_LINE_END_POINT,
     payload: { assetId, selectedAssetVertexIndex, largestAssetVertexIndex },
+  }
+}
+
+export function insertAssetVertex(
+  assetId,
+  assetVertexIndex,
+  connection,
+) {
+  return {
+    type: INSERT_ASSET_VERTEX,
+    payload: { assetId, assetVertexIndex, connection },
+  }
+}
+
+export function deleteAssetVertex(
+  assetId,
+  assetVertexIndex,
+) {
+  return {
+    type: DELETE_ASSET_VERTEX,
+    payload: { assetId, assetVertexIndex },
   }
 }
