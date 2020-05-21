@@ -154,7 +154,7 @@ export default function AssetTasksPanel({ asset }) {
 
   const selectTaskFilter = (event) => {
     setTaskFilter(event.target.value)
-    setAnchorEl(null)
+    setAnchorEl(false)
   }
 
   const listTasks = (<>
@@ -174,11 +174,11 @@ export default function AssetTasksPanel({ asset }) {
           anchorEl={anchorEl}
           keepMounted
           open={Boolean(anchorEl)}
-          onClose={() => setAnchorEl(null)}
+          onClose={() => setAnchorEl(false)}
         >
           <MenuItem onClick={selectTaskFilter} value={10}>Normal</MenuItem>
           <MenuItem onClick={selectTaskFilter} value={100}>Important</MenuItem>
-          <MenuItem onClick={selectTaskFilter} value={null}>Clear</MenuItem>
+          <MenuItem onClick={selectTaskFilter} value={false}>Clear</MenuItem>
         </Menu>
       </div>
     </FormGroup>
