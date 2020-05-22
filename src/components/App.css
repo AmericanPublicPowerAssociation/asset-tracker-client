@@ -1,3 +1,7 @@
+.do-not-scroll {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
 .black {
   color: black !important;
 }

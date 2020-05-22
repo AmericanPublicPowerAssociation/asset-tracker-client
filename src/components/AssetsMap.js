@@ -30,7 +30,9 @@ export default function AssetsMap() {
   const { mapLayers, handleMapKey, handleMapClick } = useEditableMap(deckGL)
 
   return (
-    <div onKeyUp={handleMapKey}>
+    <div onKeyUp={handleMapKey}
+      style={{ overflowX: 'hidden', overflowY: 'hidden' }}
+    >
       <DeckGL
         ref={deckGL}
         layers={mapLayers}

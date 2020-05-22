@@ -135,6 +135,7 @@ export function useEditableMap(deckGL) {
             busId = makeBusId()
           }
           if (busId) {
+            console.log('ADDING BUS HERE')
             editingAsset = produce(editingAsset, draft => {
               draft.connections[vertexCount - 1] = { busId }
             })
@@ -237,6 +238,7 @@ export function useEditableMap(deckGL) {
             }
           }
         }
+        console.log(editingAsset)
         dispatch(setEditingAsset(editingAsset))
       } else if (editType === 'finishMovePosition') {
         const { position, positionIndexes, featureIndexes } = editContext
@@ -303,14 +305,15 @@ export function useEditableMap(deckGL) {
             })
           }
         }
+        console.log(editingAsset)
         const assetId = editingAsset.id
         updateFeature(feature, editingAsset)
         // TODO: Consider combining into a single dispatch
         dispatch(setAsset(editingAsset))
         dispatch(fillAssetName(assetId, feature))
+        dispatch(setSketchMode(SKETCH_MODE_ADD))  // Add one at a time
         dispatch(setFocusingAssetId(assetId))
         dispatch(setSelectedAssetIndexes([featureIndex]))
-        dispatch(setSketchMode(SKETCH_MODE_ADD))  // Add one at a time
       }
 
       dispatch(setAssetsGeoJson(updatedData))

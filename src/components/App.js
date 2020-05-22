@@ -68,7 +68,7 @@ export default function App() {
     dispatch(refreshRisks())
   }, [dispatch])
   return (
-    <div>
+    <div style={{ overflowX: 'hidden', overflowY: 'hidden' }}>
       <AssetsMap
         // openAssetDeleteDialog={ () => setIsDeleteDialogOpen(true) }
       />
