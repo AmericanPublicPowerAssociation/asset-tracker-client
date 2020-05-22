@@ -3,7 +3,6 @@ import {
   DELETE_ASSET,
   DELETE_ASSET_VERTEX,
   INSERT_ASSET_VERTEX,
-  REMOVE_LINE_END_POINT,
   SET_ASSET,
   SET_ASSETS,
   SET_ASSET_ATTRIBUTE,
@@ -12,6 +11,7 @@ import {
   SET_ASSET_VALUE,
 } from '../constants'
 import {
+  getNewConnectionByIndex,
   makeBusId,
 } from '../routines'
 
@@ -77,12 +77,10 @@ const assetById = (state = initialState, action) => {
       } = action.payload
       return produce(state, draft => {
         const asset = draft[assetId]
-        const connectionByIndex = asset.connections
-        for (const [oldIndex, oldConnection] of Object.entries(connectionByIndex)) {
-          const newIndex = oldIndex > vertexIndex ?
-            parseInt(oldIndex) + 1 : oldIndex
-          connectionByIndex[newIndex] = oldConnection
-        }
+        const afterIndex = vertexIndex
+        const indexOffset = 1
+        const connectionByIndex = getNewConnectionByIndex(
+          asset.connections, afterIndex, indexOffset)
         connectionByIndex[vertexIndex + 1] = connection
         asset.connections = connectionByIndex
       })
@@ -90,37 +88,25 @@ const assetById = (state = initialState, action) => {
     case DELETE_ASSET_VERTEX: {
       const {
         assetId,
-        vertexIndex,
-      } = action.payload
-      break
-    }
-    case REMOVE_LINE_END_POINT: {
-      const {
-        assetId,
-        selectedAssetVertexIndex,
-        largestAssetVertexIndex,
+        oldVertexIndex,
+        newVertexCount,
       } = action.payload
       return produce(state, draft => {
         const asset = draft[assetId]
-        let connections = asset.connections
-        console.log('old connections', JSON.parse(JSON.stringify(draft[assetId]['connections'])))
-        if (selectedAssetVertexIndex === 0) {
-          delete connections[0]
-          const newConnections = Object.entries(connections).reduce( (newConnection, [key, connection]) => {
-            newConnection[key - 1] = connection
-            return newConnection
-          }, {} )
-
-          if (!newConnections[0])
-            newConnections[0] = { busId: makeBusId() }
-          draft[assetId]['connections'] =  newConnections
+        const afterIndex = oldVertexIndex - 1
+        const indexOffset = -1
+        const connectionByIndex = getNewConnectionByIndex(
+          asset.connections, afterIndex, indexOffset)
+        // If we are deleting the last endpoint,
+        if (oldVertexIndex === newVertexCount) {
+          const lastVertexIndex = newVertexCount - 1
+          // Make sure the new endpoint has a bus
+          if (!connectionByIndex[lastVertexIndex]) {
+            connectionByIndex[lastVertexIndex] = { busId: makeBusId() }
+          }
         }
-        else if (selectedAssetVertexIndex > largestAssetVertexIndex) {
-          delete connections[selectedAssetVertexIndex]
-          if (!connections[largestAssetVertexIndex])
-            connections[largestAssetVertexIndex] = { busId: makeBusId() }
-        }
-        console.log('new connections', JSON.parse(JSON.stringify(draft[assetId]['connections'])))
+        console.log(connectionByIndex)
+        asset.connections = connectionByIndex
       })
     }
     default: {

@@ -136,11 +136,12 @@ export function insertAssetVertex(
 
 export function deleteAssetVertex(
   assetId,
-  vertexIndex,
+  oldVertexIndex,
+  newVertexCount,
 ) {
   return {
     type: DELETE_ASSET_VERTEX,
-    payload: { assetId, vertexIndex },
+    payload: { assetId, oldVertexIndex, newVertexCount },
   }
 }
 

@@ -23,7 +23,6 @@ import {
   getAssetsGeoJson,
   getAssetTypeByCode,
   getMapWebMercatorViewPort,
-  getMapViewState,
 } from '../selectors'
 
 function cancellablePromise(promise) {

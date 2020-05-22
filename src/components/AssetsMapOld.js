@@ -20,40 +20,6 @@
 *        show snackbar
 */
 
-
-  function handleAssetsGeoJsonEdit({ editType, editContext, updatedData }) {
-    switch(editType) {
-      // If a feature is being added for the first time,
-      case 'addFeature': {
-        const features = updatedData.features
-        const { featureIndexes } = editContext
-        // Add an asset corresponding to the feature
-        const assetTypeCode = getAssetTypeCode(sketchMode)
-        const assetType = assetTypeByCode[assetTypeCode]
-        const asset = makeAsset(assetType, lineBusId)
-        dispatch(setAsset(asset))
-        // Store assetId in feature
-        const assetId = asset.id
-        for (let i = 0; i < featureIndexes.length; i++) {
-          const featureIndex = featureIndexes[i]
-          const feature = features[featureIndex]
-          feature.properties.id = assetId
-          feature.properties.typeCode = assetTypeCode
-        }
-        // If the new feature is a line,
-        if (sketchMode === SKETCH_MODE_ADD_LINE) {
-          // Have subsequent clicks extend the same line
-          setSelectedAssetIndexes(featureIndexes)
-        } else {
-          changeSketchMode(SKETCH_MODE_ADD)
-        }
-        dispatch(setFocusingAssetId(assetId))  // Show details for the new asset
-        break
-      }
-      default: {}
-    }
-  }
-
   function handleAssetsGeoJsonInterpret(event) {
     // Find nearest bus
     const screenCoords = event.screenCoords
@@ -154,4 +120,3 @@
     }
   }
   */
-

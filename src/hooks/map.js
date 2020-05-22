@@ -4,8 +4,9 @@ import getNearestPointOnLine from '@turf/nearest-point-on-line'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import { ViewMode } from '@nebula.gl/edit-modes'
 import {
+  // setSelectedBusIndexes,
   deleteAsset,
-  removeLineEndPoint,
+  deleteAssetVertex,
   fillAssetName,
   insertAssetVertex,
   setAsset,
@@ -17,7 +18,6 @@ import {
   setHoverInfo,
   setMapViewState,
   setSelectedAssetIndexes,
-  // setSelectedBusIndexes,
   setSketchMode,
 } from '../actions'
 import {
@@ -36,12 +36,12 @@ import {
   SKETCH_MODE_EDIT,
 } from '../constants'
 import {
+  // getPickedEditHandle,
   CustomEditableGeoJsonLayer,
+  getAssetDescription,
   getAssetTypeCode,
   getFeaturePack,
   getMapMode,
-  // getPickedEditHandle,
-  getAssetDescription,
   makeBusId,
   makeEditingAsset,
   updateFeature,
@@ -72,16 +72,17 @@ export function useMovableMap() {
 export function useEditableMap(deckGL) {
   const dispatch = useDispatch()
   const sketchMode = useSelector(getSketchMode)
-  let editingAsset = useSelector(getEditingAsset)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
   const busesGeoJson = useSelector(getBusesGeoJson)
+  const colors = useSelector(getColors)
   const focusingAssetId = useSelector(getFocusingAssetId)
   const selectedAssetIndexes = useSelector(getSelectedAssetIndexes)
   const selectedBusIndexes = useSelector(getSelectedBusIndexes)
   const assetIdByBusId = useSelector(getAssetIdByBusId)
   const assetById = useSelector(getAssetById)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
-  const colors = useSelector(getColors)
+  let editingAsset = useSelector(getEditingAsset)
+
   const assetTypeCode = getAssetTypeCode(sketchMode)
   const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
 
@@ -273,6 +274,18 @@ export function useEditableMap(deckGL) {
           }
           default: {}
         }
+      } else if (editType === 'removePosition') {
+        console.log('removePosition', event)
+        const { featureIndexes, positionIndexes } = editContext
+        const { features } = updatedData
+        const removedPositionIndex = positionIndexes[0]
+        const feature = features[featureIndexes[0]]
+        const featureProperties = feature.properties
+        if (featureProperties.typeCode === ASSET_TYPE_CODE_LINE) {
+          const vertexCount = feature.geometry.coordinates.length
+          const assetId = featureProperties.id
+          dispatch(deleteAssetVertex(assetId, removedPositionIndex, vertexCount))
+        }
       } else if (editType === 'addFeature') {
         const [featureIndex, feature] = getFeaturePack(event)
         if (!editingAsset.id) {
@@ -293,25 +306,6 @@ export function useEditableMap(deckGL) {
         dispatch(setFocusingAssetId(assetId))
         dispatch(setSelectedAssetIndexes([featureIndex]))
         dispatch(setSketchMode(SKETCH_MODE_ADD))  // Add one at a time
-      } else if (editType === 'removePosition') {
-        console.log('edit remove')
-        const { featureIndexes, positionIndexes } = editContext
-        const { features } = updatedData
-        const positionIndex = positionIndexes[0]
-        const featureIndex = featureIndexes[0]
-        const feature = features[featureIndex]
-        const geometry =  feature['geometry']
-        if (feature.properties.typeCode === ASSET_TYPE_CODE_LINE) {
-          const coordinatesLength = geometry.coordinates.length
-          const assetId = feature.properties.id
-          if (coordinatesLength === positionIndex || positionIndex === 0) {
-            // it is one endpoint of line
-            dispatch(removeLineEndPoint(
-              assetId, positionIndex, coordinatesLength - 1))
-            // TODO: FIX
-            dispatch(setSelectedAssetIndexes([]))
-          }
-        }
       }
 
       dispatch(setAssetsGeoJson(updatedData))
@@ -344,12 +338,6 @@ export function useEditableMap(deckGL) {
         dispatch(setFocusingAssetId(targetAssetId))
       }
     }
-
-    /*
-    function handleLayerDoubleClick(event) {
-      console.log('layer double click', event)
-    }
-    */
 
     function handleLayerStopDragging(event) {
       console.log('layer stop dragging', event)
@@ -412,7 +400,6 @@ export function useEditableMap(deckGL) {
       onHover: handleAssetHover,
       onClick: handleAssetClick,
       onEdit: handleAssetEdit,
-      // onDoubleClick: handleLayerDoubleClick,
       onStopDragging: handleLayerStopDragging,
     })
   }
@@ -439,8 +426,8 @@ export function useEditableMap(deckGL) {
       const targetBusId = info.object && info.object.properties.id
       const targetAssetId = assetIdByBusId[targetBusId]
 
-      // If we are not adding a specific type of asset,
       /*
+      // If we are not adding a specific type of asset,
       if (sketchMode === SKETCH_MODE_ADD) {
         const assetInfos = deckGL.current.pickMultipleObjects({
           x: info.x,

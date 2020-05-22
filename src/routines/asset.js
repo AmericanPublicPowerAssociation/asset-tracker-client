@@ -93,3 +93,17 @@ export function getAssetDescription(assetId, assetById, assetTypeByCode) {
   const assetType = assetTypeByCode[asset.typeCode]
   return assetType.name + ' ' + asset.name
 }
+
+export function getNewConnectionByIndex(
+  connectionByIndex,
+  afterIndex,
+  indexOffset,
+) {
+  const newConnectionByIndex = {}
+  for (const [oldIndex, oldConnection] of Object.entries(connectionByIndex)) {
+    const newIndex = oldIndex > afterIndex ?
+      parseInt(oldIndex) + indexOffset : oldIndex
+    newConnectionByIndex[newIndex] = oldConnection
+  }
+  return newConnectionByIndex
+}
