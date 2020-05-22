@@ -47,8 +47,8 @@ export default function TablesWindow(props) {
     ))
     dispatch(setFocusingAssetId(assetId))
     dispatch(setFocusingBusId(null))
-    setSelectedAssetIndexes([selectedIndex])
-    setSelectedBusIndexes([])
+    dispatch(setSelectedAssetIndexes([selectedIndex]))
+    dispatch(setSelectedBusIndexes([]))
     if (selectedIndex > -1)
       panToAsset(features[selectedIndex])
   }
