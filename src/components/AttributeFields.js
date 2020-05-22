@@ -12,18 +12,17 @@ import {
 import {
   getAttributeLabel,
 } from '../routines'
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import {makeStyles} from "@material-ui/core/styles";
+import MenuItem from '@material-ui/core/MenuItem'
+import Select from '@material-ui/core/Select'
+import FormControl from '@material-ui/core/FormControl'
+import InputLabel from '@material-ui/core/InputLabel'
+import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme =>  ({
   fullSelect:  {
-    width: '100%'
+    width: '100%',
   },
   fixLabelPosition: {
-    'marginLeft': '10px',
     'textTransform': 'capitalize',
   },
   singleOption: {
@@ -34,8 +33,8 @@ const useStyles = makeStyles(theme =>  ({
     justifyContent: 'center',
     flexWrap: 'wrap',
     padding: theme.spacing(0.5),
-  }
-}));
+  },
+}))
 
 export default function AttributeFields(props) {
   const {
@@ -123,8 +122,8 @@ function AttributeField(props) {
       InputLabelProps={{ classes: { root: 'capitalized' } }}
     />
   } else if (Array.isArray(attributeType) ) {
-    return <FormControl className={classes.fullSelect}>
-      <InputLabel shrink id={`${attributeKey}-${assetId}`} className={classes.fixLabelPosition}>
+    return <FormControl variant='filled' className={classes.fullSelect}>
+      <InputLabel id={`${attributeKey}-${assetId}`} className={classes.fixLabelPosition}>
         {getAttributeLabel(attributeKey)}
       </InputLabel>
       <Select
