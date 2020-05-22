@@ -125,12 +125,12 @@ export function removeLineEndPoint(
 
 export function insertAssetVertex(
   assetId,
-  vertexIndex,
+  afterIndex,
   connection,
 ) {
   return {
     type: INSERT_ASSET_VERTEX,
-    payload: { assetId, vertexIndex, connection },
+    payload: { assetId, afterIndex, connection },
   }
 }
 

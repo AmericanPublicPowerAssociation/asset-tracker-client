@@ -239,7 +239,6 @@ export function useEditableMap(deckGL) {
         }
         dispatch(setEditingAsset(editingAsset))
       } else if (editType === 'finishMovePosition') {
-        console.log('finishMovePosition', event)
         const { position, positionIndexes, featureIndexes } = editContext
         const { features } = updatedData
         const asset = features[featureIndexes[0]]
@@ -274,8 +273,14 @@ export function useEditableMap(deckGL) {
           }
           default: {}
         }
+      } else if (editType === 'addPosition') {
+        const { featureIndexes, positionIndexes } = editContext
+        const { features } = updatedData
+        const feature = features[featureIndexes[0]]
+        const assetId = feature.properties.id
+        const afterIndex = positionIndexes[0] - 1
+        dispatch(insertAssetVertex(assetId, afterIndex))
       } else if (editType === 'removePosition') {
-        console.log('removePosition', event)
         const { featureIndexes, positionIndexes } = editContext
         const { features } = updatedData
         const removedPositionIndex = positionIndexes[0]

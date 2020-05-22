@@ -70,18 +70,15 @@ const assetById = (state = initialState, action) => {
       })
     }
     case INSERT_ASSET_VERTEX: {
-      const {
-        assetId,
-        vertexIndex,
-        connection,
-      } = action.payload
+      const { assetId, afterIndex, connection } = action.payload
       return produce(state, draft => {
         const asset = draft[assetId]
-        const afterIndex = vertexIndex
         const indexOffset = 1
         const connectionByIndex = getNewConnectionByIndex(
           asset.connections, afterIndex, indexOffset)
-        connectionByIndex[vertexIndex + 1] = connection
+        if (connection) {
+          connectionByIndex[afterIndex + 1] = connection
+        }
         asset.connections = connectionByIndex
       })
     }
