@@ -2,14 +2,11 @@ import React, { useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
-import { TextLayer } from '@deck.gl/layers'
-import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import {
   PICKING_DEPTH,
   PICKING_RADIUS_IN_PIXELS,
-  SKETCH_MODE_VIEW,
 } from '../constants'
 import {
   useEditableMap,
@@ -66,7 +63,10 @@ function PopUp({ info }) {
       style={{ left: x + 16, top: y + 16 }}
       variant='outlined'
     >
-      <Typography noWrap>
+      <Typography
+        align='center'
+        // noWrap
+      >
         {text}
       </Typography>
     </Paper>

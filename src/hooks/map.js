@@ -45,7 +45,9 @@ import {
   updateFeature,
 } from '../routines'
 import {
+  getAssetById,
   getAssetIdByBusId,
+  getAssetTypeByCode,
   getAssetsGeoJson,
   getBusesGeoJson,
   getColors,
@@ -75,9 +77,20 @@ export function useEditableMap(deckGL, setHoverInfo) {
   const selectedAssetIndexes = useSelector(getSelectedAssetIndexes)
   const selectedBusIndexes = useSelector(getSelectedBusIndexes)
   const assetIdByBusId = useSelector(getAssetIdByBusId)
+  const assetById = useSelector(getAssetById)
+  const assetTypeByCode = useSelector(getAssetTypeByCode)
   const colors = useSelector(getColors)
   const assetTypeCode = getAssetTypeCode(sketchMode)
   const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
+
+  function getAssetDescription(assetId) {
+    let asset = assetById[assetId]
+    if (!asset) {
+      return null
+    }
+    const assetType = assetTypeByCode[asset.typeCode]
+    return assetType.name + ' ' + asset.name
+  }
 
   function getAssetsMapLayer() {
     const mapMode = getMapMode(sketchMode)
@@ -207,27 +220,6 @@ export function useEditableMap(deckGL, setHoverInfo) {
                   ]
                   console.log('BEFORE', oldXYs)
                   console.log('AFTER', newXYs)
-                  /*
-                  // Insert new coordinate after index, remove 0 items
-                  lineXYs.splice(nearestPointOnLinePriorIndex, 0, nearestPointOnLinePosition)
-                  lineGeometry.coordinates = newXYs
-                  lineFeature.geometry = produce(lineGeometry, draft => {
-                    draft.coordinates.splice(nearestPointOnLinePriorIndex, 0, nearestPointOnLinePosition)
-                  })
-                  lineFeature.geometry = {
-                    type: 'LineString',
-                    coordinates: newXYs,
-                  }
-                  updatedData[nearbyAssetIndex] = {
-                    type: 'Feature',
-                    geometry: {
-                      type: 'LineString',
-                      coordinates: newXYs,
-                    },
-                    properties: lineFeature.properties,
-                  }
-                  */
-                  // lineFeature.properties.xyz = 1
                   updatedData = produce(updatedData, draft => {
                     draft.features[nearbyAssetIndex].geometry.coordinates = newXYs
                   })
@@ -334,12 +326,15 @@ export function useEditableMap(deckGL, setHoverInfo) {
 
     function handleAssetHover(info) {
       const { x, y, object } = info
+      let d = null
       if (object) {
         const assetId = object.properties.id
-        setHoverInfo({ x, y, text: assetId })
-      } else {
-        setHoverInfo(null)
+        const text = getAssetDescription(assetId)
+        if (text) {
+          d = { x, y, text }
+        }
       }
+      setHoverInfo(d)
     }
 
     function handleAssetClick(info, event) {
@@ -433,8 +428,13 @@ export function useEditableMap(deckGL, setHoverInfo) {
     function handleBusHover(info) {
       const { x, y, object } = info
       if (object) {
-        const busId = object.properties.id
-        setHoverInfo({ x, y, text: busId })
+        const objectProperties = object.properties
+        const busId = objectProperties.id
+        const busIndex = objectProperties.index
+        const assetId = assetIdByBusId[busId]
+        const assetDescription = getAssetDescription(assetId)
+        const text = 'Bus ' + busIndex + ' of ' + assetDescription
+        setHoverInfo({ x, y, text })
       } else {
         setHoverInfo(null)
       }
