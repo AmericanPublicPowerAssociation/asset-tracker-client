@@ -62,22 +62,6 @@ export default function App() {
 
   usePreventWindowUnload(!isViewing)
 
-  /*
-  function changeSketchMode(newSketchMode, busId) {
-    if (sketchMode === SKETCH_MODE_ADD_LINE) {
-      const lineAssetId = getSelectedAssetId(selectedAssetIndexes, assetsGeoJson)
-      if (lineAssetId) {
-        dispatch(addAssetConnection(
-          lineAssetId,
-          busId || getRandomId(MINIMUM_BUS_ID_LENGTH)))
-      }
-    }
-    setLineBusId(null)
-    setSelectedBusIndexes([])
-    dispatch(setFocusingBusId(null))
-  }
-  */
-
   useEffect(() => {
     dispatch(refreshAssets())
     dispatch(refreshTasks())

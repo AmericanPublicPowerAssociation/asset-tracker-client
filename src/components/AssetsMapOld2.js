@@ -35,14 +35,6 @@ import {
 
   function handleAssetsGeoJsonClick(info, event, data) {
     const assetId = info.object.properties.id
-    if (assetId && sketchMode.startsWith(SKETCH_MODE_DELETE)) {
-      dispatch(setFocusingAssetId(null))
-      setSelectedAssetIndexes([])
-      setSelectedBusIndexes([])
-      dispatch(deleteAsset(assetId))
-      return
-    }
-    assetId && dispatch(setFocusingBusId(null))
     // Validate that were adding assets
     if (sketchMode.startsWith(SKETCH_MODE_ADD) || info.isGuide) {
       // Validate that were adding a line
@@ -125,40 +117,6 @@ import {
     const featureIndex = info.index
     setSelectedAssetIndexes([featureIndex])
     setSelectedBusIndexes([])
-  }
-
-  function handleAssetsGeoJsonEdit({editType, editContext, updatedData}) {
-    const splitLines = () => {};
-    switch(editType) {
-      // If a feature is being added for the first time,
-      case 'addFeature': {
-        const features = updatedData.features
-        const { featureIndexes } = editContext
-        // Add an asset corresponding to the feature
-        const assetTypeCode = getAssetTypeCode(sketchMode)
-        const assetType = assetTypeByCode[assetTypeCode]
-        const asset = makeAsset(assetType, lineBusId)
-        dispatch(setAsset(asset))
-        // Store assetId in feature
-        const assetId = asset.id
-        for (let i = 0; i < featureIndexes.length; i++) {
-          const featureIndex = featureIndexes[i]
-          const feature = features[featureIndex]
-          feature.properties.id = assetId
-          feature.properties.typeCode = assetTypeCode
-        }
-        // If the new feature is a line,
-        if (sketchMode === SKETCH_MODE_ADD_LINE) {
-          setSelectedAssetIndexes(featureIndexes)
-        } else {
-          changeSketchMode(SKETCH_MODE_ADD)
-        }
-        dispatch(setFocusingAssetId(assetId))  // Show details for the new asset
-        break
-      }
-      default: {}
-    }
-    dispatch(setAssetsGeoJson(updatedData))  // Update geojson for assets
   }
 
   function handleAssetsGeoJsonInterpret(event) {
@@ -252,16 +210,6 @@ import {
         changeSketchMode(SKETCH_MODE_ADD, busId)
       }
     }
-    else {
-      if (info.picked) {
-        const busIndex = info.index
-        setSelectedBusIndexes([busIndex])
-        dispatch(setFocusingBusId(busId))
-      }
-    }
-
-    // busId && dispatch(setFocusingBusId(busId))
-    assetId && dispatch(setFocusingAssetId(assetId))
   }
 
   function onKeyUp(e) {

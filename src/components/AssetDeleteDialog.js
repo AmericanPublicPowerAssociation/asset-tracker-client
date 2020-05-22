@@ -15,12 +15,10 @@ import {
 } from '../selectors'
 
 
-export default function AssetDeleteDialog(props) {
-  const {
-    onClose,
-    openDialog,
-    setSelectedAssetIndexes,
-  } = props
+export default function AssetDeleteDialog({
+  onClose,
+  openDialog,
+}) {
   const [input, setInput] = useState('')
   const focusingAssetId = useSelector(getFocusingAssetId) 
   const dispatch = useDispatch()
@@ -32,7 +30,6 @@ export default function AssetDeleteDialog(props) {
   function onConfirm(e) {
     if (input === focusingAssetId) {
       dispatch(deleteAsset(focusingAssetId))
-      setSelectedAssetIndexes([])
       onClose()
     }
   }

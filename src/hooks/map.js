@@ -4,7 +4,6 @@ import getNearestPointOnLine from '@turf/nearest-point-on-line'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import { ViewMode } from '@nebula.gl/edit-modes'
 import {
-  // makeAssetName,
   deleteAsset,
   removeLineEndPoint,
   fillAssetName,
@@ -17,6 +16,7 @@ import {
   setFocusingBusId,
   setMapViewState,
   setSelectedAssetIndexes,
+  // setSelectedBusIndexes,
   setSketchMode,
 } from '../actions'
 import {
@@ -302,6 +302,7 @@ export function useEditableMap(deckGL) {
         }
         const assetId = editingAsset.id
         updateFeature(feature, editingAsset)
+        // TODO: Consider combining into a single dispatch
         dispatch(setAsset(editingAsset))
         dispatch(fillAssetName(assetId, feature))
         dispatch(setFocusingAssetId(assetId))
@@ -322,6 +323,7 @@ export function useEditableMap(deckGL) {
             // it is one endpoint of line
             dispatch(removeLineEndPoint(
               assetId, positionIndex, coordinatesLength - 1))
+            // TODO: FIX
             dispatch(setSelectedAssetIndexes([]))
           }
         }
@@ -336,16 +338,11 @@ export function useEditableMap(deckGL) {
       if (!targetAssetId) {
         return
       }
-
       if (sketchMode === SKETCH_MODE_DELETE) {
-        dispatch(setSelectedAssetIndexes([]))
-        dispatch(setFocusingAssetId(null))
-        dispatch(setFocusingBusId(null))
         dispatch(deleteAsset(targetAssetId))
-      }
-      // If we are not adding a specific type of asset,
-      else if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
+      } else if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
         dispatch(setSelectedAssetIndexes([info.index]))
+        // dispatch(setSelectedBusIndexes([]))
         dispatch(setFocusingAssetId(targetAssetId))
       }
     }
@@ -488,13 +485,7 @@ export function useEditableMap(deckGL) {
         }
         case 'Delete':
         case 'Backspace': {
-          if (
-            sketchMode === SKETCH_MODE_ADD ||
-            sketchMode === SKETCH_MODE_EDIT
-          ) {
-            dispatch(setFocusingAssetId(null))
-            dispatch(setFocusingBusId(null))
-            dispatch(setSelectedAssetIndexes([]))
+          if (sketchMode in [SKETCH_MODE_ADD, SKETCH_MODE_EDIT]) {
             dispatch(deleteAsset(focusingAssetId))
           }
           break

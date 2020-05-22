@@ -1,4 +1,5 @@
 import {
+  DELETE_ASSET,
   SET_SELECTED_BUS_INDEXES,
 } from '../constants'
 
@@ -9,6 +10,9 @@ const selectedBusIndexes = (state=initialState, action) => {
     case SET_SELECTED_BUS_INDEXES: {
       const selectedBusIndexes = action.payload
       return selectedBusIndexes
+    }
+    case DELETE_ASSET: {
+      return []
     }
     default: {
       return state

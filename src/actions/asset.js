@@ -8,6 +8,7 @@ import {
   REFRESH_ASSETS,
   REMOVE_LINE_END_POINT,
   SAVE_ASSETS,
+  // SELECT_ASSET,
   SET_ASSET,
   SET_ASSETS,
   SET_ASSETS_GEOJSON,
@@ -124,21 +125,34 @@ export function removeLineEndPoint(
 
 export function insertAssetVertex(
   assetId,
-  assetVertexIndex,
+  vertexIndex,
   connection,
 ) {
   return {
     type: INSERT_ASSET_VERTEX,
-    payload: { assetId, assetVertexIndex, connection },
+    payload: { assetId, vertexIndex, connection },
   }
 }
 
 export function deleteAssetVertex(
   assetId,
-  assetVertexIndex,
+  vertexIndex,
 ) {
   return {
     type: DELETE_ASSET_VERTEX,
-    payload: { assetId, assetVertexIndex },
+    payload: { assetId, vertexIndex },
   }
 }
+
+/*
+// TODO: Consider whether to use this
+export function selectAsset(
+  assetId,
+  featureIndex,
+) {
+  return {
+    type: SELECT_ASSET,
+    payload: { assetId, featureIndex },
+  }
+}
+*/

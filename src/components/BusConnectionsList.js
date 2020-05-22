@@ -71,14 +71,15 @@ function useClickPreventionOnDoubleClick(onClick, onDoubleClick) {
     const waitForClick = cancellablePromise(delay(CLICK_DELAY))
     api.appendPendingPromise(waitForClick)
     return waitForClick.promise
-      .then( () => {
+      .then(() => {
         api.removePendingPromise(waitForClick)
         onClick(assetId)
       })
-      .catch( errorInfo => {
+      .catch(errorInfo => {
         api.removePendingPromise(waitForClick)
-        if (!errorInfo.isCancelled)
+        if (!errorInfo.isCancelled) {
           throw errorInfo.error
+        }
       })
   }
 
@@ -93,10 +94,6 @@ function useClickPreventionOnDoubleClick(onClick, onDoubleClick) {
 
 export default function BusConnectionsList({ connectedAssetIds }) {
   const dispatch = useDispatch()
-  const [onClick, onDoubleClick] = useClickPreventionOnDoubleClick(
-    onClickHighlight,
-    onClickFocusOnAsset,
-  )
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetById = useSelector(getAssetById)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
@@ -108,9 +105,14 @@ export default function BusConnectionsList({ connectedAssetIds }) {
 
   function onClickHighlight(assetId) {
     const features = assetsGeoJson.features
-    const index = features.findIndex( feature => feature.properties.id === assetId)
-    index > -1 && dispatch(setSelectedAssetIndexes([index]))
+    const index = features.findIndex(feature => feature.properties.id === assetId)
+    // TODO: Fix and consider replacing with TextLayer
+    // index > -1 && dispatch(setSelectedAssetIndexes([index]))
   }
+
+  const [onClick, onDoubleClick] = useClickPreventionOnDoubleClick(
+    onClickHighlight,
+    onClickFocusOnAsset)
 
   return (
     <List component='div' disablePadding>
@@ -122,9 +124,10 @@ export default function BusConnectionsList({ connectedAssetIds }) {
       const connectedAssetName = connectedAsset.name
       return (
         <ListItem
-          onClick={ () => onClick(connectedAssetId) }
-          onDoubleClick={ () => onDoubleClick(connectedAssetId) }
-          disableGutters component='div' key={connectedAssetIdIndex}>
+          onClick={() => onClick(connectedAssetId)}
+          onDoubleClick={() => onDoubleClick(connectedAssetId)}
+          disableGutters component='div' key={connectedAssetIdIndex}
+        >
           <Tooltip title={connectedAssetTypeName} placement='left'>
             <ListItemIcon>
               <AssetTypeSvgIcon assetTypeCode={connectedAssetTypeCode} />

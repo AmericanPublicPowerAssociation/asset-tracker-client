@@ -11,13 +11,14 @@ import {
 } from '../selectors'
 import {
   setFocusingAssetId,
+  setFocusingBusId,
+  setSelectedAssetIndexes,
+  // setSelectedBusIndexes,
+  // setPanMapToAsset,
 } from '../actions'
 
-export default function RisksTable(props) {
+export default function RisksTable() {
 	const dispatch = useDispatch()
-  const {
-    setSelectedAssetIndexes,
-  } = props
 	const risks = useSelector(getRisks)
 	const sortedRisks = useSelector(getSortedRisks)
   const { features } = useSelector(getAssetsGeoJson)
@@ -28,10 +29,19 @@ export default function RisksTable(props) {
   }, [dispatch, sortedRisks])
 
   function onRowClickCallBack(assetId) {
-    const selectedIndex = features.findIndex(
-      (feature) => feature.properties.id === assetId)
+    const selectedAssetIndexes = []
+    const selectedAssetIndex = features.findIndex(
+      feature => feature.properties.id === assetId)
+    if (selectedAssetIndex > -1) {
+      selectedAssetIndexes.push(selectedAssetIndex)
+      // TODO: Rename
+      // TODO: Combine below into a single dispatch
+      // dispatch(setPanMapToAsset(features[selectedAssetIndex]))
+    }
+    dispatch(setSelectedAssetIndexes(selectedAssetIndexes))
+    // dispatch(setSelectedBusIndexes([]))
     dispatch(setFocusingAssetId(assetId))
-    setSelectedAssetIndexes([selectedIndex])
+    dispatch(setFocusingBusId(null))
   }
 
   return (

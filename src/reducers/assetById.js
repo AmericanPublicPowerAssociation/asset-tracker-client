@@ -72,25 +72,25 @@ const assetById = (state = initialState, action) => {
     case INSERT_ASSET_VERTEX: {
       const {
         assetId,
-        assetVertexIndex,
+        vertexIndex,
         connection,
       } = action.payload
       return produce(state, draft => {
         const asset = draft[assetId]
         const connectionByIndex = asset.connections
         for (const [oldIndex, oldConnection] of Object.entries(connectionByIndex)) {
-          console.log('XXX', oldIndex, oldIndex + 1)
-          const newIndex = oldIndex > assetVertexIndex ?
+          const newIndex = oldIndex > vertexIndex ?
             parseInt(oldIndex) + 1 : oldIndex
           connectionByIndex[newIndex] = oldConnection
         }
-        connectionByIndex[assetVertexIndex + 1] = connection
+        connectionByIndex[vertexIndex + 1] = connection
         asset.connections = connectionByIndex
       })
     }
     case DELETE_ASSET_VERTEX: {
       const {
         assetId,
+        vertexIndex,
       } = action.payload
       break
     }

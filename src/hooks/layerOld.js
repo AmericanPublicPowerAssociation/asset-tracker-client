@@ -1,23 +1,3 @@
-handleLayerSelect(event) {
-  const info = getPickedInfo(event, pick => !pick.isGuide)
-  let assetId = info && info.object.properties.id
-  if (!assetId) {
-    return
-  }
-  let selectedAssetIndexes = [info.index]
-  if (sketchMode === SKETCH_MODE_DELETE) {
-    dispatch(deleteAsset(assetId))
-    selectedAssetIndexes = []
-    assetId = null
-  }
-  // Update selection in map
-  setSelectedAssetIndexes(selectedAssetIndexes)
-  setSelectedBusIndexes([])
-  // Update focus in detail
-  dispatch(setFocusingAssetId(assetId))
-  dispatch(setFocusingBusId(null))
-},
-
 handleLayerInterpret(event) {
   // const screenCoords = event.screenCoords
   // const newAssetFeature = getPickedFeature(event, pick => pick.isGuide)
