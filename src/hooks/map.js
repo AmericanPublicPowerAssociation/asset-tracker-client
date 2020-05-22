@@ -65,7 +65,7 @@ export function useMovableMap() {
   }
 }
 
-export function useEditableMap(deckGL) {
+export function useEditableMap(deckGL, setHoverInfo) {
   const dispatch = useDispatch()
   const sketchMode = useSelector(getSketchMode)
   let editingAsset = useSelector(getEditingAsset)
@@ -332,6 +332,16 @@ export function useEditableMap(deckGL) {
       dispatch(setAssetsGeoJson(updatedData))
     }
 
+    function handleAssetHover(info) {
+      const { x, y, object } = info
+      if (object) {
+        const assetId = object.properties.id
+        setHoverInfo({ x, y, text: assetId })
+      } else {
+        setHoverInfo(null)
+      }
+    }
+
     function handleAssetClick(info, event) {
       console.log('asset click', info, event)
       const targetAssetId = info.object && info.object.properties.id
@@ -411,6 +421,7 @@ export function useEditableMap(deckGL) {
       getLineColor: (feature, isSelected) => {
         return isSelected ? colors.assetSelect : colors.asset
       },
+      onHover: handleAssetHover,
       onClick: handleAssetClick,
       onEdit: handleAssetEdit,
       // onDoubleClick: handleLayerDoubleClick,
@@ -419,6 +430,15 @@ export function useEditableMap(deckGL) {
   }
 
   function getBusesMapLayer() {
+    function handleBusHover(info) {
+      const { x, y, object } = info
+      if (object) {
+        const busId = object.properties.id
+        setHoverInfo({ x, y, text: busId })
+      } else {
+        setHoverInfo(null)
+      }
+    }
     function handleBusClick(info, event) {
       console.log('bus click', info, event)
       const targetBusId = info.object && info.object.properties.id
@@ -464,6 +484,7 @@ export function useEditableMap(deckGL) {
       getFillColor: (feature, isSelected) => {
         return isSelected ? colors.busSelect : colors.bus
       },
+      onHover: handleBusHover,
       onClick: handleBusClick,
     })
   }
