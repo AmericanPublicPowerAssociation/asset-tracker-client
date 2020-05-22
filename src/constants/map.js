@@ -48,13 +48,13 @@ export const BUS_DISTANCE_IN_KILOMETERS_BY_CODE = Object.entries(
   return busDistanceInKilometersByCode
 }, {})
 
-/*
 export const PICKING_RADIUS_IN_PIXELS = Math.max(
   ...Object.values(ASSET_RADIUS_IN_METERS_BY_CODE)) + 1
 export const PICKING_DEPTH = 5
-*/
+/*
 export const PICKING_RADIUS_IN_PIXELS = 0
 export const PICKING_DEPTH = 3
+*/
 
 export const TOGGLE_MAP_STYLE = 'TOGGLE_MAP_STYLE'
 export const SET_MAP_VIEW_STATE = 'SET_MAP_VIEW_STATE'
