@@ -14,6 +14,7 @@ import {
   setEditingAsset,
   setFocusingAssetId,
   setFocusingBusId,
+  setHoverInfo,
   setMapViewState,
   setSelectedAssetIndexes,
   // setSelectedBusIndexes,
@@ -40,6 +41,7 @@ import {
   getFeaturePack,
   getMapMode,
   // getPickedEditHandle,
+  getAssetDescription,
   makeBusId,
   makeEditingAsset,
   updateFeature,
@@ -67,7 +69,7 @@ export function useMovableMap() {
   }
 }
 
-export function useEditableMap(deckGL, setHoverInfo) {
+export function useEditableMap(deckGL) {
   const dispatch = useDispatch()
   const sketchMode = useSelector(getSketchMode)
   let editingAsset = useSelector(getEditingAsset)
@@ -82,15 +84,6 @@ export function useEditableMap(deckGL, setHoverInfo) {
   const colors = useSelector(getColors)
   const assetTypeCode = getAssetTypeCode(sketchMode)
   const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
-
-  function getAssetDescription(assetId) {
-    let asset = assetById[assetId]
-    if (!asset) {
-      return null
-    }
-    const assetType = assetTypeByCode[asset.typeCode]
-    return assetType.name + ' ' + asset.name
-  }
 
   function getAssetsMapLayer() {
     const mapMode = getMapMode(sketchMode)
@@ -329,12 +322,12 @@ export function useEditableMap(deckGL, setHoverInfo) {
       let d = null
       if (object) {
         const assetId = object.properties.id
-        const text = getAssetDescription(assetId)
+        const text = getAssetDescription(assetId, assetById, assetTypeByCode)
         if (text) {
           d = { x, y, text }
         }
       }
-      setHoverInfo(d)
+      dispatch(setHoverInfo(d))
     }
 
     function handleAssetClick(info, event) {
@@ -427,17 +420,19 @@ export function useEditableMap(deckGL, setHoverInfo) {
   function getBusesMapLayer() {
     function handleBusHover(info) {
       const { x, y, object } = info
+      let d = null
       if (object) {
         const objectProperties = object.properties
         const busId = objectProperties.id
         const busIndex = objectProperties.index
         const assetId = assetIdByBusId[busId]
-        const assetDescription = getAssetDescription(assetId)
+        const assetDescription = getAssetDescription(
+          assetId, assetById, assetTypeByCode)
         const text = 'Bus ' + busIndex + ' of ' + assetDescription
-        setHoverInfo({ x, y, text })
+        d = { x, y, text }
       } else {
-        setHoverInfo(null)
       }
+      dispatch(setHoverInfo(d))
     }
     function handleBusClick(info, event) {
       console.log('bus click', info, event)

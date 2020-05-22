@@ -1,4 +1,5 @@
 import {
+  SET_HOVER_INFO,
   SET_PAN_MAP_TO_ASSET,
   SET_MAP_BOUNDING_BOX,
   SET_MAP_VIEW_STATE,
@@ -40,4 +41,8 @@ export function setSelectedBusIndexes(selectedBusIndexes) {
     type: SET_SELECTED_BUS_INDEXES,
     payload: selectedBusIndexes,
   }
+}
+
+export function setHoverInfo(info) {
+  return { type: SET_HOVER_INFO, payload: info }
 }

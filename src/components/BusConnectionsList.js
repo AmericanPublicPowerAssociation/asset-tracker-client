@@ -5,18 +5,25 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Tooltip from '@material-ui/core/Tooltip'
+import getCentroid from '@turf/centroid'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import {
   setFocusingAssetId,
-  setSelectedAssetIndexes,
+  setHoverInfo,
+  // setSelectedAssetIndexes,
 } from '../actions'
 import {
   CLICK_DELAY,
 } from '../constants'
 import {
+  getAssetDescription,
+} from '../routines'
+import {
   getAssetById,
   getAssetsGeoJson,
   getAssetTypeByCode,
+  getMapWebMercatorViewPort,
+  getMapViewState,
 } from '../selectors'
 
 function cancellablePromise(promise) {
@@ -39,7 +46,6 @@ function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-
 function useCancellablePromises() {
   const pendingPromises = useRef([])
 
@@ -61,7 +67,6 @@ function useCancellablePromises() {
     clearPendingPromises,
   }
 }
-
 
 function useClickPreventionOnDoubleClick(onClick, onDoubleClick) {
   const api = useCancellablePromises()
@@ -97,6 +102,7 @@ export default function BusConnectionsList({ connectedAssetIds }) {
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetById = useSelector(getAssetById)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
+  const mapWebMercatorViewPort = useSelector(getMapWebMercatorViewPort)
 
   function onClickFocusOnAsset(assetId) {
     dispatch(setFocusingAssetId(assetId))
@@ -104,10 +110,16 @@ export default function BusConnectionsList({ connectedAssetIds }) {
   }
 
   function onClickHighlight(assetId) {
-    const features = assetsGeoJson.features
-    const index = features.findIndex(feature => feature.properties.id === assetId)
+    const { features } = assetsGeoJson
+    const feature = features.find(feature => feature.properties.id === assetId)
+    const centroid = getCentroid(feature)
+    // const index = features.findIndex(feature => feature.properties.id === assetId)
     // TODO: Fix and consider replacing with TextLayer
     // index > -1 && dispatch(setSelectedAssetIndexes([index]))
+    // console.log(lngLatToWorld(centroid.geometry.coordinates))
+    const [x, y] = mapWebMercatorViewPort.project(centroid.geometry.coordinates)
+    const text = getAssetDescription(assetId, assetById, assetTypeByCode)
+    dispatch(setHoverInfo({ x, y, text }))
   }
 
   const [onClick, onDoubleClick] = useClickPreventionOnDoubleClick(

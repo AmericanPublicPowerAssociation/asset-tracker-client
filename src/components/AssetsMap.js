@@ -1,9 +1,8 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
+import PopUp from './PopUp'
 import {
   PICKING_DEPTH,
   PICKING_RADIUS_IN_PIXELS,
@@ -13,6 +12,7 @@ import {
   useMovableMap,
 } from '../hooks'
 import {
+  getHoverInfo,
   getMapStyle,
   getMapViewState,
 } from '../selectors'
@@ -25,10 +25,9 @@ export default function AssetsMap() {
   const deckGL = useRef()
   const mapStyle = useSelector(getMapStyle)
   const mapViewState = useSelector(getMapViewState)
-  const [hoverInfo, setHoverInfo] = useState(null)
+  const hoverInfo = useSelector(getHoverInfo)
   const { handleMapMove } = useMovableMap()
-  const { mapLayers, handleMapKey, handleMapClick } = useEditableMap(
-    deckGL, setHoverInfo)
+  const { mapLayers, handleMapKey, handleMapClick } = useEditableMap(deckGL)
 
   return (
     <div onKeyUp={handleMapKey}>
@@ -46,29 +45,10 @@ export default function AssetsMap() {
           mapStyle={mapStyle}
           mapboxApiAccessToken={REACT_APP_MAPBOX_TOKEN}
         />
-        <PopUp info={hoverInfo} />
       </DeckGL>
+    { hoverInfo &&
+      <PopUp info={hoverInfo} />
+    }
     </div>
-  )
-}
-
-function PopUp({ info }) {
-  if (!info) {
-    return null
-  }
-  const { x, y, text } = info
-  return (
-    <Paper
-      className='tooltip'
-      style={{ left: x + 16, top: y + 16 }}
-      variant='outlined'
-    >
-      <Typography
-        align='center'
-        // noWrap
-      >
-        {text}
-      </Typography>
-    </Paper>
   )
 }

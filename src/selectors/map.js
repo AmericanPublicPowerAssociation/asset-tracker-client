@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect'
+import WebMercatorViewport from '@math.gl/web-mercator'
 import {
   getAssetById,
 } from './asset'
@@ -18,6 +19,7 @@ export const getSketchMode = state => state.sketchMode
 export const getAssetsGeoJson = state => state.assetsGeoJson
 export const getSelectedAssetIndexes = state => state.selectedAssetIndexes
 export const getSelectedBusIndexes = state => state.selectedBusIndexes
+export const getHoverInfo = state => state.hoverInfo
 
 export const getMapStyle = createSelector([
   getMapStyleName,
@@ -25,6 +27,14 @@ export const getMapStyle = createSelector([
   mapStyleName,
 ) => {
   return MAP_STYLE_BY_NAME[mapStyleName]
+})
+
+export const getMapWebMercatorViewPort = createSelector([
+  getMapViewState,
+], (
+  mapViewState,
+) => {
+  return new WebMercatorViewport(mapViewState)
 })
 
 export const getIsMapStyleBright = createSelector([

@@ -17,6 +17,7 @@ export const MAP_VIEW_STATE = {
   bearing: 0,
   width: window.innerWidth,
   height: window.innerHeight,
+  altitude: 1.5,
 }
 
 export const MAP_STYLE_BY_NAME = {
@@ -89,3 +90,4 @@ export const SET_SKETCH_MODE = 'SET_SKETCH_MODE'
 
 export const SET_SELECTED_ASSET_INDEXES = 'SET_SELECTED_ASSET_INDEXES'
 export const SET_SELECTED_BUS_INDEXES = 'SET_SELECTED_BUS_INDEXES'
+export const SET_HOVER_INFO = 'SET_HOVER_INFO'

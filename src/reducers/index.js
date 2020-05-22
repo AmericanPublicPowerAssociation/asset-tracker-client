@@ -23,10 +23,12 @@ import focusingBusId from './focusingBusId'
 import taskById from './taskById'
 import taskComments from './taskComments'
 import taskCodeTypes from './taskCodeTypes'
+import hoverInfo from './hoverInfo'
 
 const reduceHorizontally = combineReducers({
   mapStyleName,
   mapViewState,
+  hoverInfo,
   overlayMode,
   selectedAssetIndexes,
   selectedBusIndexes,
