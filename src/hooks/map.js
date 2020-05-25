@@ -1,18 +1,21 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { produce } from 'immer'
+import getNearestPointOnLine from '@turf/nearest-point-on-line'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import { ViewMode } from '@nebula.gl/edit-modes'
 import {
-  // makeAssetName,
+  // setSelectedBusIndexes,
   deleteAsset,
-  removeLineEndPoint,
+  deleteAssetVertex,
   fillAssetName,
+  insertAssetVertex,
   setAsset,
   setAssetConnection,
   setAssetsGeoJson,
   setEditingAsset,
   setFocusingAssetId,
   setFocusingBusId,
+  setHoverInfo,
   setMapViewState,
   setSelectedAssetIndexes,
   setSketchMode,
@@ -35,17 +38,20 @@ import {
   ASSET_TYPE_CODE_TRANSFORMER,
 } from '../constants'
 import {
-  CustomEditableGeoJsonLayer, getAssetsByLatLng,
+  // getPickedEditHandle,
+  CustomEditableGeoJsonLayer,
+  getAssetDescription, getAssetsByLatLng,
   getAssetTypeCode, getBusesByLatLng,
   getFeaturePack,
   getMapMode,
-  getPickedEditHandle,
   makeBusId,
   makeEditingAsset,
   updateFeature,
 } from '../routines'
 import {
+  getAssetById,
   getAssetIdByBusId,
+  getAssetTypeByCode,
   getAssetsGeoJson,
   getBusesGeoJson,
   getColors,
@@ -68,14 +74,17 @@ export function useMovableMap() {
 export function useEditableMap(deckGL) {
   const dispatch = useDispatch()
   const sketchMode = useSelector(getSketchMode)
-  let editingAsset = useSelector(getEditingAsset)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
   const busesGeoJson = useSelector(getBusesGeoJson)
+  const colors = useSelector(getColors)
   const focusingAssetId = useSelector(getFocusingAssetId)
   const selectedAssetIndexes = useSelector(getSelectedAssetIndexes)
   const selectedBusIndexes = useSelector(getSelectedBusIndexes)
   const assetIdByBusId = useSelector(getAssetIdByBusId)
-  const colors = useSelector(getColors)
+  const assetById = useSelector(getAssetById)
+  const assetTypeByCode = useSelector(getAssetTypeByCode)
+  let editingAsset = useSelector(getEditingAsset)
+
   const assetTypeCode = getAssetTypeCode(sketchMode)
   const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
 
@@ -83,7 +92,8 @@ export function useEditableMap(deckGL) {
     const mapMode = getMapMode(sketchMode)
 
     function handleAssetEdit(event) {
-      const { editType, editContext, updatedData } = event
+      const { editType, editContext } = event
+      let { updatedData } = event
       console.log('asset edit', editType, editContext, updatedData)
 
       if (editType === 'addTentativePosition') {
@@ -127,18 +137,117 @@ export function useEditableMap(deckGL) {
             busId = makeBusId()
           }
           if (busId) {
+            console.log('ADDING BUS HERE')
             editingAsset = produce(editingAsset, draft => {
               draft.connections[vertexCount - 1] = { busId }
             })
           }
+          const nearbyAssetInfo = nearbyAssetInfos.find(info => !info.object.properties.guideType)
+          // If there is a nearby asset
+          if (nearbyAssetInfo) {
+            const nearbyAssetIndex = nearbyAssetInfo.index
+            const { features } = updatedData
+            const lineFeature = features[nearbyAssetIndex]
+
+            const nearbyAssetFeature = nearbyAssetInfo.object
+            if (nearbyBusFeatures.length) {
+              console.log('NEARBY ASSET && NEARBY BUS')
+              // If there was a nearby bus, do nothing
+            } else {
+              console.log('NEARBY ASSET && NOT NEARBY BUS')
+              // If the nearby asset was a line,
+              if (nearbyAssetFeature.geometry.type === 'LineString') {
+                console.log('NEARBY LINESTRING')
+                const lineMapVertices = nearbyAssetFeature.geometry.coordinates
+                console.log('MAP VERTICES', lineMapVertices)
+                // ==> Get nearest vertex if within picking distance
+                // 1. convert vertices to pixel coordinates
+                const linePixelVertices = lineMapVertices.map(
+                  _ => deckGL.current.viewports[0].project(_))
+                console.log('PIXEL VERTICES', linePixelVertices)
+                // 2. get distance to each
+                const distances = linePixelVertices.map(([x, y]) => Math.hypot(x - screenCoords[0], y - screenCoords[1]))
+                console.log('DISTANCES', distances)
+                // 3. get index of nearest
+                function argMin(array) {
+                  // put into macros
+                  // https://gist.github.com/engelen/fbce4476c9e68c52ff7e5c2da5c24a28
+                  return array.map((x, i) => [x, i]).reduce((r, a) => (a[0] < r[0] ? a : r))[1]
+                }
+                const nearestVertexIndex = argMin(distances)
+                console.log('NEAREST VERTEX INDEX', nearestVertexIndex)
+                // 4. check if within picking distance
+                const nearestVertexDistance = distances[nearestVertexIndex]
+                console.log('NEAREST VERTEX DISTANCE', nearestVertexDistance)
+                console.log('PICKING RADIUS IN PIXELS', PICKING_RADIUS_IN_PIXELS)
+
+                let vertexIndex
+                if (nearestVertexDistance < PICKING_RADIUS_IN_PIXELS) {
+                  // 5. if yes, then use this vertexIndex
+                  vertexIndex = nearestVertexIndex
+                  console.log('IS NEAR VERTEX')
+                  const lineAssetId = lineFeature.properties.id
+                  if (!busId) busId = makeBusId()
+                  dispatch(setAssetConnection(
+                    lineAssetId,
+                    vertexIndex,
+                    { busId },
+                  ))
+                } else {
+                  // 6. if no, then make point on line and use that vertexIndex
+                  console.log('IS TOO FAR FROM VERTEX')
+                  // 6.1 get nearest point on line
+                  const nearestPointOnLine = getNearestPointOnLine(nearbyAssetFeature, {
+                    type: 'Feature',
+                    geometry: {
+                      type: 'Point',
+                      coordinates: position,
+                    },
+                  })
+                  const nearestPointOnLinePosition = nearestPointOnLine.geometry.coordinates
+                  const nearestPointOnLinePriorIndex = nearestPointOnLine.properties.index
+                  // console.log(nearestPointOnLinePosition, nearestPointOnLinePriorIndex)
+                  // 6.2 insert that point as a vertex on line
+                  const lineGeometry = lineFeature.geometry
+                  const oldXYs = lineGeometry.coordinates
+                  const newXYs = [
+                    ...oldXYs.slice(0, nearestPointOnLinePriorIndex + 1),
+                    nearestPointOnLinePosition,
+                    ...oldXYs.slice(nearestPointOnLinePriorIndex + 1, oldXYs.length),
+                  ]
+                  console.log('BEFORE', oldXYs)
+                  console.log('AFTER', newXYs)
+                  updatedData = produce(updatedData, draft => {
+                    draft.features[nearbyAssetIndex].geometry.coordinates = newXYs
+                  })
+                  // 6.3 update feature geometry
+                  // see above
+                  // 6.4 update downstream connection vertices
+                  const lineAssetId = lineFeature.properties.id
+                  if (!busId) busId = makeBusId()
+                  dispatch(insertAssetVertex(lineAssetId, nearestVertexIndex, {
+                    busId,
+                  }))
+
+                  // for each connection below index
+                  // bump it forward
+                  // connect to index
+                }
+
+                //
+                // 7. add connection
+              }
+            }
+          }
         }
+        console.log(editingAsset)
         dispatch(setEditingAsset(editingAsset))
       } else if (editType === 'finishMovePosition') {
-        console.log('finishMovePosition', event)
 
+        console.log('finishMovePosition', event)
+        const { position, positionIndexes, featureIndexes } = editContext
         const busInfos = getBusesByLatLng(deckGL, editContext['position']);
         const assetsInfos = getAssetsByLatLng(deckGL, editContext['position']);
-        const { featureIndexes } = editContext
         const { features } = updatedData
         const featureIndex = featureIndexes[0]
         const vertex = features[featureIndex]
@@ -146,9 +255,6 @@ export function useEditableMap(deckGL) {
         const isMeterDisconnected = (buses) => buses.length === 0
         const getNoConnectedBuses = (asset, busInfos) => {
           return busInfos.filter(busInfo => assetIdByBusId[busInfo.object.properties.id] !== asset.id)
-        }
-        const getConnectedBuses = (asset, busInfos) => {
-          return busInfos.filter(busInfo => assetIdByBusId[busInfo.object.properties.id] === asset.id)
         }
         const isTryingToConnect = (asset, busInfos) =>  getNoConnectedBuses(asset, busInfos).length >= 1
 
@@ -197,6 +303,24 @@ export function useEditableMap(deckGL) {
             }
           }
         }
+      } else if (editType === 'addPosition') {
+        const { featureIndexes, positionIndexes } = editContext
+        const { features } = updatedData
+        const feature = features[featureIndexes[0]]
+        const assetId = feature.properties.id
+        const afterIndex = positionIndexes[0] - 1
+        dispatch(insertAssetVertex(assetId, afterIndex))
+      } else if (editType === 'removePosition') {
+        const { featureIndexes, positionIndexes } = editContext
+        const { features } = updatedData
+        const removedPositionIndex = positionIndexes[0]
+        const feature = features[featureIndexes[0]]
+        const featureProperties = feature.properties
+        if (featureProperties.typeCode === ASSET_TYPE_CODE_LINE) {
+          const vertexCount = feature.geometry.coordinates.length
+          const assetId = featureProperties.id
+          dispatch(deleteAssetVertex(assetId, removedPositionIndex, vertexCount))
+        }
       } else if (editType === 'addFeature') {
         const [featureIndex, feature] = getFeaturePack(event)
         if (!editingAsset.id) {
@@ -209,34 +333,31 @@ export function useEditableMap(deckGL) {
             })
           }
         }
+        console.log(editingAsset)
         const assetId = editingAsset.id
         updateFeature(feature, editingAsset)
+        // TODO: Consider combining into a single dispatch
         dispatch(setAsset(editingAsset))
         dispatch(fillAssetName(assetId, feature))
+        dispatch(setSketchMode(SKETCH_MODE_ADD))  // Add one at a time
         dispatch(setFocusingAssetId(assetId))
         dispatch(setSelectedAssetIndexes([featureIndex]))
-        dispatch(setSketchMode(SKETCH_MODE_ADD))  // Add one at a time
-      } else if (editType === 'removePosition') {
-        console.log('edit remove')
-        const { featureIndexes, positionIndexes } = editContext
-        const { features } = updatedData
-        const positionIndex = positionIndexes[0]
-        const featureIndex = featureIndexes[0]
-        const feature = features[featureIndex]
-        const geometry =  feature['geometry']
-        if (feature.properties.typeCode === ASSET_TYPE_CODE_LINE) {
-          const coordinatesLength = geometry.coordinates.length
-          const assetId = feature.properties.id
-          if (coordinatesLength === positionIndex || positionIndex === 0) {
-            // it is one endpoint of line
-            // dispatch(setAssetConnection(assetId, positionIndex, ''))
-            dispatch(removeLineEndPoint(
-              assetId, positionIndex, coordinatesLength - 1))
-          }
-        }
       }
 
       dispatch(setAssetsGeoJson(updatedData))
+    }
+
+    function handleAssetHover(info) {
+      const { x, y, object } = info
+      let d = null
+      if (object) {
+        const assetId = object.properties.id
+        const text = getAssetDescription(assetId, assetById, assetTypeByCode)
+        if (text) {
+          d = { x, y, text }
+        }
+      }
+      dispatch(setHoverInfo(d))
     }
 
     function handleAssetClick(info, event) {
@@ -245,16 +366,11 @@ export function useEditableMap(deckGL) {
       if (!targetAssetId) {
         return
       }
-
       if (sketchMode === SKETCH_MODE_DELETE) {
-        dispatch(setSelectedAssetIndexes([]))
-        dispatch(setFocusingAssetId(null))
-        dispatch(setFocusingBusId(null))
         dispatch(deleteAsset(targetAssetId))
-      }
-      // If we are not adding a specific type of asset,
-      else if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
+      } else if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
         dispatch(setSelectedAssetIndexes([info.index]))
+        // dispatch(setSelectedBusIndexes([]))
         dispatch(setFocusingAssetId(targetAssetId))
       }
     }
@@ -290,6 +406,7 @@ export function useEditableMap(deckGL) {
       getLineColor: (feature, isSelected) => {
         return isSelected ? colors.assetSelect : colors.asset
       },
+      onHover: handleAssetHover,
       onClick: handleAssetClick,
       onEdit: handleAssetEdit,
       // onDoubleClick: handleLayerDoubleClick,
@@ -298,13 +415,29 @@ export function useEditableMap(deckGL) {
   }
 
   function getBusesMapLayer() {
+    function handleBusHover(info) {
+      const { x, y, object } = info
+      let d = null
+      if (object) {
+        const objectProperties = object.properties
+        const busId = objectProperties.id
+        const busIndex = objectProperties.index
+        const assetId = assetIdByBusId[busId]
+        const assetDescription = getAssetDescription(
+          assetId, assetById, assetTypeByCode)
+        const text = 'Bus ' + busIndex + ' of ' + assetDescription
+        d = { x, y, text }
+      } else {
+      }
+      dispatch(setHoverInfo(d))
+    }
     function handleBusClick(info, event) {
       console.log('bus click', info, event)
       const targetBusId = info.object && info.object.properties.id
       const targetAssetId = assetIdByBusId[targetBusId]
 
-      // If we are not adding a specific type of asset,
       /*
+      // If we are not adding a specific type of asset,
       if (sketchMode === SKETCH_MODE_ADD) {
         const assetInfos = deckGL.current.pickMultipleObjects({
           x: info.x,
@@ -343,6 +476,7 @@ export function useEditableMap(deckGL) {
       getFillColor: (feature, isSelected) => {
         return isSelected ? colors.busSelect : colors.bus
       },
+      onHover: handleBusHover,
       onClick: handleBusClick,
     })
   }
@@ -364,13 +498,7 @@ export function useEditableMap(deckGL) {
         }
         case 'Delete':
         case 'Backspace': {
-          if (
-            sketchMode === SKETCH_MODE_ADD ||
-            sketchMode === SKETCH_MODE_EDIT
-          ) {
-            dispatch(setFocusingAssetId(null))
-            dispatch(setFocusingBusId(null))
-            dispatch(setSelectedAssetIndexes([]))
+          if (sketchMode in [SKETCH_MODE_ADD, SKETCH_MODE_EDIT]) {
             dispatch(deleteAsset(focusingAssetId))
           }
           break

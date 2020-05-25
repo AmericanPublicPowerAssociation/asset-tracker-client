@@ -28,6 +28,15 @@ export class CustomEditableGeoJsonLayer extends EditableGeoJsonLayer {
     onDoubleClick && onDoubleClick(event, props)
   }
 
+  /*
+  onStartDragging(event) {
+    const props = this.props
+    super.onStartDragging(event, props)
+    const onStartDragging = props.onStartDragging
+    onStartDragging && onStartDragging(event, props)
+  }
+  */
+
   onStopDragging(event) {
     const props = this.props
     super.onStopDragging(event, props)

@@ -8,9 +8,9 @@ import {
 } from 'asset-report-risks'
 import {
   setFocusingAssetId,
-  setFocusingBusId,
+  // setFocusingBusId,
   setSelectedAssetIndexes,
-  setSelectedBusIndexes,
+  // setSelectedBusIndexes,
   setPanMapToAsset,
 } from '../actions'
 import {
@@ -42,19 +42,19 @@ export default function TablesWindow(props) {
   }
 
   function highlightAsset(assetId) {
-    const selectedIndex = features.findIndex( feature => (
-      feature.properties.id === assetId
-    ))
+    const selectedAssetIndexes = []
+    const selectedAssetIndex = features.findIndex(
+      feature => feature.properties.id === assetId)
+    if (selectedAssetIndex > -1) {
+      selectedAssetIndexes.push(selectedAssetIndex)
+      // TODO: Rename
+      // TODO: Combine below into a single dispatch
+      dispatch(setPanMapToAsset(features[selectedAssetIndex]))
+    }
+    dispatch(setSelectedAssetIndexes(selectedAssetIndexes))
+    // dispatch(setSelectedBusIndexes([]))
     dispatch(setFocusingAssetId(assetId))
-    dispatch(setFocusingBusId(null))
-    setSelectedAssetIndexes([selectedIndex])
-    setSelectedBusIndexes([])
-    if (selectedIndex > -1)
-      panToAsset(features[selectedIndex])
-  }
-
-  function panToAsset(assetGeoJson) {
-    dispatch(setPanMapToAsset(assetGeoJson))
+    // dispatch(setFocusingBusId(null))
   }
 
   const pageSizeOptions = [5, 10]

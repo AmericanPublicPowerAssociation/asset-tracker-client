@@ -1,19 +1,3 @@
-  function handleBusesGeoJsonClick(info, event) {
-    if (sketchMode === SKETCH_MODE_ADD_LINE) {
-      setLineBusId(busId)
-      // If we already started a line,
-      if (selectedAssetIndexes.length) {
-        // End the line
-        changeSketchMode(SKETCH_MODE_ADD, busId)
-      }
-    } else {
-      if (info.picked) {
-        const busIndex = info.index
-        setSelectedBusIndexes([busIndex])
-      }
-    }
-  }
-
   function handleKeyUp(e) {
     if (e.key === 'Delete') {
       if (focusingAssetId && sketchMode.startsWith(SKETCH_MODE_EDIT)) {
@@ -35,58 +19,6 @@
 *        clear selected asset indexes
 *        show snackbar
 */
-
-
-  function handleAssetsGeoJsonClick(info, event) {
-    const assetId = info.object.properties.id
-    if (assetId && sketchMode.startsWith(SKETCH_MODE_DELETE)) {
-      dispatch(setFocusingAssetId(null))
-      setSelectedAssetIndexes([])
-      setSelectedBusIndexes([])
-      dispatch(deleteAsset(assetId))
-      return
-    }
-    assetId && dispatch(setFocusingAssetId(assetId))
-    assetId && dispatch(setFocusingBusId(null))
-    if (sketchMode.startsWith(SKETCH_MODE_ADD) || info.isGuide) return
-    const featureIndex = info.index
-    setSelectedAssetIndexes([featureIndex])
-    setSelectedBusIndexes([])
-  }
-
-  function handleAssetsGeoJsonEdit({ editType, editContext, updatedData }) {
-    switch(editType) {
-      // If a feature is being added for the first time,
-      case 'addFeature': {
-        const features = updatedData.features
-        const { featureIndexes } = editContext
-        // Add an asset corresponding to the feature
-        const assetTypeCode = getAssetTypeCode(sketchMode)
-        const assetType = assetTypeByCode[assetTypeCode]
-        const asset = makeAsset(assetType, lineBusId)
-        dispatch(setAsset(asset))
-        // Store assetId in feature
-        const assetId = asset.id
-        for (let i = 0; i < featureIndexes.length; i++) {
-          const featureIndex = featureIndexes[i]
-          const feature = features[featureIndex]
-          feature.properties.id = assetId
-          feature.properties.typeCode = assetTypeCode
-        }
-        // If the new feature is a line,
-        if (sketchMode === SKETCH_MODE_ADD_LINE) {
-          // Have subsequent clicks extend the same line
-          setSelectedAssetIndexes(featureIndexes)
-        } else {
-          changeSketchMode(SKETCH_MODE_ADD)
-        }
-        dispatch(setFocusingAssetId(assetId))  // Show details for the new asset
-        break
-      }
-      default: {}
-    }
-    dispatch(setAssetsGeoJson(updatedData))  // Update geojson for assets
-  }
 
   function handleAssetsGeoJsonInterpret(event) {
     // Find nearest bus
@@ -171,30 +103,6 @@
     // console.log('pickingInfo', event, nearestBusInfos)
   }
 
-  function handleBusesGeoJsonClick(info, event) {
-    const busId = info.object.properties.id
-    const assetId = assetIdByBusId[busId]
-
-    if (sketchMode === SKETCH_MODE_ADD_LINE) {
-      setLineBusId(busId)
-      // If we already started a line,
-      if (selectedAssetIndexes.length) {
-        // End the line
-        changeSketchMode(SKETCH_MODE_ADD, busId)
-      }
-    }
-    else {
-      if (info.picked) {
-        const busIndex = info.index
-        setSelectedBusIndexes([busIndex])
-        dispatch(setFocusingBusId(busId))
-      }
-    }
-
-    // busId && dispatch(setFocusingBusId(busId))
-    assetId && dispatch(setFocusingAssetId(assetId))
-  }
-
   /*
   function onKeyUp(e) {
     e.preventDefault()
@@ -212,4 +120,3 @@
     }
   }
   */
-

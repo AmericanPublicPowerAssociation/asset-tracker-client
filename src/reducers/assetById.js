@@ -1,7 +1,8 @@
 import produce from 'immer'
 import {
   DELETE_ASSET,
-  REMOVE_LINE_END_POINT,
+  DELETE_ASSET_VERTEX,
+  INSERT_ASSET_VERTEX,
   SET_ASSET,
   SET_ASSETS,
   SET_ASSET_ATTRIBUTE,
@@ -9,6 +10,10 @@ import {
   SET_ASSET_CONNECTION_ATTRIBUTE,
   SET_ASSET_VALUE,
 } from '../constants'
+import {
+  getNewConnectionByIndex,
+  makeBusId,
+} from '../routines'
 
 const initialState = {}
 
@@ -64,26 +69,41 @@ const assetById = (state = initialState, action) => {
         draft[assetId]['is_deleted'] = true
       })
     }
-    case REMOVE_LINE_END_POINT: {
-      const {
-        assetId,
-        assetVertexIndex,
-        largestAssetVertexIndex } = action.payload
+    case INSERT_ASSET_VERTEX: {
+      const { assetId, afterIndex, connection } = action.payload
       return produce(state, draft => {
         const asset = draft[assetId]
-        const connections = asset.connections
-        if (assetVertexIndex === 0) {
-          delete connections[0]
-          for (const [index, connection] of Object.entries(connections))
-            connections[index-1] = connection
-
-          if (!connections[0]) connections[0] = ''
-          delete connections[largestAssetVertexIndex]
+        const indexOffset = 1
+        const connectionByIndex = getNewConnectionByIndex(
+          asset.connections, afterIndex, indexOffset)
+        if (connection) {
+          connectionByIndex[afterIndex + 1] = connection
         }
-        else if (assetVertexIndex === largestAssetVertexIndex) {
-          delete connections[largestAssetVertexIndex]
-          connections[largestAssetVertexIndex-1] = ''
+        asset.connections = connectionByIndex
+      })
+    }
+    case DELETE_ASSET_VERTEX: {
+      const {
+        assetId,
+        oldVertexIndex,
+        newVertexCount,
+      } = action.payload
+      return produce(state, draft => {
+        const asset = draft[assetId]
+        const afterIndex = oldVertexIndex - 1
+        const indexOffset = -1
+        const connectionByIndex = getNewConnectionByIndex(
+          asset.connections, afterIndex, indexOffset)
+        // If we are deleting the last endpoint,
+        if (oldVertexIndex === newVertexCount) {
+          const lastVertexIndex = newVertexCount - 1
+          // Make sure the new endpoint has a bus
+          if (!connectionByIndex[lastVertexIndex]) {
+            connectionByIndex[lastVertexIndex] = { busId: makeBusId() }
+          }
         }
+        console.log(connectionByIndex)
+        asset.connections = connectionByIndex
       })
     }
     default: {

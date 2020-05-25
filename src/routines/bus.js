@@ -42,7 +42,7 @@ function getBusFeaturesForPoint(assetFeature, connections, busIds) {
     assetTypeCode]
   let busAngle = 0
 
-  for (const connection of Object.values(connections)) {
+  for (const [index, connection] of Object.entries(connections)) {
     const busId = connection.busId
     if (busIds.includes(busId)) continue
 
@@ -53,7 +53,7 @@ function getBusFeaturesForPoint(assetFeature, connections, busIds) {
     ).geometry
     busFeatures.push({
       type: 'Feature',
-      properties: { id: busId },
+      properties: { id: busId, index },
       geometry: busGeometry,
     })
     busIds.push(busId)
@@ -67,19 +67,16 @@ function getBusFeaturesForLine(assetFeature, connections, busIds) {
   const busFeatures = []
   const assetXYs = assetFeature.geometry.coordinates
 
-  for (const [
-    lineVertexIndex,
-    connection,
-  ] of Object.entries(connections)) {
+  for (const [index, connection] of Object.entries(connections)) {
     const busId = connection.busId
     if (busIds.includes(busId)) continue
 
     busFeatures.push({
       type: 'Feature',
-      properties: { id: busId },
+      properties: { id: busId, index },
       geometry: {
         type: 'Point',
-        coordinates: assetXYs[lineVertexIndex],
+        coordinates: assetXYs[index],
       },
     })
     busIds.push(busId)

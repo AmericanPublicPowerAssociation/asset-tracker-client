@@ -2,6 +2,7 @@ import React, { useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
+import PopUp from './PopUp'
 import {
   PICKING_DEPTH,
   PICKING_RADIUS_IN_PIXELS,
@@ -11,6 +12,7 @@ import {
   useMovableMap,
 } from '../hooks'
 import {
+  getHoverInfo,
   getMapStyle,
   getMapViewState,
 } from '../selectors'
@@ -23,10 +25,14 @@ export default function AssetsMap() {
   const deckGL = useRef()
   const mapStyle = useSelector(getMapStyle)
   const mapViewState = useSelector(getMapViewState)
+  const hoverInfo = useSelector(getHoverInfo)
   const { handleMapMove } = useMovableMap()
   const { mapLayers, handleMapKey, handleMapClick } = useEditableMap(deckGL)
+
   return (
-    <div onKeyUp={handleMapKey}>
+    <div onKeyUp={handleMapKey}
+      style={{ overflowX: 'hidden', overflowY: 'hidden' }}
+    >
       <DeckGL
         ref={deckGL}
         layers={mapLayers}
@@ -42,6 +48,9 @@ export default function AssetsMap() {
           mapboxApiAccessToken={REACT_APP_MAPBOX_TOKEN}
         />
       </DeckGL>
+    { hoverInfo &&
+      <PopUp info={hoverInfo} />
+    }
     </div>
   )
 }

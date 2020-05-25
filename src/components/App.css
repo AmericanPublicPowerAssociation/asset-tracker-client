@@ -1,3 +1,7 @@
+.do-not-scroll {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
 .black {
   color: black !important;
 }
@@ -24,4 +28,18 @@
 .rise-animation:hover {
   transition: 0.50s;
   transform: scale(1.25);
+}
+.tooltip {
+  pointer-events: none;
+  position: absolute;
+  max-width: 128px;
+  /*
+  max-width: 256px;
+  padding: 8px;
+  z-index: 10;
+  background: #fff;
+  color: #000;
+  max-height: 256px;
+  overflow-y: hidden;
+  */
 }

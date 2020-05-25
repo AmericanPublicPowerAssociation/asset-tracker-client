@@ -96,9 +96,10 @@ export default function AssetConnectionsListItems({
         className={clsx({ highlighted: isHighlighted })}
         component='div'
         disableGutters
+        onClick={handleClickOrFocus}
       >
         <ListItemText primary={title} secondary={description} />
       </ListItem>
-      : <div key={index}></div>)
+      : null)
   })
 }

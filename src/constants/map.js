@@ -17,6 +17,7 @@ export const MAP_VIEW_STATE = {
   bearing: 0,
   width: window.innerWidth,
   height: window.innerHeight,
+  altitude: 1.5,
 }
 
 export const MAP_STYLE_BY_NAME = {
@@ -47,9 +48,15 @@ export const BUS_DISTANCE_IN_KILOMETERS_BY_CODE = Object.entries(
   return busDistanceInKilometersByCode
 }, {})
 
+/*
 export const PICKING_RADIUS_IN_PIXELS = Math.max(
   ...Object.values(ASSET_RADIUS_IN_METERS_BY_CODE)) + 1
 export const PICKING_DEPTH = 5
+export const PICKING_RADIUS_IN_PIXELS = 0
+export const PICKING_DEPTH = 3
+*/
+export const PICKING_RADIUS_IN_PIXELS = 1
+export const PICKING_DEPTH = 3
 
 export const TOGGLE_MAP_STYLE = 'TOGGLE_MAP_STYLE'
 export const SET_MAP_VIEW_STATE = 'SET_MAP_VIEW_STATE'
@@ -85,3 +92,4 @@ export const SET_SKETCH_MODE = 'SET_SKETCH_MODE'
 
 export const SET_SELECTED_ASSET_INDEXES = 'SET_SELECTED_ASSET_INDEXES'
 export const SET_SELECTED_BUS_INDEXES = 'SET_SELECTED_BUS_INDEXES'
+export const SET_HOVER_INFO = 'SET_HOVER_INFO'

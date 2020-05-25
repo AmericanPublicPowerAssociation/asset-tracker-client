@@ -22,8 +22,14 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import AddIcon from '@material-ui/icons/Add'
 import TasksList, { TaskFullscreen } from './TasksList'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import IconButton from '@material-ui/core/IconButton'
+import FilterListIcon from '@material-ui/icons/FilterList'
+
 import {
   addTask,
+  refreshTaskComments,
 } from '../actions'
 import {
   TASK_ARCHIVE_STATUS,
@@ -36,6 +42,12 @@ import {
 } from '../selectors'
 
 const useStyles = makeStyles(theme => ({
+  actions: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
   formControl: {
     marginTop: theme.spacing(1),
     width: '100%',
@@ -106,7 +118,9 @@ export default function AssetTasksPanel({ asset }) {
   const [priority, setPriority] = useState(priorityTypeNormal)
   const [dialog, setDialog] = useState(false)	   
   const [taskDetails, setTaskDetails] = useState(false)
-  
+  const [anchorEl, setAnchorEl] = useState(false)
+  const [taskFilter, setTaskFilter] = useState(false)
+
   function handleClickToCreateAddTask() {
     setDialog(false)
     dispatch(addTask(assetId, name, description, priority))
@@ -115,25 +129,60 @@ export default function AssetTasksPanel({ asset }) {
     setPriority(priorityTypeNormal)
   }
 
+  const notArchived = (task) => { return task.status !== TASK_ARCHIVE_STATUS && task.status !== TASK_STATUS_CANCELLED }
+  const isArchived = (task) => { return task.status === TASK_ARCHIVE_STATUS || task.status === TASK_STATUS_CANCELLED }
+
   const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
     task => (
-      !archived ?
-      task.status !== TASK_ARCHIVE_STATUS && task.status !== TASK_STATUS_CANCELLED :
-      task.status === TASK_ARCHIVE_STATUS || task.status === TASK_STATUS_CANCELLED
+      taskFilter ?
+        (
+          !archived ?
+            notArchived(task) && task.priority === taskFilter :
+            isArchived(task) && task.priority === taskFilter
+        )
+      :
+        (
+          !archived ?
+            notArchived(task) :
+            isArchived(task)
+        )
     ),
   )
 
   const handleDisplayDetails = (task) => {
+    dispatch(refreshTaskComments(task.id))
     setTaskDetails(task)
+  }
+
+  const selectTaskFilter = (event) => {
+    setTaskFilter(event.target.value)
+    setAnchorEl(false)
   }
 
   const listTasks = (<>
     <FormGroup row>
       <TextField fullWidth id="search" label="Search task" value={query}
         onChange={(e) => setQuery(e.target.value) } />
-      <FormControlLabel control={
-        <Switch checked={archived} onChange={ () => setArchived(!archived) } value="archived" />}
+      <div className={classes.actions}>
+        <FormControlLabel control={
+          <Switch checked={archived} onChange={ () => setArchived(!archived) } value="archived" />}
           label="Show closed tasks" />
+        <Tooltip title="Filter tasks">
+          <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
+            <FilterListIcon />
+          </IconButton>
+        </Tooltip>
+        <Menu
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={() => setAnchorEl(false)}
+        >
+          <MenuItem onClick={selectTaskFilter} value={10}>Normal</MenuItem>
+          <MenuItem onClick={selectTaskFilter} value={100}>Important</MenuItem>
+          <MenuItem onClick={selectTaskFilter} value={false}>Clear</MenuItem>
+        </Menu>
+      </div>
     </FormGroup>
     <div className={classes.listTasks}>
       <TasksList showDetails={handleDisplayDetails} asset={asset} tasks={partialTasks}/>

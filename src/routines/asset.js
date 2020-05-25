@@ -84,3 +84,26 @@ export function getConnectedAssetIds(assetId, busId, assetIdsByBusId) {
   return assetIdsByBusId[busId].filter(
     connectedAssetId => connectedAssetId !== assetId)
 }
+
+export function getAssetDescription(assetId, assetById, assetTypeByCode) {
+  let asset = assetById[assetId]
+  if (!asset) {
+    return null
+  }
+  const assetType = assetTypeByCode[asset.typeCode]
+  return assetType.name + ' ' + asset.name
+}
+
+export function getNewConnectionByIndex(
+  connectionByIndex,
+  afterIndex,
+  indexOffset,
+) {
+  const newConnectionByIndex = {}
+  for (const [oldIndex, oldConnection] of Object.entries(connectionByIndex)) {
+    const newIndex = oldIndex > afterIndex ?
+      parseInt(oldIndex) + indexOffset : oldIndex
+    newConnectionByIndex[newIndex] = oldConnection
+  }
+  return newConnectionByIndex
+}

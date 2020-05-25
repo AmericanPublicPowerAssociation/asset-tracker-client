@@ -2,10 +2,13 @@
 
 import {
   DELETE_ASSET,
+  DELETE_ASSET_VERTEX,
   FILL_ASSET_NAME,
+  INSERT_ASSET_VERTEX,
   REFRESH_ASSETS,
   REMOVE_LINE_END_POINT,
   SAVE_ASSETS,
+  // SELECT_ASSET,
   SET_ASSET,
   SET_ASSETS,
   SET_ASSETS_GEOJSON,
@@ -112,10 +115,45 @@ export function uploadAssetsCsv(payload) {
 }
 
 export function removeLineEndPoint(
-  assetId, assetVertexIndex, largestAssetVertexIndex,
+  assetId, selectedAssetVertexIndex, largestAssetVertexIndex,
 ) {
   return {
     type: REMOVE_LINE_END_POINT,
-    payload: { assetId, assetVertexIndex, largestAssetVertexIndex },
+    payload: { assetId, selectedAssetVertexIndex, largestAssetVertexIndex },
   }
 }
+
+export function insertAssetVertex(
+  assetId,
+  afterIndex,
+  connection,
+) {
+  return {
+    type: INSERT_ASSET_VERTEX,
+    payload: { assetId, afterIndex, connection },
+  }
+}
+
+export function deleteAssetVertex(
+  assetId,
+  oldVertexIndex,
+  newVertexCount,
+) {
+  return {
+    type: DELETE_ASSET_VERTEX,
+    payload: { assetId, oldVertexIndex, newVertexCount },
+  }
+}
+
+/*
+// TODO: Consider whether to use this
+export function selectAsset(
+  assetId,
+  featureIndex,
+) {
+  return {
+    type: SELECT_ASSET,
+    payload: { assetId, featureIndex },
+  }
+}
+*/

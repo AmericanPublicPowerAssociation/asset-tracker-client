@@ -28,7 +28,7 @@ import DoneIcon from '@material-ui/icons/Done'
 import CommentIcon from '@material-ui/icons/Comment'
 // import Radio from '@material-ui/core/Radio'
 import CollapsibleListItem from './CollapsibleListItem'
-// import AssetConnectionsListItems from './AssetConnectionsListItems'
+import AssetConnectionsListItems from './AssetConnectionsListItems'
 import Collapse from '@material-ui/core/Collapse'
 import Divider from '@material-ui/core/Divider'
 import { AssetName } from './AssetTasksPanel'
@@ -417,15 +417,11 @@ const commentSection = (<div style={{ display: 'flex', flexDirection: 'column', 
   const assetDetails = (<>
     <AssetName assetTypeName={assetTypeName} assetTypeCode={assetTypeCode} assetName={assetName} />
 
-  {/*
     <AssetConnectionsListItems
       asset={asset}
       isEditing={false}
-      setSelectedBusIndexes={() => {}}
-      setSelectedAssetIndexes={() => {}}
       noHighlight={true}
     />
-  */}
   </>)
 
   const mobileTaskDetail = (<>

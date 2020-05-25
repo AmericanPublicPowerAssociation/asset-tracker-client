@@ -14,16 +14,8 @@ const initialState = MAP_VIEW_STATE
 const mapViewState = produce((draft, action) => {
   switch (action.type) {
     case SET_MAP_VIEW_STATE: {
-      const {
-        longitude, latitude, zoom, pitch, bearing, width, height,
-      } = action.payload
-      draft.longitude = longitude
-      draft.latitude = latitude
-      draft.zoom = zoom
-      draft.pitch = pitch
-      draft.bearing = bearing
-      draft.width = width
-      draft.height = height
+      const viewState = action.payload
+      transferViewState(draft, viewState)
       break
     }
     case SET_MAP_BOUNDING_BOX: {
@@ -34,19 +26,8 @@ const mapViewState = produce((draft, action) => {
       // }
       const viewState = getMapViewStateFromBoundingBox(
         boundingBox, window.innerWidth, window.innerHeight)
-      if (!viewState) {
-        return
-      }
-      const {
-        longitude, latitude, zoom, pitch, bearing, width, height,
-      } = viewState
-      draft.longitude = longitude
-      draft.latitude = latitude
-      draft.zoom = zoom
-      draft.pitch = pitch
-      draft.bearing = bearing
-      draft.width = width
-      draft.height = height
+      if (!viewState) return
+      transferViewState(draft, viewState)
       // draft.reset = true
       break
     }
@@ -70,5 +51,16 @@ const mapViewState = produce((draft, action) => {
     default: { }
   }
 }, initialState)
+
+function transferViewState(draft, viewState) {
+  draft.longitude = viewState.longitude
+  draft.latitude = viewState.latitude
+  draft.zoom = viewState.zoom
+  draft.pitch = viewState.pitch
+  draft.bearing = viewState.bearing
+  draft.width = window.innerWidth
+  draft.height = window.innerHeight
+  draft.altitude = viewState.altitude
+}
 
 export default mapViewState

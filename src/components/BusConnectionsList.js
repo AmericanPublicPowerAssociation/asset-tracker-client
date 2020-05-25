@@ -5,18 +5,24 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Tooltip from '@material-ui/core/Tooltip'
+import getCentroid from '@turf/centroid'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import {
   setFocusingAssetId,
-  setSelectedAssetIndexes,
+  setHoverInfo,
+  // setSelectedAssetIndexes,
 } from '../actions'
 import {
   CLICK_DELAY,
 } from '../constants'
 import {
+  getAssetDescription,
+} from '../routines'
+import {
   getAssetById,
   getAssetsGeoJson,
   getAssetTypeByCode,
+  getMapWebMercatorViewPort,
 } from '../selectors'
 
 function cancellablePromise(promise) {
@@ -38,7 +44,6 @@ function cancellablePromise(promise) {
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
-
 
 function useCancellablePromises() {
   const pendingPromises = useRef([])
@@ -62,7 +67,6 @@ function useCancellablePromises() {
   }
 }
 
-
 function useClickPreventionOnDoubleClick(onClick, onDoubleClick) {
   const api = useCancellablePromises()
 
@@ -71,14 +75,15 @@ function useClickPreventionOnDoubleClick(onClick, onDoubleClick) {
     const waitForClick = cancellablePromise(delay(CLICK_DELAY))
     api.appendPendingPromise(waitForClick)
     return waitForClick.promise
-      .then( () => {
+      .then(() => {
         api.removePendingPromise(waitForClick)
         onClick(assetId)
       })
-      .catch( errorInfo => {
+      .catch(errorInfo => {
         api.removePendingPromise(waitForClick)
-        if (!errorInfo.isCancelled)
+        if (!errorInfo.isCancelled) {
           throw errorInfo.error
+        }
       })
   }
 
@@ -93,13 +98,10 @@ function useClickPreventionOnDoubleClick(onClick, onDoubleClick) {
 
 export default function BusConnectionsList({ connectedAssetIds }) {
   const dispatch = useDispatch()
-  const [onClick, onDoubleClick] = useClickPreventionOnDoubleClick(
-    onClickHighlight,
-    onClickFocusOnAsset,
-  )
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetById = useSelector(getAssetById)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
+  const mapWebMercatorViewPort = useSelector(getMapWebMercatorViewPort)
 
   function onClickFocusOnAsset(assetId) {
     dispatch(setFocusingAssetId(assetId))
@@ -107,10 +109,21 @@ export default function BusConnectionsList({ connectedAssetIds }) {
   }
 
   function onClickHighlight(assetId) {
-    const features = assetsGeoJson.features
-    const index = features.findIndex( feature => feature.properties.id === assetId)
-    index > -1 && dispatch(setSelectedAssetIndexes([index]))
+    const { features } = assetsGeoJson
+    const feature = features.find(feature => feature.properties.id === assetId)
+    const centroid = getCentroid(feature)
+    // const index = features.findIndex(feature => feature.properties.id === assetId)
+    // TODO: Fix and consider replacing with TextLayer
+    // index > -1 && dispatch(setSelectedAssetIndexes([index]))
+    // console.log(lngLatToWorld(centroid.geometry.coordinates))
+    const [x, y] = mapWebMercatorViewPort.project(centroid.geometry.coordinates)
+    const text = getAssetDescription(assetId, assetById, assetTypeByCode)
+    dispatch(setHoverInfo({ x, y, text }))
   }
+
+  const [onClick, onDoubleClick] = useClickPreventionOnDoubleClick(
+    onClickHighlight,
+    onClickFocusOnAsset)
 
   return (
     <List component='div' disablePadding>
@@ -122,9 +135,10 @@ export default function BusConnectionsList({ connectedAssetIds }) {
       const connectedAssetName = connectedAsset.name
       return (
         <ListItem
-          onClick={ () => onClick(connectedAssetId) }
-          onDoubleClick={ () => onDoubleClick(connectedAssetId) }
-          disableGutters component='div' key={connectedAssetIdIndex}>
+          onClick={() => onClick(connectedAssetId)}
+          onDoubleClick={() => onDoubleClick(connectedAssetId)}
+          disableGutters component='div' key={connectedAssetIdIndex}
+        >
           <Tooltip title={connectedAssetTypeName} placement='left'>
             <ListItemIcon>
               <AssetTypeSvgIcon assetTypeCode={connectedAssetTypeCode} />

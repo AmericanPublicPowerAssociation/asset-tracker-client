@@ -16,6 +16,7 @@ export const getAssetCount = createSelector([
   return Object.keys(assetById).length
 })
 
+// TODO: Consider renaming to getBestAssetIdByBusId
 export const getAssetIdByBusId = createSelector([
   getAssetById,
   getEditingAsset,
@@ -47,6 +48,7 @@ export const getAssetIdByBusId = createSelector([
   return assetIdByBusId
 })
 
+// TODO: Consider renaming to getAllAssetIdsByBusId
 export const getAssetIdsByBusId = createSelector([
   getAssetById,
   getEditingAsset,
