@@ -31,13 +31,15 @@ import {
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_DELETE,
   SKETCH_MODE_EDIT,
+  ASSET_TYPE_CODE_METER,
+  ASSET_TYPE_CODE_TRANSFORMER,
 } from '../constants'
 import {
-  CustomEditableGeoJsonLayer,
-  getAssetTypeCode,
+  CustomEditableGeoJsonLayer, getAssetsByLatLng,
+  getAssetTypeCode, getBusesByLatLng,
   getFeaturePack,
   getMapMode,
-  // getPickedEditHandle,
+  getPickedEditHandle,
   makeBusId,
   makeEditingAsset,
   updateFeature,
@@ -133,39 +135,67 @@ export function useEditableMap(deckGL) {
         dispatch(setEditingAsset(editingAsset))
       } else if (editType === 'finishMovePosition') {
         console.log('finishMovePosition', event)
-        const { position, positionIndexes, featureIndexes } = editContext
-        const { features } = updatedData
-        const asset = features[featureIndexes[0]]
-        const assetId = asset.properties.id
 
-        switch (asset.properties.typeCode) {
-          case ASSET_TYPE_CODE_LINE: {
-            const assetVertexCount = asset.geometry.coordinates.length
-            const assetVertexIndex = positionIndexes[0]
-            if (assetVertexIndex === 0 || assetVertexIndex === assetVertexCount - 1) {
-              // endpoints only
-              const screenCoords = deckGL.current.viewports[0].project(position)
-              const nearbyBusInfos = deckGL.current.pickMultipleObjects({
-                x: screenCoords[0],
-                y: screenCoords[1],
-                layerIds: [BUSES_MAP_LAYER_ID],
-                radius: PICKING_RADIUS_IN_PIXELS,
-                depth: PICKING_DEPTH,
-              })
-              const nearbyBusFeatures = nearbyBusInfos.map(info => info.object)
-              // TODO: Consider whether we need to filter bus features instead of this
-              // TODO: This assumes that nearbyBusFeatures is in sorted order
-              // TODO: Case length >= 2 happens when moving endpoint from nowhere to bus
-              const newBusIndex = nearbyBusFeatures.length === 1 ? 0 : 1
-              const newBusId = (nearbyBusFeatures.length) ?
-                  nearbyBusFeatures[newBusIndex].properties.id :
-                  makeBusId()
-              const newConnection = { busId: newBusId, attributes: {} }
-              dispatch(setAssetConnection(assetId, assetVertexIndex, newConnection))
+        const busInfos = getBusesByLatLng(deckGL, editContext['position']);
+        const assetsInfos = getAssetsByLatLng(deckGL, editContext['position']);
+        const { featureIndexes } = editContext
+        const { features } = updatedData
+        const featureIndex = featureIndexes[0]
+        const vertex = features[featureIndex]
+
+        const isMeterDisconnected = (buses) => buses.length === 0
+        const getNoConnectedBuses = (asset, busInfos) => {
+          return busInfos.filter(busInfo => assetIdByBusId[busInfo.object.properties.id] !== asset.id)
+        }
+        const getConnectedBuses = (asset, busInfos) => {
+          return busInfos.filter(busInfo => assetIdByBusId[busInfo.object.properties.id] === asset.id)
+        }
+        const isTryingToConnect = (asset, busInfos) =>  getNoConnectedBuses(asset, busInfos).length >= 1
+
+        if (sketchMode === SKETCH_MODE_EDIT) {
+          let asset = vertex.properties
+
+          switch (asset.typeCode) {
+            case ASSET_TYPE_CODE_METER: {
+              console.log(busInfos)
+              // Meter was dragged to nowhere
+              if (isMeterDisconnected(busInfos)) {
+                dispatch(setAssetConnection(asset.id, 0, {busId: makeBusId()}))
+              } else if (isTryingToConnect(asset, busInfos)) {
+                const noConnectedBuses = getNoConnectedBuses(asset, busInfos)
+                console.log(noConnectedBuses)
+                dispatch(setAssetConnection(asset.id, 0, {
+                  busId: noConnectedBuses[0].object.properties.id,
+                }))
+              }
+              break
             }
-            break
+            case ASSET_TYPE_CODE_TRANSFORMER: {
+              console.log(busInfos)
+              console.log(asset)
+
+              let isConnected = busInfos.filter(busInfo => {
+                console.log(busInfo)
+                console.log(editContext['position'])
+                console.log(asset.id)
+                const assets = getAssetsByLatLng(deckGL, busInfo.object.geometry.coordinates).filter(tasset =>  {
+                  console.log(tasset.object.properties.id)
+                  console.log(asset.id)
+                  return tasset.object.properties.typeCode && tasset.object.properties.id !== asset.id
+                })
+                 console.log(assets)
+                  return assets.length > 0
+              })
+              console.log('Connected buses')
+              console.log(isConnected)
+              if (!isConnected.length) {
+                // Transformer was dragged to nowhere
+                dispatch(setAssetConnection(asset.id, 0, {busId: makeBusId()}))
+                dispatch(setAssetConnection(asset.id, 1, {busId: makeBusId()}))
+              }
+              break
+            }
           }
-          default: {}
         }
       } else if (editType === 'addFeature') {
         const [featureIndex, feature] = getFeaturePack(event)
@@ -235,44 +265,11 @@ export function useEditableMap(deckGL) {
     }
     */
 
+    /*
     function handleLayerStopDragging(event) {
       console.log('layer stop dragging', event)
-      /*
-      // TODO: Fix side effects and make code easier to read
-      const screenCoords = event.screenCoords
-      console.log('*********************', event)
-
-      const busInfos = deckGL.current.pickMultipleObjects({
-        x: screenCoords[0],
-        y: screenCoords[1],
-        layerIds: [BUSES_MAP_LAYER_ID],
-        radius: PICKING_RADIUS_IN_PIXELS,
-        depth: PICKING_DEPTH,
-      })
-      const vertex = getPickedEditHandle(event.picks)
-
-      if (sketchMode === SKETCH_MODE_EDIT) {
-        console.log(vertex)
-        console.log(busInfos)
-        console.log(vertex.picks)
-        console.log(busInfos.length === 0)
-        let asset
-        if (busInfos.length === 0 && event.picks) {
-          asset = event.picks[1].object.properties
-          dispatch(setAssetConnection(asset.id, 0, ''))
-          console.log('== dispatched')
-        } else {
-          asset = event.picks[1].object.properties
-          console.log(asset)
-          if (!asset.typeCode === 'm') return
-          console.log(busInfos[0].object.properties)
-          dispatch(setAssetConnection(asset.id, 0, {
-            busId: busInfos[0].object.properties.id,
-          }))
-        }
-      }
-      */
     }
+    */
 
     return new CustomEditableGeoJsonLayer({
       id: ASSETS_MAP_LAYER_ID,
@@ -296,7 +293,7 @@ export function useEditableMap(deckGL) {
       onClick: handleAssetClick,
       onEdit: handleAssetEdit,
       // onDoubleClick: handleLayerDoubleClick,
-      onStopDragging: handleLayerStopDragging,
+      // onStopDragging: handleLayerStopDragging,
     })
   }
 

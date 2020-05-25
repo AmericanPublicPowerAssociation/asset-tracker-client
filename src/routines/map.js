@@ -10,6 +10,8 @@ import {
   ViewMode,
 } from '@nebula.gl/edit-modes'
 import {
+  ASSETS_MAP_LAYER_ID,
+  BUSES_MAP_LAYER_ID, PICKING_DEPTH, PICKING_RADIUS_IN_PIXELS,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_ADD_METER,
   SKETCH_MODE_ADD_SUBSTATION,
@@ -77,4 +79,28 @@ export function updateFeature(feature, asset) {
   const featureProperties = feature.properties
   featureProperties.id = asset.id
   featureProperties.typeCode = asset.typeCode
+}
+
+export function getBusesByLatLng(deckGL, position) {
+  const screenCoords = deckGL.current.viewports[0].project(position)
+
+  return deckGL.current.pickMultipleObjects({
+    x: screenCoords[0],
+    y: screenCoords[1],
+    layerIds: [BUSES_MAP_LAYER_ID],
+    radius: PICKING_RADIUS_IN_PIXELS * 2,
+    depth: PICKING_DEPTH,
+  })
+}
+
+export function getAssetsByLatLng(deckGL, position) {
+  const screenCoords = deckGL.current.viewports[0].project(position)
+
+  return deckGL.current.pickMultipleObjects({
+    x: screenCoords[0],
+    y: screenCoords[1],
+    layerIds: [ASSETS_MAP_LAYER_ID],
+    radius: PICKING_RADIUS_IN_PIXELS * 2,
+    depth: PICKING_DEPTH,
+  })
 }
