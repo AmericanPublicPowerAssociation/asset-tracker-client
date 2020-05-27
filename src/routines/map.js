@@ -72,7 +72,7 @@ export function getMapViewStateFromBoundingBox(boundingBox, width, height) {
     return
   }
   const viewport = new WebMercatorViewport({ width, height })
-  return viewport.fitBounds(boundingBox, { padding: 20 })
+  return viewport.fitBounds(boundingBox, { padding: 20, maxZoom: 20 })
 }
 
 export function getFeaturePack({ editContext, updatedData }) {
