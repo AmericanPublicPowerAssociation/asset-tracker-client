@@ -55,8 +55,8 @@ export const PICKING_DEPTH = 5
 export const PICKING_RADIUS_IN_PIXELS = 0
 export const PICKING_DEPTH = 3
 */
-export const PICKING_RADIUS_IN_PIXELS = 1
-export const PICKING_DEPTH = 3
+export const PICKING_RADIUS_IN_PIXELS = 5
+export const PICKING_DEPTH = 5
 
 export const TOGGLE_MAP_STYLE = 'TOGGLE_MAP_STYLE'
 export const SET_MAP_VIEW_STATE = 'SET_MAP_VIEW_STATE'
