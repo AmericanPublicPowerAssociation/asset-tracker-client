@@ -113,3 +113,13 @@ export function getAssetsByLatLng(deckGL, position) {
     depth: PICKING_DEPTH,
   })
 }
+
+export function getAssetsByScreenPosition(deckGL, screenPosition) {
+  return deckGL.current.pickMultipleObjects({
+    x:  screenPosition.x,
+    y: screenPosition.y,
+    layerIds: [ASSETS_MAP_LAYER_ID],
+    radius: 6,
+    depth: PICKING_DEPTH,
+  })
+}

@@ -10,7 +10,7 @@ import {
   fillAssetName,
   insertAssetVertex,
   setAsset,
-  setAssetConnection,
+  setAssetConnection, setAssetGeoJson,
   setAssetsGeoJson,
   setEditingAsset,
   setFocusingAssetId,
@@ -40,7 +40,7 @@ import {
 import {
   // getPickedEditHandle,
   CustomEditableGeoJsonLayer,
-  getAssetDescription, getAssetsByLatLng,
+  getAssetDescription, getAssetsByLatLng, getAssetsByScreenPosition,
   getAssetTypeCode, getBusesByLatLng,
   getFeaturePack,
   getMapMode,
@@ -59,7 +59,7 @@ import {
   getFocusingAssetId,
   getSelectedAssetIndexes,
   getSelectedBusIndexes,
-  getSketchMode,
+  getSketchMode, getAssetIdsByBusId,
 } from '../selectors'
 
 export function useMovableMap() {
@@ -436,26 +436,127 @@ export function useEditableMap(deckGL) {
       const targetBusId = info.object && info.object.properties.id
       const targetAssetId = assetIdByBusId[targetBusId]
 
-      /*
-      // If we are not adding a specific type of asset,
-      if (sketchMode === SKETCH_MODE_ADD) {
-        const assetInfos = deckGL.current.pickMultipleObjects({
-          x: info.x,
-          y: info.y,
-          layerIds: [ASSETS_MAP_LAYER_ID],
-          radius: PICKING_RADIUS_IN_PIXELS,
-          depth: PICKING_DEPTH,
-        })
-        console.log(assetInfos)
-        if (assetInfos.length > 0 && assetInfos[0].object.properties.typeCode === 'm') {
-          const asset = assetInfos[0].object.properties
+      if (sketchMode.startsWith(SKETCH_MODE_ADD)) {
+        const assetsInfos = getAssetsByScreenPosition(deckGL, info);
+
+        console.log(assetsInfos)
+        const metersToConnect = assetsInfos.filter(info => info.object.properties.typeCode === ASSET_TYPE_CODE_METER)
+        const transformersToConnect = assetsInfos.filter(info => info.object.properties.typeCode === ASSET_TYPE_CODE_TRANSFORMER)
+        console.log(metersToConnect)
+        console.log(transformersToConnect)
+        if (metersToConnect.length > 0) {
+          const geometry = metersToConnect[0].object.geometry
+          const assetId = assetIdByBusId[info.object.properties.id]
+          const ownerAsset = assetById[assetId]
+          const asset = metersToConnect[0].object.properties
+          const busGeoJSON = info.object.geometry
+          let assetGeoJSON
+          if (ownerAsset.typeCode === ASSET_TYPE_CODE_LINE)  {
+            assetGeoJSON = busesGeoJson
+          } else {
+            assetGeoJSON = assetsGeoJson.features.filter(assetGeoJson => assetGeoJson.properties.id === assetId)[0].geometry
+          }
+
           dispatch(setAssetConnection(asset.id, 0, {
             busId: targetBusId,
           }))
+
+          console.log(ownerAsset)
+          console.log(geometry)
+          console.log(assetGeoJSON)
+          if (assetGeoJSON.coordinates[1] - geometry.coordinates[1] >= 0) {
+            console.log('decrease lat')
+            const offset  = 0.00008 - (busGeoJSON.coordinates[1] - geometry.coordinates[1])
+            console.log(offset)
+            dispatch(setAssetGeoJson(asset.id, {...geometry, coordinates: [
+                geometry.coordinates[0],
+                geometry.coordinates[1] - offset,
+              ]}))
+          }
+          if (assetGeoJSON.coordinates[1] - geometry.coordinates[1] < 0) {
+            console.log('increase lat')
+            const offset  = 0.00008 + (busGeoJSON.coordinates[1] - geometry.coordinates[1])
+            dispatch(setAssetGeoJson(asset.id, {...geometry, coordinates: [
+                geometry.coordinates[0],
+                geometry.coordinates[1] + offset,
+              ]}))
+          }
+          if (assetGeoJSON.coordinates[2] - geometry.coordinates[2] >= 0) {
+            console.log('restar longitud')
+          }
+          if (assetGeoJSON.coordinates[2] - geometry.coordinates[2] < 0) {
+            console.log('aumentar longitud')
+          }
+          console.log('========== Latitude')
+          console.log(assetGeoJSON.coordinates[0] - geometry.coordinates[0])
+          console.log('========== Longitud')
+          console.log(assetGeoJSON.coordinates[1] - geometry.coordinates[1])
+        }
+        if (transformersToConnect.length > 0) {
+          const geometry = transformersToConnect[0].object.geometry
+          const assetId = assetIdByBusId[info.object.properties.id]
+          const transformer = transformersToConnect[0].object.properties
+          const busGeoJSON = info.object.geometry
+          const ownerAsset = assetById[assetId]
+          const asset = transformersToConnect[0].object.properties
+
+          let assetGeoJSON
+          if (ownerAsset.typeCode === ASSET_TYPE_CODE_LINE)  {
+            assetGeoJSON = busGeoJSON
+          } else {
+            assetGeoJSON = assetsGeoJson.features.filter(assetGeoJson => assetGeoJson.properties.id === assetId)[0].geometry
+          }
+          console.log(assetGeoJSON)
+
+          if (assetGeoJSON.coordinates[1] - geometry.coordinates[1] >= 0) {
+            console.log('decrease lat')
+            const offset  = 0.00012 - (busGeoJSON.coordinates[1] - geometry.coordinates[1])
+            console.log(offset)
+            dispatch(setAssetGeoJson(transformer.id, {...geometry, coordinates: [
+                geometry.coordinates[0],
+                geometry.coordinates[1] - offset,
+              ]}))
+            dispatch(setAssetConnection(asset.id, 0, {
+              busId: targetBusId,
+            }))
+          }
+          else if (assetGeoJSON.coordinates[1] - geometry.coordinates[1] < 0) {
+            console.log('increase lat')
+            const offset  = 0.00012 + (busGeoJSON.coordinates[1] - geometry.coordinates[1])
+            dispatch(setAssetGeoJson(transformer.id, {...geometry, coordinates: [
+                geometry.coordinates[0],
+                geometry.coordinates[1] + offset,
+              ]}))
+            dispatch(setAssetConnection(asset.id, 1, {
+              busId: targetBusId,
+            }))
+          } else {
+            dispatch(setAssetConnection(asset.id, 0, {
+              busId: targetBusId,
+            }))
+          }
+
+          if (busGeoJSON.coordinates[0] - geometry.coordinates[0] >= 0) {
+            console.log('decrease lng')
+            const offset  = 0.00012 - (busGeoJSON.coordinates[0] - geometry.coordinates[0])
+            console.log(offset)
+            dispatch(setAssetGeoJson(transformer.id, {...geometry, coordinates: [
+                geometry.coordinates[0] - offset,
+                geometry.coordinates[1],
+              ]}))
+          }
+          else if (busGeoJSON.coordinates[0] - geometry.coordinates[0] < 0) {
+            console.log('increase lng')
+            const offset  = 0.00012 + (busGeoJSON.coordinates[0] - geometry.coordinates[0])
+            dispatch(setAssetGeoJson(transformer.id, {...geometry, coordinates: [
+                geometry.coordinates[0] + offset,
+                geometry.coordinates[1],
+              ]}))
+          }
+
         }
       }
-      */
-      if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
+      else {
         if (targetAssetId) {
           dispatch(setFocusingAssetId(targetAssetId))
           dispatch(setFocusingBusId(targetBusId))
