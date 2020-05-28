@@ -62,7 +62,7 @@ export default function AssetDeleteDialog({
         <Button onClick={handleClose} color='primary'>
           Cancel
         </Button>
-        <Button onClick={onConfirm} color='primary'>
+        <Button onClick={onConfirm} color='primary' disabled={input !== focusingAssetId}>
           Confirm
         </Button>
       </DialogActions>

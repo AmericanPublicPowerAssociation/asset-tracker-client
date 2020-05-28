@@ -47,7 +47,7 @@ export default function ImportExportDialog({
 
   const [powerName, setPowerName] = useState('')
   const [action, setAction] = useState('download')
-  const [format, setFormat] = useState('dss')
+  const [format, setFormat] = useState('csv')
   const [overwriteRecords, setOverwriteRecords] = useState(false)
   const [assetCSVFile, setAssetCSVFile] = useState(null)
   const [loadingFileIndicator, setLoadingFileIndicator] = useState(false)
@@ -125,7 +125,7 @@ export default function ImportExportDialog({
         disableBackdropClick>
             <DialogTitle>Download Manager</DialogTitle>
             <DialogContent>
-                <Typography component='p'>What i want to do?</Typography>
+                <Typography component='p'>What I want to do?</Typography>
                 <FormControl fullWidth>
                   <Select
                     onChange={(e) => setAction(e.target.value)} value={action}
@@ -140,8 +140,8 @@ export default function ImportExportDialog({
                     <Select
                       onChange={(e) => setFormat(e.target.value)} value={format}
                       input={<Input id='asset-type-select' />}>
-                      <MenuItem value='dss'>DSS</MenuItem>
                       <MenuItem value='csv'>CSV</MenuItem>
+                      <MenuItem value='dss'>DSS</MenuItem>
                     </Select> </>: <>
                       {DropzoneInstance}
                       { loadingFileIndicator ? <Grid style={{ marginTop: '20px' }} container align="center"

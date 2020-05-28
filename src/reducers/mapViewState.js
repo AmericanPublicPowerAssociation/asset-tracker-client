@@ -1,11 +1,12 @@
 import produce from 'immer'
+import centroid from '@turf/centroid'
 import {
   getMapViewStateFromBoundingBox,
 } from '../routines'
 import {
   MAP_VIEW_STATE,
-  SET_PAN_MAP_TO_ASSET,
-  SET_MAP_BOUNDING_BOX,
+  PAN_MAP_TO_ASSET,
+  SET_ASSETS,
   SET_MAP_VIEW_STATE,
 } from '../constants'
 
@@ -18,32 +19,23 @@ const mapViewState = produce((draft, action) => {
       transferViewState(draft, viewState)
       break
     }
-    case SET_MAP_BOUNDING_BOX: {
-      // TODO: Consider listening to SET_ASSETS
-      const boundingBox = action.payload
-      // if (draft['reset']) {
-        // return
-      // }
+    case SET_ASSETS: {
+      const { boundingBox } = action.payload
+      if (!boundingBox || draft['reset']) {
+        return
+      }
       const viewState = getMapViewStateFromBoundingBox(
-        boundingBox, window.innerWidth, window.innerHeight)
+        boundingBox, window.innerWidth, window.innerHeight, draft.zoom)
       if (!viewState) return
       transferViewState(draft, viewState)
-      // draft.reset = true
+      draft.reset = true
       break
     }
     // TODO: Rename
-    case SET_PAN_MAP_TO_ASSET: {
+    case PAN_MAP_TO_ASSET: {
       const assetGeoJson = action.payload
-      const { type, coordinates } = assetGeoJson.geometry
-      let lon, lat
-      // TODO: Use centroid
-      if (type === 'Point') {
-        [lon, lat] = coordinates
-      } else if (type === 'LineString') {
-        [lon, lat] = coordinates[0]
-      } else if (type === 'Polygon') {
-        [lon, lat] = coordinates[0][0]
-      }
+      const pointGeojson = centroid(assetGeoJson)
+      const [ lon, lat ] = pointGeojson.geometry.coordinates
       draft.longitude = lon
       draft.latitude = lat
       break

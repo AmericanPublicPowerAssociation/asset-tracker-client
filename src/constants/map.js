@@ -60,8 +60,7 @@ export const PICKING_DEPTH = 5
 
 export const TOGGLE_MAP_STYLE = 'TOGGLE_MAP_STYLE'
 export const SET_MAP_VIEW_STATE = 'SET_MAP_VIEW_STATE'
-export const SET_MAP_BOUNDING_BOX = 'SET_MAP_BOUNDING_BOX'
-export const SET_PAN_MAP_TO_ASSET = 'SET_PAN_MAP_TO_ASSET'
+export const PAN_MAP_TO_ASSET = 'PAN_MAP_TO_ASSET'
 
 export const ASSETS_MAP_LAYER_ID = 'assets'
 export const BUSES_MAP_LAYER_ID = 'buses'

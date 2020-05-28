@@ -15,7 +15,7 @@ import DetailsWindow from './DetailsWindow'
 import TablesWindow from './TablesWindow'
 import TablesDialog from './TablesDialog'
 import ImportExportDialog from './ImportExportDialog'
-// import AssetDeleteDialog from './AssetDeleteDialog'
+import AssetDeleteDialog from './AssetDeleteDialog'
 import {
   refreshRisks,
 } from 'asset-report-risks'
@@ -54,7 +54,7 @@ export default function App() {
   const isLayoutMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
-  // const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [
     isWithImportExport,
     setIsWithImportExport,
@@ -69,9 +69,7 @@ export default function App() {
   }, [dispatch])
   return (
     <div style={{ overflowX: 'hidden', overflowY: 'hidden' }}>
-      <AssetsMap
-        // openAssetDeleteDialog={ () => setIsDeleteDialogOpen(true) }
-      />
+      <AssetsMap openDeleteDialogOpen={() => setIsDeleteDialogOpen(true)} />
       <SketchButtons />
       <SketchModeToolbar />
       <SketchAddToolbar />
@@ -114,13 +112,13 @@ export default function App() {
           setIsImportExportDialogOpen(false)}
         }
       />
+    */}
     { isDeleteDialogOpen &&
       <AssetDeleteDialog
         openDialog={isDeleteDialogOpen}
         onClose={ () => setIsDeleteDialogOpen(false) }
       />
     }
-    */}
     </div>
   )
 }
