@@ -1,4 +1,5 @@
 import {
+  ASSET_TYPE_CODE_GENERATOR,
   ASSET_TYPE_CODE_METER,
   ASSET_TYPE_CODE_TRANSFORMER,
 } from './asset'
@@ -33,6 +34,7 @@ export const ASSET_LINE_WIDTH_IN_METERS = 5
 
 export const ASSET_RADIUS_IN_METERS_BY_CODE = {
   [ASSET_TYPE_CODE_METER]: 5,
+  [ASSET_TYPE_CODE_GENERATOR]: 15,
   [ASSET_TYPE_CODE_TRANSFORMER]: 10,
 }
 
@@ -55,8 +57,8 @@ export const PICKING_DEPTH = 5
 export const PICKING_RADIUS_IN_PIXELS = 0
 export const PICKING_DEPTH = 3
 */
-export const PICKING_RADIUS_IN_PIXELS = 1
-export const PICKING_DEPTH = 3
+export const PICKING_RADIUS_IN_PIXELS = 5
+export const PICKING_DEPTH = 5
 
 export const TOGGLE_MAP_STYLE = 'TOGGLE_MAP_STYLE'
 export const SET_MAP_VIEW_STATE = 'SET_MAP_VIEW_STATE'
@@ -78,6 +80,7 @@ export const SKETCH_MODE_ADD = 'add'
 export const SKETCH_MODE_ADD_ASSET = 'add >'
 export const SKETCH_MODE_ADD_LINE = 'add > line'
 export const SKETCH_MODE_ADD_TRANSFORMER = 'add > transformer'
+export const SKETCH_MODE_ADD_GENERATOR = 'add > generator'
 export const SKETCH_MODE_ADD_SUBSTATION = 'add > substation'
 export const SKETCH_MODE_ADD_METER = 'add > meter'
 

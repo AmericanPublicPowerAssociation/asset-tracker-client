@@ -1,5 +1,5 @@
 import {
-  DELETE_ASSET,
+  DELETE_ASSET, SET_ASSET_GEOJSON,
   SET_ASSETS,
   SET_ASSETS_GEOJSON,
 } from '../constants'
@@ -18,6 +18,17 @@ const assetsGeoJson = (state=initialState, action) => {
     case SET_ASSETS_GEOJSON: {
       const assetsGeoJson = action.payload
       return assetsGeoJson
+    }
+    case SET_ASSET_GEOJSON: {
+      console.log(action.payload)
+      const newGeoJSON = state.features.map(assetGeoJSON => {
+        if (assetGeoJSON.properties.id === action.payload.id) {
+          return {...assetGeoJSON, geometry: action.payload.geometry}
+        }
+        return assetGeoJSON
+      })
+      console.log(newGeoJSON)
+      return {...state, features: newGeoJSON}
     }
     case DELETE_ASSET: {
       const { assetId } = action.payload

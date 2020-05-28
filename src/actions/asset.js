@@ -19,7 +19,7 @@ import {
   SET_EDITING_ASSET,
   SET_EDITING_ASSET_VALUE,
   SET_FOCUSING_ASSET_ID,
-  UPLOAD_ASSETS_CSV,
+  UPLOAD_ASSETS_CSV, SET_ASSET_GEOJSON,
 } from '../constants'
 
 export function refreshAssets() {
@@ -76,6 +76,13 @@ export function setAssetsGeoJson(geojson) {
   return {
     type: SET_ASSETS_GEOJSON,
     payload: geojson,
+  }
+}
+
+export function setAssetGeoJson(id, geometry) {
+  return {
+    type: SET_ASSET_GEOJSON,
+    payload: {id, geometry},
   }
 }
 

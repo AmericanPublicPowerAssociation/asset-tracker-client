@@ -16,8 +16,9 @@ import {
   PICKING_RADIUS_IN_PIXELS,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_ADD_METER,
-  SKETCH_MODE_ADD_SUBSTATION,
+  SKETCH_MODE_ADD_GENERATOR,
   SKETCH_MODE_ADD_TRANSFORMER,
+  SKETCH_MODE_ADD_SUBSTATION,
   SKETCH_MODE_EDIT,
 } from '../constants'
 
@@ -53,6 +54,7 @@ export function getMapMode(sketchMode) {
     [SKETCH_MODE_ADD_LINE]: DrawLineStringMode,
     [SKETCH_MODE_ADD_METER]: DrawPointMode,
     [SKETCH_MODE_ADD_TRANSFORMER]: DrawPointMode,
+    [SKETCH_MODE_ADD_GENERATOR]: DrawPointMode,
     [SKETCH_MODE_ADD_SUBSTATION]: DrawPolygonMode,
     [SKETCH_MODE_EDIT]: ModifyMode,
   }[sketchMode]
@@ -130,6 +132,16 @@ export function getAssetsByLatLng(deckGL, position) {
     y: screenCoords[1],
     layerIds: [ASSETS_MAP_LAYER_ID],
     radius: PICKING_RADIUS_IN_PIXELS * 2,
+    depth: PICKING_DEPTH,
+  })
+}
+
+export function getAssetsByScreenPosition(deckGL, screenPosition) {
+  return deckGL.current.pickMultipleObjects({
+    x:  screenPosition.x,
+    y: screenPosition.y,
+    layerIds: [ASSETS_MAP_LAYER_ID],
+    radius: 6,
     depth: PICKING_DEPTH,
   })
 }

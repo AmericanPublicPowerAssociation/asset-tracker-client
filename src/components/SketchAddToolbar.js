@@ -10,10 +10,12 @@ import {
   setSketchMode,
 } from '../actions'
 import {
+  ASSET_TYPE_CODE_GENERATOR,
   ASSET_TYPE_CODE_LINE,
   ASSET_TYPE_CODE_METER,
   ASSET_TYPE_CODE_SUBSTATION,
   ASSET_TYPE_CODE_TRANSFORMER,
+  SKETCH_MODE_ADD_GENERATOR,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_ADD_METER,
   SKETCH_MODE_ADD_SUBSTATION,
@@ -81,6 +83,21 @@ export default function SketchAddToolbar(props) {
             onClick={() => dispatch(setSketchMode(SKETCH_MODE_ADD_TRANSFORMER))}
           >
             <AssetTypeSvgIcon assetTypeCode={ASSET_TYPE_CODE_TRANSFORMER} />
+          </ListItem>
+        </Tooltip>
+
+        <Tooltip
+          title='Add Generator'
+          aria-label='Add Generator'
+          placement='right'
+        >
+          <ListItem
+            button
+            classes={{ selected: 'selected' }}
+            selected={sketchMode === SKETCH_MODE_ADD_GENERATOR}
+            onClick={() => dispatch(setSketchMode(SKETCH_MODE_ADD_GENERATOR))}
+          >
+            <AssetTypeSvgIcon assetTypeCode={ASSET_TYPE_CODE_GENERATOR} />
           </ListItem>
         </Tooltip>
 
