@@ -438,80 +438,53 @@ export function useEditableMap(deckGL) {
 
       if (sketchMode.startsWith(SKETCH_MODE_ADD)) {
         const assetsInfos = getAssetsByScreenPosition(deckGL, info);
-
-        console.log(assetsInfos)
         const metersToConnect = assetsInfos.filter(info => info.object.properties.typeCode === ASSET_TYPE_CODE_METER)
         const transformersToConnect = assetsInfos.filter(info => info.object.properties.typeCode === ASSET_TYPE_CODE_TRANSFORMER)
-        console.log(metersToConnect)
-        console.log(transformersToConnect)
+        const assetId = assetIdByBusId[info.object.properties.id]
+        const ownerAsset = assetById[assetId]
+        const busGeoJSON = info.object.geometry
+
+        let assetGeoJSON
+        if (ownerAsset.typeCode === ASSET_TYPE_CODE_LINE)  {
+          assetGeoJSON = busGeoJSON
+        } else {
+          assetGeoJSON = assetsGeoJson.features.filter(assetGeoJson => assetGeoJson.properties.id === assetId)[0].geometry
+        }
+
         if (metersToConnect.length > 0) {
           const geometry = metersToConnect[0].object.geometry
-          const assetId = assetIdByBusId[info.object.properties.id]
-          const ownerAsset = assetById[assetId]
           const asset = metersToConnect[0].object.properties
-          const busGeoJSON = info.object.geometry
-          let assetGeoJSON
-          if (ownerAsset.typeCode === ASSET_TYPE_CODE_LINE)  {
-            assetGeoJSON = busesGeoJson
-          } else {
-            assetGeoJSON = assetsGeoJson.features.filter(assetGeoJson => assetGeoJson.properties.id === assetId)[0].geometry
-          }
 
           dispatch(setAssetConnection(asset.id, 0, {
             busId: targetBusId,
           }))
 
-          console.log(ownerAsset)
-          console.log(geometry)
-          console.log(assetGeoJSON)
           if (assetGeoJSON.coordinates[1] - geometry.coordinates[1] >= 0) {
-            console.log('decrease lat')
+            // 'decrease lat'
             const offset  = 0.00008 - (busGeoJSON.coordinates[1] - geometry.coordinates[1])
-            console.log(offset)
             dispatch(setAssetGeoJson(asset.id, {...geometry, coordinates: [
                 geometry.coordinates[0],
                 geometry.coordinates[1] - offset,
               ]}))
           }
           if (assetGeoJSON.coordinates[1] - geometry.coordinates[1] < 0) {
-            console.log('increase lat')
+            // 'increase lat'
             const offset  = 0.00008 + (busGeoJSON.coordinates[1] - geometry.coordinates[1])
             dispatch(setAssetGeoJson(asset.id, {...geometry, coordinates: [
                 geometry.coordinates[0],
                 geometry.coordinates[1] + offset,
               ]}))
           }
-          if (assetGeoJSON.coordinates[2] - geometry.coordinates[2] >= 0) {
-            console.log('restar longitud')
-          }
-          if (assetGeoJSON.coordinates[2] - geometry.coordinates[2] < 0) {
-            console.log('aumentar longitud')
-          }
-          console.log('========== Latitude')
-          console.log(assetGeoJSON.coordinates[0] - geometry.coordinates[0])
-          console.log('========== Longitud')
-          console.log(assetGeoJSON.coordinates[1] - geometry.coordinates[1])
         }
         if (transformersToConnect.length > 0) {
           const geometry = transformersToConnect[0].object.geometry
-          const assetId = assetIdByBusId[info.object.properties.id]
           const transformer = transformersToConnect[0].object.properties
-          const busGeoJSON = info.object.geometry
-          const ownerAsset = assetById[assetId]
           const asset = transformersToConnect[0].object.properties
 
-          let assetGeoJSON
-          if (ownerAsset.typeCode === ASSET_TYPE_CODE_LINE)  {
-            assetGeoJSON = busGeoJSON
-          } else {
-            assetGeoJSON = assetsGeoJson.features.filter(assetGeoJson => assetGeoJson.properties.id === assetId)[0].geometry
-          }
-          console.log(assetGeoJSON)
-
+          // Manage latitude offset for transformer
           if (assetGeoJSON.coordinates[1] - geometry.coordinates[1] >= 0) {
-            console.log('decrease lat')
+            // 'decrease lat'
             const offset  = 0.00012 - (busGeoJSON.coordinates[1] - geometry.coordinates[1])
-            console.log(offset)
             dispatch(setAssetGeoJson(transformer.id, {...geometry, coordinates: [
                 geometry.coordinates[0],
                 geometry.coordinates[1] - offset,
@@ -521,7 +494,6 @@ export function useEditableMap(deckGL) {
             }))
           }
           else if (assetGeoJSON.coordinates[1] - geometry.coordinates[1] < 0) {
-            console.log('increase lat')
             const offset  = 0.00012 + (busGeoJSON.coordinates[1] - geometry.coordinates[1])
             dispatch(setAssetGeoJson(transformer.id, {...geometry, coordinates: [
                 geometry.coordinates[0],
@@ -530,30 +502,25 @@ export function useEditableMap(deckGL) {
             dispatch(setAssetConnection(asset.id, 1, {
               busId: targetBusId,
             }))
-          } else {
-            dispatch(setAssetConnection(asset.id, 0, {
-              busId: targetBusId,
-            }))
           }
 
+          // Manage longitude offset for transformer
           if (busGeoJSON.coordinates[0] - geometry.coordinates[0] >= 0) {
-            console.log('decrease lng')
+            // 'decrease lng'
             const offset  = 0.00012 - (busGeoJSON.coordinates[0] - geometry.coordinates[0])
-            console.log(offset)
             dispatch(setAssetGeoJson(transformer.id, {...geometry, coordinates: [
                 geometry.coordinates[0] - offset,
                 geometry.coordinates[1],
               ]}))
           }
           else if (busGeoJSON.coordinates[0] - geometry.coordinates[0] < 0) {
-            console.log('increase lng')
+            // 'increase lng'
             const offset  = 0.00012 + (busGeoJSON.coordinates[0] - geometry.coordinates[0])
             dispatch(setAssetGeoJson(transformer.id, {...geometry, coordinates: [
                 geometry.coordinates[0] + offset,
                 geometry.coordinates[1],
               ]}))
           }
-
         }
       }
       else {
