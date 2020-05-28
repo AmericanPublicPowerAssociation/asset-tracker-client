@@ -11,7 +11,9 @@ import {
 } from '@nebula.gl/edit-modes'
 import {
   ASSETS_MAP_LAYER_ID,
-  BUSES_MAP_LAYER_ID, PICKING_DEPTH, PICKING_RADIUS_IN_PIXELS,
+  BUSES_MAP_LAYER_ID,
+  PICKING_DEPTH,
+  PICKING_RADIUS_IN_PIXELS,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_ADD_METER,
   SKETCH_MODE_ADD_GENERATOR,
@@ -76,6 +78,24 @@ export function getMapViewStateFromBoundingBox(boundingBox, width, height) {
   const viewport = new WebMercatorViewport({ width, height })
   return viewport.fitBounds(boundingBox, { padding: 20, maxZoom: 20 })
 }
+
+export function getDeckGLNearbyObjects(obj) {
+  const  {
+    deckGL,
+    screenCoords,
+    layerId,
+    pickingRadius = PICKING_RADIUS_IN_PIXELS,
+    pickingDepth = PICKING_DEPTH,
+  } = obj
+  const nearbyObjectInfos = deckGL.current.pickMultipleObjects({
+    x: screenCoords[0],
+    y: screenCoords[1],
+    layerIds: [layerId],
+    radius: pickingRadius,
+    depth: pickingDepth,
+  })
+  return nearbyObjectInfos
+} 
 
 export function getFeaturePack({ editContext, updatedData }) {
   const { featureIndexes } = editContext
