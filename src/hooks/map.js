@@ -71,7 +71,7 @@ export function useMovableMap() {
   }
 }
 
-export function useEditableMap(deckGL) {
+export function useEditableMap(deckGL, openDeleteDialogOpen) {
   const dispatch = useDispatch()
   const sketchMode = useSelector(getSketchMode)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
@@ -566,8 +566,8 @@ export function useEditableMap(deckGL) {
         }
         case 'Delete':
         case 'Backspace': {
-          if (sketchMode in [SKETCH_MODE_ADD, SKETCH_MODE_EDIT]) {
-            dispatch(deleteAsset(focusingAssetId))
+          if ([SKETCH_MODE_ADD, SKETCH_MODE_EDIT].includes(sketchMode)) {
+            openDeleteDialogOpen()
           }
           break
         }

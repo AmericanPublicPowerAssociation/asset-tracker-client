@@ -21,13 +21,14 @@ const {
   REACT_APP_MAPBOX_TOKEN,
 } = process.env
 
-export default function AssetsMap() {
+export default function AssetsMap(props) {
   const deckGL = useRef()
   const mapStyle = useSelector(getMapStyle)
   const mapViewState = useSelector(getMapViewState)
   const hoverInfo = useSelector(getHoverInfo)
   const { handleMapMove } = useMovableMap()
-  const { mapLayers, handleMapKey, handleMapClick } = useEditableMap(deckGL)
+  const { openDeleteDialogOpen } = props
+  const { mapLayers, handleMapKey, handleMapClick } = useEditableMap(deckGL, openDeleteDialogOpen)
 
   return (
     <div onKeyUp={handleMapKey}

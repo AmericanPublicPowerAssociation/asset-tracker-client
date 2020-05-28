@@ -7,11 +7,11 @@ import {
   RisksTable,
 } from 'asset-report-risks'
 import {
+  panMapToAsset,
   setFocusingAssetId,
   // setFocusingBusId,
   setSelectedAssetIndexes,
   // setSelectedBusIndexes,
-  setPanMapToAsset,
 } from '../actions'
 import {
   getAssetsGeoJson,
@@ -49,7 +49,7 @@ export default function TablesWindow(props) {
       selectedAssetIndexes.push(selectedAssetIndex)
       // TODO: Rename
       // TODO: Combine below into a single dispatch
-      dispatch(setPanMapToAsset(features[selectedAssetIndex]))
+      dispatch(panMapToAsset(features[selectedAssetIndex]))
     }
     dispatch(setSelectedAssetIndexes(selectedAssetIndexes))
     // dispatch(setSelectedBusIndexes([]))
