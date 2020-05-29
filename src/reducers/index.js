@@ -5,6 +5,7 @@ import {
   productNameSuggestions,
   productVersionSuggestions,
   risks,
+  selectedRiskIndex,
   sortedRisks,
   vendorNameSuggestions,
 } from 'asset-report-risks'
@@ -45,6 +46,7 @@ const reduceHorizontally = combineReducers({
   productVersionSuggestions,
   sortedRisks,
   risks,
+  selectedRiskIndex,
   taskCodeTypes,
   sketchMode,  // Keep last
 })

@@ -18,7 +18,7 @@ import {
 } from '../constants'
 import {
   getAssetCount,
-  getColors,
+  getMapColors,
   getIsViewing,
   getOpenTaskCount,
   getOverlayMode,
@@ -36,7 +36,7 @@ export default function OverlaysWindow() {
   const dispatch = useDispatch()
   const isViewing = useSelector(getIsViewing)
   const overlayMode = useSelector(getOverlayMode)
-  const colors = useSelector(getColors)
+  const mapColors = useSelector(getMapColors)
   // TODO: Update selectors to show counts for what is currently visible in map
   // TODO: Implement getVisibleAssetCount
   // TODO: Implement getVisibleTaskCount
@@ -45,7 +45,7 @@ export default function OverlaysWindow() {
   const visibleTaskCount = useSelector(getOpenTaskCount)
   const visibleRiskCount = useSelector(getVisibleRiskCount)
 
-  const color = colors.active
+  const color = mapColors.active
 
   const assetsOverlayLabel = `Assets (${visibleAssetCount})`
   const tasksOverlayLabel = `Tasks (${visibleTaskCount})`

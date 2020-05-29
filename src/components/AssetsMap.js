@@ -15,6 +15,7 @@ import {
   getHoverInfo,
   getMapStyle,
   getMapViewState,
+  getOverlayMapLayers,
 } from '../selectors'
 
 const {
@@ -26,10 +27,12 @@ export default function AssetsMap(props) {
   const mapStyle = useSelector(getMapStyle)
   const mapViewState = useSelector(getMapViewState)
   const hoverInfo = useSelector(getHoverInfo)
+  const overlayMapLayers = useSelector(getOverlayMapLayers)
   const { handleMapMove } = useMovableMap()
   const { openDeleteDialogOpen } = props
-  const { mapLayers, handleMapKey, handleMapClick } = useEditableMap(deckGL, openDeleteDialogOpen)
-
+  const { mapLayers, handleMapKey, handleMapClick } = useEditableMap(
+    deckGL, openDeleteDialogOpen)
+  mapLayers.push(...overlayMapLayers)
   return (
     <div onKeyUp={handleMapKey}
       style={{ overflowX: 'hidden', overflowY: 'hidden' }}

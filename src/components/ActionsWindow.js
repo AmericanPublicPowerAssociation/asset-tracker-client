@@ -10,7 +10,7 @@ import {
   USER_NAME,
 } from '../constants'
 import {
-  getColors,
+  getMapColors,
 } from '../selectors'
 
 const useStyles = makeStyles(theme => ({
@@ -26,9 +26,9 @@ export default function ActionsWindow({
   setIsWithImportExport,
 }) {
   const classes = useStyles()
-  const colors = useSelector(getColors)
-  const activeColor = colors.active
-  const inactiveColor = colors.inactive
+  const mapColors = useSelector(getMapColors)
+  const activeColor = mapColors.active
+  const inactiveColor = mapColors.inactive
 
   return (
     <div className={classes.root}>

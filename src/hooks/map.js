@@ -5,7 +5,7 @@ import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import { ViewMode } from '@nebula.gl/edit-modes'
 import {
   // setSelectedBusIndexes,
-  deleteAsset,
+  // deleteAsset,
   deleteAssetVertex,
   fillAssetName,
   insertAssetVertex,
@@ -58,12 +58,12 @@ import {
   getAssetTypeByCode,
   getAssetsGeoJson,
   getBusesGeoJson,
-  getColors,
   getEditingAsset,
-  getFocusingAssetId,
+  // getFocusingAssetId,
+  getMapColors,
   getSelectedAssetIndexes,
   getSelectedBusIndexes,
-  getSketchMode, getAssetIdsByBusId,
+  getSketchMode,
 } from '../selectors'
 
 export function useMovableMap() {
@@ -80,8 +80,8 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
   const sketchMode = useSelector(getSketchMode)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
   const busesGeoJson = useSelector(getBusesGeoJson)
-  const colors = useSelector(getColors)
-  const focusingAssetId = useSelector(getFocusingAssetId)
+  const mapColors = useSelector(getMapColors)
+  // const focusingAssetId = useSelector(getFocusingAssetId)
   const selectedAssetIndexes = useSelector(getSelectedAssetIndexes)
   const selectedBusIndexes = useSelector(getSelectedBusIndexes)
   const assetIdByBusId = useSelector(getAssetIdByBusId)
@@ -249,9 +249,13 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
       } else if (editType === 'finishMovePosition') {
 
         console.log('finishMovePosition', event)
-        const { position, positionIndexes, featureIndexes } = editContext
-        const busInfos = getBusesByLatLng(deckGL, editContext['position']);
-        const assetsInfos = getAssetsByLatLng(deckGL, editContext['position']);
+        const {
+          // position,
+          // positionIndexes,
+          featureIndexes,
+        } = editContext
+        const busInfos = getBusesByLatLng(deckGL, editContext['position'])
+        // const assetsInfos = getAssetsByLatLng(deckGL, editContext['position'])
         const { features } = updatedData
         const featureIndex = featureIndexes[0]
         const vertex = features[featureIndex]
@@ -300,11 +304,16 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
               console.log(isConnected)
               if (!isConnected.length) {
                 // Transformer was dragged to nowhere
-                dispatch(setAssetConnection(asset.id, 0, {busId: makeBusId()}))
-                dispatch(setAssetConnection(asset.id, 1, {busId: makeBusId()}))
+                dispatch(setAssetConnection(asset.id, 0, {
+                  busId: makeBusId(),
+                }))
+                dispatch(setAssetConnection(asset.id, 1, {
+                  busId: makeBusId(),
+                }))
               }
               break
             }
+            default: { }
           }
         }
       } else if (editType === 'addPosition') {
@@ -340,7 +349,7 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
             const nearbyBusInfos = getDeckGLNearbyObjects({
               deckGL, screenCoords, layerId: BUSES_MAP_LAYER_ID,
             })
-            const nearbyAssetFeatures = nearbyAssetInfos.map(info => info.object)
+            // const nearbyAssetFeatures = nearbyAssetInfos.map(info => info.object)
             const nearbyBusFeatures = nearbyBusInfos.map(info => info.object)
 
             let busId
@@ -509,7 +518,7 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
       mode: mapMode,
       selectedFeatureIndexes: selectedAssetIndexes,
       autoHighlight: true,
-      highlightColor: colors.assetHighlight,
+      highlightColor: mapColors.assetHighlight,
       pickable: true,
       stroked: false,
       getRadius: feature => {
@@ -517,10 +526,10 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
       },
       getLineWidth: ASSET_LINE_WIDTH_IN_METERS,
       getFillColor: (feature, isSelected) => {
-        return isSelected ? colors.assetSelect : colors.asset
+        return isSelected ? mapColors.assetSelect : mapColors.asset
       },
       getLineColor: (feature, isSelected) => {
-        return isSelected ? colors.assetSelect : colors.asset
+        return isSelected ? mapColors.assetSelect : mapColors.asset
       },
       onHover: handleAssetHover,
       onClick: handleAssetClick,
@@ -553,7 +562,7 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
       const targetAssetId = assetIdByBusId[targetBusId]
 
       if (sketchMode.startsWith(SKETCH_MODE_ADD)) {
-        const assetsInfos = getAssetsByScreenPosition(deckGL, info);
+        const assetsInfos = getAssetsByScreenPosition(deckGL, info)
         const metersToConnect = assetsInfos.filter(info => info.object.properties.typeCode === ASSET_TYPE_CODE_METER)
         const transformersToConnect = assetsInfos.filter(info => info.object.properties.typeCode === ASSET_TYPE_CODE_TRANSFORMER)
         const assetId = assetIdByBusId[info.object.properties.id]
@@ -578,18 +587,18 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
           if (assetGeoJSON.coordinates[1] - geometry.coordinates[1] >= 0) {
             // 'decrease lat'
             const offset  = 0.00008 - (busGeoJSON.coordinates[1] - geometry.coordinates[1])
-            dispatch(setAssetGeoJson(asset.id, {...geometry, coordinates: [
+            dispatch(setAssetGeoJson(asset.id, { ...geometry, coordinates: [
                 geometry.coordinates[0],
                 geometry.coordinates[1] - offset,
-              ]}))
+              ] }))
           }
           if (assetGeoJSON.coordinates[1] - geometry.coordinates[1] < 0) {
             // 'increase lat'
             const offset  = 0.00008 + (busGeoJSON.coordinates[1] - geometry.coordinates[1])
-            dispatch(setAssetGeoJson(asset.id, {...geometry, coordinates: [
+            dispatch(setAssetGeoJson(asset.id, { ...geometry, coordinates: [
                 geometry.coordinates[0],
                 geometry.coordinates[1] + offset,
-              ]}))
+              ] }))
           }
         }
         if (transformersToConnect.length > 0) {
@@ -653,12 +662,12 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
       mode: ViewMode,
       selectedFeatureIndexes: selectedBusIndexes,
       autoHighlight: true,
-      highlightColor: colors.busHighlight,
+      highlightColor: mapColors.busHighlight,
       pickable: true,
       stroked: false,
       getRadius: BUS_RADIUS_IN_METERS,
       getFillColor: (feature, isSelected) => {
-        return isSelected ? colors.busSelect : colors.bus
+        return isSelected ? mapColors.busSelect : mapColors.bus
       },
       onHover: handleBusHover,
       onClick: handleBusClick,
