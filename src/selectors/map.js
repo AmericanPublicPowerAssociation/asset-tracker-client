@@ -1,11 +1,26 @@
 import { createSelector } from 'reselect'
 import WebMercatorViewport from '@math.gl/web-mercator'
+import getCentroid from '@turf/centroid'
+import { GeoJsonLayer, TextLayer } from '@deck.gl/layers'
+import {
+  getRisks,
+  getRisksByAssetId,
+  getSelectedRiskIndex,
+  getThreatScoreByAssetId,
+} from 'asset-report-risks'
 import {
   getAssetById,
+  getFocusingAssetId,
 } from './asset'
 import {
+  getOpenTaskCountByAssetId,
+} from './task'
+import {
   BRIGHT_MAP_STYLE_NAMES,
+  COLORS_BY_MAP_STYLE_NAME,
   MAP_STYLE_BY_NAME,
+  OVERLAY_MODE_RISKS,
+  OVERLAY_MODE_TASKS,
   SKETCH_MODE_VIEW,
 } from '../constants'
 import {
@@ -27,6 +42,14 @@ export const getMapStyle = createSelector([
   mapStyleName,
 ) => {
   return MAP_STYLE_BY_NAME[mapStyleName]
+})
+
+export const getMapColors = createSelector([
+  getMapStyleName,
+], (
+  mapStyleName,
+) => {
+  return COLORS_BY_MAP_STYLE_NAME[mapStyleName]
 })
 
 export const getMapWebMercatorViewPort = createSelector([
@@ -66,4 +89,93 @@ export const getIsViewing = createSelector([
   sketchMode,
 ) => {
   return sketchMode === SKETCH_MODE_VIEW
+})
+
+export const getOverlayMapLayers = createSelector([
+  getOverlayMode,
+  getMapColors,
+  getRisks,
+  getAssetsGeoJson,
+  getThreatScoreByAssetId,
+  getOpenTaskCountByAssetId,
+  getSelectedRiskIndex,
+  getFocusingAssetId,
+  getRisksByAssetId,
+], (
+  overlayMode,
+  mapColors,
+  risks,
+  assetsGeoJson,
+  threatScoreByAssetId,
+  openTaskCountByAssetId,
+  selectedRiskIndex,
+  focusingAssetId,
+  risksByAssetId,
+) => {
+  const mapLayers = []
+  switch (overlayMode) {
+    case OVERLAY_MODE_TASKS: {
+      const layerData = Object.entries(
+        openTaskCountByAssetId,
+      ).map(([assetId, openTaskCount]) => {
+        const assetFeature = assetsGeoJson['features'].find(
+          feature => feature.properties.id === assetId)
+        const assetCentroid = getCentroid(assetFeature)
+        return {
+          name: '' + openTaskCount,
+          coordinates: assetCentroid.geometry.coordinates,
+        }
+      })
+      mapLayers.push(new TextLayer({
+        data: layerData,
+        fontFamily: 'Roboto',
+        pickable: false,
+        getPosition: d => d.coordinates,
+        getText: d => d.name,
+        getColor: mapColors.overlay,
+      }))
+      break
+    }
+    case OVERLAY_MODE_RISKS: {
+      const risk = risks[selectedRiskIndex]
+      if (risk) {
+        mapLayers.push(new GeoJsonLayer({
+          data: risk.lineGeoJson,
+          pickable: false,
+          getLineColor: mapColors.overlay,
+        }))
+      } else if (focusingAssetId) {
+        const focusingRisks = risksByAssetId[focusingAssetId]
+        if (focusingRisks) {
+          mapLayers.push(new GeoJsonLayer({
+            data: focusingRisks[0].lineGeoJson,
+            pickable: false,
+            getLineColor: mapColors.overlay,
+          }))
+        }
+      }
+      const layerData = Object.entries(
+        threatScoreByAssetId,
+      ).map(([assetId, threatScore]) => {
+        const assetFeature = assetsGeoJson['features'].find(
+          feature => feature.properties.id === assetId)
+        const assetCentroid = getCentroid(assetFeature)
+        return {
+          name: '' + threatScore,
+          coordinates: assetCentroid.geometry.coordinates,
+        }
+      })
+      mapLayers.push(new TextLayer({
+        data: layerData,
+        pickable: false,
+        fontFamily: 'Roboto',
+        getPosition: d => d.coordinates,
+        getText: d => d.name,
+        getColor: mapColors.overlay,
+      }))
+      break
+    }
+    default: { }
+  }
+  return mapLayers
 })

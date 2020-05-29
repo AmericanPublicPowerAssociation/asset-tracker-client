@@ -10,7 +10,7 @@ import {
   TOGGLE_MAP_STYLE,
 } from '../constants'
 import {
-  getColors,
+  getMapColors,
 } from '../selectors'
 
 const useStyles = makeStyles(theme => ({
@@ -29,9 +29,9 @@ export default function OptionsWindow({
 }) {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const colors = useSelector(getColors)
-  const activeColor = colors.active
-  const inactiveColor = colors.inactive
+  const mapColors = useSelector(getMapColors)
+  const activeColor = mapColors.active
+  const inactiveColor = mapColors.inactive
   return (
     <div className={classes.root}>
       <Tooltip title='Toggle Styles'>

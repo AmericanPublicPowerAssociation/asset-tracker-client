@@ -1,3 +1,4 @@
+// TODO: Move to asset-report-tasks
 import { createSelector } from 'reselect'
 import {
   getFocusingAssetId,
@@ -31,6 +32,20 @@ export const getOpenTaskCount = createSelector([
   openTaskById,
 ) => {
   return openTaskById.length
+})
+
+export const getOpenTaskCountByAssetId = createSelector([
+  getOpenTaskById,
+], (
+  openTaskById,
+) => {
+  const openTaskCountByAssetId = {}
+  Object.entries(openTaskById).forEach(([taskId, task]) => {
+    const assetId = task.assetId
+    const taskCount = openTaskCountByAssetId[assetId] || 0
+    openTaskCountByAssetId[assetId] = taskCount + 1
+  })
+  return openTaskCountByAssetId
 })
 
 export const getTaskPriorityTypes = createSelector([

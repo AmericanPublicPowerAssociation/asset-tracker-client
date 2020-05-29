@@ -1,9 +1,11 @@
 import {
+  ASSET_TYPE_CODE_GENERATOR,
   ASSET_TYPE_CODE_LINE,
   ASSET_TYPE_CODE_METER,
   ASSET_TYPE_CODE_SUBSTATION,
   ASSET_TYPE_CODE_TRANSFORMER,
   MINIMUM_ASSET_ID_LENGTH,
+  SKETCH_MODE_ADD_GENERATOR,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_ADD_METER,
   SKETCH_MODE_ADD_SUBSTATION,
@@ -25,7 +27,6 @@ export function makeEditingAsset(assetTypeCode) {
     typeCode: assetTypeCode,
     name: assetId,
     connections: connectionByIndex,
-    variables: {},  // Hold temporary variables
   }
   const bus0Id = makeBusId()
   const bus1Id = makeBusId()
@@ -46,6 +47,10 @@ export function makeEditingAsset(assetTypeCode) {
       connectionByIndex[1] = { busId: bus1Id }
       break
     }
+    case ASSET_TYPE_CODE_GENERATOR: {
+      connectionByIndex[0] = { busId: bus0Id }
+      break
+    }
     default: { }
   }
 
@@ -56,6 +61,7 @@ export function getAssetTypeCode(sketchMode) {
   return {
     [SKETCH_MODE_ADD_LINE]: ASSET_TYPE_CODE_LINE,
     [SKETCH_MODE_ADD_TRANSFORMER]: ASSET_TYPE_CODE_TRANSFORMER,
+    [SKETCH_MODE_ADD_GENERATOR]: ASSET_TYPE_CODE_GENERATOR,
     [SKETCH_MODE_ADD_SUBSTATION]: ASSET_TYPE_CODE_SUBSTATION,
     [SKETCH_MODE_ADD_METER]: ASSET_TYPE_CODE_METER,
   }[sketchMode]
