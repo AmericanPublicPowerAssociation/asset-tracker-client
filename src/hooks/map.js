@@ -285,31 +285,27 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
               break
             }
             case ASSET_TYPE_CODE_TRANSFORMER: {
-              console.log(busInfos)
-              console.log(asset)
+              const fullAsset = assetById[asset.id]
+              const currentConnections = fullAsset.connections
 
-              let isConnected = busInfos.filter(busInfo => {
-                console.log(busInfo)
-                console.log(editContext['position'])
-                console.log(asset.id)
-                const assets = getAssetsByLatLng(deckGL, busInfo.object.geometry.coordinates).filter(tasset =>  {
-                  console.log(tasset.object.properties.id)
-                  console.log(asset.id)
-                  return tasset.object.properties.typeCode && tasset.object.properties.id !== asset.id
+              if ([...new Set(Object.entries(currentConnections).map(conn => conn[1].busId))].length < 2) {
+                dispatch(setAssetConnection(asset.id, 1, {busId: makeBusId()}))
+              }
+
+              for (let connectionId in currentConnections) {
+                const currentConnection = currentConnections[connectionId]
+                const busCoords = busesGeoJson.features.filter(busGeoJson => busGeoJson.properties.id === currentConnection.busId)[0].geometry
+                const busGeoJSON = getBusesByLatLng(deckGL, busCoords['coordinates']).filter(bus => bus.object.properties.id !== currentConnection.busId);
+                const assets = getAssetsByLatLng(deckGL, busCoords['coordinates'], 3).filter(tempAsset =>  {
+                  return tempAsset.object.properties.typeCode && tempAsset.object.properties.id === asset.id
                 })
-                 console.log(assets)
-                  return assets.length > 0
-              })
-              console.log('Connected buses')
-              console.log(isConnected)
-              if (!isConnected.length) {
-                // Transformer was dragged to nowhere
-                dispatch(setAssetConnection(asset.id, 0, {
-                  busId: makeBusId(),
-                }))
-                dispatch(setAssetConnection(asset.id, 1, {
-                  busId: makeBusId(),
-                }))
+                if (busGeoJSON.length) {
+                  dispatch(setAssetConnection(asset.id, connectionId, {busId: busGeoJSON[0].object.properties.id}))
+                } else {
+                  if (!assets.length) {
+                    dispatch(setAssetConnection(asset.id, connectionId, {busId: makeBusId()}))
+                  }
+                }
               }
               break
             }
