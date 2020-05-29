@@ -27,7 +27,6 @@ export function makeEditingAsset(assetTypeCode) {
     typeCode: assetTypeCode,
     name: assetId,
     connections: connectionByIndex,
-    variables: {},  // Hold temporary variables
   }
   const bus0Id = makeBusId()
   const bus1Id = makeBusId()
