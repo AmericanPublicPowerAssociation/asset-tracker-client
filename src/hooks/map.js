@@ -279,25 +279,41 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
             case ASSET_TYPE_CODE_TRANSFORMER: {
               console.log(busInfos)
               console.log(asset)
+              const fullAsset = assetById[asset.id]
+              const currentConnections = fullAsset.connections
+              console.log(fullAsset)
+              console.log(currentConnections)
 
-              let isConnected = busInfos.filter(busInfo => {
-                console.log(busInfo)
-                console.log(editContext['position'])
-                console.log(asset.id)
-                const assets = getAssetsByLatLng(deckGL, busInfo.object.geometry.coordinates).filter(tasset =>  {
-                  console.log(tasset.object.properties.id)
-                  console.log(asset.id)
-                  return tasset.object.properties.typeCode && tasset.object.properties.id !== asset.id
-                })
-                 console.log(assets)
-                  return assets.length > 0
-              })
-              console.log('Connected buses')
-              console.log(isConnected)
-              if (!isConnected.length) {
-                // Transformer was dragged to nowhere
-                dispatch(setAssetConnection(asset.id, 0, {busId: makeBusId()}))
+              console.log([...new Set(Object.entries(currentConnections).map(conn =>
+              {console.log(conn); return conn[1].busId}))])
+              if ([...new Set(Object.entries(currentConnections).map(conn => conn[1].busId))].length < 2) {
                 dispatch(setAssetConnection(asset.id, 1, {busId: makeBusId()}))
+              }
+
+              for (let connectionId in currentConnections) {
+                console.log(connectionId)
+                const currentConnection = currentConnections[connectionId]
+                console.log(currentConnection)
+                console.log(busesGeoJson)
+                const busCoords = busesGeoJson.features.filter(busGeoJson => busGeoJson.properties.id === currentConnection.busId)[0].geometry
+                console.log(busCoords)
+                const busGeoJSON = getBusesByLatLng(deckGL, busCoords['coordinates']).filter(bus => bus.object.properties.id !== currentConnection.busId);
+                const assets = getAssetsByLatLng(deckGL, busCoords['coordinates'], 3).filter(tempAsset =>  {
+                  console.log(tempAsset)
+                  console.log(tempAsset.object.properties.id)
+                  console.log(asset.id)
+                  return tempAsset.object.properties.typeCode && tempAsset.object.properties.id === asset.id
+                })
+                console.log(assets)
+                console.log(busGeoJSON)
+                if (busGeoJSON.length) {
+                  console.log(`============ ${asset.id} -> ${busGeoJSON[0].object.properties.id}`)
+                  dispatch(setAssetConnection(asset.id, connectionId, {busId: busGeoJSON[0].object.properties.id}))
+                } else {
+                  if (!assets.length) {
+                    dispatch(setAssetConnection(asset.id, connectionId, {busId: makeBusId()}))
+                  }
+                }
               }
               break
             }

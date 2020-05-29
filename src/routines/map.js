@@ -102,14 +102,14 @@ export function getBusesByLatLng(deckGL, position) {
   })
 }
 
-export function getAssetsByLatLng(deckGL, position) {
+export function getAssetsByLatLng(deckGL, position, radius) {
   const screenCoords = deckGL.current.viewports[0].project(position)
 
   return deckGL.current.pickMultipleObjects({
     x: screenCoords[0],
     y: screenCoords[1],
     layerIds: [ASSETS_MAP_LAYER_ID],
-    radius: PICKING_RADIUS_IN_PIXELS * 2,
+    radius: PICKING_RADIUS_IN_PIXELS * (radius || 2),
     depth: PICKING_DEPTH,
   })
 }
