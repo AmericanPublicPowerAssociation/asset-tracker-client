@@ -5,6 +5,7 @@ import {
   ADD_TASK_COMMENT,
   REFRESH_TASKS,
   REFRESH_TASK_COMMENTS,
+  SET_SELECTED_TASK_ID,
   SET_TASKS,
   SET_TASK_COMMENTS,
   SET_TASK_COMMENT_COUNT,
@@ -61,4 +62,8 @@ export function refreshTaskComments(taskId) {
 
 export function addAssetTaskComment(taskId, text) {
   return { type: ADD_TASK_COMMENT, payload: { taskId, text } }
+}
+
+export function setSelectedTaskId(taskId) {
+  return { type: SET_SELECTED_TASK_ID, payload: { taskId } }
 }

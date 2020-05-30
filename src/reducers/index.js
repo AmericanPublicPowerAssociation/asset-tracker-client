@@ -25,6 +25,7 @@ import taskById from './taskById'
 import taskComments from './taskComments'
 import taskCodeTypes from './taskCodeTypes'
 import hoverInfo from './hoverInfo'
+import selectedTaskId from './selectedTaskId'
 
 const reduceHorizontally = combineReducers({
   mapStyleName,
@@ -48,6 +49,7 @@ const reduceHorizontally = combineReducers({
   risks,
   selectedRiskIndex,
   taskCodeTypes,
+  selectedTaskId,
   sketchMode,  // Keep last
 })
 
