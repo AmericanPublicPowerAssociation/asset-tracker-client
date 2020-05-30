@@ -482,12 +482,14 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
     }
 
     function handleAssetClick(info, event) {
-      console.log('asset click', info, event)
       const targetAssetId = info.object && info.object.properties.id
       if (!targetAssetId) {
         return
       }
       if (sketchMode === SKETCH_MODE_DELETE) {
+        const featureIndex = info.index
+        dispatch(setFocusingAssetId(targetAssetId))
+        dispatch(setSelectedAssetIndexes([featureIndex]))
         openDeleteDialogOpen()
       } else if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
         dispatch(setSelectedAssetIndexes([info.index]))
