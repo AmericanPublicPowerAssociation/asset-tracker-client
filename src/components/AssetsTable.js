@@ -51,7 +51,8 @@ export default function AssetsTable(props) {
   const {
     getHeaderLabel,
     highlightAsset,
-    pageSizeOptions,
+    focusingAssetId,
+    tableOptions,
   } = props
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetById = useSelector(getAssetById)
@@ -82,6 +83,12 @@ export default function AssetsTable(props) {
     highlightAsset(assetId)
   }
 
+  function rowStyle(rowData) {
+    return {
+        backgroundColor: (focusingAssetId === rowData.assetId) ? '#EEE' : '#FFF',
+    }
+  }
+
   return (
     <MaterialTable
       components={{
@@ -91,10 +98,7 @@ export default function AssetsTable(props) {
       }}
       icons={tableIcons}
       title={tableName}
-      options={{
-        search: true,
-        pageSizeOptions,
-      }}
+      options={{ ...tableOptions, rowStyle }}
       columns={columns}
       data={data}
       onRowClick={handleOnRowClick}

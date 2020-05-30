@@ -1,5 +1,7 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import clsx from 'clsx'
+import { useSelector, useDispatch } from 'react-redux'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 import Link from '@material-ui/core/Link'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -11,6 +13,8 @@ import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import {
   getRisksByAssetId,
+  getSelectedRiskIndex,
+  setSelectedRiskIndex,
 } from 'asset-report-risks'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import AssetName from './AssetName'
@@ -18,7 +22,15 @@ import {
   getAssetTypeByCode,
 } from '../selectors'
 
+const useStyles = makeStyles(theme => ({
+  root: {
+    background: 'rgba(0, 0, 0, 0.08)',
+  },
+}))
+
 export default function AssetRisksPanel({ asset }) {
+  const dispatch = useDispatch()
+  const classes = useStyles()
   const assetId = asset.id
   const assetTypeCode = asset.typeCode
   const assetTypeByCode = useSelector(getAssetTypeByCode)
@@ -26,6 +38,10 @@ export default function AssetRisksPanel({ asset }) {
   const assetTypeName = assetType.name
   const risksByAssetId = useSelector(getRisksByAssetId)
   const risks = risksByAssetId[assetId] || []
+  const selectedRiskIndex = useSelector(getSelectedRiskIndex)
+  const selectedRiskAssetId = selectedRiskIndex.assetId
+  const selectedRiskVulnerabilityUri = selectedRiskIndex.vulnerabilityUri
+
   return (
     <List component='div' disablePadding>
       <ListItem component='div' disableGutters>
@@ -42,8 +58,14 @@ export default function AssetRisksPanel({ asset }) {
 
       {risks.map(risk => {
         const meterCount = risk.meterCount
+        const highlight = (risk.assetId === selectedRiskAssetId &&
+          risk.vulnerabilityUri === selectedRiskVulnerabilityUri)
+
         return (
-          <Card>
+          <Card
+            classes={{ root: highlight && classes.root }}
+            onClick={ () => dispatch(setSelectedRiskIndex(risk.assetId, risk.vulnerabilityUri))}
+          >
             <CardContent>
               <Typography variant='h5' component='h2'>
                 <Link
