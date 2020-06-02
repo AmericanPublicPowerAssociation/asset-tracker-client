@@ -1,5 +1,5 @@
-import React, { forwardRef } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect, forwardRef } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import MaterialTable from 'material-table'
 import AddBox from '@material-ui/icons/AddBox'
 import ArrowDownward from '@material-ui/icons/ArrowDownward'
@@ -17,11 +17,15 @@ import SaveAlt from '@material-ui/icons/SaveAlt'
 import Search from '@material-ui/icons/Search'
 import ViewColumn from '@material-ui/icons/ViewColumn'
 import {
+  setSelectedTaskId,
+} from '../actions'
+import {
   getTaskPriorityLabel,
   getTaskStatusLabel,
 } from '../routines'
 import {
   getOpenTaskById,
+  getSelectedTaskId,
 } from '../selectors'
 
 
@@ -42,7 +46,7 @@ const tableIcons = {
   Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
   SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 }
 
 const TASK_TABLE_COLUMN_NAMES = [
@@ -54,12 +58,21 @@ const TASK_TABLE_COLUMN_NAMES = [
 
 export default function TasksTable(props) {
   const tableName = 'Tasks'
+  const dispatch = useDispatch()
   const taskById = useSelector(getOpenTaskById)
+  const selectedTaskId = useSelector(getSelectedTaskId)
   const {
     getHeaderLabel,
     highlightAsset,
-    pageSizeOptions,
+    focusingAssetId,
+    tableOptions,
   } = props
+
+  useEffect(() => {
+    return () => {
+      dispatch(setSelectedTaskId(null))
+    }
+  }, [dispatch])
 
   const data = Object.values(taskById).map(
     task => {
@@ -71,25 +84,30 @@ export default function TasksTable(props) {
   })
 
   const columns = TASK_TABLE_COLUMN_NAMES.map( field => {
-    return {field, title: getHeaderLabel(field)}
+    return { field, title: getHeaderLabel(field) }
   })
 
   function handleOnRowClick(event, rowData) {
     const { assetId } = rowData
+    dispatch(setSelectedTaskId(rowData.id))
     highlightAsset(assetId)
+  }
+
+  function rowStyle(rowData) {
+    let backgroundColor = '#FFF'
+    if (focusingAssetId === rowData.assetId && selectedTaskId === rowData.id)
+      backgroundColor = '#EEE'
+    return { backgroundColor }
   }
 
   return (
     <MaterialTable
       components={{
-        Container: props => <div style={{background: 'white'}}>{props.children}</div>
+        Container: props => (<div style={{ background: 'white' }}>{props.children}</div>),
       }}
       icons={tableIcons}
       title={tableName}
-      options={{
-        search: true,
-        pageSizeOptions,
-      }}
+      options={{ ...tableOptions, rowStyle }}
       columns={columns}
       data={data}
       onRowClick={handleOnRowClick}

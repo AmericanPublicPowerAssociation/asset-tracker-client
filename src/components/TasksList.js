@@ -36,6 +36,7 @@ import TaskComments, { CommentForm } from './TaskComments'
 
 import {
   addAssetTaskComment,
+  setSelectedTaskId,
   setTaskPriority,
   setTaskStatus,
   setTaskName,
@@ -46,6 +47,7 @@ import {
 } from '../constants'
 import {
   getAssetTypeByCode,
+  getSelectedTaskId,
   getTaskPriorityTypes,
   getTaskStatusTypes,
 } from '../selectors'
@@ -82,6 +84,11 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
+    /*
+    '&.Mui-selected': {
+      backgroundColor: 'yellow',
+    },
+    */
   },
   fullWidth: {
     width: '100%',
@@ -225,6 +232,7 @@ export default function TasksList(props) {
     showDetails,
   } = props
   const assetId = asset.id
+  const selectedTaskId = useSelector(getSelectedTaskId)
 
   return (<List disablePadding className={classes.scroll}>
       { tasks.map( (task, index) => (
@@ -234,6 +242,7 @@ export default function TasksList(props) {
           assetId={assetId}
           task={task}
           showDetails={showDetails}
+          selectedTaskId={selectedTaskId}
         />
       ))}
     </List>
@@ -245,6 +254,7 @@ function TaskItem(props) {
     itemKey,
     task,
     showDetails,
+    selectedTaskId,
   } = props
   const {
     name,
@@ -253,12 +263,14 @@ function TaskItem(props) {
     commentCount,
   } = task
 
+  const dispatch = useDispatch()
   const classes = useStyles()
   const priorityType = useSelector(getTaskPriorityTypes)
   const statusType = useSelector(getTaskStatusTypes)
   const priorityLabel = priorityType[priority].name
   const priorityColor = getPriorityColor(priority.toString())
   const statusLabel = statusType[status].name
+  const taskId = task.id
 
   return (
     <>
@@ -266,7 +278,11 @@ function TaskItem(props) {
         key={`${itemKey}-li`}
         disableGutters
         classes={{ root: classes.actions }}
-        onClick={ () => showDetails(task) }
+        onClick={ () => {
+          dispatch(setSelectedTaskId(taskId))
+          showDetails(task)
+        }}
+        selected={taskId === selectedTaskId}
       >
         <div className={classes.spaceBetween}>
           <div className={classes.alignStart}>

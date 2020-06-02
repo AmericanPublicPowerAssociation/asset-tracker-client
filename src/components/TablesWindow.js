@@ -15,6 +15,7 @@ import {
 } from '../actions'
 import {
   getAssetsGeoJson,
+  getFocusingAssetId,
   getOverlayMode,
 } from '../selectors'
 
@@ -34,6 +35,7 @@ export default function TablesWindow(props) {
   const dispatch = useDispatch()
   const { features } = useSelector(getAssetsGeoJson)
   const overlayMode = useSelector(getOverlayMode)
+  const focusingAssetId = useSelector(getFocusingAssetId)
 
   function getHeaderLabel(header) {
     const result = header.replace(/([A-Z])/g, ' $1')
@@ -58,26 +60,33 @@ export default function TablesWindow(props) {
   }
 
   const pageSizeOptions = [5, 10]
+  const tableOptions =  {
+    search: true,
+    pageSizeOptions,
+  }
 
   const table = {
     assets: (
       <AssetsTable
         getHeaderLabel={getHeaderLabel}
         highlightAsset={highlightAsset}
-        pageSizeOptions={pageSizeOptions}
+        focusingAssetId={focusingAssetId}
+        tableOptions={tableOptions}
       />
     ),
     tasks: (
       <TasksTable
         getHeaderLabel={getHeaderLabel}
         highlightAsset={highlightAsset}
-        pageSizeOptions={pageSizeOptions}
+        focusingAssetId={focusingAssetId}
+        tableOptions={tableOptions}
       />
     ),
     risks: (
       <RisksTable
         onRowClick={highlightAsset}
-        pageSizeOptions={pageSizeOptions}
+        focusingAssetId={focusingAssetId}
+        tableOptions={tableOptions}
       />
     ),
   }[overlayMode]

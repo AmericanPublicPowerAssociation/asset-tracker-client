@@ -11,6 +11,7 @@ import {
 export const getTaskById = state => state.taskById
 export const getTaskCodeTypes = state => state.taskCodeTypes
 export const getTaskComments = state => state.taskComments.comments || []
+export const getSelectedTaskId = state => state.selectedTaskId
 
 export const getOpenTaskById = createSelector([
   getTaskById,
