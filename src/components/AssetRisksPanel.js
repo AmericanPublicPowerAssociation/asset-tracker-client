@@ -1,5 +1,4 @@
 import React from 'react'
-import clsx from 'clsx'
 import { useSelector, useDispatch } from 'react-redux'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Link from '@material-ui/core/Link'
