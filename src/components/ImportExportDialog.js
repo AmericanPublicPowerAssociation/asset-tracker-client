@@ -24,7 +24,7 @@ import {
 } from '../selectors'
 
 const uploaderProps = {
-  acceptedFiles: ['text/csv'],
+  acceptedFiles: ['text/csv', 'application/vnd.ms-excel', 'text/csv'],
   filesLimit: 1,
   showPreviewsInDropzone: true,
   showFileNamesInPreview: true,
