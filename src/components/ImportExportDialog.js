@@ -1,62 +1,57 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import Dialog from '@material-ui/core/Dialog'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
+import Checkbox from '@material-ui/core/Checkbox'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import FormControl from '@material-ui/core/FormControl'
-// import NativeSelect from '@material-ui/core/NativeSelect'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Grid from '@material-ui/core/Grid'
 import Input from '@material-ui/core/Input'
+import MenuItem from '@material-ui/core/MenuItem'
+import Select from '@material-ui/core/Select'
 import Typography from '@material-ui/core/Typography'
-
+import { DropzoneArea } from 'material-ui-dropzone'
+import ImportResponseDialog from './ImportResponseDialog'
+import { uploadAssetsCsv } from '../actions'
+import { ASSET_TYPE_CODE_TRANSFORMER } from '../constants'
 import {
   getAssetById,
   getAssetTypeByCode,
 } from '../selectors'
-import { Checkbox } from '@material-ui/core'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import { DropzoneArea } from 'material-ui-dropzone'
-import Grid from '@material-ui/core/Grid'
-import { uploadAssetsCsv } from '../actions'
-import Select from '@material-ui/core/Select'
-import MenuItem from '@material-ui/core/MenuItem'
-import { ASSET_TYPE_CODE_TRANSFORMER } from '../constants'
 
-export default function ImportExportDialog({
-    open,
-    onClose,
-    onCancel,
-    onOk,
-}) {
+const uploaderProps = {
+  acceptedFiles: ['text/csv', 'application/vnd.ms-excel'],
+  filesLimit: 1,
+  showPreviewsInDropzone: true,
+  showFileNamesInPreview: true,
+  showFileNames: true,
+  dropzoneText: 'Drag and drop a file or click here',
+  useChipsForPreview: true,
+  clearOnUnmount: false,
+  getDropRejectMessage: (rejectedFile, acceptedFiles, maxFileSize) => {
+    return `File ${rejectedFile.name} was rejected. Only supports CSV files.`
+  },
+}
+
+export default function ImportExportDialog({ open, onClose, onCancel }) {
   const dispatch = useDispatch()
-  const uploaderProps = {
-    acceptedFiles: ['text/csv'],
-    filesLimit: 1,
-    showPreviewsInDropzone: true,
-    showFileNamesInPreview: true,
-    showFileNames: true,
-    dropzoneText: 'Drag and drop a file or click here',
-    useChipsForPreview: true,
-    clearOnUnmount: false,
-    getDropRejectMessage: (rejectedFile, acceptedFiles, maxFileSize) => {
-      return `File ${rejectedFile.name} was rejected. Only supports CSV files.`
-    },
-  }
-
-  const [powerName, setPowerName] = useState('')
   const [action, setAction] = useState('download')
-  const [format, setFormat] = useState('csv')
+  const [powerName, setPowerName] = useState('')
+  const [downloadFormat, setDownloadFormat] = useState('csv')
   const [overwriteRecords, setOverwriteRecords] = useState(false)
   const [assetCSVFile, setAssetCSVFile] = useState(null)
   const [loadingFileIndicator, setLoadingFileIndicator] = useState(false)
   const [confirmOverwriteRecords, setConfirmOverwriteRecords] = useState(false)
-  // const { head, data, name } = useSelector(getAssetTableData)
+  const [uploadResponse, setUploadResponse] = useState()
   const assetById = useSelector(getAssetById)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
-  const data = Object.values(assetById).filter((asset) => asset['typeCode'] === ASSET_TYPE_CODE_TRANSFORMER).map(
-    asset => {
+  const data = Object.values(assetById)
+    .filter(asset => asset['typeCode'] === ASSET_TYPE_CODE_TRANSFORMER)
+    .map(asset => {
       const assetType = asset['typeCode']
       const attributes = asset['attributes']
       const vendorName = attributes ? attributes['vendorName'] : ''
@@ -65,16 +60,18 @@ export default function ImportExportDialog({
         vendorName,
         type: assetTypeByCode[assetType]['name'],
       }
-  })
+    })
+
   if (data !== null && data !== undefined && data.length > 0 && powerName === '') {
     setPowerName(data[0].id)
   }
+  
   function selectAction() {
     if (action === 'download') {
-      if (format === 'dss') {
+      if (downloadFormat === 'dss') {
         window.location = `/assets.dss?source=${powerName}`
       }
-      if (format === 'csv') {
+      if (downloadFormat === 'csv') {
         window.location = '/assets.csv'
       }
       onClose()
@@ -88,90 +85,130 @@ export default function ImportExportDialog({
         dispatch(uploadAssetsCsv({
           file: assetCSVFile,
           overwrite: overwriteRecords,
-          close: () => {
+          onClose: (response) => {
             setAssetCSVFile(null)
             setOverwriteRecords(false)
             setConfirmOverwriteRecords(false)
-            onClose()
+            setUploadResponse(response)
+            // onClose()
           },
         }))
       }
     }
   }
 
-  const overwriteConfirmation = (<Dialog
-    open={confirmOverwriteRecords}
-    onClose={() => setConfirmOverwriteRecords(false)}
-    disableBackdropClick>
-    <DialogTitle>Overwrite all existing assets?</DialogTitle>
-    <DialogContent>
-      <Typography component='h3'>The existing assets will be replaced and
-        it cannot be undone</Typography>
-    </DialogContent>
-    <DialogActions>
-      <Button onClick={() => setConfirmOverwriteRecords(false)}>Cancel</Button>
-      <Button onClick={() => {
-        selectAction()
-      }} color='primary'>Yes, overwrite them</Button>
-    </DialogActions>
-  </Dialog>)
+  const OverwriteConfirmationDialog = (
+    <Dialog
+      open={confirmOverwriteRecords} disableBackdropClick 
+      onClose={() => setConfirmOverwriteRecords(false)} >
+      <DialogTitle>Overwrite all existing assets?</DialogTitle>
+      <DialogContent>
+        <Typography component='h3'>
+          The existing assets will be replaced and it cannot be undone.
+        </Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => setConfirmOverwriteRecords(false)}>
+          Cancel
+        </Button>
+        <Button color='primary'
+          onClick={() => selectAction()} >
+          Yes, overwrite them
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
 
-  const DropzoneInstance = (<DropzoneArea {...uploaderProps} onChange={(file) => setAssetCSVFile(file[0])}/>)
 
+  const SelectDownloadFormatComponent = (
+    <>
+      <Typography component='p'>Select the format</Typography>
+      <Select value={downloadFormat}
+        onChange={e => setDownloadFormat(e.target.value)}
+        input={<Input id='asset-type-select' />}>
+        <MenuItem value='csv'>CSV</MenuItem>
+        <MenuItem value='dss'>DSS</MenuItem>
+      </Select>
+    </>
+  )
 
-  const actionSelectorDialog =  (<Dialog
-        open={open && !confirmOverwriteRecords}
-        onClose={onClose}
-        disableBackdropClick>
-            <DialogTitle>Download Manager</DialogTitle>
-            <DialogContent>
-                <Typography component='p'>What I want to do?</Typography>
-                <FormControl fullWidth>
-                  <Select
-                    onChange={(e) => setAction(e.target.value)} value={action}
-                    input={<Input id='asset-type-select' />}
-                  >
-                    <MenuItem value='download'>Download Assets</MenuItem>
-                    <MenuItem value='upload'>Upload Assets</MenuItem>
-                  </Select>
-                  { action === 'download' ?
-                    <>
-                    <Typography component='p'>Select the format</Typography>
-                    <Select
-                      onChange={(e) => setFormat(e.target.value)} value={format}
-                      input={<Input id='asset-type-select' />}>
-                      <MenuItem value='csv'>CSV</MenuItem>
-                      <MenuItem value='dss'>DSS</MenuItem>
-                    </Select> </>: <>
-                      {DropzoneInstance}
-                      { loadingFileIndicator ? <Grid style={{ marginTop: '20px' }} container align="center"
-                                                     justify="center"
-                                                     direction="column">
-                        <CircularProgress  size={20} />
-                        <p>Wait patiently, this could take a while! </p>
-                      </Grid> : null}
-                      <FormControlLabel control={
-                        <Checkbox checked={overwriteRecords}  onChange={() => setOverwriteRecords(!overwriteRecords)} />
-                      } label='Overwrite existing records'/>
-                    </>
-                  }
-                  { action === 'download' && format === 'dss' ?
-                    <>
-                      <Typography component='p'>Select the power source</Typography>
-                      <Select
-                        onChange={(e) => setPowerName(e.target.value)} value={powerName}
-                        input={<Input id='asset-type-select' />}
-                      >
-                        {data.map((asset) => <MenuItem value={asset.name} key={asset.name}>{asset.name}</MenuItem>)}
-                      </Select></> : <></>
-                  }
-                </FormControl>
-            </DialogContent>
-            <DialogActions>
-                <Button disabled={loadingFileIndicator} onClick={onCancel}>Cancel</Button>
-                <Button disabled={loadingFileIndicator} onClick={selectAction} color='primary'>Ok</Button>
-            </DialogActions>
-	    </Dialog>)
+  const DropzoneInstance = (
+    <DropzoneArea {...uploaderProps} onChange={(file) => setAssetCSVFile(file[0])} />
+  )
 
-    return <>{actionSelectorDialog}{overwriteConfirmation}</>
+  const UploadFileComponent = (
+    <>
+      {DropzoneInstance}
+      {loadingFileIndicator && 
+        <Grid container align="center" justify="center" direction="column"
+          style={{ marginTop: '20px' }} >
+          <CircularProgress  size={20} />
+          <p>Wait patiently, this could take a while! </p>
+        </Grid>
+      }
+      <FormControlLabel label='Overwrite existing records'
+        control={
+          <Checkbox checked={overwriteRecords}
+            onChange={() => setOverwriteRecords(!overwriteRecords)} />
+        }
+      />
+    </>
+  )
+
+  const SelectDssPowerSource = (
+    <>
+      <Typography component='p'>Select the power source</Typography>
+      <Select
+        onChange={e => setPowerName(e.target.value)} value={powerName}
+        input={<Input id='asset-type-select' />} >
+        { data.map(asset => <MenuItem value={asset.name} key={asset.name}>{asset.name}</MenuItem>)}
+      </Select>
+    </>
+  )
+
+  const ActionSelectorDialog =  (
+    <Dialog
+      open={open && !confirmOverwriteRecords && !uploadResponse}
+      onClose={onClose}
+      disableBackdropClick >
+      <DialogTitle>Download Manager</DialogTitle>
+      <DialogContent>
+        <Typography component='p'>What I want to do?</Typography>
+        <FormControl fullWidth>
+          <Select
+            onChange={(e) => setAction(e.target.value)} value={action}
+            input={<Input id='asset-type-select' />} >
+            <MenuItem value='download'>Download Assets</MenuItem>
+            <MenuItem value='upload'>Upload Assets</MenuItem>
+          </Select>
+          { action === 'download' ?
+            SelectDownloadFormatComponent :
+            UploadFileComponent
+          }
+          { action === 'download' && downloadFormat === 'dss' ? SelectDssPowerSource : <></> }
+        </FormControl>
+      </DialogContent>
+      <DialogActions>
+        <Button disabled={loadingFileIndicator} onClick={onCancel}>Cancel</Button>
+        <Button disabled={loadingFileIndicator} onClick={selectAction} color='primary'>Ok</Button>
+      </DialogActions>
+	  </Dialog>
+  )
+
+    return (
+      <>
+        { ActionSelectorDialog }
+        { OverwriteConfirmationDialog }
+        { uploadResponse && 
+          <ImportResponseDialog
+            open={true}
+            response={uploadResponse}
+            onClose={(() => {
+              setUploadResponse()
+              onClose()
+            })}
+          />
+        }
+      </>
+    )
 }

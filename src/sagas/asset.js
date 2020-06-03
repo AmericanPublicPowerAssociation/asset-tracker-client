@@ -182,13 +182,13 @@ export function* watchUploadAssetsCsv() {
       method: 'PATCH',
       body: data,
     }, {
-      on200: function* (asset) {
+      on200: function* (response) {
         yield put(refreshAssets())
-        action.payload.close()
+        action.payload.onClose(response)
       },
-      on400: function* (errors) {
+      on400: function* (response) {
         yield put(refreshAssets())
-        console.log(errors)
+        action.payload.onClose(response)
       },
     })
   })
