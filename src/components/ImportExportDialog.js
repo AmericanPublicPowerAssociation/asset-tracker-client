@@ -15,6 +15,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Select from '@material-ui/core/Select'
 import Typography from '@material-ui/core/Typography'
 import { DropzoneArea } from 'material-ui-dropzone'
+import ImportResponseDialog from './ImportResponseDialog'
 import { uploadAssetsCsv } from '../actions'
 import { ASSET_TYPE_CODE_TRANSFORMER } from '../constants'
 import {
@@ -84,14 +85,12 @@ export default function ImportExportDialog({ open, onClose, onCancel }) {
         dispatch(uploadAssetsCsv({
           file: assetCSVFile,
           overwrite: overwriteRecords,
-          on200: (response) => {
+          onClose: (response) => {
             setAssetCSVFile(null)
             setOverwriteRecords(false)
             setConfirmOverwriteRecords(false)
-            onClose()
-          },
-          onErrors: (response) => {
-            console.log(response)
+            setUploadResponse(response)
+            // onClose()
           },
         }))
       }
@@ -169,7 +168,7 @@ export default function ImportExportDialog({ open, onClose, onCancel }) {
 
   const ActionSelectorDialog =  (
     <Dialog
-      open={open && !confirmOverwriteRecords}
+      open={open && !confirmOverwriteRecords && !uploadResponse}
       onClose={onClose}
       disableBackdropClick >
       <DialogTitle>Download Manager</DialogTitle>
@@ -196,5 +195,20 @@ export default function ImportExportDialog({ open, onClose, onCancel }) {
 	  </Dialog>
   )
 
-    return <>{ActionSelectorDialog}{OverwriteConfirmationDialog}</>
+    return (
+      <>
+        { ActionSelectorDialog }
+        { OverwriteConfirmationDialog }
+        { uploadResponse && 
+          <ImportResponseDialog
+            open={true}
+            response={uploadResponse}
+            onClose={(() => {
+              setUploadResponse()
+              onClose()
+            })}
+          />
+        }
+      </>
+    )
 }

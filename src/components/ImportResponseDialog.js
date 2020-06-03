@@ -8,8 +8,12 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogActions from '@material-ui/core/DialogActions'
+import Divider from '@material-ui/core/Divider'
 import ErrorIcon from '@material-ui/icons/Error'
 import IconButton from '@material-ui/core/IconButton'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import Typography from '@material-ui/core/Typography'
 import WarningIcon from '@material-ui/icons/Warning'
@@ -54,7 +58,7 @@ const messages = {
     displayIcon: CheckCircleIcon,
   },
   'warning': {
-    displayMessageTitle: 'Oh snap!',
+    displayMessageTitle: 'Aw, Snap!',
     displayMessage: 'Certain assets were not uploaded successfully.',
     displayIcon: WarningIcon,
   },
@@ -67,7 +71,38 @@ const messages = {
 
 export default function ImportResponseDialog({ open, onClose, response }) {
   const classes = useStyles()
-  const result = 'error'
+  let result = 'error' 
+
+  if (!response.error) {
+    result = 'success' 
+  }
+  else if (response.error) {
+    result = 'warning'
+  }
+  else {
+    result = 'error'
+  }
+
+  const ListAssetsWithErrorsComponent = response.error && (
+    <DialogContent>
+      <div style={{ height: '6em' }} >
+        <List
+          component="nav"
+          aria-label="assets-with-errors" >
+          { 
+            Object.entries(response.error).map( ([id, error]) => ( 
+              <>
+              <ListItem id={id}>
+                <ListItemText>{id} - {JSON.stringify(error)}</ListItemText>
+              </ListItem>
+              <Divider />
+              </>
+            )) 
+          }
+        </List>
+      </div>
+    </DialogContent>
+  )
 
   const { displayMessageTitle, displayMessage, displayIcon } = messages[result]
   return (
@@ -85,6 +120,7 @@ export default function ImportResponseDialog({ open, onClose, response }) {
             <Typography>{displayMessage}</Typography>
           </Container>
         </DialogContent>
+        { ListAssetsWithErrorsComponent }
         <Button
           variant="contained" color="primary" size="large"
           onClick={onClose}
