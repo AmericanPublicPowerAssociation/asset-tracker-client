@@ -63,19 +63,21 @@ export default function AssetsTable(props) {
     return { field, title: getHeaderLabel(field) }
   })
 
-  const data = Object.entries(assetById).map(
-    assetEntry => {
-      const [assetId, asset] = assetEntry
-      const assetType = asset['typeCode']
-      const attributes = asset['attributes']
-      const vendorName = attributes ? attributes['vendorName'] : ''
-      return {
-        ...asset,
-        assetId,
-        vendorName,
-        type: assetTypeByCode[assetType]['name'],
-      }
-  })
+  const data = Object.entries(assetById)
+    .filter(([id, asset]) => !asset.is_deleted )
+    .map(
+      assetEntry => {
+        const [assetId, asset] = assetEntry
+        const assetType = asset['typeCode']
+        const attributes = asset['attributes']
+        const vendorName = attributes ? attributes['vendorName'] : ''
+        return {
+          ...asset,
+          assetId,
+          vendorName,
+          type: assetTypeByCode[assetType]['name'],
+        }
+    })
 
   function handleOnRowClick(event, rowData) {
     const { assetId, is_deleted } = rowData
