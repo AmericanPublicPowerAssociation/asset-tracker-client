@@ -90,6 +90,7 @@ export default function App() {
         isWithTables={isWithTables}
       />
     }
+      {/*
     {isWithTables && (isLayoutMobile ?
       <TablesDialog
         isWithTables={isWithTables}
@@ -100,6 +101,13 @@ export default function App() {
         setIsWithTables={setIsWithTables}
       />
     )}
+    */}
+    {isWithTables &&
+      <TablesWindow
+        isWithTables={isWithTables}
+        setIsWithTables={setIsWithTables}
+      />
+      }
       <ImportExportDialog
         open={isWithImportExport}
         onCancel={() => {setIsWithImportExport(false)}}

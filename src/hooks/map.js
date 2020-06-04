@@ -250,8 +250,8 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
 
         console.log('finishMovePosition', event)
         const {
-          // position,
-          // positionIndexes,
+          position,
+          positionIndexes,
           featureIndexes,
         } = editContext
         const busInfos = getBusesByLatLng(deckGL, editContext['position'])
@@ -270,6 +270,36 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
           let asset = vertex.properties
 
           switch (asset.typeCode) {
+            /*
+
+            case ASSET_TYPE_CODE_LINE: {
+              const assetId = asset.id
+              const assetVertexCount = asset.geometry.coordinates.length
+              const assetVertexIndex = positionIndexes[0]
+              if (assetVertexIndex === 0 || assetVertexIndex === assetVertexCount - 1) {
+                // endpoints only
+                const screenCoords = deckGL.current.viewports[0].project(position)
+                const nearbyBusInfos = deckGL.current.pickMultipleObjects({
+                  x: screenCoords[0],
+                  y: screenCoords[1],
+                  layerIds: [BUSES_MAP_LAYER_ID],
+                  radius: PICKING_RADIUS_IN_PIXELS,
+                  depth: PICKING_DEPTH,
+                })
+                const nearbyBusFeatures = nearbyBusInfos.map(info => info.object)
+                // TODO: Consider whether we need to filter bus features instead of this
+                // TODO: This assumes that nearbyBusFeatures is in sorted order
+                // TODO: Case length >= 2 happens when moving endpoint from nowhere to bus
+                const newBusIndex = nearbyBusFeatures.length === 1 ? 0 : 1
+                const newBusId = (nearbyBusFeatures.length) ?
+                    nearbyBusFeatures[newBusIndex].properties.id :
+                    makeBusId()
+                const newConnection = { busId: newBusId, attributes: {} }
+                dispatch(setAssetConnection(assetId, assetVertexIndex, newConnection))
+                break
+              }
+            }
+            */
             case ASSET_TYPE_CODE_METER: {
               console.log(busInfos)
               // Meter was dragged to nowhere
