@@ -274,7 +274,7 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
               console.log(busInfos)
               // Meter was dragged to nowhere
               if (isMeterDisconnected(busInfos)) {
-                dispatch(setAssetConnection(asset.id, 0, {busId: makeBusId()}))
+                dispatch(setAssetConnection(asset.id, 0, { busId: makeBusId() }))
               } else if (isTryingToConnect(asset, busInfos)) {
                 const noConnectedBuses = getNoConnectedBuses(asset, busInfos)
                 console.log(noConnectedBuses)
@@ -289,7 +289,7 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
               const currentConnections = fullAsset.connections
 
               if ([...new Set(Object.entries(currentConnections).map(conn => conn[1].busId))].length < 2) {
-                dispatch(setAssetConnection(asset.id, 1, {busId: makeBusId()}))
+                dispatch(setAssetConnection(asset.id, 1, { busId: makeBusId() }))
               }
 
               for (let connectionId in currentConnections) {

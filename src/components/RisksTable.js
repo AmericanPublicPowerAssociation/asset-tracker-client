@@ -1,10 +1,7 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  RisksTable as Risks,
-	refreshRisks,
-	getSortedRisks,
-  getRisks,
+  RisksTable as RawRisksTable,
 } from 'asset-report-risks'
 import {
   getAssetsGeoJson,
@@ -19,16 +16,9 @@ import {
 
 export default function RisksTable() {
 	const dispatch = useDispatch()
-	const risks = useSelector(getRisks)
-	const sortedRisks = useSelector(getSortedRisks)
   const { features } = useSelector(getAssetsGeoJson)
 
-  useEffect(() => {
-    const { sortKey, order } = sortedRisks
-    dispatch(refreshRisks({ sortKey, order }))
-  }, [dispatch, sortedRisks])
-
-  function onRowClickCallBack(assetId) {
+  function handleRowClick(assetId) {
     const selectedAssetIndexes = []
     const selectedAssetIndex = features.findIndex(
       feature => feature.properties.id === assetId)
@@ -45,11 +35,8 @@ export default function RisksTable() {
   }
 
   return (
-		<Risks
-			risks={risks}
-			sortedRisks={sortedRisks}
-			refreshRisks={refreshRisks}
-      onRowClickCallBack={onRowClickCallBack}
+		<RawRisksTable
+      onRowClick={handleRowClick}
 		/>
   )
 }
