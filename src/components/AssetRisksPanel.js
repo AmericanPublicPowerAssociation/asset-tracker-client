@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import makeStyles from '@material-ui/core/styles/makeStyles'
+import clsx from 'clsx'
 import Link from '@material-ui/core/Link'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -21,15 +21,8 @@ import {
   getAssetTypeByCode,
 } from '../selectors'
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    background: 'rgba(0, 0, 0, 0.08)',
-  },
-}))
-
 export default function AssetRisksPanel({ asset }) {
   const dispatch = useDispatch()
-  const classes = useStyles()
   const assetId = asset.id
   const assetTypeCode = asset.typeCode
   const assetTypeByCode = useSelector(getAssetTypeByCode)
@@ -38,8 +31,6 @@ export default function AssetRisksPanel({ asset }) {
   const risksByAssetId = useSelector(getRisksByAssetId)
   const risks = risksByAssetId[assetId] || []
   const selectedRiskIndex = useSelector(getSelectedRiskIndex)
-  const selectedRiskAssetId = selectedRiskIndex.assetId
-  const selectedRiskVulnerabilityUri = selectedRiskIndex.vulnerabilityUri
 
   return (
     <List component='div' disablePadding>
@@ -55,15 +46,15 @@ export default function AssetRisksPanel({ asset }) {
         </ListItemText>
       </ListItem>
 
-      {risks.map(risk => {
+      {risks.map((risk, riskIndex) => {
         const meterCount = risk.meterCount
-        const highlight = (risk.assetId === selectedRiskAssetId &&
-          risk.vulnerabilityUri === selectedRiskVulnerabilityUri)
+        const isHighlighted = riskIndex === selectedRiskIndex
+        console.log(isHighlighted)
 
         return (
           <Card
-            classes={{ root: highlight && classes.root }}
-            onClick={ () => dispatch(setSelectedRiskIndex(risk.assetId, risk.vulnerabilityUri))}
+            className={clsx({ highlighted: isHighlighted })}
+            onClick={() => dispatch(setSelectedRiskIndex(riskIndex))}
           >
             <CardContent>
               <Typography variant='h5' component='h2'>
