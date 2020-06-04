@@ -15,6 +15,7 @@ export default function BusAttributesListItem(props) {
     connection,
     isEditing,
     onFocus,
+    connectionIndex
   } = props
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetType = assetTypeByCode[assetTypeCode]
@@ -26,10 +27,10 @@ export default function BusAttributesListItem(props) {
       attributeKey, attributeType,
     ]) => isNotNull(attributeValueByKey[attributeKey]))
   }
-
   return (
     <AttributeFields
       assetId={assetId}
+      connectionIndex={connectionIndex}
       attributeKeyTypes={attributeKeyTypes}
       attributeValueByKey={attributeValueByKey}
       isEditing={isEditing}

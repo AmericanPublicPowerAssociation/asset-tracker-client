@@ -8,6 +8,7 @@ import {
 } from 'asset-report-risks'
 import {
   setAssetAttribute,
+  setAssetConnectionAttribute,
 } from '../actions'
 import {
   getAttributeLabel,
@@ -44,6 +45,7 @@ export default function AttributeFields(props) {
     attributeValueByKey,
     isEditing,
     onFocus,
+    connectionIndex
   } = props
 
   return attributeKeyTypes.map(([
@@ -59,6 +61,7 @@ export default function AttributeFields(props) {
       attributeValueByKey={attributeValueByKey}
       isEditing={isEditing}
       onFocus={onFocus}
+      connectionIndex={connectionIndex}
     />
   ))
 }
@@ -72,12 +75,17 @@ function AttributeField(props) {
     attributeValueByKey,
     isEditing,
     onFocus,
+    connectionIndex
   } = props
   const dispatch = useDispatch()
   const classes = useStyles()
 
   function trackChange(attributeKey, attributeValue) {
-    dispatch(setAssetAttribute(assetId, attributeKey, attributeValue))
+    if (connectionIndex) {
+      dispatch(setAssetConnectionAttribute(assetId, connectionIndex, attributeKey, attributeValue))
+    } else {
+      dispatch(setAssetAttribute(assetId, attributeKey, attributeValue))
+    }
   }
 
   function handleOnFocus(e) {
