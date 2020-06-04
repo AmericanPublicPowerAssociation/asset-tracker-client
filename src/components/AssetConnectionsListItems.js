@@ -87,6 +87,7 @@ export default function AssetConnectionsListItems({
           connection={connection}
           isEditing={isEditing}
           onFocus={handleClickOrFocus}
+          connectionIndex={index}
         />
         <BusConnectionsList connectedAssetIds={connectedAssetIds} />
       </CollapsibleListItem> :
