@@ -294,6 +294,7 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
                 dispatch(setAssetConnection(assetId, assetVertexIndex, newConnection))
                 break
               }
+              break
             }
             case ASSET_TYPE_CODE_METER: {
               console.log(busInfos)
