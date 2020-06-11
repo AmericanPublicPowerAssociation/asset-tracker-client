@@ -19,7 +19,7 @@ import {
   SKETCH_MODE_ADD_GENERATOR,
   SKETCH_MODE_ADD_TRANSFORMER,
   SKETCH_MODE_ADD_SUBSTATION,
-  SKETCH_MODE_EDIT,
+  SKETCH_MODE_EDIT, BUS_RADIUS_IN_METERS,
 } from '../constants'
 
 
@@ -144,4 +144,23 @@ export function getAssetsByScreenPosition(deckGL, screenPosition) {
     radius: 6,
     depth: PICKING_DEPTH,
   })
+}
+
+
+export function getOffsetFromMetersToPosition(meters) {
+  return meters * 0.0000089
+}
+
+export function moveLatitudeInMeters(coordinates, meters) {
+  return [
+    coordinates[0],
+    coordinates[1] + getOffsetFromMetersToPosition(meters)
+  ]
+}
+
+export function moveLongitudeInMeters(coordinates, meters) {
+  return [
+    coordinates[0] + getOffsetFromMetersToPosition(meters),
+    coordinates[1]
+  ]
 }
