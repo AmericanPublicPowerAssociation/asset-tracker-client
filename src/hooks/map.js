@@ -503,9 +503,6 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
                     if (!busId) busId = makeBusId()
 
                     if (vertexOrderedByNearesDistance.length >= 2) {
-                      console.log(vertexOrderedByNearesDistance[1][1] > vertexOrderedByNearesDistance[0][1])
-                      console.log(vertexOrderedByNearesDistance[0][1])
-                      console.log(vertexOrderedByNearesDistance[1][1])
                       if (vertexOrderedByNearesDistance[1][1] > vertexOrderedByNearesDistance[0][1]) {
                         dispatch(insertAssetVertex(lineAssetId, vertexOrderedByNearesDistance[0][1], {
                           busId,
