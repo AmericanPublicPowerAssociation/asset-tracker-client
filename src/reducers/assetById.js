@@ -59,7 +59,7 @@ const assetById = (state = initialState, action) => {
       return produce(state, draft => {
         const asset = draft[assetId]
         const connections = asset.connections
-        const attributes = connections[assetVertexIndex].attributes
+        const attributes = connections[assetVertexIndex].attributes || {}
         attributes[key] = value
       })
     }

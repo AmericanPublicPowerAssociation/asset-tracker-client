@@ -40,7 +40,7 @@ export default function AssetsMap(props) {
       <DeckGL
         ref={deckGL}
         layers={mapLayers}
-        pickingRadius={PICKING_RADIUS_IN_PIXELS}
+        pickingRadius={PICKING_RADIUS_IN_PIXELS * (mapViewState.zoom)}
         pickingDepth={PICKING_DEPTH}
         controller={{ doubleClickZoom: false }}
         viewState={mapViewState}

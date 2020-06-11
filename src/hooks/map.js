@@ -50,7 +50,7 @@ import {
   getMapMode,
   makeBusId,
   makeEditingAsset,
-  updateFeature,
+  updateFeature, moveLatitudeInMeters,
 } from '../routines'
 import {
   getAssetById,
@@ -439,6 +439,8 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
                     // https://gist.github.com/engelen/fbce4476c9e68c52ff7e5c2da5c24a28
                     return array.map((x, i) => [x, i]).reduce((r, a) => (a[0] < r[0] ? a : r))[1]
                   }
+                  const vertexOrderedByNearesDistance = distances.map((x, i) => [x, i]).sort((r, a) => (a[0] < r[0] ? a : r))
+                  console.log(vertexOrderedByNearesDistance)
                   const nearestVertexIndex = argMin(distances)
                   console.log('NEAREST VERTEX INDEX', nearestVertexIndex)
 
@@ -481,19 +483,42 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
                       nearestPointOnLinePosition,
                       ...oldXYs.slice(nearestPointOnLinePriorIndex + 1, oldXYs.length),
                     ]
+
+                    console.log(feature)
                     console.log('BEFORE', oldXYs)
                     console.log('AFTER', newXYs)
+                    console.log(updatedData)
+
                     updatedData = produce(updatedData, draft => {
                       draft.features[nearbyAssetIndex].geometry.coordinates = newXYs
                     })
                     // 6.3 update feature geometry
+                    const busOffsetToDontOverlap = (BUS_RADIUS_IN_METERS + 3)
+                    const placeMeterDown = moveLatitudeInMeters(nearestPointOnLinePosition, -busOffsetToDontOverlap)
+
+                    updatedData.features[featureIndex].geometry.coordinates = placeMeterDown
                     // see above
                     // 6.4 update downstream connection vertices
                     const lineAssetId = lineFeature.properties.id
                     if (!busId) busId = makeBusId()
-                    dispatch(insertAssetVertex(lineAssetId, nearestVertexIndex, {
-                      busId,
-                    }))
+
+                    if (vertexOrderedByNearesDistance.length >= 2) {
+                      if (vertexOrderedByNearesDistance[1][1] > vertexOrderedByNearesDistance[0][1]) {
+                        dispatch(insertAssetVertex(lineAssetId, vertexOrderedByNearesDistance[0][1], {
+                          busId,
+                        }))
+                      }
+                      else {
+                        dispatch(insertAssetVertex(lineAssetId, vertexOrderedByNearesDistance[1][1], {
+                          busId,
+                        }))
+                      }
+                    } else {
+                      dispatch(insertAssetVertex(lineAssetId, nearestVertexIndex, {
+                        busId,
+                      }))
+                    }
+
 
                     // for each connection below index
                     // bump it forward
