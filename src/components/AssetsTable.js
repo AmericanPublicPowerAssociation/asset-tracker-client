@@ -87,7 +87,7 @@ export default function AssetsTable(props) {
 
   function rowStyle(rowData) {
     return {
-        backgroundColor: (focusingAssetId === rowData.assetId) ? '#EEE' : '#FFF',
+        backgroundColor: (focusingAssetId === rowData.assetId) ? 'yellow' : '#FFF',
     }
   }
 
