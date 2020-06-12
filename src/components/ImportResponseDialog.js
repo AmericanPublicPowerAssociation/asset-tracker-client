@@ -7,10 +7,10 @@ import Container from '@material-ui/core/Container'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
-import DialogActions from '@material-ui/core/DialogActions'
+// import DialogActions from '@material-ui/core/DialogActions'
 import Divider from '@material-ui/core/Divider'
-import ErrorIcon from '@material-ui/icons/Error'
-import IconButton from '@material-ui/core/IconButton'
+// import ErrorIcon from '@material-ui/icons/Error'
+// import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -20,9 +20,9 @@ import WarningIcon from '@material-ui/icons/Warning'
 
 const useStyles = makeStyles(theme => ({
   successButton: {
-    marginTop: '1rem',
-    color: 'white',
-    background: '#4caf50',
+    'marginTop': '1rem',
+    'color': 'white',
+    'background': '#4caf50',
     '&:hover': {
       background: '#4caf50',
     },

@@ -1,4 +1,6 @@
-// import assets from '../datasets/assets/example1.json'
+import {
+  ReactComponent as PoleIcon,
+} from '../images/assets/pole-16.svg'
 import {
   ReactComponent as LineIcon,
 } from '../images/assets/line-16.svg'
@@ -9,28 +11,54 @@ import {
   ReactComponent as TransformerIcon,
 } from '../images/assets/transformer-16.svg'
 import {
+  ReactComponent as SwitchIcon,
+} from '../images/assets/switch-16.svg'
+import {
+  ReactComponent as PowerQualityIcon,
+} from '../images/assets/power-quality-16.svg'
+import {
+  ReactComponent as ControlIcon,
+} from '../images/assets/control-16.svg'
+import {
+  ReactComponent as StorageIcon,
+} from '../images/assets/storage-white-16.svg'
+import {
   ReactComponent as GeneratorIcon,
 } from '../images/assets/generator-white-16.svg'
 import {
   ReactComponent as SubstationIcon,
 } from '../images/assets/substation-16.svg'
-
-// export const ASSETS = assets
+import {
+  ReactComponent as StationIcon,
+} from '../images/assets/station-16.svg'
 
 export const MINIMUM_ASSET_ID_LENGTH = 16
 
+export const ASSET_TYPE_CODE_POLE = 'p'
 export const ASSET_TYPE_CODE_LINE = 'l'
 export const ASSET_TYPE_CODE_METER = 'm'
 export const ASSET_TYPE_CODE_TRANSFORMER = 't'
+export const ASSET_TYPE_CODE_SWITCH = 'x'
+export const ASSET_TYPE_CODE_POWER_QUALITY = 'q'
+export const ASSET_TYPE_CODE_CONTROL = 'c'
+export const ASSET_TYPE_CODE_STORAGE = 'o'
 export const ASSET_TYPE_CODE_GENERATOR = 'g'
 export const ASSET_TYPE_CODE_SUBSTATION = 's'
+export const ASSET_TYPE_CODE_STATION = 'S'
+// export const ASSET_TYPE_CODE_ASSET = 'X'
 
 export const ASSET_TYPE_ICON_BY_CODE = {
+  [ASSET_TYPE_CODE_POLE]: PoleIcon,
   [ASSET_TYPE_CODE_LINE]: LineIcon,
   [ASSET_TYPE_CODE_METER]: MeterIcon,
   [ASSET_TYPE_CODE_TRANSFORMER]: TransformerIcon,
+  [ASSET_TYPE_CODE_SWITCH]: SwitchIcon,
+  [ASSET_TYPE_CODE_POWER_QUALITY]: PowerQualityIcon,
+  [ASSET_TYPE_CODE_CONTROL]: ControlIcon,
+  [ASSET_TYPE_CODE_STORAGE]: StorageIcon,
   [ASSET_TYPE_CODE_GENERATOR]: GeneratorIcon,
   [ASSET_TYPE_CODE_SUBSTATION]: SubstationIcon,
+  [ASSET_TYPE_CODE_STATION]: StationIcon,
 }
 
 export const REFRESH_ASSETS = 'REFRESH_ASSETS'

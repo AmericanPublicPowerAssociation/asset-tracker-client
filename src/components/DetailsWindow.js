@@ -28,7 +28,6 @@ const useStyles = makeStyles(theme => ({
     position: 'fixed',
     top: theme.spacing(6),
     right: theme.spacing(1),
-    bottom: theme.spacing(5),
     width: theme.spacing(32),
     padding: theme.spacing(1),
     overflowY: 'auto',
@@ -36,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     zIndex: 1,
     display: 'flex',
     flexDirection: 'column',
-    // TODO: Use maxHeight with fixed bottom https://stackoverflow.com/a/45990480/192092
+    maxHeight: 'calc(100vh - 108px)',
   },
   withTables: {
     bottom: '50%',

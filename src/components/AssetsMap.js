@@ -34,9 +34,7 @@ export default function AssetsMap(props) {
     deckGL, openDeleteDialogOpen)
   mapLayers.push(...overlayMapLayers)
   return (
-    <div onKeyUp={handleMapKey}
-      style={{ overflowX: 'hidden', overflowY: 'hidden' }}
-    >
+    <div onKeyUp={handleMapKey}>
       <DeckGL
         ref={deckGL}
         layers={mapLayers}

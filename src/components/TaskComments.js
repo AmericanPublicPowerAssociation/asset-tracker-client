@@ -1,24 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react'
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import { makeStyles } from '@material-ui/core/styles'
-import SendIcon from "@material-ui/icons/Send"
-import {getCurrentTaskComments} from "../selectors"
+import SendIcon from '@material-ui/icons/Send'
+import { getCurrentTaskComments } from '../selectors'
 import Identicon from 'react-identicons'
-import Typography from "@material-ui/core/Typography"
-import InputAdornment from "@material-ui/core/InputAdornment"
-import IconButton from "@material-ui/core/IconButton"
-import Input from "@material-ui/core/Input"
+import Typography from '@material-ui/core/Typography'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import IconButton from '@material-ui/core/IconButton'
+import Input from '@material-ui/core/Input'
 import Scrollbar from 'react-perfect-scrollbar'
 import 'react-perfect-scrollbar/dist/css/styles.css'
 import dateFormat from 'dateformat'
 
-
 const useStyles = makeStyles(theme => ({
   bottomAction: {
     margin: '15px 0 15px 0',
-    display: 'flex'
+    display: 'flex',
   },
   scroll: {
     maxHeight: '60%',

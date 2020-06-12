@@ -12,7 +12,7 @@ import {
   refreshTasks,
   setAssets,
   setAssetValue,
-  setMapBoundingBox,
+  // setMapBoundingBox,
   setTaskCommentCount,
   setTaskComments,
   setTasks,

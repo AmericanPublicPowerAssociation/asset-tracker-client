@@ -78,11 +78,17 @@ export const SKETCH_MODE_VIEW = 'view'
 
 export const SKETCH_MODE_ADD = 'add'
 export const SKETCH_MODE_ADD_ASSET = 'add >'
+export const SKETCH_MODE_ADD_POLE = 'add > pole'
 export const SKETCH_MODE_ADD_LINE = 'add > line'
+export const SKETCH_MODE_ADD_METER = 'add > meter'
 export const SKETCH_MODE_ADD_TRANSFORMER = 'add > transformer'
+export const SKETCH_MODE_ADD_SWITCH = 'add > switch'
+export const SKETCH_MODE_ADD_POWER_QUALITY = 'add > power quality'
+export const SKETCH_MODE_ADD_CONTROL = 'add > control'
+export const SKETCH_MODE_ADD_STORAGE = 'add > storage'
 export const SKETCH_MODE_ADD_GENERATOR = 'add > generator'
 export const SKETCH_MODE_ADD_SUBSTATION = 'add > substation'
-export const SKETCH_MODE_ADD_METER = 'add > meter'
+export const SKETCH_MODE_ADD_STATION = 'add > station'
 
 export const SKETCH_MODE_EDIT = 'edit'
 

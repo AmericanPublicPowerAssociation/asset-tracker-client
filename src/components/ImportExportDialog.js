@@ -44,7 +44,10 @@ export default function ImportExportDialog({ open, onClose, onCancel }) {
   const [downloadFormat, setDownloadFormat] = useState('csv')
   const [overwriteRecords, setOverwriteRecords] = useState(false)
   const [assetCSVFile, setAssetCSVFile] = useState(null)
-  const [loadingFileIndicator, setLoadingFileIndicator] = useState(false)
+  const [
+    loadingFileIndicator,
+    // setLoadingFileIndicator,
+  ] = useState(false)
   const [confirmOverwriteRecords, setConfirmOverwriteRecords] = useState(false)
   const [uploadResponse, setUploadResponse] = useState()
   const assetById = useSelector(getAssetById)
