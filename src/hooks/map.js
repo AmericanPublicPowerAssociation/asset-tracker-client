@@ -246,37 +246,6 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
         }
         console.log(editingAsset)
         dispatch(setEditingAsset(editingAsset))
-      } else if (editType === 'movePosition') {
-        console.log('movePosition', event)
-        const {
-          position,
-          positionIndexes,
-          featureIndexes,
-        } = editContext
-        const { features } = updatedData
-        const featureIndex = featureIndexes[0]
-        const asset = features[featureIndex]
-        if (sketchMode === SKETCH_MODE_EDIT) {
-          const assetProperties = asset.properties
-          switch(assetProperties.typeCode) {
-            case ASSET_TYPE_CODE_LINE: {
-              const assetId = asset.properties.id
-              const assetVertexCount = asset.geometry.coordinates.length
-              const assetVertexIndex = positionIndexes[0]
-              if (assetVertexIndex === 0 || assetVertexIndex === assetVertexCount - 1) {
-                const newBusId = makeBusId()
-                const newConnection = { busId: newBusId, attributes: {} }
-                dispatch(setAssetConnection(assetId, assetVertexIndex, newConnection))
-                break
-              }
-              break
-            }
-            default: {
-              break
-            }
-          }
-        }
-        
       } else if (editType === 'finishMovePosition') {
 
         console.log('finishMovePosition', event)

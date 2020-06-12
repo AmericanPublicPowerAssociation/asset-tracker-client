@@ -1,5 +1,6 @@
 import translateFeature from '@turf/transform-translate'
 import {
+  ASSET_TYPE_CODE_LINE,
   BUS_DISTANCE_IN_KILOMETERS_BY_CODE,
   MINIMUM_BUS_ID_LENGTH,
 } from '../constants'
@@ -11,6 +12,7 @@ export function getBusFeatures(assetFeatures, assetById) {
   const busIds = []
   const busFeatures = []
 
+  /*
   for (let i = 0; i < assetFeatures.length; i++) {
     const assetFeature = assetFeatures[i]
     const getBusFeaturesForGeometry = {
@@ -28,6 +30,40 @@ export function getBusFeatures(assetFeatures, assetById) {
 
     busFeatures.push(...getBusFeaturesForGeometry(
       assetFeature, connections, busIds))
+  }
+  */
+
+  const { lineAssetsFeatures, notLineAssetsFeatures } = assetFeatures
+    .reduce((object, asset) => {
+      if (asset.properties.typeCode === ASSET_TYPE_CODE_LINE) {
+        object.lineAssetsFeatures.push(asset)
+      }
+      else {
+        object.notLineAssetsFeatures.push(asset)
+      }
+      return object
+    }, { lineAssetsFeatures: [], notLineAssetsFeatures: [] })
+
+  const assetBatches = [notLineAssetsFeatures, lineAssetsFeatures]
+  for (let assetBatch of assetBatches) {
+    for (let i = 0; i < assetBatch.length; i++) {
+      const assetFeature = assetBatch[i]
+      const getBusFeaturesForGeometry = {
+        'Point': getBusFeaturesForPoint,
+        'LineString': getBusFeaturesForLine,
+      }[assetFeature.geometry.type]
+      if (!getBusFeaturesForGeometry) continue
+
+      const assetId = assetFeature.properties.id
+      if (!assetId) continue
+      const asset = assetById[assetId]
+      if (!asset) continue
+      const connections = asset.connections
+      if (!connections) continue
+
+      busFeatures.push(...getBusFeaturesForGeometry(
+        assetFeature, connections, busIds))
+    }
   }
 
   return busFeatures
