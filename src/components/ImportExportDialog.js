@@ -40,7 +40,7 @@ const uploaderProps = {
 export default function ImportExportDialog({ open, onClose, onCancel }) {
   const dispatch = useDispatch()
   const [action, setAction] = useState('download')
-  const [powerName, setPowerName] = useState('')
+  const [sourceId, setSourceId] = useState('')
   const [downloadFormat, setDownloadFormat] = useState('csv')
   const [overwriteRecords, setOverwriteRecords] = useState(false)
   const [assetCSVFile, setAssetCSVFile] = useState(null)
@@ -49,27 +49,30 @@ export default function ImportExportDialog({ open, onClose, onCancel }) {
   const [uploadResponse, setUploadResponse] = useState()
   const assetById = useSelector(getAssetById)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
-  const data = Object.values(assetById)
-    .filter(asset => asset['typeCode'] === ASSET_TYPE_CODE_TRANSFORMER)
-    .map(asset => {
+  const data = Object.entries(assetById)
+    .reduce((assetArray, [assetId, asset]) => {
       const assetType = asset['typeCode']
       const attributes = asset['attributes']
       const vendorName = attributes ? attributes['vendorName'] : ''
-      return {
+      assetArray.push({
         ...asset,
+        id: assetId,
         vendorName,
         type: assetTypeByCode[assetType]['name'],
-      }
-    })
+      })
+      return assetArray
+    }, [])
+    .filter(asset => asset['typeCode'] === ASSET_TYPE_CODE_TRANSFORMER)
 
-  if (data !== null && data !== undefined && data.length > 0 && powerName === '') {
-    setPowerName(data[0].id)
+  if (data !== null && data !== undefined && data.length > 0 && sourceId === '') {
+    setSourceId(data[0].id)
   }
+
   
   function selectAction() {
     if (action === 'download') {
       if (downloadFormat === 'dss') {
-        window.location = `/assets.dss?source=${powerName}`
+        window.location = `/assets.dss?sourceId=${sourceId}`
       }
       if (downloadFormat === 'csv') {
         window.location = '/assets.csv'
@@ -159,9 +162,9 @@ export default function ImportExportDialog({ open, onClose, onCancel }) {
     <>
       <Typography component='p'>Select the power source</Typography>
       <Select
-        onChange={e => setPowerName(e.target.value)} value={powerName}
+        onChange={e => setSourceId(e.target.value)} value={sourceId}
         input={<Input id='asset-type-select' />} >
-        { data.map(asset => <MenuItem value={asset.name} key={asset.name}>{asset.name}</MenuItem>)}
+        { data.map(asset => <MenuItem value={asset.id} key={asset.id}>{asset.name}</MenuItem>) }
       </Select>
     </>
   )
