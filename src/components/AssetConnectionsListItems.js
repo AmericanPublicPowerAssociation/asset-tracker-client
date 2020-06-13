@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import clsx from 'clsx'
 import ListItem from '@material-ui/core/ListItem'
@@ -12,6 +12,9 @@ import {
   setSelectedBusIndexes,
 } from '../actions'
 import {
+  IsLayoutMobileContext,
+} from '../contexts'
+import {
   getCountDescription,
 } from '../macros'
 import {
@@ -22,8 +25,6 @@ import {
   getBusesGeoJson,
   getFocusingBusId,
 } from '../selectors'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
-import useTheme from '@material-ui/core/styles/useTheme'
 
 export default function AssetConnectionsListItems({
   asset,
@@ -33,9 +34,7 @@ export default function AssetConnectionsListItems({
   expand,
 }) {
   const dispatch = useDispatch()
-  const theme = useTheme()
-  // TODO: Use isMobile and using string for media query
-  const isNotMobile = useMediaQuery(theme.breakpoints.up('sm'))
+  const isLayoutMobile = useContext(IsLayoutMobileContext)
   const [isOpenByIndex, setIsOpenByIndex] = useState({})
   const busesGeoJson = useSelector(getBusesGeoJson)
   const focusingBusId = useSelector(getFocusingBusId)
@@ -75,7 +74,7 @@ export default function AssetConnectionsListItems({
       <CollapsibleListItem
         key={index}
         title={title}
-        description={(isNotMobile || expand) ? description : null}
+        description={(!isLayoutMobile || expand) ? description : null}
         isHighlighted={isHighlighted}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
@@ -91,7 +90,7 @@ export default function AssetConnectionsListItems({
         />
         <BusConnectionsList connectedAssetIds={connectedAssetIds} />
       </CollapsibleListItem> :
-      ( isNotMobile || expand ?
+      ( !isLayoutMobile || expand ?
       <ListItem
         key={index}
         className={clsx({ highlighted: isHighlighted })}

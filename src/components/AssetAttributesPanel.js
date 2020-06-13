@@ -38,7 +38,12 @@ export default function AssetAttributesPanel({
         </Tooltip>
 
         <ListItemText>
-          <AssetName asset={asset} isEditing={isEditing} setExpand={setIsDetailsWindowExpanded} expand={isDetailsWindowExpanded} />
+          <AssetName
+            asset={asset}
+            isEditing={isEditing}
+            isFullScreen={isDetailsWindowExpanded}
+            setIsFullScreen={setIsDetailsWindowExpanded}
+          />
         </ListItemText>
       </ListItem>
 

@@ -1,6 +1,10 @@
 import {
+  ASSET_TYPE_CODE_CONTROL,
   ASSET_TYPE_CODE_GENERATOR,
   ASSET_TYPE_CODE_METER,
+  ASSET_TYPE_CODE_POWER_QUALITY,
+  ASSET_TYPE_CODE_STORAGE,
+  ASSET_TYPE_CODE_SWITCH,
   ASSET_TYPE_CODE_TRANSFORMER,
 } from './asset'
 
@@ -26,16 +30,19 @@ export const MAP_STYLE_BY_NAME = {
   street: STREET_MAP_STYLE,
   satellite: SATELLITE_MAP_STYLE,
 }
-export const MAP_STYLE_NAMES = ['dark', 'street', 'satellite']
+export const MAP_STYLE_NAMES = Object.keys(MAP_STYLE_BY_NAME)
 export const MAP_STYLE_COUNT = MAP_STYLE_NAMES.length
 export const BRIGHT_MAP_STYLE_NAMES = ['street']
 
 export const ASSET_LINE_WIDTH_IN_METERS = 5
-
 export const ASSET_RADIUS_IN_METERS_BY_CODE = {
   [ASSET_TYPE_CODE_METER]: 5,
-  [ASSET_TYPE_CODE_GENERATOR]: 15,
-  [ASSET_TYPE_CODE_TRANSFORMER]: 10,
+  [ASSET_TYPE_CODE_TRANSFORMER]: 7,
+  [ASSET_TYPE_CODE_SWITCH]: 9,
+  [ASSET_TYPE_CODE_POWER_QUALITY]: 11,
+  [ASSET_TYPE_CODE_CONTROL]: 13,
+  [ASSET_TYPE_CODE_STORAGE]: 15,
+  [ASSET_TYPE_CODE_GENERATOR]: 17,
 }
 
 export const BUS_RADIUS_IN_METERS = 5
@@ -50,19 +57,8 @@ export const BUS_DISTANCE_IN_KILOMETERS_BY_CODE = Object.entries(
   return busDistanceInKilometersByCode
 }, {})
 
-/*
-export const PICKING_RADIUS_IN_PIXELS = Math.max(
-  ...Object.values(ASSET_RADIUS_IN_METERS_BY_CODE)) + 1
-export const PICKING_DEPTH = 5
 export const PICKING_RADIUS_IN_PIXELS = 0
 export const PICKING_DEPTH = 3
-*/
-export const PICKING_RADIUS_IN_PIXELS = 5
-export const PICKING_DEPTH = 5
-
-export const TOGGLE_MAP_STYLE = 'TOGGLE_MAP_STYLE'
-export const SET_MAP_VIEW_STATE = 'SET_MAP_VIEW_STATE'
-export const PAN_MAP_TO_ASSET = 'PAN_MAP_TO_ASSET'
 
 export const ASSETS_MAP_LAYER_ID = 'assets'
 export const BUSES_MAP_LAYER_ID = 'buses'
@@ -72,10 +68,7 @@ export const OVERLAY_MODE_TASKS = 'tasks'
 export const OVERLAY_MODE_RISKS = 'risks'
 export const OVERLAY_MODE = OVERLAY_MODE_ASSETS
 
-export const SET_OVERLAY_MODE = 'SET_OVERLAY_MODE'
-
 export const SKETCH_MODE_VIEW = 'view'
-
 export const SKETCH_MODE_ADD = 'add'
 export const SKETCH_MODE_ADD_ASSET = 'add >'
 export const SKETCH_MODE_ADD_POLE = 'add > pole'
@@ -89,15 +82,15 @@ export const SKETCH_MODE_ADD_STORAGE = 'add > storage'
 export const SKETCH_MODE_ADD_GENERATOR = 'add > generator'
 export const SKETCH_MODE_ADD_SUBSTATION = 'add > substation'
 export const SKETCH_MODE_ADD_STATION = 'add > station'
-
 export const SKETCH_MODE_EDIT = 'edit'
-
 export const SKETCH_MODE_DELETE = 'delete'
-
 export const SKETCH_MODE = SKETCH_MODE_VIEW
 
+export const TOGGLE_MAP_STYLE = 'TOGGLE_MAP_STYLE'
+export const SET_MAP_VIEW_STATE = 'SET_MAP_VIEW_STATE'
+export const PAN_MAP_TO_ASSET = 'PAN_MAP_TO_ASSET'
+export const SET_OVERLAY_MODE = 'SET_OVERLAY_MODE'
 export const SET_SKETCH_MODE = 'SET_SKETCH_MODE'
-
 export const SET_SELECTED_ASSET_INDEXES = 'SET_SELECTED_ASSET_INDEXES'
 export const SET_SELECTED_BUS_INDEXES = 'SET_SELECTED_BUS_INDEXES'
 export const SET_HOVER_INFO = 'SET_HOVER_INFO'

@@ -22,16 +22,15 @@ const {
   REACT_APP_MAPBOX_TOKEN,
 } = process.env
 
-export default function AssetsMap(props) {
+export default function AssetsMap({ onAssetDelete }) {
   const deckGL = useRef()
   const mapStyle = useSelector(getMapStyle)
   const mapViewState = useSelector(getMapViewState)
   const hoverInfo = useSelector(getHoverInfo)
   const overlayMapLayers = useSelector(getOverlayMapLayers)
   const { handleMapMove } = useMovableMap()
-  const { openDeleteDialogOpen } = props
-  const { mapLayers, handleMapKey, handleMapClick } = useEditableMap(
-    deckGL, openDeleteDialogOpen)
+  const { mapLayers, handleMapKey } = useEditableMap(deckGL, {
+    onAssetDelete})
   mapLayers.push(...overlayMapLayers)
   return (
     <div onKeyUp={handleMapKey}>
@@ -43,7 +42,6 @@ export default function AssetsMap(props) {
         controller={{ doubleClickZoom: false }}
         viewState={mapViewState}
         onViewStateChange={handleMapMove}
-        onClick={handleMapClick}
       >
         <StaticMap
           mapStyle={mapStyle}

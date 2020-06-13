@@ -1,6 +1,5 @@
 import translateFeature from '@turf/transform-translate'
 import {
-  ASSET_TYPE_CODE_LINE,
   BUS_DISTANCE_IN_KILOMETERS_BY_CODE,
   MINIMUM_BUS_ID_LENGTH,
 } from '../constants'
@@ -12,7 +11,6 @@ export function getBusFeatures(assetFeatures, assetById) {
   const busIds = []
   const busFeatures = []
 
-  /*
   for (let i = 0; i < assetFeatures.length; i++) {
     const assetFeature = assetFeatures[i]
     const getBusFeaturesForGeometry = {
@@ -31,8 +29,8 @@ export function getBusFeatures(assetFeatures, assetById) {
     busFeatures.push(...getBusFeaturesForGeometry(
       assetFeature, connections, busIds))
   }
-  */
 
+  /*
   const { lineAssetsFeatures, notLineAssetsFeatures } = assetFeatures
     .reduce((object, asset) => {
       if (asset.properties.typeCode === ASSET_TYPE_CODE_LINE) {
@@ -65,6 +63,7 @@ export function getBusFeatures(assetFeatures, assetById) {
         assetFeature, connections, busIds))
     }
   }
+  */
 
   return busFeatures
 }

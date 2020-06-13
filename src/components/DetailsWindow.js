@@ -1,10 +1,9 @@
 // TODO: Rewrite from scratch to clean up logic
 
-import React, { forwardRef, useState } from 'react'
+import React, { forwardRef, useContext, useState } from 'react'
 import { useSelector } from 'react-redux'
 import clsx from 'clsx'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
+import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Dialog from '@material-ui/core/Dialog'
 import Slide from '@material-ui/core/Slide'
@@ -17,6 +16,9 @@ import {
   OVERLAY_MODE_RISKS,
   OVERLAY_MODE_TASKS,
 } from '../constants'
+import {
+  IsLayoutMobileContext,
+} from '../contexts'
 import {
   getEditingAsset,
   getFocusingAsset,
@@ -64,14 +66,12 @@ const Transition = forwardRef(function Transition(props, ref) {
 })
 
 export default function DetailsWindow({ isWithTables }) {
-  const theme = useTheme()
   const classes = useStyles()
   const overlayMode = useSelector(getOverlayMode)
   const focusingAsset = useSelector(getFocusingAsset)
   const editingAsset = useSelector(getEditingAsset)
   const [expand, setExpand] = useState(false)
-  // TODO: Use consistent useMediaQuery string
-  const isNotMobile = useMediaQuery(theme.breakpoints.up('sm'))
+  const isLayoutMobile = useContext(IsLayoutMobileContext)
   const asset = editingAsset.id ? editingAsset : focusingAsset
 
   const DetailsPanel = {
@@ -85,7 +85,8 @@ export default function DetailsWindow({ isWithTables }) {
       className={classes.root}
       asset={asset}
       // tasks={focusingTasks}
-      response={isNotMobile}
+      // TODO: RENAME
+      response={!isLayoutMobile}
       isDetailsWindowExpanded={expand}
       setIsDetailsWindowExpanded={setExpand}
     /> : <EmptyDetailsPanel />
@@ -104,8 +105,8 @@ export default function DetailsWindow({ isWithTables }) {
         {detailsPanel}
       </Paper>
     </Dialog>
-  ) : (isNotMobile || asset ?
-    <Paper className={clsx(!isNotMobile ? classes.responsive : classes.root, {
+  ) : (!isLayoutMobile || asset ?
+    <Paper className={clsx(isLayoutMobile ? classes.responsive : classes.root, {
       [classes.withTables]: isWithTables,
     })}>
       {detailsPanel}
