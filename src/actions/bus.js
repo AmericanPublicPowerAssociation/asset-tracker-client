@@ -1,10 +1,10 @@
 import {
-  SET_FOCUSING_BUS_ID,
+  SET_SELECTED_BUS_ID,
 } from '../constants'
 
-export function setFocusingBusId(id) {
+export function setSelectedBusId(id) {
   return {
-    type: SET_FOCUSING_BUS_ID,
+    type: SET_SELECTED_BUS_ID,
     payload: id,
   }
 }

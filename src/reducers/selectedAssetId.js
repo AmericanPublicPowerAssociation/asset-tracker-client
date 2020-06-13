@@ -1,22 +1,21 @@
-// TODO: Consider renaming to selectedAssetId
 import {
   DELETE_ASSET,
   SET_ASSETS,
-  SET_FOCUSING_ASSET_ID,
+  SET_SELECTED_ASSET_ID,
 } from '../constants'
 
 const initialState = null
 
-const focusingAssetId = (state=initialState, action) => {
+const selectedAssetId = (state=initialState, action) => {
   const { payload } = action
 
   switch(action.type) {
-    case SET_FOCUSING_ASSET_ID: {
+    case SET_SELECTED_ASSET_ID: {
       const id = payload
       return id
     }
     case SET_ASSETS: {
-      // Stay focused on the same asset but using the new id
+      // Keep the same asset selected but using the new id
       const { assetIdById } = payload
       const oldId = state
       if (!assetIdById) {
@@ -34,4 +33,4 @@ const focusingAssetId = (state=initialState, action) => {
   }
 }
 
-export default focusingAssetId
+export default selectedAssetId

@@ -1,12 +1,9 @@
 import { WebMercatorViewport } from '@deck.gl/core'
-/*
 import {
-  EditableGeoJsonLayer,
-} from '@nebula.gl/layers'
-*/
-import {
+  DrawCircleByDiameterMode,
   DrawLineStringMode,
   DrawPointMode,
+  DrawPolygonMode,
   DrawRectangleMode,
   ModifyMode,
   ViewMode,
@@ -58,7 +55,7 @@ export class CustomEditableGeoJsonLayer extends EditableGeoJsonLayer {
 
 export function getMapMode(sketchMode) {
   const mapMode = {
-    [SKETCH_MODE_ADD_POLE]: DrawRectangleMode,
+    [SKETCH_MODE_ADD_POLE]: DrawCircleByDiameterMode,
     [SKETCH_MODE_ADD_LINE]: DrawLineStringMode,
     [SKETCH_MODE_ADD_METER]: DrawPointMode,
     [SKETCH_MODE_ADD_TRANSFORMER]: DrawPointMode,
@@ -68,7 +65,7 @@ export function getMapMode(sketchMode) {
     [SKETCH_MODE_ADD_STORAGE]: DrawPointMode,
     [SKETCH_MODE_ADD_GENERATOR]: DrawPointMode,
     [SKETCH_MODE_ADD_SUBSTATION]: DrawRectangleMode,
-    [SKETCH_MODE_ADD_STATION]: DrawRectangleMode,
+    [SKETCH_MODE_ADD_STATION]: DrawPolygonMode,
     [SKETCH_MODE_EDIT]: ModifyMode,
   }[sketchMode]
   return mapMode || ViewMode

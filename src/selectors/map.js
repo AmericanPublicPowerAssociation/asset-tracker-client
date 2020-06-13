@@ -10,7 +10,7 @@ import {
 } from 'asset-report-risks'
 import {
   getAssetById,
-  getFocusingAssetId,
+  getSelectedAssetId,
 } from './asset'
 import {
   getOpenTaskCountByAssetId,
@@ -99,7 +99,7 @@ export const getOverlayMapLayers = createSelector([
   getThreatScoreByAssetId,
   getOpenTaskCountByAssetId,
   getSelectedRiskIndex,
-  getFocusingAssetId,
+  getSelectedAssetId,
   getRisksByAssetId,
 ], (
   overlayMode,
@@ -109,7 +109,7 @@ export const getOverlayMapLayers = createSelector([
   threatScoreByAssetId,
   openTaskCountByAssetId,
   selectedRiskIndex,
-  focusingAssetId,
+  selectedAssetId,
   risksByAssetId,
 ) => {
   const mapLayers = []
@@ -120,6 +120,7 @@ export const getOverlayMapLayers = createSelector([
       ).map(([assetId, openTaskCount]) => {
         const assetFeature = assetsGeoJson['features'].find(
           feature => feature.properties.id === assetId)
+        // TODO: Use midpoint for lines
         const assetCentroid = getCentroid(assetFeature)
         return {
           name: '' + openTaskCount,
@@ -144,11 +145,11 @@ export const getOverlayMapLayers = createSelector([
           pickable: false,
           getLineColor: mapColors.overlay,
         }))
-      } else if (focusingAssetId) {
-        const focusingRisks = risksByAssetId[focusingAssetId]
-        if (focusingRisks) {
+      } else if (selectedAssetId) {
+        const selectedRisks = risksByAssetId[selectedAssetId]
+        if (selectedRisks) {
           mapLayers.push(new GeoJsonLayer({
-            data: focusingRisks[0].lineGeoJson,
+            data: selectedRisks[0].lineGeoJson,
             pickable: false,
             getLineColor: mapColors.overlay,
           }))

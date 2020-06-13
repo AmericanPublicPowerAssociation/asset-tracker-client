@@ -1,14 +1,13 @@
-// TODO: Consider renaming to selectedBusId
 import {
   DELETE_ASSET,
-  SET_FOCUSING_BUS_ID,
+  SET_SELECTED_BUS_ID,
 } from '../constants'
 
 const initialState = null
 
-const focusingBusId = (state=initialState, action) => {
+const selectedBusId = (state=initialState, action) => {
   switch(action.type) {
-    case SET_FOCUSING_BUS_ID: {
+    case SET_SELECTED_BUS_ID: {
       const id = action.payload
       return id
     }
@@ -21,4 +20,4 @@ const focusingBusId = (state=initialState, action) => {
   }
 }
 
-export default focusingBusId
+export default selectedBusId

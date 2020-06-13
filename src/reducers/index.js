@@ -19,13 +19,14 @@ import assetTypeByCode from './assetTypeByCode'
 import assetsGeoJson from './assetsGeoJson'
 import assetById from './assetById'
 import editingAsset from './editingAsset'
-import focusingAssetId from './focusingAssetId'
-import focusingBusId from './focusingBusId'
+import selectedAssetId from './selectedAssetId'
+import selectedBusId from './selectedBusId'
 import taskById from './taskById'
 import taskComments from './taskComments'
 import taskCodeTypes from './taskCodeTypes'
 import hoverInfo from './hoverInfo'
 import selectedTaskId from './selectedTaskId'
+import message from './message'
 
 const reduceHorizontally = combineReducers({
   mapStyleName,
@@ -39,8 +40,8 @@ const reduceHorizontally = combineReducers({
   assetById,
   taskById,
   editingAsset,
-  focusingAssetId,
-  focusingBusId,
+  selectedAssetId,
+  selectedBusId,
   taskComments,
   vendorNameSuggestions,
   productNameSuggestions,
@@ -50,6 +51,7 @@ const reduceHorizontally = combineReducers({
   selectedRiskIndex,
   taskCodeTypes,
   selectedTaskId,
+  message,
   sketchMode,  // Keep last
 })
 

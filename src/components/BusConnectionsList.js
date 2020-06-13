@@ -8,7 +8,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 import getCentroid from '@turf/centroid'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import {
-  setFocusingAssetId,
+  setSelectedAssetId,
   setHoverInfo,
   // setSelectedAssetIndexes,
 } from '../actions'
@@ -104,7 +104,7 @@ export default function BusConnectionsList({ connectedAssetIds }) {
   const mapWebMercatorViewPort = useSelector(getMapWebMercatorViewPort)
 
   function onClickFocusOnAsset(assetId) {
-    dispatch(setFocusingAssetId(assetId))
+    dispatch(setSelectedAssetId(assetId))
     onClickHighlight(assetId)
   }
 

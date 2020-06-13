@@ -14,6 +14,7 @@ import TablesWindow from './TablesWindow'
 // import TablesDialog from './TablesDialog'
 import ImportExportDialog from './ImportExportDialog'
 import AssetDeleteDialog from './AssetDeleteDialog'
+import MessageBar from './MessageBar'
 import {
   refreshRisks,
 } from 'asset-report-risks'
@@ -91,7 +92,7 @@ export default function App() {
         isWithTables={isWithTables}
       />
     }
-      {/*
+		{/*
     {isWithTables && (isLayoutMobile ?
       <TablesDialog
         isWithTables={isWithTables}
@@ -108,26 +109,19 @@ export default function App() {
         isWithTables={isWithTables}
         setIsWithTables={setIsWithTables}
       />
-      }
+		}
       <ImportExportDialog
         open={isWithImportExport}
         onCancel={() => {setIsWithImportExport(false)}}
         onClose={()=> {setIsWithImportExport(false)}}
       />
-    {/*
-      <ImportExportDialog
-        onOk={element => {
-          window.location = `/assets.dss?source=${element}`
-          setIsImportExportDialogOpen(false)}
-        }
-      />
-    */}
     { isDeleteDialogOpen &&
       <AssetDeleteDialog
         openDialog={isDeleteDialogOpen}
         onClose={ () => setIsDeleteDialogOpen(false) }
       />
     }
+			<MessageBar />
     </IsLayoutMobileContext.Provider>
   )
 }

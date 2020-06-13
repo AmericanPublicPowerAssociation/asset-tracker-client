@@ -86,9 +86,9 @@ export function setAssetGeoJson(id, geometry) {
   }
 }
 
-export function setFocusingAssetId(id) {
+export function setSelectedAssetId(id) {
   return {
-    type: SET_FOCUSING_ASSET_ID,
+    type: SET_SELECTED_ASSET_ID,
     payload: id,
   }
 }

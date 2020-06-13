@@ -3,13 +3,14 @@ import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import { ViewMode } from '@nebula.gl/edit-modes'
 import {
   setAssetsGeoJson,
-  setFocusingAssetId,
-  setFocusingBusId,
+  setSelectedAssetId,
+  setSelectedBusId,
   setHoverInfo,
   setMapViewState,
   setSelectedAssetIndexes,
   setSelectedBusIndexes,
   setSketchMode,
+  showInfoMessage,
 } from '../actions'
 import {
   ASSETS_MAP_LAYER_ID,
@@ -84,6 +85,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       onHover: handleAssetHover,
       onClick: handleAssetClick,
       onEdit: handleAssetEdit,
+      modeConfig: { steps: 4 },
     })
   }
 
@@ -169,9 +171,9 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       return
     }
     if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
-      dispatch(setFocusingAssetId(targetAssetId))
+      dispatch(setSelectedAssetId(targetAssetId))
       dispatch(setSelectedAssetIndexes([info.index]))
-      dispatch(setFocusingBusId(null))
+      dispatch(setSelectedBusId(null))
       dispatch(setSelectedBusIndexes([]))
     }
     if (sketchMode === SKETCH_MODE_DELETE) {
@@ -190,9 +192,9 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       return
     }
     if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
-      dispatch(setFocusingAssetId(targetAssetId))
+      dispatch(setSelectedAssetId(targetAssetId))
       dispatch(setSelectedAssetIndexes([]))
-      dispatch(setFocusingBusId(targetBusId))
+      dispatch(setSelectedBusId(targetBusId))
       dispatch(setSelectedBusIndexes([info.index]))
     }
   }
@@ -201,6 +203,30 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
     const { editType, editContext } = event
     let { updatedData } = event
     console.log('asset edit', editType, editContext, updatedData)
+    switch (editType) {
+      case 'addFeature': {
+        // Add a feature in draw mode
+        dispatch(showInfoMessage('hey'))
+        break
+      }
+      case 'addTentativePosition': {
+        // Add a vertex in DrawLineStringMode or DrawPolygonMode
+        break
+      }
+      case 'addPosition': {
+        // Add a vertex in ModifyMode
+        break
+      }
+      case 'removePosition': {
+        // Remove a vertex in ModifyMode
+        break
+      }
+      case 'finishMovePosition': {
+        // Drag a vertex in ModifyMode
+        break
+      }
+      default: { }
+    }
     dispatch(setAssetsGeoJson(updatedData))
   }
 

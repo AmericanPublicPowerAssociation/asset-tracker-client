@@ -5,7 +5,7 @@ import {
 
 export const getAssetTypeByCode = state => state.assetTypeByCode
 export const getAssetById = state => state.assetById
-export const getFocusingAssetId = state => state.focusingAssetId
+export const getSelectedAssetId = state => state.selectedAssetId
 export const getEditingAsset = state => state.editingAsset
 
 export const getAssetCount = createSelector([
@@ -75,17 +75,17 @@ export const getAssetIdsByBusId = createSelector([
   return assetIdsByBusId
 })
 
-export const getFocusingAsset = createSelector([
-  getFocusingAssetId,
+export const getSelectedAsset = createSelector([
+  getSelectedAssetId,
   getAssetById,
 ], (
-  focusingAssetId,
+  selectedAssetId,
   assetById,
 ) => {
-  let asset = assetById[focusingAssetId]
+  let asset = assetById[selectedAssetId]
   if (asset) {
     asset = Object.assign({}, asset)
-    asset.id = focusingAssetId
+    asset.id = selectedAssetId
   }
   return asset
 })

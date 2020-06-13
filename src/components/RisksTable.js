@@ -7,8 +7,8 @@ import {
   getAssetsGeoJson,
 } from '../selectors'
 import {
-  setFocusingAssetId,
-  setFocusingBusId,
+  setSelectedAssetId,
+  setSelectedBusId,
   setSelectedAssetIndexes,
   // setSelectedBusIndexes,
   // setPanMapToAsset,
@@ -30,8 +30,8 @@ export default function RisksTable() {
     }
     dispatch(setSelectedAssetIndexes(selectedAssetIndexes))
     // dispatch(setSelectedBusIndexes([]))
-    dispatch(setFocusingAssetId(assetId))
-    dispatch(setFocusingBusId(null))
+    dispatch(setSelectedAssetId(assetId))
+    dispatch(setSelectedBusId(null))
   }
 
   return (

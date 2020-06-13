@@ -9,6 +9,7 @@
     "@deck.gl/react": "^8.1.4",
     "@material-ui/core": "^4.9.12",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "@math.gl/web-mercator": "^3.1.5",
     "@nebula.gl/layers": "^0.18.1",
     "@nebula.gl/overlays": "^0.18.1",
@@ -48,13 +49,32 @@
   "eslintConfig": {
     "extends": "react-app",
     "rules": {
-      "comma-dangle": ["error", "always-multiline"],
-      "object-curly-spacing": ["error", "always"],
-      "quotes": ["error", "single"],
-      "quote-props": ["error", "consistent"],
-      "semi": ["error", "never"],
+      "comma-dangle": [
+        "error",
+        "always-multiline"
+      ],
+      "object-curly-spacing": [
+        "error",
+        "always"
+      ],
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "quote-props": [
+        "error",
+        "consistent"
+      ],
+      "semi": [
+        "error",
+        "never"
+      ],
       "space-before-function-paren": [
-        "error", { "anonymous": "always", "named": "never" }
+        "error",
+        {
+          "anonymous": "always",
+          "named": "never"
+        }
       ]
     }
   },
@@ -69,8 +89,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "redux-devtools": "^3.5.0"
   }
 }

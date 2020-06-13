@@ -30,7 +30,8 @@ export default function AssetsMap({ onAssetDelete }) {
   const overlayMapLayers = useSelector(getOverlayMapLayers)
   const { handleMapMove } = useMovableMap()
   const { mapLayers, handleMapKey } = useEditableMap(deckGL, {
-    onAssetDelete})
+    onAssetDelete,
+	})
   mapLayers.push(...overlayMapLayers)
   return (
     <div onKeyUp={handleMapKey}>

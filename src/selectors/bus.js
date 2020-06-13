@@ -1,1 +1,1 @@
-export const getFocusingBusId = state => state.focusingBusId
+export const getSelectedBusId = state => state.selectedBusId

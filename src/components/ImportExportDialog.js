@@ -76,8 +76,7 @@ export default function ImportExportDialog({ open, onClose, onCancel }) {
     if (action === 'download') {
       if (downloadFormat === 'dss') {
         window.location = `/assets.dss?sourceId=${sourceId}`
-      }
-      if (downloadFormat === 'csv') {
+      } else if (downloadFormat === 'csv') {
         window.location = '/assets.csv'
       }
       onClose()

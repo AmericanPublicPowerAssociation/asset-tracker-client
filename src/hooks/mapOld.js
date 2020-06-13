@@ -1,4 +1,3 @@
-import { useDispatch, useSelector } from 'react-redux'
 import { produce } from 'immer'
 import getNearestPointOnLine from '@turf/nearest-point-on-line'
 import {
@@ -10,25 +9,19 @@ import {
   setAsset,
   setAssetConnection, setAssetGeoJson,
   setEditingAsset,
-  setFocusingBusId,
-  setMapViewState,
   setSketchMode,
 } from '../actions'
 import {
-  ASSET_LINE_WIDTH_IN_METERS,
-  ASSET_RADIUS_IN_METERS_BY_CODE,
   ASSET_TYPE_CODE_LINE,
   PICKING_DEPTH,
   PICKING_RADIUS_IN_PIXELS,
   SKETCH_MODE_ADD,
-  SKETCH_MODE_ADD_ASSET,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_EDIT,
   ASSET_TYPE_CODE_METER,
   ASSET_TYPE_CODE_TRANSFORMER,
 } from '../constants'
 import {
-  // getPickedEditHandle,
   getAssetTypeCode,
   getAssetsByLatLng,
   getAssetsByScreenPosition,
@@ -40,14 +33,10 @@ import {
   updateFeature, moveLatitudeInMeters,
 } from '../routines'
 import {
-  getAssetIdByBusId,
   getEditingAsset,
-  // getFocusingAssetId,
-  getSketchMode,
 } from '../selectors'
 
 export function useEditableMap(deckGL, openDeleteDialogOpen) {
-  // const focusingAssetId = useSelector(getFocusingAssetId)
   let editingAsset = useSelector(getEditingAsset)
 
   const assetTypeCode = getAssetTypeCode(sketchMode)
@@ -468,7 +457,7 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
         dispatch(setAsset(editingAsset))
         dispatch(fillAssetName(assetId, feature))
         dispatch(setSketchMode(SKETCH_MODE_ADD))  // Add one at a time
-        dispatch(setFocusingAssetId(assetId))
+        dispatch(setSelectedAssetId(assetId))
         dispatch(setSelectedAssetIndexes([featureIndex]))
       }
 

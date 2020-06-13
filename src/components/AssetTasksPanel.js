@@ -37,7 +37,7 @@ import {
 } from '../constants'
 import {
   getAssetTypeByCode,
-  getFocusingTasks,
+  getSelectedTasks,
   getTaskPriorityTypes,
 } from '../selectors'
 
@@ -100,7 +100,7 @@ export function AssetName(props) {
 export default function AssetTasksPanel({ asset }) {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const tasks = useSelector(getFocusingTasks)
+  const tasks = useSelector(getSelectedTasks)
 
   const assetId = asset.id
   const assetName = asset.name

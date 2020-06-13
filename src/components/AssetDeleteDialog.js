@@ -11,7 +11,7 @@ import {
   deleteAsset,
 } from '../actions'
 import {
-  getFocusingAssetId,
+  getSelectedAssetId,
 } from '../selectors'
 
 
@@ -20,7 +20,7 @@ export default function AssetDeleteDialog({
   openDialog,
 }) {
   const [input, setInput] = useState('')
-  const focusingAssetId = useSelector(getFocusingAssetId) 
+  const selectedAssetId = useSelector(getSelectedAssetId) 
   const dispatch = useDispatch()
 
   function handleClose(e) {
@@ -28,8 +28,8 @@ export default function AssetDeleteDialog({
   }
 
   function onConfirm(e) {
-    if (input === focusingAssetId) {
-      dispatch(deleteAsset(focusingAssetId))
+    if (input === selectedAssetId) {
+      dispatch(deleteAsset(selectedAssetId))
       onClose()
     }
   }
@@ -48,7 +48,7 @@ export default function AssetDeleteDialog({
           Please enter the asset id in the text input below and confirm.
         </DialogContentText>
         <DialogContentText>
-          Asset Id: {focusingAssetId}
+          Asset Id: {selectedAssetId}
         </DialogContentText>
         <TextField
           autoFocus
@@ -62,7 +62,7 @@ export default function AssetDeleteDialog({
         <Button onClick={handleClose} color='primary'>
           Cancel
         </Button>
-        <Button onClick={onConfirm} color='primary' disabled={input !== focusingAssetId}>
+        <Button onClick={onConfirm} color='primary' disabled={input !== selectedAssetId}>
           Confirm
         </Button>
       </DialogActions>

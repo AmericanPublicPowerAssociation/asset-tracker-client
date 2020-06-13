@@ -8,7 +8,7 @@ import CollapsibleListItem from './CollapsibleListItem'
 import BusAttributesListItem from './BusAttributesListItem'
 import BusConnectionsList from './BusConnectionsList'
 import {
-  setFocusingBusId,
+  setSelectedBusId,
   setSelectedBusIndexes,
 } from '../actions'
 import {
@@ -23,7 +23,7 @@ import {
 import {
   getAssetIdsByBusId,
   getBusesGeoJson,
-  getFocusingBusId,
+  getSelectedBusId,
 } from '../selectors'
 
 export default function AssetConnectionsListItems({
@@ -37,7 +37,7 @@ export default function AssetConnectionsListItems({
   const isLayoutMobile = useContext(IsLayoutMobileContext)
   const [isOpenByIndex, setIsOpenByIndex] = useState({})
   const busesGeoJson = useSelector(getBusesGeoJson)
-  const focusingBusId = useSelector(getFocusingBusId)
+  const selectedBusId = useSelector(getSelectedBusId)
   const assetIdsByBusId = useSelector(getAssetIdsByBusId)
   const assetId = asset.id
   const assetTypeCode = asset.typeCode
@@ -51,7 +51,7 @@ export default function AssetConnectionsListItems({
     const title = 'Bus ' + index
     const description = getCountDescription(connectedAssetCount, 'connection')
     const isOpen = isOpenByIndex[index]
-    const isHighlighted = focusingBusId === busId
+    const isHighlighted = selectedBusId === busId
 
     function setIsOpen(value) {
       setIsOpenByIndex(produce(isOpenByIndex, draft => {
@@ -65,7 +65,7 @@ export default function AssetConnectionsListItems({
       if (featureIndex > -1) {
         dispatch(setSelectedBusIndexes([featureIndex]))
       }
-      dispatch(setFocusingBusId(busId))
+      dispatch(setSelectedBusId(busId))
     }
 
     // TODO: Fix unclear isNotMobile || expand syntax

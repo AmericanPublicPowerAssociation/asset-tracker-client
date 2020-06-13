@@ -8,14 +8,14 @@ import {
 } from 'asset-report-risks'
 import {
   panMapToAsset,
-  setFocusingAssetId,
-  // setFocusingBusId,
+  setSelectedAssetId,
+  // setSelectedBusId,
   setSelectedAssetIndexes,
   // setSelectedBusIndexes,
 } from '../actions'
 import {
   getAssetsGeoJson,
-  getFocusingAssetId,
+  getSelectedAssetId,
   getOverlayMode,
 } from '../selectors'
 
@@ -35,7 +35,7 @@ export default function TablesWindow(props) {
   const dispatch = useDispatch()
   const { features } = useSelector(getAssetsGeoJson)
   const overlayMode = useSelector(getOverlayMode)
-  const focusingAssetId = useSelector(getFocusingAssetId)
+  const selectedAssetId = useSelector(getSelectedAssetId)
 
   function getHeaderLabel(header) {
     const result = header.replace(/([A-Z])/g, ' $1')
@@ -55,14 +55,8 @@ export default function TablesWindow(props) {
     }
     dispatch(setSelectedAssetIndexes(selectedAssetIndexes))
     // dispatch(setSelectedBusIndexes([]))
-    dispatch(setFocusingAssetId(assetId))
-    // dispatch(setFocusingBusId(null))
-  }
-
-  const pageSizeOptions = [5, 10]
-  const tableOptions =  {
-    search: true,
-    pageSizeOptions,
+    dispatch(setSelectedAssetId(assetId))
+    // dispatch(setSelectedBusId(null))
   }
 
   const table = {
@@ -70,7 +64,7 @@ export default function TablesWindow(props) {
       <AssetsTable
         getHeaderLabel={getHeaderLabel}
         highlightAsset={highlightAsset}
-        focusingAssetId={focusingAssetId}
+        selectedAssetId={selectedAssetId}
         tableOptions={tableOptions}
       />
     ),
@@ -78,14 +72,14 @@ export default function TablesWindow(props) {
       <TasksTable
         getHeaderLabel={getHeaderLabel}
         highlightAsset={highlightAsset}
-        focusingAssetId={focusingAssetId}
+        selectedAssetId={selectedAssetId}
         tableOptions={tableOptions}
       />
     ),
     risks: (
       <RisksTable
         onRowClick={highlightAsset}
-        focusingAssetId={focusingAssetId}
+        selectedAssetId={selectedAssetId}
         tableOptions={tableOptions}
       />
     ),

@@ -21,7 +21,7 @@ import {
 } from '../contexts'
 import {
   getEditingAsset,
-  getFocusingAsset,
+  getSelectedAsset,
   getOverlayMode,
 } from '../selectors'
 
@@ -68,11 +68,11 @@ const Transition = forwardRef(function Transition(props, ref) {
 export default function DetailsWindow({ isWithTables }) {
   const classes = useStyles()
   const overlayMode = useSelector(getOverlayMode)
-  const focusingAsset = useSelector(getFocusingAsset)
+  const selectedAsset = useSelector(getSelectedAsset)
   const editingAsset = useSelector(getEditingAsset)
   const [expand, setExpand] = useState(false)
   const isLayoutMobile = useContext(IsLayoutMobileContext)
-  const asset = editingAsset.id ? editingAsset : focusingAsset
+  const asset = editingAsset.id ? editingAsset : selectedAsset
 
   const DetailsPanel = {
     [OVERLAY_MODE_ASSETS]: AssetAttributesPanel,
@@ -84,7 +84,6 @@ export default function DetailsWindow({ isWithTables }) {
     <DetailsPanel
       className={classes.root}
       asset={asset}
-      // tasks={focusingTasks}
       // TODO: RENAME
       response={!isLayoutMobile}
       isDetailsWindowExpanded={expand}
