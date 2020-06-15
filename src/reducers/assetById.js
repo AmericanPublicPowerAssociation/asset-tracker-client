@@ -64,9 +64,9 @@ const assetById = (state = initialState, action) => {
       })
     }
     case DELETE_ASSET: {
-      const { assetId } = action.payload
+      const assetId = action.payload
       return produce(state, draft => {
-        draft[assetId]['is_deleted'] = true
+        draft[assetId]['isDeleted'] = true
       })
     }
     case INSERT_ASSET_VERTEX: {

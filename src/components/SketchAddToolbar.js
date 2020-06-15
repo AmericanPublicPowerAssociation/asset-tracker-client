@@ -1,5 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import List from '@material-ui/core/List'
@@ -47,18 +48,25 @@ const useStyles = makeStyles(theme => ({
     overflowY: 'auto',
     maxHeight: 'calc(100vh - 280px)',
   },
+  withTables: {
+    bottom: '50%',
+  },
 }))
 
 const LIST_ITEM_CLASSES = { selected: 'selected' }
 
-export default function SketchAddToolbar(props) {
+export default function SketchAddToolbar({
+  isWithTables,
+}) {
   const classes = useStyles()
   const dispatch = useDispatch()
   const sketchMode = useSelector(getSketchMode)
   const isAdding = sketchMode.startsWith('add')
   return isAdding && (
     <Paper className={classes.root}>
-      <List className={classes.list}>
+      <List className={clsx(classes.list, {
+        isWithTables: classes.withTables,
+      })}>
         <Tooltip
           title='Add Pole'
           aria-label='Add Pole'

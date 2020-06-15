@@ -10,7 +10,7 @@ import {
   setSelectedAssetIndexes,
   setSelectedBusIndexes,
   setSketchMode,
-  showInfoMessage,
+  // showInfoMessage,
 } from '../actions'
 import {
   ASSETS_MAP_LAYER_ID,
@@ -29,9 +29,9 @@ import {
 } from '../routines'
 import {
   getAssetById,
-  getAssetIdByBusId,
   getAssetTypeByCode,
   getAssetsGeoJson,
+  getBestAssetIdByBusId,
   getBusesGeoJson,
   getMapColors,
   getSelectedAssetIndexes,
@@ -56,7 +56,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   const selectedAssetIndexes = useSelector(getSelectedAssetIndexes)
   const selectedBusIndexes = useSelector(getSelectedBusIndexes)
   const assetById = useSelector(getAssetById)
-  const assetIdByBusId = useSelector(getAssetIdByBusId)
+  const bestAssetIdByBusId = useSelector(getBestAssetIdByBusId)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const mapColors = useSelector(getMapColors)
 
@@ -155,7 +155,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       const objectProperties = object.properties
       const busId = objectProperties.id
       const busIndex = objectProperties.index
-      const assetId = assetIdByBusId[busId]
+      const assetId = bestAssetIdByBusId[busId]
       const assetDescription = getAssetDescription(
         assetId, assetById, assetTypeByCode)
       const text = 'Bus ' + busIndex + ' of ' + assetDescription
@@ -187,7 +187,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
     if (!targetBusId) {
       return
     }
-    const targetAssetId = assetIdByBusId[targetBusId]
+    const targetAssetId = bestAssetIdByBusId[targetBusId]
     if (!targetAssetId) {
       return
     }
@@ -204,13 +204,13 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
     let { updatedData } = event
     console.log('asset edit', editType, editContext, updatedData)
     switch (editType) {
-      case 'addFeature': {
-        // Add a feature in draw mode
-        dispatch(showInfoMessage('hey'))
-        break
-      }
       case 'addTentativePosition': {
         // Add a vertex in DrawLineStringMode or DrawPolygonMode
+        break
+      }
+      case 'addFeature': {
+        // Add a feature in draw mode
+        // dispatch(addAsset())
         break
       }
       case 'addPosition': {

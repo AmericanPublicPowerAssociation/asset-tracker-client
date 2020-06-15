@@ -24,14 +24,14 @@ import {
   SKETCH_MODE_ADD_TRANSFORMER,
 } from '../constants'
 import {
-  expandCamelCase,
+  getLowerCaseFromCamelCase,
   getRandomId,
 } from '../macros'
 import {
   makeBusId,
 } from '../routines'
 
-export function makeEditingAsset(assetTypeCode) {
+export function makeTemporaryAsset(assetTypeCode) {
   const assetId = makeAssetId()
   const connectionByIndex = {}
   const asset = {
@@ -105,7 +105,7 @@ export function getAssetTypeCode(sketchMode) {
 }
 
 export function getAttributeLabel(attributeKey) {
-  return expandCamelCase(attributeKey).replace('percent', '%')
+  return getLowerCaseFromCamelCase(attributeKey).replace('percent', '%')
 }
 
 export function getSelectedAssetId(selectedAssetIndexes, assetsGeoJson) {

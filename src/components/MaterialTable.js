@@ -57,14 +57,19 @@ export default function WrappedMaterialTable({
   isSelectedRow,
   ...props
 }) {
+
+  function getRowStyle(rowData) {
+    return {
+      backgroundColor: isSelectedRow(rowData) ?
+        'yellow' : 'white',
+    }
+  }
+
   return (
     <MaterialTable
       icons={TABLE_ICONS}
       options={{
-        rowStyle: row => ({
-          backgroundColor: isSelectedRow(row) ? 'yellow' : 'white',
-        }),
-        search: true,
+        rowStyle: getRowStyle,
       }}
       {...props}
     />

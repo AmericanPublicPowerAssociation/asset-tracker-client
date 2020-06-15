@@ -11,7 +11,6 @@ import OptionsWindow from './OptionsWindow'
 import OverlaysWindow from './OverlaysWindow'
 import DetailsWindow from './DetailsWindow'
 import TablesWindow from './TablesWindow'
-// import TablesDialog from './TablesDialog'
 import ImportExportDialog from './ImportExportDialog'
 import AssetDeleteDialog from './AssetDeleteDialog'
 import MessageBar from './MessageBar'
@@ -74,7 +73,7 @@ export default function App() {
       <AssetsMap onAssetDelete={() => setIsDeleteDialogOpen(true)} />
       <SketchButtons />
       <SketchModeToolbar />
-      <SketchAddToolbar />
+      <SketchAddToolbar isWithTables={isWithTables} />
       <ActionsWindow
         isWithImportExport={isViewing}
         setIsWithImportExport={setIsWithImportExport}
@@ -92,36 +91,22 @@ export default function App() {
         isWithTables={isWithTables}
       />
     }
-		{/*
-    {isWithTables && (isLayoutMobile ?
-      <TablesDialog
-        isWithTables={isWithTables}
-        setIsWithTables={setIsWithTables}
-      /> :
-      <TablesWindow
-        isWithTables={isWithTables}
-        setIsWithTables={setIsWithTables}
-      />
-    )}
-    */}
-    {isWithTables &&
-      <TablesWindow
-        isWithTables={isWithTables}
-        setIsWithTables={setIsWithTables}
-      />
-		}
       <ImportExportDialog
         open={isWithImportExport}
         onCancel={() => {setIsWithImportExport(false)}}
         onClose={()=> {setIsWithImportExport(false)}}
       />
-    { isDeleteDialogOpen &&
       <AssetDeleteDialog
-        openDialog={isDeleteDialogOpen}
-        onClose={ () => setIsDeleteDialogOpen(false) }
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+      />
+      <MessageBar />
+    {isWithTables &&
+      <TablesWindow
+        isWithTables={isWithTables}
+        setIsWithTables={setIsWithTables}
       />
     }
-			<MessageBar />
     </IsLayoutMobileContext.Provider>
   )
 }

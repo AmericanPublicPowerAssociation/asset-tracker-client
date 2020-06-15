@@ -25,19 +25,13 @@ export function setSketchMode(sketchMode) {
 }
 
 export function setSelectedAssetIndexes(selectedAssetIndexes) {
-  return {
-    type: SET_SELECTED_ASSET_INDEXES,
-    payload: selectedAssetIndexes,
-  }
+  return { type: SET_SELECTED_ASSET_INDEXES, payload: selectedAssetIndexes }
 }
 
 export function setSelectedBusIndexes(selectedBusIndexes) {
-  return {
-    type: SET_SELECTED_BUS_INDEXES,
-    payload: selectedBusIndexes,
-  }
+  return { type: SET_SELECTED_BUS_INDEXES, payload: selectedBusIndexes }
 }
 
-export function setHoverInfo(info) {
-  return { type: SET_HOVER_INFO, payload: info }
+export function setHoverInfo(hoverInfo) {
+  return { type: SET_HOVER_INFO, payload: hoverInfo }
 }

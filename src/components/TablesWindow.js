@@ -1,6 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
+// import Drawer from '@material-ui/core/Drawer'
 import AssetsTable from './AssetsTable'
 import TasksTable from './TasksTable'
 import {
@@ -24,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     position: 'fixed',
     left: theme.spacing(1),
     right: theme.spacing(1),
-    height: '33%',
+    height: '50%',
     bottom: theme.spacing(5),
     overflow: 'auto',
   },
@@ -36,12 +37,6 @@ export default function TablesWindow(props) {
   const { features } = useSelector(getAssetsGeoJson)
   const overlayMode = useSelector(getOverlayMode)
   const selectedAssetId = useSelector(getSelectedAssetId)
-
-  function getHeaderLabel(header) {
-    const result = header.replace(/([A-Z])/g, ' $1')
-    var headerLabel = result.charAt(0).toUpperCase() + result.slice(1)
-    return headerLabel
-  }
 
   function highlightAsset(assetId) {
     const selectedAssetIndexes = []
@@ -62,25 +57,20 @@ export default function TablesWindow(props) {
   const table = {
     assets: (
       <AssetsTable
-        getHeaderLabel={getHeaderLabel}
         highlightAsset={highlightAsset}
         selectedAssetId={selectedAssetId}
-        tableOptions={tableOptions}
       />
     ),
     tasks: (
       <TasksTable
-        getHeaderLabel={getHeaderLabel}
         highlightAsset={highlightAsset}
         selectedAssetId={selectedAssetId}
-        tableOptions={tableOptions}
       />
     ),
     risks: (
       <RisksTable
         onRowClick={highlightAsset}
         selectedAssetId={selectedAssetId}
-        tableOptions={tableOptions}
       />
     ),
   }[overlayMode]

@@ -14,55 +14,55 @@ import {
   getSelectedAssetId,
 } from '../selectors'
 
-
 export default function AssetDeleteDialog({
+  isOpen,
   onClose,
-  openDialog,
 }) {
-  const [input, setInput] = useState('')
-  const selectedAssetId = useSelector(getSelectedAssetId) 
   const dispatch = useDispatch()
+  const [text, setText] = useState('')
+  const selectedAssetId = useSelector(getSelectedAssetId) 
 
-  function handleClose(e) {
+  function handleChange(event) {
+    setText(event.target.value)
+  }
+
+  function handleConfirm() {
+    if (text !== selectedAssetId) {
+      return
+    }
+    dispatch(deleteAsset(selectedAssetId))
     onClose()
   }
 
-  function onConfirm(e) {
-    if (input === selectedAssetId) {
-      dispatch(deleteAsset(selectedAssetId))
-      onClose()
-    }
-  }
-
   return (
-    <Dialog
-      open={openDialog}
-      onClose={handleClose}
-      aria-labelledby='delete-dialog-title'
-      aria-describedby='delete-dialog-description'
-    >
-      <DialogTitle id='delete-dialog-title'>{'Do you want to delete this asset?'}
+    <Dialog open={isOpen} onClose={onClose}>
+      <DialogTitle>
+        Delete Asset
       </DialogTitle>
       <DialogContent>
-        <DialogContentText id='delete-dialog-description'>
-          Please enter the asset id in the text input below and confirm.
+        <DialogContentText>
+          Please enter the Asset ID to confirm deletion.
         </DialogContentText>
         <DialogContentText>
-          Asset Id: {selectedAssetId}
+          Asset ID: {selectedAssetId}
         </DialogContentText>
         <TextField
           autoFocus
-          label='Asset Id'
-          type='text'
           fullWidth
-          onChange={ (e) => setInput(e.target.value)}
+          label='Asset ID'
+          type='text'
+          onChange={handleChange}
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color='primary'>
+        <Button onClick={onClose}>
           Cancel
         </Button>
-        <Button onClick={onConfirm} color='primary' disabled={input !== selectedAssetId}>
+        <Button
+          color='secondary'
+          disabled={text !== selectedAssetId}
+          onClick={handleConfirm}
+        >
           Confirm
         </Button>
       </DialogActions>

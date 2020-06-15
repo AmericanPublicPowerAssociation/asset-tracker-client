@@ -7,22 +7,20 @@ import {
 const initialState = null
 
 const selectedAssetId = (state=initialState, action) => {
-  const { payload } = action
-
   switch(action.type) {
     case SET_SELECTED_ASSET_ID: {
-      const id = payload
-      return id
+      const assetId = action.payload
+      return assetId
     }
     case SET_ASSETS: {
       // Keep the same asset selected but using the new id
-      const { assetIdById } = payload
-      const oldId = state
+      const { assetIdById } = action.payload
+      const oldAssetId = state
       if (!assetIdById) {
-        return oldId
+        return oldAssetId
       }
-      const newId = assetIdById[oldId]
-      return newId || oldId
+      const newAssetId = assetIdById[oldAssetId]
+      return newAssetId || oldAssetId
     }
     case DELETE_ASSET: {
       return null

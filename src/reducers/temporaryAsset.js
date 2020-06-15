@@ -1,21 +1,19 @@
 import { produce } from 'immer'
 import {
-  SET_EDITING_ASSET,
-  SET_EDITING_ASSET_VALUE,
   SET_SKETCH_MODE,
+  SET_TEMPORARY_ASSET,
+  SET_TEMPORARY_ASSET_VALUE,
 } from '../constants'
 
 const initialState = {}
 
-const editingAsset = (state=initialState, action) => {
-  const { payload } = action
-
+const temporaryAsset = (state=initialState, action) => {
   switch(action.type) {
-    case SET_EDITING_ASSET: {
-      return payload
+    case SET_TEMPORARY_ASSET: {
+      return action.payload
     }
-    case SET_EDITING_ASSET_VALUE: {
-      const { key, value } = payload
+    case SET_TEMPORARY_ASSET_VALUE: {
+      const { key, value } = action.payload
       return produce(state, draft => {
         draft[key] = value
       })
@@ -29,4 +27,4 @@ const editingAsset = (state=initialState, action) => {
   }
 }
 
-export default editingAsset
+export default temporaryAsset

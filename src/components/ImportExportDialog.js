@@ -37,7 +37,11 @@ const uploaderProps = {
   },
 }
 
-export default function ImportExportDialog({ open, onClose, onCancel }) {
+export default function ImportExportDialog({
+  isOpen,
+  onClose,
+  onCancel,
+}) {
   const dispatch = useDispatch()
   const [action, setAction] = useState('download')
   const [sourceId, setSourceId] = useState('')
@@ -104,7 +108,8 @@ export default function ImportExportDialog({ open, onClose, onCancel }) {
 
   const OverwriteConfirmationDialog = (
     <Dialog
-      open={confirmOverwriteRecords} disableBackdropClick 
+      isOpen={confirmOverwriteRecords}
+      disableBackdropClick 
       onClose={() => setConfirmOverwriteRecords(false)} >
       <DialogTitle>Overwrite all existing assets?</DialogTitle>
       <DialogContent>
@@ -173,7 +178,7 @@ export default function ImportExportDialog({ open, onClose, onCancel }) {
 
   const ActionSelectorDialog =  (
     <Dialog
-      open={open && !confirmOverwriteRecords && !uploadResponse}
+      open={isOpen && !confirmOverwriteRecords && !uploadResponse}
       onClose={onClose}
       disableBackdropClick >
       <DialogTitle>Download Manager</DialogTitle>

@@ -47,7 +47,10 @@ export default function AssetAttributesPanel({
         </ListItemText>
       </ListItem>
 
-      <AssetAttributesListItem asset={asset} isEditing={isEditing} />
+      <AssetAttributesListItem
+        asset={asset}
+        isEditing={isEditing}
+      />
       <AssetConnectionsListItems
         asset={asset}
         isEditing={isEditing}

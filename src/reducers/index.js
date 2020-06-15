@@ -18,7 +18,7 @@ import selectedBusIndexes from './selectedBusIndexes'
 import assetTypeByCode from './assetTypeByCode'
 import assetsGeoJson from './assetsGeoJson'
 import assetById from './assetById'
-import editingAsset from './editingAsset'
+import temporaryAsset from './temporaryAsset'
 import selectedAssetId from './selectedAssetId'
 import selectedBusId from './selectedBusId'
 import taskById from './taskById'
@@ -39,7 +39,7 @@ const reduceHorizontally = combineReducers({
   assetsGeoJson,
   assetById,
   taskById,
-  editingAsset,
+  temporaryAsset,
   selectedAssetId,
   selectedBusId,
   taskComments,

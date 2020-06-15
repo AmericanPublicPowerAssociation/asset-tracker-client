@@ -1,15 +1,16 @@
 import { produce } from 'immer'
 import getNearestPointOnLine from '@turf/nearest-point-on-line'
 import {
-  // setSelectedBusIndexes,
   // deleteAsset,
+  // setSelectedBusIndexes,
   deleteAssetVertex,
   fillAssetName,
   insertAssetVertex,
   setAsset,
-  setAssetConnection, setAssetGeoJson,
-  setEditingAsset,
+  setAssetConnection,
+  setAssetGeoJson,
   setSketchMode,
+  setTemporaryAsset,
 } from '../actions'
 import {
   ASSET_TYPE_CODE_LINE,
@@ -29,16 +30,16 @@ import {
   getDeckGLNearbyObjects,
   getFeaturePack,
   makeBusId,
-  makeEditingAsset,
-  updateFeature, moveLatitudeInMeters,
+  makeTemporaryAsset,
+  updateFeature,
+  moveLatitudeInMeters,
 } from '../routines'
 import {
-  getEditingAsset,
+  getTemporaryAsset,
 } from '../selectors'
 
 export function useEditableMap(deckGL, openDeleteDialogOpen) {
-  let editingAsset = useSelector(getEditingAsset)
-
+  let temporaryAsset = useSelector(getTemporaryAsset)
   const assetTypeCode = getAssetTypeCode(sketchMode)
   const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
 
@@ -46,8 +47,8 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
 
     function handleAssetEdit(event) {
       if (editType === 'addTentativePosition') {
-        if (!editingAsset.id) {
-          editingAsset = makeEditingAsset(assetTypeCode)
+        if (!temporaryAsset.id) {
+          temporaryAsset = makeTemporaryAsset(assetTypeCode)
         }
         if (isAddingLine) {
           // Look for nearby objects
@@ -73,10 +74,10 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
           const nearbyAssetFeatures = nearbyAssetInfos.map(info => info.object)
           const nearbyBusFeatures = nearbyBusInfos.map(info => info.object)
           // Get editing feature
-          const editingAssetFeature = nearbyAssetFeatures.find(
+          const temporaryAssetFeature = nearbyAssetFeatures.find(
             feature => feature.properties.guideType)
-          const vertexCount = editingAssetFeature ?
-            editingAssetFeature.geometry.coordinates.length : 1
+          const vertexCount = temporaryAssetFeature ?
+            temporaryAssetFeature.geometry.coordinates.length : 1
           console.log('vertexCount', vertexCount)
           // Add connection to nearby bus or make a new bus
           let busId
@@ -87,7 +88,7 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
           }
           if (busId) {
             console.log('ADDING BUS HERE')
-            editingAsset = produce(editingAsset, draft => {
+            temporaryAsset = produce(temporaryAsset, draft => {
               draft.connections[vertexCount - 1] = { busId }
             })
           }
@@ -189,8 +190,7 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
             }
           }
         }
-        console.log(editingAsset)
-        dispatch(setEditingAsset(editingAsset))
+        dispatch(setTemporaryAsset(temporaryAsset))
       } else if (editType === 'finishMovePosition') {
 
         console.log('finishMovePosition', event)
@@ -303,11 +303,11 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
         }
       } else if (editType === 'addFeature') {
         const [featureIndex, feature] = getFeaturePack(event)
-        if (!editingAsset.id) {
-          editingAsset = makeEditingAsset(assetTypeCode)
+        if (!temporaryAsset.id) {
+          temporaryAsset = makeTemporaryAsset(assetTypeCode)
 
           // connectivity meter to line
-          if (editingAsset.typeCode === ASSET_TYPE_CODE_METER) {
+          if (temporaryAsset.typeCode === ASSET_TYPE_CODE_METER) {
             const position = feature.geometry.coordinates
             const screenCoords = deckGL.current.viewports[0].project(position)
             const nearbyAssetInfos = getDeckGLNearbyObjects({
@@ -322,10 +322,10 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
             let busId
             if (nearbyBusFeatures.length) {
               busId = nearbyBusFeatures[0].properties.id
-              editingAsset.connections[0].busId = busId
+              temporaryAsset.connections[0].busId = busId
             }
             else {
-              busId = editingAsset.connections[0].busId
+              busId = temporaryAsset.connections[0].busId
             }
             const nearbyAssetInfo = nearbyAssetInfos.find(info => !info.object.properties.guideType)
 
@@ -444,17 +444,16 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
           }
         } else if (isAddingLine) {
           const vertexCount = feature.geometry.coordinates.length
-          if (!editingAsset.connections[vertexCount - 1]) {
-            editingAsset = produce(editingAsset, draft => {
+          if (!temporaryAsset.connections[vertexCount - 1]) {
+            temporaryAsset = produce(temporaryAsset, draft => {
               draft.connections[vertexCount - 1] = { busId: makeBusId() }
             })
           }
         }
-        console.log(editingAsset)
-        const assetId = editingAsset.id
-        updateFeature(feature, editingAsset)
+        const assetId = temporaryAsset.id
+        updateFeature(feature, temporaryAsset)
         // TODO: Consider combining into a single dispatch
-        dispatch(setAsset(editingAsset))
+        dispatch(setAsset(temporaryAsset))
         dispatch(fillAssetName(assetId, feature))
         dispatch(setSketchMode(SKETCH_MODE_ADD))  // Add one at a time
         dispatch(setSelectedAssetId(assetId))

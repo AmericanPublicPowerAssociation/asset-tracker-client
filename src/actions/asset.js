@@ -1,14 +1,10 @@
-// TODO: Make ids consistently explicit
-
 import {
   DELETE_ASSET,
   DELETE_ASSET_VERTEX,
   FILL_ASSET_NAME,
   INSERT_ASSET_VERTEX,
   REFRESH_ASSETS,
-  REMOVE_LINE_END_POINT,
   SAVE_ASSETS,
-  // SELECT_ASSET,
   SET_ASSET,
   SET_ASSETS,
   SET_ASSETS_GEOJSON,
@@ -16,14 +12,18 @@ import {
   SET_ASSET_CONNECTION,
   SET_ASSET_CONNECTION_ATTRIBUTE,
   SET_ASSET_VALUE,
-  SET_EDITING_ASSET,
-  SET_EDITING_ASSET_VALUE,
-  SET_FOCUSING_ASSET_ID,
-  UPLOAD_ASSETS_CSV, SET_ASSET_GEOJSON,
+  SET_SELECTED_ASSET_ID,
+  SET_TEMPORARY_ASSET,
+  SET_TEMPORARY_ASSET_VALUE,
+  UPLOAD_ASSETS_CSV,
 } from '../constants'
 
 export function refreshAssets() {
   return { type: REFRESH_ASSETS }
+}
+
+export function saveAssets() {
+  return { type: SAVE_ASSETS }
 }
 
 export function setAssets(assets) {
@@ -34,12 +34,8 @@ export function setAsset(asset) {
   return { type: SET_ASSET, payload: asset }
 }
 
-export function saveAssets() {
-  return { type: SAVE_ASSETS }
-}
-
 export function deleteAsset(assetId){
-  return { type: DELETE_ASSET, payload: { assetId } }
+  return { type: DELETE_ASSET, payload: assetId }
 }
 
 export function setAssetValue(assetId, key, value) {
@@ -79,30 +75,17 @@ export function setAssetsGeoJson(geojson) {
   }
 }
 
-export function setAssetGeoJson(id, geometry) {
-  return {
-    type: SET_ASSET_GEOJSON,
-    payload: { id, geometry },
-  }
+export function setSelectedAssetId(assetId) {
+  return { type: SET_SELECTED_ASSET_ID, payload: assetId }
 }
 
-export function setSelectedAssetId(id) {
-  return {
-    type: SET_SELECTED_ASSET_ID,
-    payload: id,
-  }
+export function setTemporaryAsset(asset) {
+  return { type: SET_TEMPORARY_ASSET, payload: asset }
 }
 
-export function setEditingAsset(asset) {
+export function setTemporaryAssetValue(key, value) {
   return {
-    type: SET_EDITING_ASSET,
-    payload: asset,
-  }
-}
-
-export function setEditingAssetValue(key, value) {
-  return {
-    type: SET_EDITING_ASSET_VALUE,
+    type: SET_TEMPORARY_ASSET_VALUE,
     payload: { key, value },
   }
 }
@@ -114,53 +97,20 @@ export function fillAssetName(assetId, feature) {
   }
 }
 
-export function uploadAssetsCsv(payload) {
-  return {
-    type: UPLOAD_ASSETS_CSV,
-    payload,
-  }
-}
-
-export function removeLineEndPoint(
-  assetId, selectedAssetVertexIndex, largestAssetVertexIndex,
-) {
-  return {
-    type: REMOVE_LINE_END_POINT,
-    payload: { assetId, selectedAssetVertexIndex, largestAssetVertexIndex },
-  }
-}
-
-export function insertAssetVertex(
-  assetId,
-  afterIndex,
-  connection,
-) {
+export function insertAssetVertex(assetId, afterIndex, connection) {
   return {
     type: INSERT_ASSET_VERTEX,
     payload: { assetId, afterIndex, connection },
   }
 }
 
-export function deleteAssetVertex(
-  assetId,
-  oldVertexIndex,
-  newVertexCount,
-) {
+export function deleteAssetVertex(assetId, oldVertexIndex, newVertexCount) {
   return {
     type: DELETE_ASSET_VERTEX,
     payload: { assetId, oldVertexIndex, newVertexCount },
   }
 }
 
-/*
-// TODO: Consider whether to use this
-export function selectAsset(
-  assetId,
-  featureIndex,
-) {
-  return {
-    type: SELECT_ASSET,
-    payload: { assetId, featureIndex },
-  }
+export function uploadAssetsCsv(payload) {
+  return { type: UPLOAD_ASSETS_CSV, payload }
 }
-*/

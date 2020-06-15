@@ -1,6 +1,6 @@
 import {
-  SHOW_MESSAGE,
   HIDE_MESSAGE,
+  SHOW_MESSAGE,
 } from '../constants'
 
 export function showInfoMessage(text) {

@@ -20,9 +20,9 @@ import {
   IsLayoutMobileContext,
 } from '../contexts'
 import {
-  getEditingAsset,
-  getSelectedAsset,
   getOverlayMode,
+  getSelectedAsset,
+  getTemporaryAsset,
 } from '../selectors'
 
 const useStyles = makeStyles(theme => ({
@@ -69,10 +69,10 @@ export default function DetailsWindow({ isWithTables }) {
   const classes = useStyles()
   const overlayMode = useSelector(getOverlayMode)
   const selectedAsset = useSelector(getSelectedAsset)
-  const editingAsset = useSelector(getEditingAsset)
+  const temporaryAsset = useSelector(getTemporaryAsset)
   const [expand, setExpand] = useState(false)
   const isLayoutMobile = useContext(IsLayoutMobileContext)
-  const asset = editingAsset.id ? editingAsset : selectedAsset
+  const asset = temporaryAsset.id ? temporaryAsset : selectedAsset
 
   const DetailsPanel = {
     [OVERLAY_MODE_ASSETS]: AssetAttributesPanel,

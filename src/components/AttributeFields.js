@@ -45,7 +45,7 @@ export default function AttributeFields(props) {
     attributeValueByKey,
     isEditing,
     onFocus,
-    connectionIndex
+    connectionIndex,
   } = props
 
   return attributeKeyTypes.map(([
@@ -75,7 +75,7 @@ function AttributeField(props) {
     attributeValueByKey,
     isEditing,
     onFocus,
-    connectionIndex
+    connectionIndex,
   } = props
   const dispatch = useDispatch()
   const classes = useStyles()
