@@ -204,13 +204,16 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
     let { updatedData } = event
     console.log('asset edit', editType, editContext, updatedData)
     switch (editType) {
-      case 'addTentativePosition': {
-        // Add a vertex in DrawLineStringMode or DrawPolygonMode
-        break
-      }
       case 'addFeature': {
         // Add a feature in draw mode
+        // const [featureIndex, feature] = getFeaturePack(event)
+        // if (!temporaryAssetId) {
+        // }
         // dispatch(addAsset())
+        break
+      }
+      case 'addTentativePosition': {
+        // Add a vertex in DrawLineStringMode or DrawPolygonMode
         break
       }
       case 'addPosition': {

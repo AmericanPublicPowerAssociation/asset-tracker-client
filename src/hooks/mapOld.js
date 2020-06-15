@@ -302,7 +302,6 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
           dispatch(deleteAssetVertex(assetId, removedPositionIndex, vertexCount))
         }
       } else if (editType === 'addFeature') {
-        const [featureIndex, feature] = getFeaturePack(event)
         if (!temporaryAsset.id) {
           temporaryAsset = makeTemporaryAsset(assetTypeCode)
 

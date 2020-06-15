@@ -24,7 +24,16 @@ import {
 } from '../selectors'
 
 const uploaderProps = {
-  acceptedFiles: ['.csv', 'text/csv', 'application/vnd.ms-excel', 'application/csv', 'text/x-csv', 'application/x-csv', 'text/comma-separated-values', 'text/x-comma-separated-values'],
+  acceptedFiles: [
+    '.csv',
+    'text/csv',
+    'application/vnd.ms-excel',
+    'application/csv',
+    'text/x-csv',
+    'application/x-csv',
+    'text/comma-separated-values',
+    'text/x-comma-separated-values',
+  ],
   filesLimit: 1,
   showPreviewsInDropzone: true,
   showFileNamesInPreview: true,
@@ -108,7 +117,7 @@ export default function ImportExportDialog({
 
   const OverwriteConfirmationDialog = (
     <Dialog
-      isOpen={confirmOverwriteRecords}
+      open={confirmOverwriteRecords}
       disableBackdropClick 
       onClose={() => setConfirmOverwriteRecords(false)} >
       <DialogTitle>Overwrite all existing assets?</DialogTitle>

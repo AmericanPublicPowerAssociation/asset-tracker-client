@@ -92,7 +92,7 @@ export default function App() {
       />
     }
       <ImportExportDialog
-        open={isWithImportExport}
+        isOpen={isWithImportExport}
         onCancel={() => {setIsWithImportExport(false)}}
         onClose={()=> {setIsWithImportExport(false)}}
       />
