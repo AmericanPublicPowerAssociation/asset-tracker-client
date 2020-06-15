@@ -51,6 +51,7 @@ const useStyles = makeStyles(theme => ({
     overflowY: 'auto',
     overflowX: 'hidden',
     zIndex: 1,
+    maxHeight: '30vh',
   },
   fullView: {
     padding: theme.spacing(1),
@@ -84,15 +85,11 @@ export default function DetailsWindow({ isWithTables }) {
     <DetailsPanel
       className={classes.root}
       asset={asset}
-      // tasks={focusingTasks}
-      // TODO: RENAME
-      response={!isLayoutMobile}
       isDetailsWindowExpanded={expand}
       setIsDetailsWindowExpanded={setExpand}
     /> : <EmptyDetailsPanel />
 
-  // TODO: Clean
-  return expand ? (
+  const MobileFullScreenPanel = (
     <Dialog
       fullScreen
       open={expand}
@@ -105,14 +102,20 @@ export default function DetailsWindow({ isWithTables }) {
         {detailsPanel}
       </Paper>
     </Dialog>
-  ) : (!isLayoutMobile || asset ?
-    <Paper className={clsx(isLayoutMobile ? classes.responsive : classes.root, {
+  )
+
+  if (isLayoutMobile && expand) {
+    return MobileFullScreenPanel
+  }
+
+  return (
+    <Paper className={clsx(
+      isLayoutMobile ? classes.responsive : classes.root, {
       [classes.withTables]: isWithTables,
     })}>
       {detailsPanel}
-    </Paper> : <></>
+    </Paper>
   )
-
 // show expanded only if not mobile and is expanded
 // otherwise show regular paper
 }
