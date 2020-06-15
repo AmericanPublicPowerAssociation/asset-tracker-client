@@ -1,7 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
-import { BrowserRouter as Router } from 'react-router-dom'
 import { applyMiddleware, compose, createStore } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { config as configureEnvironment } from 'dotenv'
@@ -21,9 +20,7 @@ configureEnvironment()
 sagaMiddleware.run(reduceSaga)
 render(
   <Provider store={store}>
-    <Router>
-      <App />
-    </Router>
+    <App />
   </Provider>,
   document.getElementById('root'))
 // serviceWorker.unregister()
