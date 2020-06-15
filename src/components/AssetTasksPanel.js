@@ -26,6 +26,7 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import IconButton from '@material-ui/core/IconButton'
 import FilterListIcon from '@material-ui/icons/FilterList'
+import { default as AssetNameTextField } from './AssetName'
 
 import {
   addTask,
@@ -55,10 +56,6 @@ const useStyles = makeStyles(theme => ({
   bottomAction: {
     width: '100%',
     bottom: 0,
-  },
-  scroll: {
-    height: '50vh',
-    overflowY: 'auto',
   },
   listTasks: {
     overflow: 'auto',
@@ -97,7 +94,11 @@ export function AssetName(props) {
   </ListItem>)
 }
 
-export default function AssetTasksPanel({ asset }) {
+export default function AssetTasksPanel({
+  asset,
+  isDetailsWindowExpanded,
+  setIsDetailsWindowExpanded,
+}) {
   const classes = useStyles()
   const dispatch = useDispatch()
   const tasks = useSelector(getFocusingTasks)
@@ -204,7 +205,17 @@ export default function AssetTasksPanel({ asset }) {
   }
 
   return (<>
-    {AssetName({ assetName, assetTypeCode, assetTypeName })}
+    <ListItem component='div' disableGutters>
+      <Tooltip title={assetTypeName} placement='left'>
+        <ListItemIcon>
+          <AssetTypeSvgIcon assetTypeCode={assetTypeCode} />
+        </ListItemIcon>
+      </Tooltip>
+
+      <ListItemText>
+        <AssetNameTextField asset={asset} setExpand={setIsDetailsWindowExpanded} expand={isDetailsWindowExpanded} />
+      </ListItemText>
+    </ListItem>
     {listTasks}
 
     <Dialog open={dialog} onClose={() => setDialog(false)} aria-labelledby='form-dialog-title'>

@@ -3,7 +3,7 @@
 import React, { forwardRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import clsx from 'clsx'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import Paper from '@material-ui/core/Paper'
 import Dialog from '@material-ui/core/Dialog'
@@ -49,6 +49,7 @@ const useStyles = makeStyles(theme => ({
     overflowY: 'auto',
     overflowX: 'hidden',
     zIndex: 1,
+    maxHeight: '30vh',
   },
   fullView: {
     padding: theme.spacing(1),
@@ -64,14 +65,13 @@ const Transition = forwardRef(function Transition(props, ref) {
 })
 
 export default function DetailsWindow({ isWithTables }) {
-  const theme = useTheme()
   const classes = useStyles()
   const overlayMode = useSelector(getOverlayMode)
   const focusingAsset = useSelector(getFocusingAsset)
   const editingAsset = useSelector(getEditingAsset)
   const [expand, setExpand] = useState(false)
   // TODO: Use consistent useMediaQuery string
-  const isNotMobile = useMediaQuery(theme.breakpoints.up('sm'))
+  const isMobileScreen = useMediaQuery('(max-width:600px)')
   const asset = editingAsset.id ? editingAsset : focusingAsset
 
   const DetailsPanel = {
@@ -85,13 +85,12 @@ export default function DetailsWindow({ isWithTables }) {
       className={classes.root}
       asset={asset}
       // tasks={focusingTasks}
-      response={isNotMobile}
+      isMobileScreen={isMobileScreen}
       isDetailsWindowExpanded={expand}
       setIsDetailsWindowExpanded={setExpand}
     /> : <EmptyDetailsPanel />
 
-  // TODO: Clean
-  return expand ? (
+  const MobileFullScreenPanel = (
     <Dialog
       fullScreen
       open={expand}
@@ -104,14 +103,22 @@ export default function DetailsWindow({ isWithTables }) {
         {detailsPanel}
       </Paper>
     </Dialog>
-  ) : (isNotMobile || asset ?
-    <Paper className={clsx(!isNotMobile ? classes.responsive : classes.root, {
+  )
+
+  if (isMobileScreen && expand) {
+    console.log('mobile expand')
+    return MobileFullScreenPanel
+  }
+
+  console.log('no expand')
+  return (
+    <Paper className={clsx(
+      isMobileScreen ? classes.responsive : classes.root, {
       [classes.withTables]: isWithTables,
     })}>
       {detailsPanel}
-    </Paper> : <></>
+    </Paper>
   )
-
 // show expanded only if not mobile and is expanded
 // otherwise show regular paper
 }
