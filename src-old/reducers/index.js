@@ -6,7 +6,6 @@ import {
   sortedRisks,
   vendorNameSuggestions,
 } from 'asset-report-risks'
-import mapStyleName from './mapStyleName'
 import mapViewState from './mapViewState'
 import overlayMode from './overlayMode'
 import selectedAssetIndexes from './selectedAssetIndexes'
@@ -20,14 +19,11 @@ import selectedBusId from './selectedBusId'
 import taskById from './taskById'
 import taskComments from './taskComments'
 import taskCodeTypes from './taskCodeTypes'
-import hoverInfo from './hoverInfo'
 import selectedTaskId from './selectedTaskId'
 import message from './message'
 
 const reduceHorizontally = combineReducers({
-  mapStyleName,
   mapViewState,
-  hoverInfo,
   overlayMode,
   selectedAssetIndexes,
   selectedBusIndexes,
@@ -48,5 +44,4 @@ const reduceHorizontally = combineReducers({
   taskCodeTypes,
   selectedTaskId,
   message,
-  sketchMode,  // Keep last
 })

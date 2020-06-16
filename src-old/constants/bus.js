@@ -1,3 +1,1 @@
 export const MINIMUM_BUS_ID_LENGTH = 32
-
-export const SET_SELECTED_BUS_ID = 'SET_SELECTED_BUS_ID'

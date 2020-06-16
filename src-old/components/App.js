@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import useTheme from '@material-ui/core/styles/useTheme'
-import AssetsMap from './AssetsMap'
 import SketchButtons from './SketchButtons'
 import SketchModeToolbar from './SketchModeToolbar'
 import SketchAddToolbar from './SketchAddToolbar'
@@ -40,7 +38,6 @@ function usePreventWindowUnload(preventDefault) {
   }, [preventDefault])
 }
 
-
   const dispatch = useDispatch()
   const isViewing = useSelector(getIsViewing)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -56,7 +53,7 @@ function usePreventWindowUnload(preventDefault) {
     dispatch(refreshTasks())
     dispatch(refreshRisks())
   }, [dispatch])
-  return (
+
       <AssetsMap onAssetDelete={() => setIsDeleteDialogOpen(true)} />
       <SketchButtons />
       <SketchModeToolbar />

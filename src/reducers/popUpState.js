@@ -1,13 +1,16 @@
 import {
-  SET_HOVER_INFO,
   SET_MAP_VIEW_STATE,
+  SET_POPUP_STATE,
 } from '../constants'
 
 const initialState = null
 
-const hoverInfo = (state=initialState, action) => {
-  switch(action.type) {
-    case SET_HOVER_INFO: {
+export default function popUpState(
+  state=initialState,
+  action,
+) {
+  switch (action.type) {
+    case SET_POPUP_STATE: {
       return action.payload
     }
     case SET_MAP_VIEW_STATE: {
@@ -18,5 +21,3 @@ const hoverInfo = (state=initialState, action) => {
     }
   }
 }
-
-export default hoverInfo

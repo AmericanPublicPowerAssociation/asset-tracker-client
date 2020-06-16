@@ -5,9 +5,12 @@ import {
   SET_TEMPORARY_ASSET_VALUE,
 } from '../constants'
 
-const initialState = {}
+const initialState = null
 
-const temporaryAsset = (state=initialState, action) => {
+export default function temporaryAsset(
+  state=initialState,
+  action,
+) {
   switch(action.type) {
     case SET_TEMPORARY_ASSET: {
       return action.payload
@@ -19,12 +22,10 @@ const temporaryAsset = (state=initialState, action) => {
       })
     }
     case SET_SKETCH_MODE: {
-      return {}
+      return null
     }
     default: {
       return state
     }
   }
 }
-
-export default temporaryAsset

@@ -1,0 +1,1 @@
+export const SET_SELECTED_BUS_ID = 'SET_SELECTED_BUS_ID'

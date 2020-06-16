@@ -2,15 +2,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import { ViewMode } from '@nebula.gl/edit-modes'
 import {
+  // showInfoMessage,
   setAssetsGeoJson,
-  setSelectedAssetId,
-  setSelectedBusId,
-  setHoverInfo,
   setMapViewState,
+  setPopUpState,
+  setSelectedAssetId,
   setSelectedAssetIndexes,
+  setSelectedBusId,
   setSelectedBusIndexes,
   setSketchMode,
-  // showInfoMessage,
 } from '../actions'
 import {
   ASSETS_MAP_LAYER_ID,
@@ -145,7 +145,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         d = { x, y, text }
       }
     }
-    dispatch(setHoverInfo(d))
+    dispatch(setPopUpState(d))
   }
 
   function handleBusHover(info) {
@@ -161,15 +161,14 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       const text = 'Bus ' + busIndex + ' of ' + assetDescription
       d = { x, y, text }
     }
-    dispatch(setHoverInfo(d))
+    dispatch(setPopUpState(d))
   }
 
   function handleAssetClick(info, event) {
     console.log('asset click', info, event)
     const targetAssetId = info.object && info.object.properties.id
-    if (!targetAssetId) {
-      return
-    }
+    if (!targetAssetId) return
+
     if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
       dispatch(setSelectedAssetId(targetAssetId))
       dispatch(setSelectedAssetIndexes([info.index]))
@@ -184,13 +183,11 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   function handleBusClick(info, event) {
     console.log('bus click', info, event)
     const targetBusId = info.object && info.object.properties.id
-    if (!targetBusId) {
-      return
-    }
+    if (!targetBusId) return
+
     const targetAssetId = bestAssetIdByBusId[targetBusId]
-    if (!targetAssetId) {
-      return
-    }
+    if (!targetAssetId) return
+
     if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
       dispatch(setSelectedAssetId(targetAssetId))
       dispatch(setSelectedAssetIndexes([]))
@@ -207,7 +204,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       case 'addFeature': {
         // Add a feature in draw mode
         // const [featureIndex, feature] = getFeaturePack(event)
-        // if (!temporaryAssetId) {
+        // if (!temporaryAsset) {
         // }
         // dispatch(addAsset())
         break

@@ -7,7 +7,6 @@ import {
   SAVE_ASSETS,
   SET_ASSET,
   SET_ASSETS,
-  SET_ASSETS_GEOJSON,
   SET_ASSET_ATTRIBUTE,
   SET_ASSET_CONNECTION,
   SET_ASSET_CONNECTION_ATTRIBUTE,
@@ -66,17 +65,6 @@ export function setAssetConnectionAttribute(
     type: SET_ASSET_CONNECTION_ATTRIBUTE,
     payload: { assetId, assetVertexIndex, key, value },
   }
-}
-
-export function setAssetsGeoJson(geojson) {
-  return {
-    type: SET_ASSETS_GEOJSON,
-    payload: geojson,
-  }
-}
-
-export function setSelectedAssetId(assetId) {
-  return { type: SET_SELECTED_ASSET_ID, payload: assetId }
 }
 
 export function setTemporaryAsset(asset) {

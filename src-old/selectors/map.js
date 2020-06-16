@@ -8,38 +8,18 @@ import {
   getThreatScoreByAssetId,
 } from 'asset-report-risks'
 import {
-  getAssetById,
   getSelectedAssetId,
 } from './asset'
 import {
   getOpenTaskCountByAssetId,
 } from './task'
 import {
-  BRIGHT_MAP_STYLE_NAMES,
-  MAP_STYLE_BY_NAME,
   OVERLAY_MODE_RISKS,
   OVERLAY_MODE_TASKS,
   SKETCH_MODE_VIEW,
 } from '../constants'
-import {
-  getBusFeatures,
-} from '../routines'
 
-export const getMapViewState = state => state.mapViewState
 export const getOverlayMode = state => state.overlayMode
-export const getSketchMode = state => state.sketchMode
-export const getAssetsGeoJson = state => state.assetsGeoJson
-export const getSelectedAssetIndexes = state => state.selectedAssetIndexes
-export const getSelectedBusIndexes = state => state.selectedBusIndexes
-export const getHoverInfo = state => state.hoverInfo
-
-export const getMapStyle = createSelector([
-  getMapStyleName,
-], (
-  mapStyleName,
-) => {
-  return MAP_STYLE_BY_NAME[mapStyleName]
-})
 
 export const getMapWebMercatorViewPort = createSelector([
   getMapViewState,
@@ -47,29 +27,6 @@ export const getMapWebMercatorViewPort = createSelector([
   mapViewState,
 ) => {
   return new WebMercatorViewport(mapViewState)
-})
-
-export const getIsMapStyleBright = createSelector([
-  getMapStyleName,
-], (
-  mapStyleName,
-) => {
-  return BRIGHT_MAP_STYLE_NAMES.includes(mapStyleName)
-})
-
-export const getBusesGeoJson = createSelector([
-  getAssetById,
-  getAssetsGeoJson,
-], (
-  assetById,
-  assetsGeoJson,
-) => {
-  const assetFeatures = assetsGeoJson.features
-  const busFeatures = getBusFeatures(assetFeatures, assetById)
-  return {
-    type: 'FeatureCollection',
-    features: busFeatures,
-  }
 })
 
 export const getIsViewing = createSelector([

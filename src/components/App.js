@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
+import AssetsMap from './AssetsMap'
 import OptionsWindow from './OptionsWindow'
 import './App.css'
 import {
@@ -16,6 +17,7 @@ export default function App() {
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
   return (
     <IsLayoutMobileContext.Provider value={isLayoutMobile}>
+      <AssetsMap />
       <OptionsWindow
         isWithDetails={isWithDetails}
         isWithTables={isWithTables}

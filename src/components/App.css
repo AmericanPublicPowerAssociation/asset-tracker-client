@@ -7,3 +7,10 @@
 .white {
   color: white !important;
 }
+.tooltip {
+  pointer-events: none;
+  position: absolute;
+  max-width: 160px;
+  overflow-wrap: break-word;
+  word-break: break-all;
+}

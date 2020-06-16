@@ -7,13 +7,10 @@ export default function PopUp({ info }) {
   return (
     <Paper
       className='tooltip'
-      style={{ left: x, top: y }}
       variant='outlined'
+      style={{ left: x, top: y }}
     >
-      <Typography
-        align='center'
-        // noWrap
-      >
+      <Typography align='center' >
         {text}
       </Typography>
     </Paper>

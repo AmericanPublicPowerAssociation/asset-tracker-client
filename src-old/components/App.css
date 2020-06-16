@@ -23,10 +23,3 @@ body {
   transition: 0.50s;
   transform: scale(1.25);
 }
-.tooltip {
-  pointer-events: none;
-  position: absolute;
-  max-width: 160px;
-  overflow-wrap: break-word;
-  word-break: break-all;
-}
