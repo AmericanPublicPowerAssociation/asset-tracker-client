@@ -10,6 +10,9 @@ import {
   toggleMapStyle,
 } from '../actions'
 import {
+  toggleState,
+} from '../macros'
+import {
   getMapColors,
 } from '../selectors'
 
@@ -46,7 +49,7 @@ export default function OptionsWindow({
       <Tooltip title='Toggle Details'>
         <IconButton
           className={isWithDetails ? activeColor : inactiveColor}
-          onClick={() => setIsWithDetails(!isWithDetails)}
+          onClick={() => setIsWithDetails(toggleState)}
         >
           <DetailsIcon />
         </IconButton>
@@ -55,7 +58,7 @@ export default function OptionsWindow({
       <Tooltip title='Toggle Tables'>
         <IconButton
           className={isWithTables ? activeColor : inactiveColor}
-          onClick={() => setIsWithTables(!isWithTables)}
+          onClick={() => setIsWithTables(toggleState)}
         >
           <TableIcon />
         </IconButton>
