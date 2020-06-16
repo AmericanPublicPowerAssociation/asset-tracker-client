@@ -1,9 +1,10 @@
 import { WebMercatorViewport } from '@deck.gl/core'
+/*
 import {
   EditableGeoJsonLayer,
 } from '@nebula.gl/layers'
+*/
 import {
-  DrawCircleFromCenterMode,
   DrawLineStringMode,
   DrawPointMode,
   DrawRectangleMode,
@@ -30,7 +31,7 @@ import {
   // BUS_RADIUS_IN_METERS,
 } from '../constants'
 
-
+/*
 export class CustomEditableGeoJsonLayer extends EditableGeoJsonLayer {
   onDoubleClick(event) {
     const props = this.props
@@ -39,14 +40,12 @@ export class CustomEditableGeoJsonLayer extends EditableGeoJsonLayer {
     onDoubleClick && onDoubleClick(event, props)
   }
 
-  /*
   onStartDragging(event) {
     const props = this.props
     super.onStartDragging(event, props)
     const onStartDragging = props.onStartDragging
     onStartDragging && onStartDragging(event, props)
   }
-  */
 
   onStopDragging(event) {
     const props = this.props
@@ -55,11 +54,11 @@ export class CustomEditableGeoJsonLayer extends EditableGeoJsonLayer {
     onStopDragging && onStopDragging(event, props)
   }
 }
-
+*/
 
 export function getMapMode(sketchMode) {
   const mapMode = {
-    [SKETCH_MODE_ADD_POLE]: DrawCircleFromCenterMode,
+    [SKETCH_MODE_ADD_POLE]: DrawRectangleMode,
     [SKETCH_MODE_ADD_LINE]: DrawLineStringMode,
     [SKETCH_MODE_ADD_METER]: DrawPointMode,
     [SKETCH_MODE_ADD_TRANSFORMER]: DrawPointMode,

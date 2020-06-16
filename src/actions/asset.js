@@ -82,7 +82,7 @@ export function setAssetsGeoJson(geojson) {
 export function setAssetGeoJson(id, geometry) {
   return {
     type: SET_ASSET_GEOJSON,
-    payload: {id, geometry},
+    payload: { id, geometry },
   }
 }
 

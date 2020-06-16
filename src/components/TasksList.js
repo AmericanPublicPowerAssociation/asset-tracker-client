@@ -1,9 +1,7 @@
 import clsx from 'clsx'
-import React, { useState, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import useTheme from '@material-ui/core/styles/useTheme'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -33,7 +31,6 @@ import Collapse from '@material-ui/core/Collapse'
 import Divider from '@material-ui/core/Divider'
 import { AssetName } from './AssetTasksPanel'
 import TaskComments, { CommentForm } from './TaskComments'
-
 import {
   addAssetTaskComment,
   setSelectedTaskId,
@@ -42,9 +39,8 @@ import {
   setTaskName,
 } from '../actions'
 import {
-  // TASK_STATUS_CANCELLED,
-  // TASK_ARCHIVE_STATUS,
-} from '../constants'
+  IsLayoutMobileContext,
+} from '../contexts'
 import {
   getAssetTypeByCode,
   getSelectedTaskId,
@@ -150,16 +146,16 @@ const useStyles = makeStyles(theme => ({
     width: '15ch',
   },
   important: {
-    backgroundColor: `${theme.palette.warning.main} !important`,
-    color: 'white',
+    'backgroundColor': `${theme.palette.warning.main} !important`,
+    'color': 'white',
     '&$checked': {
       backgroundColor: `${theme.palette.warning.main} !important`,
       color: 'white',
     },
   },
   urgent: {
-    backgroundColor: theme.palette.secondary.main,
-    color: 'white',
+    'backgroundColor': theme.palette.secondary.main,
+    'color': 'white',
     '&$checked': {
       backgroundColor: theme.palette.secondary.main,
       color: 'white',
@@ -188,13 +184,13 @@ const useStyles = makeStyles(theme => ({
     minHeight: '75px !important',
   },
   importantCheckbox: {
-    color: `${theme.palette.warning.main} !important`,
+    'color': `${theme.palette.warning.main} !important`,
     '&$checked': {
       color: `${theme.palette.warning.main} !important`,
     },
   },
   urgentCheckbox: {
-    color: theme.palette.secondary.main,
+    'color': theme.palette.secondary.main,
     '&$checked': {
       color: theme.palette.secondary.main,
     },
@@ -319,7 +315,6 @@ function TaskItem(props) {
 
 
 export const TaskFullscreen = (props) => {
-  const theme = useTheme()
   const dispatch = useDispatch()
   const classes = useStyles()
   const taskPriorityTypes = useSelector(getTaskPriorityTypes)
@@ -345,7 +340,7 @@ export const TaskFullscreen = (props) => {
   const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
 
-  const isLayoutMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const isLayoutMobile = useContext(IsLayoutMobileContext)
 
   const [taskNameState, setTaskNameState] = useState()
   const [openTask, setOpenTask] = useState(true)

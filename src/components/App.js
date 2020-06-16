@@ -1,9 +1,7 @@
-// TODO: Have a single useMediaQuery in App and decide mobile vs desktop components at App level
-
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-// import useTheme from '@material-ui/core/styles/useTheme'
-// import useMediaQuery from '@material-ui/core/useMediaQuery'
+import useTheme from '@material-ui/core/styles/useTheme'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 import AssetsMap from './AssetsMap'
 import SketchButtons from './SketchButtons'
 import SketchModeToolbar from './SketchModeToolbar'
@@ -29,6 +27,9 @@ import {
   IS_WITH_IMPORT_EXPORT,
 } from '../constants'
 import {
+  IsLayoutMobileContext,
+} from '../contexts'
+import {
   getIsViewing,
 } from '../selectors'
 import './App.css'
@@ -48,10 +49,10 @@ function usePreventWindowUnload(preventDefault) {
 }
 
 export default function App() {
-  // const theme = useTheme()
+  const theme = useTheme()
   const dispatch = useDispatch()
   const isViewing = useSelector(getIsViewing)
-  // const isLayoutMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const isLayoutMobile = useMediaQuery(theme.breakpoints.down('xs'))
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -68,8 +69,8 @@ export default function App() {
     dispatch(refreshRisks())
   }, [dispatch])
   return (
-    <div>
-      <AssetsMap openDeleteDialogOpen={() => setIsDeleteDialogOpen(true)} />
+    <IsLayoutMobileContext.Provider value={isLayoutMobile}>
+      <AssetsMap onAssetDelete={() => setIsDeleteDialogOpen(true)} />
       <SketchButtons />
       <SketchModeToolbar />
       <SketchAddToolbar />
@@ -127,6 +128,6 @@ export default function App() {
         onClose={ () => setIsDeleteDialogOpen(false) }
       />
     }
-    </div>
+    </IsLayoutMobileContext.Provider>
   )
 }
