@@ -1,4 +1,3 @@
-import produce from 'immer'
 import {
   productNameSuggestions,
   productVersionSuggestions,
@@ -9,7 +8,6 @@ import {
 } from 'asset-report-risks'
 import mapStyleName from './mapStyleName'
 import mapViewState from './mapViewState'
-import sketchMode from './sketchMode'
 import overlayMode from './overlayMode'
 import selectedAssetIndexes from './selectedAssetIndexes'
 import selectedBusIndexes from './selectedBusIndexes'
