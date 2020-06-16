@@ -1,4 +1,3 @@
-import { createSelector } from 'reselect'
 import WebMercatorViewport from '@math.gl/web-mercator'
 import getCentroid from '@turf/centroid'
 import { GeoJsonLayer, TextLayer } from '@deck.gl/layers'
@@ -17,7 +16,6 @@ import {
 } from './task'
 import {
   BRIGHT_MAP_STYLE_NAMES,
-  COLORS_BY_MAP_STYLE_NAME,
   MAP_STYLE_BY_NAME,
   OVERLAY_MODE_RISKS,
   OVERLAY_MODE_TASKS,
@@ -27,7 +25,6 @@ import {
   getBusFeatures,
 } from '../routines'
 
-export const getMapStyleName = state => state.mapStyleName
 export const getMapViewState = state => state.mapViewState
 export const getOverlayMode = state => state.overlayMode
 export const getSketchMode = state => state.sketchMode
@@ -42,14 +39,6 @@ export const getMapStyle = createSelector([
   mapStyleName,
 ) => {
   return MAP_STYLE_BY_NAME[mapStyleName]
-})
-
-export const getMapColors = createSelector([
-  getMapStyleName,
-], (
-  mapStyleName,
-) => {
-  return COLORS_BY_MAP_STYLE_NAME[mapStyleName]
 })
 
 export const getMapWebMercatorViewPort = createSelector([

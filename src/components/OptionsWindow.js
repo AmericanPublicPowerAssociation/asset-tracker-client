@@ -7,8 +7,8 @@ import StylesIcon from '@material-ui/icons/Map'
 import DetailsIcon from '@material-ui/icons/Receipt'
 import TableIcon from '@material-ui/icons/ViewList'
 import {
-  TOGGLE_MAP_STYLE,
-} from '../constants'
+  toggleMapStyle,
+} from '../actions'
 import {
   getMapColors,
 } from '../selectors'
@@ -24,8 +24,8 @@ const useStyles = makeStyles(theme => ({
 export default function OptionsWindow({
   isWithDetails,
   isWithTables,
-  setIsWithTables,
   setIsWithDetails,
+  setIsWithTables,
 }) {
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -37,7 +37,7 @@ export default function OptionsWindow({
       <Tooltip title='Toggle Styles'>
         <IconButton
           className={activeColor}
-          onClick={() => dispatch({ type: TOGGLE_MAP_STYLE })}
+          onClick={() => dispatch(toggleMapStyle())}
         >
           <StylesIcon />
         </IconButton>
@@ -46,9 +46,7 @@ export default function OptionsWindow({
       <Tooltip title='Toggle Details'>
         <IconButton
           className={isWithDetails ? activeColor : inactiveColor}
-          onClick={() => {
-            setIsWithDetails( prevState => !prevState)
-          }}
+          onClick={() => setIsWithDetails(!isWithDetails)}
         >
           <DetailsIcon />
         </IconButton>
@@ -57,9 +55,7 @@ export default function OptionsWindow({
       <Tooltip title='Toggle Tables'>
         <IconButton
           className={isWithTables ? activeColor : inactiveColor}
-          onClick={() => {
-            setIsWithTables( prevState => !prevState)
-          }}
+          onClick={() => setIsWithTables(!isWithTables)}
         >
           <TableIcon />
         </IconButton>

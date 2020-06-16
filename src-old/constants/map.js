@@ -8,9 +8,6 @@ import {
   ASSET_TYPE_CODE_TRANSFORMER,
 } from './asset'
 
-import DARK_MAP_STYLE from '../datasets/mapStyles/monochromeDark.json'
-import STREET_MAP_STYLE from '../datasets/mapStyles/streets.json'
-import SATELLITE_MAP_STYLE from '../datasets/mapStyles/satelliteStreets.json'
 export const MAP_VIEW_STATE = {
   // longitude: 0,
   // latitude: 0,
@@ -25,13 +22,6 @@ export const MAP_VIEW_STATE = {
   altitude: 1.5,
 }
 
-export const MAP_STYLE_BY_NAME = {
-  dark: DARK_MAP_STYLE,
-  street: STREET_MAP_STYLE,
-  satellite: SATELLITE_MAP_STYLE,
-}
-export const MAP_STYLE_NAMES = Object.keys(MAP_STYLE_BY_NAME)
-export const MAP_STYLE_COUNT = MAP_STYLE_NAMES.length
 export const BRIGHT_MAP_STYLE_NAMES = ['street']
 
 export const ASSET_LINE_WIDTH_IN_METERS = 5
@@ -84,7 +74,6 @@ export const SKETCH_MODE_ADD_STATION = 'add > station'
 export const SKETCH_MODE_EDIT = 'edit'
 export const SKETCH_MODE_DELETE = 'delete'
 
-export const TOGGLE_MAP_STYLE = 'TOGGLE_MAP_STYLE'
 export const SET_MAP_VIEW_STATE = 'SET_MAP_VIEW_STATE'
 export const PAN_MAP_TO_ASSET = 'PAN_MAP_TO_ASSET'
 export const SET_OVERLAY_MODE = 'SET_OVERLAY_MODE'

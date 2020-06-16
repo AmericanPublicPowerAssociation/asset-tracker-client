@@ -5,15 +5,6 @@ body {
   margin: 0;
   padding: 0;
 }
-.black {
-  color: black !important;
-}
-.gray {
-  color: gray !important;
-}
-.white {
-  color: white !important;
-}
 .selected {
   color: white !important;
   background-color: #ff4081 !important;
