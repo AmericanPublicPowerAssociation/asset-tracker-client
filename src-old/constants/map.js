@@ -68,7 +68,6 @@ export const OVERLAY_MODE_TASKS = 'tasks'
 export const OVERLAY_MODE_RISKS = 'risks'
 export const OVERLAY_MODE = OVERLAY_MODE_ASSETS
 
-export const SKETCH_MODE_VIEW = 'view'
 export const SKETCH_MODE_ADD = 'add'
 export const SKETCH_MODE_ADD_ASSET = 'add >'
 export const SKETCH_MODE_ADD_POLE = 'add > pole'
@@ -84,13 +83,11 @@ export const SKETCH_MODE_ADD_SUBSTATION = 'add > substation'
 export const SKETCH_MODE_ADD_STATION = 'add > station'
 export const SKETCH_MODE_EDIT = 'edit'
 export const SKETCH_MODE_DELETE = 'delete'
-export const SKETCH_MODE = SKETCH_MODE_VIEW
 
 export const TOGGLE_MAP_STYLE = 'TOGGLE_MAP_STYLE'
 export const SET_MAP_VIEW_STATE = 'SET_MAP_VIEW_STATE'
 export const PAN_MAP_TO_ASSET = 'PAN_MAP_TO_ASSET'
 export const SET_OVERLAY_MODE = 'SET_OVERLAY_MODE'
-export const SET_SKETCH_MODE = 'SET_SKETCH_MODE'
 export const SET_SELECTED_ASSET_INDEXES = 'SET_SELECTED_ASSET_INDEXES'
 export const SET_SELECTED_BUS_INDEXES = 'SET_SELECTED_BUS_INDEXES'
 export const SET_HOVER_INFO = 'SET_HOVER_INFO'
