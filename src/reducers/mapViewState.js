@@ -17,15 +17,15 @@ const mapViewState = produce((draft, action) => {
   }
 }, initialState)
 
-function transferViewState(draft, viewState) {
-  draft.longitude = viewState.longitude
-  draft.latitude = viewState.latitude
-  draft.zoom = viewState.zoom
-  draft.pitch = viewState.pitch
-  draft.bearing = viewState.bearing
-  draft.width = window.innerWidth
-  draft.height = window.innerHeight
-  draft.altitude = viewState.altitude
+function transferViewState(targetState, sourceState) {
+  targetState.longitude = sourceState.longitude
+  targetState.latitude = sourceState.latitude
+  targetState.zoom = sourceState.zoom
+  targetState.pitch = sourceState.pitch
+  targetState.bearing = sourceState.bearing
+  targetState.width = sourceState.innerWidth
+  targetState.height = sourceState.innerHeight
+  targetState.altitude = sourceState.altitude
 }
 
 export default mapViewState
