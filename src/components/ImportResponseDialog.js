@@ -58,7 +58,7 @@ const messages = {
     displayIcon: CheckCircleIcon,
   },
   'warning': {
-    displayMessageTitle: 'Aw, Snap!',
+    displayMessageTitle: 'Oops!',
     displayMessage: 'Certain assets were not uploaded successfully.',
     displayIcon: WarningIcon,
   },
