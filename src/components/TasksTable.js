@@ -24,6 +24,7 @@ import {
   getTaskStatusLabel,
 } from '../routines'
 import {
+  getAssetById,
   getOpenTaskById,
   getSelectedTaskId,
 } from '../selectors'
@@ -50,7 +51,8 @@ const tableIcons = {
 }
 
 const TASK_TABLE_COLUMN_NAMES = [
-  'name',
+  'assetName',
+  'taskName',
   'description',
   'priority',
   'status',
@@ -61,6 +63,7 @@ export default function TasksTable(props) {
   const dispatch = useDispatch()
   const taskById = useSelector(getOpenTaskById)
   const selectedTaskId = useSelector(getSelectedTaskId)
+  const assetById = useSelector(getAssetById)
   const {
     getHeaderLabel,
     highlightAsset,
@@ -76,8 +79,13 @@ export default function TasksTable(props) {
 
   const data = Object.values(taskById).map(
     task => {
+      const assetId = task.assetId
+      const assetName = assetById[assetId].name
+      const taskName = task.name
       return {
         ...task,
+        taskName,
+        assetName,
         status: getTaskStatusLabel(task.status),
         priority: getTaskPriorityLabel(task.priority),
       }

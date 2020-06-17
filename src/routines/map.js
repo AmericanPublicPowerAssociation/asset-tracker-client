@@ -84,12 +84,13 @@ export function getPickedEditHandle(picks) {
   return null
 }
 
-export function getMapViewStateFromBoundingBox(boundingBox, width, height) {
+export function getMapViewStateFromBoundingBox(boundingBox, width, height, maxZoom = 15) {
   if (!boundingBox.length) {
     return
   }
   const viewport = new WebMercatorViewport({ width, height })
-  return viewport.fitBounds(boundingBox, { padding: 20, maxZoom: 20 })
+  return viewport.fitBounds(boundingBox, { padding: 20, maxZoom })
+
 }
 
 export function getDeckGLNearbyObjects(obj) {

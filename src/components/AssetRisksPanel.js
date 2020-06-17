@@ -1,5 +1,5 @@
-import React from 'react'
-import { useContext, useDispatch, useSelector } from 'react-redux'
+import React, { useContext } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import clsx from 'clsx'
 import Link from '@material-ui/core/Link'
 import List from '@material-ui/core/List'
@@ -51,7 +51,7 @@ export default function AssetRisksPanel({
           </Tooltip>
 
           <ListItemText>
-            <AssetName asset={asset} expand={isDetailsWindowExpanded} setExpand={setIsDetailsWindowExpanded} />
+            <AssetName asset={asset} isFullScreen={isDetailsWindowExpanded} setIsFullScreen={setIsDetailsWindowExpanded} />
           </ListItemText>
         </ListItem>
 
