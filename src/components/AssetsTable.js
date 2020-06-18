@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useSelector } from 'react-redux'
-import MaterialTable from 'asset-report-risks'
+import MaterialTable from './MaterialTable'
 import {
   getAssetById,
   getAssetTypeByCode,

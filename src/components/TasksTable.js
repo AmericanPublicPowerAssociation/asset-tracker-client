@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import MaterialTable from 'asset-report-risks'
+import MaterialTable from './MaterialTable'
 import {
   setSelectedTaskId,
 } from '../actions'
@@ -16,13 +16,22 @@ import {
   getSelectedTaskId,
 } from '../selectors'
 
-const TASK_TABLE_COLUMN_NAMES = [
-  'assetName',
-  'taskName',
-  'description',
-  'priority',
-  'status',
-]
+const TASK_TABLE_COLUMNS = [{
+  field: 'assetName',
+  title: 'Asset Name',
+}, {
+  field: 'taskName',
+  title: 'Task Name',
+}, {
+  field: 'description',
+  title: 'Description',
+}, {
+  field: 'priority',
+  title: 'Priority',
+}, {
+  field: 'status',
+  title: 'Status',
+}]
 
 export default function TasksTable(props) {
   const tableName = 'Tasks'
@@ -31,7 +40,6 @@ export default function TasksTable(props) {
   const selectedTaskId = useSelector(getSelectedTaskId)
   const assetById = useSelector(getAssetById)
   const {
-    getHeaderLabel,
     highlightAsset,
     selectedAssetId,
     tableOptions,
@@ -57,9 +65,7 @@ export default function TasksTable(props) {
       }
   })
 
-  const columns = TASK_TABLE_COLUMN_NAMES.map( field => {
-    return { field, title: getHeaderLabel(field) }
-  })
+  const columns = TASK_TABLE_COLUMNS
 
   function handleOnRowClick(event, rowData) {
     const { assetId } = rowData

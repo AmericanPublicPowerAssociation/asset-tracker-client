@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
     maxHeight: 'calc(100vh - 108px)',
   },
   withTables: {
-    bottom: '50%',
+    bottom: '56%',
   },
   responsive: {
     position: 'fixed',
