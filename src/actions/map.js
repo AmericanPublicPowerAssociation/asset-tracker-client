@@ -1,4 +1,5 @@
 import {
+  PAN_MAP_TO_ASSET,
   SET_MAP_VIEW_STATE,
   SET_OVERLAY_MODE,
   SET_POPUP_STATE,
@@ -35,3 +36,11 @@ export function setSelectedAssetIndexes(selectedAssetIndexes) {
 export function setSelectedBusIndexes(selectedBusIndexes) {
   return { type: SET_SELECTED_BUS_INDEXES, payload: selectedBusIndexes }
 }
+
+// TODO: Review all code below
+
+export function panMapToAsset(assetGeoJson) {
+  return { type: PAN_MAP_TO_ASSET, payload: assetGeoJson }
+}
+
+// TODO: Review all code above

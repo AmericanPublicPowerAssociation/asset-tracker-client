@@ -21,3 +21,9 @@ export const getBusesGeoJson = createSelector([
     features: busFeatures,
   }
 })
+
+// TODO: Review below code
+
+export const getSelectedBusId = state => state.selectedBusId
+
+// TODO: Review above code

@@ -4,12 +4,17 @@ import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
 import PopUp from './PopUp'
 import {
+  PICKING_DEPTH,
+  PICKING_RADIUS_IN_PIXELS,
+} from '../constants'
+import {
   useEditableMap,
   useMovableMap,
 } from '../hooks'
 import {
   getMapStyle,
   getMapViewState,
+  getOverlayMapLayers,
   getPopUpState,
 } from '../selectors'
 
@@ -25,6 +30,10 @@ export default function AssetsMap({ onAssetDelete }) {
   const { mapLayers, handleMapKey } = useEditableMap(deckGL, {
     onAssetDelete,
 	})
+  // TODO: Review below code
+  const overlayMapLayers = useSelector(getOverlayMapLayers)
+  mapLayers.push(...overlayMapLayers)
+  // TODO: Review above code
   return (
     <div onKeyUp={handleMapKey}>
       <DeckGL
@@ -33,6 +42,10 @@ export default function AssetsMap({ onAssetDelete }) {
         controller={MAP_CONTROLLER_OPTIONS}
         viewState={mapViewState}
         onViewStateChange={handleMapMove}
+        // TODO: Review below code
+        pickingRadius={PICKING_RADIUS_IN_PIXELS * mapViewState.zoom}
+        pickingDepth={PICKING_DEPTH}
+        // TODO: Review above code
       >
         <StaticMap
           mapStyle={mapStyle}

@@ -1,7 +1,11 @@
 import translateFeature from '@turf/transform-translate'
 import {
   BUS_DISTANCE_IN_KILOMETERS_BY_CODE,
+  MINIMUM_BUS_ID_LENGTH,
 } from '../constants'
+import {
+  getRandomId,
+} from '../macros'
 
 export function getBusFeatures(assetFeatures, assetById) {
   const busFeatures = []
@@ -75,3 +79,11 @@ function getBusFeaturesForLine(assetFeature, connections, busIds) {
 
   return busFeatures
 }
+
+// TODO: Review all code below
+
+export function makeBusId() {
+  return getRandomId(MINIMUM_BUS_ID_LENGTH)
+}
+
+// TODO: Review all code above

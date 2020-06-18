@@ -1,5 +1,5 @@
-// import React, { useContext } from 'react'
-import React from 'react'
+// TODO: Review whether we want different behavior on isLayoutMobile
+import React, { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -11,13 +11,11 @@ import {
   toggleMapStyle,
 } from '../actions'
 import {
-  toggleState,
-} from '../macros'
-/*
-import {
   IsLayoutMobileContext,
 } from '../contexts'
-*/
+import {
+  toggleState,
+} from '../macros'
 import {
   getMapColors,
 } from '../selectors'
@@ -36,7 +34,7 @@ export default function OptionsWindow({
   setIsWithDetails,
   setIsWithTables,
 }) {
-  // const isLayoutMobile = useContext(IsLayoutMobileContext)
+  const isLayoutMobile = useContext(IsLayoutMobileContext)
   const classes = useStyles()
   const dispatch = useDispatch()
   const mapColors = useSelector(getMapColors)
@@ -57,18 +55,13 @@ export default function OptionsWindow({
       <Tooltip title='Toggle Details'>
         <IconButton
           className={isWithDetails ? activeColor : inactiveColor}
-          onClick={() => setIsWithDetails(toggleState)}
-/*
+          // onClick={() => setIsWithDetails(toggleState)}
           onClick={() => {
             if (isLayoutMobile) {
               setIsWithTables(false)
-              setIsWithDetails( prevState => !prevState)
             }
-            else {
-              setIsWithDetails( prevState => !prevState)
-            }
+            setIsWithDetails(toggleState)
           }}
-*/
         >
           <DetailsIcon />
         </IconButton>
@@ -77,18 +70,13 @@ export default function OptionsWindow({
       <Tooltip title='Toggle Tables'>
         <IconButton
           className={isWithTables ? activeColor : inactiveColor}
-          onClick={() => setIsWithTables(toggleState)}
-/*
+          // onClick={() => setIsWithTables(toggleState)}
           onClick={() => {
             if (isLayoutMobile) {
               setIsWithDetails(false)
-              setIsWithTables( prevState => !prevState)
             }
-            else {
-              setIsWithTables( prevState => !prevState)
-            }
+            setIsWithTables(toggleState)
           }}
-*/
         >
           <TableIcon />
         </IconButton>

@@ -31,7 +31,7 @@ import {
 const useStyles = makeStyles(theme => ({
   'root': {
     'position': 'fixed',
-    'top': theme.spacing(0.5),
+    'top': 0,
     'left': '50%',
     'transform': 'translateX(-50%)',
     '& > *': {
