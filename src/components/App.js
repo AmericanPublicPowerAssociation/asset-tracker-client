@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import AssetsMap from './AssetsMap'
+import SketchButtons from './SketchButtons'
 import OptionsWindow from './OptionsWindow'
 import './App.css'
 import {
@@ -18,6 +19,7 @@ export default function App() {
   return (
     <IsLayoutMobileContext.Provider value={isLayoutMobile}>
       <AssetsMap />
+      <SketchButtons />
       <OptionsWindow
         isWithDetails={isWithDetails}
         isWithTables={isWithTables}

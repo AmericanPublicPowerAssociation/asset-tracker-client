@@ -1,5 +1,4 @@
 import {
-  put,
   select,
   takeEvery,
   takeLatest,
@@ -21,16 +20,12 @@ import {
   ADD_TASK,
   ADD_TASK_COMMENT,
   FILL_ASSET_NAME,
-  REFRESH_ASSETS,
   REFRESH_TASKS,
   REFRESH_TASK_COMMENTS,
   SAVE_ASSETS,
   UPDATE_TASK,
   UPLOAD_ASSETS_CSV,
 } from '../constants'
-import {
-  fetchSafely,
-} from '../macros'
 import {
   getAssetById,
   getAssetsGeoJson,
@@ -39,15 +34,6 @@ import {
 const {
   REACT_APP_GOOGLE_TOKEN,
 } = process.env
-
-export function* watchRefreshAssets() {
-  yield takeLatest(REFRESH_ASSETS, function* (action) {
-    const url = '/assets.json'
-    yield fetchSafely(url, {}, {
-      on200: resetAssets,
-    })
-  })
-}
 
 export function* watchSaveAssets() {
   yield takeEvery(SAVE_ASSETS, function* (action) {
@@ -156,10 +142,6 @@ export function* updateTasks() {
 
 export function* resetTasks(payload) {
   yield put(setTasks(payload))
-}
-
-export function* resetAssets(payload) {
-  yield put(setAssets(payload))
 }
 
 export function* updateTaskComments(payload) {

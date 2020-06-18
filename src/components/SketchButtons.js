@@ -2,6 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
+import Tooltip from '@material-ui/core/Tooltip'
 import Fab from '@material-ui/core/Fab'
 import SketchIcon from '@material-ui/icons/Edit'
 import SaveIcon from '@material-ui/icons/Save'
@@ -11,11 +12,15 @@ import {
 } from 'asset-report-risks'
 import {
   refreshAssets,
+  // TODO: Move refreshTasks to asset-report-tasks/client
+  refreshTasks,
   saveAssets,
+  setOverlayMode,
   setSketchMode,
 } from '../actions'
 import {
   OVERLAY_MODE_ASSETS,
+  SKETCH_MODE_ADD,
   SKETCH_MODE_VIEW,
 } from '../constants'
 import {
@@ -24,26 +29,26 @@ import {
 } from '../selectors'
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    position: 'fixed',
-    top: theme.spacing(0.5),
-    left: '50%',
-    transform: 'translateX(-50%)',
+  'root': {
+    'position': 'fixed',
+    'top': theme.spacing(0.5),
+    'left': '50%',
+    'transform': 'translateX(-50%)',
     '& > *': {
-      margin: theme.spacing(1),
+      'margin': theme.spacing(1),
     },
   },
-  changeButton: {
-    transition: '1s',
-    background: theme.palette.secondary.main,
+  'changeButton': {
+    'transition': '1s',
+    'background': theme.palette.secondary.main,
     '&:hover': {
-      background: theme.palette.secondary.main,
+      'background': theme.palette.secondary.main,
     },
   },
-  cancelButton: {
-    background: 'white',
+  'cancelButton': {
+    'background': 'white',
     '&:hover': {
-      background: 'white',
+      'background': 'white',
     },
   },
 }))
@@ -58,37 +63,52 @@ export default function SketchButtons() {
   const iconColor = isViewing ? 'black' : 'white'
 
   function handleChange() {
+    if (!isWithAssetsOverlay) {
+      dispatch(setOverlayMode(OVERLAY_MODE_ASSETS))
+    }
     if (!isViewing) {
       dispatch(saveAssets())
     }
-    dispatch(setSketchMode(isViewing ? 'sketch' : SKETCH_MODE_VIEW))
+    dispatch(setSketchMode(isViewing ? SKETCH_MODE_ADD : SKETCH_MODE_VIEW))
   }
 
   function handleCancel() {
     dispatch(setSketchMode(SKETCH_MODE_VIEW))
     dispatch(refreshAssets())
+    dispatch(refreshTasks())
     dispatch(refreshRisks())
   }
 
   return (
     <div className={classes.root}>
-      <Fab
-        className={clsx(classes.changeButton, iconColor, 'rise-animation')}
-        size='small'
-        disabled={!isWithAssetsOverlay}
-        onClick={handleChange}
-      >
-        {isViewing ? <SketchIcon /> : <SaveIcon />}
-      </Fab>
+      <Tooltip title={isViewing ? 'Sketch' : 'Save'}>
+        <Fab
+          className={clsx(
+            classes.changeButton,
+            'rise-animation',
+            iconColor,
+          )}
+          size='small'
+          // disabled={!isWithAssetsOverlay}
+          onClick={handleChange}
+        >
+          {isViewing ? <SketchIcon /> : <SaveIcon />}
+        </Fab>
+      </Tooltip>
 
     {!isViewing &&
-      <Fab
-        className={clsx(classes.cancelButton, 'spin-animation')}
-        size='small' 
-        onClick={handleCancel}
-      >
-        <CloseIcon style={{ color: 'blue' }}/>
-      </Fab>
+      <Tooltip title='Cancel'>
+        <Fab
+          className={clsx(
+            classes.cancelButton,
+            'spin-animation',
+          )}
+          size='small' 
+          onClick={handleCancel}
+        >
+          <CloseIcon style={{ color: 'blue' }}/>
+        </Fab>
+      </Tooltip>
     }
     </div>
   )

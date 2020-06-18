@@ -6,6 +6,7 @@ import {
 
 export const getMapStyleName = state => state.mapStyleName
 export const getMapViewState = state => state.mapViewState
+export const getOverlayMode = state => state.overlayMode
 export const getSketchMode = state => state.sketchMode
 export const getPopUpState = state => state.popUpState
 export const getSelectedAssetIndexes = state => state.selectedAssetIndexes

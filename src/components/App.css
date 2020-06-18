@@ -7,6 +7,14 @@
 .white {
   color: white !important;
 }
+.rise-animation:hover {
+  transition: 0.50s;
+  transform: scale(1.25);
+}
+.spin-animation:hover {
+  transition: 0.50s;
+  transform: rotate(360deg);
+}
 .tooltip {
   pointer-events: none;
   position: absolute;

@@ -9,7 +9,6 @@ export const TASK_PRIORITY_LOW = 1
 export const TASK_PRIORITY_NORMAL = 10
 export const TASK_PRIORITY_HIGH = 100
 
-export const REFRESH_TASKS = 'REFRESH_TASKS'
 export const SET_TASKS = 'SET_TASK'
 
 export const ADD_TASK = 'ADD_TASK'

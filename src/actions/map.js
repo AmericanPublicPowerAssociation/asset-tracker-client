@@ -1,5 +1,6 @@
 import {
   SET_MAP_VIEW_STATE,
+  SET_OVERLAY_MODE,
   SET_POPUP_STATE,
   SET_SELECTED_ASSET_INDEXES,
   SET_SELECTED_BUS_INDEXES,
@@ -13,6 +14,10 @@ export function toggleMapStyle() {
 
 export function setMapViewState(viewState) {
   return { type: SET_MAP_VIEW_STATE, payload: viewState }
+}
+
+export function setOverlayMode(overlayMode) {
+  return { type: SET_OVERLAY_MODE, payload: overlayMode }
 }
 
 export function setSketchMode(sketchMode) {

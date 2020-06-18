@@ -55,7 +55,6 @@ function usePreventWindowUnload(preventDefault) {
   }, [dispatch])
 
       <AssetsMap onAssetDelete={() => setIsDeleteDialogOpen(true)} />
-      <SketchButtons />
       <SketchModeToolbar />
       <SketchAddToolbar isWithTables={isWithTables} />
       <ActionsWindow

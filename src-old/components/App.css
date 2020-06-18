@@ -15,11 +15,3 @@ body {
 .capitalized {
   text-transform: capitalize;
 }
-.spin-animation:hover {
-  transition: 0.50s;
-  transform: rotate(360deg);
-}
-.rise-animation:hover {
-  transition: 0.50s;
-  transform: scale(1.25);
-}

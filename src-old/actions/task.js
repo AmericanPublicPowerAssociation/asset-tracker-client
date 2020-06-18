@@ -1,9 +1,8 @@
 // TODO: Make ids consistently explicit
-//
+
 import {
   ADD_TASK,
   ADD_TASK_COMMENT,
-  REFRESH_TASKS,
   REFRESH_TASK_COMMENTS,
   SET_SELECTED_TASK_ID,
   SET_TASKS,
@@ -11,10 +10,6 @@ import {
   SET_TASK_COMMENT_COUNT,
   UPDATE_TASK,
 } from '../constants'
-
-export function refreshTasks() {
-  return { type: REFRESH_TASKS }
-}
 
 export function setTasks(assets) {
   return { type: SET_TASKS, payload: assets }

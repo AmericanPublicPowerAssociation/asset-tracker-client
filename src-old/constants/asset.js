@@ -1,9 +1,6 @@
 
 export const MINIMUM_ASSET_ID_LENGTH = 16
 
-
-export const REFRESH_ASSETS = 'REFRESH_ASSETS'
-export const SAVE_ASSETS = 'SAVE_ASSETS'
 export const SET_ASSET = 'SET_ASSET'
 export const DELETE_ASSET = 'DELETE_ASSET'
 

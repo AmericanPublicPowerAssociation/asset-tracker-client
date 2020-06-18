@@ -103,6 +103,12 @@ export const BUS_DISTANCE_IN_KILOMETERS_BY_CODE = Object.entries(
   return busDistanceInKilometersByCode
 }, {})
 
+export const OVERLAY_MODE_ASSETS = 'assets'
+export const OVERLAY_MODE_TASKS = 'tasks'
+export const OVERLAY_MODE_RISKS = 'risks'
+export const OVERLAY_MODE = OVERLAY_MODE_ASSETS
+export const SET_OVERLAY_MODE = 'SET_OVERLAY_MODE'
+
 export const SKETCH_MODE_VIEW = 'view'
 export const SKETCH_MODE_ADD = 'add'
 export const SKETCH_MODE_ADD_ASSET = 'add >'

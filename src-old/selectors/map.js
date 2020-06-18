@@ -19,8 +19,6 @@ import {
   SKETCH_MODE_VIEW,
 } from '../constants'
 
-export const getOverlayMode = state => state.overlayMode
-
 export const getMapWebMercatorViewPort = createSelector([
   getMapViewState,
 ], (

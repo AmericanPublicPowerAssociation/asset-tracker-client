@@ -9,7 +9,6 @@ import {
   watchAddTaskComment,
   watchAssetTasks,
   watchFillAssetName,
-  watchRefreshAssets,
   watchRefreshTaskComments,
   watchSaveAssets,
   watchUpdateTask,
@@ -18,7 +17,6 @@ import {
 
 export default function* () {
   yield all([
-    watchRefreshAssets(),
     watchRefreshRisks(),
     watchSaveAssets(),
     watchUploadAssetsCsv(),

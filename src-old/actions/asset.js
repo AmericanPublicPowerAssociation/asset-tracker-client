@@ -3,31 +3,14 @@ import {
   DELETE_ASSET_VERTEX,
   FILL_ASSET_NAME,
   INSERT_ASSET_VERTEX,
-  REFRESH_ASSETS,
-  SAVE_ASSETS,
-  SET_ASSET,
-  SET_ASSETS,
   SET_ASSET_ATTRIBUTE,
   SET_ASSET_CONNECTION,
   SET_ASSET_CONNECTION_ATTRIBUTE,
   SET_ASSET_VALUE,
-  SET_SELECTED_ASSET_ID,
   SET_TEMPORARY_ASSET,
   SET_TEMPORARY_ASSET_VALUE,
   UPLOAD_ASSETS_CSV,
 } from '../constants'
-
-export function refreshAssets() {
-  return { type: REFRESH_ASSETS }
-}
-
-export function saveAssets() {
-  return { type: SAVE_ASSETS }
-}
-
-export function setAssets(assets) {
-  return { type: SET_ASSETS, payload: assets }
-}
 
 export function setAsset(asset) {
   return { type: SET_ASSET, payload: asset }

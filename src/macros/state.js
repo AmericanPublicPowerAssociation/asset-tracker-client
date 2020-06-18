@@ -1,3 +1,3 @@
-function toggleState(oldState) {
+export function toggleState(oldState) {
   return !oldState
 }
