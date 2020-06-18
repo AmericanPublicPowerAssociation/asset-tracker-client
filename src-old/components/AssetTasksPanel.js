@@ -213,7 +213,7 @@ export default function AssetTasksPanel({
       </Tooltip>
 
       <ListItemText>
-        <AssetNameTextField asset={asset} setExpand={setIsDetailsWindowExpanded} expand={isDetailsWindowExpanded} />
+        <AssetNameTextField asset={asset} setIsFullScreen={setIsDetailsWindowExpanded} isFullScreen={isDetailsWindowExpanded} />
       </ListItemText>
     </ListItem>
     {listTasks}

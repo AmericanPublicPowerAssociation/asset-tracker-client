@@ -28,6 +28,16 @@ const useStyles = makeStyles(theme => ({
     height: '50%',
     bottom: theme.spacing(5),
     overflow: 'auto',
+    [theme.breakpoints.down('sm')]: {
+      position: 'fixed',
+      right: 0,
+      left: 0,
+      bottom: 0,
+      overflowY: 'auto',
+      overflowX: 'hidden',
+      zIndex: 1,
+      maxHeight: '30vh',
+    },
   },
 }))
 

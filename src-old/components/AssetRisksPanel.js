@@ -51,7 +51,7 @@ export default function AssetRisksPanel({
           </Tooltip>
 
           <ListItemText>
-            <AssetName asset={asset} expand={isDetailsWindowExpanded} setExpand={setIsDetailsWindowExpanded} />
+            <AssetName asset={asset} isFullScreen={isDetailsWindowExpanded} setIsFullScreen={setIsDetailsWindowExpanded} />
           </ListItemText>
         </ListItem>
 

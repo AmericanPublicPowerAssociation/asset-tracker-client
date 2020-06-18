@@ -11,7 +11,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@math.gl/web-mercator": "^3.1.5",
-    "@nebula.gl/layers": "^0.18.1",
+    "@nebula.gl/layers": "^0.18.5",
     "@turf/centroid": "^6.0.2",
     "@turf/nearest-point-on-line": "^6.0.2",
     "@turf/transform-translate": "^5.1.5",

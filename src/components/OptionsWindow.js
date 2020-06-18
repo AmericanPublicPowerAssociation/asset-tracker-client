@@ -1,3 +1,4 @@
+// import React, { useContext } from 'react'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
@@ -12,6 +13,11 @@ import {
 import {
   toggleState,
 } from '../macros'
+/*
+import {
+  IsLayoutMobileContext,
+} from '../contexts'
+*/
 import {
   getMapColors,
 } from '../selectors'
@@ -30,11 +36,13 @@ export default function OptionsWindow({
   setIsWithDetails,
   setIsWithTables,
 }) {
+  // const isLayoutMobile = useContext(IsLayoutMobileContext)
   const classes = useStyles()
   const dispatch = useDispatch()
   const mapColors = useSelector(getMapColors)
   const activeColor = mapColors.active
   const inactiveColor = mapColors.inactive
+
   return (
     <div className={classes.root}>
       <Tooltip title='Toggle Styles'>
@@ -50,6 +58,17 @@ export default function OptionsWindow({
         <IconButton
           className={isWithDetails ? activeColor : inactiveColor}
           onClick={() => setIsWithDetails(toggleState)}
+/*
+          onClick={() => {
+            if (isLayoutMobile) {
+              setIsWithTables(false)
+              setIsWithDetails( prevState => !prevState)
+            }
+            else {
+              setIsWithDetails( prevState => !prevState)
+            }
+          }}
+*/
         >
           <DetailsIcon />
         </IconButton>
@@ -59,6 +78,17 @@ export default function OptionsWindow({
         <IconButton
           className={isWithTables ? activeColor : inactiveColor}
           onClick={() => setIsWithTables(toggleState)}
+/*
+          onClick={() => {
+            if (isLayoutMobile) {
+              setIsWithDetails(false)
+              setIsWithTables( prevState => !prevState)
+            }
+            else {
+              setIsWithTables( prevState => !prevState)
+            }
+          }}
+*/
         >
           <TableIcon />
         </IconButton>
