@@ -146,7 +146,7 @@ export default function ImportExportDialog({
       <Typography component='p'>Select the format</Typography>
       <Select value={downloadFormat}
         onChange={e => setDownloadFormat(e.target.value)}
-        input={<Input id='asset-type-select' />}>
+        input={<Input />}>
         <MenuItem value='csv'>CSV</MenuItem>
         <MenuItem value='dss'>DSS</MenuItem>
       </Select>
@@ -181,7 +181,7 @@ export default function ImportExportDialog({
       <Typography component='p'>Select the power source</Typography>
       <Select
         onChange={e => setSourceId(e.target.value)} value={sourceId}
-        input={<Input id='asset-type-select' />} >
+        input={<Input />} >
         { data.map(asset => <MenuItem value={asset.id} key={asset.id}>{asset.name}</MenuItem>) }
       </Select>
     </>
@@ -198,14 +198,18 @@ export default function ImportExportDialog({
         <FormControl fullWidth>
           <Select
             onChange={(e) => setAction(e.target.value)} value={action}
-            input={<Input id='asset-type-select' />} >
+            input={<Input />} >
             <MenuItem value='download'>Download Assets</MenuItem>
             <MenuItem value='upload'>Upload Assets</MenuItem>
           </Select>
+        </FormControl>
+        <FormControl fullWidth>
           { action === 'download' ?
             SelectDownloadFormatComponent :
             UploadFileComponent
           }
+        </FormControl>
+        <FormControl fullWidth>
           { action === 'download' && downloadFormat === 'dss' ? SelectDssPowerSource : <></> }
         </FormControl>
       </DialogContent>
