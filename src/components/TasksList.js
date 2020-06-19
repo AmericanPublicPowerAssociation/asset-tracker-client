@@ -1,4 +1,5 @@
 // TODO: Review from scratch
+// TODO: Focus task on click edit
 
 import clsx from 'clsx'
 import React, { useContext, useEffect, useState } from 'react'
@@ -14,7 +15,7 @@ import Chip from '@material-ui/core/Chip'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
-import NativeSelect from '@material-ui/core/NativeSelect'
+import Select from '@material-ui/core/Select'
 import Input from '@material-ui/core/Input'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
@@ -150,18 +151,22 @@ const useStyles = makeStyles(theme => ({
   important: {
     'backgroundColor': `${theme.palette.warning.main} !important`,
     'color': 'white',
+    /*
     '&$checked': {
       backgroundColor: `${theme.palette.warning.main} !important`,
       color: 'white',
     },
+    */
   },
   urgent: {
     'backgroundColor': theme.palette.secondary.main,
     'color': 'white',
+    /*
     '&$checked': {
       backgroundColor: theme.palette.secondary.main,
       color: 'white',
     },
+    */
   },
   desktopContent: {
     marginTop: theme.spacing(4),
@@ -187,15 +192,19 @@ const useStyles = makeStyles(theme => ({
   },
   importantCheckbox: {
     'color': `${theme.palette.warning.main} !important`,
+    /*
     '&$checked': {
       color: `${theme.palette.warning.main} !important`,
     },
+    */
   },
   urgentCheckbox: {
     'color': theme.palette.secondary.main,
+    /*
     '&$checked': {
       color: theme.palette.secondary.main,
     },
+    */
   },
 }))
 
@@ -377,7 +386,7 @@ export const TaskFullscreen = (props) => {
   const taskheader = (<div>
       <FormControl className={classes.formControl}>
         <InputLabel htmlFor='priority'>Priority</InputLabel>
-        <NativeSelect
+        <Select
           value={priority}
           onChange={ (e) => setPriority(e.target.value)}
           inputProps={{
@@ -395,12 +404,12 @@ export const TaskFullscreen = (props) => {
               </option>
             ))
           }
-        </NativeSelect>
+        </Select>
         <FormHelperText>Select the priority for the task</FormHelperText>
       </FormControl>
       <FormControl className={classes.formControl}>
         <InputLabel htmlFor={'status'}>Status</InputLabel>
-        <NativeSelect
+        <Select
           value={status}
           onChange={ (e) => setStatus(e.target.value)}
           inputProps={{
@@ -417,7 +426,7 @@ export const TaskFullscreen = (props) => {
               </option>
             ))
           }
-        </NativeSelect>
+        </Select>
         <FormHelperText>Select the status for the task</FormHelperText>
       </FormControl>
     </div>)

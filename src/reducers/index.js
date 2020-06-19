@@ -4,7 +4,6 @@ import {
   productVersionSuggestions,
   risks,
   selectedRiskIndex,
-  sortedRisks,
   vendorNameSuggestions,
 } from 'asset-report-risks'
 import mapStyleName from './mapStyleName'
@@ -45,7 +44,6 @@ const reduce = combineReducers({
   vendorNameSuggestions,
   productNameSuggestions,
   productVersionSuggestions,
-  sortedRisks,
   risks,
   selectedRiskIndex,
   taskCodeTypes,

@@ -11,10 +11,7 @@ import {
   setAssetsGeoJson,
   setMapViewState,
   setPopUpState,
-  setSelectedAssetId,
-  setSelectedAssetIndexes,
-  setSelectedBusId,
-  setSelectedBusIndexes,
+  setSelection,
   setSketchMode,
   setTemporaryAsset,
 } from '../actions'
@@ -185,14 +182,8 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
 
   function handleAssetClick(info, event) {
     console.log('asset click', info, event)
-    const targetAssetId = info.object && info.object.properties.id
-    if (!targetAssetId) return
-
     if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
-      dispatch(setSelectedAssetId(targetAssetId))
-      dispatch(setSelectedAssetIndexes([info.index]))
-      dispatch(setSelectedBusId(null))
-      dispatch(setSelectedBusIndexes([]))
+      dispatch(setSelection({ assetIndexes: [info.index] }))
     }
     if (sketchMode === SKETCH_MODE_DELETE) {
       onAssetDelete()
@@ -201,17 +192,8 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
 
   function handleBusClick(info, event) {
     console.log('bus click', info, event)
-    const targetBusId = info.object && info.object.properties.id
-    if (!targetBusId) return
-
-    const targetAssetId = bestAssetIdByBusId[targetBusId]
-    if (!targetAssetId) return
-
     if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
-      dispatch(setSelectedAssetId(targetAssetId))
-      dispatch(setSelectedAssetIndexes([]))
-      dispatch(setSelectedBusId(targetBusId))
-      dispatch(setSelectedBusIndexes([info.index]))
+      dispatch(setSelection({ busIndexes: [info.index] }))
     }
   }
 
@@ -227,10 +209,12 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         if (!temporaryAsset) {
           temporaryAsset = makeTemporaryAsset(assetTypeCode)
         } else if (isAddingLine) {
+          // Add ending vertex
           const vertexCount = feature.geometry.coordinates.length
-          if (!temporaryAsset.connections[vertexCount - 1]) {
+          const lastVertexIndex = vertexCount - 1
+          if (!temporaryAsset.connections[lastVertexIndex]) {
             temporaryAsset = produce(temporaryAsset, draft => {
-              draft.connections[vertexCount - 1] = { busId: makeBusId() }
+              draft.connections[lastVertexIndex] = { busId: makeBusId() }
             })
           }
         }
@@ -241,8 +225,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         dispatch(setAsset(temporaryAsset))
         dispatch(fillAssetName(assetId, feature))
         dispatch(setSketchMode(SKETCH_MODE_ADD))  // Add one at a time
-        dispatch(setSelectedAssetId(assetId))
-        dispatch(setSelectedAssetIndexes([featureIndex]))
+        dispatch(setSelection({ assetId, assetIndexes: [featureIndex] }))
         break
       }
       case 'addTentativePosition': {

@@ -1,11 +1,15 @@
 // TODO: Review from scratch
 
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import MaterialTable from './MaterialTable'
+import {
+  setSelection,
+} from '../actions'
 import {
   getAssetById,
   getAssetTypeByCode,
+  getSelectedAssetId,
 } from '../selectors'
 
 const COLUMNS = [{
@@ -22,13 +26,12 @@ const COLUMNS = [{
   field: 'productName',
 }]
 
-export default function AssetsTable({
-  highlightAsset,
-  selectedAssetId,
-}) {
+export default function AssetsTable() {
+  const dispatch = useDispatch()
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetById = useSelector(getAssetById)
-  const data = Object.entries(assetById)
+  const selectedAssetId = useSelector(getSelectedAssetId)
+  const tableData = Object.entries(assetById)
     .filter(([id, asset]) => !asset.isDeleted)
     .map(([assetId, asset]) => {
         const assetTypeCode = asset.typeCode
@@ -48,14 +51,14 @@ export default function AssetsTable({
   }
 
   function handleRowClick(event, rowData) {
-    highlightAsset(rowData.assetId)
+    dispatch(setSelection({ assetId: rowData.assetId }))
   }
 
   return (
     <MaterialTable
       title='Assets'
       columns={COLUMNS}
-      data={data}
+      data={tableData}
       isSelectedRow={isSelectedRow}
       onRowClick={handleRowClick}
     />

@@ -30,7 +30,7 @@ import {
 export function* watchSetSelection() {
   yield takeLatest(SET_SELECTION, function* (action) {
     let { assetId, assetIndexes, busId, busIndexes } = action.payload
-    let centeredFeature
+    let centeredFeature, shouldCenterMap = true
     const bestAssetIdByBusId = yield select(getBestAssetIdByBusId)
     const assetsGeoJson = yield select(getAssetsGeoJson)
     const busesGeoJson = yield select(getBusesGeoJson)
@@ -41,6 +41,7 @@ export function* watchSetSelection() {
       if (!busId) {
         busId = busFeatures[busIndexes[0]].properties.id
       }
+      shouldCenterMap = false
     }
     if (busId) {
       if (!busIndexes) {
@@ -48,13 +49,14 @@ export function* watchSetSelection() {
         centeredFeature = busFeatures[busIndexes[0]]
       }
       if (!assetId) {
-        assetId = bestAssetIdByBusId(busId)
+        assetId = bestAssetIdByBusId[busId]
       }
     }
     if (assetIndexes && assetIndexes.length) {
       if (!assetId) {
         assetId = assetFeatures[assetIndexes[0]].properties.id
       }
+      shouldCenterMap = false
     }
     if (assetId) {
       if (!assetIndexes) {
@@ -71,7 +73,7 @@ export function* watchSetSelection() {
       setSelectedBusId(busId || SELECTED_BUS_ID),
       setSelectedBusIndexes(busIndexes || SELECTED_BUS_INDEXES),
     ]
-    if (centeredFeature) {
+    if (shouldCenterMap && centeredFeature) {
       actions.push(centerMap(centeredFeature))
     }
     yield all(actions.map(_ => put(_)))

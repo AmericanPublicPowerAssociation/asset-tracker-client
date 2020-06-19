@@ -1,3 +1,5 @@
+// TODO: Convert back to arrow functions
+
 import {
   DELETE_ASSET,
   DELETE_ASSET_VERTEX,
@@ -18,9 +20,9 @@ import {
   UPLOAD_ASSETS_CSV,
 } from '../constants'
 
-export function refreshAssets() {
-  return { type: REFRESH_ASSETS }
-}
+export const refreshAssets = () => ({
+  type: REFRESH_ASSETS,
+})
 
 export function saveAssets() {
   return { type: SAVE_ASSETS }

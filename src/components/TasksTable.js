@@ -1,10 +1,11 @@
 // TODO: Review from scratch
 
-import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import MaterialTable from './MaterialTable'
 import {
   setSelectedTaskId,
+  setSelection,
 } from '../actions'
 import {
   getTaskPriorityLabel,
@@ -13,10 +14,11 @@ import {
 import {
   getAssetById,
   getOpenTaskById,
+  getSelectedAssetId,
   getSelectedTaskId,
 } from '../selectors'
 
-const TASK_TABLE_COLUMNS = [{
+const COLUMNS = [{
   field: 'assetName',
   title: 'Asset Name',
 }, {
@@ -33,25 +35,14 @@ const TASK_TABLE_COLUMNS = [{
   title: 'Status',
 }]
 
-export default function TasksTable(props) {
-  const tableName = 'Tasks'
+export default function TasksTable() {
   const dispatch = useDispatch()
   const taskById = useSelector(getOpenTaskById)
-  const selectedTaskId = useSelector(getSelectedTaskId)
   const assetById = useSelector(getAssetById)
-  const {
-    highlightAsset,
-    selectedAssetId,
-    tableOptions,
-  } = props
+  const selectedAssetId = useSelector(getSelectedAssetId)
+  const selectedTaskId = useSelector(getSelectedTaskId)
 
-  useEffect(() => {
-    return () => {
-      dispatch(setSelectedTaskId(null))
-    }
-  }, [dispatch])
-
-  const data = Object.values(taskById).map(
+  const tableData = Object.values(taskById).map(
     task => {
       const assetId = task.assetId
       const assetName = assetById[assetId].name
@@ -65,28 +56,24 @@ export default function TasksTable(props) {
       }
   })
 
-  const columns = TASK_TABLE_COLUMNS
-
-  function handleOnRowClick(event, rowData) {
-    const { assetId } = rowData
-    dispatch(setSelectedTaskId(rowData.id))
-    highlightAsset(assetId)
+  function isSelectedRow(rowData) {
+    const isSelectedAssetId = rowData.assetId === selectedAssetId
+    const isSelectedTaskId = rowData.id === selectedTaskId
+    return isSelectedAssetId && isSelectedTaskId
   }
 
-  function rowStyle(rowData) {
-    let backgroundColor = '#FFF'
-    if (selectedAssetId === rowData.assetId && selectedTaskId === rowData.id)
-      backgroundColor = '#EEE'
-    return { backgroundColor }
+  function handleRowClick(event, rowData) {
+    dispatch(setSelectedTaskId(rowData.id))
+    dispatch(setSelection({ assetId: rowData.assetId }))
   }
 
   return (
     <MaterialTable
-      title={tableName}
-      options={{ ...tableOptions, rowStyle }}
-      columns={columns}
-      data={data}
-      onRowClick={handleOnRowClick}
+      title='Tasks'
+      columns={COLUMNS}
+      data={tableData}
+      isSelectedRow={isSelectedRow}
+      onRowClick={handleRowClick}
     />
   )
 }

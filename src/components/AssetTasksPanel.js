@@ -1,4 +1,9 @@
 // TODO: Review from scratch
+// TODO: Fix this panel because it is fugly
+// TODO: Show task counts in filters
+// TODO: Move filter to be at end of search
+// TODO: Move toggle for Show Closed as checkbox in filter
+// TODO: Make all filters checkboxes
 
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,9 +15,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
-import NativeSelect from '@material-ui/core/NativeSelect'
+import Select from '@material-ui/core/Select'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Divider from '@material-ui/core/Divider'
 import Switch from '@material-ui/core/Switch'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
@@ -164,12 +170,12 @@ export default function AssetTasksPanel({
 
   const listTasks = (<>
     <FormGroup row>
-      <TextField fullWidth id="search" label="Search task" value={query}
+      <TextField fullWidth label='Search tasks' value={query}
         onChange={(e) => setQuery(e.target.value) } />
       <div className={classes.actions}>
         <FormControlLabel control={
           <Switch checked={archived} onChange={ () => setArchived(!archived) } value="archived" />}
-          label="Show closed tasks" />
+          label='Show closed tasks' />
         <Tooltip title="Filter tasks">
           <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
             <FilterListIcon />
@@ -187,6 +193,7 @@ export default function AssetTasksPanel({
         </Menu>
       </div>
     </FormGroup>
+    <Divider />
     <div className={classes.listTasks}>
       <TasksList showDetails={handleDisplayDetails} asset={asset} tasks={partialTasks}/>
     </div>
@@ -223,13 +230,17 @@ export default function AssetTasksPanel({
     <Dialog open={dialog} onClose={() => setDialog(false)} aria-labelledby='form-dialog-title'>
       <DialogTitle id='form-dialog-title'>Add task</DialogTitle>
       <DialogContent>
-        <TextField id='name' label='Task name' value={name}
-          onChange={(e) => setName(e.target.value) } />
-
+        <TextField
+          autoFocus
+          id='name'
+          label='Task name'
+          value={name}
+          onChange={(e) => setName(e.target.value) }
+        />
         <div>
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor='status'>Priority</InputLabel>
-            <NativeSelect
+            <Select
               value={priority}
               onChange={ (e) => setPriority(e.target.value)}
               inputProps={{
@@ -245,7 +256,7 @@ export default function AssetTasksPanel({
                   </option>
                 ))
               }
-            </NativeSelect>
+            </Select>
             <FormHelperText>Select the priority for the task</FormHelperText>
           </FormControl>
         </div>

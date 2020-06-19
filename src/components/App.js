@@ -58,8 +58,8 @@ export default function App() {
   ] = useState(false)
 
   useEffect(() => {
-    dispatch(refreshAssets())
-    dispatch(refreshTasks())
+    // dispatch(refreshAssets())
+    // dispatch(refreshTasks())
     dispatch(refreshRisks())
   }, [dispatch])
 
@@ -82,7 +82,6 @@ export default function App() {
       />
       <TablesWindow
         isWithTables={isWithTables}
-        setIsWithTables={setIsWithTables}
       />
       {/* TODO: Review all components below */}
       <SketchModeToolbar />
