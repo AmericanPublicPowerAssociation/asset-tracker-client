@@ -1,97 +1,24 @@
-import { produce } from 'immer'
 import getNearestPointOnLine from '@turf/nearest-point-on-line'
 import {
-  // deleteAsset,
-  // setSelectedBusIndexes,
-  deleteAssetVertex,
-  fillAssetName,
-  insertAssetVertex,
-  setAsset,
   setAssetConnection,
   setAssetGeoJson,
-  setSketchMode,
   setTemporaryAsset,
 } from '../actions'
 import {
-  ASSET_TYPE_CODE_LINE,
-  PICKING_DEPTH,
-  PICKING_RADIUS_IN_PIXELS,
   SKETCH_MODE_ADD,
-  SKETCH_MODE_ADD_LINE,
-  SKETCH_MODE_EDIT,
   ASSET_TYPE_CODE_METER,
   ASSET_TYPE_CODE_TRANSFORMER,
 } from '../constants'
 import {
-  getAssetTypeCode,
   getAssetsByLatLng,
   getAssetsByScreenPosition,
   getBusesByLatLng,
   getDeckGLNearbyObjects,
-  getFeaturePack,
-  makeBusId,
-  makeTemporaryAsset,
-  updateFeature,
-  moveLatitudeInMeters,
 } from '../routines'
-import {
-  getTemporaryAsset,
-} from '../selectors'
-
-export function useEditableMap(deckGL, openDeleteDialogOpen) {
-  let temporaryAsset = useSelector(getTemporaryAsset)
-  const assetTypeCode = getAssetTypeCode(sketchMode)
-  const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
-
-  function getAssetsMapLayer() {
 
     function handleAssetEdit(event) {
       if (editType === 'addTentativePosition') {
-        if (!temporaryAsset) {
-          temporaryAsset = makeTemporaryAsset(assetTypeCode)
-        }
         if (isAddingLine) {
-          // Look for nearby objects
-          const { position } = editContext
-          const screenCoords = deckGL.current.viewports[0].project(position)
-          const nearbyAssetInfos = deckGL.current.pickMultipleObjects({
-            x: screenCoords[0],
-            y: screenCoords[1],
-            layerIds: [ASSETS_MAP_LAYER_ID],
-            radius: PICKING_RADIUS_IN_PIXELS,
-            depth: PICKING_DEPTH,
-          })
-          console.log('nearbyAssetInfos', nearbyAssetInfos)
-          const nearbyBusInfos = deckGL.current.pickMultipleObjects({
-            x: screenCoords[0],
-            y: screenCoords[1],
-            layerIds: [BUSES_MAP_LAYER_ID],
-            radius: PICKING_RADIUS_IN_PIXELS,
-            depth: PICKING_DEPTH,
-          })
-          console.log('nearbyBusInfos', nearbyBusInfos)
-          // Convert objects into features
-          const nearbyAssetFeatures = nearbyAssetInfos.map(info => info.object)
-          const nearbyBusFeatures = nearbyBusInfos.map(info => info.object)
-          // Get editing feature
-          const temporaryAssetFeature = nearbyAssetFeatures.find(
-            feature => feature.properties.guideType)
-          const vertexCount = temporaryAssetFeature ?
-            temporaryAssetFeature.geometry.coordinates.length : 1
-          console.log('vertexCount', vertexCount)
-          // Add connection to nearby bus or make a new bus
-          let busId
-          if (nearbyBusFeatures.length) {
-            busId = nearbyBusFeatures[0].properties.id
-          } else if (vertexCount === 1) {
-            busId = makeBusId()
-          }
-          if (busId) {
-            console.log('ADDING BUS HERE')
-            temporaryAsset = produce(temporaryAsset, draft => {
-              draft.connections[vertexCount - 1] = { busId }
-            })
-          }
           const nearbyAssetInfo = nearbyAssetInfos.find(info => !info.object.properties.guideType)
           // If there is a nearby asset
           if (nearbyAssetInfo) {
@@ -190,7 +117,6 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
             }
           }
         }
-        dispatch(setTemporaryAsset(temporaryAsset))
       } else if (editType === 'finishMovePosition') {
 
         console.log('finishMovePosition', event)
@@ -283,187 +209,148 @@ export function useEditableMap(deckGL, openDeleteDialogOpen) {
             default: { }
           }
         }
-      } else if (editType === 'addPosition') {
-        const { featureIndexes, positionIndexes } = editContext
-        const { features } = updatedData
-        const feature = features[featureIndexes[0]]
-        const assetId = feature.properties.id
-        const afterIndex = positionIndexes[0] - 1
-        dispatch(insertAssetVertex(assetId, afterIndex))
-      } else if (editType === 'removePosition') {
-        const { featureIndexes, positionIndexes } = editContext
-        const { features } = updatedData
-        const removedPositionIndex = positionIndexes[0]
-        const feature = features[featureIndexes[0]]
-        const featureProperties = feature.properties
-        if (featureProperties.typeCode === ASSET_TYPE_CODE_LINE) {
-          const vertexCount = feature.geometry.coordinates.length
-          const assetId = featureProperties.id
-          dispatch(deleteAssetVertex(assetId, removedPositionIndex, vertexCount))
-        }
-      } else if (editType === 'addFeature') {
-        if (!temporaryAsset) {
-          temporaryAsset = makeTemporaryAsset(assetTypeCode)
-
-          // connectivity meter to line
-          if (temporaryAsset.typeCode === ASSET_TYPE_CODE_METER) {
-            const position = feature.geometry.coordinates
-            const screenCoords = deckGL.current.viewports[0].project(position)
-            const nearbyAssetInfos = getDeckGLNearbyObjects({
-              deckGL, screenCoords, layerId: ASSETS_MAP_LAYER_ID,
-            })
-            const nearbyBusInfos = getDeckGLNearbyObjects({
-              deckGL, screenCoords, layerId: BUSES_MAP_LAYER_ID,
-            })
-            // const nearbyAssetFeatures = nearbyAssetInfos.map(info => info.object)
-            const nearbyBusFeatures = nearbyBusInfos.map(info => info.object)
-
-            let busId
-            if (nearbyBusFeatures.length) {
-              busId = nearbyBusFeatures[0].properties.id
-              temporaryAsset.connections[0].busId = busId
-            }
-            else {
-              busId = temporaryAsset.connections[0].busId
-            }
-            const nearbyAssetInfo = nearbyAssetInfos.find(info => !info.object.properties.guideType)
-
-            if (nearbyAssetInfo) {
-              const nearbyAssetIndex = nearbyAssetInfo.index
-              const { features } = updatedData
-              const lineFeature = features[nearbyAssetIndex]
-
-              const nearbyAssetFeature = nearbyAssetInfo.object
-              console.log(nearbyAssetFeature.properties.typeCode === ASSET_TYPE_CODE_LINE)
-              if (!nearbyBusFeatures.length) {
-                console.log('NEARBY ASSET && NOT NEARBY BUS')
-                if (nearbyAssetFeature.properties.typeCode === ASSET_TYPE_CODE_LINE) {
-                  const lineMapVertices = nearbyAssetFeature.geometry.coordinates
-
-                  const linePixelVertices = lineMapVertices.map(
-                    _ => deckGL.current.viewports[0].project(_))
-                  console.log('PIXEL VERTICES', linePixelVertices)
-                  // 2. get distance to each
-                  const distances = linePixelVertices.map(([x, y]) => Math.hypot(x - screenCoords[0], y - screenCoords[1]))
-                  console.log('DISTANCES', distances)
-                  // 3. get index of nearest
-                  function argMin(array) {
-                    // put into macros
-                    // https://gist.github.com/engelen/fbce4476c9e68c52ff7e5c2da5c24a28
-                    return array.map((x, i) => [x, i]).reduce((r, a) => (a[0] < r[0] ? a : r))[1]
-                  }
-                  const vertexOrderedByNearesDistance = distances.map((x, i) => [x, i]).sort((r, a) => (a[0] < r[0] ? a : r))
-                  console.log(vertexOrderedByNearesDistance)
-                  const nearestVertexIndex = argMin(distances)
-                  console.log('NEAREST VERTEX INDEX', nearestVertexIndex)
-
-                  const nearestVertexDistance = distances[nearestVertexIndex]
-                  console.log('NEAREST VERTEX DISTANCE', nearestVertexDistance)
-                  console.log('PICKING RADIUS IN PIXELS', PICKING_RADIUS_IN_PIXELS)
-                  
-                  let vertexIndex
-                  if (nearestVertexDistance < PICKING_RADIUS_IN_PIXELS) {
-                    // 5. if yes, then use this vertexIndex
-                    vertexIndex = nearestVertexIndex
-                    console.log('IS NEAR VERTEX')
-                    const lineAssetId = lineFeature.properties.id
-                    if (!busId) busId = makeBusId()
-                    dispatch(setAssetConnection(
-                      lineAssetId,
-                      vertexIndex,
-                      { busId },
-                    ))
-                  } else {
-                    // 6. if no, then make point on line and use that vertexIndex
-                    console.log('IS TOO FAR FROM VERTEX')
-                    // 6.1 get nearest point on line
-                    const nearestPointOnLine = getNearestPointOnLine(nearbyAssetFeature, {
-                      type: 'Feature',
-                      geometry: {
-                        type: 'Point',
-                        coordinates: position,
-                      },
-                    })
-
-                    const nearestPointOnLinePosition = nearestPointOnLine.geometry.coordinates
-                    const nearestPointOnLinePriorIndex = nearestPointOnLine.properties.index
-                    // console.log(nearestPointOnLinePosition, nearestPointOnLinePriorIndex)
-                    // 6.2 insert that point as a vertex on line
-                    const lineGeometry = lineFeature.geometry
-                    const oldXYs = lineGeometry.coordinates
-                    const newXYs = [
-                      ...oldXYs.slice(0, nearestPointOnLinePriorIndex + 1),
-                      nearestPointOnLinePosition,
-                      ...oldXYs.slice(nearestPointOnLinePriorIndex + 1, oldXYs.length),
-                    ]
-
-                    console.log(feature)
-                    console.log('BEFORE', oldXYs)
-                    console.log('AFTER', newXYs)
-                    console.log(updatedData)
-
-                    updatedData = produce(updatedData, draft => {
-                      draft.features[nearbyAssetIndex].geometry.coordinates = newXYs
-                    })
-                    // 6.3 update feature geometry
-                    const busOffsetToDontOverlap = (BUS_RADIUS_IN_METERS + 3)
-                    const placeMeterDown = moveLatitudeInMeters(nearestPointOnLinePosition, -busOffsetToDontOverlap)
-
-                    updatedData.features[featureIndex].geometry.coordinates = placeMeterDown
-                    // see above
-                    // 6.4 update downstream connection vertices
-                    const lineAssetId = lineFeature.properties.id
-                    if (!busId) busId = makeBusId()
-
-                    if (vertexOrderedByNearesDistance.length >= 2) {
-                      if (vertexOrderedByNearesDistance[1][1] > vertexOrderedByNearesDistance[0][1]) {
-                        dispatch(insertAssetVertex(lineAssetId, vertexOrderedByNearesDistance[0][1], {
-                          busId,
-                        }))
-                      }
-                      else {
-                        dispatch(insertAssetVertex(lineAssetId, vertexOrderedByNearesDistance[1][1], {
-                          busId,
-                        }))
-                      }
-                    } else {
-                      dispatch(insertAssetVertex(lineAssetId, nearestVertexIndex, {
-                        busId,
-                      }))
-                    }
-
-
-                    // for each connection below index
-                    // bump it forward
-                    // connect to index
-                  }
-                }
-              }
-            }
-          }
-        } else if (isAddingLine) {
-          const vertexCount = feature.geometry.coordinates.length
-          if (!temporaryAsset.connections[vertexCount - 1]) {
-            temporaryAsset = produce(temporaryAsset, draft => {
-              draft.connections[vertexCount - 1] = { busId: makeBusId() }
-            })
-          }
-        }
-        const assetId = temporaryAsset.id
-        updateFeature(feature, temporaryAsset)
-        // TODO: Consider combining into a single dispatch
-        dispatch(setAsset(temporaryAsset))
-        dispatch(fillAssetName(assetId, feature))
-        dispatch(setSketchMode(SKETCH_MODE_ADD))  // Add one at a time
-        dispatch(setSelectedAssetId(assetId))
-        dispatch(setSelectedAssetIndexes([featureIndex]))
       }
-
     }
-
   }
 
-  function getBusesMapLayer() {
+
+  // connectivity meter to line
+  if (temporaryAsset.typeCode === ASSET_TYPE_CODE_METER) {
+    const position = feature.geometry.coordinates
+    const screenCoords = deckGL.current.viewports[0].project(position)
+    const nearbyAssetInfos = getDeckGLNearbyObjects({
+      deckGL, screenCoords, layerId: ASSETS_MAP_LAYER_ID,
+    })
+    const nearbyBusInfos = getDeckGLNearbyObjects({
+      deckGL, screenCoords, layerId: BUSES_MAP_LAYER_ID,
+    })
+    // const nearbyAssetFeatures = nearbyAssetInfos.map(info => info.object)
+    const nearbyBusFeatures = nearbyBusInfos.map(info => info.object)
+
+    let busId
+    if (nearbyBusFeatures.length) {
+      busId = nearbyBusFeatures[0].properties.id
+      temporaryAsset.connections[0].busId = busId
+    }
+    else {
+      busId = temporaryAsset.connections[0].busId
+    }
+    const nearbyAssetInfo = nearbyAssetInfos.find(info => !info.object.properties.guideType)
+
+    if (nearbyAssetInfo) {
+      const nearbyAssetIndex = nearbyAssetInfo.index
+      const { features } = updatedData
+      const lineFeature = features[nearbyAssetIndex]
+
+      const nearbyAssetFeature = nearbyAssetInfo.object
+      console.log(nearbyAssetFeature.properties.typeCode === ASSET_TYPE_CODE_LINE)
+      if (!nearbyBusFeatures.length) {
+        console.log('NEARBY ASSET && NOT NEARBY BUS')
+        if (nearbyAssetFeature.properties.typeCode === ASSET_TYPE_CODE_LINE) {
+          const lineMapVertices = nearbyAssetFeature.geometry.coordinates
+
+          const linePixelVertices = lineMapVertices.map(
+            _ => deckGL.current.viewports[0].project(_))
+          console.log('PIXEL VERTICES', linePixelVertices)
+          // 2. get distance to each
+          const distances = linePixelVertices.map(([x, y]) => Math.hypot(x - screenCoords[0], y - screenCoords[1]))
+          console.log('DISTANCES', distances)
+          // 3. get index of nearest
+          function argMin(array) {
+            // put into macros
+            // https://gist.github.com/engelen/fbce4476c9e68c52ff7e5c2da5c24a28
+            return array.map((x, i) => [x, i]).reduce((r, a) => (a[0] < r[0] ? a : r))[1]
+          }
+          const vertexOrderedByNearesDistance = distances.map((x, i) => [x, i]).sort((r, a) => (a[0] < r[0] ? a : r))
+          console.log(vertexOrderedByNearesDistance)
+          const nearestVertexIndex = argMin(distances)
+          console.log('NEAREST VERTEX INDEX', nearestVertexIndex)
+
+          const nearestVertexDistance = distances[nearestVertexIndex]
+          console.log('NEAREST VERTEX DISTANCE', nearestVertexDistance)
+          console.log('PICKING RADIUS IN PIXELS', PICKING_RADIUS_IN_PIXELS)
+          
+          let vertexIndex
+          if (nearestVertexDistance < PICKING_RADIUS_IN_PIXELS) {
+            // 5. if yes, then use this vertexIndex
+            vertexIndex = nearestVertexIndex
+            console.log('IS NEAR VERTEX')
+            const lineAssetId = lineFeature.properties.id
+            if (!busId) busId = makeBusId()
+            dispatch(setAssetConnection(
+              lineAssetId,
+              vertexIndex,
+              { busId },
+            ))
+          } else {
+            // 6. if no, then make point on line and use that vertexIndex
+            console.log('IS TOO FAR FROM VERTEX')
+            // 6.1 get nearest point on line
+            const nearestPointOnLine = getNearestPointOnLine(nearbyAssetFeature, {
+              type: 'Feature',
+              geometry: {
+                type: 'Point',
+                coordinates: position,
+              },
+            })
+
+            const nearestPointOnLinePosition = nearestPointOnLine.geometry.coordinates
+            const nearestPointOnLinePriorIndex = nearestPointOnLine.properties.index
+            // console.log(nearestPointOnLinePosition, nearestPointOnLinePriorIndex)
+            // 6.2 insert that point as a vertex on line
+            const lineGeometry = lineFeature.geometry
+            const oldXYs = lineGeometry.coordinates
+            const newXYs = [
+              ...oldXYs.slice(0, nearestPointOnLinePriorIndex + 1),
+              nearestPointOnLinePosition,
+              ...oldXYs.slice(nearestPointOnLinePriorIndex + 1, oldXYs.length),
+            ]
+
+            console.log(feature)
+            console.log('BEFORE', oldXYs)
+            console.log('AFTER', newXYs)
+            console.log(updatedData)
+
+            updatedData = produce(updatedData, draft => {
+              draft.features[nearbyAssetIndex].geometry.coordinates = newXYs
+            })
+            // 6.3 update feature geometry
+            const busOffsetToDontOverlap = (BUS_RADIUS_IN_METERS + 3)
+            const placeMeterDown = moveLatitudeInMeters(nearestPointOnLinePosition, -busOffsetToDontOverlap)
+
+            updatedData.features[featureIndex].geometry.coordinates = placeMeterDown
+            // see above
+            // 6.4 update downstream connection vertices
+            const lineAssetId = lineFeature.properties.id
+            if (!busId) busId = makeBusId()
+
+            if (vertexOrderedByNearesDistance.length >= 2) {
+              if (vertexOrderedByNearesDistance[1][1] > vertexOrderedByNearesDistance[0][1]) {
+                dispatch(insertAssetVertex(lineAssetId, vertexOrderedByNearesDistance[0][1], {
+                  busId,
+                }))
+              }
+              else {
+                dispatch(insertAssetVertex(lineAssetId, vertexOrderedByNearesDistance[1][1], {
+                  busId,
+                }))
+              }
+            } else {
+              dispatch(insertAssetVertex(lineAssetId, nearestVertexIndex, {
+                busId,
+              }))
+            }
+
+
+            // for each connection below index
+            // bump it forward
+            // connect to index
+          }
+        }
+      }
+    }
+  }
+
     function handleBusClick(info, event) {
       if (sketchMode.startsWith(SKETCH_MODE_ADD)) {
         const assetsInfos = getAssetsByScreenPosition(deckGL, info)

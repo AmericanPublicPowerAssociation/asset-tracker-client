@@ -57,11 +57,9 @@ export default function WrappedMaterialTable({
   isSelectedRow,
   ...props
 }) {
-
   function getRowStyle(rowData) {
     return {
-      backgroundColor: isSelectedRow(rowData)
-        ? 'yellow' : 'white',
+      backgroundColor: isSelectedRow(rowData) ? 'yellow' : 'white',
     }
   }
 
@@ -70,6 +68,13 @@ export default function WrappedMaterialTable({
       icons={TABLE_ICONS}
       options={{
         rowStyle: getRowStyle,
+        maxBodyHeight: 200,
+        pageSize: 10,
+        pageSizeOptions: [10],
+        padding: 'dense',
+        showFirstLastPageButtons: false,
+        thirdSortClick: false,
+        draggable: false,
       }}
       {...props}
     />

@@ -101,12 +101,12 @@ export default function App() {
         onClose={() => setIsAssetDeleteDialogOpen(false)}
       />
       <MessageBar />
-    {isWithTables &&
+
       <TablesWindow
         isWithTables={isWithTables}
         setIsWithTables={setIsWithTables}
       />
-    }
+
     {isWithDetails &&
       <DetailsWindow
         isWithDetails={isWithDetails}

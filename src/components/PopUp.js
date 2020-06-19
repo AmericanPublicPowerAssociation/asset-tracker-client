@@ -2,8 +2,8 @@ import React from 'react'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 
-export default function PopUp({ info }) {
-  const { x, y, text } = info
+export default function PopUp({ state }) {
+  const { x, y, text } = state
   return (
     <Paper
       className='tooltip'

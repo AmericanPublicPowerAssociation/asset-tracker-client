@@ -57,6 +57,7 @@ export default function SketchModeToolbar() {
             classes={{ selected: 'selected' }}
             selected={sketchMode === SKETCH_MODE_EDIT}
             onClick={() => dispatch(setSketchMode(SKETCH_MODE_EDIT))}
+            disabled
           >
             <SvgIcon fontSize='large' component={EditIcon} />
           </ListItem>

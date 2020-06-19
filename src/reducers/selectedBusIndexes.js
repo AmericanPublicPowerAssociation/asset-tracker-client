@@ -1,20 +1,18 @@
-// TODO: Review code from scratch
-
 import {
   DELETE_ASSET,
+  SELECTED_BUS_INDEXES,
   SET_SELECTED_BUS_INDEXES,
 } from '../constants'
 
-const initialState = []
+export const initialState = SELECTED_BUS_INDEXES
 
 const selectedBusIndexes = (state=initialState, action) => {
   switch (action.type) {
     case SET_SELECTED_BUS_INDEXES: {
-      const selectedBusIndexes = action.payload
-      return selectedBusIndexes
+      return action.payload
     }
     case DELETE_ASSET: {
-      return []
+      return SELECTED_BUS_INDEXES
     }
     default: {
       return state

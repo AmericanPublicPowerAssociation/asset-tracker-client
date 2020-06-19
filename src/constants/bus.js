@@ -1,3 +1,4 @@
+export const SELECTED_BUS_ID = null
 export const SET_SELECTED_BUS_ID = 'SET_SELECTED_BUS_ID'
 
 // TODO: Review all code below

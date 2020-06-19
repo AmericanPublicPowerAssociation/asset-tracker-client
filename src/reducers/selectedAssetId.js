@@ -1,18 +1,16 @@
-// TODO: Review code from scratch
-
 import {
   DELETE_ASSET,
+  SELECTED_ASSET_ID,
   SET_ASSETS,
   SET_SELECTED_ASSET_ID,
 } from '../constants'
 
-const initialState = null
+export const initialState = SELECTED_ASSET_ID
 
 const selectedAssetId = (state=initialState, action) => {
   switch(action.type) {
     case SET_SELECTED_ASSET_ID: {
-      const assetId = action.payload
-      return assetId
+      return action.payload
     }
     case SET_ASSETS: {
       // Keep the same asset selected but using the new id
@@ -25,7 +23,7 @@ const selectedAssetId = (state=initialState, action) => {
       return newAssetId || oldAssetId
     }
     case DELETE_ASSET: {
-      return null
+      return SELECTED_ASSET_ID
     }
     default: {
       return state

@@ -129,14 +129,16 @@ export const SKETCH_MODE = SKETCH_MODE_VIEW
 export const SET_SKETCH_MODE = 'SET_SKETCH_MODE'
 
 export const SET_POPUP_STATE = 'SET_POPUP_STATE'
+export const SET_SELECTION = 'SET_SELECTION'
+export const SELECTED_ASSET_INDEXES = []
+export const SELECTED_BUS_INDEXES = []
 export const SET_SELECTED_ASSET_INDEXES = 'SET_SELECTED_ASSET_INDEXES'
 export const SET_SELECTED_BUS_INDEXES = 'SET_SELECTED_BUS_INDEXES'
+export const CENTER_MAP = 'CENTER_MAP'
 
 // TODO: Review all code below
 
 export const PICKING_RADIUS_IN_PIXELS = 0
 export const PICKING_DEPTH = 3
-
-export const PAN_MAP_TO_ASSET = 'PAN_MAP_TO_ASSET'
 
 // TODO: Review all code above

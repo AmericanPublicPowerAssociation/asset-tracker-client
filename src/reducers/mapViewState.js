@@ -1,8 +1,8 @@
 import produce from 'immer'
 import centroid from '@turf/centroid'
 import {
+  CENTER_MAP,
   MAP_VIEW_STATE,
-  PAN_MAP_TO_ASSET,
   SET_ASSETS,
   SET_MAP_VIEW_STATE,
 } from '../constants'
@@ -19,29 +19,24 @@ const mapViewState = produce((draft, action) => {
       transferViewState(draft, viewState)
       break
     }
-    // TODO: Review below code
     case SET_ASSETS: {
       const { boundingBox } = action.payload
-      if (!boundingBox || draft['reset']) {
-        return
-      }
+      if (!boundingBox || draft.preventReset) return
       const viewState = getMapViewStateFromBoundingBox(
-        boundingBox, window.innerWidth, window.innerHeight, draft.zoom)
+        boundingBox, draft.width, draft.height)
       if (!viewState) return
       transferViewState(draft, viewState)
-      draft.reset = true
+      draft.preventReset = true
       break
     }
-    // TODO: Rename
-    case PAN_MAP_TO_ASSET: {
-      const assetGeoJson = action.payload
-      const pointGeojson = centroid(assetGeoJson)
-      const [ lon, lat ] = pointGeojson.geometry.coordinates
-      draft.longitude = lon
-      draft.latitude = lat
+    case CENTER_MAP: {
+      const geojsonFeature = action.payload
+      const pointGeojson = centroid(geojsonFeature)
+      const [ longitude, latitude ] = pointGeojson.geometry.coordinates
+      draft.longitude = longitude
+      draft.latitude = latitude
       break
     }
-    // TODO: Review above code
     default: {}
   }
 }, initialState)

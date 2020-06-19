@@ -1,8 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux'
+import { produce } from 'immer'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import { ViewMode } from '@nebula.gl/edit-modes'
 import {
   // showInfoMessage,
+  fillAssetName,
+  deleteAssetVertex,
+  insertAssetVertex,
+  setAsset,
   setAssetsGeoJson,
   setMapViewState,
   setPopUpState,
@@ -11,21 +16,31 @@ import {
   setSelectedBusId,
   setSelectedBusIndexes,
   setSketchMode,
+  setTemporaryAsset,
 } from '../actions'
 import {
   ASSETS_MAP_LAYER_ID,
   ASSET_LINE_WIDTH_IN_METERS,
   ASSET_RADIUS_IN_METERS_BY_CODE,
+  ASSET_TYPE_CODE_LINE,
   BUSES_MAP_LAYER_ID,
   BUS_RADIUS_IN_METERS,
+  PICKING_DEPTH,
+  PICKING_RADIUS_IN_PIXELS,
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_ASSET,
+  SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_DELETE,
   SKETCH_MODE_EDIT,
 } from '../constants'
 import {
   getAssetDescription,
+  getAssetTypeCode,
+  getFeaturePack,
   getMapMode,
+  makeBusId,
+  makeTemporaryAsset,
+  updateFeature,
 } from '../routines'
 import {
   getAssetById,
@@ -37,6 +52,7 @@ import {
   getSelectedAssetIndexes,
   getSelectedBusIndexes,
   getSketchMode,
+  getTemporaryAsset,
 } from '../selectors'
 
 export function useMovableMap() {
@@ -58,7 +74,10 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   const assetById = useSelector(getAssetById)
   const bestAssetIdByBusId = useSelector(getBestAssetIdByBusId)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
+  const assetTypeCode = getAssetTypeCode(sketchMode)
   const mapColors = useSelector(getMapColors)
+  const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
+  let temporaryAsset = useSelector(getTemporaryAsset)
 
   function getAssetsMapLayer() {
     const mapMode = getMapMode(sketchMode)
@@ -203,26 +222,113 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
     switch (editType) {
       case 'addFeature': {
         // Add a feature in draw mode
-        // const [featureIndex, feature] = getFeaturePack(event)
-        // if (!temporaryAsset) {
-        // }
-        // dispatch(addAsset())
+        // TODO: Review this code
+        const [featureIndex, feature] = getFeaturePack(event)
+        if (!temporaryAsset) {
+          temporaryAsset = makeTemporaryAsset(assetTypeCode)
+        } else if (isAddingLine) {
+          const vertexCount = feature.geometry.coordinates.length
+          if (!temporaryAsset.connections[vertexCount - 1]) {
+            temporaryAsset = produce(temporaryAsset, draft => {
+              draft.connections[vertexCount - 1] = { busId: makeBusId() }
+            })
+          }
+        }
+        const assetId = temporaryAsset.id
+        updateFeature(feature, temporaryAsset)
+        // TODO: Consider combining into a single dispatch
+        // TODO: Consider dispatch(addAsset()) -- maybe a bad idea
+        dispatch(setAsset(temporaryAsset))
+        dispatch(fillAssetName(assetId, feature))
+        dispatch(setSketchMode(SKETCH_MODE_ADD))  // Add one at a time
+        dispatch(setSelectedAssetId(assetId))
+        dispatch(setSelectedAssetIndexes([featureIndex]))
         break
       }
       case 'addTentativePosition': {
         // Add a vertex in DrawLineStringMode or DrawPolygonMode
+        // TODO: Review this code
+        if (!temporaryAsset) {
+          temporaryAsset = makeTemporaryAsset(assetTypeCode)
+        }
+        if (isAddingLine) {
+          // Look for nearby objects
+          const { position } = editContext
+          const screenCoords = deckGL.current.viewports[0].project(position)
+          const nearbyAssetInfos = deckGL.current.pickMultipleObjects({
+            x: screenCoords[0],
+            y: screenCoords[1],
+            layerIds: [ASSETS_MAP_LAYER_ID],
+            radius: PICKING_RADIUS_IN_PIXELS,
+            depth: PICKING_DEPTH,
+          })
+          console.log('nearbyAssetInfos', nearbyAssetInfos)
+          const nearbyBusInfos = deckGL.current.pickMultipleObjects({
+            x: screenCoords[0],
+            y: screenCoords[1],
+            layerIds: [BUSES_MAP_LAYER_ID],
+            radius: PICKING_RADIUS_IN_PIXELS,
+            depth: PICKING_DEPTH,
+          })
+          console.log('nearbyBusInfos', nearbyBusInfos)
+          // Convert objects into features
+          const nearbyAssetFeatures = nearbyAssetInfos.map(info => info.object)
+          const nearbyBusFeatures = nearbyBusInfos.map(info => info.object)
+          // Get editing feature
+          const temporaryAssetFeature = nearbyAssetFeatures.find(
+            feature => feature.properties.guideType)
+          const vertexCount = temporaryAssetFeature ?
+            temporaryAssetFeature.geometry.coordinates.length : 1
+          console.log('vertexCount', vertexCount)
+          // Add connection to nearby bus or make a new bus
+          let busId
+          if (nearbyBusFeatures.length) {
+            busId = nearbyBusFeatures[0].properties.id
+          } else if (vertexCount === 1) {
+            busId = makeBusId()
+          }
+          if (busId) {
+            console.log('ADDING BUS HERE')
+            temporaryAsset = produce(temporaryAsset, draft => {
+              draft.connections[vertexCount - 1] = { busId }
+            })
+          }
+        }
+        dispatch(setTemporaryAsset(temporaryAsset))
         break
       }
       case 'addPosition': {
         // Add a vertex in ModifyMode
+        // TODO: Review this code
+        const { featureIndexes, positionIndexes } = editContext
+        const { features } = updatedData
+        const feature = features[featureIndexes[0]]
+        const featureProperties = feature.properties
+        if (featureProperties.typeCode === ASSET_TYPE_CODE_LINE) {
+          const assetId = feature.properties.id
+          const afterIndex = positionIndexes[0] - 1
+          dispatch(insertAssetVertex(assetId, afterIndex))
+        }
         break
       }
       case 'removePosition': {
         // Remove a vertex in ModifyMode
+        // TODO: Review this code
+        const { featureIndexes, positionIndexes } = editContext
+        const { features } = updatedData
+        const removedPositionIndex = positionIndexes[0]
+        const feature = features[featureIndexes[0]]
+        const featureProperties = feature.properties
+        if (featureProperties.typeCode === ASSET_TYPE_CODE_LINE) {
+          const vertexCount = feature.geometry.coordinates.length
+          const assetId = featureProperties.id
+          dispatch(deleteAssetVertex(assetId, removedPositionIndex, vertexCount))
+        }
         break
       }
       case 'finishMovePosition': {
         // Drag a vertex in ModifyMode
+        // TODO: Review this code
         break
       }
       default: { }

@@ -19,9 +19,13 @@ import {
   watchUpdateTask,
   watchUploadAssetsCsv,
 } from './asset'
+import {
+  watchSetSelection,
+} from './map'
 
 export default function* () {
   yield all([
+    watchSetSelection(),
     watchRefreshAssets(),
     // TODO: Review below code
     // watchRefreshTasks(),

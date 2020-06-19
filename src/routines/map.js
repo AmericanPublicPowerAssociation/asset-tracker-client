@@ -46,32 +46,23 @@ export function getMapMode(sketchMode) {
   return mapMode || ViewMode
 }
 
-// TODO: Review all code below
-
-/*
-export class CustomEditableGeoJsonLayer extends EditableGeoJsonLayer {
-  onDoubleClick(event) {
-    const props = this.props
-    super.onDoubleClick(event, props)
-    const onDoubleClick = props.onDoubleClick
-    onDoubleClick && onDoubleClick(event, props)
-  }
-
-  onStartDragging(event) {
-    const props = this.props
-    super.onStartDragging(event, props)
-    const onStartDragging = props.onStartDragging
-    onStartDragging && onStartDragging(event, props)
-  }
-
-  onStopDragging(event) {
-    const props = this.props
-    super.onStopDragging(event, props)
-    const onStopDragging = props.onStopDragging
-    onStopDragging && onStopDragging(event, props)
-  }
+export function getMapViewStateFromBoundingBox(
+  boundingBox,
+  width,
+  height,
+) {
+  if (!boundingBox.length) return
+  const viewport = new WebMercatorViewport({ width, height })
+  return viewport.fitBounds(boundingBox, { padding: 128, maxZoom: 20 })
 }
-*/
+
+export function findSelectedFeatureIndices(id, features) {
+  const index = features.findIndex(f => f.properties.id === id)
+  if (index < 0) return []
+  return [index]
+}
+
+// TODO: Review all code below
 
 export function getPickedEditHandle(picks) {
   // Taken from nebula.gl > mode-handler.js
@@ -80,14 +71,6 @@ export function getPickedEditHandle(picks) {
     return info.object
   }
   return null
-}
-
-export function getMapViewStateFromBoundingBox(boundingBox, width, height) {
-  if (!boundingBox.length) {
-    return
-  }
-  const viewport = new WebMercatorViewport({ width, height })
-  return viewport.fitBounds(boundingBox, { padding: 20, maxZoom: 20 })
 }
 
 export function getDeckGLNearbyObjects(obj) {
