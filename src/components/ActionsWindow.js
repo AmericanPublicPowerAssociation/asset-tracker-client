@@ -1,5 +1,3 @@
-// TODO: Review from scratch
-
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
@@ -11,6 +9,9 @@ import SignOutIcon from '@material-ui/icons/LockOpen'
 import {
   USER_NAME,
 } from '../constants'
+import {
+  toggleState,
+} from '../macros'
 import {
   getMapColors,
 } from '../selectors'
@@ -24,23 +25,19 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function ActionsWindow({
-  isWithImportExport,
-  setIsWithImportExport,
+  isImportExportDialogOpen,
+  setIsImportExportDialogOpen,
 }) {
   const classes = useStyles()
   const mapColors = useSelector(getMapColors)
   const activeColor = mapColors.active
   const inactiveColor = mapColors.inactive
-
   return (
     <div className={classes.root}>
       <Tooltip title='Import and Export Assets'>
         <IconButton
-          className={ isWithImportExport ? activeColor : inactiveColor}
-          disabled={ !isWithImportExport }
-          onClick={() => {
-            setIsWithImportExport( prevState => !prevState)
-          }}
+          className={isImportExportDialogOpen ? activeColor : inactiveColor}
+          onClick={() => setIsImportExportDialogOpen(toggleState) }
         >
           <ImportExportIcon />
         </IconButton>

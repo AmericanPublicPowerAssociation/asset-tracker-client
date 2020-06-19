@@ -21,7 +21,9 @@ import {
 const { REACT_APP_MAPBOX_TOKEN } = process.env
 const MAP_CONTROLLER_OPTIONS = { doubleClickZoom: false }
 
-export default function AssetsMap({ onAssetDelete }) {
+export default function AssetsMap({
+  onAssetDelete,
+}) {
   const deckGL = useRef()
   const mapStyle = useSelector(getMapStyle)
   const mapViewState = useSelector(getMapViewState)
@@ -35,17 +37,19 @@ export default function AssetsMap({ onAssetDelete }) {
   mapLayers.push(...overlayMapLayers)
   // TODO: Review above code
   return (
-    <div onKeyUp={handleMapKey}>
+    <div
+      onKeyUp={handleMapKey}
+    >
       <DeckGL
         ref={deckGL}
         layers={mapLayers}
         controller={MAP_CONTROLLER_OPTIONS}
         viewState={mapViewState}
-        onViewStateChange={handleMapMove}
         // TODO: Review below code
         pickingRadius={PICKING_RADIUS_IN_PIXELS * mapViewState.zoom}
         pickingDepth={PICKING_DEPTH}
         // TODO: Review above code
+        onViewStateChange={handleMapMove}
       >
         <StaticMap
           mapStyle={mapStyle}

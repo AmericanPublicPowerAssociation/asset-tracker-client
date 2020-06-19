@@ -51,7 +51,7 @@ const useStyles = makeStyles(theme => ({
     maxHeight: 'calc(100vh - 280px)',
   },
   withTables: {
-    bottom: '50%',
+    maxHeight: 'calc(100vh - 556px)',
   },
 }))
 
@@ -67,7 +67,7 @@ export default function SketchAddToolbar({
   return isAdding && (
     <Paper className={classes.root}>
       <List className={clsx(classes.list, {
-        isWithTables: classes.withTables,
+        [classes.withTables]: isWithTables,
       })}>
         <Tooltip
           title='Add Pole'

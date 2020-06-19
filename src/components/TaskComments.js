@@ -144,10 +144,8 @@ function CommentItem(props) {
   )
 }
 
-export function CommentForm(props) {
+export function CommentForm({ onSubmit }) {
   const classes = useStyles()
-
-  const {onSubmit} = props;
   const [comment, setComment] = useState('')
 
   function onEnterKeyPress(e) {
@@ -172,7 +170,7 @@ export function CommentForm(props) {
       endAdornment={
         <InputAdornment position="end">
           <IconButton
-            disabled={ comment === ''}
+            disabled={comment === ''}
             aria-label="Send comment"
             onClick={submitComment}
             onMouseDown={submitComment}>

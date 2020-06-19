@@ -1,4 +1,3 @@
-// TODO: Review from scratch
 // TODO: Toggle whether to show only what is visible in the map
 
 import React from 'react'

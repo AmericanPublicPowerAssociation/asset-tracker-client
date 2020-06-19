@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
-import {
-  refreshRisks,
-} from 'asset-report-risks'
+import { refreshRisks } from 'asset-report-risks'
 import AssetsMap from './AssetsMap'
 import SketchButtons from './SketchButtons'
 import OptionsWindow from './OptionsWindow'
@@ -23,7 +21,6 @@ import {
 } from '../actions'
 import {
   IS_WITH_DETAILS,
-  IS_WITH_IMPORT_EXPORT,
   IS_WITH_TABLES,
 } from '../constants'
 import {
@@ -33,6 +30,7 @@ import {
   getIsViewing,
 } from '../selectors'
 
+// TODO: Review below code
 // TODO: Rename
 // TODO: Consider moving to SketchButtons or somewhere else
 function usePreventWindowUnload(preventDefault) {
@@ -46,23 +44,18 @@ function usePreventWindowUnload(preventDefault) {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload)
   }, [preventDefault])
 }
+// TODO: Review above code
 
 export default function App() {
+  const dispatch = useDispatch()
   const isLayoutMobile = useMediaQuery('(max-width:599px)')
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
   const [isAssetDeleteDialogOpen, setIsAssetDeleteDialogOpen] = useState(false)
-
-  // TODO: Review all code below
-
-  const dispatch = useDispatch()
-  const isViewing = useSelector(getIsViewing)
   const [
-    isWithImportExport,
-    setIsWithImportExport,
-  ] = useState(IS_WITH_IMPORT_EXPORT)
-
-  usePreventWindowUnload(!isViewing)
+    isImportExportDialogOpen,
+    setIsImportExportDialogOpen,
+  ] = useState(false)
 
   useEffect(() => {
     dispatch(refreshAssets())
@@ -70,7 +63,11 @@ export default function App() {
     dispatch(refreshRisks())
   }, [dispatch])
 
-  // TODO: Review all code above
+  // TODO: Review below code
+  const isViewing = useSelector(getIsViewing)
+  usePreventWindowUnload(!isViewing)
+  // TODO: Review above code
+
   return (
     <IsLayoutMobileContext.Provider value={isLayoutMobile}>
       <AssetsMap
@@ -83,36 +80,36 @@ export default function App() {
         setIsWithDetails={setIsWithDetails}
         setIsWithTables={setIsWithTables}
       />
-      {/* TODO: Review all components below */}
-      <SketchModeToolbar />
-      <SketchAddToolbar isWithTables={isWithTables} />
-      <ActionsWindow
-        isWithImportExport={isViewing}
-        setIsWithImportExport={setIsWithImportExport}
-      />
-      <OverlaysWindow />
-      <ImportExportDialog
-        isOpen={isWithImportExport}
-        onCancel={() => {setIsWithImportExport(false)}}
-        onClose={()=> {setIsWithImportExport(false)}}
-      />
-      <AssetDeleteDialog
-        isOpen={isAssetDeleteDialogOpen}
-        onClose={() => setIsAssetDeleteDialogOpen(false)}
-      />
-      <MessageBar />
-
       <TablesWindow
         isWithTables={isWithTables}
         setIsWithTables={setIsWithTables}
       />
-
+      {/* TODO: Review all components below */}
+      <SketchModeToolbar />
+      <SketchAddToolbar
+        isWithTables={isWithTables}
+      />
+      <ActionsWindow
+        isImportExportDialogOpen={isImportExportDialogOpen}
+        setIsImportExportDialogOpen={setIsImportExportDialogOpen}
+      />
+      <OverlaysWindow />
     {isWithDetails &&
       <DetailsWindow
         isWithDetails={isWithDetails}
         isWithTables={isWithTables}
       />
     }
+      <ImportExportDialog
+        isOpen={isImportExportDialogOpen}
+        onCancel={() => {setIsImportExportDialogOpen(false)}}
+        onClose={()=> {setIsImportExportDialogOpen(false)}}
+      />
+      <AssetDeleteDialog
+        isOpen={isAssetDeleteDialogOpen}
+        onClose={() => setIsAssetDeleteDialogOpen(false)}
+      />
+      <MessageBar />
       {/* TODO: Review all components above */}
     </IsLayoutMobileContext.Provider>
   )
