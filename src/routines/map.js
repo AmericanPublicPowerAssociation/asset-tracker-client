@@ -1,4 +1,7 @@
 import { WebMercatorViewport } from '@deck.gl/core'
+import getCentroid from '@turf/centroid'
+import  * as turf  from '@turf/turf'
+import along from '@turf/along'
 import {
   DrawCircleByDiameterMode,
   DrawLineStringMode,
@@ -216,6 +219,18 @@ export function moveLongitudeInMeters(coordinates, meters) {
     coordinates[0] + getOffsetFromMetersToPosition(meters),
     coordinates[1],
   ]
+}
+
+export function getFeatureCentroid(assetFeature) {
+  const geometryType = assetFeature.geometry.type
+  if (geometryType !== 'LineString') {
+    return getCentroid(assetFeature)
+  }
+  const coordinates = assetFeature.geometry.coordinates
+  const line = turf.lineString(coordinates)
+  const distance = turf.length(line)
+  const centroid = along(line, distance/2)
+  return centroid
 }
 
 // TODO: Review all code above

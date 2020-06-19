@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect'
 import WebMercatorViewport from '@math.gl/web-mercator'
-import getCentroid from '@turf/centroid'
 import { GeoJsonLayer, TextLayer } from '@deck.gl/layers'
 import {
   getAssetsGeoJson,
@@ -24,6 +23,9 @@ import {
 import {
   getOpenTaskCountByAssetId,
 } from './task'
+import {
+  getFeatureCentroid,
+} from '../routines'
 
 export const getMapStyleName = state => state.mapStyleName
 export const getMapViewState = state => state.mapViewState
@@ -97,7 +99,7 @@ export const getOverlayMapLayers = createSelector([
         const assetFeature = assetsGeoJson['features'].find(
           feature => feature.properties.id === assetId)
         // TODO: Use midpoint for lines
-        const assetCentroid = getCentroid(assetFeature)
+        const assetCentroid = getFeatureCentroid(assetFeature)
         return {
           name: '' + openTaskCount,
           coordinates: assetCentroid.geometry.coordinates,
@@ -136,7 +138,7 @@ export const getOverlayMapLayers = createSelector([
       ).map(([assetId, threatScore]) => {
         const assetFeature = assetsGeoJson['features'].find(
           feature => feature.properties.id === assetId)
-        const assetCentroid = getCentroid(assetFeature)
+        const assetCentroid = getFeatureCentroid(assetFeature)
         return {
           name: '' + threatScore,
           coordinates: assetCentroid.geometry.coordinates,
