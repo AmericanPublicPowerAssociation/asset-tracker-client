@@ -1,10 +1,19 @@
 import { createSelector } from 'reselect'
 import WebMercatorViewport from '@math.gl/web-mercator'
-import getCentroid from '@turf/centroid'
 import { GeoJsonLayer, TextLayer } from '@deck.gl/layers'
 import {
+  getRisks,
+  getRisksByAssetId,
+  getSelectedRiskIndex,
+  getThreatScoreByAssetId,
+} from 'asset-report-risks'
+import {
   getAssetsGeoJson,
+  getSelectedAssetId,
 } from './asset'
+import {
+  getOpenTaskCountByAssetId,
+} from './task'
 import {
   COLORS_BY_MAP_STYLE_NAME,
   MAP_STYLE_BY_NAME,
@@ -13,17 +22,8 @@ import {
   SKETCH_MODE_VIEW,
 } from '../constants'
 import {
-  getRisks,
-  getRisksByAssetId,
-  getSelectedRiskIndex,
-  getThreatScoreByAssetId,
-} from 'asset-report-risks'
-import {
-  getSelectedAssetId,
-} from './asset'
-import {
-  getOpenTaskCountByAssetId,
-} from './task'
+  getRepresentativeXY,
+} from '../routines'
 
 export const getMapStyleName = state => state.mapStyleName
 export const getMapViewState = state => state.mapViewState
@@ -48,8 +48,6 @@ export const getMapStyle = createSelector([
 ) => {
   return MAP_STYLE_BY_NAME[mapStyleName]
 })
-
-// TODO: Review below code
 
 export const getMapWebMercatorViewPort = createSelector([
   getMapViewState,
@@ -89,72 +87,64 @@ export const getOverlayMapLayers = createSelector([
   risksByAssetId,
 ) => {
   const mapLayers = []
+  const assetFeatures = assetsGeoJson.features
+  const textColor = mapColors.overlay
+
+  function getTextLayerFromValueByAssetId(
+    valueByAssetId,
+  ) {
+    const ds = []
+    for (const [assetId, value] of Object.entries(
+      valueByAssetId,
+    )) {
+      const assetFeature = assetFeatures.find(f => f.properties.id === assetId)
+      if (!assetFeature) continue
+      ds.push({
+        name: value.toString(),
+        coordinates: getRepresentativeXY(assetFeature),
+      })
+    }
+    return new TextLayer({
+      data: ds,
+      pickable: false,
+      fontFamily: 'Roboto',
+      getText: d => d.name,
+      getPosition: d => d.coordinates,
+      getColor: textColor,
+    })
+  }
+
   switch (overlayMode) {
     case OVERLAY_MODE_TASKS: {
-      const layerData = Object.entries(
-        openTaskCountByAssetId,
-      ).map(([assetId, openTaskCount]) => {
-        const assetFeature = assetsGeoJson['features'].find(
-          feature => feature.properties.id === assetId)
-        // TODO: Use midpoint for lines
-        const assetCentroid = getCentroid(assetFeature)
-        return {
-          name: '' + openTaskCount,
-          coordinates: assetCentroid.geometry.coordinates,
-        }
-      })
-      mapLayers.push(new TextLayer({
-        data: layerData,
-        fontFamily: 'Roboto',
-        pickable: false,
-        getPosition: d => d.coordinates,
-        getText: d => d.name,
-        getColor: mapColors.overlay,
-      }))
+      mapLayers.push(getTextLayerFromValueByAssetId(
+        openTaskCountByAssetId))
       break
     }
     case OVERLAY_MODE_RISKS: {
-      const risk = risks[selectedRiskIndex]
-      if (risk) {
-        mapLayers.push(new GeoJsonLayer({
-          data: risk.lineGeoJson,
-          pickable: false,
-          getLineColor: mapColors.overlay,
-        }))
+      let downstreamLineGeoJson
+      if (selectedRiskIndex) {
+        const risk = risks[selectedRiskIndex]
+        if (risk) {
+          downstreamLineGeoJson = risk.lineGeoJson
+        }
       } else if (selectedAssetId) {
         const selectedRisks = risksByAssetId[selectedAssetId]
         if (selectedRisks) {
-          mapLayers.push(new GeoJsonLayer({
-            data: selectedRisks[0].lineGeoJson,
-            pickable: false,
-            getLineColor: mapColors.overlay,
-          }))
+          downstreamLineGeoJson = selectedRisks[0].lineGeoJson
         }
       }
-      const layerData = Object.entries(
-        threatScoreByAssetId,
-      ).map(([assetId, threatScore]) => {
-        const assetFeature = assetsGeoJson['features'].find(
-          feature => feature.properties.id === assetId)
-        const assetCentroid = getCentroid(assetFeature)
-        return {
-          name: '' + threatScore,
-          coordinates: assetCentroid.geometry.coordinates,
-        }
-      })
-      mapLayers.push(new TextLayer({
-        data: layerData,
-        pickable: false,
-        fontFamily: 'Roboto',
-        getPosition: d => d.coordinates,
-        getText: d => d.name,
-        getColor: mapColors.overlay,
-      }))
+      if (downstreamLineGeoJson) {
+        mapLayers.push(new GeoJsonLayer({
+          data: downstreamLineGeoJson,
+          pickable: false,
+          getLineColor: mapColors.overlay,
+        }))
+      }
+      mapLayers.push(getTextLayerFromValueByAssetId(
+        threatScoreByAssetId))
       break
     }
     default: { }
   }
   return mapLayers
 })
-
-// TODO: Review above code

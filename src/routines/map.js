@@ -8,8 +8,8 @@ import {
   ModifyMode,
   ViewMode,
 } from '@nebula.gl/edit-modes'
+import getRepresentativePoint from '@turf/point-on-feature'
 import {
-  // BUS_RADIUS_IN_METERS,
   ASSETS_MAP_LAYER_ID,
   BUSES_MAP_LAYER_ID,
   PICKING_DEPTH,
@@ -60,6 +60,10 @@ export function findSelectedFeatureIndices(id, features) {
   const index = features.findIndex(f => f.properties.id === id)
   if (index < 0) return []
   return [index]
+}
+
+export function getRepresentativeXY(geojsonFeature) {
+  return getRepresentativePoint(geojsonFeature).geometry.coordinates
 }
 
 // TODO: Review all code below

@@ -58,8 +58,8 @@ export default function App() {
   ] = useState(false)
 
   useEffect(() => {
-    // dispatch(refreshAssets())
-    // dispatch(refreshTasks())
+    dispatch(refreshAssets())
+    dispatch(refreshTasks())
     dispatch(refreshRisks())
   }, [dispatch])
 

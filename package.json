@@ -14,6 +14,7 @@
     "@nebula.gl/layers": "^0.18.5",
     "@turf/centroid": "^6.0.2",
     "@turf/nearest-point-on-line": "^6.0.2",
+    "@turf/point-on-feature": "^5.1.5",
     "@turf/transform-translate": "^5.1.5",
     "asset-report-risks": "file:../asset-report-risks/client",
     "clsx": "^1.0.4",
