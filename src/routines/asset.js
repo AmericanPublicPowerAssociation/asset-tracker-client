@@ -60,42 +60,18 @@ export function makeTemporaryAsset(assetTypeCode) {
   const bus1Id = makeBusId()
 
   switch (assetTypeCode) {
-    /*
-    case ASSET_TYPE_CODE_LINE: {
+    case ASSET_TYPE_CODE_METER:
+    case ASSET_TYPE_CODE_STORAGE:
+    case ASSET_TYPE_CODE_GENERATOR: {
       connectionByIndex[0] = { busId: bus0Id }
       break
     }
-    */
-    case ASSET_TYPE_CODE_METER: {
-      connectionByIndex[0] = { busId: bus0Id }
-      break
-    }
-    case ASSET_TYPE_CODE_TRANSFORMER: {
-      connectionByIndex[0] = { busId: bus0Id }
-      connectionByIndex[1] = { busId: bus1Id }
-      break
-    }
-    case ASSET_TYPE_CODE_SWITCH: {
-      connectionByIndex[0] = { busId: bus0Id }
-      connectionByIndex[1] = { busId: bus1Id }
-      break
-    }
-    case ASSET_TYPE_CODE_POWER_QUALITY: {
-      connectionByIndex[0] = { busId: bus0Id }
-      connectionByIndex[1] = { busId: bus1Id }
-      break
-    }
+    case ASSET_TYPE_CODE_TRANSFORMER:
+    case ASSET_TYPE_CODE_SWITCH:
+    case ASSET_TYPE_CODE_POWER_QUALITY:
     case ASSET_TYPE_CODE_CONTROL: {
       connectionByIndex[0] = { busId: bus0Id }
       connectionByIndex[1] = { busId: bus1Id }
-      break
-    }
-    case ASSET_TYPE_CODE_STORAGE: {
-      connectionByIndex[0] = { busId: bus0Id }
-      break
-    }
-    case ASSET_TYPE_CODE_GENERATOR: {
-      connectionByIndex[0] = { busId: bus0Id }
       break
     }
     default: { }

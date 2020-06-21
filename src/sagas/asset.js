@@ -1,4 +1,5 @@
 import {
+  all,
   put,
   select,
   takeEvery,
@@ -10,17 +11,20 @@ import {
   refreshRisks,
 } from 'asset-report-risks'
 import {
-  // setMapBoundingBox,
+  fillAssetName,
   refreshAssets,
   refreshTaskComments,
   refreshTasks,
+  setAsset,
   setAssetValue,
   setAssets,
+  setSelection,
   setTaskCommentCount,
   setTaskComments,
   setTasks,
 } from '../actions'
 import {
+  ADD_ASSET,
   ADD_TASK,
   ADD_TASK_COMMENT,
   FILL_ASSET_NAME,
@@ -51,6 +55,23 @@ export function* watchRefreshAssets() {
 
 export function* resetAssets(payload) {
   yield put(setAssets(payload))
+}
+
+export function* watchAddAsset() {
+  yield takeEvery(ADD_ASSET, function* (action) {
+    const { asset, feature, featureIndex } = action.payload
+    const assetId = asset.id
+    // Update feature
+    const featureProperties = feature.properties
+    featureProperties.id = assetId
+    featureProperties.typeCode = asset.typeCode
+
+    yield all([
+      put(setAsset(asset)),
+      put(fillAssetName(assetId, feature)),
+      put(setSelection({ assetId, assetIndexes: [featureIndex] })),
+    ])
+  })
 }
 
 // TODO: Review below code

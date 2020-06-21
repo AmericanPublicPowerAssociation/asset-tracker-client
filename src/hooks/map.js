@@ -4,10 +4,9 @@ import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import { ViewMode } from '@nebula.gl/edit-modes'
 import {
   // showInfoMessage,
-  fillAssetName,
+  addAsset,
   deleteAssetVertex,
   insertAssetVertex,
-  setAsset,
   setAssetsGeoJson,
   setMapViewState,
   setPopUpState,
@@ -37,7 +36,6 @@ import {
   getMapMode,
   makeBusId,
   makeTemporaryAsset,
-  updateFeature,
 } from '../routines'
 import {
   getAssetById,
@@ -204,7 +202,6 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
     switch (editType) {
       case 'addFeature': {
         // Add a feature in draw mode
-        // TODO: Review this code
         const [featureIndex, feature] = getFeaturePack(event)
         if (!temporaryAsset) {
           temporaryAsset = makeTemporaryAsset(assetTypeCode)
@@ -218,14 +215,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
             })
           }
         }
-        const assetId = temporaryAsset.id
-        updateFeature(feature, temporaryAsset)
-        // TODO: Consider combining into a single dispatch
-        // TODO: Consider dispatch(addAsset()) -- maybe a bad idea
-        dispatch(setAsset(temporaryAsset))
-        dispatch(fillAssetName(assetId, feature))
-        dispatch(setSketchMode(SKETCH_MODE_ADD))  // Add one at a time
-        dispatch(setSelection({ assetId, assetIndexes: [featureIndex] }))
+        dispatch(addAsset(temporaryAsset, feature, featureIndex))
         break
       }
       case 'addTentativePosition': {

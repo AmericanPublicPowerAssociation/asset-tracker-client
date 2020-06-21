@@ -186,12 +186,6 @@ export function getPickedInfo(event, select) {
   return picks && picks.find(select)
 }
 
-export function updateFeature(feature, asset) {
-  const featureProperties = feature.properties
-  featureProperties.id = asset.id
-  featureProperties.typeCode = asset.typeCode
-}
-
 export function getBusesByLatLng(deckGL, position) {
   const screenCoords = deckGL.current.viewports[0].project(position)
 

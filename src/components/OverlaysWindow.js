@@ -19,7 +19,7 @@ import {
   OVERLAY_MODE_TASKS,
 } from '../constants'
 import {
-  getAssetCount,
+  getVisibleAssetCount,
   getMapColors,
   getIsViewing,
   getOpenTaskCount,
@@ -44,7 +44,7 @@ export default function OverlaysWindow() {
   // TODO: Implement getVisibleAssetCount
   // TODO: Implement getVisibleTaskCount
   // TODO: Implement getVisibleRiskCount
-  const visibleAssetCount = useSelector(getAssetCount)
+  const visibleAssetCount = useSelector(getVisibleAssetCount)
   const visibleTaskCount = useSelector(getOpenTaskCount)
   const visibleRiskCount = useSelector(getVisibleRiskCount)
 

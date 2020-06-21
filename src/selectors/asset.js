@@ -7,6 +7,16 @@ export const getAssetTypeByCode = state => state.assetTypeByCode
 export const getAssetById = state => state.assetById
 export const getAssetsGeoJson = state => state.assetsGeoJson
 export const getTemporaryAsset = state => state.temporaryAsset
+export const getSelectedAssetId = state => state.selectedAssetId
+
+export const getVisibleAssetCount = createSelector([
+  getAssetById,
+], (
+  assetById,
+) => {
+  // TODO: Count only assets that are visible in map
+  return Object.keys(assetById).length
+})
 
 const getTemporaryAssetById = createSelector([
   getAssetById,
@@ -44,16 +54,6 @@ export const getBestAssetIdByBusId = createSelector([
 })
 
 // TODO: Review below code
-
-export const getSelectedAssetId = state => state.selectedAssetId
-
-export const getAssetCount = createSelector([
-  getAssetById,
-], (
-  assetById,
-) => {
-  return Object.keys(assetById).length
-})
 
 export const getAssetIdsByBusId = createSelector([
   getTemporaryAssetById,

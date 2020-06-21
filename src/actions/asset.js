@@ -1,6 +1,7 @@
 // TODO: Convert back to arrow functions
 
 import {
+  ADD_ASSET,
   DELETE_ASSET,
   DELETE_ASSET_VERTEX,
   FILL_ASSET_NAME,
@@ -24,21 +25,29 @@ export const refreshAssets = () => ({
   type: REFRESH_ASSETS,
 })
 
-export function saveAssets() {
-  return { type: SAVE_ASSETS }
-}
+export const saveAssets = () => ({
+  type: SAVE_ASSETS,
+})
 
-export function setAssets(assets) {
-  return { type: SET_ASSETS, payload: assets }
-}
+export const setAssets = assets => ({
+  type: SET_ASSETS, payload: assets,
+})
 
-export function setAssetsGeoJson(geojson) {
-  return { type: SET_ASSETS_GEOJSON, payload: geojson }
-}
+export const setAssetsGeoJson = geojson => ({
+  type: SET_ASSETS_GEOJSON, payload: geojson,
+})
 
-export function setSelectedAssetId(assetId) {
-  return { type: SET_SELECTED_ASSET_ID, payload: assetId }
-}
+export const addAsset = (asset, feature, featureIndex) => ({
+  type: ADD_ASSET, payload: { asset, feature, featureIndex },
+})
+
+export const fillAssetName = (assetId, feature) => ({
+  type: FILL_ASSET_NAME, payload: { assetId, feature },
+})
+
+export const setSelectedAssetId = assetId => ({
+  type: SET_SELECTED_ASSET_ID, payload: assetId,
+})
 
 // TODO: Review all code below
 
@@ -88,13 +97,6 @@ export function setTemporaryAssetValue(key, value) {
   return {
     type: SET_TEMPORARY_ASSET_VALUE,
     payload: { key, value },
-  }
-}
-
-export function fillAssetName(assetId, feature) {
-  return {
-    type: FILL_ASSET_NAME,
-    payload: { assetId, feature },
   }
 }
 
