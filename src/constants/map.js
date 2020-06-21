@@ -67,9 +67,9 @@ export const MAP_STYLE_COUNT = MAP_STYLE_NAMES.length
 export const TOGGLE_MAP_STYLE = 'TOGGLE_MAP_STYLE'
 
 export const MAP_VIEW_STATE = {
-  longitude: 0,
-  latitude: 0,
-  zoom: 0,
+  longitude: -93.297,
+  latitude: 37.182,
+  zoom: 16,
   pitch: 0,
   bearing: 0,
   width: window.innerWidth,
