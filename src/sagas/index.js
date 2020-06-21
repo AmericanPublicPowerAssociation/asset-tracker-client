@@ -27,14 +27,14 @@ import {
 export default function* () {
   yield all([
     watchSetSelection(),
+    watchAddAsset(),
+    watchFillAssetName(),
     watchRefreshAssets(),
     // TODO: Review below code
     // watchRefreshTasks(),
     watchRefreshRisks(),
     watchSaveAssets(),
-    watchAddAsset(),
     watchUploadAssetsCsv(),
-    watchFillAssetName(),
     watchAssetTasks(),
     watchAddTask(),
     watchUpdateTask(),

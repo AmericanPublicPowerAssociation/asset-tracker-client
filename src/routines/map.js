@@ -56,6 +56,19 @@ export function getMapViewStateFromBoundingBox(
   return viewport.fitBounds(boundingBox, { padding: 128, maxZoom: 20 })
 }
 
+export function getFeatureInfo({ editContext, updatedData }) {
+  const { featureIndexes } = editContext
+  const { features } = updatedData
+  const featureIndex = featureIndexes[0]
+  const feature = features[featureIndex]
+  return { feature, featureIndex }
+}
+
+export function getPositionIndex({ editContext }) {
+  const { positionIndexes } = editContext
+  return positionIndexes[0]
+}
+
 export function findSelectedFeatureIndices(id, features) {
   const index = features.findIndex(f => f.properties.id === id)
   if (index < 0) return []
@@ -94,15 +107,6 @@ export function getDeckGLNearbyObjects(obj) {
   })
   return nearbyObjectInfos
 } 
-
-export function getFeaturePack({ editContext, updatedData }) {
-  const { featureIndexes } = editContext
-  console.assert(featureIndexes.length === 1)
-  const featureIndex = featureIndexes[0]
-  const { features } = updatedData
-  const feature = features[featureIndex]
-  return [featureIndex, feature]
-}
 
 export function getAssetsByLatLng(deckGL, position, radius) {
   const screenCoords = deckGL.current.viewports[0].project(position)

@@ -61,11 +61,9 @@ export function* watchAddAsset() {
   yield takeEvery(ADD_ASSET, function* (action) {
     const { asset, feature, featureIndex } = action.payload
     const assetId = asset.id
-    // Update feature
     const featureProperties = feature.properties
     featureProperties.id = assetId
     featureProperties.typeCode = asset.typeCode
-
     yield all([
       put(setAsset(asset)),
       put(fillAssetName(assetId, feature)),

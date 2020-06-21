@@ -32,8 +32,9 @@ import {
 import {
   getAssetDescription,
   getAssetTypeCode,
-  getFeaturePack,
+  getFeatureInfo,
   getMapMode,
+  getPositionIndex,
   makeBusId,
   makeTemporaryAsset,
 } from '../routines'
@@ -202,7 +203,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
     switch (editType) {
       case 'addFeature': {
         // Add a feature in draw mode
-        const [featureIndex, feature] = getFeaturePack(event)
+        const { feature, featureIndex } = getFeatureInfo(event)
         if (!temporaryAsset) {
           temporaryAsset = makeTemporaryAsset(assetTypeCode)
         } else if (isAddingLine) {
@@ -272,30 +273,26 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       }
       case 'addPosition': {
         // Add a vertex in ModifyMode
-        // TODO: Review this code
-        const { featureIndexes, positionIndexes } = editContext
-        const { features } = updatedData
-        const feature = features[featureIndexes[0]]
+        const { feature } = getFeatureInfo(event)
+        const addedPositionIndex = getPositionIndex(event)
         const featureProperties = feature.properties
         if (featureProperties.typeCode === ASSET_TYPE_CODE_LINE) {
           const assetId = feature.properties.id
-          const afterIndex = positionIndexes[0] - 1
+          const afterIndex = addedPositionIndex - 1
           dispatch(insertAssetVertex(assetId, afterIndex))
         }
         break
       }
       case 'removePosition': {
         // Remove a vertex in ModifyMode
-        // TODO: Review this code
-        const { featureIndexes, positionIndexes } = editContext
-        const { features } = updatedData
-        const removedPositionIndex = positionIndexes[0]
-        const feature = features[featureIndexes[0]]
+        const { feature } = getFeatureInfo(event)
+        const removedPositionIndex = getPositionIndex(event)
         const featureProperties = feature.properties
         if (featureProperties.typeCode === ASSET_TYPE_CODE_LINE) {
           const vertexCount = feature.geometry.coordinates.length
           const assetId = featureProperties.id
-          dispatch(deleteAssetVertex(assetId, removedPositionIndex, vertexCount))
+          dispatch(deleteAssetVertex(
+            assetId, removedPositionIndex, vertexCount))
         }
         break
       }
