@@ -2,7 +2,6 @@
 
 import produce from 'immer'
 import {
-  DELETE_ASSET,
   DELETE_ASSET_VERTEX,
   INSERT_ASSET_VERTEX,
   SET_ASSET,
@@ -65,12 +64,6 @@ const assetById = (state = initialState, action) => {
         attributes[key] = value
       })
     }
-    case DELETE_ASSET: {
-      const assetId = action.payload
-      return produce(state, draft => {
-        draft[assetId]['isDeleted'] = true
-      })
-    }
     case INSERT_ASSET_VERTEX: {
       const { assetId, afterIndex, connection } = action.payload
       return produce(state, draft => {
@@ -104,7 +97,6 @@ const assetById = (state = initialState, action) => {
             connectionByIndex[lastVertexIndex] = { busId: makeBusId() }
           }
         }
-        console.log(connectionByIndex)
         asset.connections = connectionByIndex
       })
     }

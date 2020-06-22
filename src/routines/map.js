@@ -12,8 +12,6 @@ import getRepresentativePoint from '@turf/point-on-feature'
 import {
   ASSETS_MAP_LAYER_ID,
   BUSES_MAP_LAYER_ID,
-  PICKING_DEPTH,
-  PICKING_RADIUS_IN_PIXELS,
   SKETCH_MODE_ADD_CONTROL,
   SKETCH_MODE_ADD_GENERATOR,
   SKETCH_MODE_ADD_LINE,
@@ -94,8 +92,6 @@ export function getNearbyFeatures(lonlat, deckGL) {
     x: screenCoords[0],
     y: screenCoords[1],
     layerIds: [ASSETS_MAP_LAYER_ID],
-    radius: PICKING_RADIUS_IN_PIXELS,
-    depth: PICKING_DEPTH,
   }).map(info => info.object)
   console.log('nearbyAssetFeatures', nearbyAssetFeatures)
 
@@ -103,8 +99,6 @@ export function getNearbyFeatures(lonlat, deckGL) {
     x: screenCoords[0],
     y: screenCoords[1],
     layerIds: [BUSES_MAP_LAYER_ID],
-    radius: PICKING_RADIUS_IN_PIXELS,
-    depth: PICKING_DEPTH,
   }).map(info => info.object)
   console.log('nearbyBusFeatures', nearbyBusFeatures)
 
@@ -123,8 +117,6 @@ export function getAssetsByLatLng(deckGL, position, radius) {
     x: screenCoords[0],
     y: screenCoords[1],
     layerIds: [ASSETS_MAP_LAYER_ID],
-    radius: PICKING_RADIUS_IN_PIXELS * (radius || 2),
-    depth: PICKING_DEPTH,
   })
 }
 
@@ -134,7 +126,6 @@ export function getAssetsByScreenPosition(deckGL, screenPosition) {
     y: screenPosition.y,
     layerIds: [ASSETS_MAP_LAYER_ID],
     radius: 6,
-    depth: PICKING_DEPTH,
   })
 }
 
@@ -145,8 +136,6 @@ export function getBusesByLatLng(deckGL, position) {
     x: screenCoords[0],
     y: screenCoords[1],
     layerIds: [BUSES_MAP_LAYER_ID],
-    radius: PICKING_RADIUS_IN_PIXELS * 2,
-    depth: PICKING_DEPTH,
   })
 }
 

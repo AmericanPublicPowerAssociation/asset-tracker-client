@@ -30,7 +30,7 @@ import {
 export function* watchSetSelection() {
   yield takeLatest(SET_SELECTION, function* (action) {
     let { assetId, assetIndexes, busId, busIndexes } = action.payload
-    let shouldCenterMap = true
+    let shouldCenterMap = false
     let centeredFeature
     const assetsGeoJson = yield select(getAssetsGeoJson)
     const busesGeoJson = yield select(getBusesGeoJson)
@@ -41,11 +41,11 @@ export function* watchSetSelection() {
       if (!busId) {
         busId = busFeatures[busIndexes[0]].properties.id
       }
-      shouldCenterMap = false
     }
     if (busId) {
       if (!busIndexes) {
         busIndexes = findSelectedFeatureIndices(busId, busFeatures)
+        shouldCenterMap = true
         centeredFeature = busFeatures[busIndexes[0]]
       }
       if (!assetId) {
@@ -57,12 +57,12 @@ export function* watchSetSelection() {
       if (!assetId) {
         assetId = assetFeatures[assetIndexes[0]].properties.id
       }
-      shouldCenterMap = false
     }
     if (assetId) {
       if (!assetIndexes) {
         assetIndexes = findSelectedFeatureIndices(assetId, assetFeatures)
         if (!centeredFeature) {
+          shouldCenterMap = true
           centeredFeature = assetFeatures[assetIndexes[0]]
         }
       }

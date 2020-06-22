@@ -1,7 +1,7 @@
 // TODO: Review from scratch
 
 import React, { useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
@@ -12,29 +12,27 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import {
   deleteAsset,
 } from '../actions'
-import {
-  getSelectedAssetId,
-} from '../selectors'
 
-export default function AssetDeleteDialog({ isOpen, onClose }) {
+export default function AssetDeleteDialog({
+  deletedAssetId,
+  isOpen,
+  onClose,
+}) {
   const dispatch = useDispatch()
   const [text, setText] = useState('')
-  const selectedAssetId = useSelector(getSelectedAssetId) 
 
   function handleChange(event) {
     setText(event.target.value)
   }
 
   function handleConfirm() {
-    if (text !== selectedAssetId) {
-      return
-    }
-    dispatch(deleteAsset(selectedAssetId))
+    if (text !== deletedAssetId) return
+    dispatch(deleteAsset(deletedAssetId))
     onClose()
   }
 
   return (
-    <Dialog open={isOpen} onClose={onClose}>
+    <Dialog open={isOpen || false} onClose={onClose}>
       <DialogTitle>
         Delete Asset
       </DialogTitle>
@@ -43,7 +41,7 @@ export default function AssetDeleteDialog({ isOpen, onClose }) {
           Please enter the Asset ID to confirm deletion.
         </DialogContentText>
         <DialogContentText>
-          Asset ID: {selectedAssetId}
+          Asset ID: {deletedAssetId}
         </DialogContentText>
         <TextField
           autoFocus
@@ -57,9 +55,10 @@ export default function AssetDeleteDialog({ isOpen, onClose }) {
         <Button onClick={onClose}>
           Cancel
         </Button>
+
         <Button
           color='secondary'
-          disabled={text !== selectedAssetId}
+          disabled={text !== deletedAssetId}
           onClick={handleConfirm}
         >
           Confirm

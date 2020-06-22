@@ -7,6 +7,8 @@ import {
   getBusFeatures,
 } from '../routines'
 
+export const getSelectedBusId = state => state.selectedBusId
+
 export const getBusesGeoJson = createSelector([
   getAssetById,
   getAssetsGeoJson,
@@ -16,14 +18,5 @@ export const getBusesGeoJson = createSelector([
 ) => {
   const assetFeatures = assetsGeoJson.features
   const busFeatures = getBusFeatures(assetFeatures, assetById)
-  return {
-    type: 'FeatureCollection',
-    features: busFeatures,
-  }
+  return { type: 'FeatureCollection', features: busFeatures }
 })
-
-// TODO: Review below code
-
-export const getSelectedBusId = state => state.selectedBusId
-
-// TODO: Review above code

@@ -38,7 +38,7 @@ export default function App() {
   const isLayoutMobile = useMediaQuery('(max-width:599px)')
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
-  const [isAssetDeleteDialogOpen, setIsAssetDeleteDialogOpen] = useState(false)
+  const [deletedAssetId, setDeletedAssetId] = useState(null)
   const [
     isImportExportDialogOpen,
     setIsImportExportDialogOpen,
@@ -56,7 +56,7 @@ export default function App() {
   return (
     <IsLayoutMobileContext.Provider value={isLayoutMobile}>
       <AssetsMap
-        onAssetDelete={() => setIsAssetDeleteDialogOpen(true)}
+        onAssetDelete={assetId => setDeletedAssetId(assetId)}
       />
       <SketchButtons />
       <OptionsWindow
@@ -91,8 +91,9 @@ export default function App() {
         onClose={()=> {setIsImportExportDialogOpen(false)}}
       />
       <AssetDeleteDialog
-        isOpen={isAssetDeleteDialogOpen}
-        onClose={() => setIsAssetDeleteDialogOpen(false)}
+        deletedAssetId={deletedAssetId}
+        isOpen={deletedAssetId !== null}
+        onClose={() => setDeletedAssetId(null)}
       />
       {/* TODO: Review all components above */}
 

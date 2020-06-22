@@ -7,6 +7,10 @@ import {
   getRandomId,
 } from '../macros'
 
+export function makeBusId() {
+  return getRandomId(MINIMUM_BUS_ID_LENGTH)
+}
+
 export function getBusFeatures(assetFeatures, assetById) {
   const busFeatures = []
 
@@ -25,13 +29,13 @@ export function getBusFeatures(assetFeatures, assetById) {
     const connections = asset.connections
     if (!connections) continue
     busFeatures.push(...getBusFeaturesForGeometry(
-      assetFeature, connections, busIds))
+      busIds, connections, assetFeature))
   }
 
   return busFeatures
 }
 
-function getBusFeaturesForPoint(assetFeature, connections, busIds) {
+function getBusFeaturesForPoint(busIds, connections, assetFeature) {
   const busFeatures = []
   const busCount = Object.keys(connections).length
   const busAngleIncrement = 360 / busCount
@@ -61,7 +65,7 @@ function getBusFeaturesForPoint(assetFeature, connections, busIds) {
   return busFeatures
 }
 
-function getBusFeaturesForLine(assetFeature, connections, busIds) {
+function getBusFeaturesForLine(busIds, connections, assetFeature) {
   const busFeatures = []
   const assetXYs = assetFeature.geometry.coordinates
 
@@ -80,10 +84,11 @@ function getBusFeaturesForLine(assetFeature, connections, busIds) {
   return busFeatures
 }
 
-// TODO: Review all code below
-
-export function makeBusId() {
-  return getRandomId(MINIMUM_BUS_ID_LENGTH)
+export function getVertexIndex(busId, asset) {
+  const connections = asset.connections
+  const connectionPack = Object.entries(connections).find(([
+    vertexIndex, connection,
+  ]) => connection.busId === busId)
+  const vertexIndex = parseInt(connectionPack[0])
+  return vertexIndex
 }
-
-// TODO: Review all code above

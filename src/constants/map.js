@@ -135,10 +135,3 @@ export const SELECTED_BUS_INDEXES = []
 export const SET_SELECTED_ASSET_INDEXES = 'SET_SELECTED_ASSET_INDEXES'
 export const SET_SELECTED_BUS_INDEXES = 'SET_SELECTED_BUS_INDEXES'
 export const CENTER_MAP = 'CENTER_MAP'
-
-// TODO: Review all code below
-
-export const PICKING_RADIUS_IN_PIXELS = 0
-export const PICKING_DEPTH = 3
-
-// TODO: Review all code above

@@ -53,8 +53,6 @@ export const getBestAssetIdByBusId = createSelector([
   return assetIdByBusId
 })
 
-// TODO: Review below code
-
 export const getAssetIdsByBusId = createSelector([
   getTemporaryAssetById,
 ], (
@@ -62,9 +60,8 @@ export const getAssetIdsByBusId = createSelector([
 ) => {
   const assetIdsByBusId = {}
   for (const [assetId, asset] of Object.entries(temporaryAssetById)) {
-    if (asset['isDeleted']) {
-      continue
-    }
+    if (asset['isDeleted']) continue
+
     for (const connection of Object.values(asset.connections || {})) {
       const { busId } = connection
       const assetIds = assetIdsByBusId[busId] || []
@@ -88,5 +85,3 @@ export const getSelectedAsset = createSelector([
   }
   return asset
 })
-
-// TODO: Review above code

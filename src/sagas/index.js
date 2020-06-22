@@ -8,12 +8,13 @@ import  {
   watchSuggestVendorNames,
 } from 'asset-report-risks'
 import {
+  // watchRefreshTasks,
   watchAddTask,
   watchAddTaskComment,
   watchAssetTasks,
+  watchDeleteAsset,
   watchFillAssetName,
   watchRefreshAssets,
-  // watchRefreshTasks,
   watchRefreshTaskComments,
   watchSaveAssets,
   watchUpdateTask,
@@ -32,6 +33,7 @@ export default function* () {
     // watchRefreshTasks(),
     watchRefreshRisks(),
     watchSaveAssets(),
+    watchDeleteAsset(),
     watchUploadAssetsCsv(),
     watchAssetTasks(),
     watchAddTask(),

@@ -4,10 +4,6 @@ import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
 import PopUp from './PopUp'
 import {
-  PICKING_DEPTH,
-  PICKING_RADIUS_IN_PIXELS,
-} from '../constants'
-import {
   useEditableMap,
   useMovableMap,
 } from '../hooks'
@@ -43,8 +39,6 @@ export default function AssetsMap({
         layers={mapLayers}
         controller={MAP_CONTROLLER_OPTIONS}
         viewState={mapViewState}
-        pickingRadius={PICKING_RADIUS_IN_PIXELS}
-        pickingDepth={PICKING_DEPTH}
         onViewStateChange={handleMapMove}
       >
         <StaticMap

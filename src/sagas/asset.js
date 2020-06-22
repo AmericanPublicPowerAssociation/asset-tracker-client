@@ -4,6 +4,7 @@ import {
   takeEvery,
   takeLatest,
 } from 'redux-saga/effects'
+import produce from 'immer'
 import getCentroid from '@turf/centroid'
 import {
   fetchSafely,  // TODO: Move to separate package
@@ -22,6 +23,8 @@ import {
 import {
   ADD_TASK,
   ADD_TASK_COMMENT,
+  ASSET_TYPE_CODE_LINE,
+  DELETE_ASSET,
   FILL_ASSET_NAME,
   REFRESH_ASSETS,
   REFRESH_TASKS,
@@ -31,7 +34,12 @@ import {
   UPLOAD_ASSETS_CSV,
 } from '../constants'
 import {
+  getConnectedAssetIds,
+  getVertexIndex,
+} from '../routines'
+import {
   getAssetById,
+  getAssetIdsByBusId,
   getAssetsGeoJson,
 } from '../selectors'
 
@@ -45,6 +53,56 @@ export function* watchRefreshAssets() {
     yield fetchSafely(url, {}, {
       on200: resetAssets,
     })
+  })
+}
+
+export function* watchDeleteAsset() {
+  yield takeEvery(DELETE_ASSET, function* (action) {
+    let assetById = yield select(getAssetById)
+    let assetsGeoJson = yield select(getAssetsGeoJson)
+    const assetIdsByBusId = yield select(getAssetIdsByBusId)
+    const assetId = action.payload
+    const assetFeatures = assetsGeoJson.features
+    const asset = assetById[assetId]
+    const connectionByIndex = asset.connections
+
+    // Find orphan line midpoint connections
+    const orphanInfos = []
+    for (const connection of Object.values(connectionByIndex)) {
+      const { busId } = connection
+      const connectedAssetIds = getConnectedAssetIds(
+        assetId, busId, assetIdsByBusId)
+      const connectedAssetCount = connectedAssetIds.length
+      if (connectedAssetCount !== 1) continue
+
+      const connectedAssetId = connectedAssetIds[0]
+      const connectedAsset = assetById[connectedAssetId]
+      const connectedAssetTypeCode = connectedAsset.typeCode
+      if (connectedAssetTypeCode !== ASSET_TYPE_CODE_LINE) continue
+
+      const connectedAssetFeature = assetFeatures.find(
+        f => f.properties.id === connectedAssetId)
+      const connectedAssetXYs = connectedAssetFeature.geometry.coordinates
+      const connectedAssetVertexCount = connectedAssetXYs.length
+      const connectedAssetLastVertexIndex = connectedAssetVertexCount - 1
+      const vertexIndex = getVertexIndex(busId, connectedAsset)
+      if (!vertexIndex || vertexIndex === connectedAssetLastVertexIndex)
+        continue
+
+      orphanInfos.push([connectedAssetId, vertexIndex])
+    }
+
+    assetById = produce(assetById, draft => {
+      for (const [connectedAssetId, vertexIndex] of orphanInfos) {
+        const connections = draft[connectedAssetId].connections
+        delete connections[vertexIndex]
+      }
+      draft[assetId].isDeleted = true
+    })
+    assetsGeoJson = produce(assetsGeoJson, draft => {
+      draft.features = assetFeatures.filter(f => f.properties.id !== assetId)
+    })
+    yield put(setAssets({ assetById, assetsGeoJson }))
   })
 }
 
@@ -80,9 +138,7 @@ export function* watchFillAssetName() {
     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${REACT_APP_GOOGLE_TOKEN}`
     yield fetchSafely(url, {}, {
       on200: function* ({ results }) {
-        if (!results.length) {
-          return
-        }
+        if (!results.length) return
         const assetName = results[0].formatted_address
         yield put(setAssetValue(assetId, 'name', assetName))
       },
@@ -130,6 +186,7 @@ export function* watchUpdateTask() {
   })
 }
 
+// TODO: Move task sagas to task.js
 export function* watchRefreshTaskComments() {
   yield takeLatest(REFRESH_TASK_COMMENTS, function* (action) {
     const taskId = action.payload.taskId

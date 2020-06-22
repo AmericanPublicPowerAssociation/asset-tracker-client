@@ -26,7 +26,6 @@ import {
   SKETCH_MODE_ADD_ASSET,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_DELETE,
-  SKETCH_MODE_EDIT,
 } from '../constants'
 import {
   getAssetDescription,
@@ -46,6 +45,7 @@ import {
   getBestAssetIdByBusId,
   getBusesGeoJson,
   getMapColors,
+  getSelectedAssetId,
   getSelectedAssetIndexes,
   getSelectedBusIndexes,
   getSketchMode,
@@ -64,15 +64,17 @@ export function useMovableMap() {
 export function useEditableMap(deckGL, { onAssetDelete }) {
   const dispatch = useDispatch()
   const sketchMode = useSelector(getSketchMode)
+  const mapColors = useSelector(getMapColors)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
   const busesGeoJson = useSelector(getBusesGeoJson)
+  const selectedAssetId = useSelector(getSelectedAssetId)
   const selectedAssetIndexes = useSelector(getSelectedAssetIndexes)
   const selectedBusIndexes = useSelector(getSelectedBusIndexes)
-  const assetById = useSelector(getAssetById)
   const bestAssetIdByBusId = useSelector(getBestAssetIdByBusId)
+  const assetById = useSelector(getAssetById)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetTypeCode = getAssetTypeCode(sketchMode)
-  const mapColors = useSelector(getMapColors)
+  const assetFeatures = assetsGeoJson.features
   const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
   let temporaryAsset = useSelector(getTemporaryAsset)
 
@@ -136,12 +138,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       }
       case 'Backspace':
       case 'Delete': {
-        if ([
-          SKETCH_MODE_ADD,
-          SKETCH_MODE_EDIT,
-        ].includes(sketchMode)) {
-          onAssetDelete()
-        }
+        onAssetDelete(selectedAssetId)
         break
       }
       default: { }
@@ -182,13 +179,17 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
 
   function handleAssetClick(info, event) {
     console.log('asset click', info, event)
+    const assetIndex = info.index
+    const assetFeature = assetFeatures[assetIndex]
+    if (!assetFeature) return
+    const assetId = assetFeature.properties.id
     if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
       dispatch(setSelection({
-        assetIndexes: [info.index],
+        assetIndexes: [assetIndex],
       }))
     }
     if (sketchMode === SKETCH_MODE_DELETE) {
-      onAssetDelete()
+      onAssetDelete(assetId)
     }
   }
 
