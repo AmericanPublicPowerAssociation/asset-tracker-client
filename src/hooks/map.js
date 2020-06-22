@@ -22,8 +22,6 @@ import {
   ASSET_TYPE_CODE_LINE,
   BUSES_MAP_LAYER_ID,
   BUS_RADIUS_IN_METERS,
-  PICKING_DEPTH,
-  PICKING_RADIUS_IN_PIXELS,
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_ASSET,
   SKETCH_MODE_ADD_LINE,
@@ -35,6 +33,7 @@ import {
   getAssetTypeCode,
   getFeatureInfo,
   getMapMode,
+  getNearbyFeatures,
   getPositionIndex,
   makeBusId,
   makeTemporaryAsset,
@@ -237,30 +236,12 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
 
         // TODO: Review this code
         if (isAddingLine) {
-          // Look for nearby objects
-          const { position } = editContext
-          const screenCoords = deckGL.current.viewports[0].project(position)
-          const nearbyAssetFeatures = deckGL.current.pickMultipleObjects({
-            x: screenCoords[0],
-            y: screenCoords[1],
-            layerIds: [ASSETS_MAP_LAYER_ID],
-            radius: PICKING_RADIUS_IN_PIXELS,
-            depth: PICKING_DEPTH,
-          }).map(info => info.object)
-          console.log('nearbyAssetFeatures', nearbyAssetFeatures)
-          const nearbyBusFeatures = deckGL.current.pickMultipleObjects({
-            x: screenCoords[0],
-            y: screenCoords[1],
-            layerIds: [BUSES_MAP_LAYER_ID],
-            radius: PICKING_RADIUS_IN_PIXELS,
-            depth: PICKING_DEPTH,
-          }).map(info => info.object)
-          console.log('nearbyBusFeatures', nearbyBusFeatures)
-          // Get editing feature
-          const temporaryAssetFeature = nearbyAssetFeatures.find(
-            feature => feature.properties.guideType)
-          const vertexCount = temporaryAssetFeature ?
-            temporaryAssetFeature.geometry.coordinates.length : 1
+          const vertexCount = (temporaryAsset.vertexCount || 0) + 1
+          temporaryAsset = produce(temporaryAsset, draft => {
+            draft.vertexCount = vertexCount
+          })
+          const { nearbyBusFeatures } = getNearbyFeatures(
+            editContext.position, deckGL)
           // Add connection to nearby bus or make a new bus
           let busId
           if (nearbyBusFeatures.length) {

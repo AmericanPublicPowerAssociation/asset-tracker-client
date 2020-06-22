@@ -86,34 +86,35 @@ export function updateFeature(asset, feature) {
   featureProperties.typeCode = asset.typeCode
 }
 
-// TODO: Review all code below
+export function getNearbyFeatures(lonlat, deckGL) {
+  const { current } = deckGL
+  const screenCoords = current.viewports[0].project(lonlat)
 
-export function getPickedEditHandle(picks) {
-  // Taken from nebula.gl > mode-handler.js
-  const info = picks && picks.find(pick => pick.isGuide)
-  if (info) {
-    return info.object
-  }
-  return null
-}
-
-export function getDeckGLNearbyObjects(obj) {
-  const  {
-    deckGL,
-    screenCoords,
-    layerId,
-    pickingRadius = PICKING_RADIUS_IN_PIXELS,
-    pickingDepth = PICKING_DEPTH,
-  } = obj
-  const nearbyObjectInfos = deckGL.current.pickMultipleObjects({
+  const nearbyAssetFeatures = current.pickMultipleObjects({
     x: screenCoords[0],
     y: screenCoords[1],
-    layerIds: [layerId],
-    radius: pickingRadius,
-    depth: pickingDepth,
-  })
-  return nearbyObjectInfos
-} 
+    layerIds: [ASSETS_MAP_LAYER_ID],
+    radius: PICKING_RADIUS_IN_PIXELS,
+    depth: PICKING_DEPTH,
+  }).map(info => info.object)
+  console.log('nearbyAssetFeatures', nearbyAssetFeatures)
+
+  const nearbyBusFeatures = current.pickMultipleObjects({
+    x: screenCoords[0],
+    y: screenCoords[1],
+    layerIds: [BUSES_MAP_LAYER_ID],
+    radius: PICKING_RADIUS_IN_PIXELS,
+    depth: PICKING_DEPTH,
+  }).map(info => info.object)
+  console.log('nearbyBusFeatures', nearbyBusFeatures)
+
+  return {
+    nearbyAssetFeatures,
+    nearbyBusFeatures,
+  }
+}
+
+// TODO: Review all code below
 
 export function getAssetsByLatLng(deckGL, position, radius) {
   const screenCoords = deckGL.current.viewports[0].project(position)
