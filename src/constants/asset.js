@@ -63,13 +63,10 @@ export const SAVE_ASSETS = 'SAVE_ASSETS'
 export const SET_ASSETS = 'SET_ASSETS'
 export const SET_ASSETS_GEOJSON = 'SET_ASSETS_GEOJSON'
 
-export const ADD_ASSET = 'ADD_ASSET'
-
 export const SELECTED_ASSET_ID = null
 export const SET_SELECTED_ASSET_ID = 'SET_SELECTED_ASSET_ID'
 
 export const SET_TEMPORARY_ASSET = 'SET_TEMPORARY_ASSET'
-export const SET_TEMPORARY_ASSET_VALUE = 'SET_TEMPORARY_ASSET_VALUE'
 
 // TODO: Review all code below
 

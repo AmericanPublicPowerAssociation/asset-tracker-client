@@ -1,4 +1,4 @@
-import { WebMercatorViewport } from '@deck.gl/core'
+import { WebMercatorViewport } from '@math.gl/web-mercator'
 import {
   DrawCircleByDiameterMode,
   DrawLineStringMode,
@@ -77,6 +77,13 @@ export function findSelectedFeatureIndices(id, features) {
 
 export function getRepresentativeXY(geojsonFeature) {
   return getRepresentativePoint(geojsonFeature).geometry.coordinates
+}
+
+export function updateFeature(asset, feature) {
+  const assetId = asset.id
+  const featureProperties = feature.properties
+  featureProperties.id = assetId
+  featureProperties.typeCode = asset.typeCode
 }
 
 // TODO: Review all code below

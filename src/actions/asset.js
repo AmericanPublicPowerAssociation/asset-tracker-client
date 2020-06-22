@@ -1,7 +1,6 @@
 // TODO: Convert back to arrow functions
 
 import {
-  ADD_ASSET,
   DELETE_ASSET,
   DELETE_ASSET_VERTEX,
   FILL_ASSET_NAME,
@@ -17,7 +16,6 @@ import {
   SET_ASSET_VALUE,
   SET_SELECTED_ASSET_ID,
   SET_TEMPORARY_ASSET,
-  SET_TEMPORARY_ASSET_VALUE,
   UPLOAD_ASSETS_CSV,
 } from '../constants'
 
@@ -35,10 +33,6 @@ export const setAssets = assets => ({
 
 export const setAssetsGeoJson = geojson => ({
   type: SET_ASSETS_GEOJSON, payload: geojson,
-})
-
-export const addAsset = (asset, feature, featureIndex) => ({
-  type: ADD_ASSET, payload: { asset, feature, featureIndex },
 })
 
 export const fillAssetName = (assetId, feature) => ({
@@ -90,13 +84,6 @@ export function setAssetConnectionAttribute(
   return {
     type: SET_ASSET_CONNECTION_ATTRIBUTE,
     payload: { assetId, assetVertexIndex, key, value },
-  }
-}
-
-export function setTemporaryAssetValue(key, value) {
-  return {
-    type: SET_TEMPORARY_ASSET_VALUE,
-    payload: { key, value },
   }
 }
 

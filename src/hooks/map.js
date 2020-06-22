@@ -4,9 +4,10 @@ import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import { ViewMode } from '@nebula.gl/edit-modes'
 import {
   // showInfoMessage,
-  addAsset,
   deleteAssetVertex,
+  fillAssetName,
   insertAssetVertex,
+  setAsset,
   setAssetsGeoJson,
   setMapViewState,
   setPopUpState,
@@ -37,6 +38,7 @@ import {
   getPositionIndex,
   makeBusId,
   makeTemporaryAsset,
+  updateFeature,
 } from '../routines'
 import {
   getAssetById,
@@ -182,7 +184,9 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   function handleAssetClick(info, event) {
     console.log('asset click', info, event)
     if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
-      dispatch(setSelection({ assetIndexes: [info.index] }))
+      dispatch(setSelection({
+        assetIndexes: [info.index],
+      }))
     }
     if (sketchMode === SKETCH_MODE_DELETE) {
       onAssetDelete()
@@ -192,7 +196,9 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   function handleBusClick(info, event) {
     console.log('bus click', info, event)
     if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
-      dispatch(setSelection({ busIndexes: [info.index] }))
+      dispatch(setSelection({
+        busIndexes: [info.index],
+      }))
     }
   }
 
@@ -216,7 +222,11 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
             })
           }
         }
-        dispatch(addAsset(temporaryAsset, feature, featureIndex))
+        const assetId = temporaryAsset.id
+        updateFeature(temporaryAsset, feature)
+        dispatch(setAsset(temporaryAsset))
+        dispatch(fillAssetName(assetId, feature))
+        dispatch(setSelection({ assetId, assetIndexes: [featureIndex] }))
         break
       }
       case 'addTentativePosition': {
@@ -224,36 +234,33 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         if (!temporaryAsset) {
           temporaryAsset = makeTemporaryAsset(assetTypeCode)
         }
+
         // TODO: Review this code
         if (isAddingLine) {
           // Look for nearby objects
           const { position } = editContext
           const screenCoords = deckGL.current.viewports[0].project(position)
-          const nearbyAssetInfos = deckGL.current.pickMultipleObjects({
+          const nearbyAssetFeatures = deckGL.current.pickMultipleObjects({
             x: screenCoords[0],
             y: screenCoords[1],
             layerIds: [ASSETS_MAP_LAYER_ID],
             radius: PICKING_RADIUS_IN_PIXELS,
             depth: PICKING_DEPTH,
-          })
-          console.log('nearbyAssetInfos', nearbyAssetInfos)
-          const nearbyBusInfos = deckGL.current.pickMultipleObjects({
+          }).map(info => info.object)
+          console.log('nearbyAssetFeatures', nearbyAssetFeatures)
+          const nearbyBusFeatures = deckGL.current.pickMultipleObjects({
             x: screenCoords[0],
             y: screenCoords[1],
             layerIds: [BUSES_MAP_LAYER_ID],
             radius: PICKING_RADIUS_IN_PIXELS,
             depth: PICKING_DEPTH,
-          })
-          console.log('nearbyBusInfos', nearbyBusInfos)
-          // Convert objects into features
-          const nearbyAssetFeatures = nearbyAssetInfos.map(info => info.object)
-          const nearbyBusFeatures = nearbyBusInfos.map(info => info.object)
+          }).map(info => info.object)
+          console.log('nearbyBusFeatures', nearbyBusFeatures)
           // Get editing feature
           const temporaryAssetFeature = nearbyAssetFeatures.find(
             feature => feature.properties.guideType)
           const vertexCount = temporaryAssetFeature ?
             temporaryAssetFeature.geometry.coordinates.length : 1
-          console.log('vertexCount', vertexCount)
           // Add connection to nearby bus or make a new bus
           let busId
           if (nearbyBusFeatures.length) {
@@ -262,7 +269,6 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
             busId = makeBusId()
           }
           if (busId) {
-            console.log('ADDING BUS HERE')
             temporaryAsset = produce(temporaryAsset, draft => {
               draft.connections[vertexCount - 1] = { busId }
             })

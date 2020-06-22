@@ -68,8 +68,8 @@ export const TOGGLE_MAP_STYLE = 'TOGGLE_MAP_STYLE'
 
 export const MAP_VIEW_STATE = {
   longitude: -93.297,
-  latitude: 37.182,
-  zoom: 16,
+  latitude: 37.180,
+  zoom: 17,
   pitch: 0,
   bearing: 0,
   width: window.innerWidth,

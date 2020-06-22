@@ -8,7 +8,6 @@ import  {
   watchSuggestVendorNames,
 } from 'asset-report-risks'
 import {
-  watchAddAsset,
   watchAddTask,
   watchAddTaskComment,
   watchAssetTasks,
@@ -27,7 +26,6 @@ import {
 export default function* () {
   yield all([
     watchSetSelection(),
-    watchAddAsset(),
     watchFillAssetName(),
     watchRefreshAssets(),
     // TODO: Review below code
