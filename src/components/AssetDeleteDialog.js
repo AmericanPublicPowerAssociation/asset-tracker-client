@@ -16,10 +16,7 @@ import {
   getSelectedAssetId,
 } from '../selectors'
 
-export default function AssetDeleteDialog({
-  isOpen,
-  onClose,
-}) {
+export default function AssetDeleteDialog({ isOpen, onClose }) {
   const dispatch = useDispatch()
   const [text, setText] = useState('')
   const selectedAssetId = useSelector(getSelectedAssetId) 

@@ -7,10 +7,7 @@ import {
 
 const initialState = { type: 'FeatureCollection', features: [] }
 
-export default function assetsGeoJson(
-  state=initialState,
-  action,
-) {
+export default function assetsGeoJson(state=initialState, action) {
   switch(action.type) {
     case SET_ASSETS: {
       const { assetsGeoJson } = action.payload
@@ -19,15 +16,13 @@ export default function assetsGeoJson(
     case SET_ASSETS_GEOJSON: {
       return action.payload
     }
-    // TODO: Review below code
     case DELETE_ASSET: {
       const assetId = action.payload
-      const features = state.features
+      const { features } = state
       return produce(state, draft => {
-        draft.features = features.filter(feature => feature.properties.id !== assetId)
+        draft.features = features.filter(f => f.properties.id !== assetId)
       })
     }
-    // TODO: Review above code
     default: {
       return state
     }

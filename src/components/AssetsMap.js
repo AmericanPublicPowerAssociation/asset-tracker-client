@@ -28,14 +28,12 @@ export default function AssetsMap({
   const mapStyle = useSelector(getMapStyle)
   const mapViewState = useSelector(getMapViewState)
   const popUpState = useSelector(getPopUpState)
+  const overlayMapLayers = useSelector(getOverlayMapLayers)
   const { handleMapMove } = useMovableMap()
   const { mapLayers, handleMapKey } = useEditableMap(deckGL, {
     onAssetDelete,
 	})
-  // TODO: Review below code
-  const overlayMapLayers = useSelector(getOverlayMapLayers)
   mapLayers.push(...overlayMapLayers)
-  // TODO: Review above code
   return (
     <div
       onKeyUp={handleMapKey}
@@ -45,10 +43,8 @@ export default function AssetsMap({
         layers={mapLayers}
         controller={MAP_CONTROLLER_OPTIONS}
         viewState={mapViewState}
-        // TODO: Review below code
-        pickingRadius={PICKING_RADIUS_IN_PIXELS * mapViewState.zoom}
+        pickingRadius={PICKING_RADIUS_IN_PIXELS}
         pickingDepth={PICKING_DEPTH}
-        // TODO: Review above code
         onViewStateChange={handleMapMove}
       >
         <StaticMap

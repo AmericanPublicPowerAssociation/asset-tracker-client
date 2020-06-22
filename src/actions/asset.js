@@ -47,6 +47,14 @@ export const setTemporaryAsset = asset => ({
   type: SET_TEMPORARY_ASSET, payload: asset,
 })
 
+export function setAsset(asset) {
+  return { type: SET_ASSET, payload: asset }
+}
+
+export function deleteAsset(assetId){
+  return { type: DELETE_ASSET, payload: assetId }
+}
+
 // TODO: Review all code below
 
 export function setAssetValue(assetId, key, value) {
@@ -54,14 +62,6 @@ export function setAssetValue(assetId, key, value) {
     type: SET_ASSET_VALUE,
     payload: { assetId, key, value },
   }
-}
-
-export function setAsset(asset) {
-  return { type: SET_ASSET, payload: asset }
-}
-
-export function deleteAsset(assetId){
-  return { type: DELETE_ASSET, payload: assetId }
 }
 
 export function setAssetAttribute(assetId, key, value) {
