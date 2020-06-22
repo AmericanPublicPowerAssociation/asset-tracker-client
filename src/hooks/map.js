@@ -233,8 +233,6 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         if (!temporaryAsset) {
           temporaryAsset = makeTemporaryAsset(assetTypeCode)
         }
-
-        // TODO: Review this code
         if (isAddingLine) {
           const vertexCount = (temporaryAsset.vertexCount || 0) + 1
           temporaryAsset = produce(temporaryAsset, draft => {

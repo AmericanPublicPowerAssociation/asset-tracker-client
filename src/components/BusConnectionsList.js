@@ -111,19 +111,15 @@ export default function BusConnectionsList({ connectedAssetIds }) {
   }
 
   function onClickHighlight(assetId) {
-    console.log(assetId)
     const { features } = assetsGeoJson
     const feature = features.find(feature => feature.properties.id === assetId)
-    console.log(feature)
     const centroid = getCentroid(feature)
-    console.log(centroid)
     // const index = features.findIndex(feature => feature.properties.id === assetId)
     // TODO: Fix and consider replacing with TextLayer
     // index > -1 && dispatch(setSelectedAssetIndexes([index]))
     // console.log(lngLatToWorld(centroid.geometry.coordinates))
     const [x, y] = mapWebMercatorViewPort.project(centroid.geometry.coordinates)
     const text = getAssetDescription(assetId, assetById, assetTypeByCode)
-    console.log(x, y, text)
     dispatch(setPopUpState({ x, y, text }))
   }
 
