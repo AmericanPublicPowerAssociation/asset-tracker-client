@@ -8,6 +8,9 @@ import {
   hideMessage,
 } from '../actions'
 import {
+  MESSAGE_HIDE_DELAY,
+} from '../constants'
+import {
   getMessage,
 } from '../selectors'
 
@@ -25,7 +28,7 @@ export default function MessageBar() {
   return (
     <Snackbar
       open={isOpen}
-      autoHideDuration={5000}
+      autoHideDuration={MESSAGE_HIDE_DELAY}
       onClose={handleClose}
     >
       <Alert

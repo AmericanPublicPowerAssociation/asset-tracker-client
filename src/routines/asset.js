@@ -31,20 +31,24 @@ import {
   makeBusId,
 } from '../routines'
 
-export function getAssetDescription(assetId, assetById, assetTypeByCode) {
-  let asset = assetById[assetId]
-  if (!asset) {
-    return null
-  }
-  const assetType = assetTypeByCode[asset.typeCode]
-  return assetType.name + ' ' + asset.name
+export function getAssetTypeCode(sketchMode) {
+  return {
+    [SKETCH_MODE_ADD_POLE]: ASSET_TYPE_CODE_POLE,
+    [SKETCH_MODE_ADD_LINE]: ASSET_TYPE_CODE_LINE,
+    [SKETCH_MODE_ADD_METER]: ASSET_TYPE_CODE_METER,
+    [SKETCH_MODE_ADD_TRANSFORMER]: ASSET_TYPE_CODE_TRANSFORMER,
+    [SKETCH_MODE_ADD_SWITCH]: ASSET_TYPE_CODE_SWITCH,
+    [SKETCH_MODE_ADD_POWER_QUALITY]: ASSET_TYPE_CODE_POWER_QUALITY,
+    [SKETCH_MODE_ADD_CONTROL]: ASSET_TYPE_CODE_CONTROL,
+    [SKETCH_MODE_ADD_STORAGE]: ASSET_TYPE_CODE_STORAGE,
+    [SKETCH_MODE_ADD_GENERATOR]: ASSET_TYPE_CODE_GENERATOR,
+    [SKETCH_MODE_ADD_SUBSTATION]: ASSET_TYPE_CODE_SUBSTATION,
+    [SKETCH_MODE_ADD_STATION]: ASSET_TYPE_CODE_STATION,
+  }[sketchMode]
 }
 
-// TODO: Review all code below
-
-export function getConnectedAssetIds(assetId, busId, assetIdsByBusId) {
-  return assetIdsByBusId[busId].filter(
-    connectedAssetId => connectedAssetId !== assetId)
+export function makeAssetId() {
+  return getRandomId(MINIMUM_ASSET_ID_LENGTH)
 }
 
 export function makeTemporaryAsset(assetTypeCode) {
@@ -80,20 +84,20 @@ export function makeTemporaryAsset(assetTypeCode) {
   return asset
 }
 
-export function getAssetTypeCode(sketchMode) {
-  return {
-    [SKETCH_MODE_ADD_POLE]: ASSET_TYPE_CODE_POLE,
-    [SKETCH_MODE_ADD_LINE]: ASSET_TYPE_CODE_LINE,
-    [SKETCH_MODE_ADD_METER]: ASSET_TYPE_CODE_METER,
-    [SKETCH_MODE_ADD_TRANSFORMER]: ASSET_TYPE_CODE_TRANSFORMER,
-    [SKETCH_MODE_ADD_SWITCH]: ASSET_TYPE_CODE_SWITCH,
-    [SKETCH_MODE_ADD_POWER_QUALITY]: ASSET_TYPE_CODE_POWER_QUALITY,
-    [SKETCH_MODE_ADD_CONTROL]: ASSET_TYPE_CODE_CONTROL,
-    [SKETCH_MODE_ADD_STORAGE]: ASSET_TYPE_CODE_STORAGE,
-    [SKETCH_MODE_ADD_GENERATOR]: ASSET_TYPE_CODE_GENERATOR,
-    [SKETCH_MODE_ADD_SUBSTATION]: ASSET_TYPE_CODE_SUBSTATION,
-    [SKETCH_MODE_ADD_STATION]: ASSET_TYPE_CODE_STATION,
-  }[sketchMode]
+export function getAssetDescription(assetId, assetById, assetTypeByCode) {
+  let asset = assetById[assetId]
+  if (!asset) {
+    return null
+  }
+  const assetType = assetTypeByCode[asset.typeCode]
+  return assetType.name + ' ' + asset.name
+}
+
+// TODO: Review all code below
+
+export function getConnectedAssetIds(assetId, busId, assetIdsByBusId) {
+  return assetIdsByBusId[busId].filter(
+    connectedAssetId => connectedAssetId !== assetId)
 }
 
 export function getAttributeLabel(attributeKey) {
@@ -104,10 +108,6 @@ export function getSelectedAssetId(selectedAssetIndexes, assetsGeoJson) {
   const selectedAssetIndex = selectedAssetIndexes[0]
   const feature = assetsGeoJson.features[selectedAssetIndex]
   return feature && feature.properties.id
-}
-
-export function makeAssetId() {
-  return getRandomId(MINIMUM_ASSET_ID_LENGTH)
 }
 
 export function getConnectedAssetCount(asset, assetIdsByBusId) {

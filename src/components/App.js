@@ -27,24 +27,11 @@ import {
   IsLayoutMobileContext,
 } from '../contexts'
 import {
+  useStickyWindow,
+} from '../hooks'
+import {
   getIsViewing,
 } from '../selectors'
-
-// TODO: Review below code
-// TODO: Rename
-// TODO: Consider moving to SketchButtons or somewhere else
-function usePreventWindowUnload(preventDefault) {
-  useEffect( () => {
-    if (!preventDefault) return
-    const handleBeforeUnload = event => {
-      event.preventDefault()
-      event.returnValue = ''
-    }
-    window.addEventListener('beforeunload', handleBeforeUnload)
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
-  }, [preventDefault])
-}
-// TODO: Review above code
 
 export default function App() {
   const dispatch = useDispatch()
@@ -56,17 +43,15 @@ export default function App() {
     isImportExportDialogOpen,
     setIsImportExportDialogOpen,
   ] = useState(false)
+  const isViewing = useSelector(getIsViewing)
+
+  useStickyWindow(!isViewing)
 
   useEffect(() => {
     dispatch(refreshAssets())
     dispatch(refreshTasks())
     dispatch(refreshRisks())
   }, [dispatch])
-
-  // TODO: Review below code
-  const isViewing = useSelector(getIsViewing)
-  usePreventWindowUnload(!isViewing)
-  // TODO: Review above code
 
   return (
     <IsLayoutMobileContext.Provider value={isLayoutMobile}>
@@ -83,6 +68,7 @@ export default function App() {
       <TablesWindow
         isWithTables={isWithTables}
       />
+
       {/* TODO: Review all components below */}
       <SketchModeToolbar />
       <SketchAddToolbar
@@ -108,8 +94,9 @@ export default function App() {
         isOpen={isAssetDeleteDialogOpen}
         onClose={() => setIsAssetDeleteDialogOpen(false)}
       />
-      <MessageBar />
       {/* TODO: Review all components above */}
+
+      <MessageBar />
     </IsLayoutMobileContext.Provider>
   )
 }

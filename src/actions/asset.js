@@ -49,6 +49,10 @@ export const setSelectedAssetId = assetId => ({
   type: SET_SELECTED_ASSET_ID, payload: assetId,
 })
 
+export const setTemporaryAsset = asset => ({
+  type: SET_TEMPORARY_ASSET, payload: asset,
+})
+
 // TODO: Review all code below
 
 export function setAssetValue(assetId, key, value) {
@@ -87,10 +91,6 @@ export function setAssetConnectionAttribute(
     type: SET_ASSET_CONNECTION_ATTRIBUTE,
     payload: { assetId, assetVertexIndex, key, value },
   }
-}
-
-export function setTemporaryAsset(asset) {
-  return { type: SET_TEMPORARY_ASSET, payload: asset }
 }
 
 export function setTemporaryAssetValue(key, value) {

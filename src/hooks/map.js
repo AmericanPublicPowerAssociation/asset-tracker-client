@@ -221,10 +221,10 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       }
       case 'addTentativePosition': {
         // Add a vertex in DrawLineStringMode or DrawPolygonMode
-        // TODO: Review this code
         if (!temporaryAsset) {
           temporaryAsset = makeTemporaryAsset(assetTypeCode)
         }
+        // TODO: Review this code
         if (isAddingLine) {
           // Look for nearby objects
           const { position } = editContext
