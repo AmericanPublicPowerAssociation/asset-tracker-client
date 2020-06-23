@@ -221,7 +221,18 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         const { feature, featureIndex } = getFeatureInfo(event)
         if (!temporaryAsset) {
           temporaryAsset = makeTemporaryAsset(assetTypeCode)
+        } else if (isAddingLine) {
+          // Add ending vertex
+          const vertexCount = feature.geometry.coordinates.length
+          const lastVertexIndex = vertexCount - 1
+          if (!temporaryAsset.connections[lastVertexIndex]) {
+            temporaryAsset = produce(temporaryAsset, draft => {
+              draft.connections[lastVertexIndex] = { busId: makeBusId() }
+            })
+          }
+        }
 
+        if (feature.geometry.type === 'Point') {
           const position = feature.geometry.coordinates
           const {
             nearbyAssetFeatures, nearbyBusFeatures,
@@ -235,15 +246,6 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
           if (nearbyBusFeatures.length) {
             dispatch(showWarningMessage(
               'You cannot add an asset directly to bus. Please add lines to connect buses.'))
-          }
-        } else if (isAddingLine) {
-          // Add ending vertex
-          const vertexCount = feature.geometry.coordinates.length
-          const lastVertexIndex = vertexCount - 1
-          if (!temporaryAsset.connections[lastVertexIndex]) {
-            temporaryAsset = produce(temporaryAsset, draft => {
-              draft.connections[lastVertexIndex] = { busId: makeBusId() }
-            })
           }
         }
 
