@@ -288,12 +288,17 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         break
       }
       case 'movePosition': {
+        // Drag a vertex in ModifyMode
+        const vertexIndex = editContext.positionIndexes[0]
+        const asset = assetById[selectedAssetId]
+        const connection = asset.connections[vertexIndex]
+        const oldBusId = connection && connection.busId
         const {
           nearbyAssetFeatures,
           nearbyBusFeatures,
           screenXY,
         } = getNearbyFeatures(
-          editContext.position, deckGL, selectedAssetId, selectedBusId)
+          editContext.position, deckGL, selectedAssetId, oldBusId)
         const [x, y] = screenXY
         if (nearbyBusFeatures.length) {
           handleBusHover({ x, y, object: nearbyBusFeatures[0] })
@@ -303,29 +308,27 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         break
       }
       case 'finishMovePosition': {
-        // Drag a vertex in ModifyMode
-        const { feature } = getFeatureInfo(event)
+        // Drop a vertex in ModifyMode
         const vertexIndex = editContext.positionIndexes[0]
         const asset = assetById[selectedAssetId]
-        const assetTypeCode = asset.typeCode
         const connection = asset.connections[vertexIndex]
         const oldBusId = connection && connection.busId
+        const {
+          nearbyBusFeatures,
+        } = getNearbyFeatures(
+          editContext.position, deckGL, selectedAssetId, oldBusId)
 
         let busId = null
+        const { feature } = getFeatureInfo(event)
+        const assetTypeCode = asset.typeCode
         if (assetTypeCode === ASSET_TYPE_CODE_LINE) {
-          const { nearbyBusFeatures } = getNearbyFeatures(
-            editContext.position, deckGL, selectedAssetId, oldBusId)
-          console.log('nearbyBusFeatures', nearbyBusFeatures)
           const vertexCount = feature.geometry.coordinates.length
           const lastVertexIndex = vertexCount - 1
           if (nearbyBusFeatures.length) {
-            console.log('ADD EXISTING')
             busId = nearbyBusFeatures[0].properties.id
           } else if (!vertexIndex || vertexIndex === lastVertexIndex) {
-            console.log('ADD NEW')
             busId = makeBusId()
           }
-          console.log(vertexCount, lastVertexIndex, busId)
         } else {
           // if we are moving 1 bus asset
           // if we are moving 2 bus asset

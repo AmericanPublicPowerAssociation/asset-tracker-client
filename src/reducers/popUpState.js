@@ -1,10 +1,11 @@
 import {
+  POPUP_STATE,
   SET_MAP_VIEW_STATE,
   SET_POPUP_STATE,
   SET_SELECTION,
 } from '../constants'
 
-const initialState = null
+const initialState = POPUP_STATE
 
 export default function popUpState(state=initialState, action) {
   switch (action.type) {

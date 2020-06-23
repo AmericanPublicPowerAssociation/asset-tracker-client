@@ -12,7 +12,7 @@ const selectedBusIndexes = (state=initialState, action) => {
       return action.payload
     }
     case DELETE_ASSET: {
-      return SELECTED_BUS_INDEXES
+      return initialState
     }
     default: {
       return state

@@ -23,7 +23,7 @@ const selectedAssetId = (state=initialState, action) => {
       return newAssetId || oldAssetId
     }
     case DELETE_ASSET: {
-      return SELECTED_ASSET_ID
+      return initialState
     }
     default: {
       return state

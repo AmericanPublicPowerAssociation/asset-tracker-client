@@ -128,6 +128,7 @@ export const SKETCH_MODE_DELETE = 'delete'
 export const SKETCH_MODE = SKETCH_MODE_VIEW
 export const SET_SKETCH_MODE = 'SET_SKETCH_MODE'
 
+export const POPUP_STATE = null
 export const SET_POPUP_STATE = 'SET_POPUP_STATE'
 export const SET_SELECTION = 'SET_SELECTION'
 export const SELECTED_ASSET_INDEXES = []

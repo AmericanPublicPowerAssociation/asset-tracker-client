@@ -12,7 +12,7 @@ const selectedAssetIndexes = (state=initialState, action) => {
       return action.payload
     }
     case DELETE_ASSET: {
-      return SELECTED_ASSET_INDEXES
+      return initialState
     }
     default: {
       return state

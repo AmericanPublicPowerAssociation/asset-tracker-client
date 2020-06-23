@@ -12,7 +12,7 @@ const selectedBusId = (state=initialState, action) => {
       return action.payload
     }
     case DELETE_ASSET: {
-      return SELECTED_BUS_ID
+      return initialState
     }
     default: {
       return state

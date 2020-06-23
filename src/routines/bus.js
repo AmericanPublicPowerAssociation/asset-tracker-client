@@ -1,5 +1,6 @@
 import translateFeature from '@turf/transform-translate'
 import {
+  ASSET_TYPE_CODE_LINE,
   BUS_DISTANCE_IN_KILOMETERS_BY_CODE,
   MINIMUM_BUS_ID_LENGTH,
 } from '../constants'
@@ -13,10 +14,11 @@ export function makeBusId() {
 
 export function getBusFeatures(assetFeatures, assetById) {
   const busFeatures = []
-
   const busIds = []
-  for (let i = 0; i < assetFeatures.length; i++) {
-    const assetFeature = assetFeatures[i]
+  const sortedAssetFeatures = [...assetFeatures].sort(
+    f => f.typeCode !== ASSET_TYPE_CODE_LINE)
+  for (let i = 0; i < sortedAssetFeatures.length; i++) {
+    const assetFeature = sortedAssetFeatures[i]
     const getBusFeaturesForGeometry = {
       'Point': getBusFeaturesForPoint,
       'LineString': getBusFeaturesForLine,
@@ -29,13 +31,13 @@ export function getBusFeatures(assetFeatures, assetById) {
     const connections = asset.connections
     if (!connections) continue
     busFeatures.push(...getBusFeaturesForGeometry(
-      busIds, connections, assetFeature))
+      assetFeature, connections, busIds))
   }
 
   return busFeatures
 }
 
-function getBusFeaturesForPoint(busIds, connections, assetFeature) {
+function getBusFeaturesForPoint(assetFeature, connections, busIds) {
   const busFeatures = []
   const busCount = Object.keys(connections).length
   const busAngleIncrement = 360 / busCount
@@ -65,7 +67,7 @@ function getBusFeaturesForPoint(busIds, connections, assetFeature) {
   return busFeatures
 }
 
-function getBusFeaturesForLine(busIds, connections, assetFeature) {
+function getBusFeaturesForLine(assetFeature, connections, busIds) {
   const busFeatures = []
   const assetXYs = assetFeature.geometry.coordinates
 
