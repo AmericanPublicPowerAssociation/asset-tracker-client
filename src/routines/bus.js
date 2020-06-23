@@ -21,8 +21,16 @@ export function makeBusId() {
 export function getBusFeatures(assetFeatures, assetById) {
   const busFeatures = []
   const busIds = []
-  const sortedAssetFeatures = [...assetFeatures].sort(
-    f => f.typeCode !== ASSET_TYPE_CODE_LINE)
+  const sortedAssetFeatures = [...assetFeatures].sort((f1, f2) => {
+    const assetTypeCode1 = f1.properties.typeCode
+    const assetTypeCode2 = f2.properties.typeCode
+    if (assetTypeCode1 === assetTypeCode2) return 0
+    if (assetTypeCode1 === ASSET_TYPE_CODE_LINE) {
+      // Put line assets last
+      return 1
+    }
+    return -1
+  })
   for (let i = 0; i < sortedAssetFeatures.length; i++) {
     const assetFeature = sortedAssetFeatures[i]
     const getBusFeaturesForGeometry = {
@@ -133,7 +141,6 @@ export function getBusOrphanInfo(
   const connectedAssetCount = connectedAssetIds.length
   if (connectedAssetCount !== 1) {
     // Skip if the bus has multiple connections
-    console.log('multiple')
     return
   }
 
@@ -142,7 +149,6 @@ export function getBusOrphanInfo(
   const connectedAssetTypeCode = connectedAsset.typeCode
   if (connectedAssetTypeCode !== ASSET_TYPE_CODE_LINE) {
     // Skip if the bus is not on a line
-    console.log('not line')
     return
   }
 
@@ -154,7 +160,6 @@ export function getBusOrphanInfo(
   const vertexIndex = getVertexIndex(busId, connectedAsset)
   if (!vertexIndex || vertexIndex === connectedAssetLastVertexIndex) {
     // Skip if the bus is a line endpoint
-    console.log('lineendpoint')
     return
   }
 

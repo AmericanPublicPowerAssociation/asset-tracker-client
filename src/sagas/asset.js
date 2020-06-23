@@ -24,7 +24,6 @@ import {
   ADD_TASK,
   ADD_TASK_COMMENT,
   DELETE_ASSET,
-  DELETE_ASSET_CONNECTION,
   FILL_ASSET_NAME,
   REFRESH_ASSETS,
   REFRESH_TASKS,
@@ -85,33 +84,6 @@ export function* watchDeleteAsset() {
       draft.features = assetFeatures.filter(f => f.properties.id !== assetId)
     })
     yield put(setAssets({ assetById, assetsGeoJson }))
-  })
-}
-
-export function* watchDeleteAssetConnection() {
-  yield takeEvery(DELETE_ASSET_CONNECTION, function* (action) {
-    let busOrphanInfo
-    let assetById = yield select(getAssetById)
-    let assetIdsByBusId = yield select(getAssetIdsByBusId)
-    let assetsGeoJson = yield select(getAssetsGeoJson)
-    const assetFeatures = assetsGeoJson.features
-
-    const { assetId, vertexIndex } = action.payload
-    const connection = assetById[assetId].connections[vertexIndex]
-    if (connection) {
-      const { busId } = connection
-      busOrphanInfo = getBusOrphanInfo(
-        busId, assetId, assetById, assetIdsByBusId, assetFeatures)
-    }
-
-    assetById = produce(assetById, draft => {
-      if (busOrphanInfo) {
-        const [connectedAssetId, connectedVertexIndex] = busOrphanInfo
-        delete draft[connectedAssetId].connections[connectedVertexIndex]
-      }
-      delete draft[assetId].connections[vertexIndex]
-    })
-    yield put(setAssets({ assetById }))
   })
 }
 

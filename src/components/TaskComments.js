@@ -43,14 +43,14 @@ const useStyles = makeStyles(theme => ({
   timestamp: {
     fontSize: '0.6em',
     color: '#333333',
-    display: 'block'
+    display: 'block',
   },
   userImage: {
-    paddingTop: '.3rem'
+    paddingTop: '.3rem',
   },
   scrollBar: {
     paddingRight: '1rem',
-  }
+  },
 }))
 
 
@@ -71,7 +71,6 @@ export default function TaskComments(props) {
     const intervalId = setInterval( function () {
       let nextScrollHeight = scrollBarContainer.scrollHeight
       if (nextScrollHeight === prevScrollHeight) {
-        console.log(nextScrollHeight)
         scrollBarContainer.scrollTop = nextScrollHeight
         clearInterval(intervalId)
       }
@@ -104,24 +103,19 @@ export default function TaskComments(props) {
 }
 
 
-function CommentItem(props) {
-  const {
-    comment,
-    itemKey
-  } = props
+function CommentItem({ comment, itemKey }) {
   const {
     // id,
     text,
     creationUserId,
     // modificationTimestamp,
-    creationTimestamp
+    creationTimestamp,
   } = comment
 
   // JS datetime works in milliseconds, that's why you times 1000
   const now = new Date(creationTimestamp * 1000)
-  const timestamp = dateFormat(now, "dddd, mmmm d, yyyy h:MMtt")
-
-  const classes = useStyles();
+  const timestamp = dateFormat(now, 'dddd, mmmm d, yyyy h:MMtt')
+  const classes = useStyles()
 
   return (
     <>

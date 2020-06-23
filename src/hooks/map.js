@@ -343,6 +343,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
 
         const { feature } = getFeatureInfo(event)
         for (const [vertexIndex, oldBusId, busPosition] of busPacks) {
+          // Delete orphan line midpoint bus if it exists
           const busOrphanInfo = getBusOrphanInfo(
             oldBusId, selectedAssetId, assetById, assetIdsByBusId,
             assetFeatures)
@@ -352,11 +353,10 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
               connectedAssetId, connectedVertexIndex))
           }
 
+          let busId = null
           const {
             nearbyBusFeatures,
           } = getNearbyFeatures(busPosition, deckGL, selectedAssetId, oldBusId)
-
-          let busId = null
           if (nearbyBusFeatures.length) {
             busId = nearbyBusFeatures[0].properties.id
           } else if (isBusRequired(feature, vertexIndex)) {
