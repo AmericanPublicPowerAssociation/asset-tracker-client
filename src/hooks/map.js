@@ -4,10 +4,12 @@ import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import { ViewMode } from '@nebula.gl/edit-modes'
 import {
   // showInfoMessage,
+  deleteAssetConnection,
   deleteAssetVertex,
   fillAssetName,
   insertAssetVertex,
   setAsset,
+  setAssetConnection,
   setAssetsGeoJson,
   setMapViewState,
   setPopUpState,
@@ -47,6 +49,7 @@ import {
   getMapColors,
   getSelectedAssetId,
   getSelectedAssetIndexes,
+  getSelectedBusId,
   getSelectedBusIndexes,
   getSketchMode,
   getTemporaryAsset,
@@ -69,12 +72,14 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   const busesGeoJson = useSelector(getBusesGeoJson)
   const selectedAssetId = useSelector(getSelectedAssetId)
   const selectedAssetIndexes = useSelector(getSelectedAssetIndexes)
+  const selectedBusId = useSelector(getSelectedBusId)
   const selectedBusIndexes = useSelector(getSelectedBusIndexes)
   const bestAssetIdByBusId = useSelector(getBestAssetIdByBusId)
   const assetById = useSelector(getAssetById)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetTypeCode = getAssetTypeCode(sketchMode)
   const assetFeatures = assetsGeoJson.features
+  const busFeatures = busesGeoJson.features
   const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
   let temporaryAsset = useSelector(getTemporaryAsset)
 
@@ -128,7 +133,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
 
   function handleMapKey(event) {
     event.persist()  // Populate event with extra signals
-    console.log('map key', event)
+    // console.log('map key', event)
     switch (event.key) {
       case 'Escape': {
         if (sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
@@ -178,15 +183,13 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   }
 
   function handleAssetClick(info, event) {
-    console.log('asset click', info, event)
+    // console.log('asset click', info, event)
     const assetIndex = info.index
     const assetFeature = assetFeatures[assetIndex]
     if (!assetFeature) return
     const assetId = assetFeature.properties.id
     if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
-      dispatch(setSelection({
-        assetIndexes: [assetIndex],
-      }))
+      dispatch(setSelection({ assetId, assetIndexes: [assetIndex] }))
     }
     if (sketchMode === SKETCH_MODE_DELETE) {
       onAssetDelete(assetId)
@@ -194,18 +197,20 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   }
 
   function handleBusClick(info, event) {
-    console.log('bus click', info, event)
+    // console.log('bus click', info, event)
+    const busIndex = info.index
+    const busFeature = busFeatures[busIndex]
+    if (!busFeature) return
+    const busId = busFeature.properties.id
     if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
-      dispatch(setSelection({
-        busIndexes: [info.index],
-      }))
+      dispatch(setSelection({ busId, busIndexes: [info.index] }))
     }
   }
 
   function handleAssetEdit(event) {
     const { editType, editContext } = event
     let { updatedData } = event
-    console.log('asset edit', editType, editContext, updatedData)
+    // console.log('asset edit', editType, editContext, updatedData)
     switch (editType) {
       case 'addFeature': {
         // Add a feature in draw mode
@@ -240,7 +245,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
             draft.vertexCount = vertexCount
           })
           const { nearbyBusFeatures } = getNearbyFeatures(
-            editContext.position, deckGL)
+            editContext.position, deckGL, selectedAssetId, selectedBusId)
           // Add connection to nearby bus or make a new bus
           let busId
           if (nearbyBusFeatures.length) {
@@ -282,9 +287,57 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         }
         break
       }
+      case 'movePosition': {
+        const {
+          nearbyAssetFeatures,
+          nearbyBusFeatures,
+          screenXY,
+        } = getNearbyFeatures(
+          editContext.position, deckGL, selectedAssetId, selectedBusId)
+        const [x, y] = screenXY
+        if (nearbyBusFeatures.length) {
+          handleBusHover({ x, y, object: nearbyBusFeatures[0] })
+        } else if (nearbyAssetFeatures.length) {
+          handleAssetHover({ x, y, object: nearbyAssetFeatures[0] })
+        }
+        break
+      }
       case 'finishMovePosition': {
         // Drag a vertex in ModifyMode
-        // TODO: Review this code
+        const { feature } = getFeatureInfo(event)
+        const vertexIndex = editContext.positionIndexes[0]
+        const asset = assetById[selectedAssetId]
+        const assetTypeCode = asset.typeCode
+        const connection = asset.connections[vertexIndex]
+        const oldBusId = connection && connection.busId
+
+        let busId = null
+        if (assetTypeCode === ASSET_TYPE_CODE_LINE) {
+          const { nearbyBusFeatures } = getNearbyFeatures(
+            editContext.position, deckGL, selectedAssetId, oldBusId)
+          console.log('nearbyBusFeatures', nearbyBusFeatures)
+          const vertexCount = feature.geometry.coordinates.length
+          const lastVertexIndex = vertexCount - 1
+          if (nearbyBusFeatures.length) {
+            console.log('ADD EXISTING')
+            busId = nearbyBusFeatures[0].properties.id
+          } else if (!vertexIndex || vertexIndex === lastVertexIndex) {
+            console.log('ADD NEW')
+            busId = makeBusId()
+          }
+          console.log(vertexCount, lastVertexIndex, busId)
+        } else {
+          // if we are moving 1 bus asset
+          // if we are moving 2 bus asset
+        }
+
+        if (busId) {
+          dispatch(setAssetConnection(
+            selectedAssetId, vertexIndex, { busId }))
+        } else {
+          dispatch(deleteAssetConnection(
+            selectedAssetId, vertexIndex))
+        }
         break
       }
       default: { }

@@ -2,6 +2,7 @@
 
 import produce from 'immer'
 import {
+  DELETE_ASSET_CONNECTION,
   DELETE_ASSET_VERTEX,
   INSERT_ASSET_VERTEX,
   SET_ASSET,
@@ -34,8 +35,7 @@ const assetById = (state = initialState, action) => {
     case SET_ASSET_VALUE: {
       const { assetId, key, value } = action.payload
       return produce(state, draft => {
-        const asset = draft[assetId]
-        asset[key] = value
+        draft[assetId][key] = value
       })
     }
     case SET_ASSET_ATTRIBUTE: {
@@ -50,9 +50,15 @@ const assetById = (state = initialState, action) => {
       })
     }
     case SET_ASSET_CONNECTION: {
-      const { assetId, assetVertexIndex, connection } = action.payload
+      const { assetId, vertexIndex, connection } = action.payload
       return produce(state, draft => {
-        draft[assetId].connections[assetVertexIndex] = connection
+        draft[assetId].connections[vertexIndex] = connection
+      })
+    }
+    case DELETE_ASSET_CONNECTION: {
+      const { assetId, vertexIndex } = action.payload
+      return produce(state, draft => {
+        delete draft[assetId].connections[vertexIndex]
       })
     }
     case SET_ASSET_CONNECTION_ATTRIBUTE: {
@@ -78,11 +84,7 @@ const assetById = (state = initialState, action) => {
       })
     }
     case DELETE_ASSET_VERTEX: {
-      const {
-        assetId,
-        oldVertexIndex,
-        newVertexCount,
-      } = action.payload
+      const { assetId, oldVertexIndex, newVertexCount } = action.payload
       return produce(state, draft => {
         const asset = draft[assetId]
         const afterIndex = oldVertexIndex - 1

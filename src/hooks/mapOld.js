@@ -117,18 +117,14 @@ import {
             }
           }
         }
-      } else if (editType === 'finishMovePosition') {
-
-        console.log('finishMovePosition', event)
+      }
+      else if (editType === 'finishMovePosition') {
         const {
           position,
           positionIndexes,
           featureIndexes,
         } = editContext
         const busInfos = getBusesByLatLng(deckGL, editContext['position'])
-        // const assetsInfos = getAssetsByLatLng(deckGL, editContext['position'])
-        const { features } = updatedData
-        const featureIndex = featureIndexes[0]
         const vertex = features[featureIndex]
 
         const isMeterDisconnected = (buses) => buses.length === 0
@@ -142,10 +138,7 @@ import {
 
           switch (asset.typeCode) {
             case ASSET_TYPE_CODE_LINE: {
-              const asset = features[featureIndex]
-              const assetId = asset.properties.id
               const assetVertexCount = asset.geometry.coordinates.length
-              const assetVertexIndex = positionIndexes[0]
               if (assetVertexIndex === 0 || assetVertexIndex === assetVertexCount - 1) {
                 // endpoints only
                 const screenCoords = deckGL.current.viewports[0].project(position)
@@ -209,6 +202,7 @@ import {
             default: { }
           }
         }
+
       }
     }
   }

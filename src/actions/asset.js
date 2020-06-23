@@ -2,6 +2,7 @@
 
 import {
   DELETE_ASSET,
+  DELETE_ASSET_CONNECTION,
   DELETE_ASSET_VERTEX,
   FILL_ASSET_NAME,
   INSERT_ASSET_VERTEX,
@@ -47,13 +48,23 @@ export const setTemporaryAsset = asset => ({
   type: SET_TEMPORARY_ASSET, payload: asset,
 })
 
-export function setAsset(asset) {
-  return { type: SET_ASSET, payload: asset }
-}
+export const setAsset = asset => ({
+  type: SET_ASSET, payload: asset,
+})
 
-export function deleteAsset(assetId){
-  return { type: DELETE_ASSET, payload: assetId }
-}
+export const deleteAsset = assetId => ({
+  type: DELETE_ASSET, payload: assetId,
+})
+
+export const setAssetConnection = (assetId, vertexIndex, connection) => ({
+  type: SET_ASSET_CONNECTION,
+  payload: { assetId, vertexIndex, connection },
+})
+
+export const deleteAssetConnection = (assetId, vertexIndex) => ({
+  type: DELETE_ASSET_CONNECTION,
+  payload: { assetId, vertexIndex },
+})
 
 // TODO: Review all code below
 
@@ -68,13 +79,6 @@ export function setAssetAttribute(assetId, key, value) {
   return {
     type: SET_ASSET_ATTRIBUTE,
     payload: { assetId, key, value },
-  }
-}
-
-export function setAssetConnection(assetId, assetVertexIndex, connection) {
-  return {
-    type: SET_ASSET_CONNECTION,
-    payload: { assetId, assetVertexIndex, connection },
   }
 }
 

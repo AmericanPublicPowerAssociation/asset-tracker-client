@@ -84,27 +84,40 @@ export function updateFeature(asset, feature) {
   featureProperties.typeCode = asset.typeCode
 }
 
-export function getNearbyFeatures(lonlat, deckGL) {
+export function getNearbyFeatures(
+  lonlat,
+  deckGL,
+  selectedAssetId,
+  selectedBusId,
+) {
   const { current } = deckGL
-  const screenCoords = current.viewports[0].project(lonlat)
+  const screenXY = current.viewports[0].project(lonlat)
 
   const nearbyAssetFeatures = current.pickMultipleObjects({
-    x: screenCoords[0],
-    y: screenCoords[1],
+    x: screenXY[0],
+    y: screenXY[1],
     layerIds: [ASSETS_MAP_LAYER_ID],
-  }).map(info => info.object)
-  console.log('nearbyAssetFeatures', nearbyAssetFeatures)
+  }).map(info =>
+    info.object,
+  ).filter(f =>
+    f.properties.id !== selectedAssetId &&
+    !f.properties.guideType,
+  )
 
   const nearbyBusFeatures = current.pickMultipleObjects({
-    x: screenCoords[0],
-    y: screenCoords[1],
+    x: screenXY[0],
+    y: screenXY[1],
     layerIds: [BUSES_MAP_LAYER_ID],
-  }).map(info => info.object)
-  console.log('nearbyBusFeatures', nearbyBusFeatures)
+  }).map(
+    info => info.object,
+  ).filter(
+    f => f.properties.id !== selectedBusId,
+  )
 
   return {
     nearbyAssetFeatures,
     nearbyBusFeatures,
+    screenXY,
   }
 }
 
