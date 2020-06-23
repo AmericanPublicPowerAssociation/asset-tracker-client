@@ -214,7 +214,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   function handleAssetEdit(event) {
     const { editType, editContext } = event
     let { updatedData } = event
-    // console.log('asset edit', editType, editContext, updatedData)
+    console.log('asset edit', editType, editContext, updatedData)
     switch (editType) {
       case 'addFeature': {
         // Add a feature in draw mode

@@ -74,12 +74,16 @@ const assetById = (state = initialState, action) => {
       const { assetId, afterIndex, connection } = action.payload
       return produce(state, draft => {
         const asset = draft[assetId]
+        const assetConnections = asset.connections
+
         const indexOffset = 1
         const connectionByIndex = getNewConnectionByIndex(
-          asset.connections, afterIndex, indexOffset)
+          assetConnections, afterIndex, indexOffset)
+
         if (connection) {
           connectionByIndex[afterIndex + 1] = connection
         }
+
         asset.connections = connectionByIndex
       })
     }
@@ -87,10 +91,14 @@ const assetById = (state = initialState, action) => {
       const { assetId, oldVertexIndex, newVertexCount } = action.payload
       return produce(state, draft => {
         const asset = draft[assetId]
+        const assetConnections = asset.connections
+        delete assetConnections[oldVertexIndex]
+
         const afterIndex = oldVertexIndex - 1
         const indexOffset = -1
         const connectionByIndex = getNewConnectionByIndex(
-          asset.connections, afterIndex, indexOffset)
+          assetConnections, afterIndex, indexOffset)
+
         // If we are deleting the last endpoint,
         if (oldVertexIndex === newVertexCount) {
           const lastVertexIndex = newVertexCount - 1
@@ -99,6 +107,7 @@ const assetById = (state = initialState, action) => {
             connectionByIndex[lastVertexIndex] = { busId: makeBusId() }
           }
         }
+
         asset.connections = connectionByIndex
       })
     }
