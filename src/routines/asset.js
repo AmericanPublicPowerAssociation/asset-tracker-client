@@ -96,8 +96,8 @@ export function getAssetDescription(assetId, assetById, assetTypeByCode) {
 // TODO: Review all code below
 
 export function getConnectedAssetIds(assetId, busId, assetIdsByBusId) {
-  return assetIdsByBusId[busId].filter(
-    connectedAssetId => connectedAssetId !== assetId)
+  const assetIds = assetIdsByBusId[busId] || []
+  return assetIds.filter(connectedAssetId => connectedAssetId !== assetId)
 }
 
 export function getAttributeLabel(attributeKey) {

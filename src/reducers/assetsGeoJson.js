@@ -9,6 +9,9 @@ export default function assetsGeoJson(state=initialState, action) {
   switch(action.type) {
     case SET_ASSETS: {
       const { assetsGeoJson } = action.payload
+      if (!assetsGeoJson) {
+        return state
+      }
       return assetsGeoJson
     }
     case SET_ASSETS_GEOJSON: {

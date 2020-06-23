@@ -1,5 +1,8 @@
 import translateFeature from '@turf/transform-translate'
 import {
+  getConnectedAssetIds,
+} from './asset'
+import {
   ASSET_TYPE_CODE_LINE,
   ASSET_TYPE_CODE_POLE,
   ASSET_TYPE_CODE_STATION,
@@ -116,4 +119,45 @@ export function isBusRequired(assetFeature, vertexIndex) {
   }
 
   return true
+}
+
+export function getBusOrphanInfo(
+  busId,
+  assetId,
+  assetById,
+  assetIdsByBusId,
+  assetFeatures,
+) {
+  const connectedAssetIds = getConnectedAssetIds(
+    assetId, busId, assetIdsByBusId)
+  const connectedAssetCount = connectedAssetIds.length
+  if (connectedAssetCount !== 1) {
+    // Skip if the bus has multiple connections
+    console.log('multiple')
+    return
+  }
+
+  const connectedAssetId = connectedAssetIds[0]
+  const connectedAsset = assetById[connectedAssetId]
+  const connectedAssetTypeCode = connectedAsset.typeCode
+  if (connectedAssetTypeCode !== ASSET_TYPE_CODE_LINE) {
+    // Skip if the bus is not on a line
+    console.log('not line')
+    return
+  }
+
+  const connectedAssetFeature = assetFeatures.find(
+    f => f.properties.id === connectedAssetId)
+  const connectedAssetXYs = connectedAssetFeature.geometry.coordinates
+  const connectedAssetVertexCount = connectedAssetXYs.length
+  const connectedAssetLastVertexIndex = connectedAssetVertexCount - 1
+  const vertexIndex = getVertexIndex(busId, connectedAsset)
+  if (!vertexIndex || vertexIndex === connectedAssetLastVertexIndex) {
+    // Skip if the bus is a line endpoint
+    console.log('lineendpoint')
+    return
+  }
+
+  // Return line midpoint orphan bus info
+  return [connectedAssetId, vertexIndex]
 }

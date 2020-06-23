@@ -23,8 +23,8 @@ import {
 import {
   ADD_TASK,
   ADD_TASK_COMMENT,
-  ASSET_TYPE_CODE_LINE,
   DELETE_ASSET,
+  DELETE_ASSET_CONNECTION,
   FILL_ASSET_NAME,
   REFRESH_ASSETS,
   REFRESH_TASKS,
@@ -34,8 +34,7 @@ import {
   UPLOAD_ASSETS_CSV,
 } from '../constants'
 import {
-  getConnectedAssetIds,
-  getVertexIndex,
+  getBusOrphanInfo,
 } from '../routines'
 import {
   getAssetById,
@@ -67,35 +66,18 @@ export function* watchDeleteAsset() {
     const connectionByIndex = asset.connections
 
     // Find orphan line midpoint connections
-    const orphanInfos = []
+    const busOrphanInfos = []
     for (const connection of Object.values(connectionByIndex)) {
       const { busId } = connection
-      const connectedAssetIds = getConnectedAssetIds(
-        assetId, busId, assetIdsByBusId)
-      const connectedAssetCount = connectedAssetIds.length
-      if (connectedAssetCount !== 1) continue
-
-      const connectedAssetId = connectedAssetIds[0]
-      const connectedAsset = assetById[connectedAssetId]
-      const connectedAssetTypeCode = connectedAsset.typeCode
-      if (connectedAssetTypeCode !== ASSET_TYPE_CODE_LINE) continue
-
-      const connectedAssetFeature = assetFeatures.find(
-        f => f.properties.id === connectedAssetId)
-      const connectedAssetXYs = connectedAssetFeature.geometry.coordinates
-      const connectedAssetVertexCount = connectedAssetXYs.length
-      const connectedAssetLastVertexIndex = connectedAssetVertexCount - 1
-      const vertexIndex = getVertexIndex(busId, connectedAsset)
-      if (!vertexIndex || vertexIndex === connectedAssetLastVertexIndex)
-        continue
-
-      orphanInfos.push([connectedAssetId, vertexIndex])
+      const busOrphanInfo = getBusOrphanInfo(
+        busId, assetId, assetById, assetIdsByBusId, assetFeatures)
+      if (!busOrphanInfo) continue
+      busOrphanInfos.push(busOrphanInfo)
     }
 
     assetById = produce(assetById, draft => {
-      for (const [connectedAssetId, vertexIndex] of orphanInfos) {
-        const connections = draft[connectedAssetId].connections
-        delete connections[vertexIndex]
+      for (const [connectedAssetId, vertexIndex] of busOrphanInfos) {
+        delete draft[connectedAssetId].connections[vertexIndex]
       }
       draft[assetId].isDeleted = true
     })
@@ -103,6 +85,33 @@ export function* watchDeleteAsset() {
       draft.features = assetFeatures.filter(f => f.properties.id !== assetId)
     })
     yield put(setAssets({ assetById, assetsGeoJson }))
+  })
+}
+
+export function* watchDeleteAssetConnection() {
+  yield takeEvery(DELETE_ASSET_CONNECTION, function* (action) {
+    let busOrphanInfo
+    let assetById = yield select(getAssetById)
+    let assetIdsByBusId = yield select(getAssetIdsByBusId)
+    let assetsGeoJson = yield select(getAssetsGeoJson)
+    const assetFeatures = assetsGeoJson.features
+
+    const { assetId, vertexIndex } = action.payload
+    const connection = assetById[assetId].connections[vertexIndex]
+    if (connection) {
+      const { busId } = connection
+      busOrphanInfo = getBusOrphanInfo(
+        busId, assetId, assetById, assetIdsByBusId, assetFeatures)
+    }
+
+    assetById = produce(assetById, draft => {
+      if (busOrphanInfo) {
+        const [connectedAssetId, connectedVertexIndex] = busOrphanInfo
+        delete draft[connectedAssetId].connections[connectedVertexIndex]
+      }
+      delete draft[assetId].connections[vertexIndex]
+    })
+    yield put(setAssets({ assetById }))
   })
 }
 

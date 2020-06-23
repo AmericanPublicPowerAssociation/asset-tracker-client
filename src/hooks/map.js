@@ -32,6 +32,7 @@ import {
 import {
   getAssetDescription,
   getAssetTypeCode,
+  getBusOrphanInfo,
   getFeatureInfo,
   getMapMode,
   getNearbyFeatures,
@@ -43,6 +44,7 @@ import {
 } from '../routines'
 import {
   getAssetById,
+  getAssetIdsByBusId,
   getAssetTypeByCode,
   getAssetsGeoJson,
   getBestAssetIdByBusId,
@@ -76,6 +78,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   const selectedBusId = useSelector(getSelectedBusId)
   const selectedBusIndexes = useSelector(getSelectedBusIndexes)
   const bestAssetIdByBusId = useSelector(getBestAssetIdByBusId)
+  const assetIdsByBusId = useSelector(getAssetIdsByBusId)
   const assetById = useSelector(getAssetById)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetTypeCode = getAssetTypeCode(sketchMode)
@@ -340,6 +343,15 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
 
         const { feature } = getFeatureInfo(event)
         for (const [vertexIndex, oldBusId, busPosition] of busPacks) {
+          const busOrphanInfo = getBusOrphanInfo(
+            oldBusId, selectedAssetId, assetById, assetIdsByBusId,
+            assetFeatures)
+          if (busOrphanInfo) {
+            const [connectedAssetId, connectedVertexIndex] = busOrphanInfo
+            dispatch(deleteAssetConnection(
+              connectedAssetId, connectedVertexIndex))
+          }
+
           const {
             nearbyBusFeatures,
           } = getNearbyFeatures(busPosition, deckGL, selectedAssetId, oldBusId)
