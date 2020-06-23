@@ -36,6 +36,7 @@ import {
   getMapMode,
   getNearbyFeatures,
   getPositionIndex,
+  isBusRequired,
   makeBusId,
   makeTemporaryAsset,
   updateFeature,
@@ -289,9 +290,12 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       }
       case 'movePosition': {
         // Drag a vertex in ModifyMode
-        const vertexIndex = editContext.positionIndexes[0]
         const asset = assetById[selectedAssetId]
-        const connection = asset.connections[vertexIndex]
+        const assetConnections = asset.connections
+        if (!assetConnections) break
+
+        const vertexIndex = editContext.positionIndexes[0]
+        const connection = assetConnections[vertexIndex]
         const oldBusId = connection && connection.busId
         const {
           nearbyAssetFeatures,
@@ -299,6 +303,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
           screenXY,
         } = getNearbyFeatures(
           editContext.position, deckGL, selectedAssetId, oldBusId)
+
         const [x, y] = screenXY
         if (nearbyBusFeatures.length) {
           handleBusHover({ x, y, object: nearbyBusFeatures[0] })
@@ -309,37 +314,49 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       }
       case 'finishMovePosition': {
         // Drop a vertex in ModifyMode
-        const vertexIndex = editContext.positionIndexes[0]
         const asset = assetById[selectedAssetId]
-        const connection = asset.connections[vertexIndex]
-        const oldBusId = connection && connection.busId
-        const {
-          nearbyBusFeatures,
-        } = getNearbyFeatures(
-          editContext.position, deckGL, selectedAssetId, oldBusId)
+        const assetConnections = asset.connections
+        if (!assetConnections) break
 
-        let busId = null
-        const { feature } = getFeatureInfo(event)
+        const busPacks = []
         const assetTypeCode = asset.typeCode
         if (assetTypeCode === ASSET_TYPE_CODE_LINE) {
-          const vertexCount = feature.geometry.coordinates.length
-          const lastVertexIndex = vertexCount - 1
-          if (nearbyBusFeatures.length) {
-            busId = nearbyBusFeatures[0].properties.id
-          } else if (!vertexIndex || vertexIndex === lastVertexIndex) {
-            busId = makeBusId()
-          }
+          const vertexIndex = editContext.positionIndexes[0]
+          const connection = assetConnections[vertexIndex]
+          const busId = connection && connection.busId
+          const busPosition = editContext.position
+          busPacks.push([vertexIndex, busId, busPosition])
         } else {
-          // if we are moving 1 bus asset
-          // if we are moving 2 bus asset
+          for (const [
+            vertexIndex, connection,
+          ] of Object.entries(asset.connections)) {
+            const { busId } = connection
+            const busPosition = busFeatures.find(
+              f => f.properties.id === busId,
+            ).geometry.coordinates
+            busPacks.push([vertexIndex, busId, busPosition])
+          }
         }
 
-        if (busId) {
-          dispatch(setAssetConnection(
-            selectedAssetId, vertexIndex, { busId }))
-        } else {
-          dispatch(deleteAssetConnection(
-            selectedAssetId, vertexIndex))
+        const { feature } = getFeatureInfo(event)
+        for (const [vertexIndex, oldBusId, busPosition] of busPacks) {
+          const {
+            nearbyBusFeatures,
+          } = getNearbyFeatures(busPosition, deckGL, selectedAssetId, oldBusId)
+
+          let busId = null
+          if (nearbyBusFeatures.length) {
+            busId = nearbyBusFeatures[0].properties.id
+          } else if (isBusRequired(feature, vertexIndex)) {
+            busId = makeBusId()
+          }
+
+          if (busId) {
+            dispatch(setAssetConnection(
+              selectedAssetId, vertexIndex, { busId }))
+          } else {
+            dispatch(deleteAssetConnection(selectedAssetId, vertexIndex))
+          }
         }
         break
       }

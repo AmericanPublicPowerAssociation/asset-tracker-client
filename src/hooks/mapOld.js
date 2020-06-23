@@ -137,29 +137,6 @@ import {
           let asset = vertex.properties
 
           switch (asset.typeCode) {
-            case ASSET_TYPE_CODE_LINE: {
-              const assetVertexCount = asset.geometry.coordinates.length
-              if (assetVertexIndex === 0 || assetVertexIndex === assetVertexCount - 1) {
-                // endpoints only
-                const screenCoords = deckGL.current.viewports[0].project(position)
-                const nearbyBusInfos = getDeckGLNearbyObjects({
-                  deckGL, screenCoords, layerId: BUSES_MAP_LAYER_ID })
-                const nearbyBusFeatures = nearbyBusInfos.map(info => info.object)
-                // TODO: Consider whether we need to filter bus features instead of this
-                // TODO: This assumes that nearbyBusFeatures is in sorted order
-                // TODO: Case length >= 2 happens when moving endpoint from nowhere to bus
-                const newBuses = nearbyBusFeatures.filter(bus => (
-                  bus.geometry.coordinates[0] !== position[0] &&
-                  bus.geometry.coordinates[1] !== position[1]))
-                const newBusId = (newBuses.length) ?
-                    newBuses[0].properties.id :
-                    makeBusId()
-                const newConnection = { busId: newBusId, attributes: {} }
-                dispatch(setAssetConnection(assetId, assetVertexIndex, newConnection))
-                break
-              }
-              break
-            }
             case ASSET_TYPE_CODE_METER: {
               console.log(busInfos)
               // Meter was dragged to nowhere
@@ -346,6 +323,7 @@ import {
   }
 
     function handleBusClick(info, event) {
+
       if (sketchMode.startsWith(SKETCH_MODE_ADD)) {
         const assetsInfos = getAssetsByScreenPosition(deckGL, info)
         const metersToConnect = assetsInfos.filter(info => info.object.properties.typeCode === ASSET_TYPE_CODE_METER)

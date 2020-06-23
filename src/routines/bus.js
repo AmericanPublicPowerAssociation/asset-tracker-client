@@ -1,6 +1,9 @@
 import translateFeature from '@turf/transform-translate'
 import {
   ASSET_TYPE_CODE_LINE,
+  ASSET_TYPE_CODE_POLE,
+  ASSET_TYPE_CODE_STATION,
+  ASSET_TYPE_CODE_SUBSTATION,
   BUS_DISTANCE_IN_KILOMETERS_BY_CODE,
   MINIMUM_BUS_ID_LENGTH,
 } from '../constants'
@@ -93,4 +96,24 @@ export function getVertexIndex(busId, asset) {
   ]) => connection.busId === busId)
   const vertexIndex = parseInt(connectionPack[0])
   return vertexIndex
+}
+
+export function isBusRequired(assetFeature, vertexIndex) {
+  const assetTypeCode = assetFeature.properties.typeCode
+
+  if ([
+    ASSET_TYPE_CODE_POLE,
+    ASSET_TYPE_CODE_SUBSTATION,
+    ASSET_TYPE_CODE_STATION,
+  ].includes(assetTypeCode)) {
+    return false
+  } else if (assetTypeCode === ASSET_TYPE_CODE_LINE) {
+    const vertexCount = assetFeature.geometry.coordinates.length
+    const lastVertexIndex = vertexCount - 1
+    if (vertexIndex > 0 && vertexIndex < lastVertexIndex) {
+      return false
+    }
+  }
+
+  return true
 }
