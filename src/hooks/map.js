@@ -3,7 +3,6 @@ import { produce } from 'immer'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import { ViewMode } from '@nebula.gl/edit-modes'
 import {
-  // showInfoMessage,
   deleteAssetConnection,
   deleteAssetVertex,
   fillAssetName,
@@ -16,6 +15,7 @@ import {
   setSelection,
   setSketchMode,
   setTemporaryAsset,
+  showWarningMessage,
 } from '../actions'
 import {
   ASSETS_MAP_LAYER_ID,
@@ -221,6 +221,21 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         const { feature, featureIndex } = getFeatureInfo(event)
         if (!temporaryAsset) {
           temporaryAsset = makeTemporaryAsset(assetTypeCode)
+
+          const position = feature.geometry.coordinates
+          const {
+            nearbyAssetFeatures, nearbyBusFeatures,
+          } = getNearbyFeatures(
+            position, deckGL, selectedAssetId, selectedBusId)
+
+          if (nearbyAssetFeatures.length) {
+            dispatch(showWarningMessage(
+              'You cannot add an asset directly to another asset. Please add lines to connect buses.'))
+          }
+          if (nearbyBusFeatures.length) {
+            dispatch(showWarningMessage(
+              'You cannot add an asset directly to bus. Please add lines to connect buses.'))
+          }
         } else if (isAddingLine) {
           // Add ending vertex
           const vertexCount = feature.geometry.coordinates.length
@@ -231,6 +246,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
             })
           }
         }
+
         const assetId = temporaryAsset.id
         updateFeature(temporaryAsset, feature)
         dispatch(setAsset(temporaryAsset))
@@ -248,8 +264,14 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
           temporaryAsset = produce(temporaryAsset, draft => {
             draft.vertexCount = vertexCount
           })
-          const { nearbyBusFeatures } = getNearbyFeatures(
+          const {
+            nearbyAssetFeatures, nearbyBusFeatures,
+          } = getNearbyFeatures(
             editContext.position, deckGL, selectedAssetId, selectedBusId)
+          if (nearbyAssetFeatures.length) {
+            dispatch(showWarningMessage(
+              'Connecting to a line is not supported yet. Please connect to a bus.'))
+          }
           // Add connection to nearby bus or make a new bus
           let busId
           if (nearbyBusFeatures.length) {
@@ -301,9 +323,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         const connection = assetConnections[vertexIndex]
         const oldBusId = connection && connection.busId
         const {
-          nearbyAssetFeatures,
-          nearbyBusFeatures,
-          screenXY,
+          nearbyAssetFeatures, nearbyBusFeatures, screenXY,
         } = getNearbyFeatures(
           editContext.position, deckGL, selectedAssetId, oldBusId)
 
@@ -355,8 +375,12 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
 
           let busId = null
           const {
-            nearbyBusFeatures,
+            nearbyAssetFeatures, nearbyBusFeatures,
           } = getNearbyFeatures(busPosition, deckGL, selectedAssetId, oldBusId)
+          if (nearbyAssetFeatures.length) {
+            dispatch(showWarningMessage(
+              'Connecting to a line is not supported yet. Please connect to a bus.'))
+          }
           if (nearbyBusFeatures.length) {
             busId = nearbyBusFeatures[0].properties.id
           } else if (isBusRequired(feature, vertexIndex)) {
