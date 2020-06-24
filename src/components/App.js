@@ -6,6 +6,7 @@ import AssetsMap from './AssetsMap'
 import SketchButtons from './SketchButtons'
 import OptionsWindow from './OptionsWindow'
 import SketchModeToolbar from './SketchModeToolbar'
+import SketchEditToolbar from './SketchEditToolbar'
 import SketchAddToolbar from './SketchAddToolbar'
 import ActionsWindow from './ActionsWindow'
 import OverlaysWindow from './OverlaysWindow'
@@ -72,6 +73,9 @@ export default function App() {
       {/* TODO: Review all components below */}
       <SketchModeToolbar />
       <SketchAddToolbar
+        isWithTables={isWithTables}
+      />
+      <SketchEditToolbar
         isWithTables={isWithTables}
       />
       <ActionsWindow
