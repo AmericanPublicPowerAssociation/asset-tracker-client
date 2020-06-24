@@ -67,8 +67,9 @@ const useStyles = makeStyles(theme => ({
   },
   listTasks: {
     overflow: 'auto',
-    marginBottom: '10px',
-    height: '100%',
+    //marginBottom: '10px',
+    //height: '100%',
+    flex: '1 1 auto',
   },
 }))
 
@@ -169,7 +170,7 @@ export default function AssetTasksPanel({
   }
 
   const listTasks = (<>
-    <FormGroup row>
+    <FormGroup row style={{ flex: '0 0 auto' }}>
       <TextField fullWidth label='Search tasks' value={query}
         onChange={(e) => setQuery(e.target.value) } />
       <div className={classes.actions}>
@@ -197,7 +198,7 @@ export default function AssetTasksPanel({
     <div className={classes.listTasks}>
       <TasksList showDetails={handleDisplayDetails} asset={asset} tasks={partialTasks}/>
     </div>
-    <div>
+    <div style={{ flex: '0 0 auto' }}>
       <Button className={classes.bottomAction} startIcon={<AddIcon />} onClick={() => setDialog(true)}>
         Add task
       </Button>
@@ -214,18 +215,20 @@ export default function AssetTasksPanel({
   }
 
   return (<>
-    <ListItem component='div' disableGutters>
-      <Tooltip title={assetTypeName} placement='left'>
-        <ListItemIcon>
-          <AssetTypeSvgIcon assetTypeCode={assetTypeCode} />
-        </ListItemIcon>
-      </Tooltip>
+    <div style={{ display: 'flex', flexDirection:'column', height: '100%', overflow: 'hidden' }}>
+      <ListItem component='div' disableGutters style={{ flex: '0 0 auto' }}>
+        <Tooltip title={assetTypeName} placement='left'>
+          <ListItemIcon>
+            <AssetTypeSvgIcon assetTypeCode={assetTypeCode} />
+          </ListItemIcon>
+        </Tooltip>
 
-      <ListItemText>
-        <AssetNameTextField asset={asset} setIsFullScreen={setIsDetailsWindowExpanded} isFullScreen={isDetailsWindowExpanded} />
-      </ListItemText>
-    </ListItem>
-    {listTasks}
+        <ListItemText>
+          <AssetNameTextField asset={asset} setIsFullScreen={setIsDetailsWindowExpanded} isFullScreen={isDetailsWindowExpanded} />
+        </ListItemText>
+      </ListItem>
+      {listTasks}
+    </div>
 
     <Dialog open={dialog} onClose={() => setDialog(false)} aria-labelledby='form-dialog-title'>
       <DialogTitle id='form-dialog-title'>Add task</DialogTitle>
