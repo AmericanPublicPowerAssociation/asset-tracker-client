@@ -26,6 +26,47 @@ import {
   SKETCH_MODE_EDIT,
 } from '../constants'
 
+class MyModifyMode extends ModifyMode {
+  // disables remove vertex when drawing lines and rectangles
+  handleClick(event, props) {
+    // Taken from nebula.gl > edit-modes/utils
+    const picks = event.picks
+    const pickedEditHandle = picks && picks
+      .filter(pick => (
+        pick.isGuide && pick.object.properties.guideType === 'editHandle'))
+      .map(pick => pick.object) || []
+    const pickedExistingHandle = pickedEditHandle.find(
+      ({ properties }) => properties.featureIndex >= 0 && properties.editHandleType === 'existing')
+    if (pickedExistingHandle) return
+    super.handleClick(event, props)
+  }
+}
+
+class RemoveVertexModeOnly extends ModifyMode {
+  // disables moving lines and only allows to remove vertex
+  handleClick(event, props) {
+    // Taken from nebula.gl > edit-modes/utils
+    const picks = event.picks
+    const pickedEditHandle = picks && picks
+      .filter(pick => (
+        pick.isGuide && pick.object.properties.guideType === 'editHandle'))
+      .map(pick => pick.object) || []
+    const pickedIntermediateHandle = pickedEditHandle.find(
+      ({ properties }) => properties.featureIndex >= 0 && properties.editHandleType === 'intermediate')
+    if (pickedIntermediateHandle) return
+    super.handleClick(event, props)
+  }
+
+  getGuides(props) {
+    props['lastPointerMoveEvent'] = null
+    return super.getGuides(props)
+  }
+
+  handleDragging() {}
+  handleStartDragging() {}
+  handleStopDragging() {}
+}
+
 export function getMapMode(sketchMode) {
   const mapMode = {
     [SKETCH_MODE_ADD_POLE]: DrawCircleByDiameterMode,
