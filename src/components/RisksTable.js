@@ -48,12 +48,12 @@ export default function RisksTable() {
 
   function isSelectedRow(rowData) {
     const isSelectedAssetId = rowData.assetId === selectedAssetId
-    const isSelectedRiskIndex = rowData.tableData.id === selectedRiskIndex
+    const isSelectedRiskIndex = rowData.vulnerabilityUri === selectedRiskIndex
     return isSelectedAssetId && isSelectedRiskIndex
   }
 
   function handleRowClick(event, rowData) {
-    dispatch(setSelectedRiskIndex(rowData.tableData.id))
+    dispatch(setSelectedRiskIndex(rowData.vulnerabilityUri))
     dispatch(setSelection({ assetId: rowData.assetId }))
   }
 
