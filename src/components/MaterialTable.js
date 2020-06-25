@@ -15,6 +15,11 @@ import Remove from '@material-ui/icons/Remove'
 import SaveAlt from '@material-ui/icons/SaveAlt'
 import Search from '@material-ui/icons/Search'
 import ViewColumn from '@material-ui/icons/ViewColumn'
+import { useSelector } from 'react-redux'
+import {
+  getSelectedAssetId,
+} from '../selectors'
+
 
 const TABLE_ICONS = {
   Add: forwardRef((props, ref) =>
@@ -57,9 +62,11 @@ export default function WrappedMaterialTable({
   isSelectedRow,
   ...props
 }) {
+  const selectedAssetId = useSelector(getSelectedAssetId)
+
   function getRowStyle(rowData) {
     return {
-      backgroundColor: isSelectedRow(rowData) ? 'yellow' : 'white',
+      backgroundColor: rowData.assetId === selectedAssetId  ? 'yellow' : 'white',
     }
   }
 
