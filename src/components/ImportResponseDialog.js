@@ -74,25 +74,24 @@ const messages = {
 export default function ImportResponseDialog({ open, onClose, response }) {
   const classes = useStyles()
   let result = 'error' 
+  let errors = response.errors
 
-  if (!response.error) {
+  if (!response.errors) {
     result = 'success' 
   }
-  else if (response.error) {
+  else if (response.errors['save_errors']) {
     result = 'warning'
-  }
-  else {
-    result = 'error'
+    errors = response.errors.save_errors
   }
 
-  const ListAssetsWithErrorsComponent = response.error && (
+  const ListErrorsComponent = response.errors && (
     <DialogContent>
       <div style={{ height: '6em' }} >
         <List
           component="nav"
           aria-label="assets-with-errors" >
           { 
-            Object.entries(response.error).map( ([id, error]) => ( 
+            Object.entries(errors).map( ([id, error]) => (
               <>
               <ListItem id={id}>
                 <ListItemText>{id} - {JSON.stringify(error)}</ListItemText>
@@ -122,7 +121,7 @@ export default function ImportResponseDialog({ open, onClose, response }) {
             <Typography>{displayMessage}</Typography>
           </Container>
         </DialogContent>
-        { ListAssetsWithErrorsComponent }
+        { ListErrorsComponent }
         <Button
           variant="contained" color="primary" size="large"
           onClick={onClose}
