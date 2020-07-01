@@ -58,7 +58,11 @@ export default function AssetRisksPanel({
         </ListItem>
 
         {
-          !isLayoutMobile &&
+          (!isLayoutMobile && risks.length === 0) ?
+            <Typography variant='h5' component='h2'>
+              No risks to show
+              </Typography>
+          :
           risks.map((risk, riskIndex) => {
             const meterCount = risk.meterCount
             const isHighlighted = riskIndex === selectedRiskIndex
