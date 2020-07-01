@@ -27,12 +27,13 @@ import {
   SKETCH_MODE_EDIT_VERTEX_ADD,
   SKETCH_MODE_EDIT_VERTEX_MOVE,
   SKETCH_MODE_EDIT_VERTEX_REMOVE,
-  SKETCH_MODE_EDIT_VERTEX_SPLIT_LINE,
+  // SKETCH_MODE_EDIT_VERTEX_SPLIT_LINE,
 } from '../constants'
 
-class AddVertexMode extends ModifyMode {
+class AddMoveVertexMode extends ModifyMode {
   // disables remove vertex when drawing lines and rectangles
   handleClick(event, props) {
+    console.log('props', props)
     // Taken from nebula.gl > edit-modes/utils
     const picks = event.picks
     const pickedEditHandle = picks && picks
@@ -45,20 +46,28 @@ class AddVertexMode extends ModifyMode {
     super.handleClick(event, props)
   }
 
-  handleDragging() {}
-  handleStartDragging() {}
-  handleStopDragging() {}
+  handleDragging(event, props) {
+    super.handleDragging(event, props)
+  }
+
+  handleStartDragging(event, props) {
+    super.handleStartDragging(event, props)
+  }
+
+  handleStopDragging(event, props) {
+    super.handleStopDragging(event, props)
+  }
 }
 
 class MoveVertexMode extends ModifyMode {
   handleDragging(event, props) {
     super.handleDragging(event, props)
   }
-  
+
   handleStartDragging(event, props) {
     super.handleStartDragging(event, props)
   }
-  
+
   handleStopDragging(event, props) {
     super.handleStopDragging(event, props)
   }
@@ -103,9 +112,9 @@ export function getMapMode(sketchMode) {
     [SKETCH_MODE_ADD_SUBSTATION]: DrawRectangleMode,
     [SKETCH_MODE_ADD_STATION]: DrawPolygonMode,
     [SKETCH_MODE_EDIT]: ModifyMode,
-    [SKETCH_MODE_EDIT_VERTEX_ADD]: AddVertexMode, 
+    [SKETCH_MODE_EDIT_VERTEX_ADD]: AddMoveVertexMode,
     [SKETCH_MODE_EDIT_VERTEX_MOVE]: MoveVertexMode, 
-    [SKETCH_MODE_EDIT_VERTEX_REMOVE]: RemoveVertexMode,
+    [SKETCH_MODE_EDIT_VERTEX_REMOVE]: ModifyMode,
     // add split line mode
   }[sketchMode]
   return mapMode || ViewMode

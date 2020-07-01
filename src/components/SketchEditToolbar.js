@@ -7,7 +7,10 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import Tooltip from '@material-ui/core/Tooltip'
 import SvgIcon from '@material-ui/core/SvgIcon'
-import EditIcon from '@material-ui/icons/Edit'
+import AddIcon from '@material-ui/icons/Add'
+import OpenWithIcon from '@material-ui/icons/OpenWith'
+import DeleteIcon from '@material-ui/icons/Delete'
+import Typography from '@material-ui/core/Typography'
 import {
   setSketchMode,
 } from '../actions'
@@ -16,7 +19,7 @@ import {
   SKETCH_MODE_EDIT_VERTEX_ADD,
   SKETCH_MODE_EDIT_VERTEX_MOVE,
   SKETCH_MODE_EDIT_VERTEX_REMOVE,
-  SKETCH_MODE_EDIT_VERTEX_SPLIT_LINE,
+  // SKETCH_MODE_EDIT_VERTEX_SPLIT_LINE,
 } from '../constants'
 import {
   getSketchMode,
@@ -27,6 +30,7 @@ const useStyles = makeStyles(theme => ({
     position: 'fixed',
     top: theme.spacing(28.5),
     left: theme.spacing(1),
+    textAlign: 'center',
   },
   list: {
     overflowY: 'auto',
@@ -50,21 +54,11 @@ export default function SketchEditToolbar({
     <Paper className={classes.root}>
       <List className={clsx(classes.list, {
         [classes.withTables]: isWithTables,
-      })}>
-        <Tooltip
-          title='Add Vertex'
-          aria-label='Add Vertex'
-          placement='right'
-        >
-          <ListItem
-            button
-            classes={LIST_ITEM_CLASSES}
-            selected={sketchMode === SKETCH_MODE_EDIT_VERTEX_ADD}
-            onClick={() => dispatch(setSketchMode(SKETCH_MODE_EDIT_VERTEX_ADD))}
-          >
-            <SvgIcon fontSize='large' component={EditIcon} />
-          </ListItem>
-        </Tooltip>
+      })}
+        aria-labelledby='nested-list-subheader'
+        subheader={
+          <Typography variant='caption'>Edit Vertex</Typography>
+        }>
         <Tooltip
           title='Move Vertex'
           aria-label='Move Vertex'
@@ -76,12 +70,26 @@ export default function SketchEditToolbar({
             selected={sketchMode === SKETCH_MODE_EDIT_VERTEX_MOVE}
             onClick={() => dispatch(setSketchMode(SKETCH_MODE_EDIT_VERTEX_MOVE))}
           >
-            <SvgIcon fontSize='large' component={EditIcon} />
+            <SvgIcon fontSize='large' component={OpenWithIcon} />
           </ListItem>
         </Tooltip>
         <Tooltip
-          title='Remove Vertex'
-          aria-label='Remove Vertex'
+          title='Add/Move Vertex'
+          aria-label='Add/Move Vertex'
+          placement='right'
+        >
+          <ListItem
+            button
+            classes={LIST_ITEM_CLASSES}
+            selected={sketchMode === SKETCH_MODE_EDIT_VERTEX_ADD}
+            onClick={() => dispatch(setSketchMode(SKETCH_MODE_EDIT_VERTEX_ADD))}
+          >
+            <SvgIcon fontSize='large' component={AddIcon} />
+          </ListItem>
+        </Tooltip>
+        <Tooltip
+          title='Remove/Move/Add Vertex'
+          aria-label='Remove/Move/Add Vertex'
           placement='right'
         >
           <ListItem
@@ -90,9 +98,10 @@ export default function SketchEditToolbar({
             selected={sketchMode === SKETCH_MODE_EDIT_VERTEX_REMOVE}
             onClick={() => dispatch(setSketchMode(SKETCH_MODE_EDIT_VERTEX_REMOVE))}
           >
-            <SvgIcon fontSize='large' component={EditIcon} />
+            <SvgIcon fontSize='large' component={DeleteIcon} />
           </ListItem>
         </Tooltip>
+        { /*
         <Tooltip
           title='Split Line'
           aria-label='Split Line'
@@ -106,7 +115,8 @@ export default function SketchEditToolbar({
           >
             <SvgIcon fontSize='large' component={EditIcon} />
           </ListItem>
-        </Tooltip>
+        </Tooltip> */
+        }
       </List>
     </Paper>
   )

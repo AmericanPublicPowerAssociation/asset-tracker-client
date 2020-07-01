@@ -19,6 +19,7 @@ const MAP_CONTROLLER_OPTIONS = { doubleClickZoom: false }
 
 export default function AssetsMap({
   onAssetDelete,
+  onAssetVertexDelete,
 }) {
   const deckGL = useRef()
   const mapStyle = useSelector(getMapStyle)
@@ -28,6 +29,7 @@ export default function AssetsMap({
   const { handleMapMove } = useMovableMap()
   const { mapLayers, handleMapKey } = useEditableMap(deckGL, {
     onAssetDelete,
+    onAssetVertexDelete,
 	})
   mapLayers.push(...overlayMapLayers)
   return (

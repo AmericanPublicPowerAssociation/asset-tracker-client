@@ -15,6 +15,7 @@ import TablesWindow from './TablesWindow'
 import ImportExportDialog from './ImportExportDialog'
 import AssetDeleteDialog from './AssetDeleteDialog'
 import MessageBar from './MessageBar'
+import AssetVertexDeleteDialog from './AssetVertexDeleteDialog'
 import './App.css'
 import {
   refreshAssets,
@@ -40,6 +41,7 @@ export default function App() {
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
   const [deletedAssetId, setDeletedAssetId] = useState(null)
+  const [deleteAssetVertexObj, setDeleteAssetVertexObj] = useState(null)
   const [
     isImportExportDialogOpen,
     setIsImportExportDialogOpen,
@@ -58,6 +60,7 @@ export default function App() {
     <IsLayoutMobileContext.Provider value={isLayoutMobile}>
       <AssetsMap
         onAssetDelete={assetId => setDeletedAssetId(assetId)}
+        onAssetVertexDelete={deleteParams => setDeleteAssetVertexObj(deleteParams) }
       />
       <SketchButtons />
       <OptionsWindow
@@ -98,6 +101,11 @@ export default function App() {
         deletedAssetId={deletedAssetId}
         isOpen={deletedAssetId !== null}
         onClose={() => setDeletedAssetId(null)}
+      />
+      <AssetVertexDeleteDialog
+        deleteAssetVertexObj={deleteAssetVertexObj}
+        isOpen={deleteAssetVertexObj !== null}
+        onClose={() => setDeleteAssetVertexObj(null)}
       />
       {/* TODO: Review all components above */}
 

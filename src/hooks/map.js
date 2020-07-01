@@ -67,7 +67,7 @@ export function useMovableMap() {
   }
 }
 
-export function useEditableMap(deckGL, { onAssetDelete }) {
+export function useEditableMap(deckGL, { onAssetDelete, onAssetVertexDelete }) {
   const dispatch = useDispatch()
   const sketchMode = useSelector(getSketchMode)
   const mapColors = useSelector(getMapColors)
@@ -310,8 +310,13 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         if (featureProperties.typeCode === ASSET_TYPE_CODE_LINE) {
           const vertexCount = feature.geometry.coordinates.length
           const assetId = featureProperties.id
-          dispatch(deleteAssetVertex(
+          const asset = assetById[assetId]
+          /*dispatch(deleteAssetVertex(
             assetId, removedPositionIndex, vertexCount))
+          dispatch(setAssetsGeoJson(updatedData))
+          */
+          onAssetVertexDelete({ assetId, removedPositionIndex, vertexCount, updatedData })
+          return // prevent update
         }
         break
       }
