@@ -93,8 +93,8 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
   },
   status: {
-    fontSize: '0.7em',
     height: '25px',
+    fontSize: '0.7em',
     marginLeft: '6px',
     marginTop: '0',
     marginBottom: '0',
@@ -114,6 +114,11 @@ const useStyles = makeStyles(theme => ({
     overflowY: 'auto',
     backgroundColor: 'white',
     paddingLeft: '15px',
+  },
+  listItemText: {
+    marginLeft: '6px',
+    marginTop: '0',
+    marginBottom: '0',
   },
   label: {
     color: 'rgba(0, 0, 0, 0.54)',
@@ -294,7 +299,7 @@ function TaskItem(props) {
         <div className={classes.spaceBetween}>
           <div className={classes.alignStart}>
             <div className={classes.fullWidth}>
-              <ListItemText primary={name} className={classes.status} />
+              <ListItemText primary={name} className={classes.listItemText} />
               <div className={classes.actions}>
                 <div>
                   { priorityLabel !== 'Normal' &&

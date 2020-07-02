@@ -27,14 +27,19 @@ import {
 
 const uploaderProps = {
   acceptedFiles: [
+    '.ods',
     '.csv',
+    '.xls ',
+    '.xlsx',
+    'text/ods',
     'text/csv',
-    'application/vnd.ms-excel',
-    'application/csv',
     'text/x-csv',
-    'application/x-csv',
     'text/comma-separated-values',
     'text/x-comma-separated-values',
+    'application/x-csv',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/csv',
   ],
   filesLimit: 1,
   showPreviewsInDropzone: true,

@@ -58,15 +58,19 @@ export default function AssetRisksPanel({
         </ListItem>
 
         {
-          !isLayoutMobile &&
+          (!isLayoutMobile && risks.length === 0) ?
+            <Typography variant='h5' component='h2'>
+              No risks to show
+              </Typography>
+          :
           risks.map((risk, riskIndex) => {
             const meterCount = risk.meterCount
-            const isHighlighted = riskIndex === selectedRiskIndex
+            const isHighlighted = risk.vulnerabilityUri === selectedRiskIndex
 
             return (
               <Card
                 className={clsx({ highlighted: isHighlighted })}
-                onClick={() => dispatch(setSelectedRiskIndex(riskIndex))}
+                onClick={() => dispatch(setSelectedRiskIndex(risk.vulnerabilityUri))}
               >
                 <CardContent>
                   <Typography variant='h5' component='h2'>
