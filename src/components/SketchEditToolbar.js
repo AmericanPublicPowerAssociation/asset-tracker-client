@@ -60,20 +60,6 @@ export default function SketchEditToolbar({
           <Typography variant='caption'>Edit Vertex</Typography>
         }>
         <Tooltip
-          title='Move Vertex'
-          aria-label='Move Vertex'
-          placement='right'
-        >
-          <ListItem
-            button
-            classes={LIST_ITEM_CLASSES}
-            selected={sketchMode === SKETCH_MODE_EDIT_VERTEX_MOVE}
-            onClick={() => dispatch(setSketchMode(SKETCH_MODE_EDIT_VERTEX_MOVE))}
-          >
-            <SvgIcon fontSize='large' component={OpenWithIcon} />
-          </ListItem>
-        </Tooltip>
-        <Tooltip
           title='Add/Move Vertex'
           aria-label='Add/Move Vertex'
           placement='right'
@@ -85,6 +71,20 @@ export default function SketchEditToolbar({
             onClick={() => dispatch(setSketchMode(SKETCH_MODE_EDIT_VERTEX_ADD))}
           >
             <SvgIcon fontSize='large' component={AddIcon} />
+          </ListItem>
+        </Tooltip>
+        <Tooltip
+          title='Move Vertex'
+          aria-label='Move Vertex'
+          placement='right'
+        >
+          <ListItem
+            button
+            classes={LIST_ITEM_CLASSES}
+            selected={sketchMode === SKETCH_MODE_EDIT_VERTEX_MOVE}
+            onClick={() => dispatch(setSketchMode(SKETCH_MODE_EDIT_VERTEX_MOVE))}
+          >
+            <SvgIcon fontSize='large' component={OpenWithIcon} />
           </ListItem>
         </Tooltip>
         <Tooltip

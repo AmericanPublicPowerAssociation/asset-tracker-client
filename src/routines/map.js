@@ -31,7 +31,6 @@ import {
 } from '../constants'
 
 class AddMoveVertexMode extends ModifyMode {
-  // disables remove vertex when drawing lines and rectangles
   handleClick(event, props) {
     console.log('props', props)
     // Taken from nebula.gl > edit-modes/utils
@@ -60,13 +59,13 @@ class AddMoveVertexMode extends ModifyMode {
 }
 
 class MoveVertexMode extends ModifyMode {
+  handleClick(event, props) {}
+
   handleDragging(event, props) {
     super.handleDragging(event, props)
   }
 
-  handleStartDragging(event, props) {
-    super.handleStartDragging(event, props)
-  }
+  handleStartDragging(event, props) {}
 
   handleStopDragging(event, props) {
     super.handleStopDragging(event, props)
@@ -114,7 +113,7 @@ export function getMapMode(sketchMode) {
     [SKETCH_MODE_EDIT]: ModifyMode,
     [SKETCH_MODE_EDIT_VERTEX_ADD]: AddMoveVertexMode,
     [SKETCH_MODE_EDIT_VERTEX_MOVE]: MoveVertexMode, 
-    [SKETCH_MODE_EDIT_VERTEX_REMOVE]: ModifyMode,
+    [SKETCH_MODE_EDIT_VERTEX_REMOVE]: RemoveVertexMode,
     // add split line mode
   }[sketchMode]
   return mapMode || ViewMode
