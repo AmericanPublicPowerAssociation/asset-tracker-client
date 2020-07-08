@@ -142,7 +142,7 @@ export default function AssetTasksPanel({
   const notArchived = (task) => { return task.status !== TASK_ARCHIVE_STATUS && task.status !== TASK_STATUS_CANCELLED }
   const isArchived = (task) => { return task.status === TASK_ARCHIVE_STATUS || task.status === TASK_STATUS_CANCELLED }
 
-  const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
+  const partialTasks = tasks.filter(task => task.name.toLowerCase().includes(query.toLowerCase())).filter(
     task => (
       taskFilter ?
         (

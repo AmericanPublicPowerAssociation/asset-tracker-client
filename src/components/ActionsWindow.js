@@ -25,8 +25,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function ActionsWindow({
-  isImportExportDialogOpen,
-  setIsImportExportDialogOpen,
+  isWithImportExportDialog,
+  setIsWithImportExportDialog,
 }) {
   const classes = useStyles()
   const mapColors = useSelector(getMapColors)
@@ -36,8 +36,9 @@ export default function ActionsWindow({
     <div className={classes.root}>
       <Tooltip title='Import and Export Assets'>
         <IconButton
-          className={isImportExportDialogOpen ? activeColor : inactiveColor}
-          onClick={() => setIsImportExportDialogOpen(toggleState) }
+          className={isWithImportExportDialog ? activeColor : inactiveColor}
+          disabled={!isWithImportExportDialog}
+          onClick={() => setIsWithImportExportDialog(toggleState) }
         >
           <ImportExportIcon />
         </IconButton>

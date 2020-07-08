@@ -29,6 +29,7 @@ import {
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_DELETE,
   SKETCH_MODE_EDIT_VERTEX_REMOVE,
+  SKETCH_MODE_VIEW,
 } from '../constants'
 import {
   getAssetDescription,
@@ -137,6 +138,7 @@ export function useEditableMap(deckGL, { onAssetDelete, onAssetVertexDelete }) {
   }
 
   function handleMapKey(event) {
+    if (sketchMode === SKETCH_MODE_VIEW) return
     event.persist()  // Populate event with extra signals
     // console.log('map key', event)
     switch (event.key) {
