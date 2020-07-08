@@ -194,24 +194,12 @@ export function useEditableMap(deckGL, { onAssetDelete, onAssetVertexDelete }) {
     const assetFeature = assetFeatures[assetIndex]
     if (!assetFeature) return
     const assetId = assetFeature.properties.id
-    const assetTypeCode = assetFeature.properties.typeCode
     console.log(assetId)
     if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
       dispatch(setSelection({ assetId, assetIndexes: [assetIndex] }))
     }
     if (sketchMode === SKETCH_MODE_DELETE) {
       onAssetDelete(assetId)
-    }
-    else if (sketchMode.startsWith(SKETCH_MODE_EDIT_VERTEX_REMOVE)) {
-      const assetHasVertex = (
-          assetTypeCode === 'p' ||
-          assetTypeCode === 'l' ||
-          assetTypeCode === 's' ||
-          assetTypeCode === 'S')
-      if (!assetHasVertex) {
-        dispatch(showWarningMessage(
-          'If you\'d like to delete an asset, you must be in delete mode.'))
-      }
     }
   }
 

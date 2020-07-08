@@ -15,7 +15,7 @@ import TablesWindow from './TablesWindow'
 import ImportExportDialog from './ImportExportDialog'
 import AssetDeleteDialog from './AssetDeleteDialog'
 import MessageBar from './MessageBar'
-import AssetVertexDeleteDialog from './AssetVertexDeleteDialog'
+import AssetVertexDeleteSnackbar from './AssetVertexDeleteSnackbar'
 import './App.css'
 import {
   refreshAssets,
@@ -102,10 +102,10 @@ export default function App() {
         isOpen={deletedAssetId !== null}
         onClose={() => setDeletedAssetId(null)}
       />
-      <AssetVertexDeleteDialog
+      <AssetVertexDeleteSnackbar
         deleteAssetVertexObj={deleteAssetVertexObj}
         isOpen={deleteAssetVertexObj !== null}
-        onClose={() => setDeleteAssetVertexObj(null)}
+        hideMessage={() => setDeleteAssetVertexObj(null)}
       />
       {/* TODO: Review all components above */}
 
