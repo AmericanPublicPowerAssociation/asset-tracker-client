@@ -11,6 +11,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
+import FormHelperText from '@material-ui/core/FormHelperText'
 import Grid from '@material-ui/core/Grid'
 import Input from '@material-ui/core/Input'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -91,7 +92,6 @@ export default function ImportExportDialog({
     setSourceId(data[0].id)
   }
 
-  
   function selectAction() {
     if (action === 'download') {
       if (downloadFormat === 'dss') {
@@ -183,12 +183,19 @@ export default function ImportExportDialog({
 
   const SelectDssPowerSource = (
     <>
-      <Typography component='p'>Select the power source</Typography>
-      <Select
-        onChange={e => setSourceId(e.target.value)} value={sourceId}
-        input={<Input />} >
-        { data.map(asset => <MenuItem value={asset.id} key={asset.id}>{asset.name}</MenuItem>) }
-      </Select>
+      <FormControl>
+        <Typography component='p'>Select the power source</Typography>
+        <Select
+          id='power-source-select'
+          onChange={e => setSourceId(e.target.value)}
+          value={sourceId}
+          input={<Input />} >
+          { data.length > 0
+            ? data.map(asset => <MenuItem value={asset.id} key={asset.id}>{asset.name}</MenuItem>)
+            : <MenuItem value=''><em>None</em></MenuItem>}
+        </Select>
+        <FormHelperText>A generator must be connected to download a dss file.</FormHelperText>
+      </FormControl>
     </>
   )
 
@@ -220,25 +227,27 @@ export default function ImportExportDialog({
       </DialogContent>
       <DialogActions>
         <Button disabled={loadingFileIndicator} onClick={onCancel}>Cancel</Button>
-        <Button disabled={loadingFileIndicator} onClick={selectAction} color='primary'>Ok</Button>
+        <Button
+          disabled={action === 'download' && downloadFormat === 'dss' && !sourceId}
+          onClick={selectAction} color='primary'>Ok</Button>
       </DialogActions>
 	  </Dialog>
   )
 
-    return (
-      <>
-        { ActionSelectorDialog }
-        { OverwriteConfirmationDialog }
-        { uploadResponse && 
-          <ImportResponseDialog
-            open={true}
-            response={uploadResponse}
-            onClose={(() => {
-              setUploadResponse()
-              onClose()
-            })}
-          />
-        }
-      </>
-    )
+  return (
+    <>
+      { ActionSelectorDialog }
+      { OverwriteConfirmationDialog }
+      { uploadResponse &&
+        <ImportResponseDialog
+          open={true}
+          response={uploadResponse}
+          onClose={(() => {
+            setUploadResponse()
+            onClose()
+          })}
+        />
+      }
+    </>
+  )
 }

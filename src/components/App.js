@@ -85,16 +85,18 @@ export default function App() {
         isWithTables={isWithTables}
       />
     }
+    { isImportExportDialogOpen &&
       <ImportExportDialog
         isOpen={isImportExportDialogOpen}
         onCancel={() => {setIsImportExportDialogOpen(false)}}
         onClose={()=> {setIsImportExportDialogOpen(false)}}
       />
-      <AssetDeleteDialog
-        deletedAssetId={deletedAssetId}
-        isOpen={deletedAssetId !== null}
-        onClose={() => setDeletedAssetId(null)}
-      />
+    }
+    <AssetDeleteDialog
+      deletedAssetId={deletedAssetId}
+      isOpen={deletedAssetId !== null}
+      onClose={() => setDeletedAssetId(null)}
+    />
       {/* TODO: Review all components above */}
 
       <MessageBar />
