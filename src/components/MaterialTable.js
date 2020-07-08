@@ -17,9 +17,13 @@ import Search from '@material-ui/icons/Search'
 import ViewColumn from '@material-ui/icons/ViewColumn'
 import { useSelector } from 'react-redux'
 import {
+  getOverlayMode,
   getSelectedAssetId,
+  getSelectedTaskId,
 } from '../selectors'
-
+import {
+  getSelectedRiskIndex,
+} from 'asset-report-risks'
 
 const TABLE_ICONS = {
   Add: forwardRef((props, ref) =>
@@ -63,10 +67,23 @@ export default function WrappedMaterialTable({
   ...props
 }) {
   const selectedAssetId = useSelector(getSelectedAssetId)
+  const selectedTaskId = useSelector(getSelectedTaskId)
+  const selectedRiskIndex = useSelector(getSelectedRiskIndex)
+  const overlayMode = useSelector(getOverlayMode)
 
   function getRowStyle(rowData) {
-    return {
-      backgroundColor: rowData.assetId === selectedAssetId  ? 'yellow' : 'white',
+    if ((overlayMode === 'tasks') && (selectedTaskId) && (rowData.assetId === selectedAssetId)) {
+      return {
+        backgroundColor: rowData.id === selectedTaskId  ? 'yellow' : 'white',
+      }
+    } else if ((overlayMode === 'risks') && (selectedRiskIndex) && (rowData.assetId === selectedAssetId)) {
+      return {
+        backgroundColor: rowData.vulnerabilityUri === selectedRiskIndex  ? 'yellow' : 'white',
+      }
+    } else {
+      return {
+        backgroundColor: rowData.assetId === selectedAssetId  ? 'yellow' : 'white',
+      }
     }
   }
 
