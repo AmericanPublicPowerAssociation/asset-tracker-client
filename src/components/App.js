@@ -40,8 +40,8 @@ export default function App() {
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
   const [deletedAssetId, setDeletedAssetId] = useState(null)
   const [
-    isImportExportDialogOpen,
-    setIsImportExportDialogOpen,
+    isWithImportExportDialog,
+    setIsWithImportExportDialog,
   ] = useState(false)
   const isViewing = useSelector(getIsViewing)
 
@@ -75,8 +75,9 @@ export default function App() {
         isWithTables={isWithTables}
       />
       <ActionsWindow
-        isImportExportDialogOpen={isImportExportDialogOpen}
-        setIsImportExportDialogOpen={setIsImportExportDialogOpen}
+        {/* If sketchMode='view', then import-export is enabled */}
+        isWithImportExportDialog={isViewing}
+        setIsWithImportExportDialog={setIsWithImportExportDialog}
       />
       <OverlaysWindow />
     {isWithDetails &&
@@ -87,9 +88,9 @@ export default function App() {
     }
     { isImportExportDialogOpen &&
       <ImportExportDialog
-        isOpen={isImportExportDialogOpen}
-        onCancel={() => {setIsImportExportDialogOpen(false)}}
-        onClose={()=> {setIsImportExportDialogOpen(false)}}
+        isOpen={isWithImportExportDialog}
+        onCancel={() => {setIsWithImportExportDialog(false)}}
+        onClose={()=> {setIsWithImportExportDialog(false)}}
       />
     }
     <AssetDeleteDialog
