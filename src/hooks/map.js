@@ -28,6 +28,7 @@ import {
   SKETCH_MODE_ADD_ASSET,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_DELETE,
+  SKETCH_MODE_EDIT_VERTEX_REMOVE,
   SKETCH_MODE_VIEW,
 } from '../constants'
 import {
@@ -68,7 +69,7 @@ export function useMovableMap() {
   }
 }
 
-export function useEditableMap(deckGL, { onAssetDelete }) {
+export function useEditableMap(deckGL, { onAssetDelete, onAssetVertexDelete }) {
   const dispatch = useDispatch()
   const sketchMode = useSelector(getSketchMode)
   const mapColors = useSelector(getMapColors)
@@ -189,11 +190,13 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   }
 
   function handleAssetClick(info, event) {
-    // console.log('asset click', info, event)
+    console.log('asset click', info, event)
     const assetIndex = info.index
+    console.log(assetFeatures, assetIndex)
     const assetFeature = assetFeatures[assetIndex]
     if (!assetFeature) return
     const assetId = assetFeature.properties.id
+    console.log(assetId)
     if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
       dispatch(setSelection({ assetId, assetIndexes: [assetIndex] }))
     }
@@ -312,8 +315,13 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         if (featureProperties.typeCode === ASSET_TYPE_CODE_LINE) {
           const vertexCount = feature.geometry.coordinates.length
           const assetId = featureProperties.id
-          dispatch(deleteAssetVertex(
+          const asset = assetById[assetId]
+          /*dispatch(deleteAssetVertex(
             assetId, removedPositionIndex, vertexCount))
+          dispatch(setAssetsGeoJson(updatedData))
+          */
+          onAssetVertexDelete({ assetId, removedPositionIndex, vertexCount, updatedData })
+          return // prevent update
         }
         break
       }

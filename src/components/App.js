@@ -6,6 +6,7 @@ import AssetsMap from './AssetsMap'
 import SketchButtons from './SketchButtons'
 import OptionsWindow from './OptionsWindow'
 import SketchModeToolbar from './SketchModeToolbar'
+import SketchEditToolbar from './SketchEditToolbar'
 import SketchAddToolbar from './SketchAddToolbar'
 import ActionsWindow from './ActionsWindow'
 import OverlaysWindow from './OverlaysWindow'
@@ -14,6 +15,7 @@ import TablesWindow from './TablesWindow'
 import ImportExportDialog from './ImportExportDialog'
 import AssetDeleteDialog from './AssetDeleteDialog'
 import MessageBar from './MessageBar'
+import AssetVertexDeleteSnackbar from './AssetVertexDeleteSnackbar'
 import './App.css'
 import {
   refreshAssets,
@@ -39,6 +41,7 @@ export default function App() {
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
   const [deletedAssetId, setDeletedAssetId] = useState(null)
+  const [deleteAssetVertexObj, setDeleteAssetVertexObj] = useState(null)
   const [
     isWithImportExportDialog,
     setIsWithImportExportDialog,
@@ -57,6 +60,7 @@ export default function App() {
     <IsLayoutMobileContext.Provider value={isLayoutMobile}>
       <AssetsMap
         onAssetDelete={assetId => setDeletedAssetId(assetId)}
+        onAssetVertexDelete={deleteParams => setDeleteAssetVertexObj(deleteParams) }
       />
       <SketchButtons />
       <OptionsWindow
@@ -74,30 +78,37 @@ export default function App() {
       <SketchAddToolbar
         isWithTables={isWithTables}
       />
+      <SketchEditToolbar
+        isWithTables={isWithTables}
+      />
       <ActionsWindow
-        {/* If sketchMode='view', then import-export is enabled */}
         isWithImportExportDialog={isViewing}
         setIsWithImportExportDialog={setIsWithImportExportDialog}
       />
       <OverlaysWindow />
-    {isWithDetails &&
-      <DetailsWindow
-        isWithDetails={isWithDetails}
-        isWithTables={isWithTables}
+      {isWithDetails &&
+        <DetailsWindow
+          isWithDetails={isWithDetails}
+          isWithTables={isWithTables}
+        />
+      }
+      { isWithImportExportDialog &&
+        <ImportExportDialog
+          isOpen={isWithImportExportDialog}
+          onCancel={() => {setIsWithImportExportDialog(false)}}
+          onClose={()=> {setIsWithImportExportDialog(false)}}
+        />
+      }
+      <AssetDeleteDialog
+        deletedAssetId={deletedAssetId}
+        isOpen={deletedAssetId !== null}
+        onClose={() => setDeletedAssetId(null)}
       />
-    }
-    { isImportExportDialogOpen &&
-      <ImportExportDialog
-        isOpen={isWithImportExportDialog}
-        onCancel={() => {setIsWithImportExportDialog(false)}}
-        onClose={()=> {setIsWithImportExportDialog(false)}}
+      <AssetVertexDeleteSnackbar
+        deleteAssetVertexObj={deleteAssetVertexObj}
+        isOpen={deleteAssetVertexObj !== null}
+        hideMessage={() => setDeleteAssetVertexObj(null)}
       />
-    }
-    <AssetDeleteDialog
-      deletedAssetId={deletedAssetId}
-      isOpen={deletedAssetId !== null}
-      onClose={() => setDeletedAssetId(null)}
-    />
       {/* TODO: Review all components above */}
 
       <MessageBar />

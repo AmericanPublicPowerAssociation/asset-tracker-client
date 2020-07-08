@@ -55,7 +55,7 @@ export default function SketchModeToolbar() {
           <ListItem
             button
             classes={{ selected: 'selected' }}
-            selected={sketchMode === SKETCH_MODE_EDIT}
+            selected={sketchMode.startsWith(SKETCH_MODE_EDIT)}
             onClick={() => dispatch(setSketchMode(SKETCH_MODE_EDIT))}
           >
             <SvgIcon fontSize='large' component={EditIcon} />
