@@ -310,16 +310,13 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         const { feature } = getFeatureInfo(event)
         const removedPositionIndex = getPositionIndex(event)
         const featureProperties = feature.properties
-        if (featureProperties.typeCode === ASSET_TYPE_CODE_LINE) {
-          const vertexCount = feature.geometry.coordinates.length
-          const assetId = featureProperties.id
-          const lonlat = editContext.position
-          dispatch(setPopUpDeleteMidpoint({
-            lonlat, assetId, removedPositionIndex, vertexCount, updatedData,
-          }))
-          return // prevent update
-        }
-        break
+        const vertexCount = feature.geometry.coordinates.length
+        const assetId = featureProperties.id
+        const lonlat = editContext.position
+        dispatch(setPopUpDeleteMidpoint({
+          lonlat, assetId, removedPositionIndex, vertexCount, updatedData,
+        }))
+        return // prevent update
       }
       case 'movePosition': {
         // Drag a vertex in ModifyMode
