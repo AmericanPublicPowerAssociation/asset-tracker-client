@@ -30,6 +30,7 @@ export const getMapViewState = state => state.mapViewState
 export const getOverlayMode = state => state.overlayMode
 export const getSketchMode = state => state.sketchMode
 export const getPopUpState = state => state.popUpState
+export const getPopUpDeleteMidpointState = state => state.popUpDeleteMidpointState
 export const getSelectedAssetIndexes = state => state.selectedAssetIndexes
 export const getSelectedBusIndexes = state => state.selectedBusIndexes
 
