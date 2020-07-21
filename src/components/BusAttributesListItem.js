@@ -1,3 +1,5 @@
+// TODO: Review from scratch
+
 import React from 'react'
 import { useSelector } from 'react-redux'
 import AttributeFields from './AttributeFields'
@@ -15,7 +17,7 @@ export default function BusAttributesListItem(props) {
     connection,
     isEditing,
     onFocus,
-    connectionIndex
+    connectionIndex,
   } = props
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetType = assetTypeByCode[assetTypeCode]

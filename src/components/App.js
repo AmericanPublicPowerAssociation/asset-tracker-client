@@ -1,24 +1,22 @@
-// TODO: Have a single useMediaQuery in App and decide mobile vs desktop components at App level
-
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import useTheme from '@material-ui/core/styles/useTheme'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
+import { refreshRisks } from 'asset-report-risks'
 import AssetsMap from './AssetsMap'
 import SketchButtons from './SketchButtons'
+import OptionsWindow from './OptionsWindow'
 import SketchModeToolbar from './SketchModeToolbar'
+import SketchEditToolbar from './SketchEditToolbar'
 import SketchAddToolbar from './SketchAddToolbar'
 import ActionsWindow from './ActionsWindow'
-import OptionsWindow from './OptionsWindow'
 import OverlaysWindow from './OverlaysWindow'
 import DetailsWindow from './DetailsWindow'
 import TablesWindow from './TablesWindow'
-import TablesDialog from './TablesDialog'
 import ImportExportDialog from './ImportExportDialog'
 import AssetDeleteDialog from './AssetDeleteDialog'
-import {
-  refreshRisks,
-} from 'asset-report-risks'
+import MessageBar from './MessageBar'
+import AssetVertexDeleteSnackbar from './AssetVertexDeleteSnackbar'
+import './App.css'
 import {
   refreshAssets,
   refreshTasks,
@@ -26,107 +24,94 @@ import {
 import {
   IS_WITH_DETAILS,
   IS_WITH_TABLES,
-  IS_WITH_IMPORT_EXPORT,
 } from '../constants'
+import {
+  IsLayoutMobileContext,
+} from '../contexts'
+import {
+  useStickyWindow,
+} from '../hooks'
 import {
   getIsViewing,
 } from '../selectors'
-import './App.css'
-
-// TODO: Rename
-// TODO: Consider moving to SketchButtons
-function usePreventWindowUnload(preventDefault) {
-  useEffect( () => {
-    if (!preventDefault) return
-    const handleBeforeUnload = event => {
-      event.preventDefault()
-      event.returnValue = ''
-    }
-    window.addEventListener('beforeunload', handleBeforeUnload)
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
-  }, [preventDefault])
-}
 
 export default function App() {
-  const theme = useTheme()
   const dispatch = useDispatch()
-  const isViewing = useSelector(getIsViewing)
-  const isLayoutMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const isLayoutMobile = useMediaQuery('(max-width:599px)')
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [deletedAssetId, setDeletedAssetId] = useState(null)
+  const [deleteAssetVertexObj, setDeleteAssetVertexObj] = useState(null)
   const [
-    isWithImportExport,
-    setIsWithImportExport,
-  ] = useState(IS_WITH_IMPORT_EXPORT)
+    isWithImportExportDialog,
+    setIsWithImportExportDialog,
+  ] = useState(false)
+  const isViewing = useSelector(getIsViewing)
 
-  usePreventWindowUnload(!isViewing)
+  useStickyWindow(!isViewing)
 
   useEffect(() => {
     dispatch(refreshAssets())
     dispatch(refreshTasks())
     dispatch(refreshRisks())
   }, [dispatch])
+
   return (
-    <div style={{ overflowX: 'hidden', overflowY: 'hidden' }}>
-      <AssetsMap openDeleteDialogOpen={() => setIsDeleteDialogOpen(true)} />
-      <SketchButtons />
-      <SketchModeToolbar />
-      <SketchAddToolbar />
-      <ActionsWindow
-        isWithImportExport={isViewing}
-        setIsWithImportExport={setIsWithImportExport}
+    <IsLayoutMobileContext.Provider value={isLayoutMobile}>
+      <AssetsMap
+        onAssetDelete={assetId => setDeletedAssetId(assetId)}
+        onAssetVertexDelete={deleteParams => setDeleteAssetVertexObj(deleteParams) }
       />
+      <SketchButtons />
       <OptionsWindow
         isWithDetails={isWithDetails}
         isWithTables={isWithTables}
         setIsWithDetails={setIsWithDetails}
         setIsWithTables={setIsWithTables}
       />
+      <TablesWindow
+        isWithTables={isWithTables}
+      />
+
+      {/* TODO: Review all components below */}
+      <SketchModeToolbar />
+      <SketchAddToolbar
+        isWithTables={isWithTables}
+      />
+      <SketchEditToolbar
+        isWithTables={isWithTables}
+      />
+      <ActionsWindow
+        isWithImportExportDialog={isViewing}
+        setIsWithImportExportDialog={setIsWithImportExportDialog}
+      />
       <OverlaysWindow />
-    {isWithDetails &&
-      <DetailsWindow
-        isWithDetails={isWithDetails}
-        isWithTables={isWithTables}
-      />
-    }
-      {/*
-    {isWithTables && (isLayoutMobile ?
-      <TablesDialog
-        isWithTables={isWithTables}
-        setIsWithTables={setIsWithTables}
-      /> :
-      <TablesWindow
-        isWithTables={isWithTables}
-        setIsWithTables={setIsWithTables}
-      />
-    )}
-    */}
-    {isWithTables &&
-      <TablesWindow
-        isWithTables={isWithTables}
-        setIsWithTables={setIsWithTables}
-      />
+      {isWithDetails &&
+        <DetailsWindow
+          isWithDetails={isWithDetails}
+          isWithTables={isWithTables}
+        />
       }
-      <ImportExportDialog
-        open={isWithImportExport}
-        onCancel={() => {setIsWithImportExport(false)}}
-        onClose={()=> {setIsWithImportExport(false)}}
-      />
-    {/*
-      <ImportExportDialog
-        onOk={element => {
-          window.location = `/assets.dss?source=${element}`
-          setIsImportExportDialogOpen(false)}
-        }
-      />
-    */}
-    { isDeleteDialogOpen &&
+      { isWithImportExportDialog &&
+        <ImportExportDialog
+          isOpen={isWithImportExportDialog}
+          onCancel={() => {setIsWithImportExportDialog(false)}}
+          onClose={()=> {setIsWithImportExportDialog(false)}}
+        />
+      }
       <AssetDeleteDialog
-        openDialog={isDeleteDialogOpen}
-        onClose={ () => setIsDeleteDialogOpen(false) }
+        deletedAssetId={deletedAssetId}
+        isOpen={deletedAssetId !== null}
+        onClose={() => setDeletedAssetId(null)}
       />
-    }
-    </div>
+      <AssetVertexDeleteSnackbar
+        deleteAssetVertexObj={deleteAssetVertexObj}
+        isOpen={deleteAssetVertexObj !== null}
+        hideMessage={() => setDeleteAssetVertexObj(null)}
+      />
+      {/* TODO: Review all components above */}
+
+      <MessageBar />
+    </IsLayoutMobileContext.Provider>
   )
 }

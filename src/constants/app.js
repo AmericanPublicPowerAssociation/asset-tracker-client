@@ -1,5 +1,8 @@
 export const IS_WITH_DETAILS = true
 export const IS_WITH_TABLES = false
-export const IS_WITH_IMPORT_EXPORT = false
 
-export const CLICK_DELAY = 300
+export const MESSAGE_HIDE_DELAY = 10000
+export const SHOW_MESSAGE = 'SHOW_MESSAGE'
+export const HIDE_MESSAGE = 'HIDE_MESSAGE'
+
+export const SET_SELECTION = 'SET_SELECTION'

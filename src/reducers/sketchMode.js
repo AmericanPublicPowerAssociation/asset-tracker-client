@@ -5,15 +5,13 @@ import {
 
 const initialState = SKETCH_MODE
 
-const sketchMode = (state=initialState, action) => {
+export default function sketchMode(state=initialState, action) {
   switch (action.type) {
     case SET_SKETCH_MODE: {
-      const sketchMode = action.payload
-      return sketchMode
+      return action.payload
     }
-    default: { }
+    default: {
+      return state
+    }
   }
-  return state
 }
-
-export default sketchMode

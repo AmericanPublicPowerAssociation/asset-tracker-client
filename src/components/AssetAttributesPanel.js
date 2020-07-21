@@ -1,3 +1,5 @@
+// TODO: Review from scratch
+
 import React from 'react'
 import { useSelector } from 'react-redux'
 import List from '@material-ui/core/List'
@@ -38,11 +40,19 @@ export default function AssetAttributesPanel({
         </Tooltip>
 
         <ListItemText>
-          <AssetName asset={asset} isEditing={isEditing} setExpand={setIsDetailsWindowExpanded} expand={isDetailsWindowExpanded} />
+          <AssetName
+            asset={asset}
+            isEditing={isEditing}
+            isFullScreen={isDetailsWindowExpanded}
+            setIsFullScreen={setIsDetailsWindowExpanded}
+          />
         </ListItemText>
       </ListItem>
 
-      <AssetAttributesListItem asset={asset} isEditing={isEditing} />
+      <AssetAttributesListItem
+        asset={asset}
+        isEditing={isEditing}
+      />
       <AssetConnectionsListItems
         asset={asset}
         isEditing={isEditing}

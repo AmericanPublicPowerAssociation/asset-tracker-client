@@ -1,7 +1,9 @@
+// TODO: Review code from scratch
 // TODO: Move to asset-report-tasks
+
 import { createSelector } from 'reselect'
 import {
-  getFocusingAssetId,
+  getSelectedAssetId,
 } from './asset'
 import {
   TASK_STATUS_DONE,
@@ -65,17 +67,17 @@ export const getTaskStatusTypes = createSelector([
   return taskCodeTypes.taskStatusTypes
 })
 
-export const getFocusingTasks = createSelector([
+export const getSelectedTasks = createSelector([
   getTaskById,
-  getFocusingAssetId,
+  getSelectedAssetId,
 ], (
   taskById,
-  focusingAssetId,
+  selectedAssetId,
 ) => {
   // TODO: Consider replacing this with a lookup table
-  const focusingTaskIds = Object.keys(taskById).filter(
-    taskId => taskById[taskId].assetId === focusingAssetId)
-  return focusingTaskIds.map(taskId => taskById[taskId])
+  const selectedTaskIds = Object.keys(taskById).filter(
+    taskId => taskById[taskId].assetId === selectedAssetId)
+  return selectedTaskIds.map(taskId => taskById[taskId])
 })
 
 export const getCurrentTaskComments = createSelector([

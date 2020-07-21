@@ -1,3 +1,10 @@
+// TODO: Review from scratch
+// TODO: Fix this panel because it is fugly
+// TODO: Show task counts in filters
+// TODO: Move filter to be at end of search
+// TODO: Move toggle for Show Closed as checkbox in filter
+// TODO: Make all filters checkboxes
+
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ListItem from '@material-ui/core/ListItem'
@@ -8,9 +15,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
-import NativeSelect from '@material-ui/core/NativeSelect'
+import Select from '@material-ui/core/Select'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Divider from '@material-ui/core/Divider'
 import Switch from '@material-ui/core/Switch'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
@@ -26,6 +34,7 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import IconButton from '@material-ui/core/IconButton'
 import FilterListIcon from '@material-ui/icons/FilterList'
+import { default as AssetNameTextField } from './AssetName'
 
 import {
   addTask,
@@ -37,7 +46,7 @@ import {
 } from '../constants'
 import {
   getAssetTypeByCode,
-  getFocusingTasks,
+  getSelectedTasks,
   getTaskPriorityTypes,
 } from '../selectors'
 
@@ -56,14 +65,11 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     bottom: 0,
   },
-  scroll: {
-    height: '50vh',
-    overflowY: 'auto',
-  },
   listTasks: {
     overflow: 'auto',
-    marginBottom: '10px',
-    height: '100%',
+    //marginBottom: '10px',
+    //height: '100%',
+    flex: '1 1 auto',
   },
 }))
 
@@ -97,13 +103,17 @@ export function AssetName(props) {
   </ListItem>)
 }
 
-export default function AssetTasksPanel({ asset }) {
+export default function AssetTasksPanel({
+  asset,
+  isDetailsWindowExpanded,
+  setIsDetailsWindowExpanded,
+}) {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const tasks = useSelector(getFocusingTasks)
+  const tasks = useSelector(getSelectedTasks)
 
   const assetId = asset.id
-  const assetName = asset.name
+  // const assetName = asset.name
   const assetTypeCode = asset.typeCode
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetType = assetTypeByCode[assetTypeCode]
@@ -132,7 +142,7 @@ export default function AssetTasksPanel({ asset }) {
   const notArchived = (task) => { return task.status !== TASK_ARCHIVE_STATUS && task.status !== TASK_STATUS_CANCELLED }
   const isArchived = (task) => { return task.status === TASK_ARCHIVE_STATUS || task.status === TASK_STATUS_CANCELLED }
 
-  const partialTasks = tasks.filter(task => task.name.includes(query)).filter(
+  const partialTasks = tasks.filter(task => task.name.toLowerCase().includes(query.toLowerCase())).filter(
     task => (
       taskFilter ?
         (
@@ -160,13 +170,13 @@ export default function AssetTasksPanel({ asset }) {
   }
 
   const listTasks = (<>
-    <FormGroup row>
-      <TextField fullWidth id="search" label="Search task" value={query}
+    <FormGroup row style={{ flex: '0 0 auto' }}>
+      <TextField fullWidth label='Search tasks' value={query}
         onChange={(e) => setQuery(e.target.value) } />
       <div className={classes.actions}>
         <FormControlLabel control={
           <Switch checked={archived} onChange={ () => setArchived(!archived) } value="archived" />}
-          label="Show closed tasks" />
+          label='Show closed tasks' />
         <Tooltip title="Filter tasks">
           <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
             <FilterListIcon />
@@ -184,10 +194,11 @@ export default function AssetTasksPanel({ asset }) {
         </Menu>
       </div>
     </FormGroup>
+    <Divider />
     <div className={classes.listTasks}>
       <TasksList showDetails={handleDisplayDetails} asset={asset} tasks={partialTasks}/>
     </div>
-    <div>
+    <div style={{ flex: '0 0 auto' }}>
       <Button className={classes.bottomAction} startIcon={<AddIcon />} onClick={() => setDialog(true)}>
         Add task
       </Button>
@@ -204,19 +215,35 @@ export default function AssetTasksPanel({ asset }) {
   }
 
   return (<>
-    {AssetName({ assetName, assetTypeCode, assetTypeName })}
-    {listTasks}
+    <div style={{ display: 'flex', flexDirection:'column', height: '100%', overflow: 'hidden' }}>
+      <ListItem component='div' disableGutters style={{ flex: '0 0 auto' }}>
+        <Tooltip title={assetTypeName} placement='left'>
+          <ListItemIcon>
+            <AssetTypeSvgIcon assetTypeCode={assetTypeCode} />
+          </ListItemIcon>
+        </Tooltip>
+
+        <ListItemText>
+          <AssetNameTextField asset={asset} setIsFullScreen={setIsDetailsWindowExpanded} isFullScreen={isDetailsWindowExpanded} />
+        </ListItemText>
+      </ListItem>
+      {listTasks}
+    </div>
 
     <Dialog open={dialog} onClose={() => setDialog(false)} aria-labelledby='form-dialog-title'>
       <DialogTitle id='form-dialog-title'>Add task</DialogTitle>
       <DialogContent>
-        <TextField id='name' label='Task name' value={name}
-          onChange={(e) => setName(e.target.value) } />
-
+        <TextField
+          autoFocus
+          id='name'
+          label='Task name'
+          value={name}
+          onChange={(e) => setName(e.target.value) }
+        />
         <div>
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor='status'>Priority</InputLabel>
-            <NativeSelect
+            <Select
               value={priority}
               onChange={ (e) => setPriority(e.target.value)}
               inputProps={{
@@ -232,7 +259,7 @@ export default function AssetTasksPanel({ asset }) {
                   </option>
                 ))
               }
-            </NativeSelect>
+            </Select>
             <FormHelperText>Select the priority for the task</FormHelperText>
           </FormControl>
         </div>

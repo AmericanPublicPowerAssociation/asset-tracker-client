@@ -1,3 +1,5 @@
+// TODO: Review from scratch
+
 import React from 'react'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
@@ -7,10 +9,10 @@ import Container from '@material-ui/core/Container'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
-import DialogActions from '@material-ui/core/DialogActions'
+// import DialogActions from '@material-ui/core/DialogActions'
 import Divider from '@material-ui/core/Divider'
-import ErrorIcon from '@material-ui/icons/Error'
-import IconButton from '@material-ui/core/IconButton'
+// import ErrorIcon from '@material-ui/icons/Error'
+// import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -20,9 +22,9 @@ import WarningIcon from '@material-ui/icons/Warning'
 
 const useStyles = makeStyles(theme => ({
   successButton: {
-    marginTop: '1rem',
-    color: 'white',
-    background: '#4caf50',
+    'marginTop': '1rem',
+    'color': 'white',
+    'background': '#4caf50',
     '&:hover': {
       background: '#4caf50',
     },
@@ -31,9 +33,9 @@ const useStyles = makeStyles(theme => ({
     background: '#4caf50',
   },
   errorButton: {
-    marginTop: '1rem',
-    color: 'white',
-    background: '#e2747e',
+    'marginTop': '1rem',
+    'color': 'white',
+    'background': '#e2747e',
     '&:hover': {
       background: '#e2747e',
     },
@@ -58,7 +60,7 @@ const messages = {
     displayIcon: CheckCircleIcon,
   },
   'warning': {
-    displayMessageTitle: 'Aw, Snap!',
+    displayMessageTitle: 'Oops!',
     displayMessage: 'Certain assets were not uploaded successfully.',
     displayIcon: WarningIcon,
   },
@@ -72,25 +74,24 @@ const messages = {
 export default function ImportResponseDialog({ open, onClose, response }) {
   const classes = useStyles()
   let result = 'error' 
+  let errors = response.errors
 
-  if (!response.error) {
+  if (!response.errors) {
     result = 'success' 
   }
-  else if (response.error) {
+  else if (response.errors['save_errors']) {
     result = 'warning'
-  }
-  else {
-    result = 'error'
+    errors = response.errors.save_errors
   }
 
-  const ListAssetsWithErrorsComponent = response.error && (
+  const ListErrorsComponent = response.errors && (
     <DialogContent>
       <div style={{ height: '6em' }} >
         <List
           component="nav"
           aria-label="assets-with-errors" >
           { 
-            Object.entries(response.error).map( ([id, error]) => ( 
+            Object.entries(errors).map( ([id, error]) => (
               <>
               <ListItem id={id}>
                 <ListItemText>{id} - {JSON.stringify(error)}</ListItemText>
@@ -120,7 +121,7 @@ export default function ImportResponseDialog({ open, onClose, response }) {
             <Typography>{displayMessage}</Typography>
           </Container>
         </DialogContent>
-        { ListAssetsWithErrorsComponent }
+        { ListErrorsComponent }
         <Button
           variant="contained" color="primary" size="large"
           onClick={onClose}

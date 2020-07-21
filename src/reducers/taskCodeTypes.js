@@ -1,3 +1,5 @@
+// TODO: Review code from scratch
+
 import {
   SET_TASKS,
 } from '../constants'

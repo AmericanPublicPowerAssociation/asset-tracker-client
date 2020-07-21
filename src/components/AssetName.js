@@ -1,14 +1,19 @@
-import React from 'react'
+// TODO: Review from scratch
+
+import React, { useContext } from 'react'
 import { useDispatch } from 'react-redux'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
+import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
+import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
-import ExpandLess from '@material-ui/icons/ExpandLess'
-import ExpandMore from '@material-ui/icons/ExpandMore'
+import FullScreenExitIcon from '@material-ui/icons/FullscreenExit'
+import FullScreenIcon from '@material-ui/icons/Fullscreen'
 import {
   setAssetValue,
 } from '../actions'
+import {
+  IsLayoutMobileContext,
+} from '../contexts'
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -18,46 +23,48 @@ const useStyles = makeStyles(theme => ({
   inline: {
     display: 'flex',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
 }))
 
 export default function AssetName({
   asset,
   isEditing,
-  // TODO: Rename
-  expand,
-  setExpand,
+  isFullScreen,
+  setIsFullScreen,
 }) {
-  const theme = useTheme()
   const classes = useStyles()
   const dispatch = useDispatch()
-  const isMobileView = useMediaQuery(theme.breakpoints.down('sm'))
+  const isLayoutMobile = useContext(IsLayoutMobileContext)
 
   const assetId = asset.id
   const assetName = asset.name
 
-  function handleChange(event) {
+  function handleAssetNameChange(event) {
     dispatch(setAssetValue(assetId, 'name', event.target.value))
   }
 
-  const expandIcon = (expand ?
-    <ExpandMore onClick={() => setExpand(false)} /> :
-    <ExpandLess onClick={() => setExpand(true)} />)
-
-  return (isEditing ?
-    <>
-      <TextField
-        value={assetName}
-        multiline={true}
-        variant='filled'
-        InputProps={{ className: classes.input }}
-        onChange={handleChange}
-      />
-      {isMobileView ? expandIcon : <></>}
-    </>:
+  return (
     <div className={classes.inline}>
-      <Typography>{assetName}</Typography>
-      { isMobileView ? expandIcon : <></>}
+      {isEditing ?
+        <TextField
+          fullWidth
+          value={assetName}
+          multiline={true}
+          variant='filled'
+          InputProps={{ className: classes.input }}
+          onChange={handleAssetNameChange}
+        /> :
+        <Typography>{assetName}</Typography>
+      }
+      {isLayoutMobile && (
+        <IconButton onClick={() => setIsFullScreen(!isFullScreen)}>
+          {isFullScreen ?
+            <FullScreenExitIcon /> :
+            <FullScreenIcon />
+          }
+        </IconButton>
+      )}
     </div>
   )
 }

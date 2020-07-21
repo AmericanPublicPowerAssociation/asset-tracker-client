@@ -1,9 +1,9 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
-import { BrowserRouter as Router } from 'react-router-dom'
 import { applyMiddleware, compose, createStore } from 'redux'
 import createSagaMiddleware from 'redux-saga'
+import CssBaseline from '@material-ui/core/CssBaseline'
 import { config as configureEnvironment } from 'dotenv'
 import reduceState from './reducers'
 import reduceSaga from './sagas'
@@ -21,9 +21,8 @@ configureEnvironment()
 sagaMiddleware.run(reduceSaga)
 render(
   <Provider store={store}>
-    <Router>
-      <App />
-    </Router>
+    <CssBaseline />
+    <App />
   </Provider>,
   document.getElementById('root'))
 // serviceWorker.unregister()

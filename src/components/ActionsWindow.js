@@ -10,6 +10,9 @@ import {
   USER_NAME,
 } from '../constants'
 import {
+  toggleState,
+} from '../macros'
+import {
   getMapColors,
 } from '../selectors'
 
@@ -22,23 +25,20 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function ActionsWindow({
-  isWithImportExport,
-  setIsWithImportExport,
+  isWithImportExportDialog,
+  setIsWithImportExportDialog,
 }) {
   const classes = useStyles()
   const mapColors = useSelector(getMapColors)
   const activeColor = mapColors.active
   const inactiveColor = mapColors.inactive
-
   return (
     <div className={classes.root}>
       <Tooltip title='Import and Export Assets'>
         <IconButton
-          className={ isWithImportExport ? activeColor : inactiveColor}
-          disabled={ !isWithImportExport }
-          onClick={() => {
-            setIsWithImportExport( prevState => !prevState)
-          }}
+          className={isWithImportExportDialog ? activeColor : inactiveColor}
+          disabled={!isWithImportExportDialog}
+          onClick={() => setIsWithImportExportDialog(toggleState) }
         >
           <ImportExportIcon />
         </IconButton>

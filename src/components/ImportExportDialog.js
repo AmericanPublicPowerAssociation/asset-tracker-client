@@ -1,3 +1,5 @@
+// TODO: Review from scratch
+
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Button from '@material-ui/core/Button'
@@ -9,6 +11,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
+import FormHelperText from '@material-ui/core/FormHelperText'
 import Grid from '@material-ui/core/Grid'
 import Input from '@material-ui/core/Input'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -24,7 +27,21 @@ import {
 } from '../selectors'
 
 const uploaderProps = {
-  acceptedFiles: ['text/csv', 'application/vnd.ms-excel'],
+  acceptedFiles: [
+    '.ods',
+    '.csv',
+    '.xls ',
+    '.xlsx',
+    'text/ods',
+    'text/csv',
+    'text/x-csv',
+    'text/comma-separated-values',
+    'text/x-comma-separated-values',
+    'application/x-csv',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/csv',
+  ],
   filesLimit: 1,
   showPreviewsInDropzone: true,
   showFileNamesInPreview: true,
@@ -37,41 +54,49 @@ const uploaderProps = {
   },
 }
 
-export default function ImportExportDialog({ open, onClose, onCancel }) {
+export default function ImportExportDialog({
+  isOpen,
+  onClose,
+  onCancel,
+}) {
   const dispatch = useDispatch()
   const [action, setAction] = useState('download')
-  const [powerName, setPowerName] = useState('')
+  const [sourceId, setSourceId] = useState('')
   const [downloadFormat, setDownloadFormat] = useState('csv')
   const [overwriteRecords, setOverwriteRecords] = useState(false)
   const [assetCSVFile, setAssetCSVFile] = useState(null)
-  const [loadingFileIndicator, setLoadingFileIndicator] = useState(false)
+  const [
+    loadingFileIndicator,
+    // setLoadingFileIndicator,
+  ] = useState(false)
   const [confirmOverwriteRecords, setConfirmOverwriteRecords] = useState(false)
   const [uploadResponse, setUploadResponse] = useState()
   const assetById = useSelector(getAssetById)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
-  const data = Object.values(assetById)
-    .filter(asset => asset['typeCode'] === ASSET_TYPE_CODE_TRANSFORMER)
-    .map(asset => {
+  const data = Object.entries(assetById)
+    .reduce((assetArray, [assetId, asset]) => {
       const assetType = asset['typeCode']
       const attributes = asset['attributes']
       const vendorName = attributes ? attributes['vendorName'] : ''
-      return {
+      assetArray.push({
         ...asset,
+        id: assetId,
         vendorName,
         type: assetTypeByCode[assetType]['name'],
-      }
-    })
+      })
+      return assetArray
+    }, [])
+    .filter(asset => asset['typeCode'] === ASSET_TYPE_CODE_TRANSFORMER)
 
-  if (data !== null && data !== undefined && data.length > 0 && powerName === '') {
-    setPowerName(data[0].id)
+  if (data !== null && data !== undefined && data.length > 0 && sourceId === '') {
+    setSourceId(data[0].id)
   }
-  
+
   function selectAction() {
     if (action === 'download') {
       if (downloadFormat === 'dss') {
-        window.location = `/assets.dss?source=${powerName}`
-      }
-      if (downloadFormat === 'csv') {
+        window.location = `/assets.dss?sourceId=${sourceId}`
+      } else if (downloadFormat === 'csv') {
         window.location = '/assets.csv'
       }
       onClose()
@@ -99,7 +124,8 @@ export default function ImportExportDialog({ open, onClose, onCancel }) {
 
   const OverwriteConfirmationDialog = (
     <Dialog
-      open={confirmOverwriteRecords} disableBackdropClick 
+      open={confirmOverwriteRecords}
+      disableBackdropClick 
       onClose={() => setConfirmOverwriteRecords(false)} >
       <DialogTitle>Overwrite all existing assets?</DialogTitle>
       <DialogContent>
@@ -125,7 +151,7 @@ export default function ImportExportDialog({ open, onClose, onCancel }) {
       <Typography component='p'>Select the format</Typography>
       <Select value={downloadFormat}
         onChange={e => setDownloadFormat(e.target.value)}
-        input={<Input id='asset-type-select' />}>
+        input={<Input />}>
         <MenuItem value='csv'>CSV</MenuItem>
         <MenuItem value='dss'>DSS</MenuItem>
       </Select>
@@ -157,18 +183,25 @@ export default function ImportExportDialog({ open, onClose, onCancel }) {
 
   const SelectDssPowerSource = (
     <>
-      <Typography component='p'>Select the power source</Typography>
-      <Select
-        onChange={e => setPowerName(e.target.value)} value={powerName}
-        input={<Input id='asset-type-select' />} >
-        { data.map(asset => <MenuItem value={asset.name} key={asset.name}>{asset.name}</MenuItem>)}
-      </Select>
+      <FormControl>
+        <Typography component='p'>Select the power source</Typography>
+        <Select
+          id='power-source-select'
+          onChange={e => setSourceId(e.target.value)}
+          value={sourceId}
+          input={<Input />} >
+          { data.length > 0
+            ? data.map(asset => <MenuItem value={asset.id} key={asset.id}>{asset.name}</MenuItem>)
+            : <MenuItem value=''><em>None</em></MenuItem>}
+        </Select>
+        <FormHelperText>A generator must be connected to download a dss file.</FormHelperText>
+      </FormControl>
     </>
   )
 
   const ActionSelectorDialog =  (
     <Dialog
-      open={open && !confirmOverwriteRecords && !uploadResponse}
+      open={isOpen && !confirmOverwriteRecords && !uploadResponse}
       onClose={onClose}
       disableBackdropClick >
       <DialogTitle>Download Manager</DialogTitle>
@@ -177,38 +210,44 @@ export default function ImportExportDialog({ open, onClose, onCancel }) {
         <FormControl fullWidth>
           <Select
             onChange={(e) => setAction(e.target.value)} value={action}
-            input={<Input id='asset-type-select' />} >
+            input={<Input />} >
             <MenuItem value='download'>Download Assets</MenuItem>
             <MenuItem value='upload'>Upload Assets</MenuItem>
           </Select>
+        </FormControl>
+        <FormControl fullWidth>
           { action === 'download' ?
             SelectDownloadFormatComponent :
             UploadFileComponent
           }
+        </FormControl>
+        <FormControl fullWidth>
           { action === 'download' && downloadFormat === 'dss' ? SelectDssPowerSource : <></> }
         </FormControl>
       </DialogContent>
       <DialogActions>
         <Button disabled={loadingFileIndicator} onClick={onCancel}>Cancel</Button>
-        <Button disabled={loadingFileIndicator} onClick={selectAction} color='primary'>Ok</Button>
+        <Button
+          disabled={action === 'download' && downloadFormat === 'dss' && !sourceId}
+          onClick={selectAction} color='primary'>Ok</Button>
       </DialogActions>
 	  </Dialog>
   )
 
-    return (
-      <>
-        { ActionSelectorDialog }
-        { OverwriteConfirmationDialog }
-        { uploadResponse && 
-          <ImportResponseDialog
-            open={true}
-            response={uploadResponse}
-            onClose={(() => {
-              setUploadResponse()
-              onClose()
-            })}
-          />
-        }
-      </>
-    )
+  return (
+    <>
+      { ActionSelectorDialog }
+      { OverwriteConfirmationDialog }
+      { uploadResponse &&
+        <ImportResponseDialog
+          open={true}
+          response={uploadResponse}
+          onClose={(() => {
+            setUploadResponse()
+            onClose()
+          })}
+        />
+      }
+    </>
+  )
 }

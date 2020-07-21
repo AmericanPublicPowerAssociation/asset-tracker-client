@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+// TODO: Review from scratch
+
+import React, { useContext, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import clsx from 'clsx'
 import ListItem from '@material-ui/core/ListItem'
@@ -8,9 +10,12 @@ import CollapsibleListItem from './CollapsibleListItem'
 import BusAttributesListItem from './BusAttributesListItem'
 import BusConnectionsList from './BusConnectionsList'
 import {
-  setFocusingBusId,
+  setSelectedBusId,
   setSelectedBusIndexes,
 } from '../actions'
+import {
+  IsLayoutMobileContext,
+} from '../contexts'
 import {
   getCountDescription,
 } from '../macros'
@@ -20,10 +25,8 @@ import {
 import {
   getAssetIdsByBusId,
   getBusesGeoJson,
-  getFocusingBusId,
+  getSelectedBusId,
 } from '../selectors'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
-import useTheme from '@material-ui/core/styles/useTheme'
 
 export default function AssetConnectionsListItems({
   asset,
@@ -33,12 +36,10 @@ export default function AssetConnectionsListItems({
   expand,
 }) {
   const dispatch = useDispatch()
-  const theme = useTheme()
-  // TODO: Use isMobile and using string for media query
-  const isNotMobile = useMediaQuery(theme.breakpoints.up('sm'))
+  const isLayoutMobile = useContext(IsLayoutMobileContext)
   const [isOpenByIndex, setIsOpenByIndex] = useState({})
   const busesGeoJson = useSelector(getBusesGeoJson)
-  const focusingBusId = useSelector(getFocusingBusId)
+  const selectedBusId = useSelector(getSelectedBusId)
   const assetIdsByBusId = useSelector(getAssetIdsByBusId)
   const assetId = asset.id
   const assetTypeCode = asset.typeCode
@@ -52,7 +53,7 @@ export default function AssetConnectionsListItems({
     const title = 'Bus ' + index
     const description = getCountDescription(connectedAssetCount, 'connection')
     const isOpen = isOpenByIndex[index]
-    const isHighlighted = focusingBusId === busId
+    const isHighlighted = selectedBusId === busId
 
     function setIsOpen(value) {
       setIsOpenByIndex(produce(isOpenByIndex, draft => {
@@ -66,7 +67,7 @@ export default function AssetConnectionsListItems({
       if (featureIndex > -1) {
         dispatch(setSelectedBusIndexes([featureIndex]))
       }
-      dispatch(setFocusingBusId(busId))
+      dispatch(setSelectedBusId(busId))
     }
 
     // TODO: Fix unclear isNotMobile || expand syntax
@@ -75,7 +76,7 @@ export default function AssetConnectionsListItems({
       <CollapsibleListItem
         key={index}
         title={title}
-        description={(isNotMobile || expand) ? description : null}
+        description={(!isLayoutMobile || expand) ? description : null}
         isHighlighted={isHighlighted}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
@@ -91,7 +92,7 @@ export default function AssetConnectionsListItems({
         />
         <BusConnectionsList connectedAssetIds={connectedAssetIds} />
       </CollapsibleListItem> :
-      ( isNotMobile || expand ?
+      ( !isLayoutMobile || expand ?
       <ListItem
         key={index}
         className={clsx({ highlighted: isHighlighted })}

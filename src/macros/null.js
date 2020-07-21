@@ -1,3 +1,5 @@
+// TODO: Review from scratch
+
 export function isNull(x) {
   return [null, undefined, ''].includes(x)
 }

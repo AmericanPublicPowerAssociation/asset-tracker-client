@@ -8,9 +8,11 @@ import  {
   watchSuggestVendorNames,
 } from 'asset-report-risks'
 import {
+  // watchRefreshTasks,
   watchAddTask,
   watchAddTaskComment,
   watchAssetTasks,
+  watchDeleteAsset,
   watchFillAssetName,
   watchRefreshAssets,
   watchRefreshTaskComments,
@@ -18,14 +20,21 @@ import {
   watchUpdateTask,
   watchUploadAssetsCsv,
 } from './asset'
+import {
+  watchSetSelection,
+} from './map'
 
 export default function* () {
   yield all([
+    watchSetSelection(),
+    watchFillAssetName(),
     watchRefreshAssets(),
+    // TODO: Review below code
+    // watchRefreshTasks(),
     watchRefreshRisks(),
     watchSaveAssets(),
+    watchDeleteAsset(),
     watchUploadAssetsCsv(),
-    watchFillAssetName(),
     watchAssetTasks(),
     watchAddTask(),
     watchUpdateTask(),

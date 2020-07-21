@@ -1,3 +1,5 @@
+// TODO: Review from scratch
+
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import TextField from '@material-ui/core/TextField'
@@ -45,7 +47,7 @@ export default function AttributeFields(props) {
     attributeValueByKey,
     isEditing,
     onFocus,
-    connectionIndex
+    connectionIndex,
   } = props
 
   return attributeKeyTypes.map(([
@@ -75,7 +77,7 @@ function AttributeField(props) {
     attributeValueByKey,
     isEditing,
     onFocus,
-    connectionIndex
+    connectionIndex,
   } = props
   const dispatch = useDispatch()
   const classes = useStyles()

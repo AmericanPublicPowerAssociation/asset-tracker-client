@@ -1,6 +1,8 @@
+// TODO: Review code from scratch
+
 import produce from 'immer'
 import {
-  DELETE_ASSET,
+  DELETE_ASSET_CONNECTION,
   DELETE_ASSET_VERTEX,
   INSERT_ASSET_VERTEX,
   SET_ASSET,
@@ -33,8 +35,7 @@ const assetById = (state = initialState, action) => {
     case SET_ASSET_VALUE: {
       const { assetId, key, value } = action.payload
       return produce(state, draft => {
-        const asset = draft[assetId]
-        asset[key] = value
+        draft[assetId][key] = value
       })
     }
     case SET_ASSET_ATTRIBUTE: {
@@ -49,9 +50,15 @@ const assetById = (state = initialState, action) => {
       })
     }
     case SET_ASSET_CONNECTION: {
-      const { assetId, assetVertexIndex, connection } = action.payload
+      const { assetId, vertexIndex, connection } = action.payload
       return produce(state, draft => {
-        draft[assetId].connections[assetVertexIndex] = connection
+        draft[assetId].connections[vertexIndex] = connection
+      })
+    }
+    case DELETE_ASSET_CONNECTION: {
+      const { assetId, vertexIndex } = action.payload
+      return produce(state, draft => {
+        delete draft[assetId].connections[vertexIndex]
       })
     }
     case SET_ASSET_CONNECTION_ATTRIBUTE: {
@@ -59,41 +66,39 @@ const assetById = (state = initialState, action) => {
       return produce(state, draft => {
         const asset = draft[assetId]
         const connections = asset.connections
-        const attributes = connections[assetVertexIndex].attributes
+        const attributes = connections[assetVertexIndex].attributes || {}
         attributes[key] = value
-      })
-    }
-    case DELETE_ASSET: {
-      const { assetId } = action.payload
-      return produce(state, draft => {
-        draft[assetId]['is_deleted'] = true
       })
     }
     case INSERT_ASSET_VERTEX: {
       const { assetId, afterIndex, connection } = action.payload
       return produce(state, draft => {
         const asset = draft[assetId]
+        const assetConnections = asset.connections
+
         const indexOffset = 1
         const connectionByIndex = getNewConnectionByIndex(
-          asset.connections, afterIndex, indexOffset)
+          assetConnections, afterIndex, indexOffset)
+
         if (connection) {
           connectionByIndex[afterIndex + 1] = connection
         }
+
         asset.connections = connectionByIndex
       })
     }
     case DELETE_ASSET_VERTEX: {
-      const {
-        assetId,
-        oldVertexIndex,
-        newVertexCount,
-      } = action.payload
+      const { assetId, oldVertexIndex, newVertexCount } = action.payload
       return produce(state, draft => {
         const asset = draft[assetId]
+        const assetConnections = asset.connections
+        delete assetConnections[oldVertexIndex]
+
         const afterIndex = oldVertexIndex - 1
         const indexOffset = -1
         const connectionByIndex = getNewConnectionByIndex(
-          asset.connections, afterIndex, indexOffset)
+          assetConnections, afterIndex, indexOffset)
+
         // If we are deleting the last endpoint,
         if (oldVertexIndex === newVertexCount) {
           const lastVertexIndex = newVertexCount - 1
@@ -102,7 +107,7 @@ const assetById = (state = initialState, action) => {
             connectionByIndex[lastVertexIndex] = { busId: makeBusId() }
           }
         }
-        console.log(connectionByIndex)
+
         asset.connections = connectionByIndex
       })
     }

@@ -1,3 +1,5 @@
+// TODO: Review code from scratch
+
 import {
   SET_TASKS,
   SET_TASK_COMMENT_COUNT,

@@ -1,5 +1,3 @@
-// TODO: Make ids consistently explicit
-//
 import {
   ADD_TASK,
   ADD_TASK_COMMENT,
@@ -15,6 +13,9 @@ import {
 export function refreshTasks() {
   return { type: REFRESH_TASKS }
 }
+
+// TODO: Review all code below
+// TODO: Make ids consistently explicit
 
 export function setTasks(assets) {
   return { type: SET_TASKS, payload: assets }
@@ -67,3 +68,5 @@ export function addAssetTaskComment(taskId, text) {
 export function setSelectedTaskId(taskId) {
   return { type: SET_SELECTED_TASK_ID, payload: { taskId } }
 }
+
+// TODO: Review all code above

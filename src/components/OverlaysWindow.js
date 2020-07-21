@@ -1,3 +1,5 @@
+// TODO: Review from scratch
+
 import React from 'react'
 import clsx from 'clsx'
 import { useDispatch, useSelector } from 'react-redux'
@@ -17,7 +19,7 @@ import {
   OVERLAY_MODE_TASKS,
 } from '../constants'
 import {
-  getAssetCount,
+  getVisibleAssetCount,
   getMapColors,
   getIsViewing,
   getOpenTaskCount,
@@ -28,6 +30,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
     top: theme.spacing(6),
+    left: theme.spacing(1),
   },
 }))
 
@@ -41,7 +44,7 @@ export default function OverlaysWindow() {
   // TODO: Implement getVisibleAssetCount
   // TODO: Implement getVisibleTaskCount
   // TODO: Implement getVisibleRiskCount
-  const visibleAssetCount = useSelector(getAssetCount)
+  const visibleAssetCount = useSelector(getVisibleAssetCount)
   const visibleTaskCount = useSelector(getOpenTaskCount)
   const visibleRiskCount = useSelector(getVisibleRiskCount)
 

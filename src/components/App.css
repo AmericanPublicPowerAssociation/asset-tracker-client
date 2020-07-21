@@ -1,15 +1,3 @@
-body {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-}
-
-.do-not-scroll {
-  overflow-x: hidden;
-  overflow-y: hidden;
-}
 .black {
   color: black !important;
 }
@@ -18,6 +6,34 @@ body {
 }
 .white {
   color: white !important;
+}
+.rise-animation:hover {
+  transition: 0.50s;
+  transform: scale(1.25);
+}
+.spin-animation:hover {
+  transition: 0.50s;
+  transform: rotate(360deg);
+}
+.tooltip {
+  pointer-events: none;
+  position: absolute;
+  max-width: 160px;
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+.no-overflow-x {
+  overflow-x: hidden;
+}
+
+/* TODO: Review below code */
+
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 .selected {
   color: white !important;
@@ -29,18 +45,5 @@ body {
 .capitalized {
   text-transform: capitalize;
 }
-.spin-animation:hover {
-  transition: 0.50s;
-  transform: rotate(360deg);
-}
-.rise-animation:hover {
-  transition: 0.50s;
-  transform: scale(1.25);
-}
-.tooltip {
-  pointer-events: none;
-  position: absolute;
-  max-width: 160px;
-  overflow-wrap: break-word;
-  word-break: break-all;
-}
+
+/* TODO: Review above code */

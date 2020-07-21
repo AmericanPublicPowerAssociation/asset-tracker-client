@@ -1,3 +1,5 @@
+// TODO: Review code from scratch
+
 import {
   SET_SELECTED_TASK_ID,
 } from '../constants'

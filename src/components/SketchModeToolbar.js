@@ -1,3 +1,5 @@
+// TODO: Review from scratch
+
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
@@ -53,7 +55,7 @@ export default function SketchModeToolbar() {
           <ListItem
             button
             classes={{ selected: 'selected' }}
-            selected={sketchMode === SKETCH_MODE_EDIT}
+            selected={sketchMode.startsWith(SKETCH_MODE_EDIT)}
             onClick={() => dispatch(setSketchMode(SKETCH_MODE_EDIT))}
           >
             <SvgIcon fontSize='large' component={EditIcon} />

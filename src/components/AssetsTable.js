@@ -1,109 +1,66 @@
-import React, { forwardRef } from 'react'
-import { useSelector } from 'react-redux'
-import MaterialTable from 'material-table'
-import AddBox from '@material-ui/icons/AddBox'
-import ArrowDownward from '@material-ui/icons/ArrowDownward'
-import Check from '@material-ui/icons/Check'
-import ChevronLeft from '@material-ui/icons/ChevronLeft'
-import ChevronRight from '@material-ui/icons/ChevronRight'
-import Clear from '@material-ui/icons/Clear'
-import DeleteOutline from '@material-ui/icons/DeleteOutline'
-import Edit from '@material-ui/icons/Edit'
-import FilterList from '@material-ui/icons/FilterList'
-import FirstPage from '@material-ui/icons/FirstPage'
-import LastPage from '@material-ui/icons/LastPage'
-import Remove from '@material-ui/icons/Remove'
-import SaveAlt from '@material-ui/icons/SaveAlt'
-import Search from '@material-ui/icons/Search'
-import ViewColumn from '@material-ui/icons/ViewColumn'
+// TODO: Review from scratch
+
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import MaterialTable from './MaterialTable'
+import {
+  setSelection,
+} from '../actions'
 import {
   getAssetById,
   getAssetTypeByCode,
+  getSelectedAssetId,
 } from '../selectors'
 
+const COLUMNS = [{
+  title: 'Asset Type',
+  field: 'type',
+}, {
+  title: 'Asset Name',
+  field: 'name',
+}, {
+  title: 'Vendor Name',
+  field: 'vendorName',
+}, {
+  title: 'Product Name',
+  field: 'productName',
+}]
 
-const tableIcons = {
-  Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-  Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-  Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-  Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-  DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-  Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-  Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-  Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-  FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-  LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-  NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-  PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
-  ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-  Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-  SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
-  ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
-}
-
-const ASSET_TABLE_COLUMN_NAMES = [
-  'type',
-  'name',
-]
-
-export default function AssetsTable(props) {
-  const {
-    getHeaderLabel,
-    highlightAsset,
-    focusingAssetId,
-    tableOptions,
-  } = props
+export default function AssetsTable() {
+  const dispatch = useDispatch()
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetById = useSelector(getAssetById)
-
-  const tableName = 'Asset'
-
-  const columns = ASSET_TABLE_COLUMN_NAMES.map( field => {
-    return { field, title: getHeaderLabel(field) }
-  })
-
-  const data = Object.entries(assetById)
-    .filter(([id, asset]) => !asset.is_deleted )
-    .map(
-      assetEntry => {
-        const [assetId, asset] = assetEntry
-        const assetType = asset['typeCode']
-        const attributes = asset['attributes']
-        const vendorName = attributes ? attributes['vendorName'] : ''
+  const selectedAssetId = useSelector(getSelectedAssetId)
+  const tableData = Object.entries(assetById)
+    .filter(([id, asset]) => !asset.isDeleted)
+    .map(([assetId, asset]) => {
+        const assetTypeCode = asset.typeCode
+        const assetType = assetTypeByCode[assetTypeCode]
+        const assetAttributes = asset.attributes
         return {
-          ...asset,
           assetId,
-          vendorName,
-          type: assetTypeByCode[assetType]['name'],
+          name: asset.name,
+          type: assetType.name,
+          vendorName: assetAttributes && assetAttributes.vendorName,
+          productName: assetAttributes && assetAttributes.productName,
         }
     })
 
-  function handleOnRowClick(event, rowData) {
-    const { assetId, is_deleted } = rowData
-    if (is_deleted) return
-    highlightAsset(assetId)
+  function isSelectedRow(rowData) {
+    return rowData.assetId === selectedAssetId
   }
 
-  function rowStyle(rowData) {
-    return {
-        backgroundColor: (focusingAssetId === rowData.assetId) ? 'yellow' : '#FFF',
-    }
+  function handleRowClick(event, rowData) {
+    dispatch(setSelection({ assetId: rowData.assetId }))
   }
 
   return (
     <MaterialTable
-      components={{
-        Container: props => (
-          <div style={{ background: 'white' }}>{props.children}</div>
-        ),
-      }}
-      icons={tableIcons}
-      title={tableName}
-      options={{ ...tableOptions, rowStyle }}
-      columns={columns}
-      data={data}
-      onRowClick={handleOnRowClick}
+      title='Assets'
+      columns={COLUMNS}
+      data={tableData}
+      isSelectedRow={isSelectedRow}
+      onRowClick={handleRowClick}
     />
   )
 }

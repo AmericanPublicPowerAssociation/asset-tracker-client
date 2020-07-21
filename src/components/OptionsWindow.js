@@ -1,4 +1,5 @@
-import React from 'react'
+// TODO: Review whether we want different behavior on isLayoutMobile
+import React, { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -7,8 +8,14 @@ import StylesIcon from '@material-ui/icons/Map'
 import DetailsIcon from '@material-ui/icons/Receipt'
 import TableIcon from '@material-ui/icons/ViewList'
 import {
-  TOGGLE_MAP_STYLE,
-} from '../constants'
+  toggleMapStyle,
+} from '../actions'
+import {
+  IsLayoutMobileContext,
+} from '../contexts'
+import {
+  toggleState,
+} from '../macros'
 import {
   getMapColors,
 } from '../selectors'
@@ -24,20 +31,22 @@ const useStyles = makeStyles(theme => ({
 export default function OptionsWindow({
   isWithDetails,
   isWithTables,
-  setIsWithTables,
   setIsWithDetails,
+  setIsWithTables,
 }) {
+  const isLayoutMobile = useContext(IsLayoutMobileContext)
   const classes = useStyles()
   const dispatch = useDispatch()
   const mapColors = useSelector(getMapColors)
   const activeColor = mapColors.active
   const inactiveColor = mapColors.inactive
+
   return (
     <div className={classes.root}>
       <Tooltip title='Toggle Styles'>
         <IconButton
           className={activeColor}
-          onClick={() => dispatch({ type: TOGGLE_MAP_STYLE })}
+          onClick={() => dispatch(toggleMapStyle())}
         >
           <StylesIcon />
         </IconButton>
@@ -46,8 +55,12 @@ export default function OptionsWindow({
       <Tooltip title='Toggle Details'>
         <IconButton
           className={isWithDetails ? activeColor : inactiveColor}
+          // onClick={() => setIsWithDetails(toggleState)}
           onClick={() => {
-            setIsWithDetails( prevState => !prevState)
+            if (isLayoutMobile) {
+              setIsWithTables(false)
+            }
+            setIsWithDetails(toggleState)
           }}
         >
           <DetailsIcon />
@@ -57,8 +70,12 @@ export default function OptionsWindow({
       <Tooltip title='Toggle Tables'>
         <IconButton
           className={isWithTables ? activeColor : inactiveColor}
+          // onClick={() => setIsWithTables(toggleState)}
           onClick={() => {
-            setIsWithTables( prevState => !prevState)
+            if (isLayoutMobile) {
+              setIsWithDetails(false)
+            }
+            setIsWithTables(toggleState)
           }}
         >
           <TableIcon />

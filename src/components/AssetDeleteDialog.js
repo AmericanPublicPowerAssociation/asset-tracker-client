@@ -1,5 +1,7 @@
+// TODO: Review from scratch
+
 import React, { useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
@@ -10,59 +12,55 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import {
   deleteAsset,
 } from '../actions'
-import {
-  getFocusingAssetId,
-} from '../selectors'
-
 
 export default function AssetDeleteDialog({
+  deletedAssetId,
+  isOpen,
   onClose,
-  openDialog,
 }) {
-  const [input, setInput] = useState('')
-  const focusingAssetId = useSelector(getFocusingAssetId) 
   const dispatch = useDispatch()
+  const [text, setText] = useState('')
 
-  function handleClose(e) {
+  function handleChange(event) {
+    setText(event.target.value)
+  }
+
+  function handleConfirm() {
+    if (text !== deletedAssetId) return
+    dispatch(deleteAsset(deletedAssetId))
     onClose()
   }
 
-  function onConfirm(e) {
-    if (input === focusingAssetId) {
-      dispatch(deleteAsset(focusingAssetId))
-      onClose()
-    }
-  }
-
   return (
-    <Dialog
-      open={openDialog}
-      onClose={handleClose}
-      aria-labelledby='delete-dialog-title'
-      aria-describedby='delete-dialog-description'
-    >
-      <DialogTitle id='delete-dialog-title'>{'Do you want to delete this asset?'}
+    <Dialog open={isOpen || false} onClose={onClose}>
+      <DialogTitle>
+        Delete Asset
       </DialogTitle>
       <DialogContent>
-        <DialogContentText id='delete-dialog-description'>
-          Please enter the asset id in the text input below and confirm.
+        <DialogContentText>
+          Please enter the Asset ID to confirm deletion.
         </DialogContentText>
         <DialogContentText>
-          Asset Id: {focusingAssetId}
+          Asset ID: {deletedAssetId}
         </DialogContentText>
         <TextField
           autoFocus
-          label='Asset Id'
-          type='text'
           fullWidth
-          onChange={ (e) => setInput(e.target.value)}
+          label='Asset ID'
+          type='text'
+          onChange={handleChange}
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color='primary'>
+        <Button onClick={onClose}>
           Cancel
         </Button>
-        <Button onClick={onConfirm} color='primary' disabled={input !== focusingAssetId}>
+
+        <Button
+          color='secondary'
+          disabled={text !== deletedAssetId}
+          onClick={handleConfirm}
+        >
           Confirm
         </Button>
       </DialogActions>

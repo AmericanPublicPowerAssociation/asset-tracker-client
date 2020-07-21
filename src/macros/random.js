@@ -1,3 +1,5 @@
+// TODO: Review from scratch
+
 const ALPHABET = [
   ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
   ...'abcdefghijklmnopqrstuvwxyz',

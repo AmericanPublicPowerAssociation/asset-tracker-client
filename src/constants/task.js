@@ -1,3 +1,7 @@
+export const REFRESH_TASKS = 'REFRESH_TASKS'
+
+// TODO: Review all code below
+
 export const TASK_ARCHIVE_STATUS = 100
 
 export const TASK_STATUS_CANCELLED = -1
@@ -9,7 +13,6 @@ export const TASK_PRIORITY_LOW = 1
 export const TASK_PRIORITY_NORMAL = 10
 export const TASK_PRIORITY_HIGH = 100
 
-export const REFRESH_TASKS = 'REFRESH_TASKS'
 export const SET_TASKS = 'SET_TASK'
 
 export const ADD_TASK = 'ADD_TASK'
@@ -24,3 +27,5 @@ export const REFRESH_TASK_COMMENTS = 'REFRESH_TASK_COMMENTS'
 export const SET_TASK_COMMENTS = 'SET_ASSET_COMMENTS'
 
 export const ADD_TASK_COMMENT = 'ADD_ASSET_COMMENT'
+
+// TODO: Review all code above

@@ -1,3 +1,5 @@
+// TODO: Review code from scratch
+
 import {
   SET_TASK_COMMENTS,
 } from '../constants'

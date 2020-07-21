@@ -1,3 +1,5 @@
+// TODO: Review from scratch
+
 import {
   TASK_PRIORITY_LOW,
   TASK_PRIORITY_NORMAL,
@@ -7,7 +9,6 @@ import {
   TASK_STATUS_DONE,
   TASK_STATUS_CANCELLED,
 } from '../constants'
-
 
 export function getTaskStatusLabel(status) {
   return {

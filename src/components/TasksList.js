@@ -1,9 +1,10 @@
+// TODO: Review from scratch
+// TODO: Focus task on click edit
+
 import clsx from 'clsx'
-import React, { useState, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import useTheme from '@material-ui/core/styles/useTheme'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -14,7 +15,7 @@ import Chip from '@material-ui/core/Chip'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
-import NativeSelect from '@material-ui/core/NativeSelect'
+import Select from '@material-ui/core/Select'
 import Input from '@material-ui/core/Input'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
@@ -33,7 +34,6 @@ import Collapse from '@material-ui/core/Collapse'
 import Divider from '@material-ui/core/Divider'
 import { AssetName } from './AssetTasksPanel'
 import TaskComments, { CommentForm } from './TaskComments'
-
 import {
   addAssetTaskComment,
   setSelectedTaskId,
@@ -42,9 +42,8 @@ import {
   setTaskName,
 } from '../actions'
 import {
-  // TASK_STATUS_CANCELLED,
-  // TASK_ARCHIVE_STATUS,
-} from '../constants'
+  IsLayoutMobileContext,
+} from '../contexts'
 import {
   getAssetTypeByCode,
   getSelectedTaskId,
@@ -94,8 +93,8 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
   },
   status: {
-    fontSize: '0.7em',
     height: '25px',
+    fontSize: '0.7em',
     marginLeft: '6px',
     marginTop: '0',
     marginBottom: '0',
@@ -115,6 +114,11 @@ const useStyles = makeStyles(theme => ({
     overflowY: 'auto',
     backgroundColor: 'white',
     paddingLeft: '15px',
+  },
+  listItemText: {
+    marginLeft: '6px',
+    marginTop: '0',
+    marginBottom: '0',
   },
   label: {
     color: 'rgba(0, 0, 0, 0.54)',
@@ -150,20 +154,24 @@ const useStyles = makeStyles(theme => ({
     width: '15ch',
   },
   important: {
-    backgroundColor: `${theme.palette.warning.main} !important`,
-    color: 'white',
+    'backgroundColor': `${theme.palette.warning.main} !important`,
+    'color': 'white',
+    /*
     '&$checked': {
       backgroundColor: `${theme.palette.warning.main} !important`,
       color: 'white',
     },
+    */
   },
   urgent: {
-    backgroundColor: theme.palette.secondary.main,
-    color: 'white',
+    'backgroundColor': theme.palette.secondary.main,
+    'color': 'white',
+    /*
     '&$checked': {
       backgroundColor: theme.palette.secondary.main,
       color: 'white',
     },
+    */
   },
   desktopContent: {
     marginTop: theme.spacing(4),
@@ -188,16 +196,20 @@ const useStyles = makeStyles(theme => ({
     minHeight: '75px !important',
   },
   importantCheckbox: {
-    color: `${theme.palette.warning.main} !important`,
+    'color': `${theme.palette.warning.main} !important`,
+    /*
     '&$checked': {
       color: `${theme.palette.warning.main} !important`,
     },
+    */
   },
   urgentCheckbox: {
-    color: theme.palette.secondary.main,
+    'color': theme.palette.secondary.main,
+    /*
     '&$checked': {
       color: theme.palette.secondary.main,
     },
+    */
   },
 }))
 
@@ -287,7 +299,7 @@ function TaskItem(props) {
         <div className={classes.spaceBetween}>
           <div className={classes.alignStart}>
             <div className={classes.fullWidth}>
-              <ListItemText primary={name} className={classes.status} />
+              <ListItemText primary={name} className={classes.listItemText} />
               <div className={classes.actions}>
                 <div>
                   { priorityLabel !== 'Normal' &&
@@ -319,7 +331,6 @@ function TaskItem(props) {
 
 
 export const TaskFullscreen = (props) => {
-  const theme = useTheme()
   const dispatch = useDispatch()
   const classes = useStyles()
   const taskPriorityTypes = useSelector(getTaskPriorityTypes)
@@ -345,7 +356,7 @@ export const TaskFullscreen = (props) => {
   const assetType = assetTypeByCode[assetTypeCode]
   const assetTypeName = assetType.name
 
-  const isLayoutMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const isLayoutMobile = useContext(IsLayoutMobileContext)
 
   const [taskNameState, setTaskNameState] = useState()
   const [openTask, setOpenTask] = useState(true)
@@ -380,7 +391,7 @@ export const TaskFullscreen = (props) => {
   const taskheader = (<div>
       <FormControl className={classes.formControl}>
         <InputLabel htmlFor='priority'>Priority</InputLabel>
-        <NativeSelect
+        <Select
           value={priority}
           onChange={ (e) => setPriority(e.target.value)}
           inputProps={{
@@ -398,12 +409,12 @@ export const TaskFullscreen = (props) => {
               </option>
             ))
           }
-        </NativeSelect>
+        </Select>
         <FormHelperText>Select the priority for the task</FormHelperText>
       </FormControl>
       <FormControl className={classes.formControl}>
         <InputLabel htmlFor={'status'}>Status</InputLabel>
-        <NativeSelect
+        <Select
           value={status}
           onChange={ (e) => setStatus(e.target.value)}
           inputProps={{
@@ -420,7 +431,7 @@ export const TaskFullscreen = (props) => {
               </option>
             ))
           }
-        </NativeSelect>
+        </Select>
         <FormHelperText>Select the status for the task</FormHelperText>
       </FormControl>
     </div>)

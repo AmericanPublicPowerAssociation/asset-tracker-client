@@ -4,15 +4,18 @@ import {
   takeEvery,
   takeLatest,
 } from 'redux-saga/effects'
+import produce from 'immer'
 import getCentroid from '@turf/centroid'
-import { refreshRisks } from 'asset-report-risks'
+import {
+  fetchSafely,  // TODO: Move to separate package
+  refreshRisks,
+} from 'asset-report-risks'
 import {
   refreshAssets,
   refreshTaskComments,
   refreshTasks,
-  setAssets,
   setAssetValue,
-  setMapBoundingBox,
+  setAssets,
   setTaskCommentCount,
   setTaskComments,
   setTasks,
@@ -20,6 +23,7 @@ import {
 import {
   ADD_TASK,
   ADD_TASK_COMMENT,
+  DELETE_ASSET,
   FILL_ASSET_NAME,
   REFRESH_ASSETS,
   REFRESH_TASKS,
@@ -29,10 +33,11 @@ import {
   UPLOAD_ASSETS_CSV,
 } from '../constants'
 import {
-  fetchSafely,
-} from '../macros'
+  getBusOrphanInfo,
+} from '../routines'
 import {
   getAssetById,
+  getAssetIdsByBusId,
   getAssetsGeoJson,
 } from '../selectors'
 
@@ -48,6 +53,45 @@ export function* watchRefreshAssets() {
     })
   })
 }
+
+export function* watchDeleteAsset() {
+  yield takeEvery(DELETE_ASSET, function* (action) {
+    let assetById = yield select(getAssetById)
+    let assetsGeoJson = yield select(getAssetsGeoJson)
+    const assetIdsByBusId = yield select(getAssetIdsByBusId)
+    const assetId = action.payload
+    const assetFeatures = assetsGeoJson.features
+    const asset = assetById[assetId]
+    const connectionByIndex = asset.connections
+
+    // Find orphan line midpoint connections
+    const busOrphanInfos = []
+    for (const connection of Object.values(connectionByIndex)) {
+      const { busId } = connection
+      const busOrphanInfo = getBusOrphanInfo(
+        busId, assetId, assetById, assetIdsByBusId, assetFeatures)
+      if (!busOrphanInfo) continue
+      busOrphanInfos.push(busOrphanInfo)
+    }
+
+    assetById = produce(assetById, draft => {
+      for (const [connectedAssetId, vertexIndex] of busOrphanInfos) {
+        delete draft[connectedAssetId].connections[vertexIndex]
+      }
+      draft[assetId].isDeleted = true
+    })
+    assetsGeoJson = produce(assetsGeoJson, draft => {
+      draft.features = assetFeatures.filter(f => f.properties.id !== assetId)
+    })
+    yield put(setAssets({ assetById, assetsGeoJson }))
+  })
+}
+
+export function* resetAssets(payload) {
+  yield put(setAssets(payload))
+}
+
+// TODO: Review below code
 
 export function* watchSaveAssets() {
   yield takeEvery(SAVE_ASSETS, function* (action) {
@@ -75,9 +119,7 @@ export function* watchFillAssetName() {
     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${REACT_APP_GOOGLE_TOKEN}`
     yield fetchSafely(url, {}, {
       on200: function* ({ results }) {
-        if (!results.length) {
-          return
-        }
+        if (!results.length) return
         const assetName = results[0].formatted_address
         yield put(setAssetValue(assetId, 'name', assetName))
       },
@@ -125,6 +167,7 @@ export function* watchUpdateTask() {
   })
 }
 
+// TODO: Move task sagas to task.js
 export function* watchRefreshTaskComments() {
   yield takeLatest(REFRESH_TASK_COMMENTS, function* (action) {
     const taskId = action.payload.taskId
@@ -158,10 +201,6 @@ export function* resetTasks(payload) {
   yield put(setTasks(payload))
 }
 
-export function* resetAssets(payload) {
-  yield put(setAssets(payload))
-}
-
 export function* updateTaskComments(payload) {
   const {
     comments,
@@ -193,3 +232,5 @@ export function* watchUploadAssetsCsv() {
     })
   })
 }
+
+// TODO: Review above code

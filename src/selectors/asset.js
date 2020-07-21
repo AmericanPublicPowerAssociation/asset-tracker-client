@@ -5,87 +5,83 @@ import {
 
 export const getAssetTypeByCode = state => state.assetTypeByCode
 export const getAssetById = state => state.assetById
-export const getFocusingAssetId = state => state.focusingAssetId
-export const getEditingAsset = state => state.editingAsset
+export const getAssetsGeoJson = state => state.assetsGeoJson
+export const getTemporaryAsset = state => state.temporaryAsset
+export const getSelectedAssetId = state => state.selectedAssetId
 
-export const getAssetCount = createSelector([
+export const getVisibleAssetCount = createSelector([
   getAssetById,
 ], (
   assetById,
 ) => {
+  // TODO: Count only assets that are visible in map
   return Object.keys(assetById).length
 })
 
-// TODO: Consider renaming to getBestAssetIdByBusId
-export const getAssetIdByBusId = createSelector([
+const getTemporaryAssetById = createSelector([
   getAssetById,
-  getEditingAsset,
+  getTemporaryAsset,
 ], (
   assetById,
-  editingAsset,
+  temporaryAsset,
+) => {
+  const temporaryAssetById = temporaryAsset ? {
+    [temporaryAsset.id]: temporaryAsset,
+  } : {}
+  return Object.assign({}, temporaryAssetById, assetById)
+})
+
+export const getBestAssetIdByBusId = createSelector([
+  getTemporaryAssetById,
+], (
+  temporaryAssetById,
 ) => {
   const assetIdByBusId = {}
-  const assets = Object.entries(assetById)
-  if (editingAsset.id) assets.push([editingAsset.id, editingAsset])
+  for (const [assetId, asset] of Object.entries(temporaryAssetById)) {
+    if (asset['isDeleted']) continue
 
-  for (const [assetId, asset] of assets) {
-    if (asset['is_deleted']) {
-      continue
-    }
-    const assetConnections = asset.connections || {}
-    for (const connection of Object.values(assetConnections)) {
-      const busId = connection.busId
-
-      if (busId in assetIdByBusId && asset.typeCode === ASSET_TYPE_CODE_LINE) {
-        // Have buses belong to point assets if possible
+    const assetTypeCode = asset.typeCode
+    for (const connection of Object.values(asset.connections || {})) {
+      const { busId } = connection
+      if (assetTypeCode === ASSET_TYPE_CODE_LINE && busId in assetIdByBusId) {
+        // Assign buses to point assets when possible
         continue
       }
-
       assetIdByBusId[busId] = assetId
     }
   }
-
   return assetIdByBusId
 })
 
-// TODO: Consider renaming to getAllAssetIdsByBusId
 export const getAssetIdsByBusId = createSelector([
-  getAssetById,
-  getEditingAsset,
+  getTemporaryAssetById,
 ], (
-  assetById,
-  editingAsset,
+  temporaryAssetById,
 ) => {
   const assetIdsByBusId = {}
-  const assets = Object.entries(assetById)
-  if (editingAsset.id) assets.push([editingAsset.id, editingAsset])
+  for (const [assetId, asset] of Object.entries(temporaryAssetById)) {
+    if (asset['isDeleted']) continue
 
-  for (const [assetId, asset] of assets) {
-    if (asset['is_deleted']) {
-      continue
-    }
-    const assetConnections = asset.connections || {}
-    for (const connection of Object.values(assetConnections)) {
-      const busId = connection.busId
+    for (const connection of Object.values(asset.connections || {})) {
+      const { busId } = connection
       const assetIds = assetIdsByBusId[busId] || []
       assetIdsByBusId[busId] = [...assetIds, assetId]
     }
   }
-
   return assetIdsByBusId
 })
 
-export const getFocusingAsset = createSelector([
-  getFocusingAssetId,
+export const getSelectedAsset = createSelector([
+  getSelectedAssetId,
   getAssetById,
 ], (
-  focusingAssetId,
+  selectedAssetId,
   assetById,
 ) => {
-  let asset = assetById[focusingAssetId]
+  let asset = assetById[selectedAssetId]
   if (asset) {
     asset = Object.assign({}, asset)
-    asset.id = focusingAssetId
+    asset.id = selectedAssetId
   }
   return asset
 })

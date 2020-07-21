@@ -1,14 +1,14 @@
 import produce from 'immer'
 import centroid from '@turf/centroid'
 import {
-  getMapViewStateFromBoundingBox,
-} from '../routines'
-import {
+  CENTER_MAP,
   MAP_VIEW_STATE,
-  PAN_MAP_TO_ASSET,
   SET_ASSETS,
   SET_MAP_VIEW_STATE,
 } from '../constants'
+import {
+  getMapViewStateFromBoundingBox,
+} from '../routines'
 
 const initialState = MAP_VIEW_STATE
 
@@ -21,38 +21,35 @@ const mapViewState = produce((draft, action) => {
     }
     case SET_ASSETS: {
       const { boundingBox } = action.payload
-      if (!boundingBox || draft['reset']) {
-        return
-      }
+      if (!boundingBox || draft.preventReset) return
       const viewState = getMapViewStateFromBoundingBox(
-        boundingBox, window.innerWidth, window.innerHeight, draft.zoom)
+        boundingBox, draft.width, draft.height)
       if (!viewState) return
       transferViewState(draft, viewState)
-      draft.reset = true
+      draft.preventReset = true
       break
     }
-    // TODO: Rename
-    case PAN_MAP_TO_ASSET: {
-      const assetGeoJson = action.payload
-      const pointGeojson = centroid(assetGeoJson)
-      const [ lon, lat ] = pointGeojson.geometry.coordinates
-      draft.longitude = lon
-      draft.latitude = lat
+    case CENTER_MAP: {
+      const geojsonFeature = action.payload
+      const pointGeojson = centroid(geojsonFeature)
+      const [ longitude, latitude ] = pointGeojson.geometry.coordinates
+      draft.longitude = longitude
+      draft.latitude = latitude
       break
     }
-    default: { }
+    default: {}
   }
 }, initialState)
 
-function transferViewState(draft, viewState) {
-  draft.longitude = viewState.longitude
-  draft.latitude = viewState.latitude
-  draft.zoom = viewState.zoom
-  draft.pitch = viewState.pitch
-  draft.bearing = viewState.bearing
-  draft.width = window.innerWidth
-  draft.height = window.innerHeight
-  draft.altitude = viewState.altitude
+function transferViewState(targetState, sourceState) {
+  targetState.longitude = sourceState.longitude
+  targetState.latitude = sourceState.latitude
+  targetState.zoom = sourceState.zoom
+  targetState.pitch = sourceState.pitch
+  targetState.bearing = sourceState.bearing
+  targetState.width = sourceState.innerWidth
+  targetState.height = sourceState.innerHeight
+  targetState.altitude = sourceState.altitude
 }
 
 export default mapViewState
