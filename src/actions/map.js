@@ -3,6 +3,7 @@ import {
   SET_MAP_VIEW_STATE,
   SET_OVERLAY_MODE,
   SET_POPUP_STATE,
+  SET_POPUP_DELETE_MIDPOINT,
   SET_SELECTED_ASSET_INDEXES,
   SET_SELECTED_BUS_INDEXES,
   SET_SELECTION,
@@ -30,6 +31,9 @@ export function setPopUpState(popUpState) {
   return { type: SET_POPUP_STATE, payload: popUpState }
 }
 
+export function setPopUpDeleteMidpoint(popUpState) {
+  return { type: SET_POPUP_DELETE_MIDPOINT, payload: popUpState }
+}
 export function setSelection(payload) {
   return { type: SET_SELECTION, payload }
 }

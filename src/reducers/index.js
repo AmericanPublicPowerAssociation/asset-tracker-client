@@ -11,6 +11,7 @@ import mapViewState from './mapViewState'
 import assetsGeoJson from './assetsGeoJson'
 import temporaryAsset from './temporaryAsset'
 import popUpState from './popUpState'
+import popUpDeleteMidpointState from './popUpDeleteMidpointState'
 import sketchMode from './sketchMode'
 import overlayMode from './overlayMode'
 import selectedAssetIndexes from './selectedAssetIndexes'
@@ -32,6 +33,7 @@ const reduce = combineReducers({
   assetsGeoJson,
   temporaryAsset,
   popUpState,
+  popUpDeleteMidpointState,
   overlayMode,
   selectedAssetIndexes,
   selectedBusIndexes,

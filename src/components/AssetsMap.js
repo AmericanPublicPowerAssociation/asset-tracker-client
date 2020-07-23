@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
 import PopUp from './PopUp'
+import PopUpDeleteMidpoint from './PopUpDeleteMidpoint'
 import {
   useEditableMap,
   useMovableMap,
@@ -12,6 +13,7 @@ import {
   getMapViewState,
   getOverlayMapLayers,
   getPopUpState,
+  getPopUpDeleteMidpointState,
 } from '../selectors'
 
 const { REACT_APP_MAPBOX_TOKEN } = process.env
@@ -19,17 +21,16 @@ const MAP_CONTROLLER_OPTIONS = { doubleClickZoom: false }
 
 export default function AssetsMap({
   onAssetDelete,
-  onAssetVertexDelete,
 }) {
   const deckGL = useRef()
   const mapStyle = useSelector(getMapStyle)
   const mapViewState = useSelector(getMapViewState)
   const popUpState = useSelector(getPopUpState)
+  const popUpDeleteMidpointState = useSelector(getPopUpDeleteMidpointState)
   const overlayMapLayers = useSelector(getOverlayMapLayers)
   const { handleMapMove } = useMovableMap()
   const { mapLayers, handleMapKey } = useEditableMap(deckGL, {
     onAssetDelete,
-    onAssetVertexDelete,
 	})
   mapLayers.push(...overlayMapLayers)
   return (
@@ -48,8 +49,11 @@ export default function AssetsMap({
           mapboxApiAccessToken={REACT_APP_MAPBOX_TOKEN}
         />
       </DeckGL>
-    {popUpState &&
+    { popUpState  &&
       <PopUp state={popUpState} />
+    }
+    { popUpDeleteMidpointState &&
+     <PopUpDeleteMidpoint state={{ ...popUpDeleteMidpointState, mapViewState }} />
     }
     </div>
   )
