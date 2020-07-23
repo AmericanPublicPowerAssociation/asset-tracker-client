@@ -14,6 +14,7 @@ import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 import AssetName from './AssetName'
 import AssetAttributesListItem from './AssetAttributesListItem'
 import AssetConnectionsListItems from './AssetConnectionsListItems'
+import AssetDeleteDialog from './AssetDeleteDialog'
 import {
 } from '../actions'
 import {
@@ -42,7 +43,7 @@ export default function AssetAttributesPanel({
   const isEditing = !isViewing
 
   const classes = useStyles()
-  const [dialog, setDialog] = useState(false)
+  const [deletedAssetId, setDeletedAssetId] = useState(null)
 
   return (
     <List component='div' disablePadding>
@@ -74,10 +75,16 @@ export default function AssetAttributesPanel({
       />
       <Divider />
       <div style={{ flex: '0 0 auto' }}>
-        <Button className={classes.bottomAction} onClick={() => setDialog(true)}>
+        <Button className={classes.bottomAction} onClick={() => setDeletedAssetId(asset.id)}>
           Delete asset
         </Button>
       </div>
+      <AssetDeleteDialog
+        deletedAssetId={deletedAssetId}
+        isOpen={deletedAssetId !== null}
+        onClose={() => setDeletedAssetId(null)}
+      />
+
     </List>
   )
 }
