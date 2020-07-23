@@ -28,7 +28,7 @@ import {
   SKETCH_MODE_ADD_ASSET,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_DELETE,
-  SKETCH_MODE_VIEW,
+  SKETCH_MODE_VIEW, COLORS_BY_ASSET,
 } from '../constants'
 import {
   getAssetDescription,
@@ -99,16 +99,24 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       autoHighlight: true,
       highlightColor: mapColors.assetHighlight,
       pickable: true,
-      stroked: false,
+      stroked: true,
       getRadius: feature => {
         return ASSET_RADIUS_IN_METERS_BY_CODE[feature.properties.typeCode]
       },
-      getLineWidth: ASSET_LINE_WIDTH_IN_METERS,
-      getFillColor: (feature, isSelected) => {
+      getLineWidth: (feature) => {
+        const asset = feature['properties']['typeCode']
+        if (asset === ASSET_TYPE_CODE_LINE) {
+          return ASSET_LINE_WIDTH_IN_METERS
+        }
+        return 3;
+      },
+      getFillColor: (feature, isSelected, mode) => {
         return isSelected ? mapColors.assetSelect : mapColors.asset
       },
       getLineColor: (feature, isSelected) => {
-        return isSelected ? mapColors.assetSelect : mapColors.asset
+        console.log(feature)
+        const asset = feature['properties']['typeCode']
+        return isSelected ? mapColors.assetSelect : COLORS_BY_ASSET['dark'][asset]
       },
       onHover: handleAssetHover,
       onClick: handleAssetClick,
