@@ -44,7 +44,6 @@ export default function AssetDeleteDialog({
   }
 
   function handleConfirm() {
-    if (text !== deletedAssetId) return
     dispatch(deleteAsset(deletedAssetId))
     onClose()
   }
