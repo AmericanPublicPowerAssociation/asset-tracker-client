@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
@@ -13,6 +14,21 @@ import {
   deleteAsset,
 } from '../actions'
 
+
+const useStyles = makeStyles(theme => ({
+  buttons: {
+    justifyContent: 'space-between',
+  },
+  center: {
+    textAlign: 'center',
+  },
+  delete: {
+    backgroundColor: 'red',
+  },
+}))
+
+
+
 export default function AssetDeleteDialog({
   deletedAssetId,
   isOpen,
@@ -21,47 +37,45 @@ export default function AssetDeleteDialog({
   const dispatch = useDispatch()
   const [text, setText] = useState('')
 
+  const classes = useStyles()
+
   function handleChange(event) {
     setText(event.target.value)
   }
 
   function handleConfirm() {
-    if (text !== deletedAssetId) return
     dispatch(deleteAsset(deletedAssetId))
     onClose()
   }
 
   return (
     <Dialog open={isOpen || false} onClose={onClose}>
-      <DialogTitle>
+      <DialogTitle className={classes.center}>
         Delete Asset
       </DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          Please enter the Asset ID to confirm deletion.
+        <DialogContentText className={classes.center}>
+          You will permanently lose its:
+          <br/>-tasks
+          <br/>-risks
         </DialogContentText>
-        <DialogContentText>
-          Asset ID: {deletedAssetId}
-        </DialogContentText>
-        <TextField
-          autoFocus
-          fullWidth
-          label='Asset ID'
-          type='text'
-          onChange={handleChange}
-        />
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>
+      <DialogActions className={classes.buttons}>
+        <Button size='large' variant='outlined' onClick={onClose}>
           Cancel
         </Button>
 
         <Button
+          classes={{
+            containedSecondary: classes.delete,
+          }}
+          size='large'
           color='secondary'
-          disabled={text !== deletedAssetId}
+          variant='contained'
           onClick={handleConfirm}
+          disableElevation
         >
-          Confirm
+          Delete asset
         </Button>
       </DialogActions>
     </Dialog>
