@@ -59,15 +59,19 @@ export default function App() {
         onAssetDelete={assetId => setDeletedAssetId(assetId)}
       />
       <SketchButtons />
+      { false &&
       <OptionsWindow
         isWithDetails={isWithDetails}
         isWithTables={isWithTables}
         setIsWithDetails={setIsWithDetails}
         setIsWithTables={setIsWithTables}
       />
+      }
+      { false &&
       <TablesWindow
         isWithTables={isWithTables}
       />
+      }
 
       {/* TODO: Review all components below */}
       <SketchModeToolbar />
@@ -78,13 +82,11 @@ export default function App() {
         isWithImportExportDialog={isViewing}
         setIsWithImportExportDialog={setIsWithImportExportDialog}
       />
-      <OverlaysWindow />
-      {isWithDetails &&
-        <DetailsWindow
-          isWithDetails={isWithDetails}
-          isWithTables={isWithTables}
-        />
-      }
+      { false && <OverlaysWindow />}
+      <DetailsWindow
+        isWithDetails={isWithDetails}
+        setIsWithDetails={setIsWithDetails}
+      />
       { isWithImportExportDialog &&
         <ImportExportDialog
           isOpen={isWithImportExportDialog}

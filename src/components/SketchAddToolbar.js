@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
     top: theme.spacing(28.5),
-    left: theme.spacing(1),
+    right: theme.spacing(1),
   },
   list: {
     overflowY: 'auto',
