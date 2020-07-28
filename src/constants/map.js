@@ -12,7 +12,6 @@ import STREET_MAP_STYLE from '../datasets/mapStyles/streets.json'
 import SATELLITE_MAP_STYLE from '../datasets/mapStyles/satelliteStreets.json'
 
 const TRANSPARENT_BLACK = [0, 0, 0, 128]
-const TRANSPARENT_WHITE = [255, 255, 255, 128]
 const TRANSPARENT_CYAN = [0, 255, 255, 128]
 const TRANSPARENT_BLUE_GREY = [69, 90, 100, 200]
 const TRANSPARENT_DEEP_PURPLE = [121, 76, 248, 160]
@@ -29,7 +28,7 @@ const SOMEWHAT_TRANSPARENT_MAGENTA = [255, 0, 255, 160]
 const SOMEWHAT_TRANSPARENT_CYAN = [0, 255, 255, 160]
 const SOMEWHAT_TRANSPARENT_YELLOW = [255, 255, 0, 160]
 const SOLID_RED = [255, 0, 0, 255]
-
+export const TRANSPARENT_WHITE = [255, 255, 255, 128]
 
 export const COLORS_BY_ASSET = {
   dark: {
@@ -105,6 +104,7 @@ export const SET_MAP_VIEW_STATE = 'SET_MAP_VIEW_STATE'
 
 export const ASSETS_MAP_LAYER_ID = 'assets'
 export const BUSES_MAP_LAYER_ID = 'buses'
+export const ICONS_MAP_LAYER_ID = 'icons'
 
 export const ASSET_LINE_WIDTH_IN_METERS = 5
 export const ASSET_RADIUS_IN_METERS_BY_CODE = {
