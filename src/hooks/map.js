@@ -197,9 +197,6 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
     if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
       dispatch(setSelection({ assetId, assetIndexes: [assetIndex] }))
     }
-    if (sketchMode === SKETCH_MODE_DELETE) {
-      onAssetDelete(assetId)
-    }
   }
 
   function handleBusClick(info, event) {
