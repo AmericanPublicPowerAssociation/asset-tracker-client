@@ -20,7 +20,7 @@ import {
 } from '../actions'
 import {
   OVERLAY_MODE_ASSETS,
-  SKETCH_MODE_ADD,
+  SKETCH_MODE_EDIT,
   SKETCH_MODE_VIEW,
 } from '../constants'
 import {
@@ -69,7 +69,7 @@ export default function SketchButtons() {
     if (!isViewing) {
       dispatch(saveAssets())
     }
-    dispatch(setSketchMode(isViewing ? SKETCH_MODE_ADD : SKETCH_MODE_VIEW))
+    dispatch(setSketchMode(isViewing ? SKETCH_MODE_EDIT : SKETCH_MODE_VIEW))
   }
 
   function handleCancel() {
