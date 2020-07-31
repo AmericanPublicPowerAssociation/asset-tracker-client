@@ -23,7 +23,10 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'center',
   },
   delete: {
-    backgroundColor: 'red',
+    backgroundColor: '#d22d2a',
+    '&:hover': {
+      backgroundColor: '#aa2623',
+    },
   },
 }))
 

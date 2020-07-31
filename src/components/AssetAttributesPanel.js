@@ -24,7 +24,7 @@ import {
 
 const useStyles = makeStyles(theme => ({
     bottomAction: {
-      color: 'red',
+      color: '#d22d2a',
       width: '100%',
       bottom: 0,
     },
