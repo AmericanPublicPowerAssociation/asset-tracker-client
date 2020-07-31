@@ -19,6 +19,9 @@ const useStyles = makeStyles(theme => ({
   buttons: {
     justifyContent: 'space-between',
   },
+  buttonRoot: {
+    minWidth: '150px',
+  },
   center: {
     textAlign: 'center',
   },
@@ -64,13 +67,21 @@ export default function AssetDeleteDialog({
         </DialogContentText>
       </DialogContent>
       <DialogActions className={classes.buttons}>
-        <Button size='large' variant='outlined' onClick={onClose}>
+        <Button
+          classes={{
+            root: classes.buttonRoot,
+          }}
+          size='large'
+          variant='outlined'
+          onClick={onClose}
+        >
           Cancel
         </Button>
 
         <Button
           classes={{
             containedSecondary: classes.delete,
+            root: classes.buttonRoot,
           }}
           size='large'
           color='secondary'
