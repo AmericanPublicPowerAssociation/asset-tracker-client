@@ -27,6 +27,7 @@ import {
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_ASSET,
   SKETCH_MODE_ADD_LINE,
+  SKETCH_MODE_EDIT,
   SKETCH_MODE_VIEW,
 } from '../constants'
 import {
@@ -142,7 +143,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
     switch (event.key) {
       case 'Escape': {
         if (sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
-          dispatch(setSketchMode(SKETCH_MODE_ADD))
+          dispatch(setSketchMode(SKETCH_MODE_EDIT))
         }
         break
       }
@@ -252,7 +253,6 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         dispatch(setAsset(temporaryAsset))
         dispatch(fillAssetName(assetId, feature))
         dispatch(setSelection({ assetId, assetIndexes: [featureIndex] }))
-        dispatch(setSketchMode('edit'))
         break
       }
       case 'addTentativePosition': {
