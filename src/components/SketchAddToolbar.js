@@ -35,6 +35,7 @@ import {
   SKETCH_MODE_ADD_SUBSTATION,
   SKETCH_MODE_ADD_SWITCH,
   SKETCH_MODE_ADD_TRANSFORMER,
+  SKETCH_MODE_VIEW,
 } from '../constants'
 import {
   getSketchMode,
@@ -63,8 +64,8 @@ export default function SketchAddToolbar({
   const classes = useStyles()
   const dispatch = useDispatch()
   const sketchMode = useSelector(getSketchMode)
-  const isAdding = sketchMode.startsWith('add')
-  return isAdding && (
+  const isViewing = sketchMode === SKETCH_MODE_VIEW
+  return !isViewing && (
     <Paper className={classes.root}>
       <List className={clsx(classes.list, {
         [classes.withTables]: isWithTables,
