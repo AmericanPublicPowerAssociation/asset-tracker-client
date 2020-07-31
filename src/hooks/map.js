@@ -27,7 +27,6 @@ import {
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_ASSET,
   SKETCH_MODE_ADD_LINE,
-  SKETCH_MODE_DELETE,
   SKETCH_MODE_VIEW,
 } from '../constants'
 import {
