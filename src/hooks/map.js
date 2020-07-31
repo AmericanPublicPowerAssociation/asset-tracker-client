@@ -252,6 +252,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         dispatch(setAsset(temporaryAsset))
         dispatch(fillAssetName(assetId, feature))
         dispatch(setSelection({ assetId, assetIndexes: [featureIndex] }))
+        dispatch(setSketchMode('edit'))
         break
       }
       case 'addTentativePosition': {
