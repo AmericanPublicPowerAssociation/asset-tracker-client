@@ -1,4 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
+import {IconLayer} from '@deck.gl/layers';
+
 import { produce } from 'immer'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import { ViewMode } from '@nebula.gl/edit-modes'
@@ -28,7 +30,7 @@ import {
   SKETCH_MODE_ADD_ASSET,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_DELETE,
-  SKETCH_MODE_VIEW,
+  SKETCH_MODE_VIEW, COLORS_BY_ASSET, ICONS_MAP_LAYER_ID, ASSET_TYPE_CODE_TRANSFORMER, ASSET_TYPE_CODE_METER,
 } from '../constants'
 import {
   getAssetDescription,
@@ -99,16 +101,25 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       autoHighlight: true,
       highlightColor: mapColors.assetHighlight,
       pickable: true,
-      stroked: false,
+      stroked: true,
       getRadius: feature => {
-        return ASSET_RADIUS_IN_METERS_BY_CODE[feature.properties.typeCode]
+        return ASSET_RADIUS_IN_METERS_BY_CODE[ASSET_TYPE_CODE_TRANSFORMER]
       },
-      getLineWidth: ASSET_LINE_WIDTH_IN_METERS,
-      getFillColor: (feature, isSelected) => {
-        return isSelected ? mapColors.assetSelect : mapColors.asset
+      getLineWidth: (feature) => {
+        const asset = feature['properties']['typeCode']
+        if (asset === ASSET_TYPE_CODE_LINE) {
+          return ASSET_LINE_WIDTH_IN_METERS
+        }
+        return 3;
+      },
+      getFillColor: (feature, isSelected, mode) => {
+        const asset = feature['properties']['typeCode']
+        return isSelected ? mapColors.assetSelect : COLORS_BY_ASSET['dark'][asset]
+        // return isSelected ? mapColors.assetSelect : mapColors.asset
       },
       getLineColor: (feature, isSelected) => {
-        return isSelected ? mapColors.assetSelect : mapColors.asset
+        const asset = feature['properties']['typeCode']
+        return isSelected ? mapColors.assetSelect : COLORS_BY_ASSET['dark'][asset]
       },
       onHover: handleAssetHover,
       onClick: handleAssetClick,
@@ -135,6 +146,36 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       onClick: handleBusClick,
     })
   }
+  const ICON_SIZE = 60;
+
+  function getIconsMapLayer() {
+    const assetsJSONForIcons = {
+      type: "FeatureCollection",
+      features: assetsGeoJson.features.filter(obj => obj.properties.typeCode !== "l")
+    }
+
+    return new IconLayer({
+      id: ICONS_MAP_LAYER_ID,
+      data: assetsJSONForIcons,
+      pickable: false,
+      sizeScale: ICON_SIZE * window.devicePixelRatio,
+      getPosition: d => {
+        console.log(d)
+        return d.geometry.coordinates
+      },
+      getIcon: d => {
+        console.log(d);
+        return 'marker'
+      } ,
+      getSize: d => {
+        console.log(d)
+        return 1
+      },
+      onHover: () => {},
+      onClick: () => {},
+    })
+  }
+
 
   function handleMapKey(event) {
     if (sketchMode === SKETCH_MODE_VIEW) return
@@ -406,6 +447,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   const mapLayers = [
     getAssetsMapLayer(),
     getBusesMapLayer(),
+    // getIconsMapLayer()
   ]
 
   return {
