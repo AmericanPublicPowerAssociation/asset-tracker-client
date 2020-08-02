@@ -2,22 +2,23 @@
 
 import React from 'react'
 import { useSelector } from 'react-redux'
+import List from '@material-ui/core/List'
 import AssetAttributesListItem from './AssetAttributesListItem'
 import AssetConnectionsListItems from './AssetConnectionsListItems'
+import CollapsibleTaskList from './CollapsibleTaskList'
 import {
   getIsViewing,
 } from '../selectors'
 
 export default function AssetAttributesPanel({
   asset,
-  setIsDetailsWindowExpanded,
-  isDetailsWindowExpanded,
+  isDetailsWindowFullScreen,
 }) {
   const isViewing = useSelector(getIsViewing)
   const isEditing = !isViewing
 
   return (
-    <>
+    <List component='div'>
       <AssetAttributesListItem
         asset={asset}
         isEditing={isEditing}
@@ -25,8 +26,9 @@ export default function AssetAttributesPanel({
       <AssetConnectionsListItems
         asset={asset}
         isEditing={isEditing}
-        expand={isDetailsWindowExpanded}
+        isDetailsWindowFullScreen={isDetailsWindowFullScreen}
       />
-    </>
+      <CollapsibleTaskList asset={asset} />
+    </List>
   )
 }

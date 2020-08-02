@@ -61,7 +61,8 @@ export default function DetailWindowTabs() {
           <AssetList />
         </TabPanel>
         <TabPanel value={tabValue} index={1}>
-          Tasks
+          <List>
+          </List>
         </TabPanel>
         <TabPanel value={tabValue} index={2}>
           Risks

@@ -59,7 +59,7 @@ export default function App() {
         onAssetDelete={assetId => setDeletedAssetId(assetId)}
       />
       <SketchButtons />
-      { false &&
+      {
       <OptionsWindow
         isWithDetails={isWithDetails}
         isWithTables={isWithTables}
@@ -82,7 +82,7 @@ export default function App() {
         isWithImportExportDialog={isViewing}
         setIsWithImportExportDialog={setIsWithImportExportDialog}
       />
-      { false && <OverlaysWindow />}
+      { <OverlaysWindow />}
       <DetailsWindow
         isWithDetails={isWithDetails}
         setIsWithDetails={setIsWithDetails}

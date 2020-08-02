@@ -6,7 +6,7 @@ import FullScreenIcon from '@material-ui/icons/Fullscreen'
 import AssetName from './AssetName'
 import AssetTypeSvgIcon from './AssetTypeSvgIcon'
 
-export default function AssetNameWithLogo(props) {
+export default function AssetNameWithIcon(props) {
   const {
     asset,
     expand,

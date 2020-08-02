@@ -10,7 +10,7 @@ import Drawer from '@material-ui/core/Drawer'
 import IconButton from '@material-ui/core/IconButton'
 import Slide from '@material-ui/core/Slide'
 import AssetAttributesPanel from './AssetAttributesPanel2'
-import AssetNameWithLogo from './AssetNameWithLogo'
+import AssetNameWithIcon from './AssetNameWithIcon'
 import AssetRisksPanel from './AssetRisksPanel2'
 import AssetTasksPanel from './AssetTasksPanel2'
 import DetailsWindowTabs from './DetailsWindowTabs'
@@ -71,7 +71,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function DetailsWindows({ isWithDetails, setIsWithDetails }) {
-  const [expand, setExpand] = useState(false)
+  const [isFullScreen, setIsFullScreen] = useState(false)
   const isViewing = useSelector(getIsViewing)
   const overlayMode = useSelector(getOverlayMode)
   const selectedAsset = useSelector(getSelectedAsset)
@@ -85,7 +85,7 @@ export default function DetailsWindows({ isWithDetails, setIsWithDetails }) {
     [OVERLAY_MODE_RISKS]: AssetRisksPanel,
   }[overlayMode]
 
-	const props = { overlayMode,  expand, isLayoutMobile, setIsWithDetails, isWithDetails }
+	const props = { overlayMode,  isFullScreen, isLayoutMobile, setIsWithDetails, isWithDetails }
 	return (
 		<MyDrawer {...props}>
       <>
@@ -94,9 +94,9 @@ export default function DetailsWindows({ isWithDetails, setIsWithDetails }) {
           ? <Box p={1} display='flex' flexDirection='column' flexGrow={1}
               style={{ overflow: 'hidden' }}
             >
-              <AssetNameWithLogo asset={asset} showExpandButton={isLayoutMobile} expand={expand} setExpand={setExpand} isViewing={isViewing} />  
+              <AssetNameWithIcon asset={asset} showExpandButton={isLayoutMobile} expand={isFullScreen} setExpand={setIsFullScreen} isViewing={isViewing} />
               <Box flexGrow={1} style={{ overflowX: 'hidden', overflowY: 'auto' }}>
-                <DetailsPanel asset={asset} />
+                <DetailsPanel asset={asset} isDetailsWindowFullScreen={isFullScreen} />
               </Box>
             </Box>
         : <DetailsWindowTabs /> }
@@ -107,7 +107,7 @@ export default function DetailsWindows({ isWithDetails, setIsWithDetails }) {
 
 export function MyDrawer(props) {
   const classes= useStyles()
-  const { children, setIsWithDetails, isWithDetails, isLayoutMobile, expand } = props
+  const { children, setIsWithDetails, isWithDetails, isLayoutMobile, isFullScreen } = props
   const anchor = isLayoutMobile ? 'bottom' : 'left'
 
   return (
@@ -117,8 +117,8 @@ export function MyDrawer(props) {
           className: clsx(
             classes.paper, {
             [classes.desktopPaper]: !isLayoutMobile,
-            [classes.mobilePaperPreview]: !expand && isLayoutMobile,
-            [classes.mobilePaperFullHeight]: expand && isLayoutMobile,
+            [classes.mobilePaperPreview]: !isFullScreen && isLayoutMobile,
+            [classes.mobilePaperFullHeight]: isFullScreen && isLayoutMobile,
             }),
         }}
         anchor={anchor}

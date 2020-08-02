@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import Divider from '@material-ui/core/Divider'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-import AssetNameWithLogo from './AssetNameWithLogo'
+import AssetNameWithIcon from './AssetNameWithIcon'
 import {
   getAssetById,
 } from '../selectors'
@@ -30,7 +30,7 @@ export default function AssetList(props) {
           return (
             <React.Fragment key={id}>
               <ListItem className={classes.listItem}>
-                <AssetNameWithLogo asset={asset} />
+                <AssetNameWithIcon asset={asset} />
               </ListItem>
               <Divider variant="middle" component="li" />
             </React.Fragment>
