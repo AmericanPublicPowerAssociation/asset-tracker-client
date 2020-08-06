@@ -37,7 +37,6 @@ export default function App() {
   const dispatch = useDispatch()
   const isLayoutMobile = useMediaQuery('(max-width:599px)')
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
-  const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
   const [deletedAssetId, setDeletedAssetId] = useState(null)
   const [
     isWithImportExportDialog,
@@ -59,30 +58,14 @@ export default function App() {
         onAssetDelete={assetId => setDeletedAssetId(assetId)}
       />
       <SketchButtons />
-      {
-      <OptionsWindow
-        isWithDetails={isWithDetails}
-        isWithTables={isWithTables}
-        setIsWithDetails={setIsWithDetails}
-        setIsWithTables={setIsWithTables}
-      />
-      }
-      { false &&
-      <TablesWindow
-        isWithTables={isWithTables}
-      />
-      }
-
       {/* TODO: Review all components below */}
+      
       <SketchModeToolbar />
-      <SketchAddToolbar
-        isWithTables={isWithTables}
-      />
+      <SketchAddToolbar />
       <ActionsWindow
         isWithImportExportDialog={isViewing}
         setIsWithImportExportDialog={setIsWithImportExportDialog}
       />
-      { <OverlaysWindow />}
       <DetailsWindow
         isWithDetails={isWithDetails}
         setIsWithDetails={setIsWithDetails}

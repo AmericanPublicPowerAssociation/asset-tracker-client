@@ -50,25 +50,18 @@ const useStyles = makeStyles(theme => ({
     overflowY: 'auto',
     maxHeight: 'calc(100vh - 280px)',
   },
-  withTables: {
-    maxHeight: 'calc(100vh - 556px)',
-  },
 }))
 
 const LIST_ITEM_CLASSES = { selected: 'selected' }
 
-export default function SketchAddToolbar({
-  isWithTables,
-}) {
+export default function SketchAddToolbar() {
   const classes = useStyles()
   const dispatch = useDispatch()
   const sketchMode = useSelector(getSketchMode)
   const isAdding = sketchMode.startsWith('add')
   return isAdding && (
     <Paper className={classes.root}>
-      <List className={clsx(classes.list, {
-        [classes.withTables]: isWithTables,
-      })}>
+      <List className={clsx(classes.list)}>
         <Tooltip
           title='Add Pole'
           aria-label='Add Pole'

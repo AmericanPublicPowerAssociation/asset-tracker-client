@@ -1,6 +1,6 @@
 // TODO: Rewrite from scratch to clean up logic
 import React, { useState, useContext } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import Box from '@material-ui/core/Box'
@@ -11,15 +11,12 @@ import IconButton from '@material-ui/core/IconButton'
 import Slide from '@material-ui/core/Slide'
 import AssetAttributesPanel from './AssetAttributesPanel2'
 import AssetNameWithIcon from './AssetNameWithIcon'
-import AssetRisksPanel from './AssetRisksPanel2'
-import AssetTasksPanel from './AssetTasksPanel2'
 import DetailsWindowTabs from './DetailsWindowTabs'
 import SearchBox from './SearchBox'
+import TaskDetails from './TaskDetails'
 import {
-  OVERLAY_MODE_ASSETS,
-  OVERLAY_MODE_RISKS,
-  OVERLAY_MODE_TASKS,
-} from '../constants'
+  setSelection,
+} from '../actions'
 import {
   IsLayoutMobileContext,
 } from '../contexts'
@@ -27,6 +24,7 @@ import {
   getIsViewing,
   getOverlayMode,
   getSelectedAsset,
+  getSelectedTaskId,
   getTemporaryAsset,
 } from '../selectors'
 
@@ -71,6 +69,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function DetailsWindows({ isWithDetails, setIsWithDetails }) {
+  const dispatch = useDispatch()
+  const [searchInput, setSearchInput] = useState('')
   const [isFullScreen, setIsFullScreen] = useState(false)
   const isViewing = useSelector(getIsViewing)
   const overlayMode = useSelector(getOverlayMode)
@@ -79,28 +79,37 @@ export default function DetailsWindows({ isWithDetails, setIsWithDetails }) {
   const asset = temporaryAsset ? temporaryAsset : selectedAsset
   const isLayoutMobile = useContext(IsLayoutMobileContext)
 
-  const DetailsPanel = {
-    [OVERLAY_MODE_ASSETS]: AssetAttributesPanel,
-    [OVERLAY_MODE_TASKS]: AssetTasksPanel,
-    [OVERLAY_MODE_RISKS]: AssetRisksPanel,
-  }[overlayMode]
+	const drawerProps = {
+    overlayMode,  isFullScreen, isLayoutMobile, setIsWithDetails, isWithDetails,
+  }
 
-	const props = { overlayMode,  isFullScreen, isLayoutMobile, setIsWithDetails, isWithDetails }
 	return (
-		<MyDrawer {...props}>
-      <>
-        <SearchBox />
-        { asset
-          ? <Box p={1} display='flex' flexDirection='column' flexGrow={1}
-              style={{ overflow: 'hidden' }}
-            >
-              <AssetNameWithIcon asset={asset} showExpandButton={isLayoutMobile} expand={isFullScreen} setExpand={setIsFullScreen} isViewing={isViewing} />
-              <Box flexGrow={1} style={{ overflowX: 'hidden', overflowY: 'auto' }}>
-                <DetailsPanel asset={asset} isDetailsWindowFullScreen={isFullScreen} />
-              </Box>
-            </Box>
-        : <DetailsWindowTabs /> }
-      </>
+		<MyDrawer {...drawerProps}>
+      <SearchBox
+        updateInputTextFunc={setSearchInput}
+        input={searchInput}
+        isShowBackButton={asset}
+        onBackButtonClick={() => { dispatch(setSelection({})) }}
+      />
+      { !asset && <DetailsWindowTabs /> }
+      { asset &&
+        <Box display='flex' flexDirection='column' flexGrow={1}
+        style={{ overflow: 'hidden' }}
+        >
+          <AssetNameWithIcon
+            asset={asset}
+            showExpandButton={isLayoutMobile}
+            expand={isFullScreen}
+            setExpand={setIsFullScreen} isViewing={isViewing}
+          />
+          <Box flexGrow={1} style={{ overflowX: 'hidden', overflowY: 'auto' }}>
+            <AssetAttributesPanel
+              asset={asset}
+              isDetailsWindowFullScreen={isFullScreen}
+            />
+          </Box>
+        </Box>
+      }
 		</MyDrawer>
 	)
 }

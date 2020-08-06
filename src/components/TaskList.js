@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Badge from '@material-ui/core/Badge'
 import Chip from '@material-ui/core/Chip'
 import CommentIcon from '@material-ui/icons/Comment'
@@ -9,11 +9,16 @@ import ListItem from '@material-ui/core/ListItem'
 import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
 import {
+  refreshTaskComments,
+  setSelectedTaskId,
+} from '../actions'
+import {
+  getOpenTaskById,
   getTaskPriorityTypes,
   getSelectedTasks,
 } from '../selectors'
 
-export default function TaskList() {
+export default function AssetTaskList() {
   const tasks = useSelector(getSelectedTasks)
 
   return (
@@ -23,8 +28,19 @@ export default function TaskList() {
   )
 }
 
+export function TaskList() {
+  const tasks = useSelector(getOpenTaskById)
+  return (
+    <List>
+      { tasks.map(task => <TaskItem key={task.id} task={task} />) }
+    </List>
+  )
+}
+
 export function TaskItem({ task }) {
+  const dispatch = useDispatch()
   const { name, priority, commentCount } = task
+  const taskId = task.id
   const priorityType = useSelector(getTaskPriorityTypes)
   const priorityLabel = priorityType[priority].name
   const priorityColor = getPriorityColor(priority)
@@ -36,14 +52,17 @@ export function TaskItem({ task }) {
       100:  'secondary',
     }[priority] || 'default'
   }
-
+  
   return (
     <>
       <ListItem button
         component='div'
         disableGutters
         style={{ display: 'block' }}
-        onClick={ () => {}}
+        onClick={ () => {
+          dispatch(setSelectedTaskId({ taskId })) 
+          dispatch(refreshTaskComments(taskId))
+        }}
       >
         <div>
           <div>
