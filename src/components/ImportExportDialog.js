@@ -20,7 +20,9 @@ import Typography from '@material-ui/core/Typography'
 import { DropzoneArea } from 'material-ui-dropzone'
 import ImportResponseDialog from './ImportResponseDialog'
 import { uploadAssetsCsv } from '../actions'
-import { ASSET_TYPE_CODE_TRANSFORMER, ASSET_TYPE_CODE_GENERATOR } from '../constants'
+import {
+  ASSET_TYPE_CODE_GENERATOR,
+} from '../constants'
 import {
   getAssetById,
   getAssetTypeByCode,

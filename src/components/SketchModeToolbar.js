@@ -15,13 +15,15 @@ import {
   setSketchMode,
 } from '../actions'
 import {
+  // ASSET_TYPE_CODE_SUBSTATION,
+  // COLORS_BY_ASSET,
   SKETCH_MODE_ADD,
-  SKETCH_MODE_EDIT,
   SKETCH_MODE_DELETE,
-  SKETCH_MODE_VIEW, COLORS_BY_ASSET, ASSET_TYPE_CODE_SUBSTATION,
+  SKETCH_MODE_EDIT,
+  SKETCH_MODE_VIEW,
 } from '../constants'
 import {
-  TRANSPARENT_WHITE
+  TRANSPARENT_WHITE,
 } from '../constants/map'
 import {
   getSketchMode,
@@ -30,9 +32,10 @@ import {
 const baseAssetIcon = {
   display: 'flex',
   flexDirection: 'column',
-  fontSize: '10px',
+  fontSize: '11px',
+  fontWeight: 'bold',
   paddingBottom: '0px',
-  paddingTop: '0px'
+  paddingTop: '0px',
 }
 
 const useStyles = makeStyles(theme => ({
@@ -44,17 +47,17 @@ const useStyles = makeStyles(theme => ({
   addRightIndicator: {
     borderRight: `5px solid rgba(${TRANSPARENT_WHITE})`,
     borderBottom: '2px solid #EAEAEA',
-    ...baseAssetIcon
+    ...baseAssetIcon,
   },
   editRightIndicator: {
     borderRight: `5px solid rgba(${TRANSPARENT_WHITE})`,
     borderBottom: '2px solid #EAEAEA',
-    ...baseAssetIcon
+    ...baseAssetIcon,
   },
   deleteRightIndicator: {
     borderRight: `5px solid rgba(${TRANSPARENT_WHITE})`,
-    ...baseAssetIcon
-  }
+    ...baseAssetIcon,
+  },
 }))
 
 export default function SketchModeToolbar() {
