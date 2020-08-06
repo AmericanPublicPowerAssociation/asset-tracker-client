@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import {IconLayer} from '@deck.gl/layers';
+import { IconLayer } from '@deck.gl/layers'
 
 import { produce } from 'immer'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
@@ -110,7 +110,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         if (asset === ASSET_TYPE_CODE_LINE) {
           return ASSET_LINE_WIDTH_IN_METERS
         }
-        return 3;
+        return 3
       },
       getFillColor: (feature, isSelected, mode) => {
         const asset = feature['properties']['typeCode']
@@ -146,12 +146,12 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       onClick: handleBusClick,
     })
   }
-  const ICON_SIZE = 60;
+  const ICON_SIZE = 60
 
   function getIconsMapLayer() {
     const assetsJSONForIcons = {
-      type: "FeatureCollection",
-      features: assetsGeoJson.features.filter(obj => obj.properties.typeCode !== "l")
+      type: 'FeatureCollection',
+      features: assetsGeoJson.features.filter(obj => obj.properties.typeCode !== 'l'),
     }
 
     return new IconLayer({
@@ -164,7 +164,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         return d.geometry.coordinates
       },
       getIcon: d => {
-        console.log(d);
+        console.log(d)
         return 'marker'
       } ,
       getSize: d => {
