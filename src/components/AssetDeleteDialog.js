@@ -1,9 +1,10 @@
 // TODO: Review from scratch
 
-import React, { useState } from 'react'
+// import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
+// import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -19,11 +20,17 @@ const useStyles = makeStyles(theme => ({
   buttons: {
     justifyContent: 'space-between',
   },
+  buttonRoot: {
+    minWidth: '150px',
+  },
   center: {
     textAlign: 'center',
   },
   delete: {
-    backgroundColor: 'red',
+    'backgroundColor': '#d22d2a',
+    '&:hover': {
+      backgroundColor: '#aa2623',
+    },
   },
 }))
 
@@ -35,13 +42,14 @@ export default function AssetDeleteDialog({
   onClose,
 }) {
   const dispatch = useDispatch()
-  const [text, setText] = useState('')
-
   const classes = useStyles()
+  /*
+  const [text, setText] = useState('')
 
   function handleChange(event) {
     setText(event.target.value)
   }
+  */
 
   function handleConfirm() {
     dispatch(deleteAsset(deletedAssetId))
@@ -61,13 +69,21 @@ export default function AssetDeleteDialog({
         </DialogContentText>
       </DialogContent>
       <DialogActions className={classes.buttons}>
-        <Button size='large' variant='outlined' onClick={onClose}>
+        <Button
+          classes={{
+            root: classes.buttonRoot,
+          }}
+          size='large'
+          variant='outlined'
+          onClick={onClose}
+        >
           Cancel
         </Button>
 
         <Button
           classes={{
             containedSecondary: classes.delete,
+            root: classes.buttonRoot,
           }}
           size='large'
           color='secondary'

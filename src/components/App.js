@@ -5,7 +5,6 @@ import { refreshRisks } from 'asset-report-risks'
 import AssetsMap from './AssetsMap'
 import SketchButtons from './SketchButtons'
 import OptionsWindow from './OptionsWindow'
-import SketchModeToolbar from './SketchModeToolbar'
 import SketchAddToolbar from './SketchAddToolbar'
 import ActionsWindow from './ActionsWindow'
 import OverlaysWindow from './OverlaysWindow'
@@ -59,8 +58,6 @@ export default function App() {
       />
       <SketchButtons />
       {/* TODO: Review all components below */}
-      
-      <SketchModeToolbar />
       <SketchAddToolbar />
       <ActionsWindow
         isWithImportExportDialog={isViewing}

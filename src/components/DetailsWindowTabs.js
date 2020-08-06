@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
   overflow: {
     overflowX: 'hidden',
     overflowY: 'auto',
-  }.
+  },
 }))
 
 function TabPanel(props) {

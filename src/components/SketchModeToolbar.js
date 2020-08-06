@@ -15,20 +15,48 @@ import {
   setSketchMode,
 } from '../actions'
 import {
+  // ASSET_TYPE_CODE_SUBSTATION,
+  // COLORS_BY_ASSET,
   SKETCH_MODE_ADD,
-  SKETCH_MODE_EDIT,
   SKETCH_MODE_DELETE,
+  SKETCH_MODE_EDIT,
   SKETCH_MODE_VIEW,
 } from '../constants'
 import {
+  TRANSPARENT_WHITE,
+} from '../constants/map'
+import {
   getSketchMode,
 } from '../selectors'
+
+const baseAssetIcon = {
+  display: 'flex',
+  flexDirection: 'column',
+  fontSize: '11px',
+  fontWeight: 'bold',
+  paddingBottom: '0px',
+  paddingTop: '0px',
+}
 
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
     top: theme.spacing(6),
     right: theme.spacing(1),
+  },
+  addRightIndicator: {
+    borderRight: `5px solid rgba(${TRANSPARENT_WHITE})`,
+    borderBottom: '2px solid #EAEAEA',
+    ...baseAssetIcon,
+  },
+  editRightIndicator: {
+    borderRight: `5px solid rgba(${TRANSPARENT_WHITE})`,
+    borderBottom: '2px solid #EAEAEA',
+    ...baseAssetIcon,
+  },
+  deleteRightIndicator: {
+    borderRight: `5px solid rgba(${TRANSPARENT_WHITE})`,
+    ...baseAssetIcon,
   },
 }))
 
@@ -43,33 +71,39 @@ export default function SketchModeToolbar() {
         <Tooltip title='Add' aria-label='Add' placement='right'>
           <ListItem
             button
+            className={classes.addRightIndicator}
             classes={{ selected: 'selected' }}
             selected={sketchMode.startsWith(SKETCH_MODE_ADD)}
             onClick={() => dispatch(setSketchMode(SKETCH_MODE_ADD))}
           >
             <SvgIcon fontSize='large' component={AddIcon} />
+            <span>Add</span>
           </ListItem>
         </Tooltip>
 
         <Tooltip title='Edit' aria-label='Edit' placement='right'>
           <ListItem
             button
+            className={classes.editRightIndicator}
             classes={{ selected: 'selected' }}
             selected={sketchMode.startsWith(SKETCH_MODE_EDIT)}
             onClick={() => dispatch(setSketchMode(SKETCH_MODE_EDIT))}
           >
             <SvgIcon fontSize='large' component={EditIcon} />
+            <span>Edit</span>
           </ListItem>
         </Tooltip>
 
         <Tooltip title='Delete' aria-label='Delete' placement='right'>
           <ListItem
             button
+            className={classes.deleteRightIndicator}
             classes={{ selected: 'selected' }}
             selected={sketchMode === SKETCH_MODE_DELETE}
             onClick={() => dispatch(setSketchMode(SKETCH_MODE_DELETE))}
           >
             <SvgIcon fontSize='large' component={DeleteIcon} />
+            <span>Delete</span>
           </ListItem>
         </Tooltip>
       </List>
