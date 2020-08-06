@@ -197,20 +197,6 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         // const asset = feature['properties']['typeCode']
         // return COLORS_BY_ASSET['dark'][asset]
       },
-
-/*
-      getColor: d => [255, 255, 255]
-      getPosition: d => {
-        console.log(d)
-        return d.geometry.coordinates
-      },
-      getSize: d => {
-        console.log(d)
-        return 1
-      },
-      onHover: () => {},
-      onClick: () => {},
- */
     })
   }
 
