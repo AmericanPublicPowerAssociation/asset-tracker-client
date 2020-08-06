@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import { auth } from 'appa-auth-consumer'
 import {
   productNameSuggestions,
   productVersionSuggestions,
@@ -28,6 +29,7 @@ import message from './message'
 
 // TODO: Review order
 const reduce = combineReducers({
+  auth,
   mapStyleName,
   mapViewState,
   assetsGeoJson,
