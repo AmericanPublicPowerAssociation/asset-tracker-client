@@ -32,7 +32,16 @@ import {
   SKETCH_MODE_EDIT,
   SKETCH_MODE_VIEW,
   SKETCH_MODE_DELETE,
-  SKETCH_MODE_VIEW, COLORS_BY_ASSET, ICONS_MAP_LAYER_ID, ASSET_TYPE_CODE_TRANSFORMER, ASSET_TYPE_CODE_METER,
+  SKETCH_MODE_VIEW,
+  COLORS_BY_ASSET,
+  ICONS_MAP_LAYER_ID,
+  ASSET_TYPE_CODE_TRANSFORMER,
+  ASSET_TYPE_CODE_METER,
+  ASSET_TYPE_CODE_GENERATOR,
+  ASSET_TYPE_CODE_POWER_QUALITY,
+  ASSET_TYPE_CODE_STORAGE,
+  ASSET_TYPE_CODE_SWITCH,
+  ASSET_TYPE_CODE_CONTROL,
 } from '../constants'
 import {
   getAssetDescription,
@@ -60,7 +69,7 @@ import {
   getSelectedBusId,
   getSelectedBusIndexes,
   getSketchMode,
-  getTemporaryAsset,
+  getTemporaryAsset, getMapWebMercatorViewPort,
 } from '../selectors'
 
 export function useMovableMap() {
@@ -90,7 +99,10 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   const assetFeatures = assetsGeoJson.features
   const busFeatures = busesGeoJson.features
   const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
+  const mapWebMercatorViewPort = useSelector(getMapWebMercatorViewPort)
   let temporaryAsset = useSelector(getTemporaryAsset)
+
+
 
   function getAssetsMapLayer() {
     const mapMode = getMapMode(sketchMode)
@@ -116,6 +128,9 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       },
       getFillColor: (feature, isSelected, mode) => {
         const asset = feature['properties']['typeCode']
+        if (asset === ASSET_TYPE_CODE_LINE) {
+          return isSelected ? mapColors.assetSelect : COLORS_BY_ASSET['dark'][asset]
+        }
         return isSelected ? mapColors.assetSelect : COLORS_BY_ASSET['dark'][asset]
         // return isSelected ? mapColors.assetSelect : mapColors.asset
       },
@@ -148,33 +163,56 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       onClick: handleBusClick,
     })
   }
-  const ICON_SIZE = 60;
+  const ICON_SIZE = 8;
 
   function getIconsMapLayer() {
     const assetsJSONForIcons = {
       type: "FeatureCollection",
       features: assetsGeoJson.features.filter(obj => obj.properties.typeCode !== "l")
     }
+    const zoom = mapWebMercatorViewPort.zoom;
+    const ICON_MAPPING = {
+      [ASSET_TYPE_CODE_CONTROL]:  {x:0, y:67, width:100, height:107, mask: true},
+      [ASSET_TYPE_CODE_GENERATOR]:  {x:0, y:175, width:100, height:86, mask: true},
+      [ASSET_TYPE_CODE_METER]:  {x:0, y:262, width:100, height:108, mask: true},
+      [ASSET_TYPE_CODE_POWER_QUALITY]:  {x:0, y:370, width:100, height:98, mask: true},
+      [ASSET_TYPE_CODE_STORAGE]:  {x:0, y:473, width:100, height:92, mask: true},
+      [ASSET_TYPE_CODE_SWITCH]:  {x:0, y:559, width:100, height:43, mask: true},
+      [ASSET_TYPE_CODE_TRANSFORMER]: { x:0, y:600, width:100, height:91, mask: true},
+    }
 
     return new IconLayer({
       id: ICONS_MAP_LAYER_ID,
-      data: assetsJSONForIcons,
       pickable: false,
-      sizeScale: ICON_SIZE * window.devicePixelRatio,
+      data: assetsGeoJson.features.filter(obj => obj.properties.typeCode !== "l"),
+      iconAtlas: '/tileset.png',
+      iconMapping: ICON_MAPPING,
+      sizeScale: 1,
+      getPosition: d => d.geometry.coordinates,
+      getIcon: d => d.properties.typeCode ? d.properties.typeCode : 'marker',
+      getSize: d => {
+        console.log(mapWebMercatorViewPort.zoom, 2 * mapWebMercatorViewPort.zoom)
+        return Math.sqrt(mapWebMercatorViewPort.zoom * mapWebMercatorViewPort.zoom) * 2;
+      },
+      getColor: (feature) => {
+        return [255, 255, 255]
+        // const asset = feature['properties']['typeCode']
+        // return COLORS_BY_ASSET['dark'][asset]
+      },
+
+/*
+      getColor: d => [255, 255, 255]
       getPosition: d => {
         console.log(d)
         return d.geometry.coordinates
       },
-      getIcon: d => {
-        console.log(d);
-        return 'marker'
-      } ,
       getSize: d => {
         console.log(d)
         return 1
       },
       onHover: () => {},
       onClick: () => {},
+ */
     })
   }
 
@@ -449,7 +487,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   const mapLayers = [
     getAssetsMapLayer(),
     getBusesMapLayer(),
-    // getIconsMapLayer()
+    getIconsMapLayer()
   ]
 
   return {

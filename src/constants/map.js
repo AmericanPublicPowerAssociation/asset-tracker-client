@@ -108,13 +108,13 @@ export const ICONS_MAP_LAYER_ID = 'icons'
 
 export const ASSET_LINE_WIDTH_IN_METERS = 5
 export const ASSET_RADIUS_IN_METERS_BY_CODE = {
-  [ASSET_TYPE_CODE_METER]: 5,
-  [ASSET_TYPE_CODE_TRANSFORMER]: 7,
-  [ASSET_TYPE_CODE_SWITCH]: 9,
+  [ASSET_TYPE_CODE_METER]: 11,
+  [ASSET_TYPE_CODE_TRANSFORMER]: 11,
+  [ASSET_TYPE_CODE_SWITCH]: 11,
   [ASSET_TYPE_CODE_POWER_QUALITY]: 11,
-  [ASSET_TYPE_CODE_CONTROL]: 13,
-  [ASSET_TYPE_CODE_STORAGE]: 15,
-  [ASSET_TYPE_CODE_GENERATOR]: 17,
+  [ASSET_TYPE_CODE_CONTROL]: 11,
+  [ASSET_TYPE_CODE_STORAGE]: 11,
+  [ASSET_TYPE_CODE_GENERATOR]: 11,
 }
 export const BUS_RADIUS_IN_METERS = 5
 export const BUS_DISTANCE_IN_KILOMETERS_BY_CODE = Object.entries(
@@ -124,7 +124,7 @@ export const BUS_DISTANCE_IN_KILOMETERS_BY_CODE = Object.entries(
   assetRadiusInMeters,
 ]) => {
   busDistanceInKilometersByCode[typeCode] = (
-    assetRadiusInMeters + BUS_RADIUS_IN_METERS) / 1000
+    assetRadiusInMeters + BUS_RADIUS_IN_METERS + 1) / 1000
   return busDistanceInKilometersByCode
 }, {})
 

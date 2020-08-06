@@ -44,7 +44,8 @@ import {
 const baseAssetIcon = {
   display: 'flex',
   flexDirection: 'column',
-  fontSize: '10px',
+  fontSize: '11px',
+  fontWeight: 'bold',
   paddingLeft: '4px',
   paddingRight: '4px',
   paddingTop: '4px',
@@ -54,7 +55,7 @@ const baseAssetIcon = {
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
-    top: theme.spacing(28.5),
+    top: theme.spacing(30),
     left: theme.spacing(1),
   },
   list: {
@@ -198,7 +199,7 @@ export default function SketchAddToolbar({
             onClick={() => dispatch(setSketchMode(SKETCH_MODE_ADD_TRANSFORMER))}
           >
             <AssetTypeSvgIcon assetTypeCode={ASSET_TYPE_CODE_TRANSFORMER} />
-            <span>Transformer</span>
+            <span>Tran...mer</span>
           </ListItem>
         </Tooltip>
 
