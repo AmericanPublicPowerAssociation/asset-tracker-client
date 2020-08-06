@@ -157,13 +157,14 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       onClick: handleBusClick,
     })
   }
+  // const ICON_SIZE = 60
   // const ICON_SIZE = 8
 
   function getIconsMapLayer() {
     /*
     const assetsJSONForIcons = {
       type: 'FeatureCollection',
-      features: assetsGeoJson.features.filter(obj => obj.properties.typeCode !== 'l')
+      features: assetsGeoJson.features.filter(obj => obj.properties.typeCode !== 'l'),
     }
     const zoom = mapWebMercatorViewPort.zoom
     */
@@ -180,6 +181,17 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
     return new IconLayer({
       id: ICONS_MAP_LAYER_ID,
       pickable: false,
+/*
+      sizeScale: ICON_SIZE * window.devicePixelRatio,
+      getPosition: d => {
+        console.log(d)
+        return d.geometry.coordinates
+      },
+      getIcon: d => {
+        console.log(d)
+        return 'marker'
+      } ,
+*/
       data: assetsGeoJson.features.filter(obj => obj.properties.typeCode !== 'l'),
       iconAtlas: '/tileset.png',
       iconMapping: ICON_MAPPING,
