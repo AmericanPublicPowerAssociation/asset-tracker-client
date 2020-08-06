@@ -30,7 +30,8 @@ import {
 const baseAssetIcon = {
   display: 'flex',
   flexDirection: 'column',
-  fontSize: '10px',
+  fontSize: '11px',
+  fontWeight: 'bold',
   paddingBottom: '0px',
   paddingTop: '0px'
 }
