@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { IconLayer } from '@deck.gl/layers'
-
 import { produce } from 'immer'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import { ViewMode } from '@nebula.gl/edit-modes'
@@ -12,8 +11,8 @@ import {
   setAssetConnection,
   setAssetsGeoJson,
   setMapViewState,
-  setPopUpState,
   setPopUpDeleteMidpoint,
+  setPopUpState,
   setSelection,
   setSketchMode,
   setTemporaryAsset,
@@ -98,8 +97,6 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
   const mapWebMercatorViewPort = useSelector(getMapWebMercatorViewPort)
   let temporaryAsset = useSelector(getTemporaryAsset)
-
-
 
   function getAssetsMapLayer() {
     const mapMode = getMapMode(sketchMode)

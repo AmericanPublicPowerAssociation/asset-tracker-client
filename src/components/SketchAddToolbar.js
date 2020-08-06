@@ -23,7 +23,8 @@ import {
   ASSET_TYPE_CODE_STORAGE,
   ASSET_TYPE_CODE_SUBSTATION,
   ASSET_TYPE_CODE_SWITCH,
-  ASSET_TYPE_CODE_TRANSFORMER, COLORS_BY_ASSET,
+  ASSET_TYPE_CODE_TRANSFORMER,
+  COLORS_BY_ASSET,
   SKETCH_MODE_ADD_CONTROL,
   SKETCH_MODE_ADD_GENERATOR,
   SKETCH_MODE_ADD_LINE,
@@ -55,7 +56,8 @@ const baseAssetIcon = {
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
-    top: theme.spacing(30),
+    // top: theme.spacing(30),
+    top: theme.spacing(6),
     left: theme.spacing(1),
   },
   list: {
@@ -68,57 +70,57 @@ const useStyles = makeStyles(theme => ({
   meterRightIndicator: {
     borderRight: `5px solid rgba(${COLORS_BY_ASSET['dark'][ASSET_TYPE_CODE_METER]})`,
     borderBottom: '2px solid #EAEAEA',
-    ...baseAssetIcon
+    ...baseAssetIcon,
   },
   transformerRightIndicator: {
     borderRight: `5px solid rgba(${COLORS_BY_ASSET['dark'][ASSET_TYPE_CODE_TRANSFORMER]})`,
     borderBottom: '2px solid #EAEAEA',
-    ...baseAssetIcon
+    ...baseAssetIcon,
   },
   lineRightIndicator: {
     borderRight: `5px solid rgba(${COLORS_BY_ASSET['dark'][ASSET_TYPE_CODE_LINE]})`,
     borderBottom: '2px solid #EAEAEA',
-    ...baseAssetIcon
+    ...baseAssetIcon,
   },
   poleRightIndicator: {
     borderRight: `5px solid rgba(${COLORS_BY_ASSET['dark'][ASSET_TYPE_CODE_POLE]})`,
     borderBottom: '2px solid #EAEAEA',
-    ...baseAssetIcon
+    ...baseAssetIcon,
   },
   switchRightIndicator: {
     borderRight: `5px solid rgba(${COLORS_BY_ASSET['dark'][ASSET_TYPE_CODE_SWITCH]})`,
     borderBottom: '2px solid #EAEAEA',
-    ...baseAssetIcon
+    ...baseAssetIcon,
   },
   powerRightIndicator: {
     borderRight: `5px solid rgba(${COLORS_BY_ASSET['dark'][ASSET_TYPE_CODE_POWER_QUALITY]})`,
     borderBottom: '2px solid #EAEAEA',
-    ...baseAssetIcon
+    ...baseAssetIcon,
   },
   controlRightIndicator: {
     borderRight: `5px solid rgba(${COLORS_BY_ASSET['dark'][ASSET_TYPE_CODE_CONTROL]})`,
     borderBottom: '2px solid #EAEAEA',
-    ...baseAssetIcon
+    ...baseAssetIcon,
   },
   storageRightIndicator: {
     borderRight: `5px solid rgba(${COLORS_BY_ASSET['dark'][ASSET_TYPE_CODE_STORAGE]})`,
     borderBottom: '2px solid #EAEAEA',
-    ...baseAssetIcon
+    ...baseAssetIcon,
   },
   generatorRightIndicator: {
     borderRight: `5px solid rgba(${COLORS_BY_ASSET['dark'][ASSET_TYPE_CODE_GENERATOR]})`,
     borderBottom: '2px solid #EAEAEA',
-    ...baseAssetIcon
+    ...baseAssetIcon,
   },
   substationRightIndicator: {
     borderRight: `5px solid rgba(${COLORS_BY_ASSET['dark'][ASSET_TYPE_CODE_SUBSTATION]})`,
     borderBottom: '2px solid #EAEAEA',
-    ...baseAssetIcon
+    ...baseAssetIcon,
   },
   stationRightIndicator: {
     borderRight: `5px solid rgba(${COLORS_BY_ASSET['dark'][ASSET_TYPE_CODE_STATION]})`,
-    ...baseAssetIcon
-  }
+    ...baseAssetIcon,
+  },
 }))
 
 const LIST_ITEM_CLASSES = { selected: 'selected' }
