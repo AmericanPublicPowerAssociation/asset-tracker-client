@@ -17,6 +17,7 @@
     "@turf/point-on-feature": "^5.1.5",
     "@turf/transform-translate": "^5.1.5",
     "asset-report-risks": "file:../asset-report-risks/client",
+    "appa-auth-consumer": "file:../appa-auth-consumer/client",
     "clsx": "^1.0.4",
     "dateformat": "^3.0.3",
     "dotenv": "^8.2.0",
