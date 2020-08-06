@@ -29,6 +29,8 @@ import {
   SKETCH_MODE_ADD,
   SKETCH_MODE_ADD_ASSET,
   SKETCH_MODE_ADD_LINE,
+  SKETCH_MODE_EDIT,
+  SKETCH_MODE_VIEW,
   SKETCH_MODE_DELETE,
   SKETCH_MODE_VIEW, COLORS_BY_ASSET, ICONS_MAP_LAYER_ID, ASSET_TYPE_CODE_TRANSFORMER, ASSET_TYPE_CODE_METER,
 } from '../constants'
@@ -184,7 +186,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
     switch (event.key) {
       case 'Escape': {
         if (sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
-          dispatch(setSketchMode(SKETCH_MODE_ADD))
+          dispatch(setSketchMode(SKETCH_MODE_EDIT))
         }
         break
       }
@@ -237,9 +239,6 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
     const assetId = assetFeature.properties.id
     if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
       dispatch(setSelection({ assetId, assetIndexes: [assetIndex] }))
-    }
-    if (sketchMode === SKETCH_MODE_DELETE) {
-      onAssetDelete(assetId)
     }
   }
 
