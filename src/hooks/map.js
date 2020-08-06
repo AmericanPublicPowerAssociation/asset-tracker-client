@@ -488,3 +488,4 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
     mapLayers,
     handleMapKey,
   }
+}
