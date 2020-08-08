@@ -1,7 +1,6 @@
 import {
   // SKETCH_MODE_ADD,
   // SET_ASSET,
-  SET_ASSETS_GEOJSON,
   SET_SKETCH_MODE,
   SKETCH_MODE,
 } from '../constants'
