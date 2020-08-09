@@ -13,6 +13,9 @@ import TablesWindow from './TablesWindow'
 import ImportExportDialog from './ImportExportDialog'
 import AssetDeleteDialog from './AssetDeleteDialog'
 import MessageBar from './MessageBar'
+import {
+  refreshAuth,
+} from 'appa-auth-consumer'
 import './App.css'
 import {
   refreshAssets,
@@ -47,6 +50,7 @@ export default function App() {
   useStickyWindow(!isViewing)
 
   useEffect(() => {
+    dispatch(refreshAuth())
     dispatch(refreshAssets())
     dispatch(refreshTasks())
     dispatch(refreshRisks())
