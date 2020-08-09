@@ -294,8 +294,10 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         // Add a feature in draw mode
         const { feature, featureIndex } = getFeatureInfo(event)
         if (!temporaryAsset) {
+          console.log('no temp asset')
           temporaryAsset = makeTemporaryAsset(assetTypeCode)
         } else if (isAddingLine) {
+          console.log('add ending vertex')
           // Add ending vertex
           const vertexCount = feature.geometry.coordinates.length
           const lastVertexIndex = vertexCount - 1
@@ -336,6 +338,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
           temporaryAsset = makeTemporaryAsset(assetTypeCode)
         }
         if (isAddingLine) {
+          console.log('adding line')
           const vertexCount = (temporaryAsset.vertexCount || 0) + 1
           temporaryAsset = produce(temporaryAsset, draft => {
             draft.vertexCount = vertexCount
@@ -365,6 +368,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         break
       }
       case 'addPosition': {
+        console.log('adding vertex position')
         // Add a vertex in ModifyMode
         const { feature } = getFeatureInfo(event)
         const addedPositionIndex = getPositionIndex(event)
@@ -475,6 +479,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       }
       default: { }
     }
+    console.log('finished the line')
     dispatch(setAssetsGeoJson(updatedData))
   }
 
