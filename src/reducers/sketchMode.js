@@ -2,7 +2,6 @@ import {
   SET_ASSET,
   SET_SKETCH_MODE,
   SKETCH_MODE,
-  SKETCH_MODE_EDIT,
 } from '../constants'
 
 const initialState = SKETCH_MODE

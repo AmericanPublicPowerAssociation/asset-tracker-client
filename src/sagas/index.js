@@ -8,6 +8,9 @@ import  {
   watchSuggestVendorNames,
 } from 'asset-report-risks'
 import {
+  watchRefreshAuth,
+} from 'appa-auth-consumer'
+import {
   // watchRefreshTasks,
   watchAddTask,
   watchAddTaskComment,
@@ -43,5 +46,6 @@ export default function* () {
     watchSuggestVendorNames(),
     watchSuggestProductNames(),
     watchSuggestProductVersions(),
+    watchRefreshAuth(),
   ])
 }
