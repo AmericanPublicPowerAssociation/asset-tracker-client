@@ -13,7 +13,9 @@ import TablesWindow from './TablesWindow'
 import ImportExportDialog from './ImportExportDialog'
 import AssetDeleteDialog from './AssetDeleteDialog'
 import MessageBar from './MessageBar'
+import LoginPage from './LoginPage'
 import {
+  getIsUserAuthenticated,
   refreshAuth,
 } from 'appa-auth-consumer'
 import './App.css'
@@ -46,17 +48,20 @@ export default function App() {
     setIsWithImportExportDialog,
   ] = useState(false)
   const isViewing = useSelector(getIsViewing)
+  const isUserAuthenticated = useSelector(getIsUserAuthenticated)
 
   useStickyWindow(!isViewing)
 
   useEffect(() => {
     dispatch(refreshAuth())
-    dispatch(refreshAssets())
-    dispatch(refreshTasks())
-    dispatch(refreshRisks())
-  }, [dispatch])
+    if (isUserAuthenticated) {
+      dispatch(refreshAssets())
+      dispatch(refreshTasks())
+      dispatch(refreshRisks())
+    }
+  }, [dispatch, isUserAuthenticated])
 
-  return (
+  return !isUserAuthenticated ? <LoginPage /> : (
     <IsLayoutMobileContext.Provider value={isLayoutMobile}>
       <AssetsMap
         onAssetDelete={assetId => setDeletedAssetId(assetId)}

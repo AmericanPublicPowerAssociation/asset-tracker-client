@@ -7,6 +7,9 @@ import ImportExportIcon from '@material-ui/icons/ImportExport'
 import SeeUserIcon from '@material-ui/icons/AccountCircle'
 import SignOutIcon from '@material-ui/icons/LockOpen'
 import {
+  getAuthUrl,
+} from 'appa-auth-consumer'
+import {
   USER_NAME,
 } from '../constants'
 import {
@@ -32,6 +35,7 @@ export default function ActionsWindow({
   const mapColors = useSelector(getMapColors)
   const activeColor = mapColors.active
   const inactiveColor = mapColors.inactive
+  const authUrl = useSelector(getAuthUrl)
   return (
     <div className={classes.root}>
       <Tooltip title='Import and Export Assets'>
@@ -51,7 +55,7 @@ export default function ActionsWindow({
       </Tooltip>
 
       <Tooltip title='Sign Out'>
-        <IconButton className={activeColor}>
+        <IconButton className={activeColor} href={authUrl}>
           <SignOutIcon />
         </IconButton>
       </Tooltip>
