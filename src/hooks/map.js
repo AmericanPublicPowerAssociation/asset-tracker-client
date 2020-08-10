@@ -288,6 +288,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   function handleAssetEdit(event) {
     const { editType, editContext } = event
     let { updatedData } = event
+    let triggerSetAssetsGeoJsonLast = true
     console.log('sketch mode: ', sketchMode, ', asset edit', editType, editContext, updatedData)
     switch (editType) {
       case 'addFeature': {
@@ -327,6 +328,8 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
 
         const assetId = temporaryAsset.id
         updateFeature(temporaryAsset, feature)
+        dispatch(setAssetsGeoJson(updatedData))
+        triggerSetAssetsGeoJsonLast = false
         dispatch(setAsset(temporaryAsset))
         dispatch(fillAssetName(assetId, feature))
         if (editContext !== 'addTentativePosition'){
@@ -385,7 +388,6 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       }
       case 'removePosition': {
         // Remove a vertex in ModifyMode
-        console.log('aaaaaaa', event)
         const { feature } = getFeatureInfo(event)
         const removedPositionIndex = getPositionIndex(event)
         const featureProperties = feature.properties
@@ -482,7 +484,9 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       }
       default: { }
     }
-    dispatch(setAssetsGeoJson(updatedData))
+    if (triggerSetAssetsGeoJsonLast) {
+      dispatch(setAssetsGeoJson(updatedData))
+    }
   }
 
   const mapLayers = [
