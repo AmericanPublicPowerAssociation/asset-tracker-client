@@ -1,5 +1,5 @@
 import {
-  SET_ASSET,
+  SET_ASSETS_GEOJSON,
   SET_SKETCH_MODE,
   SKETCH_MODE,
   SKETCH_MODE_EDIT,
@@ -12,7 +12,7 @@ export default function sketchMode(state=initialState, action) {
     case SET_SKETCH_MODE: {
       return action.payload
     }
-    case SET_ASSET: {
+    case SET_ASSETS_GEOJSON: {
       return SKETCH_MODE_EDIT
     }
     default: {
