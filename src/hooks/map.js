@@ -263,6 +263,12 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
     dispatch(setPopUpState(d))
   }
 
+  function handleDeckClick(info, event) {
+    if (!info.picked) {
+      dispatch(setSelection({ assetId: null, assetIndexes: [] }))
+    }
+  }
+
   function handleAssetClick(info, event) {
     console.log('asset click', info, event, 'sketch mode: ', sketchMode)
     const assetIndex = info.object.properties.featureIndex || info.index
@@ -494,5 +500,6 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   return {
     mapLayers,
     handleMapKey,
+    handleDeckClick,
   }
 }
