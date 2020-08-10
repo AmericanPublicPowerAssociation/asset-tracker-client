@@ -36,6 +36,7 @@ import {
   SKETCH_MODE_ADD_SUBSTATION,
   SKETCH_MODE_ADD_SWITCH,
   SKETCH_MODE_ADD_TRANSFORMER,
+  SKETCH_MODE_EDIT,
   SKETCH_MODE_VIEW,
 } from '../constants'
 import {
@@ -134,9 +135,12 @@ export default function SketchAddToolbar({
   const isViewing = sketchMode === SKETCH_MODE_VIEW
   return !isViewing && (
     <Paper className={classes.root}>
-      <List className={clsx(classes.list, {
-        [classes.withTables]: isWithTables,
-      })}>
+      <List
+        onKeyUp= {() => dispatch(setSketchMode(SKETCH_MODE_EDIT))}
+        className={clsx(classes.list, {
+          [classes.withTables]: isWithTables,
+        })}
+      >
         <Tooltip
           title='Add Pole'
           aria-label='Add Pole'

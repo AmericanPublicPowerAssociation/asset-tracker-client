@@ -213,13 +213,10 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
 
   function handleMapKey(event) {
     if (sketchMode === SKETCH_MODE_VIEW) return
-    event.persist()  // Populate event with extra signals
     // console.log('map key', event)
     switch (event.key) {
       case 'Escape': {
-        if (sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
-          dispatch(setSketchMode(SKETCH_MODE_EDIT))
-        }
+        dispatch(setSketchMode(SKETCH_MODE_EDIT))
         break
       }
       case 'Backspace':
