@@ -1,121 +1,160 @@
 // TODO: Rewrite from scratch to clean up logic
-
-import React, { forwardRef, useContext, useState } from 'react'
-import { useSelector } from 'react-redux'
-import clsx from 'clsx'
+import React, { useState, useContext } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper'
-import Dialog from '@material-ui/core/Dialog'
+import clsx from 'clsx'
+import Box from '@material-ui/core/Box'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
+import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import Drawer from '@material-ui/core/Drawer'
+import IconButton from '@material-ui/core/IconButton'
 import Slide from '@material-ui/core/Slide'
-import AssetAttributesPanel from './AssetAttributesPanel'
-import AssetTasksPanel from './AssetTasksPanel'
-import AssetRisksPanel from './AssetRisksPanel'
-import EmptyDetailsPanel from './EmptyDetailsPanel'
+import AssetAttributesPanel from './AssetAttributesPanel2'
+import AssetNameWithIcon from './AssetNameWithIcon'
+import DetailsWindowTabs from './DetailsWindowTabs'
+import SearchBox from './SearchBox'
+import TaskDetails from './TaskDetails'
 import {
-  OVERLAY_MODE_ASSETS,
-  OVERLAY_MODE_RISKS,
-  OVERLAY_MODE_TASKS,
-} from '../constants'
+  setSelection,
+} from '../actions'
 import {
   IsLayoutMobileContext,
 } from '../contexts'
 import {
+  getIsViewing,
   getOverlayMode,
   getSelectedAsset,
+  getSelectedTaskId,
   getTemporaryAsset,
 } from '../selectors'
 
+
 const useStyles = makeStyles(theme => ({
-  root: {
+  paper: {
+    overflow: 'hidden',
+  },
+  desktopPaper: {
     position: 'fixed',
     top: theme.spacing(6),
-    right: theme.spacing(1),
-    width: theme.spacing(32),
-    padding: theme.spacing(1),
-    overflowY: 'auto',
-    overflowX: 'hidden',
-    zIndex: 1,
-    display: 'flex',
-    flexDirection: 'column',
+    left: theme.spacing(1),
+    width: theme.spacing(34),
     maxHeight: 'calc(100vh - 108px)',
+    borderRadius: theme.shape.borderRadius,
   },
-  withTables: {
-    maxHeight: 'calc(100vh - 374px)',
+  mobilePaperPreview: {
+    maxHeight: '40vh',
   },
-  responsive: {
+  mobilePaperFullHeight: {
+    height: '100vh',
+    maxHeight: '100vh',
+  },
+  drawerButton: {
     position: 'fixed',
-    right: 0,
-    left: 0,
-    bottom: 0,
-    padding: theme.spacing(1),
-    overflowY: 'auto',
-    overflowX: 'hidden',
-    zIndex: 1,
-    maxHeight: '30vh',
+    background: 'white',
+    height: theme.spacing(6),
+    width: theme.spacing(2),
+    borderRadius: 0,
+    '&:hover, &.Mui-focusVisible': {
+      backgroundColor: 'white',
+    },
   },
-  fullView: {
-    padding: theme.spacing(1),
-    overflowY: 'auto',
-    overflowX: 'hidden',
-    zIndex: 1,
-    height: '100%',
+  drawerButtonClose: {
+    top: theme.spacing(12),
+    left: theme.spacing(35),
+  },
+  drawerButtonOpen: {
+    top: theme.spacing(12),
+    left: theme.spacing(0),
   },
 }))
 
-const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction='up' ref={ref} {...props} />
-})
-
-export default function DetailsWindow({ isWithTables }) {
-  const classes = useStyles()
+export default function DetailsWindows({ isWithDetails, setIsWithDetails }) {
+  const dispatch = useDispatch()
+  const [searchInput, setSearchInput] = useState('')
+  const [isFullScreen, setIsFullScreen] = useState(false)
+  const isViewing = useSelector(getIsViewing)
   const overlayMode = useSelector(getOverlayMode)
   const selectedAsset = useSelector(getSelectedAsset)
   const temporaryAsset = useSelector(getTemporaryAsset)
-  const [expand, setExpand] = useState(false)
-  const isLayoutMobile = useContext(IsLayoutMobileContext)
   const asset = temporaryAsset ? temporaryAsset : selectedAsset
+  const isLayoutMobile = useContext(IsLayoutMobileContext)
 
-  const DetailsPanel = {
-    [OVERLAY_MODE_ASSETS]: AssetAttributesPanel,
-    [OVERLAY_MODE_TASKS]: AssetTasksPanel,
-    [OVERLAY_MODE_RISKS]: AssetRisksPanel,
-  }[overlayMode]
-
-  const detailsPanel = asset ?
-    <DetailsPanel
-      className={classes.root}
-      asset={asset}
-      isDetailsWindowExpanded={expand}
-      setIsDetailsWindowExpanded={setExpand}
-    /> : <EmptyDetailsPanel />
-
-  const MobileFullScreenPanel = (
-    <Dialog
-      fullScreen
-      open={expand}
-      onClose={setExpand}
-      TransitionComponent={Transition}
-    >
-      <Paper className={clsx(classes.fullView, {
-        [classes.withTables]: isWithTables,
-      })}>
-        {detailsPanel}
-      </Paper>
-    </Dialog>
-  )
-
-  if (isLayoutMobile && expand) {
-    return MobileFullScreenPanel
+	const drawerProps = {
+    overlayMode,  isFullScreen, isLayoutMobile, setIsWithDetails, isWithDetails,
   }
 
+	return (
+		<MyDrawer {...drawerProps}>
+      <SearchBox
+        updateInputTextFunc={setSearchInput}
+        input={searchInput}
+        isShowBackButton={asset}
+        onBackButtonClick={() => { dispatch(setSelection({})) }}
+      />
+      { !asset && <DetailsWindowTabs /> }
+      { asset &&
+        <Box display='flex' flexDirection='column' flexGrow={1}
+        style={{ overflow: 'hidden' }}
+        >
+          <AssetNameWithIcon
+            asset={asset}
+            showExpandButton={isLayoutMobile}
+            expand={isFullScreen}
+            setExpand={setIsFullScreen} isViewing={isViewing}
+          />
+          <Box flexGrow={1} style={{ overflowX: 'hidden', overflowY: 'auto' }}>
+            <AssetAttributesPanel
+              asset={asset}
+              isDetailsWindowFullScreen={isFullScreen}
+            />
+          </Box>
+        </Box>
+      }
+		</MyDrawer>
+	)
+}
+
+export function MyDrawer(props) {
+  const classes= useStyles()
+  const { children, setIsWithDetails, isWithDetails, isLayoutMobile, isFullScreen } = props
+  const anchor = isLayoutMobile ? 'bottom' : 'left'
+
   return (
-    <Paper className={clsx(
-      isLayoutMobile ? classes.responsive : classes.root, {
-      [classes.withTables]: isWithTables,
-    })}>
-      {detailsPanel}
-    </Paper>
+    <div>
+      <Drawer
+        PaperProps={{
+          className: clsx(
+            classes.paper, {
+            [classes.desktopPaper]: !isLayoutMobile,
+            [classes.mobilePaperPreview]: !isFullScreen && isLayoutMobile,
+            [classes.mobilePaperFullHeight]: isFullScreen && isLayoutMobile,
+            }),
+        }}
+        anchor={anchor}
+        variant='persistent'
+        open={isWithDetails}
+      >
+        {children}
+      </Drawer>
+
+      { isWithDetails && !isLayoutMobile  &&
+        <Slide direction='right' in={isWithDetails} mountOnEnter unmountOnExit>
+          <IconButton size='small' aria-label='close-drawer' disableRipple
+            className={ clsx(classes.drawerButton, classes.drawerButtonClose) }
+            onClick={() => setIsWithDetails(() => setIsWithDetails(false))}
+          >
+            <ChevronLeftIcon />
+          </IconButton>
+        </Slide>
+      }
+      { !isWithDetails && !isLayoutMobile &&
+        <IconButton size='small' aria-label='open-drawer' disableRipple
+          className={clsx(classes.drawerButton, classes.drawerButtonOpen )}
+          onClick={() => setIsWithDetails(() => setIsWithDetails(true))}
+        >
+          <ChevronRightIcon />
+        </IconButton>
+      }
+    </div>
   )
-// show expanded only if not mobile and is expanded
-// otherwise show regular paper
 }

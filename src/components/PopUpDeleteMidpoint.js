@@ -39,7 +39,7 @@ export default function PopUpDeleteMidpoint({ state }) {
 
   return (
     <div
-      style={{ position: 'absolute', left: x, top: y }}
+      style={{ position: 'fixed', left: x, top: y }}
     >
       <Paper style={{ position: 'relative', bottom: bottom, right: 15 }}>
         <IconButton size='small' onClick={handleDeleteOnClick}>

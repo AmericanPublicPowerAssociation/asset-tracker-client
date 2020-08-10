@@ -33,7 +33,7 @@ export default function AssetConnectionsListItems({
   isEditing,
   // TODO: Rename
   noHighlight,
-  expand,
+  isDetailsWindowFullScreen,
 }) {
   const dispatch = useDispatch()
   const isLayoutMobile = useContext(IsLayoutMobileContext)
@@ -50,7 +50,7 @@ export default function AssetConnectionsListItems({
     const connectedAssetIds = getConnectedAssetIds(
       assetId, busId, assetIdsByBusId)
     const connectedAssetCount = connectedAssetIds.length
-    const title = 'Bus ' + index
+    const title = `Bus ${index}`
     const description = getCountDescription(connectedAssetCount, 'connection')
     const isOpen = isOpenByIndex[index]
     const isHighlighted = selectedBusId === busId
@@ -72,36 +72,41 @@ export default function AssetConnectionsListItems({
 
     // TODO: Fix unclear isNotMobile || expand syntax
     // TODO: Replace <></> technique with just not showing component
-    return connectedAssetCount > 0 ?
-      <CollapsibleListItem
-        key={index}
-        title={title}
-        description={(!isLayoutMobile || expand) ? description : null}
-        isHighlighted={isHighlighted}
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        onClick={handleClickOrFocus}
-      >
-        <BusAttributesListItem
-          assetId={assetId}
-          assetTypeCode={assetTypeCode}
-          connection={connection}
-          isEditing={isEditing}
-          onFocus={handleClickOrFocus}
-          connectionIndex={index}
-        />
-        <BusConnectionsList connectedAssetIds={connectedAssetIds} />
-      </CollapsibleListItem> :
-      ( !isLayoutMobile || expand ?
-      <ListItem
-        key={index}
-        className={clsx({ highlighted: isHighlighted })}
-        component='div'
-        disableGutters
-        onClick={handleClickOrFocus}
-      >
-        <ListItemText primary={title} secondary={description} />
-      </ListItem>
-      : null)
+    return (
+      <React.Fragment key={index}>
+        { connectedAssetCount > 0 &&
+          <>
+            <CollapsibleListItem
+              title={title}
+              description={(!isLayoutMobile || isDetailsWindowFullScreen) &&  description }
+              isHighlighted={isHighlighted}
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              onClick={handleClickOrFocus}
+            >
+              <BusAttributesListItem
+                assetId={assetId}
+                assetTypeCode={assetTypeCode}
+                connection={connection}
+                isEditing={isEditing}
+                onFocus={handleClickOrFocus}
+                connectionIndex={index}
+              />
+              <BusConnectionsList connectedAssetIds={connectedAssetIds} />
+            </CollapsibleListItem>
+          </>
+        }
+        { !connectedAssetCount && (!isLayoutMobile || isDetailsWindowFullScreen) &&
+          <ListItem
+            className={clsx({ highlighted: isHighlighted })}
+            component='div'
+            disableGutters
+            onClick={handleClickOrFocus}
+          >
+            <ListItemText primary={title} secondary={description} />
+          </ListItem>
+        }
+      </React.Fragment>
+    )
   })
 }

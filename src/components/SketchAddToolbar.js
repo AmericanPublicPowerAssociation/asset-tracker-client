@@ -58,7 +58,7 @@ const useStyles = makeStyles(theme => ({
     position: 'fixed',
     // top: theme.spacing(30),
     top: theme.spacing(6),
-    left: theme.spacing(1),
+    right: theme.spacing(1),
   },
   list: {
     overflowY: 'auto',
@@ -125,18 +125,14 @@ const useStyles = makeStyles(theme => ({
 
 const LIST_ITEM_CLASSES = { selected: 'selected' }
 
-export default function SketchAddToolbar({
-  isWithTables,
-}) {
+export default function SketchAddToolbar() {
   const classes = useStyles()
   const dispatch = useDispatch()
   const sketchMode = useSelector(getSketchMode)
   const isViewing = sketchMode === SKETCH_MODE_VIEW
   return !isViewing && (
     <Paper className={classes.root}>
-      <List className={clsx(classes.list, {
-        [classes.withTables]: isWithTables,
-      })}>
+      <List className={clsx(classes.list)}>
         <Tooltip
           title='Add Pole'
           aria-label='Add Pole'

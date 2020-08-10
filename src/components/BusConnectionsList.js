@@ -2,10 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
-import Tooltip from '@material-ui/core/Tooltip'
-import AssetTypeSvgIcon from './AssetTypeSvgIcon'
+import AssetNameWithIcon from './AssetNameWithIcon'
 import {
   setPopUpState,
   setSelection,
@@ -45,10 +42,6 @@ export default function BusConnectionsList({ connectedAssetIds }) {
     <List component='div' disablePadding>
     {connectedAssetIds.map((connectedAssetId, connectedAssetIdIndex) => {
       const connectedAsset = assetById[connectedAssetId]
-      const connectedAssetTypeCode = connectedAsset.typeCode
-      const connectedAssetType = assetTypeByCode[connectedAssetTypeCode]
-      const connectedAssetTypeName = connectedAssetType.name
-      const connectedAssetName = connectedAsset.name
       return (
         <ListItem
           disableGutters
@@ -57,12 +50,7 @@ export default function BusConnectionsList({ connectedAssetIds }) {
           onClick={() => showPopUp(connectedAssetId)}
           onDoubleClick={() => selectAsset(connectedAssetId)}
         >
-          <Tooltip title={connectedAssetTypeName} placement='left'>
-            <ListItemIcon>
-              <AssetTypeSvgIcon assetTypeCode={connectedAssetTypeCode} />
-            </ListItemIcon>
-          </Tooltip>
-          <ListItemText primary={connectedAssetName}/>
+          <AssetNameWithIcon asset={connectedAsset} />
         </ListItem>
       )
     })}

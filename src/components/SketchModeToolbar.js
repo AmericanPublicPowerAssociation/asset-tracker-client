@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
     top: theme.spacing(6),
-    left: theme.spacing(1),
+    right: theme.spacing(1),
   },
   addRightIndicator: {
     borderRight: `5px solid rgba(${TRANSPARENT_WHITE})`,

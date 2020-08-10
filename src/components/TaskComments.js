@@ -65,7 +65,7 @@ export default function TaskComments(props) {
 
   const comments = useSelector(getCurrentTaskComments)
 
-  useEffect( () => {
+  useEffect(() => {
     const scrollBarContainer = scrollBarRef.current._container
     let prevScrollHeight = scrollBarContainer.scrollHeight
     const intervalId = setInterval( function () {
