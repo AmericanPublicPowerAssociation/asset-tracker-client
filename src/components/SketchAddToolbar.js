@@ -136,7 +136,11 @@ export default function SketchAddToolbar({
   return !isViewing && (
     <Paper className={classes.root}>
       <List
-        onKeyUp= {() => dispatch(setSketchMode(SKETCH_MODE_EDIT))}
+        onKeyUp= {(e) => {
+          if (e.key === 'Escape'){
+            dispatch(setSketchMode(SKETCH_MODE_EDIT))
+          }
+        }}
         className={clsx(classes.list, {
           [classes.withTables]: isWithTables,
         })}
