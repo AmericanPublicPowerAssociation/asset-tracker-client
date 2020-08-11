@@ -66,7 +66,8 @@ const useStyles = makeStyles(theme => ({
   },
   bottomAction: {
     width: '100%',
-    bottom: 0,
+    paddingTop: '8px',
+    paddingBottom: '8px',
   },
   filterGrouping: {
     background: 'white',
@@ -81,7 +82,7 @@ const useStyles = makeStyles(theme => ({
   },
   listTasks: {
     overflow: 'auto',
-    //marginBottom: '10px',
+    marginBottom: '10px',
     //height: '100%',
     flex: '1 1 auto',
   },
@@ -222,6 +223,7 @@ export default function AssetTasksPanel({
     setFilterNameSelection(selectedFiltersArray)
   }
 
+    /*
   const ITEM_HEIGHT = 48
   const ITEM_PADDING_TOP = 8
   const FilterListProps = {
@@ -232,6 +234,7 @@ export default function AssetTasksPanel({
       },
     },
   }
+  */
 
   const setFilterItems = filterDict => {
     return Object.entries(filterDict).map(([filterKey, filterValue]) => (
@@ -249,7 +252,7 @@ export default function AssetTasksPanel({
   }
 
   const listTasks = (<>
-    <FormGroup row style={{ flex: '0 0 auto' }}>
+    <FormGroup row style={{ paddingLeft: '10px', paddingRight: '10px', flex: '0 0 auto' }}>
       <OutlinedInput
         classes={{ input: classes.input }}
         fullWidth
@@ -263,14 +266,14 @@ export default function AssetTasksPanel({
         }
       />
       <div className={classes.actions}>
-        <FormControl size='small' variant='outlined' className={classes.formControl} style={{ maxWidth: '170px' }}>
+        <FormControl size='small' variant='outlined' className={classes.formControl} style={{ maxWidth: '162px' }}>
           <InputLabel id="demo-mutiple-checkbox-label">Filter</InputLabel>
           <Select
             multiple
             value={filterNameSelection}
             onChange={handleChange}
             renderValue={(selected) => selected.join(', ')}
-            MenuProps={FilterListProps}
+            MenuProps={{ getContentAnchorEl: () => null }}
             input={
               <OutlinedInput
                 label='Filter'
@@ -298,6 +301,7 @@ export default function AssetTasksPanel({
     <div className={classes.listTasks}>
       <TasksList showDetails={handleDisplayDetails} asset={asset} tasks={filteredTasks}/>
     </div>
+    <Divider />
     <div style={{ flex: '0 0 auto' }}>
       <Button className={classes.bottomAction} startIcon={<AddIcon />} onClick={() => setDialog(true)}>
         Add task
@@ -316,7 +320,7 @@ export default function AssetTasksPanel({
 
   return (<>
     <div style={{ display: 'flex', flexDirection:'column', height: '100%', overflow: 'hidden' }}>
-      <ListItem component='div' disableGutters style={{ flex: '0 0 auto' }}>
+      <ListItem component='div' disableGutters style={{ flex: '0 0 auto', padding: '10px' }}>
         <Tooltip title={assetTypeName} placement='left'>
           <ListItemIcon>
             <AssetTypeSvgIcon assetTypeCode={assetTypeCode} />
