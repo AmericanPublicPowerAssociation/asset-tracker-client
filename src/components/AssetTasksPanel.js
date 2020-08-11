@@ -94,7 +94,7 @@ export function AssetName(props) {
     <Tooltip title={assetName} placement='bottom'>
       <ListItemText
         primary={
-          <Typography variant='h5' style={{ fontSize: '1rem' }}>
+          <Typography variant='h5' style={{ fontSize: '1rem', overflowWrap: 'anywhere'  }}>
             {assetName}
           </Typography>
         }
