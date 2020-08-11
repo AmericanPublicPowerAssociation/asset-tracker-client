@@ -55,7 +55,7 @@ export default function AssetName({
           InputProps={{ className: classes.input }}
           onChange={handleAssetNameChange}
         /> :
-        <Typography>{assetName}</Typography>
+        <Typography style={{ overflowWrap: 'anywhere' }}>{assetName}</Typography>
       }
       {isLayoutMobile && (
         <IconButton onClick={() => setIsFullScreen(!isFullScreen)}>
