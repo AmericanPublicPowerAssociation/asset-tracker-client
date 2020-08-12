@@ -34,6 +34,7 @@ export default function AssetAttributesListItem({ asset, isEditing, styling }) {
       title={assetTypeName}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
+      styling={styling}
     >
       <AttributeFields
         assetId={assetId}
