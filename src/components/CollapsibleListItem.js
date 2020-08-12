@@ -17,6 +17,7 @@ export default function CollapsibleListItem({
   setIsOpen,
   onClick,
   entered,
+  styling,
 }) {
 
   function handleClick() {
@@ -33,7 +34,7 @@ export default function CollapsibleListItem({
         onClick={handleClick}
         className={clsx({
           highlighted: isHighlighted,
-        })}
+        }, styling)}
       >
         <ListItemText primary={title} secondary={description} />
         {isOpen ? <ExpandLess /> : <ExpandMore />}
