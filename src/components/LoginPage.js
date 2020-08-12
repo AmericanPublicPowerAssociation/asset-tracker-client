@@ -3,8 +3,6 @@ import { useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
-import Container from '@material-ui/core/Container'
-import CssBaseline from '@material-ui/core/CssBaseline'
 import Link from '@material-ui/core/Link'
 import Typography from '@material-ui/core/Typography'
 import {
@@ -12,20 +10,25 @@ import {
 } from 'appa-auth-consumer'
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    background: 'white',
+    width: '100vw',
+    height: '100vh',
+  },
   paper: {
-    marginTop: theme.spacing(15),
     display: 'flex',
-    flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
   },
   avatar: {
-    margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
     width: theme.spacing(12),
     height: theme.spacing(12),
+    margin: '0 auto',
   },
   avatarBackground: {
-    borderRadius: '1',
     background: 'white',
   },
   appaLogo: {
@@ -39,6 +42,8 @@ const useStyles = makeStyles(theme => ({
     paddingRight: theme.spacing(5),
     paddingLeft: theme.spacing(5),
     borderRadius: '40px',
+    fontSize: '1.35rem',
+    fontWeight: 'bold',
     '&:hover': {
       backgroundColor: 'white',
     },
@@ -46,20 +51,37 @@ const useStyles = makeStyles(theme => ({
   buttonStartIcon: {
     marginRight: theme.spacing(2),
   },
-  text: {
+  contributorText: {
     color: 'gray',
+    fontSize: '.5rem',
+  },
+  assetTrackerText: {
+    fontWeight: 'bold',
   },
 }))
 
 const companies = [
-  { 'name': 'CrossCompute', 'linkedIn': '' },
+  { name:'American Public Power Association', linkedIn: 'https://www.linkedin.com/company/american-public-power-association/' },
+  { name:'CrossCompute', linkedIn: 'https://www.linkedin.com/company/crosscompute-inc/' },
+  { name:'DevLabs Mexico', linkedIn: '' },
 ]
 
 const individuals = [
-  { 'name': 'Roy', 'linkedIn': '' },
-  { 'name': 'Polina', 'linkedIn': '' },
-  { 'name': 'Miguel', 'linkedIn': '' },
-  { 'name': 'Rodrigo', 'linkedIn': '' },
+  { name: 'Rodrigo Guarachi', linkedIn: 'https://www.linkedin.com/in/rodrigo-guarachi-95060711b/' },
+  { name: 'Polina Chernomaz', linkedIn: 'https://www.linkedin.com/in/polinac/' },
+  { name: 'Miguel Ángel Gordián', linkedIn: 'https://www.linkedin.com/in/miguelgordian/' },
+  { name: 'Marta Moreno', linkedIn: 'https://www.linkedin.com/in/marta-moreno-07364b82/' },
+  { name: 'Salah Ahmed', linkedIn: 'https://www.linkedin.com/in/salahspage/' },
+  { name: 'Roy Hyunjin Han', linkedIn: 'https://www.linkedin.com/in/invisibleroads/' },
+  { name: 'Noé Domínguez Porras', linkedIn: 'https://www.linkedin.com/in/noedominguez/' },
+  { name: 'Olga Creutzburg', linkedIn: 'https://www.linkedin.com/in/olga-creutzburg-52a689b2/' },
+  { name: 'Mayra Esther Rodríguez Solano', linkedIn: '' },
+  { name: 'Trevor David Rhone', linkedIn: '' },
+  { name: 'Ethan Epstein', linkedIn: '' },
+  { name: 'Tyler Doyle', linkedIn: '' },
+  { name: 'Chris Ching', linkedIn: '' },
+  { name: 'Nathan Mitchell', linkedIn: '' },
+  { name: 'Alex Hofmann', linkedIn: 'https://www.linkedin.com/in/alex-hofmann-4a006519/' },
 ]
 
 export default function LoginPage() {
@@ -69,48 +91,54 @@ export default function LoginPage() {
   const authUrl = useSelector(getAuthUrl) 
 
   return (
-    <Container maxWidth='sm' className={classes.background}>
-      <CssBaseline />
+    <div className={classes.root}>
       <div className={classes.paper}> 
-        <Avatar
-          variant='rounded'
-          className={classes.avatar}
-          classes={{ root: classes.avatarBackground }}
-          src={`${process.env.PUBLIC_URL}/logo192.png`}>
-        </Avatar>
-        <Typography component='h1' variant='h4'>
-          Asset Tracker
-        </Typography>
-        <Button
-          href={authUrl}
-          size='large'
-          variant='outlined'
-          startIcon={AppaLogo}
-          classes={{
-            root: classes.button,
-            startIcon: classes.buttonStartIcon }}
-        >
-          Log in with APPA
-        </Button>
-        <Typography className={classes.text}>
+        <div>
+          <Avatar
+            variant='rounded'
+            className={classes.avatar}
+            classes={{ root: classes.avatarBackground }}
+            src={`${process.env.PUBLIC_URL}/logo192.png`}>
+          </Avatar>
+          <Typography component='h1' align='center' className={classes.assetTrackerText}>
+            Asset Tracker
+          </Typography>
+          <Button
+            href={authUrl}
+            size='large'
+            variant='contained'
+            startIcon={AppaLogo}
+            classes={{
+              root: classes.button,
+              startIcon: classes.buttonStartIcon }}
+          >
+            Log in with APPA
+          </Button>
+        </div>
+      </div>
+      <div style={{ position: 'fixed', bottom: 0, width: '100%' }}>
+        <div style={{ width: '70%', margin: '0 auto' }}>
+        <Typography align='center' className={classes.contributorText}>
           {'This application is brought to you by: '}
+        </Typography>
+        <Typography align='center' className={classes.contributorText}>
           {
             companies.map((company, index) => (
-              <Link key={company.name} href={company.linkedIn} rel='noopener' rel='noreferrer'>
+              <Link key={company.name} href={company.linkedIn} target='_blank' rel='noopener' rel='noreferrer'>
                 { (index ? ', ' : '') + company.name }
               </Link>))
           }
         </Typography>
-        <Typography className={classes.text}>
-          {'Individual Contributors: '}
+        <Typography align='center' className={classes.contributorText}>
           {
             individuals.map((individual, index) => (
-              <Link key={individual.name} href={individual.linkedIn} rel='noopener' rel='noreferrer'>
+              <Link key={individual.name} href={individual.linkedIn} target='_blank' rel='noopener' rel='noreferrer'>
                 { (index ? ', ' : '') + individual.name }
               </Link>))
           }
         </Typography>
+        </div>
       </div>
-    </Container>
+    </div>
   )
 }

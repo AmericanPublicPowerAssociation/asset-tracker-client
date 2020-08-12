@@ -147,11 +147,10 @@ export default function AssetTasksPanel({
   const [priority, setPriority] = useState(priorityTypeNormal)
   const [dialog, setDialog] = useState(false)	   
   const [taskDetails, setTaskDetails] = useState(false)
-  const [prioritySelected, setPrioritySelected] = useState(false)
-  const [statusSelected, setStatusSelected] = useState(false)
-  const [filterNameSelection, setFilterNameSelection] = useState([])
+  const [prioritySelected, setPrioritySelected] = useState(true)
+  const [statusSelected, setStatusSelected] = useState(true)
+  const [filterNameSelection, setFilterNameSelection] = useState(['Normal', 'Important', 'New', 'Pending'])
 
-  console.log('status selected', statusSelected, 'priority selected', prioritySelected)
   function handleClickToCreateAddTask() {
     setDialog(false)
     dispatch(addTask(assetId, name, description, priority))

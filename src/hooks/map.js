@@ -213,13 +213,10 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
 
   function handleMapKey(event) {
     if (sketchMode === SKETCH_MODE_VIEW) return
-    event.persist()  // Populate event with extra signals
     // console.log('map key', event)
     switch (event.key) {
       case 'Escape': {
-        if (sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
-          dispatch(setSketchMode(SKETCH_MODE_EDIT))
-        }
+        dispatch(setSketchMode(SKETCH_MODE_EDIT))
         break
       }
       case 'Backspace':
@@ -263,6 +260,12 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
     dispatch(setPopUpState(d))
   }
 
+  function handleDeckClick(info, event) {
+    if (!info.picked) {
+      dispatch(setSelection({ assetId: null, assetIndexes: [] }))
+    }
+  }
+
   function handleAssetClick(info, event) {
     console.log('asset click', info, event, 'sketch mode: ', sketchMode)
     const assetIndex = info.object.properties.featureIndex || info.index
@@ -288,6 +291,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   function handleAssetEdit(event) {
     const { editType, editContext } = event
     let { updatedData } = event
+    let triggerSetAssetsGeoJsonLast = true
     console.log('sketch mode: ', sketchMode, ', asset edit', editType, editContext, updatedData)
     switch (editType) {
       case 'addFeature': {
@@ -327,6 +331,8 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
 
         const assetId = temporaryAsset.id
         updateFeature(temporaryAsset, feature)
+        dispatch(setAssetsGeoJson(updatedData))
+        triggerSetAssetsGeoJsonLast = false
         dispatch(setAsset(temporaryAsset))
         dispatch(fillAssetName(assetId, feature))
         if (editContext !== 'addTentativePosition'){
@@ -385,7 +391,6 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       }
       case 'removePosition': {
         // Remove a vertex in ModifyMode
-        console.log('aaaaaaa', event)
         const { feature } = getFeatureInfo(event)
         const removedPositionIndex = getPositionIndex(event)
         const featureProperties = feature.properties
@@ -482,7 +487,9 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       }
       default: { }
     }
-    dispatch(setAssetsGeoJson(updatedData))
+    if (triggerSetAssetsGeoJsonLast) {
+      dispatch(setAssetsGeoJson(updatedData))
+    }
   }
 
   const mapLayers = [
@@ -494,5 +501,6 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   return {
     mapLayers,
     handleMapKey,
+    handleDeckClick,
   }
 }
