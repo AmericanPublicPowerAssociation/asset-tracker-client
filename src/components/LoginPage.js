@@ -24,9 +24,10 @@ const useStyles = makeStyles(theme => ({
   },
   avatar: {
     backgroundColor: theme.palette.secondary.main,
-    width: theme.spacing(12),
-    height: theme.spacing(12),
+    width: theme.spacing(14),
+    height: theme.spacing(14),
     margin: '0 auto',
+    marginBottom: '8px',
   },
   avatarBackground: {
     background: 'white',
@@ -53,10 +54,11 @@ const useStyles = makeStyles(theme => ({
   },
   contributorText: {
     color: 'gray',
-    fontSize: '.5rem',
+    fontSize: '.9rem',
   },
   assetTrackerText: {
     fontWeight: 'bold',
+    fontSize: '2rem',
   },
 }))
 
