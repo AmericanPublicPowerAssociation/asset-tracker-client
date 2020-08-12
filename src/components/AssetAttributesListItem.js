@@ -13,7 +13,7 @@ import {
   getAssetTypeByCode,
 } from '../selectors'
 
-export default function AssetAttributesListItem({ asset, isEditing }) {
+export default function AssetAttributesListItem({ asset, isEditing, styling }) {
   const [isOpen, setIsOpen] = useState(false)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const assetId = asset.id
@@ -43,7 +43,7 @@ export default function AssetAttributesListItem({ asset, isEditing }) {
         isEditing={isEditing}
       />
     </CollapsibleListItem> :
-    <ListItem disableGutters component='div'>
+    <ListItem disableGutters component='div' className={styling}>
       <ListItemText primary={assetTypeName} />
     </ListItem>
 }
