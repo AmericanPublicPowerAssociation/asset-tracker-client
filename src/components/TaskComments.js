@@ -60,6 +60,7 @@ export default function TaskComments(props) {
     asset,
     task,
   } = props
+  const { commentCount } = task
   const assetId = asset.id
   const scrollBarRef = useRef()
 
@@ -86,6 +87,9 @@ export default function TaskComments(props) {
   return (
     <>
       <List disablePadding className={props.classes || classes.scroll}>
+        <Typography variant='h5' style={{ fontWeight: 'bold', marginBottom: '24px' }}>
+          Comments ({commentCount})
+        </Typography>
         <Scrollbar className={classes.scrollBar} ref={scrollBarRef}>
           { comments.map((comment, index) => (
             <CommentItem
@@ -159,6 +163,7 @@ export function CommentForm({ onSubmit }) {
   return (<div className={classes.bottomAction}>
     <Input id="new_comment" type={'text'} label="New Comment" value={comment} autoComplete=''
       onChange={(e) => setComment(e.target.value) }
+      placeholder='Type your comment here...'
       onKeyPress={onEnterKeyPress}
       fullWidth={true}
       endAdornment={

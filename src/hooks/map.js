@@ -264,7 +264,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   }
 
   function handleAssetClick(info, event) {
-    console.log('asset click', info, event)
+    console.log('asset click', info, event, 'sketch mode: ', sketchMode)
     const assetIndex = info.object.properties.featureIndex || info.index
     const assetFeature = assetFeatures[assetIndex]
     if (!assetFeature) return
@@ -288,7 +288,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   function handleAssetEdit(event) {
     const { editType, editContext } = event
     let { updatedData } = event
-    console.log('asset edit', editType, editContext, updatedData)
+    console.log('sketch mode: ', sketchMode, ', asset edit', editType, editContext, updatedData)
     switch (editType) {
       case 'addFeature': {
         // Add a feature in draw mode
@@ -296,6 +296,8 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         if (!temporaryAsset) {
           temporaryAsset = makeTemporaryAsset(assetTypeCode)
         } else if (isAddingLine) {
+          console.log('add ending vertex')
+          console.log('sketch mode: ', sketchMode)
           // Add ending vertex
           const vertexCount = feature.geometry.coordinates.length
           const lastVertexIndex = vertexCount - 1
@@ -339,6 +341,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
           temporaryAsset = makeTemporaryAsset(assetTypeCode)
         }
         if (isAddingLine) {
+          console.log('adding line')
           const vertexCount = (temporaryAsset.vertexCount || 0) + 1
           temporaryAsset = produce(temporaryAsset, draft => {
             draft.vertexCount = vertexCount
@@ -368,6 +371,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         break
       }
       case 'addPosition': {
+        console.log('adding vertex position')
         // Add a vertex in ModifyMode
         const { feature } = getFeatureInfo(event)
         const addedPositionIndex = getPositionIndex(event)

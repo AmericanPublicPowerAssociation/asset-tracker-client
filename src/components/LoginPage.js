@@ -23,7 +23,6 @@ const useStyles = makeStyles(theme => ({
     height: '100%',
   },
   avatar: {
-    margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
     width: theme.spacing(12),
     height: theme.spacing(12),

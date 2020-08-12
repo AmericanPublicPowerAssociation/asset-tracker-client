@@ -73,6 +73,8 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     width: '100%',
     justifyContent: 'space-between',
+    paddingLeft: '10px',
+    paddingRight: '10px',
   },
   alignStart: {
     display: 'flex',
@@ -118,7 +120,8 @@ const useStyles = makeStyles(theme => ({
   listItemText: {
     marginLeft: '6px',
     marginTop: '0',
-    marginBottom: '0',
+    marginRight: '6px',
+    overflowWrap: 'anywhere',
   },
   label: {
     color: 'rgba(0, 0, 0, 0.54)',
@@ -324,7 +327,7 @@ function TaskItem(props) {
           </div>
         </div>
       </ListItem>
-      <Divider />
+      <Divider variant='middle' />
     </>
   )
 }
