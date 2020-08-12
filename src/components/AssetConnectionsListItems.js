@@ -34,6 +34,7 @@ export default function AssetConnectionsListItems({
   // TODO: Rename
   noHighlight,
   expand,
+  styling,
 }) {
   const dispatch = useDispatch()
   const isLayoutMobile = useContext(IsLayoutMobileContext)
@@ -95,7 +96,7 @@ export default function AssetConnectionsListItems({
       ( !isLayoutMobile || expand ?
       <ListItem
         key={index}
-        className={clsx({ highlighted: isHighlighted })}
+        className={clsx({ highlighted: isHighlighted }, styling)}
         component='div'
         disableGutters
         onClick={handleClickOrFocus}
