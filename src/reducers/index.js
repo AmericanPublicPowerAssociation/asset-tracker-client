@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import { auth } from 'appa-auth-consumer'
 import {
   productNameSuggestions,
   productVersionSuggestions,
@@ -11,6 +12,7 @@ import mapViewState from './mapViewState'
 import assetsGeoJson from './assetsGeoJson'
 import temporaryAsset from './temporaryAsset'
 import popUpState from './popUpState'
+import popUpDeleteMidpointState from './popUpDeleteMidpointState'
 import sketchMode from './sketchMode'
 import overlayMode from './overlayMode'
 import selectedAssetIndexes from './selectedAssetIndexes'
@@ -27,11 +29,13 @@ import message from './message'
 
 // TODO: Review order
 const reduce = combineReducers({
+  auth,
   mapStyleName,
   mapViewState,
   assetsGeoJson,
   temporaryAsset,
   popUpState,
+  popUpDeleteMidpointState,
   overlayMode,
   selectedAssetIndexes,
   selectedBusIndexes,

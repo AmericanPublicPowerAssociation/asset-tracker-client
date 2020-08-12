@@ -1,16 +1,17 @@
 import { useDispatch, useSelector } from 'react-redux'
+import { IconLayer } from '@deck.gl/layers'
 import { produce } from 'immer'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import { ViewMode } from '@nebula.gl/edit-modes'
 import {
   deleteAssetConnection,
-  deleteAssetVertex,
   fillAssetName,
   insertAssetVertex,
   setAsset,
   setAssetConnection,
   setAssetsGeoJson,
   setMapViewState,
+  setPopUpDeleteMidpoint,
   setPopUpState,
   setSelection,
   setSketchMode,
@@ -21,14 +22,21 @@ import {
   ASSETS_MAP_LAYER_ID,
   ASSET_LINE_WIDTH_IN_METERS,
   ASSET_RADIUS_IN_METERS_BY_CODE,
+  ASSET_TYPE_CODE_CONTROL,
+  ASSET_TYPE_CODE_GENERATOR,
   ASSET_TYPE_CODE_LINE,
+  ASSET_TYPE_CODE_METER,
+  ASSET_TYPE_CODE_POWER_QUALITY,
+  ASSET_TYPE_CODE_STORAGE,
+  ASSET_TYPE_CODE_SWITCH,
+  ASSET_TYPE_CODE_TRANSFORMER,
   BUSES_MAP_LAYER_ID,
   BUS_RADIUS_IN_METERS,
-  SKETCH_MODE_ADD,
+  COLORS_BY_ASSET,
+  ICONS_MAP_LAYER_ID,
   SKETCH_MODE_ADD_ASSET,
   SKETCH_MODE_ADD_LINE,
-  SKETCH_MODE_DELETE,
-  SKETCH_MODE_EDIT_VERTEX_REMOVE,
+  SKETCH_MODE_EDIT,
   SKETCH_MODE_VIEW,
 } from '../constants'
 import {
@@ -57,7 +65,7 @@ import {
   getSelectedBusId,
   getSelectedBusIndexes,
   getSketchMode,
-  getTemporaryAsset,
+  getTemporaryAsset, getMapWebMercatorViewPort,
 } from '../selectors'
 
 export function useMovableMap() {
@@ -69,7 +77,7 @@ export function useMovableMap() {
   }
 }
 
-export function useEditableMap(deckGL, { onAssetDelete, onAssetVertexDelete }) {
+export function useEditableMap(deckGL, { onAssetDelete }) {
   const dispatch = useDispatch()
   const sketchMode = useSelector(getSketchMode)
   const mapColors = useSelector(getMapColors)
@@ -87,6 +95,7 @@ export function useEditableMap(deckGL, { onAssetDelete, onAssetVertexDelete }) {
   const assetFeatures = assetsGeoJson.features
   const busFeatures = busesGeoJson.features
   const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
+  const mapWebMercatorViewPort = useSelector(getMapWebMercatorViewPort)
   let temporaryAsset = useSelector(getTemporaryAsset)
 
   function getAssetsMapLayer() {
@@ -100,16 +109,28 @@ export function useEditableMap(deckGL, { onAssetDelete, onAssetVertexDelete }) {
       autoHighlight: true,
       highlightColor: mapColors.assetHighlight,
       pickable: true,
-      stroked: false,
+      stroked: true,
       getRadius: feature => {
-        return ASSET_RADIUS_IN_METERS_BY_CODE[feature.properties.typeCode]
+        return ASSET_RADIUS_IN_METERS_BY_CODE[ASSET_TYPE_CODE_TRANSFORMER]
       },
-      getLineWidth: ASSET_LINE_WIDTH_IN_METERS,
-      getFillColor: (feature, isSelected) => {
-        return isSelected ? mapColors.assetSelect : mapColors.asset
+      getLineWidth: (feature) => {
+        const asset = feature['properties']['typeCode']
+        if (asset === ASSET_TYPE_CODE_LINE) {
+          return ASSET_LINE_WIDTH_IN_METERS
+        }
+        return 3
+      },
+      getFillColor: (feature, isSelected, mode) => {
+        const asset = feature['properties']['typeCode']
+        if (asset === ASSET_TYPE_CODE_LINE) {
+          return isSelected ? mapColors.assetSelect : COLORS_BY_ASSET['dark'][asset]
+        }
+        return isSelected ? mapColors.assetSelect : COLORS_BY_ASSET['dark'][asset]
+        // return isSelected ? mapColors.assetSelect : mapColors.asset
       },
       getLineColor: (feature, isSelected) => {
-        return isSelected ? mapColors.assetSelect : mapColors.asset
+        const asset = feature['properties']['typeCode']
+        return isSelected ? mapColors.assetSelect : COLORS_BY_ASSET['dark'][asset]
       },
       onHover: handleAssetHover,
       onClick: handleAssetClick,
@@ -136,16 +157,66 @@ export function useEditableMap(deckGL, { onAssetDelete, onAssetVertexDelete }) {
       onClick: handleBusClick,
     })
   }
+  // const ICON_SIZE = 60
+  // const ICON_SIZE = 8
+
+  function getIconsMapLayer() {
+    /*
+    const assetsJSONForIcons = {
+      type: 'FeatureCollection',
+      features: assetsGeoJson.features.filter(obj => obj.properties.typeCode !== 'l'),
+    }
+    const zoom = mapWebMercatorViewPort.zoom
+    */
+    const ICON_MAPPING = {
+      [ASSET_TYPE_CODE_CONTROL]:  { x: 0, y: 67, width: 100, height: 107, mask: true },
+      [ASSET_TYPE_CODE_GENERATOR]:  { x: 0, y: 175, width: 100, height: 86, mask: true },
+      [ASSET_TYPE_CODE_METER]:  { x: 0, y: 262, width: 100, height: 108, mask: true },
+      [ASSET_TYPE_CODE_POWER_QUALITY]:  { x: 0, y: 370, width: 100, height: 98, mask: true },
+      [ASSET_TYPE_CODE_STORAGE]:  { x: 0, y: 473, width: 100, height: 92, mask: true },
+      [ASSET_TYPE_CODE_SWITCH]:  { x: 0, y: 559, width: 100, height: 43, mask: true },
+      [ASSET_TYPE_CODE_TRANSFORMER]: { x:0, y: 600, width: 100, height: 91, mask: true },
+    }
+
+    return new IconLayer({
+      id: ICONS_MAP_LAYER_ID,
+      pickable: false,
+/*
+      sizeScale: ICON_SIZE * window.devicePixelRatio,
+      getPosition: d => {
+        console.log(d)
+        return d.geometry.coordinates
+      },
+      getIcon: d => {
+        console.log(d)
+        return 'marker'
+      } ,
+*/
+      data: assetsGeoJson.features.filter(obj => obj.properties.typeCode !== 'l'),
+      iconAtlas: '/tileset.png',
+      iconMapping: ICON_MAPPING,
+      sizeScale: 1,
+      getPosition: d => d.geometry.coordinates,
+      getIcon: d => d.properties.typeCode ? d.properties.typeCode : 'marker',
+      getSize: d => {
+        console.log(mapWebMercatorViewPort.zoom, 2 * mapWebMercatorViewPort.zoom)
+        return Math.sqrt(mapWebMercatorViewPort.zoom * mapWebMercatorViewPort.zoom) * 2
+      },
+      getColor: (feature) => {
+        return [255, 255, 255]
+        // const asset = feature['properties']['typeCode']
+        // return COLORS_BY_ASSET['dark'][asset]
+      },
+    })
+  }
+
 
   function handleMapKey(event) {
     if (sketchMode === SKETCH_MODE_VIEW) return
-    event.persist()  // Populate event with extra signals
     // console.log('map key', event)
     switch (event.key) {
       case 'Escape': {
-        if (sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
-          dispatch(setSketchMode(SKETCH_MODE_ADD))
-        }
+        dispatch(setSketchMode(SKETCH_MODE_EDIT))
         break
       }
       case 'Backspace':
@@ -189,24 +260,25 @@ export function useEditableMap(deckGL, { onAssetDelete, onAssetVertexDelete }) {
     dispatch(setPopUpState(d))
   }
 
+  function handleDeckClick(info, event) {
+    if (!info.picked) {
+      dispatch(setSelection({ assetId: null, assetIndexes: [] }))
+    }
+  }
+
   function handleAssetClick(info, event) {
-    console.log('asset click', info, event)
-    const assetIndex = info.index
-    console.log(assetFeatures, assetIndex)
+    console.log('asset click', info, event, 'sketch mode: ', sketchMode)
+    const assetIndex = info.object.properties.featureIndex || info.index
     const assetFeature = assetFeatures[assetIndex]
     if (!assetFeature) return
     const assetId = assetFeature.properties.id
-    console.log(assetId)
     if (!sketchMode.startsWith(SKETCH_MODE_ADD_ASSET)) {
       dispatch(setSelection({ assetId, assetIndexes: [assetIndex] }))
-    }
-    if (sketchMode === SKETCH_MODE_DELETE) {
-      onAssetDelete(assetId)
     }
   }
 
   function handleBusClick(info, event) {
-    // console.log('bus click', info, event)
+    console.log('bus click', info, event)
     const busIndex = info.index
     const busFeature = busFeatures[busIndex]
     if (!busFeature) return
@@ -219,7 +291,8 @@ export function useEditableMap(deckGL, { onAssetDelete, onAssetVertexDelete }) {
   function handleAssetEdit(event) {
     const { editType, editContext } = event
     let { updatedData } = event
-    console.log('asset edit', editType, editContext, updatedData)
+    let triggerSetAssetsGeoJsonLast = true
+    console.log('sketch mode: ', sketchMode, ', asset edit', editType, editContext, updatedData)
     switch (editType) {
       case 'addFeature': {
         // Add a feature in draw mode
@@ -227,6 +300,8 @@ export function useEditableMap(deckGL, { onAssetDelete, onAssetVertexDelete }) {
         if (!temporaryAsset) {
           temporaryAsset = makeTemporaryAsset(assetTypeCode)
         } else if (isAddingLine) {
+          console.log('add ending vertex')
+          console.log('sketch mode: ', sketchMode)
           // Add ending vertex
           const vertexCount = feature.geometry.coordinates.length
           const lastVertexIndex = vertexCount - 1
@@ -256,8 +331,13 @@ export function useEditableMap(deckGL, { onAssetDelete, onAssetVertexDelete }) {
 
         const assetId = temporaryAsset.id
         updateFeature(temporaryAsset, feature)
+        dispatch(setAssetsGeoJson(updatedData))
+        triggerSetAssetsGeoJsonLast = false
         dispatch(setAsset(temporaryAsset))
         dispatch(fillAssetName(assetId, feature))
+        if (editContext !== 'addTentativePosition'){
+          dispatch(setSketchMode(SKETCH_MODE_EDIT))
+        }
         dispatch(setSelection({ assetId, assetIndexes: [featureIndex] }))
         break
       }
@@ -267,6 +347,7 @@ export function useEditableMap(deckGL, { onAssetDelete, onAssetVertexDelete }) {
           temporaryAsset = makeTemporaryAsset(assetTypeCode)
         }
         if (isAddingLine) {
+          console.log('adding line')
           const vertexCount = (temporaryAsset.vertexCount || 0) + 1
           temporaryAsset = produce(temporaryAsset, draft => {
             draft.vertexCount = vertexCount
@@ -296,6 +377,7 @@ export function useEditableMap(deckGL, { onAssetDelete, onAssetVertexDelete }) {
         break
       }
       case 'addPosition': {
+        console.log('adding vertex position')
         // Add a vertex in ModifyMode
         const { feature } = getFeatureInfo(event)
         const addedPositionIndex = getPositionIndex(event)
@@ -312,18 +394,13 @@ export function useEditableMap(deckGL, { onAssetDelete, onAssetVertexDelete }) {
         const { feature } = getFeatureInfo(event)
         const removedPositionIndex = getPositionIndex(event)
         const featureProperties = feature.properties
-        if (featureProperties.typeCode === ASSET_TYPE_CODE_LINE) {
-          const vertexCount = feature.geometry.coordinates.length
-          const assetId = featureProperties.id
-          const asset = assetById[assetId]
-          /*dispatch(deleteAssetVertex(
-            assetId, removedPositionIndex, vertexCount))
-          dispatch(setAssetsGeoJson(updatedData))
-          */
-          onAssetVertexDelete({ assetId, removedPositionIndex, vertexCount, updatedData })
-          return // prevent update
-        }
-        break
+        const vertexCount = feature.geometry.coordinates.length
+        const assetId = featureProperties.id
+        const lonlat = editContext.position
+        dispatch(setPopUpDeleteMidpoint({
+          lonlat, assetId, removedPositionIndex, vertexCount, updatedData,
+        }))
+        return // prevent update
       }
       case 'movePosition': {
         // Drag a vertex in ModifyMode
@@ -410,16 +487,20 @@ export function useEditableMap(deckGL, { onAssetDelete, onAssetVertexDelete }) {
       }
       default: { }
     }
-    dispatch(setAssetsGeoJson(updatedData))
+    if (triggerSetAssetsGeoJsonLast) {
+      dispatch(setAssetsGeoJson(updatedData))
+    }
   }
 
   const mapLayers = [
     getAssetsMapLayer(),
     getBusesMapLayer(),
+    getIconsMapLayer(),
   ]
 
   return {
     mapLayers,
     handleMapKey,
+    handleDeckClick,
   }
 }

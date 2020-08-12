@@ -30,6 +30,7 @@ export const getMapViewState = state => state.mapViewState
 export const getOverlayMode = state => state.overlayMode
 export const getSketchMode = state => state.sketchMode
 export const getPopUpState = state => state.popUpState
+export const getPopUpDeleteMidpointState = state => state.popUpDeleteMidpointState
 export const getSelectedAssetIndexes = state => state.selectedAssetIndexes
 export const getSelectedBusIndexes = state => state.selectedBusIndexes
 
@@ -54,7 +55,11 @@ export const getMapWebMercatorViewPort = createSelector([
 ], (
   mapViewState,
 ) => {
-  return new WebMercatorViewport(mapViewState)
+  return new WebMercatorViewport({
+    ...mapViewState,
+    width: window.innerWidth,
+    height: window.innerHeight,
+  })
 })
 
 export const getIsViewing = createSelector([

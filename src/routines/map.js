@@ -24,78 +24,8 @@ import {
   SKETCH_MODE_ADD_SWITCH,
   SKETCH_MODE_ADD_TRANSFORMER,
   SKETCH_MODE_EDIT,
-  SKETCH_MODE_EDIT_VERTEX_ADD,
-  SKETCH_MODE_EDIT_VERTEX_MOVE,
-  SKETCH_MODE_EDIT_VERTEX_REMOVE,
   // SKETCH_MODE_EDIT_VERTEX_SPLIT_LINE,
 } from '../constants'
-
-class AddMoveVertexMode extends ModifyMode {
-  handleClick(event, props) {
-    console.log('props', props)
-    // Taken from nebula.gl > edit-modes/utils
-    const picks = event.picks
-    const pickedEditHandle = picks && picks
-      .filter(pick => (
-        pick.isGuide && pick.object.properties.guideType === 'editHandle'))
-      .map(pick => pick.object) || []
-    const pickedExistingHandle = pickedEditHandle.find(
-      ({ properties }) => properties.featureIndex >= 0 && properties.editHandleType === 'existing')
-    if (pickedExistingHandle) return
-    super.handleClick(event, props)
-  }
-
-  handleDragging(event, props) {
-    super.handleDragging(event, props)
-  }
-
-  handleStartDragging(event, props) {
-    super.handleStartDragging(event, props)
-  }
-
-  handleStopDragging(event, props) {
-    super.handleStopDragging(event, props)
-  }
-}
-
-class MoveVertexMode extends ModifyMode {
-  handleClick(event, props) {}
-
-  handleDragging(event, props) {
-    super.handleDragging(event, props)
-  }
-
-  handleStartDragging(event, props) {}
-
-  handleStopDragging(event, props) {
-    super.handleStopDragging(event, props)
-  }
-}
-
-class RemoveVertexMode extends ModifyMode {
-  // disables moving lines and only allows to remove vertex
-  handleClick(event, props) {
-    // Taken from nebula.gl > edit-modes/utils
-    const picks = event.picks
-    const pickedEditHandle = picks && picks
-      .filter(pick => (
-        pick.isGuide && pick.object.properties.guideType === 'editHandle'))
-      .map(pick => pick.object) || []
-    const pickedIntermediateHandle = pickedEditHandle.find(
-      ({ properties }) => properties.featureIndex >= 0 && properties.editHandleType === 'intermediate')
-    if (pickedIntermediateHandle) return
-    super.handleClick(event, props)
-  }
-
-  getGuides(props) {
-    props['lastPointerMoveEvent'] = null
-    return super.getGuides(props)
-  }
-
-  handleDragging() {}
-  handleStartDragging() {}
-  handleStopDragging() {}
-}
 
 export function getMapMode(sketchMode) {
   const mapMode = {
@@ -111,9 +41,6 @@ export function getMapMode(sketchMode) {
     [SKETCH_MODE_ADD_SUBSTATION]: DrawRectangleMode,
     [SKETCH_MODE_ADD_STATION]: DrawPolygonMode,
     [SKETCH_MODE_EDIT]: ModifyMode,
-    [SKETCH_MODE_EDIT_VERTEX_ADD]: AddMoveVertexMode,
-    [SKETCH_MODE_EDIT_VERTEX_MOVE]: MoveVertexMode, 
-    [SKETCH_MODE_EDIT_VERTEX_REMOVE]: RemoveVertexMode,
     // add split line mode
   }[sketchMode]
   return mapMode || ViewMode

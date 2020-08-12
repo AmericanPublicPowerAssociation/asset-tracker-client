@@ -20,7 +20,9 @@ import Typography from '@material-ui/core/Typography'
 import { DropzoneArea } from 'material-ui-dropzone'
 import ImportResponseDialog from './ImportResponseDialog'
 import { uploadAssetsCsv } from '../actions'
-import { ASSET_TYPE_CODE_TRANSFORMER } from '../constants'
+import {
+  ASSET_TYPE_CODE_GENERATOR,
+} from '../constants'
 import {
   getAssetById,
   getAssetTypeByCode,
@@ -86,7 +88,7 @@ export default function ImportExportDialog({
       })
       return assetArray
     }, [])
-    .filter(asset => asset['typeCode'] === ASSET_TYPE_CODE_TRANSFORMER)
+    .filter(asset => asset['typeCode'] === ASSET_TYPE_CODE_GENERATOR)
 
   if (data !== null && data !== undefined && data.length > 0 && sourceId === '') {
     setSourceId(data[0].id)

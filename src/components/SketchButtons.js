@@ -2,11 +2,9 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
-import Tooltip from '@material-ui/core/Tooltip'
 import Fab from '@material-ui/core/Fab'
-import SketchIcon from '@material-ui/icons/Edit'
-import SaveIcon from '@material-ui/icons/Save'
-import CloseIcon from '@material-ui/icons/Close'
+// import SaveIcon from '@material-ui/icons/Save'
+// import CloseIcon from '@material-ui/icons/Close'
 import {
   refreshRisks,
 } from 'asset-report-risks'
@@ -20,7 +18,7 @@ import {
 } from '../actions'
 import {
   OVERLAY_MODE_ASSETS,
-  SKETCH_MODE_ADD,
+  SKETCH_MODE_EDIT,
   SKETCH_MODE_VIEW,
 } from '../constants'
 import {
@@ -51,6 +49,9 @@ const useStyles = makeStyles(theme => ({
       'background': 'white',
     },
   },
+  'buttonDetails': {
+    'fontSize': '1.1rem',
+  },
 }))
 
 export default function SketchButtons() {
@@ -60,7 +61,6 @@ export default function SketchButtons() {
   const sketchMode = useSelector(getSketchMode)
   const isWithAssetsOverlay = overlayMode === OVERLAY_MODE_ASSETS
   const isViewing = sketchMode === SKETCH_MODE_VIEW
-  const iconColor = isViewing ? 'black' : 'white'
 
   function handleChange() {
     if (!isWithAssetsOverlay) {
@@ -69,7 +69,7 @@ export default function SketchButtons() {
     if (!isViewing) {
       dispatch(saveAssets())
     }
-    dispatch(setSketchMode(isViewing ? SKETCH_MODE_ADD : SKETCH_MODE_VIEW))
+    dispatch(setSketchMode(isViewing ? SKETCH_MODE_EDIT : SKETCH_MODE_VIEW))
   }
 
   function handleCancel() {
@@ -81,35 +81,32 @@ export default function SketchButtons() {
 
   return (
     <div className={classes.root}>
-      <Tooltip title={isViewing ? 'Sketch' : 'Save'}>
-        <Fab
-          className={clsx(
-            classes.changeButton,
-            'rise-animation',
-            iconColor,
-          )}
-          size='small'
-          // disabled={!isWithAssetsOverlay}
-          onClick={handleChange}
-        >
-          {isViewing ? <SketchIcon /> : <SaveIcon />}
-        </Fab>
-      </Tooltip>
-
-    {!isViewing &&
-      <Tooltip title='Cancel'>
+      <Fab
+        className={clsx(
+          classes.changeButton,
+          classes.buttonDetails,
+          'rise-animation',
+          'white',
+        )}
+        variant='extended'
+        // disabled={!isWithAssetsOverlay}
+        onClick={handleChange}
+      >
+        {isViewing ? 'START DRAWING' : 'SAVE'}
+      </Fab>
+      {!isViewing &&
         <Fab
           className={clsx(
             classes.cancelButton,
-            'spin-animation',
+            classes.buttonDetails,
+            'rise-animation',
           )}
-          size='small' 
+          variant='extended'
           onClick={handleCancel}
         >
-          <CloseIcon style={{ color: 'blue' }}/>
+          CANCEL
         </Fab>
-      </Tooltip>
-    }
+      }
     </div>
   )
 }

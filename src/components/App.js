@@ -5,8 +5,6 @@ import { refreshRisks } from 'asset-report-risks'
 import AssetsMap from './AssetsMap'
 import SketchButtons from './SketchButtons'
 import OptionsWindow from './OptionsWindow'
-import SketchModeToolbar from './SketchModeToolbar'
-import SketchEditToolbar from './SketchEditToolbar'
 import SketchAddToolbar from './SketchAddToolbar'
 import ActionsWindow from './ActionsWindow'
 import OverlaysWindow from './OverlaysWindow'
@@ -15,7 +13,11 @@ import TablesWindow from './TablesWindow'
 import ImportExportDialog from './ImportExportDialog'
 import AssetDeleteDialog from './AssetDeleteDialog'
 import MessageBar from './MessageBar'
-import AssetVertexDeleteSnackbar from './AssetVertexDeleteSnackbar'
+import LoginPage from './LoginPage'
+import {
+  getIsUserAuthenticated,
+  refreshAuth,
+} from 'appa-auth-consumer'
 import './App.css'
 import {
   refreshAssets,
@@ -41,26 +43,28 @@ export default function App() {
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
   const [isWithTables, setIsWithTables] = useState(IS_WITH_TABLES)
   const [deletedAssetId, setDeletedAssetId] = useState(null)
-  const [deleteAssetVertexObj, setDeleteAssetVertexObj] = useState(null)
   const [
     isWithImportExportDialog,
     setIsWithImportExportDialog,
   ] = useState(false)
   const isViewing = useSelector(getIsViewing)
+  const isUserAuthenticated = useSelector(getIsUserAuthenticated)
 
   useStickyWindow(!isViewing)
 
   useEffect(() => {
-    dispatch(refreshAssets())
-    dispatch(refreshTasks())
-    dispatch(refreshRisks())
-  }, [dispatch])
+    dispatch(refreshAuth())
+    if (isUserAuthenticated) {
+      dispatch(refreshAssets())
+      dispatch(refreshTasks())
+      dispatch(refreshRisks())
+    }
+  }, [dispatch, isUserAuthenticated])
 
-  return (
+  return !isUserAuthenticated ? <LoginPage /> : (
     <IsLayoutMobileContext.Provider value={isLayoutMobile}>
       <AssetsMap
         onAssetDelete={assetId => setDeletedAssetId(assetId)}
-        onAssetVertexDelete={deleteParams => setDeleteAssetVertexObj(deleteParams) }
       />
       <SketchButtons />
       <OptionsWindow
@@ -74,11 +78,7 @@ export default function App() {
       />
 
       {/* TODO: Review all components below */}
-      <SketchModeToolbar />
       <SketchAddToolbar
-        isWithTables={isWithTables}
-      />
-      <SketchEditToolbar
         isWithTables={isWithTables}
       />
       <ActionsWindow
@@ -103,11 +103,6 @@ export default function App() {
         deletedAssetId={deletedAssetId}
         isOpen={deletedAssetId !== null}
         onClose={() => setDeletedAssetId(null)}
-      />
-      <AssetVertexDeleteSnackbar
-        deleteAssetVertexObj={deleteAssetVertexObj}
-        isOpen={deleteAssetVertexObj !== null}
-        hideMessage={() => setDeleteAssetVertexObj(null)}
       />
       {/* TODO: Review all components above */}
 
