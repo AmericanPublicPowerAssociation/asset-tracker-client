@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
 export default function EmptyDetailsPanel() {
   const classes = useStyles()
 
-  return (<div style={{ margin: '30px' }}>
+  return (<div style={{ margin: '25px 30px 25px 30px' }}>
     <Typography
       gutterBottom
       classes={{ gutterBottom: classes.gutterBottom }}
