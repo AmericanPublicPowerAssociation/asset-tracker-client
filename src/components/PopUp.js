@@ -8,7 +8,7 @@ export default function PopUp({ state }) {
     <Paper
       className='tooltip'
       variant='outlined'
-      style={{ left: x, top: y }}
+      style={{ position: 'fixed', left: x, top: y }}
     >
       <Typography align='center' >
         {text}
