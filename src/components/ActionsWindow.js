@@ -17,6 +17,7 @@ import MenuList from '@material-ui/core/MenuList'
 import {
   getAuthUrl,
   getAuthName,
+  getAuthEmail,
 } from 'appa-auth-consumer'
 import {
   USER_NAME,
@@ -51,6 +52,16 @@ const useStyles = makeStyles(theme => ({
   popper: {
      marginTop: '-0.3em',
   },
+  emailText: {
+    paddingTop: 'none',
+    color: 'gray',
+    fontSize: '0.8125rem',
+  },
+  infoWrap: {
+    paddingBottom: theme.spacing(3),
+    paddingTop: theme.spacing(1),
+    width: '100%',
+  },
 }))
 
 export default function ActionsWindow({
@@ -65,6 +76,7 @@ export default function ActionsWindow({
   const inactiveColor = mapColors.inactive
   const authUrl = useSelector(getAuthUrl)
   const authName = useSelector(getAuthName)
+  const authEmail = useSelector(getAuthEmail)
 
   return (
     <div className={classes.root}>
@@ -103,8 +115,9 @@ export default function ActionsWindow({
             <Paper elevation={10} className={classes.paper}>
               <ClickAwayListener onClickAway={() => setIsShowUserMenu(false)}>
                 <div className={classes.subMenu}>
-                  <div style={{ paddingBottom: '12px', paddingTop: '12px' }}>
+                  <div className={classes.infoWrap}>
                     <Typography variant='h6' align='center'>{authName}</Typography>
+                    <Typography align='center' className={classes.emailText} noWrap>{authEmail}</Typography>
                   </div>
                   <div>
                     <Button variant='outlined' className={classes.signout} href={authUrl} size='small'>
