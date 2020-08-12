@@ -25,8 +25,12 @@ const useStyles = makeStyles(theme => ({
   center: {
     textAlign: 'center',
   },
+  cancel: {
+    'borderRadius': '40px',
+  },
   delete: {
-    backgroundColor: '#d22d2a',
+    'backgroundColor': '#d22d2a',
+    'borderRadius': '40px',
     '&:hover': {
       backgroundColor: '#aa2623',
     },
@@ -69,6 +73,7 @@ export default function AssetDeleteDialog({
       <DialogActions className={classes.buttons}>
         <Button
           classes={{
+            outlined: classes.cancel,
             root: classes.buttonRoot,
           }}
           size='large'
