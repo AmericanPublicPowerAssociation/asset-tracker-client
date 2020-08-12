@@ -48,6 +48,7 @@ const useStyles = makeStyles(theme => ({
     '&:hover': {
       backgroundColor: 'white',
     },
+    boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.1)',
   },
   buttonStartIcon: {
     marginRight: theme.spacing(2),
@@ -108,7 +109,7 @@ export default function LoginPage() {
           <Button
             href={authUrl}
             size='large'
-            variant='contained'
+            variant='outlined'
             startIcon={AppaLogo}
             classes={{
               root: classes.button,
