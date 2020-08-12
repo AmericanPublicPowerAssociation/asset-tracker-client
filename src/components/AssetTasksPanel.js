@@ -12,6 +12,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import TextField from '@material-ui/core/TextField'
 import OutlinedInput from '@material-ui/core/OutlinedInput'
 import InputAdornment from '@material-ui/core/InputAdornment'
+import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
@@ -54,6 +55,9 @@ import {
 } from '../selectors'
 
 const useStyles = makeStyles(theme => ({
+  adornedEnd: {
+    paddingRight: '0',
+  },
   actions: {
     display: 'flex',
     alignItems: 'center',
@@ -254,15 +258,23 @@ export default function AssetTasksPanel({
   const listTasks = (<>
     <FormGroup row style={{ paddingLeft: '10px', paddingRight: '10px', flex: '0 0 auto' }}>
       <OutlinedInput
-        classes={{ input: classes.input }}
+        classes={{ input: classes.input, adornedEnd: classes.adornedEnd }}
         fullWidth
         value={query}
         onChange={(e) => setQuery(e.target.value) }
         placeholder='Search tasks...'
-        endAdornment={
-          <InputAdornment position='end'>
-            { query === '' ? <SearchIcon /> : <CloseIcon /> }
-          </InputAdornment>
+        endAdornment={ query === '' ?
+            <InputAdornment position='end'>
+              <SearchIcon style={{ marginRight: '14px' }}/>
+            </InputAdornment>
+          :
+            <InputAdornment position='end'>
+              <IconButton
+                onClick={() => setQuery('')}
+              >
+                <CloseIcon />
+              </IconButton>
+            </InputAdornment>
         }
       />
       <div className={classes.actions}>
