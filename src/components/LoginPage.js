@@ -40,15 +40,17 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(5),
     color: '#043e74',
     backgroundColor: 'white',
-    paddingRight: theme.spacing(5),
-    paddingLeft: theme.spacing(5),
+    paddingRight: theme.spacing(4),
+    paddingLeft: theme.spacing(4.5),
+    paddingTop: theme.spacing(1.5),
+    paddingBottom: theme.spacing(1.5),
     borderRadius: '40px',
     fontSize: '1.35rem',
     fontWeight: 'bold',
-    '&:hover': {
-      backgroundColor: 'white',
-    },
-    boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16)',
+  },
+  outline: {
+    border: '1px solid rgba(112, 112, 112, 0.4)',
   },
   buttonStartIcon: {
     marginRight: theme.spacing(2),
@@ -113,7 +115,9 @@ export default function LoginPage() {
             startIcon={AppaLogo}
             classes={{
               root: classes.button,
-              startIcon: classes.buttonStartIcon }}
+              startIcon: classes.buttonStartIcon,
+              outlined: classes.outline,
+            }}
           >
             Log in with APPA
           </Button>
