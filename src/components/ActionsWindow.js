@@ -90,7 +90,7 @@ export default function ActionsWindow({
         </IconButton>
       </Tooltip>
 
-      <Tooltip title={`Preferences for ${USER_NAME}`}>
+      <Tooltip title='User Settings'>
         <IconButton
           className={activeColor}
           ref={menuButtonRef}
