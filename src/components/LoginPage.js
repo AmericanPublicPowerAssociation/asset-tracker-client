@@ -61,27 +61,27 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const companies = [
-  { name:'American Public Power Association', linkedIn: '' },
-  { name:'CrossCompute', linkedIn: '' },
+  { name:'American Public Power Association', linkedIn: 'https://www.linkedin.com/company/american-public-power-association/' },
+  { name:'CrossCompute', linkedIn: 'https://www.linkedin.com/company/crosscompute-inc/' },
   { name:'DevLabs Mexico', linkedIn: '' },
 ]
 
 const individuals = [
-  { name: 'Rodrigo Guarachi', linkedIn: '' },
-  { name: 'Polina Chernomaz', linkedIn: '' },
-  { name: 'Miguel Ángel Gordián', linkedIn: '' },
-  { name: 'Marta Moreno', linkedIn: '' },
-  { name: 'Salah Ahmed', linkedIn: '' },
-  { name: 'Roy Hyunjin Han', linkedIn: '' },
-  { name: 'Noé Domínguez Porras', linkedIn: '' },
-  { name: 'Olga Creutzburg', linkedIn: '' },
+  { name: 'Rodrigo Guarachi', linkedIn: 'https://www.linkedin.com/in/rodrigo-guarachi-95060711b/' },
+  { name: 'Polina Chernomaz', linkedIn: 'https://www.linkedin.com/in/polinac/' },
+  { name: 'Miguel Ángel Gordián', linkedIn: 'https://www.linkedin.com/in/miguelgordian/' },
+  { name: 'Marta Moreno', linkedIn: 'https://www.linkedin.com/in/marta-moreno-07364b82/' },
+  { name: 'Salah Ahmed', linkedIn: 'https://www.linkedin.com/in/salahspage/' },
+  { name: 'Roy Hyunjin Han', linkedIn: 'https://www.linkedin.com/in/invisibleroads/' },
+  { name: 'Noé Domínguez Porras', linkedIn: 'https://www.linkedin.com/in/noedominguez/' },
+  { name: 'Olga Creutzburg', linkedIn: 'https://www.linkedin.com/in/olga-creutzburg-52a689b2/' },
   { name: 'Mayra Esther Rodríguez Solano', linkedIn: '' },
   { name: 'Trevor David Rhone', linkedIn: '' },
   { name: 'Ethan Epstein', linkedIn: '' },
   { name: 'Tyler Doyle', linkedIn: '' },
   { name: 'Chris Ching', linkedIn: '' },
   { name: 'Nathan Mitchell', linkedIn: '' },
-  { name: 'Alex Hofmann', linkedIn: '' },
+  { name: 'Alex Hofmann', linkedIn: 'https://www.linkedin.com/in/alex-hofmann-4a006519/' },
 ]
 
 export default function LoginPage() {
@@ -124,7 +124,7 @@ export default function LoginPage() {
         <Typography align='center' className={classes.contributorText}>
           {
             companies.map((company, index) => (
-              <Link key={company.name} href={company.linkedIn} rel='noopener' rel='noreferrer'>
+              <Link key={company.name} href={company.linkedIn} target='_blank' rel='noopener' rel='noreferrer'>
                 { (index ? ', ' : '') + company.name }
               </Link>))
           }
@@ -132,7 +132,7 @@ export default function LoginPage() {
         <Typography align='center' className={classes.contributorText}>
           {
             individuals.map((individual, index) => (
-              <Link key={individual.name} href={individual.linkedIn} rel='noopener' rel='noreferrer'>
+              <Link key={individual.name} href={individual.linkedIn} target='_blank' rel='noopener' rel='noreferrer'>
                 { (index ? ', ' : '') + individual.name }
               </Link>))
           }
