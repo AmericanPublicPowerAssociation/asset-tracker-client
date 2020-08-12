@@ -24,9 +24,10 @@ const useStyles = makeStyles(theme => ({
   },
   avatar: {
     backgroundColor: theme.palette.secondary.main,
-    width: theme.spacing(12),
-    height: theme.spacing(12),
+    width: theme.spacing(14),
+    height: theme.spacing(14),
     margin: '0 auto',
+    marginBottom: '8px',
   },
   avatarBackground: {
     background: 'white',
@@ -39,24 +40,28 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(5),
     color: '#043e74',
     backgroundColor: 'white',
-    paddingRight: theme.spacing(5),
-    paddingLeft: theme.spacing(5),
+    paddingRight: theme.spacing(4),
+    paddingLeft: theme.spacing(4.5),
+    paddingTop: theme.spacing(1.5),
+    paddingBottom: theme.spacing(1.5),
     borderRadius: '40px',
     fontSize: '1.35rem',
     fontWeight: 'bold',
-    '&:hover': {
-      backgroundColor: 'white',
-    },
+    boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16)',
+  },
+  outline: {
+    border: '1px solid rgba(112, 112, 112, 0.4)',
   },
   buttonStartIcon: {
     marginRight: theme.spacing(2),
   },
   contributorText: {
     color: 'gray',
-    fontSize: '.5rem',
+    fontSize: '.9rem',
   },
   assetTrackerText: {
     fontWeight: 'bold',
+    fontSize: '2rem',
   },
 }))
 
@@ -106,11 +111,13 @@ export default function LoginPage() {
           <Button
             href={authUrl}
             size='large'
-            variant='contained'
+            variant='outlined'
             startIcon={AppaLogo}
             classes={{
               root: classes.button,
-              startIcon: classes.buttonStartIcon }}
+              startIcon: classes.buttonStartIcon,
+              outlined: classes.outline,
+            }}
           >
             Log in with APPA
           </Button>
