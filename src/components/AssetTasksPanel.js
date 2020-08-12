@@ -7,6 +7,7 @@
 
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import clsx from 'clsx'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import TextField from '@material-ui/core/TextField'
@@ -89,6 +90,17 @@ const useStyles = makeStyles(theme => ({
     marginBottom: '10px',
     //height: '100%',
     flex: '1 1 auto',
+  },
+  noTasks: {
+    fontWeight: 'bold',
+    fontSize: '1.3rem',
+    textAlign: 'center',
+    marginTop: '35px',
+    marginBottom: '20px',
+  },
+  sidePadding: {
+    paddingLeft: '10px',
+    paddingRight: '10px',
   },
 }))
 
@@ -311,7 +323,14 @@ export default function AssetTasksPanel({
     </FormGroup>
     <Divider style={{ marginTop: '15px' }} />
     <div className={classes.listTasks}>
-      <TasksList showDetails={handleDisplayDetails} asset={asset} tasks={filteredTasks}/>
+      { 
+        (tasks.length===0) ? 
+          <Typography disableGutter variant='h6' className={clsx(classes.noTasks, classes.sidePadding)}>
+            No tasks to show
+          </Typography> 
+        :
+          <TasksList showDetails={handleDisplayDetails} asset={asset} tasks={filteredTasks}/>
+      }
     </div>
     <Divider />
     <div style={{ flex: '0 0 auto' }}>
