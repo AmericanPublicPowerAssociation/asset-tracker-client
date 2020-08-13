@@ -82,6 +82,7 @@ export default function AssetConnectionsListItems({
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         onClick={handleClickOrFocus}
+        styling={styling}
       >
         <BusAttributesListItem
           assetId={assetId}
