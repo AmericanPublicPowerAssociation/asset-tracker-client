@@ -27,7 +27,7 @@ const SOMEWHAT_TRANSPARENT_WHITE = [255, 255, 255, 160]
 const SOMEWHAT_TRANSPARENT_MAGENTA = [255, 0, 255, 160]
 const SOMEWHAT_TRANSPARENT_CYAN = [0, 255, 255, 160]
 const SOMEWHAT_TRANSPARENT_YELLOW = [255, 255, 0, 160]
-const SOLID_RED = [255, 0, 0, 255]
+const SOLID_WHITE = [255, 255, 255]
 export const TRANSPARENT_WHITE = [255, 255, 255, 128]
 
 export const COLORS_BY_ASSET = {
@@ -42,8 +42,8 @@ export const COLORS_BY_ASSET = {
     [ASSET_TYPE_CODE_STORAGE]: TRANSPARENT_LIME_COLOR,
     [ASSET_TYPE_CODE_GENERATOR]: TRANSPARENT_AMBER_COLOR,
     [ASSET_TYPE_CODE_SUBSTATION]: TRANSPARENT_WHITE,
-    [ASSET_TYPE_CODE_STATION]: TRANSPARENT_BLUE_GREY
-  }
+    [ASSET_TYPE_CODE_STATION]: TRANSPARENT_BLUE_GREY,
+  },
 }
 export const COLORS_BY_MAP_STYLE_NAME = {
   dark: {
@@ -55,7 +55,7 @@ export const COLORS_BY_MAP_STYLE_NAME = {
     bus: TRANSPARENT_CYAN,
     busHighlight: SOMEWHAT_TRANSPARENT_CYAN,
     busSelect: SOMEWHAT_TRANSPARENT_YELLOW,
-    overlay: SOLID_RED,
+    overlay: SOLID_WHITE,
   },
   street: {
     active: 'black',
@@ -66,7 +66,7 @@ export const COLORS_BY_MAP_STYLE_NAME = {
     bus: TRANSPARENT_CYAN,
     busHighlight: SOMEWHAT_TRANSPARENT_CYAN,
     busSelect: SOMEWHAT_TRANSPARENT_YELLOW,
-    overlay: SOLID_RED,
+    overlay: SOLID_WHITE,
   },
   satellite: {
     active: 'white',
@@ -77,7 +77,7 @@ export const COLORS_BY_MAP_STYLE_NAME = {
     bus: TRANSPARENT_CYAN,
     busHighlight: SOMEWHAT_TRANSPARENT_CYAN,
     busSelect: SOMEWHAT_TRANSPARENT_YELLOW,
-    overlay: SOLID_RED,
+    overlay: SOLID_WHITE,
   },
 }
 
