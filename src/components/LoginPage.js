@@ -66,27 +66,27 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const companies = [
-  { name:'American Public Power Association', linkedIn: 'https://publicpower.org' },
-  { name:'CrossCompute', linkedIn: 'https://crosscompute.com' },
-  { name:'DevLabs Mexico', linkedIn: 'https://www.devlabs.com.mx' },
+  { name:'American Public Power Association', url: 'https://publicpower.org' },
+  { name:'CrossCompute', url: 'https://crosscompute.com' },
+  { name:'DevLabs Mexico', url: 'https://www.devlabs.com.mx' },
 ]
 
 const individuals = [
-  { name: 'Rodrigo Guarachi', linkedIn: 'https://www.linkedin.com/in/rodrigo-guarachi-95060711b/' },
-  { name: 'Polina Chernomaz', linkedIn: 'https://www.linkedin.com/in/polinac/' },
-  { name: 'Miguel Ángel Gordián', linkedIn: 'https://www.linkedin.com/in/miguelgordian/' },
-  { name: 'Marta Moreno', linkedIn: 'https://www.linkedin.com/in/marta-moreno-07364b82/' },
-  { name: 'Salah Ahmed', linkedIn: 'https://www.linkedin.com/in/salahspage/' },
-  { name: 'Roy Hyunjin Han', linkedIn: 'https://www.linkedin.com/in/invisibleroads/' },
-  { name: 'Noé Domínguez Porras', linkedIn: 'https://www.linkedin.com/in/noedominguez/' },
-  { name: 'Olga Creutzburg', linkedIn: 'https://www.linkedin.com/in/olga-creutzburg-52a689b2/' },
-  { name: 'Mayra Esther Rodríguez Solano', linkedIn: '' },
-  { name: 'Trevor David Rhone', linkedIn: '' },
-  { name: 'Ethan Epstein', linkedIn: '' },
-  { name: 'Tyler Doyle', linkedIn: '' },
-  { name: 'Chris Ching', linkedIn: '' },
-  { name: 'Nathan Mitchell', linkedIn: '' },
-  { name: 'Alex Hofmann', linkedIn: 'https://www.linkedin.com/in/alex-hofmann-4a006519/' },
+  { name: 'Rodrigo Guarachi', url: 'https://www.linkedin.com/in/rodrigo-guarachi-95060711b/' },
+  { name: 'Polina Chernomaz', url: 'https://www.linkedin.com/in/polinac/' },
+  { name: 'Miguel Ángel Gordián', url: 'https://www.linkedin.com/in/miguelgordian/' },
+  { name: 'Marta Moreno', url: 'https://www.linkedin.com/in/marta-moreno-07364b82/' },
+  { name: 'Salah Ahmed', url: 'https://www.linkedin.com/in/salahspage/' },
+  { name: 'Roy Hyunjin Han', url: 'https://www.linkedin.com/in/invisibleroads/' },
+  { name: 'Noé Domínguez Porras', url: 'https://www.linkedin.com/in/noedominguez/' },
+  { name: 'Olga Creutzburg', url: 'https://www.linkedin.com/in/olga-creutzburg-52a689b2/' },
+  { name: 'Mayra Esther Rodríguez Solano', url: '' },
+  { name: 'Trevor David Rhone', url: '' },
+  { name: 'Ethan Epstein', url: '' },
+  { name: 'Tyler Doyle', url: '' },
+  { name: 'Chris Ching', url: '' },
+  { name: 'Nathan Mitchell', url: '' },
+  { name: 'Alex Hofmann', url: 'https://www.linkedin.com/in/alex-hofmann-4a006519/' },
 ]
 
 export default function LoginPage() {
@@ -131,17 +131,23 @@ export default function LoginPage() {
         <Typography align='center' className={classes.contributorText}>
           {
             companies.map((company, index) => (
-              <Link key={company.name} href={company.linkedIn} target='_blank' rel='noopener' rel='noreferrer'>
-                { (index ? ', ' : '') + company.name }
-              </Link>))
+              <React.Fragment key={company.name}>
+                  <span>{index ? ', ' : ''}</span>
+                  <Link href={company.url} target='_blank' rel='noopener' rel='noreferrer'>
+                    { company.name }
+                  </Link>
+              </React.Fragment>))
           }
         </Typography>
         <Typography align='center' className={classes.contributorText}>
           {
             individuals.map((individual, index) => (
-              <Link key={individual.name} href={individual.linkedIn} target='_blank' rel='noopener' rel='noreferrer'>
-                { (index ? ', ' : '') + individual.name }
-              </Link>))
+              <React.Fragment key={individual.name}>
+                <span>{index ? ', ' : ''}</span>
+                <Link href={individual.url} target='_blank' rel='noopener' rel='noreferrer'>
+                  { individual.name }
+                </Link>
+              </React.Fragment>))
           }
         </Typography>
         </div>
