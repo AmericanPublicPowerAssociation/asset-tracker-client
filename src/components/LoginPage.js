@@ -66,9 +66,9 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const companies = [
-  { name:'American Public Power Association', linkedIn: 'https://www.linkedin.com/company/american-public-power-association/' },
-  { name:'CrossCompute', linkedIn: 'https://www.linkedin.com/company/crosscompute-inc/' },
-  { name:'DevLabs Mexico', linkedIn: '' },
+  { name:'American Public Power Association', linkedIn: 'https://publicpower.org' },
+  { name:'CrossCompute', linkedIn: 'https://crosscompute.com' },
+  { name:'DevLabs Mexico', linkedIn: 'https://www.devlabs.com.mx' },
 ]
 
 const individuals = [
