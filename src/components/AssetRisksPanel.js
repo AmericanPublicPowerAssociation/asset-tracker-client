@@ -76,7 +76,7 @@ export default function AssetRisksPanel({
 
         {
           (!isLayoutMobile && risks.length === 0) ?
-            <Typography disableGutter variant='h6' className={clsx(classes.noRisks, classes.sidePadding)}>
+            <Typography variant='h6' className={clsx(classes.noRisks, classes.sidePadding)}>
               No risks to show
             </Typography>
           :
