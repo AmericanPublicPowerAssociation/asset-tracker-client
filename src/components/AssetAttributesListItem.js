@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import CollapsibleListItem from './CollapsibleListItem'
@@ -12,6 +13,17 @@ import {
 import {
   getAssetTypeByCode,
 } from '../selectors'
+
+const theme = createMuiTheme({
+  overrides: {
+    MuiListItem: {
+      root: {
+        paddingLeft: '10px',
+        paddingRight: '10px',
+      },
+    },
+  },
+})
 
 export default function AssetAttributesListItem({ asset, isEditing, styling }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -30,20 +42,21 @@ export default function AssetAttributesListItem({ asset, isEditing, styling }) {
   }
 
   return attributeKeyTypes.length > 0 ?
-    <CollapsibleListItem
-      title={assetTypeName}
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
-      styling={styling}
-    >
-      <AttributeFields
-        assetId={assetId}
-        assetTypeCode={assetTypeCode}
-        attributeKeyTypes={attributeKeyTypes}
-        attributeValueByKey={attributeValueByKey}
-        isEditing={isEditing}
-      />
-    </CollapsibleListItem> :
+    <ThemeProvider theme={theme}>
+      <CollapsibleListItem
+        title={assetTypeName}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      >
+        <AttributeFields
+          assetId={assetId}
+          assetTypeCode={assetTypeCode}
+          attributeKeyTypes={attributeKeyTypes}
+          attributeValueByKey={attributeValueByKey}
+          isEditing={isEditing}
+        />
+      </CollapsibleListItem>
+    </ThemeProvider> :
     <ListItem disableGutters component='div' className={styling}>
       <ListItemText primary={assetTypeName} />
     </ListItem>
