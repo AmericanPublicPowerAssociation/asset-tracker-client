@@ -1,13 +1,22 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import { useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import Link from '@material-ui/core/Link'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
 import Typography from '@material-ui/core/Typography'
 import {
   getAuthUrl,
 } from 'appa-auth-consumer'
+import {
+  IsLayoutMobileContext,
+} from '../contexts'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -63,6 +72,16 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 'bold',
     fontSize: '2rem',
   },
+  dialogTitle: {
+    paddingRight: theme.spacing(3),
+    paddingLeft: theme.spacing(3),
+  },
+  list: {
+    '& li': {
+      paddingLeft: 0,
+      paddingRight: 0,
+    },
+  }, 
 }))
 
 const companies = [
@@ -94,6 +113,9 @@ export default function LoginPage() {
   const AppaLogo = (
     <img className={classes.appaLogo} src={`${process.env.PUBLIC_URL}/appa.svg`} />)
   const authUrl = useSelector(getAuthUrl) 
+  const isLayoutMobile = useContext(IsLayoutMobileContext)
+  const [isAcknowledgementOpen, setIsAcknowledgementOpen] = useState(false)
+  console.log('aaaaaa', isLayoutMobile)
 
   return (
     <div className={classes.root}>
@@ -123,35 +145,80 @@ export default function LoginPage() {
           </Button>
         </div>
       </div>
-      <div style={{ position: 'fixed', bottom: 0, width: '100%' }}>
-        <div style={{ width: '70%', margin: '0 auto' }}>
-        <Typography align='center' className={classes.contributorText}>
-          {'This application is brought to you by: '}
-        </Typography>
-        <Typography align='center' className={classes.contributorText}>
-          {
-            companies.map((company, index) => (
-              <React.Fragment key={company.name}>
+      { !isLayoutMobile &&
+        <div style={{ position: 'fixed', bottom: 0, width: '100%' }}>
+          <div style={{ width: '70%', margin: '0 auto' }}>
+          <Typography align='center' className={classes.contributorText}>
+            {'This application is brought to you by: '}
+          </Typography>
+          <Typography align='center' className={classes.contributorText}>
+            {
+              companies.map((company, index) => (
+                <React.Fragment key={company.name}>
                   <span>{index ? ', ' : ''}</span>
                   <Link href={company.url} target='_blank' rel='noopener' rel='noreferrer'>
                     { company.name }
                   </Link>
-              </React.Fragment>))
-          }
-        </Typography>
-        <Typography align='center' className={classes.contributorText}>
-          {
-            individuals.map((individual, index) => (
-              <React.Fragment key={individual.name}>
-                <span>{index ? ', ' : ''}</span>
-                <Link href={individual.url} target='_blank' rel='noopener' rel='noreferrer'>
-                  { individual.name }
-                </Link>
-              </React.Fragment>))
-          }
-        </Typography>
+                </React.Fragment>))
+            }
+          </Typography>
+          <Typography align='center' className={classes.contributorText}>
+            {
+              individuals.map((individual, index) => (
+                <React.Fragment key={individual.name}>
+                  <span>{index ? ', ' : ''}</span>
+                  <Link href={individual.url} target='_blank' rel='noopener' rel='noreferrer'>
+                    { individual.name }
+                  </Link>
+                </React.Fragment>))
+            }
+          </Typography>
+          </div>
         </div>
-      </div>
+      }
+      {
+        isLayoutMobile && (
+          <>
+            <div style={{ position: 'fixed', bottom: 0, width: '100%' }}>
+              <div style={{ width: '70%', margin: '0 auto' }}>
+                <Button fullWidth onClick={() => setIsAcknowledgementOpen(true)}>Acknowledgements</Button>
+              </div>
+            </div>
+            <Dialog
+              fullScreen
+              maxWidth='sm'
+              open={isAcknowledgementOpen}
+              onClose={() => setIsAcknowledgementOpen(false)}
+              aria-labelledby='max-width-dialog-title'
+            >
+              <DialogTitle id='max-width-dialog-title' className={classes.dialogTitle}>Acknowledgements</DialogTitle>
+              <DialogContent>
+                <List className={classes.list}>
+                  {companies.map(company => (
+                    <ListItem key={company.name}>
+                      <Link href={company.url} target='_blank' rel='noopener' rel='noreferrer'>
+                      {company.name}
+                      </Link>
+                    </ListItem>
+                  ))}
+                  {individuals.map(individual => (
+                    <ListItem key={individual.name}>
+                      <Link href={individual.url} target='_blank' rel='noopener' rel='noreferrer'>
+                        {individual.name}
+                      </Link>
+                    </ListItem>
+                  ))}
+                </List>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setIsAcknowledgementOpen(false)} color='primary'>
+                  Close
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </>
+        )
+      }
     </div>
   )
 }
