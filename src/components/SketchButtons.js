@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
-import SaveIcon from '@material-ui/icons/Save'
-import CloseIcon from '@material-ui/icons/Close'
+// import SaveIcon from '@material-ui/icons/Save'
+// import CloseIcon from '@material-ui/icons/Close'
 import {
   refreshRisks,
 } from 'asset-report-risks'
@@ -18,7 +18,7 @@ import {
 } from '../actions'
 import {
   OVERLAY_MODE_ASSETS,
-  SKETCH_MODE_ADD,
+  SKETCH_MODE_EDIT,
   SKETCH_MODE_VIEW,
 } from '../constants'
 import {
@@ -69,7 +69,7 @@ export default function SketchButtons() {
     if (!isViewing) {
       dispatch(saveAssets())
     }
-    dispatch(setSketchMode(isViewing ? SKETCH_MODE_ADD : SKETCH_MODE_VIEW))
+    dispatch(setSketchMode(isViewing ? SKETCH_MODE_EDIT : SKETCH_MODE_VIEW))
   }
 
   function handleCancel() {

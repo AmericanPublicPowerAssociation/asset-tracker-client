@@ -55,7 +55,11 @@ export const getMapWebMercatorViewPort = createSelector([
 ], (
   mapViewState,
 ) => {
-  return new WebMercatorViewport(mapViewState)
+  return new WebMercatorViewport({
+    ...mapViewState,
+    width: window.innerWidth,
+    height: window.innerHeight,
+  })
 })
 
 export const getIsViewing = createSelector([

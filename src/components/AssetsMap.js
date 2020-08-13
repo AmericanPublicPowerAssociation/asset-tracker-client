@@ -29,7 +29,7 @@ export default function AssetsMap({
   const popUpDeleteMidpointState = useSelector(getPopUpDeleteMidpointState)
   const overlayMapLayers = useSelector(getOverlayMapLayers)
   const { handleMapMove } = useMovableMap()
-  const { mapLayers, handleMapKey } = useEditableMap(deckGL, {
+  const { mapLayers, handleMapKey, handleDeckClick } = useEditableMap(deckGL, {
     onAssetDelete,
 	})
   mapLayers.push(...overlayMapLayers)
@@ -43,6 +43,7 @@ export default function AssetsMap({
         controller={MAP_CONTROLLER_OPTIONS}
         viewState={mapViewState}
         onViewStateChange={handleMapMove}
+        onClick={handleDeckClick}
       >
         <StaticMap
           mapStyle={mapStyle}

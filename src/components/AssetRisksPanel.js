@@ -2,6 +2,7 @@
 
 import React, { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import Link from '@material-ui/core/Link'
 import List from '@material-ui/core/List'
@@ -26,11 +27,27 @@ import {
   getAssetTypeByCode,
 } from '../selectors'
 
+const useStyles = makeStyles(theme => ({
+  noRisks: {
+    fontWeight: 'bold',
+    fontSize: '1.3rem',
+    textAlign: 'center',
+    marginTop: '20px',
+    marginBottom: '20px',
+  },
+  sidePadding: {
+    paddingLeft: '10px',
+    paddingRight: '10px',
+    paddingBottom: '10px',
+  },
+}))
+
 export default function AssetRisksPanel({
   asset,
   isDetailsWindowExpanded,
   setIsDetailsWindowExpanded,
 }) {
+  const classes = useStyles()
   const dispatch = useDispatch()
   const assetId = asset.id
   const assetTypeCode = asset.typeCode
@@ -45,7 +62,7 @@ export default function AssetRisksPanel({
   return (
     <>
       <List component='div' disablePadding>
-        <ListItem component='div' disableGutters>
+        <ListItem component='div' disableGutters style={{ flex: '0 0 auto', padding: '10px' }}>
           <Tooltip title={assetTypeName} placement='left'>
             <ListItemIcon>
               <AssetTypeSvgIcon assetTypeCode={assetTypeCode} />
@@ -59,9 +76,9 @@ export default function AssetRisksPanel({
 
         {
           (!isLayoutMobile && risks.length === 0) ?
-            <Typography variant='h5' component='h2'>
+            <Typography disableGutter variant='h6' className={clsx(classes.noRisks, classes.sidePadding)}>
               No risks to show
-              </Typography>
+            </Typography>
           :
           risks.map((risk, riskIndex) => {
             const meterCount = risk.meterCount
