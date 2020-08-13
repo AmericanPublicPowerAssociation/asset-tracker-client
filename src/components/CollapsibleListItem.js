@@ -42,7 +42,7 @@ export default function CollapsibleListItem({
 
       <Collapse in={isOpen} classes={{ entered:  entered }} className= {clsx({
           highlighted: isHighlighted,
-        })}
+        }, styling)}
       >
         {children}
       </Collapse >
