@@ -57,6 +57,7 @@ import {
   getAssetIdsByBusId,
   getAssetTypeByCode,
   getAssetsGeoJson,
+  getAssetsIconLayer,
   getBestAssetIdByBusId,
   getBusesGeoJson,
   getMapColors,
@@ -83,6 +84,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   const mapColors = useSelector(getMapColors)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
   const busesGeoJson = useSelector(getBusesGeoJson)
+  const assetsIconLayer = useSelector(getAssetsIconLayer)
   const selectedAssetId = useSelector(getSelectedAssetId)
   const selectedAssetIndexes = useSelector(getSelectedAssetIndexes)
   const selectedBusId = useSelector(getSelectedBusId)
@@ -192,7 +194,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         return 'marker'
       } ,
 */
-      data: assetsGeoJson.features.filter(obj => obj.properties.typeCode !== 'l'),
+      data: assetsIconLayer,
       iconAtlas: '/tileset.png',
       iconMapping: ICON_MAPPING,
       sizeScale: 1,
