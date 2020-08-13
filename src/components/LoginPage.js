@@ -131,23 +131,23 @@ export default function LoginPage() {
         <Typography align='center' className={classes.contributorText}>
           {
             companies.map((company, index) => (
-              <>
+              <React.Fragment key={company.name}>
                   <span>{index ? ', ' : ''}</span>
-                  <Link key={company.name} href={company.url} target='_blank' rel='noopener' rel='noreferrer'>
+                  <Link href={company.url} target='_blank' rel='noopener' rel='noreferrer'>
                     { company.name }
                   </Link>
-              </>))
+              </React.Fragment>))
           }
         </Typography>
         <Typography align='center' className={classes.contributorText}>
           {
             individuals.map((individual, index) => (
-              <>
+              <React.Fragment key={individual.name}>
                 <span>{index ? ', ' : ''}</span>
-                <Link key={individual.name} href={individual.url} target='_blank' rel='noopener' rel='noreferrer'>
+                <Link href={individual.url} target='_blank' rel='noopener' rel='noreferrer'>
                   { individual.name }
                 </Link>
-              </>))
+              </React.Fragment>))
           }
         </Typography>
         </div>
