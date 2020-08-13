@@ -324,7 +324,7 @@ export default function AssetTasksPanel({
     <div className={classes.listTasks}>
       { 
         (tasks.length===0) ? 
-          <Typography disableGutter variant='h6' className={clsx(classes.noTasks, classes.sidePadding)}>
+          <Typography variant='h6' className={clsx(classes.noTasks, classes.sidePadding)}>
             No tasks to show
           </Typography> 
         :

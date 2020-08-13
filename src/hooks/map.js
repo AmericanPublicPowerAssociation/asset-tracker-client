@@ -34,6 +34,7 @@ import {
   BUS_RADIUS_IN_METERS,
   COLORS_BY_ASSET,
   ICONS_MAP_LAYER_ID,
+  OVERLAY_MODE_ASSETS,
   SKETCH_MODE_ADD_ASSET,
   SKETCH_MODE_ADD_LINE,
   SKETCH_MODE_EDIT,
@@ -61,6 +62,7 @@ import {
   getBestAssetIdByBusId,
   getBusesGeoJson,
   getMapColors,
+  getOverlayMode,
   getSelectedAssetId,
   getSelectedAssetIndexes,
   getSelectedBusId,
@@ -93,11 +95,13 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   const assetIdsByBusId = useSelector(getAssetIdsByBusId)
   const assetById = useSelector(getAssetById)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
+  const overlayMode = useSelector(getOverlayMode)
   const assetTypeCode = getAssetTypeCode(sketchMode)
   const assetFeatures = assetsGeoJson.features
   const busFeatures = busesGeoJson.features
   const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
   const mapWebMercatorViewPort = useSelector(getMapWebMercatorViewPort)
+  const isShowAssetIcons = (overlayMode === OVERLAY_MODE_ASSETS )
   let temporaryAsset = useSelector(getTemporaryAsset)
 
   function getAssetsMapLayer() {
@@ -194,7 +198,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         return 'marker'
       } ,
 */
-      data: assetsIconLayer,
+      data: isShowAssetIcons ? assetsIconLayer : [],
       iconAtlas: '/tileset.png',
       iconMapping: ICON_MAPPING,
       sizeScale: 1,
