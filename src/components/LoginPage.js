@@ -115,7 +115,6 @@ export default function LoginPage() {
   const authUrl = useSelector(getAuthUrl) 
   const isLayoutMobile = useContext(IsLayoutMobileContext)
   const [isAcknowledgementOpen, setIsAcknowledgementOpen] = useState(false)
-  console.log('aaaaaa', isLayoutMobile)
 
   return (
     <div className={classes.root}>
