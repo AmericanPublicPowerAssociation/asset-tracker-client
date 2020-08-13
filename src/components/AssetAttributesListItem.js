@@ -19,7 +19,7 @@ const theme = createMuiTheme({
     MuiListItem: {
       root: {
         paddingLeft: '10px',
-        paddingLeft: '10px',
+        paddingRight: '10px',
       },
     },
   },
