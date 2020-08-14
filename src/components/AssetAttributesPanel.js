@@ -26,8 +26,13 @@ import {
   setAssetValue,
 } from '../actions'
 import {
+  SKETCH_MODE_ADD,
+  SKETCH_MODE_EDIT, 
+} from '../constants'
+import {
   getIsViewing,
   getAssetTypeByCode,
+  getSketchMode,
 } from '../selectors'
 
 const useStyles = makeStyles(theme => ({
@@ -54,6 +59,7 @@ export default function AssetAttributesPanel({
   const isViewing = useSelector(getIsViewing)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const utilities = useSelector(getAuthUtilities)
+  const sketchMode = useSelector(getSketchMode)
 
   const assetId = asset.id
   const assetTypeCode = asset.typeCode
@@ -123,16 +129,17 @@ export default function AssetAttributesPanel({
       </FormControl>
 
       {/* <Divider style={{ marginTop: '10px' }} /> */}
-
-      <div style={{ flex: '0 0 auto' }}>
-        <Button
-          className={classes.bottomAction}
-          onClick={() => setDeletedAssetId(asset.id)}
-        >
-          Delete asset
-        </Button>
-      </div>
-
+      {
+        (sketchMode.includes(SKETCH_MODE_EDIT) || sketchMode.includes(SKETCH_MODE_ADD)) &&
+        <div style={{ flex: '0 0 auto' }}>
+          <Button
+            className={classes.bottomAction}
+            onClick={() => setDeletedAssetId(asset.id)}
+          >
+            Delete asset
+          </Button>
+        </div>
+      }
       <AssetDeleteDialog
         deletedAssetId={deletedAssetId}
         isOpen={deletedAssetId !== null}
