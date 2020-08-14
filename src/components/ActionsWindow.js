@@ -61,6 +61,7 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(1),
     width: '100%',
+    overflowWrap: 'anywhere',
   },
 }))
 
