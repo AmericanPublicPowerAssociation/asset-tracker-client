@@ -88,8 +88,8 @@ const individuals = [
   { name: 'Trevor David Rhone', url: 'https://www.linkedin.com/in/trevor-david-rhone-965ba9b' },
   { name: 'Elaine Chan', url: 'https://www.linkedin.com/in/chanelaine' },
   { name: 'Ethan Epstein', url: 'https://www.linkedin.com/in/ethan-epstein-80772093' },
-  { name: 'Tyler Doyle', url: 'https://www.linkedin.com/in/tyler-doyle-987642111' },
   { name: 'Chris Ching', url: 'https://www.linkedin.com/in/chingchristopher' },
+  { name: 'Tyler Doyle', url: 'https://www.linkedin.com/in/tyler-doyle-987642111' },
   { name: 'Nathan Mitchell', url: 'https://www.linkedin.com/in/nathan-mitchell-p-e-58872a4/' },
   { name: 'Alex Hofmann', url: 'https://www.linkedin.com/in/alex-hofmann-4a006519' },
 ]
