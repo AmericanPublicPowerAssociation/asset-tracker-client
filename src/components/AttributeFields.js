@@ -22,9 +22,6 @@ import InputLabel from '@material-ui/core/InputLabel'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme =>  ({
-  fullSelect:  {
-    width: '100%',
-  },
   fixLabelPosition: {
     'textTransform': 'capitalize',
   },
@@ -132,14 +129,13 @@ function AttributeField(props) {
       InputLabelProps={{ classes: { root: 'capitalized' } }}
     />
   } else if (Array.isArray(attributeType) ) {
-    return <FormControl variant='filled' className={classes.fullSelect}>
+    return <FormControl variant='filled' fullWidth>
       <InputLabel id={`${attributeKey}-${assetId}`} className={classes.fixLabelPosition}>
         {getAttributeLabel(attributeKey)}
       </InputLabel>
       <Select
         fullWidth
         variant='filled'
-        key={attributeKey}
         labelId={`${attributeKey}-${assetId}`}
         label={getAttributeLabel(attributeKey)}
         value={attributeValueByKey[attributeKey] || ''}
@@ -147,9 +143,12 @@ function AttributeField(props) {
         onChange={e => trackChange(attributeKey, e.target.value)}
         onFocus={handleOnFocus}
       >
-      {attributeType.map((option, i) => {
-        return <MenuItem key={`${attributeKey}-${i}`} value={option}>{option}</MenuItem>
-      })}
+      {attributeType.map((option, index) => (
+        <MenuItem
+          key={`${attributeKey}-${index}`}
+          value={option}>{option}
+        </MenuItem>
+      ))}
       </Select>
     </FormControl>
   }  else {

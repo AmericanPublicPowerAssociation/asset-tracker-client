@@ -5,6 +5,9 @@ import getNearestPointOnLine from '@turf/nearest-point-on-line'
 import { EditableGeoJsonLayer } from '@nebula.gl/layers'
 import { ViewMode } from '@nebula.gl/edit-modes'
 import {
+  getAuthUtilities,
+} from 'appa-auth-consumer'
+import {
   deleteAssetConnection,
   fillAssetName,
   insertAssetVertex,
@@ -101,6 +104,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   const assetById = useSelector(getAssetById)
   const assetTypeByCode = useSelector(getAssetTypeByCode)
   const overlayMode = useSelector(getOverlayMode)
+  const utilities = useSelector(getAuthUtilities)
   const assetTypeCode = getAssetTypeCode(sketchMode)
   const assetFeatures = assetsGeoJson.features
   const busFeatures = busesGeoJson.features
@@ -108,6 +112,8 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   const mapWebMercatorViewPort = useSelector(getMapWebMercatorViewPort)
   const isShowAssetIcons = (overlayMode === OVERLAY_MODE_ASSETS )
   const isEditing = sketchMode.startsWith(SKETCH_MODE_EDIT)
+  const utility = utilities[0]
+  const utilityId = utility.id
   let temporaryAsset = useSelector(getTemporaryAsset)
   let iconLayerData = []
   if (isEditing) {
@@ -312,13 +318,13 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
     const { editType, editContext } = event
     let { updatedData } = event
     let triggerSetAssetsGeoJsonLast = true
-    console.log('sketch mode: ', sketchMode, ', asset edit', editType, editContext, updatedData)
+    console.log('sketch mode:', sketchMode, ', asset edit:', editType, editContext, updatedData)
     switch (editType) {
       case 'addFeature': {
         // Add a feature in draw mode
         const { feature, featureIndex } = getFeatureInfo(event)
         if (!temporaryAsset) {
-          temporaryAsset = makeTemporaryAsset(assetTypeCode)
+          temporaryAsset = makeTemporaryAsset(utilityId, assetTypeCode)
         } else if (isAddingLine) {
           console.log('add ending vertex')
           console.log('sketch mode: ', sketchMode)
@@ -364,7 +370,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       case 'addTentativePosition': {
         // Add a vertex in DrawLineStringMode or DrawPolygonMode
         if (!temporaryAsset) {
-          temporaryAsset = makeTemporaryAsset(assetTypeCode)
+          temporaryAsset = makeTemporaryAsset(utilityId, assetTypeCode)
         }
         console.log('temporal asset', temporaryAsset)
         if (isAddingLine) {

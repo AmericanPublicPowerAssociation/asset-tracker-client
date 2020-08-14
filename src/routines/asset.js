@@ -51,11 +51,12 @@ export function makeAssetId() {
   return getRandomId(MINIMUM_ASSET_ID_LENGTH)
 }
 
-export function makeTemporaryAsset(assetTypeCode) {
+export function makeTemporaryAsset(utilityId, assetTypeCode) {
   const assetId = makeAssetId()
   const connectionByIndex = {}
   const asset = {
     id: assetId,
+    utilityId,
     typeCode: assetTypeCode,
     name: assetId,
     connections: connectionByIndex,
