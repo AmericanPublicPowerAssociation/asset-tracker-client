@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
@@ -115,7 +114,6 @@ const individuals = [
 
 export default function LoginPage() {
   const classes = useStyles()
-  const isLayoutMobile = useMediaQuery('(max-width:599px)')
   const AppaLogo = <img 
     className={classes.appaLogo} 
     src={`${process.env.PUBLIC_URL}/appa.svg`} 
