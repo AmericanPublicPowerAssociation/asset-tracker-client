@@ -63,9 +63,11 @@ export default function App() {
 
   useEffect(() => {
     dispatch(refreshAuth())
+    if (isUserAuthenticated) {
       dispatch(refreshAssets())
       dispatch(refreshTasks())
       dispatch(refreshRisks())
+    }
   }, [dispatch, isUserAuthenticated])
 
   return (<IsLayoutMobileContext.Provider value={isLayoutMobile}>
