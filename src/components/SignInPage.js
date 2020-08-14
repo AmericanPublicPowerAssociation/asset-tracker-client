@@ -86,9 +86,10 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const companies = [
-  { name:'American Public Power Association', url: 'https://publicpower.org' },
-  { name:'CrossCompute', url: 'https://crosscompute.com' },
-  { name:'DevLabs Mexico', url: 'https://www.devlabs.com.mx' },
+  { name: 'U.S. Department of Energy', url: 'https://www.energy.gov' },
+  { name: 'American Public Power Association', url: 'https://publicpower.org' },
+  { name: 'CrossCompute', url: 'https://crosscompute.com' },
+  { name: 'DevLabs Mexico', url: 'https://www.devlabs.com.mx' },
 ]
 
 const individuals = [
@@ -117,6 +118,7 @@ export default function LoginPage() {
   const AppaLogo = <img 
     className={classes.appaLogo} 
     src={`${process.env.PUBLIC_URL}/appa.svg`} 
+    alt='logo'
   />
   const authUrl = useSelector(getAuthUrl) 
   const isLayoutMobile = useContext(IsLayoutMobileContext)
@@ -162,7 +164,7 @@ export default function LoginPage() {
         <div style={{ position: 'fixed', bottom: 0, width: '100%' }}>
           <div style={{ width: '70%', margin: '0 auto' }}>
           <Typography align='center' className={classes.contributorText}>
-            {'This application is brought to you by: '}
+            {'This application is brought to you by'}
           </Typography>
           <Typography align='center' className={classes.contributorText}>
             {
@@ -181,7 +183,7 @@ export default function LoginPage() {
               individuals.map((individual, index) => (
                 <React.Fragment key={individual.name}>
                   <span>{index ? ', ' : ''}</span>
-                  <Link href={individual.url} target='_blank' rel='noopener' rel='noreferrer'>
+                  <Link href={individual.url} target='_blank' rel='noopener noreferrer'>
                     { individual.name }
                   </Link>
                 </React.Fragment>))
@@ -210,14 +212,14 @@ export default function LoginPage() {
                 <List className={classes.list}>
                   {companies.map(company => (
                     <ListItem key={company.name}>
-                      <Link href={company.url} target='_blank' rel='noopener' rel='noreferrer'>
+                      <Link href={company.url} target='_blank' rel='noopener noreferrer'>
                       {company.name}
                       </Link>
                     </ListItem>
                   ))}
                   {individuals.map(individual => (
                     <ListItem key={individual.name}>
-                      <Link href={individual.url} target='_blank' rel='noopener' rel='noreferrer'>
+                      <Link href={individual.url} target='_blank' rel='noopener noreferrer'>
                         {individual.name}
                       </Link>
                     </ListItem>
