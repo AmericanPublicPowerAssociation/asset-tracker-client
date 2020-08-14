@@ -125,7 +125,7 @@ export default function LoginPage() {
               outlined: classes.outline,
             }}
           >
-            Log in with APPA
+            Sign In with APPA
           </Button>
         </div>
       </div>
