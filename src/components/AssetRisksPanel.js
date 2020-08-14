@@ -86,6 +86,7 @@ export default function AssetRisksPanel({
 
             return (
               <Card
+                key={riskIndex}
                 className={clsx({ highlighted: isHighlighted })}
                 onClick={() => dispatch(setSelectedRiskIndex(risk.vulnerabilityUri))}
               >

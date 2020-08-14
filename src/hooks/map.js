@@ -110,7 +110,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   const busFeatures = busesGeoJson.features
   const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
   const mapWebMercatorViewPort = useSelector(getMapWebMercatorViewPort)
-  const isShowAssetIcons = (overlayMode === OVERLAY_MODE_ASSETS )
+  const isShowAssetIcons = overlayMode === OVERLAY_MODE_ASSETS
   const isEditing = sketchMode.startsWith(SKETCH_MODE_EDIT)
   const utility = utilities[0]
   const utilityId = utility.id

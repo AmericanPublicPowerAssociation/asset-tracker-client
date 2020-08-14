@@ -28,6 +28,7 @@ const SOMEWHAT_TRANSPARENT_MAGENTA = [255, 0, 255, 160]
 const SOMEWHAT_TRANSPARENT_CYAN = [0, 255, 255, 160]
 const SOMEWHAT_TRANSPARENT_YELLOW = [255, 255, 0, 160]
 const SOLID_WHITE = [255, 255, 255]
+const SOLID_RED = [255, 0, 0]
 export const TRANSPARENT_WHITE = [255, 255, 255, 128]
 
 export const COLORS_BY_ASSET = {
@@ -56,6 +57,7 @@ export const COLORS_BY_MAP_STYLE_NAME = {
     busHighlight: SOMEWHAT_TRANSPARENT_CYAN,
     busSelect: SOMEWHAT_TRANSPARENT_YELLOW,
     overlay: SOLID_WHITE,
+    risk: SOLID_RED,
   },
   street: {
     active: 'black',
@@ -67,6 +69,7 @@ export const COLORS_BY_MAP_STYLE_NAME = {
     busHighlight: SOMEWHAT_TRANSPARENT_CYAN,
     busSelect: SOMEWHAT_TRANSPARENT_YELLOW,
     overlay: SOLID_WHITE,
+    risk: SOLID_RED,
   },
   satellite: {
     active: 'white',
@@ -78,6 +81,7 @@ export const COLORS_BY_MAP_STYLE_NAME = {
     busHighlight: SOMEWHAT_TRANSPARENT_CYAN,
     busSelect: SOMEWHAT_TRANSPARENT_YELLOW,
     overlay: SOLID_WHITE,
+    risk: SOLID_RED,
   },
 }
 

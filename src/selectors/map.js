@@ -142,7 +142,8 @@ export const getOverlayMapLayers = createSelector([
         mapLayers.push(new GeoJsonLayer({
           data: downstreamLineGeoJson,
           pickable: false,
-          getLineColor: mapColors.overlay,
+          getLineColor: mapColors.risk,
+          getLineWidth: 5,
         }))
       }
       mapLayers.push(getTextLayerFromValueByAssetId(
