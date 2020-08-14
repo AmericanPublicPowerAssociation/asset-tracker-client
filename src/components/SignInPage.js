@@ -72,27 +72,33 @@ const companies = [
 ]
 
 const individuals = [
-  { name: 'Rodrigo Guarachi', url: 'https://www.linkedin.com/in/rodrigo-guarachi-95060711b/' },
-  { name: 'Polina Chernomaz', url: 'https://www.linkedin.com/in/polinac/' },
-  { name: 'Miguel Ángel Gordián', url: 'https://www.linkedin.com/in/miguelgordian/' },
-  { name: 'Marta Moreno', url: 'https://www.linkedin.com/in/marta-moreno-07364b82/' },
-  { name: 'Salah Ahmed', url: 'https://www.linkedin.com/in/salahspage/' },
-  { name: 'Roy Hyunjin Han', url: 'https://www.linkedin.com/in/invisibleroads/' },
-  { name: 'Noé Domínguez Porras', url: 'https://www.linkedin.com/in/noedominguez/' },
-  { name: 'Olga Creutzburg', url: 'https://www.linkedin.com/in/olga-creutzburg-52a689b2/' },
-  { name: 'Mayra Esther Rodríguez Solano', url: '' },
-  { name: 'Trevor David Rhone', url: '' },
-  { name: 'Ethan Epstein', url: '' },
-  { name: 'Tyler Doyle', url: '' },
-  { name: 'Chris Ching', url: '' },
-  { name: 'Nathan Mitchell', url: '' },
-  { name: 'Alex Hofmann', url: 'https://www.linkedin.com/in/alex-hofmann-4a006519/' },
+  { name: 'Rodrigo Guarachi', url: 'https://www.linkedin.com/in/rodrigo-guarachi-95060711b' },
+  { name: 'Polina Chernomaz', url: 'https://www.linkedin.com/in/polinac' },
+  { name: 'Miguel Ángel Gordián', url: 'https://www.linkedin.com/in/miguelgordian' },
+  { name: 'Marta Moreno', url: 'https://www.linkedin.com/in/marta-moreno-07364b82' },
+  { name: 'Salah Ahmed', url: 'https://www.linkedin.com/in/salahspage' },
+  { name: 'Roy Hyunjin Han', url: 'https://www.linkedin.com/in/invisibleroads' },
+  { name: 'Olga Creutzburg', url: 'https://www.linkedin.com/in/olga-creutzburg-52a689b2' },
+  { name: 'Noé Domínguez Porras', url: 'https://www.linkedin.com/in/noedominguez' },
+  { name: 'Hugo Aguirre Martínez', url: 'https://www.linkedin.com/in/hugoaguirre' },
+  { name: 'Luis Antonio Gomez Prieto', url: 'https://www.linkedin.com/in/jimmylagp' },
+  { name: 'Mayra Esther Rodríguez Solano', url: 'http://linkedin.com/in/mayra-esther-rodr%C3%ADguez-solano-62b34ab2' },
+  { name: 'Trevor David Rhone', url: 'https://www.linkedin.com/in/trevor-david-rhone-965ba9b' },
+  { name: 'Elaine Chan', url: 'https://www.linkedin.com/in/chanelaine' },
+  { name: 'Ethan Epstein', url: 'https://www.linkedin.com/in/ethan-epstein-80772093' },
+  { name: 'Tyler Doyle', url: 'https://www.linkedin.com/in/tyler-doyle-987642111' },
+  { name: 'Chris Ching', url: 'https://www.linkedin.com/in/chingchristopher' },
+  { name: 'Nathan Mitchell', url: 'https://www.linkedin.com/in/nathan-mitchell-p-e-58872a4/' },
+  { name: 'Alex Hofmann', url: 'https://www.linkedin.com/in/alex-hofmann-4a006519' },
 ]
 
 export default function LoginPage() {
   const classes = useStyles()
-  const AppaLogo = (
-    <img className={classes.appaLogo} src={`${process.env.PUBLIC_URL}/appa.svg`} />)
+  const AppaLogo = <img
+    className={classes.appaLogo}
+    src={`${process.env.PUBLIC_URL}/appa.svg`}
+    alt='logo'
+  />
   const authUrl = useSelector(getAuthUrl) 
 
   return (
@@ -119,36 +125,30 @@ export default function LoginPage() {
               outlined: classes.outline,
             }}
           >
-            Log in with APPA
+            Sign In with APPA
           </Button>
         </div>
       </div>
       <div style={{ position: 'fixed', bottom: 0, width: '100%' }}>
         <div style={{ width: '70%', margin: '0 auto' }}>
         <Typography align='center' className={classes.contributorText}>
-          {'This application is brought to you by: '}
-        </Typography>
-        <Typography align='center' className={classes.contributorText}>
-          {
+          This application is brought to you by the {
             companies.map((company, index) => (
               <React.Fragment key={company.name}>
                   <span>{index ? ', ' : ''}</span>
-                  <Link href={company.url} target='_blank' rel='noopener' rel='noreferrer'>
+                  <Link href={company.url} target='_blank' rel='noopener noreferrer'>
                     { company.name }
                   </Link>
               </React.Fragment>))
-          }
-        </Typography>
-        <Typography align='center' className={classes.contributorText}>
-          {
+          }. Thank you to {
             individuals.map((individual, index) => (
               <React.Fragment key={individual.name}>
                 <span>{index ? ', ' : ''}</span>
-                <Link href={individual.url} target='_blank' rel='noopener' rel='noreferrer'>
+                <Link href={individual.url} target='_blank' rel='noopener noreferrer'>
                   { individual.name }
                 </Link>
               </React.Fragment>))
-          }
+          }.
         </Typography>
         </div>
       </div>

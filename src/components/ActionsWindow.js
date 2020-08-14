@@ -5,23 +5,23 @@ import IconButton from '@material-ui/core/IconButton'
 import Tooltip from '@material-ui/core/Tooltip'
 import ImportExportIcon from '@material-ui/icons/ImportExport'
 import SeeUserIcon from '@material-ui/icons/AccountCircle'
-import SignOutIcon from '@material-ui/icons/LockOpen'
+// import SignOutIcon from '@material-ui/icons/LockOpen'
 import Button from '@material-ui/core/Button'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import Grow from '@material-ui/core/Grow'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import Popper from '@material-ui/core/Popper'
-import MenuItem from '@material-ui/core/MenuItem'
-import MenuList from '@material-ui/core/MenuList'
+// import MenuItem from '@material-ui/core/MenuItem'
+// import MenuList from '@material-ui/core/MenuList'
 import {
   getAuthUrl,
   getAuthName,
   getAuthEmail,
 } from 'appa-auth-consumer'
-import {
-  USER_NAME,
-} from '../constants'
+// import {
+  // USER_NAME,
+// } from '../constants'
 import {
   toggleState,
 } from '../macros'

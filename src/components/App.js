@@ -14,7 +14,7 @@ import TablesWindow from './TablesWindow'
 import ImportExportDialog from './ImportExportDialog'
 import AssetDeleteDialog from './AssetDeleteDialog'
 import MessageBar from './MessageBar'
-import LoginPage from './LoginPage'
+import SignInPage from './SignInPage'
 import {
   getIsUserAuthenticated,
   refreshAuth,
@@ -70,7 +70,7 @@ export default function App() {
     }
   }, [dispatch, isUserAuthenticated])
 
-  return  (
+  return !isUserAuthenticated ? <SignInPage /> : (
     <IsLayoutMobileContext.Provider value={isLayoutMobile}>
       <AssetsMap
         onAssetDelete={assetId => setDeletedAssetId(assetId)}

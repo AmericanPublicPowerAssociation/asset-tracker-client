@@ -44,10 +44,10 @@ import {
   addTask,
   refreshTaskComments,
 } from '../actions'
-import {
-  TASK_ARCHIVE_STATUS,
-  TASK_STATUS_CANCELLED,
-} from '../constants'
+// import {
+  // TASK_ARCHIVE_STATUS,
+  // TASK_STATUS_CANCELLED,
+// } from '../constants'
 import {
   getAssetTypeByCode,
   getSelectedTasks,
