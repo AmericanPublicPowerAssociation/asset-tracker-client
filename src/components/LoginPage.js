@@ -91,8 +91,11 @@ const individuals = [
 
 export default function LoginPage() {
   const classes = useStyles()
-  const AppaLogo = (
-    <img className={classes.appaLogo} src={`${process.env.PUBLIC_URL}/appa.svg`} />)
+  const AppaLogo = <img
+    className={classes.appaLogo}
+    src={`${process.env.PUBLIC_URL}/appa.svg`}
+    alt='logo'
+  />
   const authUrl = useSelector(getAuthUrl) 
 
   return (
@@ -133,7 +136,7 @@ export default function LoginPage() {
             companies.map((company, index) => (
               <React.Fragment key={company.name}>
                   <span>{index ? ', ' : ''}</span>
-                  <Link href={company.url} target='_blank' rel='noopener' rel='noreferrer'>
+                  <Link href={company.url} target='_blank' rel='noopener noreferrer'>
                     { company.name }
                   </Link>
               </React.Fragment>))
@@ -144,7 +147,7 @@ export default function LoginPage() {
             individuals.map((individual, index) => (
               <React.Fragment key={individual.name}>
                 <span>{index ? ', ' : ''}</span>
-                <Link href={individual.url} target='_blank' rel='noopener' rel='noreferrer'>
+                <Link href={individual.url} target='_blank' rel='noopener noreferrer'>
                   { individual.name }
                 </Link>
               </React.Fragment>))
