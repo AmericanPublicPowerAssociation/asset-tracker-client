@@ -41,6 +41,7 @@ const useStyles = makeStyles(theme => ({
   },
   'noDetailsTables': {
     'position': 'absolute',
+    'display': 'table',
     'bottom': 0,
     'left': '50%',
     'marginBottom': '30px',
