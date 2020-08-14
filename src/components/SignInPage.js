@@ -10,6 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import Link from '@material-ui/core/Link'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
+import WarningIcon from '@material-ui/icons/ErrorOutline'
 import Typography from '@material-ui/core/Typography'
 import {
   getAuthUrl,

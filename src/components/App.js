@@ -71,81 +71,81 @@ export default function App() {
   return (<IsLayoutMobileContext.Provider value={isLayoutMobile}>
       { !isUserAuthenticated ? <SignInPage /> : (
         <>
-					<AssetsMap
-						onAssetDelete={assetId => setDeletedAssetId(assetId)}
-					/>
-					<OptionsWindow
-						isWithDetails={isWithDetails}
-						isWithTables={isWithTables}
-						setIsWithDetails={setIsWithDetails}
-						setIsWithTables={setIsWithTables}
-					/>
-					{(isLayoutMobile && isWithTables) ?
-						<div className={classes.bottomFixed}>
-							<SketchButtons isWithTables={isWithTables}/>
-							<TablesWindow
-								isWithTables={isWithTables}
-							/>
-						</div>
-					:
-						<TablesWindow
-							isWithTables={isWithTables}
-						/>
-					}
+        <AssetsMap
+          onAssetDelete={assetId => setDeletedAssetId(assetId)}
+        />
+        <OptionsWindow
+          isWithDetails={isWithDetails}
+          isWithTables={isWithTables}
+          setIsWithDetails={setIsWithDetails}
+          setIsWithTables={setIsWithTables}
+        />
+        {(isLayoutMobile && isWithTables) ?
+          <div className={classes.bottomFixed}>
+            <SketchButtons isWithTables={isWithTables}/>
+            <TablesWindow
+              isWithTables={isWithTables}
+            />
+          </div>
+        :
+          <TablesWindow
+            isWithTables={isWithTables}
+          />
+        }
 
-					{/* TODO: Review all components below */}
-					<SketchAddToolbar
-						isWithTables={isWithTables}
-					/>
-					<ActionsWindow
-						isWithImportExportDialog={isViewing}
-						setIsWithImportExportDialog={setIsWithImportExportDialog}
-					/>
-					<OverlaysWindow />
-					{(isLayoutMobile && isWithDetails) &&
-						<div className={classes.bottomFixed}>
-							<SketchButtons
-								isWithDetails={isWithDetails}
-								isWithTables={isWithTables}
-								isLayoutMobile={isLayoutMobile}
-							/>
-							<DetailsWindow
-								isWithDetails={isWithDetails}
-								isWithTables={isWithTables}
-							/>
-						</div>
-					}
-					{(isLayoutMobile && !isWithDetails && !isWithTables) &&
-						<SketchButtons
-							isWithDetails={isWithDetails}
-							isWithTables={isWithTables}
-							isLayoutMobile={isLayoutMobile}
-						/>
-					}
-					{!isLayoutMobile &&
-						<SketchButtons />
-					}
-					{(!isLayoutMobile && isWithDetails) &&
-						<DetailsWindow
-							isWithDetails={isWithDetails}
-							isWithTables={isWithTables}
-						/>
-					}
-					{ isWithImportExportDialog &&
-						<ImportExportDialog
-							isOpen={isWithImportExportDialog}
-							onCancel={() => {setIsWithImportExportDialog(false)}}
-							onClose={()=> {setIsWithImportExportDialog(false)}}
-						/>
-					}
-					<AssetDeleteDialog
-						deletedAssetId={deletedAssetId}
-						isOpen={deletedAssetId !== null}
-						onClose={() => setDeletedAssetId(null)}
-					/>
-					{/* TODO: Review all components above */}
+        {/* TODO: Review all components below */}
+        <SketchAddToolbar
+          isWithTables={isWithTables}
+        />
+        <ActionsWindow
+          isWithImportExportDialog={isViewing}
+          setIsWithImportExportDialog={setIsWithImportExportDialog}
+        />
+        <OverlaysWindow />
+        {(isLayoutMobile && isWithDetails) &&
+          <div className={classes.bottomFixed}>
+            <SketchButtons
+              isWithDetails={isWithDetails}
+              isWithTables={isWithTables}
+              isLayoutMobile={isLayoutMobile}
+            />
+            <DetailsWindow
+              isWithDetails={isWithDetails}
+              isWithTables={isWithTables}
+            />
+          </div>
+        }
+        {(isLayoutMobile && !isWithDetails && !isWithTables) &&
+          <SketchButtons
+            isWithDetails={isWithDetails}
+            isWithTables={isWithTables}
+            isLayoutMobile={isLayoutMobile}
+          />
+        }
+        {!isLayoutMobile &&
+          <SketchButtons />
+        }
+        {(!isLayoutMobile && isWithDetails) &&
+          <DetailsWindow
+            isWithDetails={isWithDetails}
+            isWithTables={isWithTables}
+          />
+        }
+        { isWithImportExportDialog &&
+          <ImportExportDialog
+            isOpen={isWithImportExportDialog}
+            onCancel={() => {setIsWithImportExportDialog(false)}}
+            onClose={()=> {setIsWithImportExportDialog(false)}}
+          />
+        }
+        <AssetDeleteDialog
+          deletedAssetId={deletedAssetId}
+          isOpen={deletedAssetId !== null}
+          onClose={() => setDeletedAssetId(null)}
+        />
+        {/* TODO: Review all components above */}
 
-					<MessageBar />
+        <MessageBar />
         </>
       )} 
     </IsLayoutMobileContext.Provider>
