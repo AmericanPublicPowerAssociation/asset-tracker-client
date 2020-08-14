@@ -42,15 +42,17 @@ const useStyles = makeStyles(theme => ({
     maxHeight: 'calc(100vh - 374px)',
   },
   responsive: {
-    position: 'fixed',
+    position: 'relative',
     right: 0,
     left: 0,
     bottom: 0,
+    width: '100vw',
     padding: theme.spacing(1),
     overflowY: 'auto',
     overflowX: 'hidden',
     zIndex: 1,
     maxHeight: '30vh',
+    marginTop: '10px',
   },
   fullView: {
     padding: theme.spacing(1),
@@ -108,12 +110,12 @@ export default function DetailsWindow({ isWithTables }) {
   }
 
   return (
-    <Paper className={clsx(
-      isLayoutMobile ? classes.responsive : classes.root, {
-      [classes.withTables]: isWithTables,
-    })}>
-      {detailsPanel}
-    </Paper>
+      <Paper className={clsx(
+        isLayoutMobile ? classes.responsive : classes.root, {
+        [classes.withTables]: isWithTables,
+      })}>
+        {detailsPanel}
+      </Paper>
   )
 // show expanded only if not mobile and is expanded
 // otherwise show regular paper

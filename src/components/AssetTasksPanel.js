@@ -7,6 +7,7 @@
 
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import clsx from 'clsx'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import TextField from '@material-ui/core/TextField'
@@ -43,10 +44,10 @@ import {
   addTask,
   refreshTaskComments,
 } from '../actions'
-import {
-  TASK_ARCHIVE_STATUS,
-  TASK_STATUS_CANCELLED,
-} from '../constants'
+// import {
+  // TASK_ARCHIVE_STATUS,
+  // TASK_STATUS_CANCELLED,
+// } from '../constants'
 import {
   getAssetTypeByCode,
   getSelectedTasks,
@@ -90,6 +91,17 @@ const useStyles = makeStyles(theme => ({
     //height: '100%',
     flex: '1 1 auto',
   },
+  noTasks: {
+    fontWeight: 'bold',
+    fontSize: '1.3rem',
+    textAlign: 'center',
+    marginTop: '35px',
+    marginBottom: '20px',
+  },
+  sidePadding: {
+    paddingLeft: '10px',
+    paddingRight: '10px',
+  },
 }))
 
 
@@ -113,7 +125,7 @@ export function AssetName(props) {
     <Tooltip title={assetName} placement='bottom'>
       <ListItemText
         primary={
-          <Typography variant='h5' style={{ fontSize: '1rem' }}>
+          <Typography variant='h5' style={{ fontSize: '1rem', overflowWrap: 'anywhere'  }}>
             {assetName}
           </Typography>
         }
@@ -147,11 +159,10 @@ export default function AssetTasksPanel({
   const [priority, setPriority] = useState(priorityTypeNormal)
   const [dialog, setDialog] = useState(false)	   
   const [taskDetails, setTaskDetails] = useState(false)
-  const [prioritySelected, setPrioritySelected] = useState(false)
-  const [statusSelected, setStatusSelected] = useState(false)
-  const [filterNameSelection, setFilterNameSelection] = useState([])
+  const [prioritySelected, setPrioritySelected] = useState(true)
+  const [statusSelected, setStatusSelected] = useState(true)
+  const [filterNameSelection, setFilterNameSelection] = useState(['Normal', 'Important', 'New', 'Pending'])
 
-  console.log('status selected', statusSelected, 'priority selected', prioritySelected)
   function handleClickToCreateAddTask() {
     setDialog(false)
     dispatch(addTask(assetId, name, description, priority))
@@ -311,7 +322,14 @@ export default function AssetTasksPanel({
     </FormGroup>
     <Divider style={{ marginTop: '15px' }} />
     <div className={classes.listTasks}>
-      <TasksList showDetails={handleDisplayDetails} asset={asset} tasks={filteredTasks}/>
+      { 
+        (tasks.length===0) ? 
+          <Typography variant='h6' className={clsx(classes.noTasks, classes.sidePadding)}>
+            No tasks to show
+          </Typography> 
+        :
+          <TasksList showDetails={handleDisplayDetails} asset={asset} tasks={filteredTasks}/>
+      }
     </div>
     <Divider />
     <div style={{ flex: '0 0 auto' }}>

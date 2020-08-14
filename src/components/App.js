@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { makeStyles } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { refreshRisks } from 'asset-report-risks'
 import AssetsMap from './AssetsMap'
@@ -13,7 +14,7 @@ import TablesWindow from './TablesWindow'
 import ImportExportDialog from './ImportExportDialog'
 import AssetDeleteDialog from './AssetDeleteDialog'
 import MessageBar from './MessageBar'
-import LoginPage from './LoginPage'
+import SignInPage from './SignInPage'
 import {
   getIsUserAuthenticated,
   refreshAuth,
@@ -37,7 +38,15 @@ import {
   getIsViewing,
 } from '../selectors'
 
+const useStyles = makeStyles(theme => ({
+  'bottomFixed': {
+    'position': 'fixed',
+    'bottom': '0',
+  },
+}))
+
 export default function App() {
+  const classes = useStyles()
   const dispatch = useDispatch()
   const isLayoutMobile = useMediaQuery('(max-width:599px)')
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
@@ -61,21 +70,29 @@ export default function App() {
     }
   }, [dispatch, isUserAuthenticated])
 
-  return !isUserAuthenticated ? <LoginPage /> : (
+  return !isUserAuthenticated ? <SignInPage /> : (
     <IsLayoutMobileContext.Provider value={isLayoutMobile}>
       <AssetsMap
         onAssetDelete={assetId => setDeletedAssetId(assetId)}
       />
-      <SketchButtons />
       <OptionsWindow
         isWithDetails={isWithDetails}
         isWithTables={isWithTables}
         setIsWithDetails={setIsWithDetails}
         setIsWithTables={setIsWithTables}
       />
-      <TablesWindow
-        isWithTables={isWithTables}
-      />
+      {(isLayoutMobile && isWithTables) ?
+        <div className={classes.bottomFixed}>
+          <SketchButtons isWithTables={isWithTables}/>
+          <TablesWindow
+            isWithTables={isWithTables}
+          />
+        </div>
+      :
+        <TablesWindow
+          isWithTables={isWithTables}
+        />
+      }
 
       {/* TODO: Review all components below */}
       <SketchAddToolbar
@@ -86,7 +103,30 @@ export default function App() {
         setIsWithImportExportDialog={setIsWithImportExportDialog}
       />
       <OverlaysWindow />
-      {isWithDetails &&
+      {(isLayoutMobile && isWithDetails) &&
+        <div className={classes.bottomFixed}>
+          <SketchButtons
+            isWithDetails={isWithDetails}
+            isWithTables={isWithTables}
+            isLayoutMobile={isLayoutMobile}
+          />
+          <DetailsWindow
+            isWithDetails={isWithDetails}
+            isWithTables={isWithTables}
+          />
+        </div>
+      }
+      {(isLayoutMobile && !isWithDetails && !isWithTables) &&
+        <SketchButtons
+          isWithDetails={isWithDetails}
+          isWithTables={isWithTables}
+          isLayoutMobile={isLayoutMobile}
+        />
+      }
+      {!isLayoutMobile &&
+        <SketchButtons />
+      }
+      {(!isLayoutMobile && isWithDetails) &&
         <DetailsWindow
           isWithDetails={isWithDetails}
           isWithTables={isWithTables}

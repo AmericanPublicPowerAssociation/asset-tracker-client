@@ -27,6 +27,12 @@ const useStyles = makeStyles(theme => ({
       color: '#d22d2a',
       width: '100%',
       bottom: 0,
+      paddingTop: '8px',
+      paddingBottom: '8px',
+    },
+    sidePadding: {
+      paddingLeft: '10px',
+      paddingRight: '10px',
     },
   }))
 
@@ -47,7 +53,7 @@ export default function AssetAttributesPanel({
 
   return (
     <List component='div' disablePadding>
-      <ListItem component='div' disableGutters>
+      <ListItem component='div' disableGutters style={{ flex: '0 0 auto', padding: '10px' }}>
         <Tooltip title={assetTypeName} placement='left'>
           <ListItemIcon>
             <AssetTypeSvgIcon assetTypeCode={assetTypeCode} />
@@ -72,8 +78,9 @@ export default function AssetAttributesPanel({
         asset={asset}
         isEditing={isEditing}
         expand={isDetailsWindowExpanded}
+        styling={classes.sidePadding}
       />
-      <Divider />
+      <Divider style={{ marginTop: '10px' }} />
       <div style={{ flex: '0 0 auto' }}>
         <Button className={classes.bottomAction} onClick={() => setDeletedAssetId(asset.id)}>
           Delete asset

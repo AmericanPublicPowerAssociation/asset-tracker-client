@@ -62,7 +62,7 @@ export default function BusConnectionsList({ connectedAssetIds }) {
               <AssetTypeSvgIcon assetTypeCode={connectedAssetTypeCode} />
             </ListItemIcon>
           </Tooltip>
-          <ListItemText primary={connectedAssetName}/>
+          <ListItemText style={{ overflowWrap: 'anywhere' }}primary={connectedAssetName}/>
         </ListItem>
       )
     })}
