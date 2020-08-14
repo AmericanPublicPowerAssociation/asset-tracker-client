@@ -1,9 +1,11 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import Link from '@material-ui/core/Link'
+import WarningIcon from '@material-ui/icons/ErrorOutline'
 import Typography from '@material-ui/core/Typography'
 import {
   getAuthUrl,
@@ -37,7 +39,7 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     marginTop: theme.spacing(5),
-    marginBottom: theme.spacing(5),
+    marginBottom: theme.spacing(1),
     color: '#043e74',
     backgroundColor: 'white',
     paddingRight: theme.spacing(4),
@@ -45,7 +47,7 @@ const useStyles = makeStyles(theme => ({
     paddingTop: theme.spacing(1.5),
     paddingBottom: theme.spacing(1.5),
     borderRadius: '40px',
-    fontSize: '1.35rem',
+    fontSize: '1.2rem',
     fontWeight: 'bold',
     boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16)',
   },
@@ -94,10 +96,10 @@ const individuals = [
 
 export default function LoginPage() {
   const classes = useStyles()
-  const AppaLogo = <img
-    className={classes.appaLogo}
-    src={`${process.env.PUBLIC_URL}/appa.svg`}
-    alt='logo'
+  const isLayoutMobile = useMediaQuery('(max-width:599px)')
+  const AppaLogo = <img 
+    className={classes.appaLogo} 
+    src={`${process.env.PUBLIC_URL}/appa.svg`} 
   />
   const authUrl = useSelector(getAuthUrl) 
 
@@ -127,6 +129,14 @@ export default function LoginPage() {
           >
             Sign In with APPA
           </Button>
+          { isLayoutMobile &&
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <WarningIcon />
+              <Typography style={{ paddingLeft: '4px' }} align='center'>
+                Optimized for desktop
+              </Typography>
+            </div>
+          }
         </div>
       </div>
       <div style={{ position: 'fixed', bottom: 0, width: '100%' }}>
