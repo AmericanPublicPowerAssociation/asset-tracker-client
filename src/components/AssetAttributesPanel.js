@@ -86,6 +86,7 @@ export default function AssetAttributesPanel({
       <AssetAttributesListItem
         asset={asset}
         isEditing={isEditing}
+        styling={classes.sidePadding}
       />
 
       <AssetConnectionsListItems

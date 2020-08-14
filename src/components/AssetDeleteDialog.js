@@ -66,10 +66,14 @@ export default function AssetDeleteDialog({
         Delete Asset
       </DialogTitle>
       <DialogContent>
-        <DialogContentText className={classes.center}>
-          You will permanently lose its:
-          <br/>-tasks
-          <br/>-risks
+        <DialogContentText>
+          You will permanently lose its
+          <ul>
+            <li>Attributes</li>
+            <li>Connections</li>
+            <li>Tasks</li>
+            <li>Risks</li>
+          </ul>
         </DialogContentText>
       </DialogContent>
       <DialogActions className={classes.buttons}>
