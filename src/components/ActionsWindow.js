@@ -121,7 +121,7 @@ export default function ActionsWindow({
                   </div>
                   <div>
                     <Button variant='outlined' className={classes.signout} href={authUrl} size='small'>
-                      Sign Out
+                      Log Out
                     </Button>
                   </div>
                 </div>
