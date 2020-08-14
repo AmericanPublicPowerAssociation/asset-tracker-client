@@ -86,14 +86,10 @@ export const getSelectedAsset = createSelector([
   return asset
 })
 
-export const getAssetsIconLayer = createSelector([
+export const getAssetsIconLayerData = createSelector([
   getAssetsGeoJson,
-  getSelectedAssetId,
 ], (
   assetsGeoJson,
-  selectedAssetId,
 ) => {
-  return assetsGeoJson.features
-    .filter(obj => obj.properties.typeCode !== ASSET_TYPE_CODE_LINE)
-    .filter(obj => obj.properties.id !== selectedAssetId)
+  return assetsGeoJson.features.filter(obj => obj.properties.typeCode !== ASSET_TYPE_CODE_LINE)
 })

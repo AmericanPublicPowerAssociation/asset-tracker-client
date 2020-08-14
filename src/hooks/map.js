@@ -59,7 +59,7 @@ import {
   getAssetIdsByBusId,
   getAssetTypeByCode,
   getAssetsGeoJson,
-  getAssetsIconLayer,
+  getAssetsIconLayerData,
   getBestAssetIdByBusId,
   getBusesGeoJson,
   getMapColors,
@@ -69,7 +69,8 @@ import {
   getSelectedBusId,
   getSelectedBusIndexes,
   getSketchMode,
-  getTemporaryAsset, getMapWebMercatorViewPort,
+  getTemporaryAsset,
+  getMapWebMercatorViewPort,
 } from '../selectors'
 
 export function useMovableMap() {
@@ -90,7 +91,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   const mapColors = useSelector(getMapColors)
   const assetsGeoJson = useSelector(getAssetsGeoJson)
   const busesGeoJson = useSelector(getBusesGeoJson)
-  const assetsIconLayer = useSelector(getAssetsIconLayer)
+  const assetsIconLayerData = useSelector(getAssetsIconLayerData)
   const selectedAssetId = useSelector(getSelectedAssetId)
   const selectedAssetIndexes = useSelector(getSelectedAssetIndexes)
   const selectedBusId = useSelector(getSelectedBusId)
@@ -106,7 +107,16 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
   const isAddingLine = sketchMode === SKETCH_MODE_ADD_LINE
   const mapWebMercatorViewPort = useSelector(getMapWebMercatorViewPort)
   const isShowAssetIcons = (overlayMode === OVERLAY_MODE_ASSETS )
+  const isEditing = sketchMode.startsWith(SKETCH_MODE_EDIT)
   let temporaryAsset = useSelector(getTemporaryAsset)
+  let iconLayerData = []
+  if (isEditing) {
+    iconLayerData = assetsIconLayerData.filter(asset => asset.properties.id !== selectedAssetId)
+  }
+  else if (isShowAssetIcons) {
+    iconLayerData = assetsIconLayerData
+  }
+
 
   function getAssetsMapLayer() {
     const mapMode = getMapMode(sketchMode)
@@ -202,7 +212,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
         return 'marker'
       } ,
 */
-      data: isShowAssetIcons ? assetsIconLayer : [],
+      data: iconLayerData,
       iconAtlas: '/tileset.png',
       iconMapping: ICON_MAPPING,
       sizeScale: 1,
@@ -378,8 +388,8 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
             busId = makeBusId()
           }
           if (busId) {
-            console.log('>> Adding connection', vertexCount - 1);
-            console.log('>> Connection', busId);
+            console.log('>> Adding connection', vertexCount - 1)
+            console.log('>> Connection', busId)
             temporaryAsset = produce(temporaryAsset, draft => {
               draft.connections[vertexCount - 1] = { busId }
             })
@@ -450,7 +460,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
                   dispatch(setAssetConnection(
                     lineAssetId,
                     vertexIndex,
-                    {busId},
+                    { busId },
                   ))
                 } else {
                   // 6. if no, then make point on line and use that vertexIndex
