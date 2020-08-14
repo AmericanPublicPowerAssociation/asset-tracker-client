@@ -61,12 +61,11 @@ export default function App() {
     }
   }, [dispatch, isUserAuthenticated])
 
-  return !isUserAuthenticated ? <LoginPage /> : (
+  return  (
     <IsLayoutMobileContext.Provider value={isLayoutMobile}>
       <AssetsMap
         onAssetDelete={assetId => setDeletedAssetId(assetId)}
       />
-      <SketchButtons />
       <OptionsWindow
         isWithDetails={isWithDetails}
         isWithTables={isWithTables}
@@ -86,7 +85,30 @@ export default function App() {
         setIsWithImportExportDialog={setIsWithImportExportDialog}
       />
       <OverlaysWindow />
-      {isWithDetails &&
+      {isLayoutMobile ?
+        (isWithDetails ?
+          <div style={{ bottom: '0', position: 'fixed' }}>
+            <SketchButtons
+              isWithDetails={isWithDetails}
+              isWithTables={isWithTables}
+              isLayoutMobile={isLayoutMobile}
+            />
+            <DetailsWindow
+              isWithDetails={isWithDetails}
+              isWithTables={isWithTables}
+            />
+          </div>
+        :
+          <SketchButtons
+            isWithDetails={isWithDetails}
+            isWithTables={isWithTables}
+            isLayoutMobile={isLayoutMobile}
+          />
+        )
+      :
+        <SketchButtons />
+      }
+      {(!isLayoutMobile && isWithDetails) &&
         <DetailsWindow
           isWithDetails={isWithDetails}
           isWithTables={isWithTables}
