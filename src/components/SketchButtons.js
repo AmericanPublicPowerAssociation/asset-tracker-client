@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
@@ -22,6 +22,9 @@ import {
   SKETCH_MODE_VIEW,
 } from '../constants'
 import {
+  IsLayoutMobileContext,
+} from '../contexts'
+import {
   getOverlayMode,
   getSketchMode,
 } from '../selectors'
@@ -29,6 +32,27 @@ import {
 const useStyles = makeStyles(theme => ({
   'root': {
     'position': 'fixed',
+    'top': 0,
+    'left': '50%',
+    'transform': 'translateX(-50%)',
+    '& > *': {
+      'margin': theme.spacing(1),
+    },
+  },
+  'noDetailsTables': {
+    'position': 'absolute',
+    'display': 'table',
+    'bottom': 0,
+    'left': '50%',
+    'marginBottom': '30px',
+    'transform': 'translateX(-50%)',
+    '& > *': {
+      'margin': theme.spacing(1),
+    },
+  },
+  'withDetailsTables': {
+    'display': 'inline-block',
+    'position': 'relative',
     'top': 0,
     'left': '50%',
     'transform': 'translateX(-50%)',
@@ -54,13 +78,14 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function SketchButtons() {
+export default function SketchButtons({ isWithDetails, isWithTables }) {
   const classes = useStyles()
   const dispatch = useDispatch()
   const overlayMode = useSelector(getOverlayMode)
   const sketchMode = useSelector(getSketchMode)
   const isWithAssetsOverlay = overlayMode === OVERLAY_MODE_ASSETS
   const isViewing = sketchMode === SKETCH_MODE_VIEW
+  const isLayoutMobile = useContext(IsLayoutMobileContext)
 
   function handleChange() {
     if (!isWithAssetsOverlay) {
@@ -80,12 +105,22 @@ export default function SketchButtons() {
   }
 
   return (
-    <div className={classes.root}>
+    <div className={
+      (isLayoutMobile ?
+        ((isWithDetails || isWithTables) ?
+          classes.withDetailsTables
+        :
+          classes.noDetailsTables
+        )
+      :
+        classes.root
+      )
+    }>
       <Fab
         className={clsx(
           classes.changeButton,
           classes.buttonDetails,
-          'rise-animation',
+          !isLayoutMobile && 'rise-animation',
           'white',
         )}
         variant='extended'
@@ -99,7 +134,7 @@ export default function SketchButtons() {
           className={clsx(
             classes.cancelButton,
             classes.buttonDetails,
-            'rise-animation',
+            !isLayoutMobile && 'rise-animation',
           )}
           variant='extended'
           onClick={handleCancel}
