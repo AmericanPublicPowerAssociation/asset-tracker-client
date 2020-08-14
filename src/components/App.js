@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { makeStyles } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { refreshRisks } from 'asset-report-risks'
 import AssetsMap from './AssetsMap'
@@ -37,7 +38,15 @@ import {
   getIsViewing,
 } from '../selectors'
 
+const useStyles = makeStyles(theme => ({
+  'bottomFixed': {
+    'position': 'fixed',
+    'bottom': '0',
+  },
+}))
+
 export default function App() {
+  const classes = useStyles()
   const dispatch = useDispatch()
   const isLayoutMobile = useMediaQuery('(max-width:599px)')
   const [isWithDetails, setIsWithDetails] = useState(IS_WITH_DETAILS)
@@ -72,9 +81,18 @@ export default function App() {
         setIsWithDetails={setIsWithDetails}
         setIsWithTables={setIsWithTables}
       />
-      <TablesWindow
-        isWithTables={isWithTables}
-      />
+      {(isLayoutMobile && isWithTables) ?
+        <div className={classes.bottomFixed}>
+          <SketchButtons isWithTables={isWithTables}/>
+          <TablesWindow
+            isWithTables={isWithTables}
+          />
+        </div>
+      :
+        <TablesWindow
+          isWithTables={isWithTables}
+        />
+      }
 
       {/* TODO: Review all components below */}
       <SketchAddToolbar
@@ -85,27 +103,27 @@ export default function App() {
         setIsWithImportExportDialog={setIsWithImportExportDialog}
       />
       <OverlaysWindow />
-      {isLayoutMobile ?
-        (isWithDetails ?
-          <div style={{ bottom: '0', position: 'fixed' }}>
-            <SketchButtons
-              isWithDetails={isWithDetails}
-              isWithTables={isWithTables}
-              isLayoutMobile={isLayoutMobile}
-            />
-            <DetailsWindow
-              isWithDetails={isWithDetails}
-              isWithTables={isWithTables}
-            />
-          </div>
-        :
+      {(isLayoutMobile && isWithDetails) &&
+        <div className={classes.bottomFixed}>
           <SketchButtons
             isWithDetails={isWithDetails}
             isWithTables={isWithTables}
             isLayoutMobile={isLayoutMobile}
           />
-        )
-      :
+          <DetailsWindow
+            isWithDetails={isWithDetails}
+            isWithTables={isWithTables}
+          />
+        </div>
+      }
+      {(isLayoutMobile && !isWithDetails && !isWithTables) &&
+        <SketchButtons
+          isWithDetails={isWithDetails}
+          isWithTables={isWithTables}
+          isLayoutMobile={isLayoutMobile}
+        />
+      }
+      {!isLayoutMobile &&
         <SketchButtons />
       }
       {(!isLayoutMobile && isWithDetails) &&
