@@ -89,7 +89,7 @@ const companies = [
   { name: 'U.S. Department of Energy', url: 'https://www.energy.gov' },
   { name: 'American Public Power Association', url: 'https://publicpower.org' },
   { name: 'CrossCompute', url: 'https://crosscompute.com' },
-  { name: 'DevLabs Mexico', url: 'https://www.devlabs.com.mx' },
+  { name: 'DevLabs México', url: 'https://www.devlabs.com.mx' },
 ]
 
 const individuals = [
