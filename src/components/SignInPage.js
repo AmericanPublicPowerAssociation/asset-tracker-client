@@ -100,6 +100,7 @@ const individuals = [
   { name: 'Salah Ahmed', url: 'https://www.linkedin.com/in/salahspage' },
   { name: 'Roy Hyunjin Han', url: 'https://www.linkedin.com/in/invisibleroads' },
   { name: 'Olga Creutzburg', url: 'https://www.linkedin.com/in/olga-creutzburg-52a689b2' },
+  { name: 'Eugen Fomenko', url: 'https://www.linkedin.com/in/eugen-fomenko-57b204168' },
   { name: 'Noé Domínguez Porras', url: 'https://www.linkedin.com/in/noedominguez' },
   { name: 'Hugo Aguirre Martínez', url: 'https://www.linkedin.com/in/hugoaguirre' },
   { name: 'Luis Antonio Gomez Prieto', url: 'https://www.linkedin.com/in/jimmylagp' },
