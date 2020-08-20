@@ -1,6 +1,6 @@
 {
   "name": "asset-tracker",
-  "version": "0.5.0",
+  "version": "0.7.0",
   "private": true,
   "dependencies": {
     "@deck.gl/core": "^8.2.5",
