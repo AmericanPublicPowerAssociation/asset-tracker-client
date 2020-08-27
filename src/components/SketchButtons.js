@@ -127,7 +127,7 @@ export default function SketchButtons({ isWithDetails, isWithTables }) {
         // disabled={!isWithAssetsOverlay}
         onClick={handleChange}
       >
-        {isViewing ? 'START DRAWING' : 'SAVE'}
+        {isViewing ? 'Add/Edit Assets' : 'SAVE'}
       </Fab>
       {!isViewing &&
         <Fab
