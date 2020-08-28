@@ -1,4 +1,5 @@
 // TODO: Review from scratch
+// TODO: Make terminology consistent between Import/Export or Upload/Download
 
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -132,7 +133,7 @@ export default function ImportExportDialog({
       <DialogTitle>Overwrite all existing assets?</DialogTitle>
       <DialogContent>
         <Typography component='h3'>
-          The existing assets will be replaced and it cannot be undone.
+          The existing assets will be replaced and this cannot be undone.
         </Typography>
       </DialogContent>
       <DialogActions>
@@ -196,7 +197,7 @@ export default function ImportExportDialog({
             ? data.map(asset => <MenuItem value={asset.id} key={asset.id}>{asset.name}</MenuItem>)
             : <MenuItem value=''><em>None</em></MenuItem>}
         </Select>
-        <FormHelperText>A generator must be connected to download a dss file.</FormHelperText>
+        <FormHelperText>A generator must be connected to export a dss file.</FormHelperText>
       </FormControl>
     </>
   )
@@ -206,9 +207,9 @@ export default function ImportExportDialog({
       open={isOpen && !confirmOverwriteRecords && !uploadResponse}
       onClose={onClose}
       disableBackdropClick >
-      <DialogTitle>Download Manager</DialogTitle>
+      <DialogTitle>Import and Export Assets</DialogTitle>
       <DialogContent>
-        <Typography component='p'>What I want to do?</Typography>
+        <Typography component='p'>What would you like to do?</Typography>
         <FormControl fullWidth>
           <Select
             onChange={(e) => setAction(e.target.value)} value={action}
