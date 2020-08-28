@@ -207,7 +207,7 @@ export default function ImportExportDialog({
       open={isOpen && !confirmOverwriteRecords && !uploadResponse}
       onClose={onClose}
       disableBackdropClick >
-      <DialogTitle>Import and Export Assets</DialogTitle>
+      <DialogTitle>Import/Export Assets</DialogTitle>
       <DialogContent>
         <Typography component='p'>What would you like to do?</Typography>
         <FormControl fullWidth>
