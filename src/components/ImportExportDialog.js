@@ -214,8 +214,8 @@ export default function ImportExportDialog({
           <Select
             onChange={(e) => setAction(e.target.value)} value={action}
             input={<Input />} >
-            <MenuItem value='download'>Download Assets</MenuItem>
-            <MenuItem value='upload'>Upload Assets</MenuItem>
+            <MenuItem value='download'>Export Assets</MenuItem>
+            <MenuItem value='upload'>Import Assets</MenuItem>
           </Select>
         </FormControl>
         <FormControl fullWidth>
