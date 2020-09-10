@@ -225,7 +225,7 @@ export function useEditableMap(deckGL, { onAssetDelete }) {
       getPosition: d => d.geometry.coordinates,
       getIcon: d => d.properties.typeCode ? d.properties.typeCode : 'marker',
       getSize: d => {
-        console.log(mapWebMercatorViewPort.zoom, 2 * mapWebMercatorViewPort.zoom)
+        // console.log(mapWebMercatorViewPort.zoom, 2 * mapWebMercatorViewPort.zoom)
         return Math.sqrt(mapWebMercatorViewPort.zoom * mapWebMercatorViewPort.zoom) * 2
       },
       getColor: (feature) => {
