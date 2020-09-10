@@ -37,7 +37,8 @@
     "reselect": "^4.0.0"
   },
   "resolutions": {
-    "@turf/difference": "6.0.1"
+    "@turf/difference": "6.0.1",
+    "jspdf": "2.1.0"
   },
   "scripts": {
     "start": "PORT=7000 react-scripts start",
