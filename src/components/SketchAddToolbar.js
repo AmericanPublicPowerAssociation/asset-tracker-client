@@ -243,7 +243,7 @@ export default function SketchAddToolbar({
             onClick={() => dispatch(setSketchMode(SKETCH_MODE_ADD_POWER_QUALITY))}
           >
             <AssetTypeSvgIcon assetTypeCode={ASSET_TYPE_CODE_POWER_QUALITY} />
-            <span>Power</span>
+            <span>Quality</span>
           </ListItem>
         </Tooltip>
 
